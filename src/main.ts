@@ -1,4 +1,7 @@
-const { app, BrowserWindow } = require('electron')
+import { app, BrowserWindow } from "electron";
+import { PluginManager } from "./plugin.js";
+
+const pm: PluginManager = new PluginManager();
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -10,5 +13,7 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
-  createWindow()
+  pm.initAll()
+
+  createWindow();
 })
