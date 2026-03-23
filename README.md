@@ -1,5 +1,0 @@
-To run:
-
-```sh
-npm start
-```
