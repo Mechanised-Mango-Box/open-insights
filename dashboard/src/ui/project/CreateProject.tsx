@@ -6,7 +6,7 @@ type Props = {
   onCreated: () => void;
 };
 
-const CreateClass = ({ teacherId, onCreated }: Props) => {
+const CreateProject = ({ teacherId, onCreated }: Props) => {
   const [name, setName] = useState("");
 
   const handleCreate = async () => {
@@ -29,5 +29,5 @@ const CreateClass = ({ teacherId, onCreated }: Props) => {
   );
 };
 
-export default CreateClass;
+export default CreateProject;
 
