@@ -64,7 +64,6 @@ class QuizOption(Base):
     id = Column(Integer, primary_key=True, index=True)
     checkpoint_id = Column(Integer, ForeignKey("quiz_checkpoints.id"), nullable=False)
     option_text = Column(String, nullable=False)
-    is_correct = Column(Boolean, default=False)
 
 
 class QuizAttempt(Base):
@@ -74,6 +73,5 @@ class QuizAttempt(Base):
     checkpoint_id = Column(Integer, ForeignKey("quiz_checkpoints.id"), nullable=False)
     student_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     selected_option_id = Column(Integer, ForeignKey("quiz_options.id"), nullable=True)
-    is_correct = Column(Boolean, default=False)
-    shown_at = Column(DateTime, default=datetime.utcnow)
+    score = Column(Integer, default=False)
     answered_at = Column(DateTime, default=datetime.utcnow)
