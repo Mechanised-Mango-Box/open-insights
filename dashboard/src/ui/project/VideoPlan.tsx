@@ -1,50 +1,49 @@
-const VideoPlan = () => {
+import { useState } from "react";
+import { createVideo, addVideoToClass } from "../../api";
+
+type Props = {
+  classId: number;
+  onAdded: () => void;
+};
+
+function extractYoutubeVideoId(input: string) {
+  try {
+    const url = new URL(input);
+    return url.searchParams.get("v") || input;
+  } catch {
+    return input;
+  }
+}
+
+const AddVideoForm = ({ classId, onAdded }: Props) => {
+  const [url, setUrl] = useState("");
+  const [title, setTitle] = useState("");
+
+  const handleAdd = async () => {
+    const youtube_video_id = extractYoutubeVideoId(url);
+    const video = await createVideo({ url, title, youtube_video_id });
+    await addVideoToClass({ class_id: classId, video_id: video.id });
+    setUrl("");
+    setTitle("");
+    onAdded();
+  };
+
   return (
     <div>
-      <h1>Video Plan</h1>
-
-      <section>
-        <h2>Settings</h2>
-        <label>
-          Project Name:
-          <input type="text" placeholder="Enter project name" />
-        </label>
-      </section>
-
-      <section>
-        <h2>Sources</h2>
-        <label>
-          Video Link/ID:
-          <input type="text" placeholder="Paste video link or ID" />
-        </label>
-        <button>Update Data</button>
-      </section>
-
-      <section>
-        <h2>Meta</h2>
-        <p>
-          <label>
-            Video Type:
-            <select>
-              <option value="">Select type</option>
-              <option value="lecture">Lecture</option>
-              <option value="demo">Demonstration</option>
-            </select>
-          </label>
-        </p>
-        <p>
-          <label>
-            Video Style:
-            <select>
-              <option value="">Select style</option>
-              <option value="head">Talking Head</option>
-              <option value="tutorial">Tutorial</option>
-            </select>
-          </label>
-        </p>
-      </section>
+      <h4>Add YouTube Video</h4>
+      <input
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Video title"
+      />
+      <input
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
+        placeholder="https://youtube.com/watch?v=..."
+      />
+      <button onClick={handleAdd}>Add Video</button>
     </div>
   );
 };
 
-export default VideoPlan;
+export default AddVideoForm;

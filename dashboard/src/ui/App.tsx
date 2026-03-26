@@ -1,16 +1,16 @@
-import VideoPlan from "./project/VideoPlan";
+import { useState } from "react";
+import Login from "./auth/Login";
+import ProjectDashboard from "./project/ProjectDashboard";
+import { User } from "../type";
 
-const App = () => (
-  <>
-    <h1>Main Menu</h1>
-    <p>Under construction</p>
+const App = () => {
+  const [teacher, setTeacher] = useState<User | null>(null);
 
-    <>
-      <button>Open Recent</button>
-      <button>New Project</button>
-    </>
-    <VideoPlan/>
-  </>
-);
+  if (!teacher) {
+    return <Login onLogin={setTeacher} />;
+  }
+
+  return <ProjectDashboard teacher={teacher} />;
+};
 
 export default App;

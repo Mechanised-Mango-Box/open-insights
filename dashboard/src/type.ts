@@ -6,7 +6,7 @@ export type User = {
 
 };
 
-export type Class = {
+export type Project = {
   id: number;
   name: string;
   teacher_id: number;
