@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from db import Base, engine, get_db
-from dbmodels import (
+from fastapi.middleware.cors import CORSMiddleware
+from dbmodel import (
     User,
     ClassRoom,
     ClassMember,
@@ -11,7 +12,7 @@ from dbmodels import (
     QuizOption,
     QuizAttempt,
 )
-from dbschemas import (
+from dbschema import (
     UserCreate,
     ClassCreate,
     VideoCreate,
@@ -25,6 +26,14 @@ import string
 
 # in the interest of writing a quick prototype, this file has been written by ChatGPT
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 Base.metadata.create_all(bind=engine)
 
 

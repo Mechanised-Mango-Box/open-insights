@@ -26,6 +26,7 @@ class AddVideoToClass(BaseModel):
 
 class QuizOptionCreate(BaseModel):
     option_text: str
+    is_correct: bool
 
 
 class QuizCheckpointCreate(BaseModel):
