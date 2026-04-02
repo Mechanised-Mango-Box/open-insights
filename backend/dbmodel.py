@@ -11,6 +11,7 @@ class User(Base):
     email = Column(String, unique=True, nullable=False)
     full_name = Column(String, nullable=False)
     role = Column(String, nullable=False)  # teacher or student
+    google_id = Column(String, unique=True, nullable=True)
 
 
 class ClassRoom(Base):

@@ -1,5 +1,10 @@
-#to run this file type "pip install -r requirements.txt"
+# Run: pip install -r requirements.txt
+
 pydantic
 fastapi
-typing
 sqlalchemy
+uvicorn
+authlib
+httpx
+python-jose[cryptography]
+python-dotenv

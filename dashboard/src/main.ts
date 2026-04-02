@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 
@@ -6,6 +6,10 @@ import started from 'electron-squirrel-startup';
 if (started) {
   app.quit();
 }
+
+ipcMain.on('open-google-auth', () => {
+  shell.openExternal('http://localhost:8000/auth/google/login');
+});
 
 const createWindow = () => {
   // Create the browser window.

@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from db import Base, engine, get_db
 from fastapi.middleware.cors import CORSMiddleware
+from auth import router as auth_router
 from dbmodel import (
     User,
     ClassRoom,
@@ -26,6 +27,7 @@ import string
 
 # in the interest of writing a quick prototype, this file has been written by ChatGPT
 app = FastAPI()
+app.include_router(auth_router) 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
