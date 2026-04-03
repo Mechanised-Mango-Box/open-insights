@@ -43,6 +43,9 @@ def generate_join_code(length=6):
 
 @app.post("/users")
 def create_user(payload: UserCreate, db: Session = Depends(get_db)):
+    existing = db.query(User).filter(User.email == payload.email).first()
+    if existing:
+        return existing
     user = User(email=payload.email, full_name=payload.full_name, role=payload.role)
     db.add(user)
     db.commit()
