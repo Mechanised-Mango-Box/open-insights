@@ -1,0 +1,136 @@
+<style>
+#erd svg { width: 100%; height: auto; }
+</style>
+<div id="erd"></div>
+<script type="module">
+import mermaid from 'https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs';
+const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+await document.fonts.ready;
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'base',
+  fontFamily: '"Arial", Arial',
+  themeVariables: {
+    darkMode: dark,
+    fontSize: '13px',
+    fontFamily: '"Arial", Arial',
+    lineColor: dark ? '#9c9a92' : '#73726c',
+    textColor: dark ? '#c2c0b6' : '#3d3d3a',
+    primaryColor: dark ? '#2a2a28' : '#f1efe8',
+    primaryBorderColor: dark ? '#5f5e5a' : '#888780',
+    primaryTextColor: dark ? '#c2c0b6' : '#3d3d3a',
+  },
+});
+const diagram = `erDiagram
+  users {
+    uuid id PK
+    string email
+    string name
+    string password_hash
+    time created_at
+    time updated_at
+  }
+
+  youtube_connections {
+    uuid id PK
+    uuid user_id FK
+    string channel_id
+    string channel_name
+    text access_token
+    text refresh_token
+    timestamp token_expires_at
+    timestamp connected_at
+  }
+
+  datasets {
+    uuid id PK
+    uuid user_id FK
+    string dataset_tag
+    string institution
+    string course_code
+    string course_name
+    string unit_level
+    string subject_area
+    int year
+    string speaker_name
+    string video_type
+    string source
+    timestamp created_at
+  }
+
+  videos {
+    uuid id PK
+    uuid dataset_id FK
+    string youtube_video_id
+    string title
+    string video_url
+    string channel_name
+    date upload_date
+    string source_path
+    string ingest_source
+    string processing_status
+    timestamp created_at
+  }
+
+  video_features {
+    uuid id PK
+    uuid video_id FK
+    numeric duration_min
+    string tag
+    int word_count
+    numeric avg_speaking_speed_wpm
+    int scene_count
+    numeric avg_scene_change_per_min
+    timestamp extracted_at
+  }
+
+  engagement_metrics {
+    uuid id PK
+    uuid video_id FK
+    numeric avg_pct_viewed
+    string metric_source
+    timestamp collected_at
+  }
+
+  public_contributions {
+    uuid id PK
+    uuid video_id FK
+    uuid user_id FK
+    boolean consent_given
+    timestamp contributed_at
+    string github_commit_sha
+  }
+
+  users ||--o{ datasets : owns
+  users ||--o| youtube_connections : connects
+  users ||--o{ public_contributions : contributes
+  datasets ||--o{ videos : contains
+  videos ||--o| video_features : has
+  videos ||--o| engagement_metrics : has
+  videos ||--o| public_contributions : shared_via
+`;
+const { svg } = await mermaid.render('erd-svg', diagram);
+document.getElementById('erd').innerHTML = svg;
+document.querySelectorAll('#erd svg .node').forEach(node => {
+  const firstPath = node.querySelector('path[d]');
+  if (!firstPath) return;
+  const d = firstPath.getAttribute('d');
+  const nums = d.match(/-?[\d.]+/g)?.map(Number);
+  if (!nums || nums.length < 8) return;
+  const xs = [nums[0], nums[2], nums[4], nums[6]];
+  const ys = [nums[1], nums[3], nums[5], nums[7]];
+  const x = Math.min(...xs), y = Math.min(...ys);
+  const w = Math.max(...xs) - x, h = Math.max(...ys) - y;
+  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rect.setAttribute('x', x); rect.setAttribute('y', y);
+  rect.setAttribute('width', w); rect.setAttribute('height', h);
+  rect.setAttribute('rx', '8');
+  for (const a of ['fill', 'stroke', 'stroke-width', 'class', 'style']) {
+    if (firstPath.hasAttribute(a)) rect.setAttribute(a, firstPath.getAttribute(a));
+  }
+  firstPath.replaceWith(rect);
+});
+document.querySelectorAll('#erd svg .row-rect-odd path, #erd svg .row-rect-even path').forEach(p => {
+  p.setAttribute('stroke', 'none');
+});
+</script>
