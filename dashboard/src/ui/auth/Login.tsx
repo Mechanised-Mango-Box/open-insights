@@ -1,4 +1,4 @@
-//this file is meant to mock a google login
+//this file handles Google login via IPC
 type Props = {
   onLogin: (user: {
     id: number;
@@ -8,22 +8,23 @@ type Props = {
   }) => void;
 };
 
-import { createUser } from "../../api";
-
 const Login = ({ onLogin }: Props) => {
-  const handleMockGoogleLogin = async () => {
-    const teacher = await createUser({
-      email: "teacher@monash.edu",
-      full_name: "Prototype Teacher",
-      role: "teacher",
-    });
-    onLogin(teacher);
+  const handleGoogleLogin = async () => {
+    try {
+      const response = await window.api.loginWithGoogle();
+      if (response && response.user) {
+        onLogin(response.user as any);
+      }
+    } catch (err) {
+      console.error("Login failed:", err);
+      alert("Login failed. Please try again.");
+    }
   };
 
   return (
     <div>
       <h1>Teacher Login</h1>
-      <button onClick={handleMockGoogleLogin}>
+      <button onClick={handleGoogleLogin}>
         Sign in with Google
       </button>
     </div>

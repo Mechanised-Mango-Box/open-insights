@@ -2,4 +2,8 @@
 pydantic
 fastapi
 typing
-psycopg2
+psycopg2-binary
+uvicorn[standard]
+PyJWT
+python-dotenv
+httpx

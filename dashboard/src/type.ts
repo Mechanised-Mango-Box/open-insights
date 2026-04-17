@@ -28,3 +28,11 @@ export type ClassVideo = {
   youtube_video_id: string;
 };
 
+declare global {
+  interface Window {
+    api: {
+      loginWithGoogle: () => Promise<{ user: User, token?: string }>;
+      getAuthToken: () => Promise<{ error: string | null, token: string | null }>;
+    };
+  }
+}

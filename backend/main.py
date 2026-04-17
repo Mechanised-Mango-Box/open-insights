@@ -2,6 +2,39 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from db import Base, engine, get_db
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from dotenv import load_dotenv
+import jwt
+import os
+from auth import router as auth_router
+
+load_dotenv()
+
+security = HTTPBearer()
+
+def get_current_teacher(credentials: HTTPAuthorizationCredentials = Depends(security), db: Session = Depends(get_db)):
+    token = credentials.credentials
+    secret = os.getenv("JWT_SECRET")
+    if not secret:
+        raise HTTPException(status_code=500, detail="JWT secret not configured")
+    try:
+        payload = jwt.decode(token, secret, algorithms=["HS256"])
+        role = payload.get("role")
+        if role != "teacher":
+            raise HTTPException(status_code=403, detail="Not authorized as teacher")
+        email = payload.get("email")
+        if email is None:
+            raise HTTPException(status_code=401, detail="Invalid token")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+        
+    user = db.query(User).filter(User.email == email).first()
+    if user is None:
+        raise HTTPException(status_code=401, detail="User not found")
+    return user
+
 from dbmodel import (
     User,
     ClassRoom,
@@ -34,6 +67,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth_router)
+
 Base.metadata.create_all(bind=engine)
 
 
@@ -54,7 +89,7 @@ def create_user(payload: UserCreate, db: Session = Depends(get_db)):
 
 
 @app.post("/classes")
-def create_class(payload: ClassCreate, db: Session = Depends(get_db)):
+def create_class(payload: ClassCreate, db: Session = Depends(get_db), current_teacher: User = Depends(get_current_teacher)):
     classroom = ClassRoom(
         name=payload.name, teacher_id=payload.teacher_id, join_code=generate_join_code()
     )
@@ -65,12 +100,12 @@ def create_class(payload: ClassCreate, db: Session = Depends(get_db)):
 
 
 @app.get("/teachers/{teacher_id}/classes")
-def get_teacher_classes(teacher_id: int, db: Session = Depends(get_db)):
+def get_teacher_classes(teacher_id: int, db: Session = Depends(get_db), current_teacher: User = Depends(get_current_teacher)):
     return db.query(ClassRoom).filter(ClassRoom.teacher_id == teacher_id).all()
 
 
 @app.post("/videos")
-def create_video(payload: VideoCreate, db: Session = Depends(get_db)):
+def create_video(payload: VideoCreate, db: Session = Depends(get_db), current_teacher: User = Depends(get_current_teacher)):
     video = Video(
         url=payload.url, youtube_video_id=payload.youtube_video_id, title=payload.title
     )
@@ -81,7 +116,7 @@ def create_video(payload: VideoCreate, db: Session = Depends(get_db)):
 
 
 @app.post("/class-videos")
-def add_video_to_class(payload: AddVideoToClass, db: Session = Depends(get_db)):
+def add_video_to_class(payload: AddVideoToClass, db: Session = Depends(get_db), current_teacher: User = Depends(get_current_teacher)):
     class_video = ClassVideo(class_id=payload.class_id, video_id=payload.video_id)
     db.add(class_video)
     db.commit()
@@ -90,7 +125,7 @@ def add_video_to_class(payload: AddVideoToClass, db: Session = Depends(get_db)):
 
 
 @app.get("/classes/{class_id}/videos")
-def get_class_videos(class_id: int, db: Session = Depends(get_db)):
+def get_class_videos(class_id: int, db: Session = Depends(get_db), current_teacher: User = Depends(get_current_teacher)):
     class_videos = db.query(ClassVideo).filter(ClassVideo.class_id == class_id).all()
     result = []
     for cv in class_videos:
@@ -108,7 +143,7 @@ def get_class_videos(class_id: int, db: Session = Depends(get_db)):
 
 
 @app.post("/quiz-checkpoints")
-def create_checkpoint(payload: QuizCheckpointCreate, db: Session = Depends(get_db)):
+def create_checkpoint(payload: QuizCheckpointCreate, db: Session = Depends(get_db), current_teacher: User = Depends(get_current_teacher)):
     checkpoint = QuizCheckpoint(
         class_video_id=payload.class_video_id,
         timestamp_seconds=payload.timestamp_seconds,
