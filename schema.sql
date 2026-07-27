@@ -10,3 +10,5 @@ CREATE TABLE videos (
     scene_count     INTEGER,
     uploader_opt_in INTEGER -- i guess this is binary yes or no   
 );
+
+DESC videos;
