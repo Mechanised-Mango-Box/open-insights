@@ -1,5 +1,7 @@
 import whisper
 from collections import list
+import cv2
+
 
 # example 
 # import whisper
@@ -37,8 +39,38 @@ def transcribe_and_wordcount(video_path: str, model) -> tuple[int, str]:
 
     return word_count, transcript
 
+# next function we need is to get the video duration 
+# to get this we need to use a tool called open cv which is a computer vision Tool used to analsye images, video analysis, and more.
+def video_duration(video_path: str) -> float:
+   
+    video_capture = cv2.VideoCapture(video_path) # this just asks opencv to open the video file 
+
+    # check if the file has opened
+    if video_capture.isOpened():
+        #get the frames per second property
+        fps = video_capture.get(cv2.CAP_PROP_FPS)
+
+        # get totatl frames in video
+        total_frames = video_capture.get(cv2.CAP_PROP_FRAME_COUNT)
+
+        duration = (total_frames/fps) / 60 # in mins
+
+        return duration 
 
 
+    else:
+        return ("VIDEO FILE WASN'T ABLE TO BE OPENED")
+
+   
+
+
+
+def word_per_min():
+    pass
+
+def count_scene_transitions():
+
+    pass
 
 
 
