@@ -1,16 +1,10 @@
-from typing import List, Dict, Optional, Any
+from utils import *
+from typing import List, Dict, Any
 from datetime import datetime, timezone
 from sqlite3 import connect
 from sqlite3 import Connection, Row, IntegrityError
-import json
-import csv
 from dataclasses import dataclass
-
-Path = str
-CustomResourceType = str
-ID = int
-DatasetFileLabel = str
-
+from utils import Result, Success, Failure
 
 # region Setup
 def connect_db(db_path: Path = "media_indexer.sqlite") -> Connection:
@@ -104,7 +98,32 @@ def setup_schema(c: Connection):
 
 
 # region File tracking
-def register_file_dataset(c: Connection, path: Path) -> int:
+def find_file_dataset(c: Connection, path: Path) -> Result[ID, None]:
+    cursor = c.execute(
+        """
+        SELECT _id FROM file_dataset
+        WHERE path=?
+        """,
+        (path,),
+    )
+
+    res = cursor.fetchone()
+    if res is None:
+        return Failure(None)
+    return Success(res[0])
+
+def find_entities_using_dataset(c: Connection, dataset_id: ID) -> List[ID]:
+    cursor = c.execute(
+        """
+        SELECT entity_id FROM link_entity_dataset
+        WHERE dataset_id=?
+        """,
+        (dataset_id,),
+    )
+    res = cursor.fetchall()
+    return list(map(lambda row: row[0], res))
+
+def register_file_dataset(c: Connection, path: Path) -> Result[int, str]:
     print(f"[ Asset Manager ] Registering file (data): {path}")
     try:
         cursor = c.execute(
@@ -115,12 +134,14 @@ def register_file_dataset(c: Connection, path: Path) -> int:
             (path,),
         )
         c.commit()
-        return cursor.lastrowid
+        if cursor.lastrowid is None:
+            return Failure("Unexpected null ID")
+        return Success(cursor.lastrowid)
     except IntegrityError:
-        raise ValueError(f"File data already exists for path: {path}")
+        return Failure(f"File data already exists for path: {path}")
 
 
-def register_file_video(c: Connection, path: Path) -> int:
+def register_file_video(c: Connection, path: Path) -> Result[int, str]:
     print(f"[ Asset Manager ] Registering file (video): {path}")
     try:
         cursor = c.execute(
@@ -131,23 +152,29 @@ def register_file_video(c: Connection, path: Path) -> int:
             (path,),
         )
         c.commit()
-        return cursor.lastrowid
+        if cursor.lastrowid is None:
+            return Failure("Unexpected null ID")
+        return Success(cursor.lastrowid)
     except IntegrityError:
-        raise ValueError(f"Video file already exists for path: {path}")
+        return Failure(f"Video file already exists for path: {path}")
 
 
 # endregion
 
 
 # region Entity management
-def new_entity(c: Connection) -> ID:
+def new_entity(c: Connection) -> Result[ID, str]:
     print(f"[ Asset Manager ] Creating new entity...")
     cur = c.execute(
         "INSERT INTO entity (display_name, video_id) VALUES (?, ?)",
         (None, None),
     )
     c.commit()
-    return cur.lastrowid
+
+    if cur.lastrowid is None:
+        return Failure("Unexpected null ID")
+
+    return Success(cur.lastrowid)
 
 
 def upsert_entity_video(c: Connection, entity_id: ID, video_id: ID):
@@ -167,9 +194,9 @@ def upsert_entity_video(c: Connection, entity_id: ID, video_id: ID):
     c.commit()
 
 
-def upsert_entity_data(
+def upsert_link_entity_data(
     c: Connection, entity_id: ID, dataset_id: ID, label: DatasetFileLabel
-):
+) -> Result[None, str]:
     print(f"[ Asset Manager ] Updating entity (id={entity_id}).")
 
     c.execute(
@@ -182,33 +209,22 @@ def upsert_entity_data(
         (entity_id, label, dataset_id),
     )
     c.commit()
+    return Success(None)
 
 
-# endregion
+def delete_link_entity_data(c: Connection, entity_id: ID, label: DatasetFileLabel):
+    print(
+        f"[ Asset Manager ] Deleting entity-data link (entity_id={entity_id}, label={label})."
+    )
 
-
-# region File utils
-def parse_csv_to_dict(
-    file_path: Path, *, delimiter=",", has_header=True
-) -> Dict[str, List[str]]:
-    with open(file_path, newline="", encoding="utf-8") as f:
-        if has_header:
-            reader = csv.DictReader(f, delimiter=delimiter)
-            if reader.fieldnames is None:
-                return {}
-            out: Dict[str, List[str]] = {name: [] for name in reader.fieldnames}
-            for row in reader:
-                for k, v in row.items():
-                    out[k].append("" if v is None else v)
-            return out
-        else:
-            reader = csv.reader(f, delimiter=delimiter)
-            out: Dict[str, List[str]] = {}
-            for row in reader:
-                for i, cell in enumerate(row):
-                    key = f"column{i}"
-                    out.setdefault(key, []).append(cell)
-            return out
+    c.execute(
+        """
+        DELETE FROM link_entity_dataset 
+        WHERE entity_id = ? AND label = ?
+        """,
+        (entity_id, label),
+    )
+    c.commit()
 
 
 # endregion

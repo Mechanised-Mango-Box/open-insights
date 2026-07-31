@@ -1,10 +1,9 @@
-from typing import List, Dict, Optional, Any
+from asset_manager.file_utils import parse_csv_to_dict
+from asset_manager.db import EntitySnapshot
+from utils import *
+from typing import List, Dict, Any
 from dataclasses import dataclass
-import os
 from sqlite3 import Connection
-import csv
-from asset_manager import parse_csv_to_dict, DatasetFileLabel, EntitySnapshot
-from copy import copy
 
 
 @dataclass
@@ -24,16 +23,15 @@ class TrainingResourcesSnapshot:
     log: List[str]
     fetch_success: bool = False
 
-def fetch_snapshot(
-    c: "Connection", m: "TrainingResourcesManifest"
-) -> "TrainingResourcesSnapshot":
+
+def fetch_snapshot(c: Connection, m: TrainingResourcesManifest) -> TrainingResourcesSnapshot:
     snapshot = TrainingResourcesSnapshot(
         entity_snapshots=[],
         data={label: {} for label in m.dataset_file_labels},
         log=[],
         fetch_success=False,
     )
-    has_failed:bool = False
+    has_failed: bool = False
 
     if not m.entity_ids:
         snapshot.log.append("[ ERR ] No entities specified. Fatal operation.")
@@ -43,31 +41,34 @@ def fetch_snapshot(
     if not m.dataset_file_labels:
         snapshot.log.append(" [ WRN ] No labels specified. Proceeding regardless.")
 
-    #> Entity data
+    # > Entity data
     for entity_id in m.entity_ids:
-        e_snap: Optional[EntitySnapshot] = fetch_entity_snapshot(c, entity_id)
-        if e_snap is None:
-            snapshot.log.append(f" [ERR] Entity id provided ({entity_id}) did not match a record.")
-            has_failed = True
-            continue
-        
-        snapshot.entity_snapshots.append(e_snap)
-
-    #> Datasets
-    for label in m.dataset_file_labels:
-        for entity_id in m.entity_ids:
-            path: Path = fetch_dataset_path(c, entity_id, label)
-            if path is None:
-                snapshot.log.append(f" [ERR] File no longer exists: {path}")
+        match fetch_entity_snapshot(c, entity_id):
+            case Success(value):
+                snapshot.entity_snapshots.append(value)
+            case Failure(err):
+                snapshot.log.append(f" [ ERR ] Entity id provided ({entity_id}) did not match a record.")
                 has_failed = True
                 continue
-                
-            snapshot.data[label][entity_id] = parse_csv_to_dict(path, delimiter=",")
+
+
+    # > Datasets
+    for label in m.dataset_file_labels:
+        for entity_id in m.entity_ids:
+            match fetch_dataset_path(c, entity_id, label):
+                case Success(value):
+                    path: Path = value
+                    snapshot.data[label][entity_id] = parse_csv_to_dict(path, delimiter=",")
+                case Failure(err):
+                    snapshot.log.append(f" [ ERR ] File no longer exists ({entity_id}'s {label}): {err}")
+                    has_failed = True
+                    continue
 
     snapshot.fetch_success = not has_failed
     return snapshot
 
-def fetch_entity_snapshot(c: Connection, entity_id: ID) -> Optional[EntitySnapshot]:
+
+def fetch_entity_snapshot(c: Connection, entity_id: ID) -> Result[EntitySnapshot, str]:
     row = c.execute(
         """
         SELECT
@@ -91,29 +92,32 @@ def fetch_entity_snapshot(c: Connection, entity_id: ID) -> Optional[EntitySnapsh
     ).fetchone()
 
     if row is None:
-        return None
+        return Failure(f"Failed load entity (id={entity_id})")
 
-    return EntitySnapshot(
-        _id=row[0],
-        display_name=row[1],
-        video_id=row[2],
-        yt_hash=row[3],
-        yt_title=row[4],
-        yt_pub_time=row[5],
-        yt_duration=row[6],
-        yt_views=row[7],
-        yt_watch_time=row[8],
-        yt_subscribers=row[9],
-        yt_average_view_duration=row[10],
-        yt_impressions=row[11],
-        yt_impressions_click_through_rate=row[12],
+    return Success(
+        EntitySnapshot(
+            _id=row[0],
+            display_name=row[1],
+            video_id=row[2],
+            yt_hash=row[3],
+            yt_title=row[4],
+            yt_pub_time=row[5],
+            yt_duration=row[6],
+            yt_views=row[7],
+            yt_watch_time=row[8],
+            yt_subscribers=row[9],
+            yt_average_view_duration=row[10],
+            yt_impressions=row[11],
+            yt_impressions_click_through_rate=row[12],
+        )
     )
+
 
 def fetch_dataset_path(
     c: Connection,
     entity_id: ID,
     label: str,
-) -> Optional[Path]:
+) -> Result[Path, str]:
     """
     Get dataset path for this entity + label
     """
@@ -130,10 +134,10 @@ def fetch_dataset_path(
     ).fetchone()
 
     if cursor is None:
-        return None
+        return Failure("Unexpected null cursor")
 
     path = cursor[0]
     if path is None:
-        return None
+        return Failure("No path was found")
 
-    return path
+    return Success(path)
