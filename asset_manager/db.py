@@ -1,3 +1,4 @@
+from typing import Tuple
 from utils import *
 from typing import List, Dict, Any
 from datetime import datetime, timezone
@@ -6,8 +7,9 @@ from sqlite3 import Connection, Row, IntegrityError
 from dataclasses import dataclass
 from utils import Result, Success, Failure
 
+
 # region Setup
-def connect_db(db_path: Path = "media_indexer.sqlite") -> Connection:
+def connect_db(db_path: Path) -> Connection:
     print("[ Asset Manager ] Connecting to DB.")
     c: Connection = connect(db_path)
     c.execute("PRAGMA foreign_keys = ON;")
@@ -32,6 +34,23 @@ class EntitySnapshot:
     yt_average_view_duration: int
     yt_impressions: int
     yt_impressions_click_through_rate: float
+
+    def from_row(row: Tuple) -> EntitySnapshot:
+        return EntitySnapshot(
+            _id=row[0],
+            display_name=row[1],
+            video_id=row[2],
+            yt_hash=row[3],
+            yt_title=row[4],
+            yt_pub_time=row[5],
+            yt_duration=row[6],
+            yt_views=row[7],
+            yt_watch_time=row[8],
+            yt_subscribers=row[9],
+            yt_average_view_duration=row[10],
+            yt_impressions=row[11],
+            yt_impressions_click_through_rate=row[12],
+        )
 
 
 def setup_schema(c: Connection):
@@ -112,6 +131,7 @@ def find_file_dataset(c: Connection, path: Path) -> Result[ID, None]:
         return Failure(None)
     return Success(res[0])
 
+
 def find_entities_using_dataset(c: Connection, dataset_id: ID) -> List[ID]:
     cursor = c.execute(
         """
@@ -122,6 +142,7 @@ def find_entities_using_dataset(c: Connection, dataset_id: ID) -> List[ID]:
     )
     res = cursor.fetchall()
     return list(map(lambda row: row[0], res))
+
 
 def register_file_dataset(c: Connection, path: Path) -> Result[int, str]:
     print(f"[ Asset Manager ] Registering file (data): {path}")
@@ -163,6 +184,16 @@ def register_file_video(c: Connection, path: Path) -> Result[int, str]:
 
 
 # region Entity management
+def get_all_entity_ids(c: Connection) -> List[ID]:
+    cur = c.execute(
+        """
+        SELECT _id FROM entity
+        """,
+    )
+    rows = cur.fetchall()
+    return [row[0] for row in rows]
+
+
 def new_entity(c: Connection) -> Result[ID, str]:
     print(f"[ Asset Manager ] Creating new entity...")
     cur = c.execute(
@@ -194,9 +225,7 @@ def upsert_entity_video(c: Connection, entity_id: ID, video_id: ID):
     c.commit()
 
 
-def upsert_link_entity_data(
-    c: Connection, entity_id: ID, dataset_id: ID, label: DatasetFileLabel
-) -> Result[None, str]:
+def upsert_link_entity_data(c: Connection, entity_id: ID, dataset_id: ID, label: DatasetFileLabel) -> Result[None, str]:
     print(f"[ Asset Manager ] Updating entity (id={entity_id}).")
 
     c.execute(
@@ -213,9 +242,7 @@ def upsert_link_entity_data(
 
 
 def delete_link_entity_data(c: Connection, entity_id: ID, label: DatasetFileLabel):
-    print(
-        f"[ Asset Manager ] Deleting entity-data link (entity_id={entity_id}, label={label})."
-    )
+    print(f"[ Asset Manager ] Deleting entity-data link (entity_id={entity_id}, label={label}).")
 
     c.execute(
         """
@@ -252,3 +279,22 @@ def find_entity_ids_from_yt_hash(c: Connection, yt_hash: str) -> List[ID]:
     )
     rows = cur.fetchall()
     return [row[0] for row in rows]
+
+
+def find_entities(c: Connection, *, count: int = -1) -> Result[List[EntitySnapshot], str]:
+    cursor = c.execute(
+        """
+        SELECT *
+        FROM entity
+        LIMIT ?
+        """,
+        (count,),
+    )
+
+    rows = cursor.fetchall()
+
+    try:
+        snapshots = [EntitySnapshot.from_row(r) for r in rows]
+        return Success(snapshots)
+    except Exception as e:
+        return Failure(str(e))

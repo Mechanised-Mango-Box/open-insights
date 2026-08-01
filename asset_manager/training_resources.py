@@ -51,7 +51,6 @@ def fetch_snapshot(c: Connection, m: TrainingResourcesManifest) -> TrainingResou
                 has_failed = True
                 continue
 
-
     # > Datasets
     for label in m.dataset_file_labels:
         for entity_id in m.entity_ids:
@@ -94,23 +93,7 @@ def fetch_entity_snapshot(c: Connection, entity_id: ID) -> Result[EntitySnapshot
     if row is None:
         return Failure(f"Failed load entity (id={entity_id})")
 
-    return Success(
-        EntitySnapshot(
-            _id=row[0],
-            display_name=row[1],
-            video_id=row[2],
-            yt_hash=row[3],
-            yt_title=row[4],
-            yt_pub_time=row[5],
-            yt_duration=row[6],
-            yt_views=row[7],
-            yt_watch_time=row[8],
-            yt_subscribers=row[9],
-            yt_average_view_duration=row[10],
-            yt_impressions=row[11],
-            yt_impressions_click_through_rate=row[12],
-        )
-    )
+    return Success(EntitySnapshot.from_row(row))
 
 
 def fetch_dataset_path(
