@@ -68,6 +68,7 @@ def yt_content_upsert(c: Connection, yt_hash: str, row: Dict[str, str], should_c
             cursor.execute(
                 """
                 INSERT INTO entity (
+                    display_name,
                     yt_hash,
                     yt_title,
                     yt_pub_time,
@@ -78,9 +79,11 @@ def yt_content_upsert(c: Connection, yt_hash: str, row: Dict[str, str], should_c
                     yt_average_view_duration,
                     yt_impressions,
                     yt_impressions_click_through_rate
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
+                    row["Video title"],
+
                     yt_hash,
                     row["Video title"],
                     row["Video publish time"],

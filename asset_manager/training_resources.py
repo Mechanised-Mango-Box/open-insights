@@ -1,5 +1,5 @@
 from asset_manager.file_utils import parse_csv_to_dict
-from asset_manager.db import EntitySnapshot
+from universe import EntitySnapshot
 from utils import *
 from typing import List, Dict, Any
 from dataclasses import dataclass
