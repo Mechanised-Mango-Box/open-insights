@@ -1,4 +1,3 @@
-from universe import EntitySnapshot
 from typing import Tuple
 from utils import *
 from typing import List, Dict, Any
@@ -258,6 +257,25 @@ def find_entities(c: Connection, *, count: int = -1) -> Result[List[EntitySnapsh
 
     try:
         snapshots = [EntitySnapshot.from_row(r) for r in rows]
+        return Success(snapshots)
+    except Exception as e:
+        return Failure(str(e))
+
+
+def find_datasets(c: Connection, *, count: int = -1) -> Result[List[DatasetSnapshot], str]:
+    cursor = c.execute(
+        """
+        SELECT *
+        FROM file_dataset
+        LIMIT ?
+        """,
+        (count,),
+    )
+
+    rows = cursor.fetchall()
+
+    try:
+        snapshots = [DatasetSnapshot.from_row(r) for r in rows]
         return Success(snapshots)
     except Exception as e:
         return Failure(str(e))

@@ -1,16 +1,12 @@
 from universe import Universe
-from universe import EntitySnapshot
 from imgui_bundle import imgui
 from typing import Optional, List
 from sqlite3 import Connection
-
-# --- your imports ---
 from asset_manager.db import find_entities, find_file_dataset, find_entities_using_dataset, register_file_dataset, find_entity_ids_from_yt_title, upsert_link_entity_data
 from asset_manager.training_resources import fetch_snapshot, TrainingResourcesManifest
 from utils import Failure, Success
 from utils import ID
-
-from time import time
+import mimetypes
 
 def entity_table(u: Universe, element_id: str):
     table_flags = imgui.TableFlags_.borders | imgui.TableFlags_.row_bg | imgui.TableFlags_.resizable
@@ -38,34 +34,45 @@ def entity_table(u: Universe, element_id: str):
         # > Populate
         for snap in u.entity_snapshots:
             imgui.table_next_row()
-            imgui.table_set_column_index(0)
-            imgui.text(str(snap.display_name))
-            imgui.table_set_column_index(1)
-            imgui.text(str(snap.video_id))
+            imgui.table_set_column_index(0); imgui.text(str(snap.display_name))
+            imgui.table_set_column_index(1); imgui.text(str(snap.video_id))
 
+            imgui.table_set_column_index(2); imgui.text(str(snap.yt_hash))
+            imgui.table_set_column_index(3); imgui.text(str(snap.yt_title))
+
+            imgui.table_set_column_index(4); imgui.text(str(snap.yt_pub_time))
+            imgui.table_set_column_index(5); imgui.text(str(snap.yt_duration))
+            imgui.table_set_column_index(6); imgui.text(str(snap.yt_views))
+
+            imgui.table_set_column_index(7); imgui.text(str(snap.yt_watch_time))
+            imgui.table_set_column_index(8); imgui.text(str(snap.yt_subscribers))
+            imgui.table_set_column_index(9); imgui.text(str(snap.yt_average_view_duration))
+
+            imgui.table_set_column_index(10); imgui.text(str(snap.yt_impressions))
+            imgui.table_set_column_index(11); imgui.text(str(snap.yt_impressions_click_through_rate))
+
+        imgui.end_table()
+
+def dataset_table(u: Universe, element_id: str):
+    table_flags = imgui.TableFlags_.borders | imgui.TableFlags_.row_bg | imgui.TableFlags_.resizable
+
+    if imgui.begin_table(element_id, 3, table_flags):
+        # > Generate Headers
+        imgui.table_setup_column("ID")
+        imgui.table_setup_column("Path")
+        imgui.table_setup_column("Type")
+
+        imgui.table_headers_row()
+
+        # > Populate
+        for snap in u.dataset_snapshots:
+            imgui.table_next_row()
+
+            imgui.table_set_column_index(0);            imgui.text(str(snap._id))
+            imgui.table_set_column_index(1);            imgui.text(str(snap.path))
             imgui.table_set_column_index(2)
-            imgui.text(str(snap.yt_hash))
-            imgui.table_set_column_index(3)
-            imgui.text(str(snap.yt_title))
-
-            imgui.table_set_column_index(4)
-            imgui.text(str(snap.yt_pub_time))
-            imgui.table_set_column_index(5)
-            imgui.text(str(snap.yt_duration))
-            imgui.table_set_column_index(6)
-            imgui.text(str(snap.yt_views))
-
-            imgui.table_set_column_index(7)
-            imgui.text(str(snap.yt_watch_time))
-            imgui.table_set_column_index(8)
-            imgui.text(str(snap.yt_subscribers))
-            imgui.table_set_column_index(9)
-            imgui.text(str(snap.yt_average_view_duration))
-
-            imgui.table_set_column_index(10)
-            imgui.text(str(snap.yt_impressions))
-            imgui.table_set_column_index(11)
-            imgui.text(str(snap.yt_impressions_click_through_rate))
+            mime, _ = mimetypes.guess_type(snap.path)
+            imgui.text(str(mime))
 
         imgui.end_table()
 
