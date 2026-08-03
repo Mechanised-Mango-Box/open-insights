@@ -23,7 +23,7 @@ def entity_table(u: Universe, element_id: str):
         imgui.table_setup_column("Duration (s)")
         imgui.table_setup_column("Views")
 
-        imgui.table_setup_column("Watch Time (s)")
+        imgui.table_setup_column("Watch Time (mins)")
         imgui.table_setup_column("Subscribers")
         imgui.table_setup_column("Avg View Duration (s)")
 
@@ -34,7 +34,12 @@ def entity_table(u: Universe, element_id: str):
         # > Populate
         for snap in u.entity_snapshots:
             imgui.table_next_row()
-            imgui.table_set_column_index(0); imgui.text(str(snap.display_name))
+            
+            imgui.table_set_column_index(0)
+            clicked, _ = imgui.selectable(
+                f"{snap.display_name}##{snap._id}", 
+                False, imgui.SelectableFlags_.span_all_columns | imgui.SelectableFlags_.allow_overlap)
+                
             imgui.table_set_column_index(1); imgui.text(str(snap.video_id))
 
             imgui.table_set_column_index(2); imgui.text(str(snap.yt_hash))
@@ -44,7 +49,7 @@ def entity_table(u: Universe, element_id: str):
             imgui.table_set_column_index(5); imgui.text(str(snap.yt_duration))
             imgui.table_set_column_index(6); imgui.text(str(snap.yt_views))
 
-            imgui.table_set_column_index(7); imgui.text(str(snap.yt_watch_time))
+            imgui.table_set_column_index(7); imgui.text(str(snap.yt_watch_time * 60))
             imgui.table_set_column_index(8); imgui.text(str(snap.yt_subscribers))
             imgui.table_set_column_index(9); imgui.text(str(snap.yt_average_view_duration))
 
