@@ -1,3 +1,5 @@
+from utils import EntitySnapshot
+from utils import VideoSnapshot
 from typing import Tuple
 from utils import *
 from typing import List, Dict, Any
@@ -169,6 +171,47 @@ def new_entity(c: Connection) -> Result[ID, str]:
 
     return Success(cur.lastrowid)
 
+def update_entity(c: Connection, snap: EntitySnapshot) -> Result[None, str]:
+    print(f"[ Asset Manager ] Updating entity (id={snap._id})...")
+    try:
+        cur = c.execute(
+            """
+            UPDATE entity
+            SET
+                display_name = ?,
+                video_id = ?,
+                yt_hash = ?,
+                yt_title = ?,
+                yt_pub_time = ?,
+                yt_duration = ?,
+                yt_views = ?,
+                yt_watch_time = ?,
+                yt_subscribers = ?,
+                yt_average_view_duration = ?,
+                yt_impressions = ?,
+                yt_impressions_click_through_rate = ?
+            WHERE _id = ?
+            """,
+            (
+                snap.display_name,
+                snap.video_id,
+                snap.yt_hash,
+                snap.yt_title,
+                snap.yt_pub_time,
+                snap.yt_duration,
+                snap.yt_views,
+                snap.yt_watch_time,
+                snap.yt_subscribers,
+                snap.yt_average_view_duration,
+                snap.yt_impressions,
+                snap.yt_impressions_click_through_rate,
+                snap._id,
+            )
+        )
+        c.commit()
+        return Success(None)
+    except Exception as e:
+        return Failure(f"Failed to update entity (id={snap._id}): {e}")
 
 def upsert_entity_video(c: Connection, entity_id: ID, video_id: ID):
     print(f"[ Asset Manager ] Updating entity (id={entity_id}).")
@@ -276,6 +319,24 @@ def find_datasets(c: Connection, *, count: int = -1) -> Result[List[DatasetSnaps
 
     try:
         snapshots = [DatasetSnapshot.from_row(r) for r in rows]
+        return Success(snapshots)
+    except Exception as e:
+        return Failure(str(e))
+
+def find_videos(c: Connection, *, count: int = -1) -> Result[List[VideoSnapshot], str]:
+    cursor = c.execute(
+        """
+        SELECT *
+        FROM file_video
+        LIMIT ?
+        """,
+        (count,),
+    )
+
+    rows = cursor.fetchall()
+
+    try:
+        snapshots = [VideoSnapshot.from_row(r) for r in rows]
         return Success(snapshots)
     except Exception as e:
         return Failure(str(e))

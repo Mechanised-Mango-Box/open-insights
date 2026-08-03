@@ -1,3 +1,4 @@
+from gui.tables import video_table
 from gui.tables import dataset_table
 from imgui_bundle import imgui_md
 from gui.tables import register_files
@@ -6,7 +7,8 @@ from imgui_bundle import portable_file_dialogs as pfd
 from imgui_bundle import imgui
 from universe import Universe
 
-def build_page(u:Universe):
+
+def build_page(u: Universe):
     if imgui.begin_tab_item("Import")[0]:
         imgui.text("Add a file or directory:")
         if imgui.button("Add entities (PLACEHOLDER)"):
@@ -38,6 +40,13 @@ This is a list of all datasets.
         )
         dataset_table(u, "dataset_table")
         imgui.end_tab_item()
-    if imgui.begin_tab_item("Videos")[0]:
-        imgui.text("Under construction...")
+
+    if imgui.begin_tab_item("Video Files")[0]:
+        imgui_md.render(
+            """
+## Video Files
+This is a list of all video files. This does not include data about said files (see: "Entity")
+        """
+        )
+        video_table(u, "video_table")
         imgui.end_tab_item()

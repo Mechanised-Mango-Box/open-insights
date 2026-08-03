@@ -7,7 +7,6 @@ from asset_manager.db import setup_schema, connect_db
 from imgui_bundle import immapp, implot, imgui_md, imgui
 
 
-
 def build_ui(u: Universe):
     if imgui.begin_tab_bar("views", imgui.TabBarFlags_.none):
         if imgui.begin_tab_item("Asset Management")[0]:

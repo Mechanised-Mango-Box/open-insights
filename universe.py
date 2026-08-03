@@ -1,3 +1,6 @@
+from typing_extensions import Optional
+from asset_manager.db import find_videos
+from utils import VideoSnapshot
 from asset_manager.db import find_datasets
 from utils import DatasetSnapshot
 from utils import EntitySnapshot
@@ -13,6 +16,7 @@ class Universe:
 
     entity_snapshots: List[EntitySnapshot] = []
     dataset_snapshots: List[DatasetSnapshot] = []
+    video_snapshots: List[VideoSnapshot] = []
 
     def reload_entity_snapshots(self):
         match find_entities(self.db):
@@ -29,3 +33,14 @@ class Universe:
             case Success(snaps):
                 self.dataset_snapshots.clear()
                 self.dataset_snapshots.extend(snaps)
+
+    def reload_video_snapshots(self):
+        match find_videos(self.db):
+            case Failure(err):
+                print(err)
+            case Success(snaps):
+                self.video_snapshots.clear()
+                self.video_snapshots.extend(snaps)
+
+    editing_entity_snapshot: Optional[EntitySnapshot]
+    _editing_entity_snapshot_original: Optional[EntitySnapshot]

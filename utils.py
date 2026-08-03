@@ -1,3 +1,4 @@
+from typing_extensions import Optional
 from typing import Tuple
 from dataclasses import dataclass
 from typing import Generic, TypeVar, Union
@@ -29,13 +30,13 @@ DatasetFileLabel = str
 
 
 # region Container Structs
-@dataclass(frozen=True)
+@dataclass()
 class EntitySnapshot:
     _id: ID
 
     display_name: str
 
-    video_id: int
+    video_id: Optional[int]
 
     yt_hash: str
     yt_title: str
@@ -66,7 +67,7 @@ class EntitySnapshot:
         )
 
 
-@dataclass(frozen=True)
+@dataclass()
 class DatasetSnapshot:
     _id: ID
 
@@ -74,6 +75,18 @@ class DatasetSnapshot:
 
     def from_row(row: Tuple):
         return DatasetSnapshot(
+            _id=row[0],
+            path=row[1],
+        )
+
+@dataclass(frozen=True)
+class VideoSnapshot:
+    _id: ID
+
+    path: Path
+
+    def from_row(row: Tuple):
+        return VideoSnapshot(
             _id=row[0],
             path=row[1],
         )
