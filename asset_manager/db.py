@@ -1,3 +1,4 @@
+from utils import DatasetSnapshot
 from utils import EntitySnapshot
 from utils import VideoSnapshot
 from typing import Tuple
@@ -16,6 +17,7 @@ def connect_db(db_path: Path) -> Connection:
     c: Connection = connect(db_path)
     c.execute("PRAGMA foreign_keys = ON;")
     return c
+
 
 def setup_schema(c: Connection):
     print("[ Asset Manager ] Loading schema.")
@@ -45,12 +47,17 @@ def setup_schema(c: Connection):
 
     CREATE TABLE IF NOT EXISTS file_video (
         _id INTEGER PRIMARY KEY,
-        path TEXT UNIQUE NOT NULL
+        path TEXT UNIQUE NOT NULL,
+
+        display_name TEXT NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS file_dataset (
         _id INTEGER PRIMARY KEY,
-        path TEXT UNIQUE NOT NULL
+        path TEXT UNIQUE NOT NULL,
+
+        display_name TEXT NOT NULL,
+        source TEXT
     );
 
     CREATE TABLE IF NOT EXISTS link_entity_dataset (
@@ -108,40 +115,48 @@ def find_entities_using_dataset(c: Connection, dataset_id: ID) -> List[ID]:
     return list(map(lambda row: row[0], res))
 
 
-def register_file_dataset(c: Connection, path: Path) -> Result[int, str]:
-    print(f"[ Asset Manager ] Registering file (data): {path}")
+def register_file_dataset(c: Connection, snap: DatasetSnapshot) -> Result[int, str]:
+    print(f"[ Asset Manager ] Registering file (data): {snap}")
     try:
+        assert snap._id <= 0, "Potentially attempting to insert an existing record."
         cursor = c.execute(
             """
-            INSERT INTO file_dataset (path)
-            VALUES (?)
+            INSERT INTO file_dataset (path, display_name, source)
+            VALUES (?, ?, ?)
             """,
-            (path,),
+            (
+                snap.path,
+                snap.display_name,
+                snap.source,
+            ),
         )
         c.commit()
         if cursor.lastrowid is None:
             return Failure("Unexpected null ID")
         return Success(cursor.lastrowid)
-    except IntegrityError:
-        return Failure(f"File data already exists for path: {path}")
+    except Exception as e:
+        return Failure(f"Failed to insert dataset file: {e}")
 
 
-def register_file_video(c: Connection, path: Path) -> Result[int, str]:
-    print(f"[ Asset Manager ] Registering file (video): {path}")
+def register_file_video(c: Connection, snap: VideoSnapshot) -> Result[int, str]:
+    print(f"[ Asset Manager ] Registering file (video): {snap}")
     try:
         cursor = c.execute(
             """
-            INSERT INTO file_video (path)
-            VALUES (?)
+            INSERT INTO file_video (path, display_name)
+            VALUES (?, ?)
             """,
-            (path,),
+            (
+                snap.path,
+                snap.display_name,
+            ),
         )
         c.commit()
         if cursor.lastrowid is None:
             return Failure("Unexpected null ID")
         return Success(cursor.lastrowid)
-    except IntegrityError:
-        return Failure(f"Video file already exists for path: {path}")
+    except Exception as e:
+        return Failure(f"Failed to insert video file: {e}")
 
 
 # endregion
@@ -170,6 +185,7 @@ def new_entity(c: Connection) -> Result[ID, str]:
         return Failure("Unexpected null ID")
 
     return Success(cur.lastrowid)
+
 
 def update_entity(c: Connection, snap: EntitySnapshot) -> Result[None, str]:
     print(f"[ Asset Manager ] Updating entity (id={snap._id})...")
@@ -206,12 +222,13 @@ def update_entity(c: Connection, snap: EntitySnapshot) -> Result[None, str]:
                 snap.yt_impressions,
                 snap.yt_impressions_click_through_rate,
                 snap._id,
-            )
+            ),
         )
         c.commit()
         return Success(None)
     except Exception as e:
         return Failure(f"Failed to update entity (id={snap._id}): {e}")
+
 
 def upsert_entity_video(c: Connection, entity_id: ID, video_id: ID):
     print(f"[ Asset Manager ] Updating entity (id={entity_id}).")
@@ -230,7 +247,9 @@ def upsert_entity_video(c: Connection, entity_id: ID, video_id: ID):
     c.commit()
 
 
-def upsert_link_entity_data(c: Connection, entity_id: ID, dataset_id: ID, label: DatasetFileLabel) -> Result[None, str]:
+def upsert_link_entity_data(
+    c: Connection, entity_id: ID, dataset_id: ID, label: DatasetFileLabel
+) -> Result[None, str]:
     print(f"[ Asset Manager ] Updating entity (id={entity_id}).")
 
     c.execute(
@@ -247,7 +266,9 @@ def upsert_link_entity_data(c: Connection, entity_id: ID, dataset_id: ID, label:
 
 
 def delete_link_entity_data(c: Connection, entity_id: ID, label: DatasetFileLabel):
-    print(f"[ Asset Manager ] Deleting entity-data link (entity_id={entity_id}, label={label}).")
+    print(
+        f"[ Asset Manager ] Deleting entity-data link (entity_id={entity_id}, label={label})."
+    )
 
     c.execute(
         """
@@ -286,7 +307,9 @@ def find_entity_ids_from_yt_hash(c: Connection, yt_hash: str) -> List[ID]:
     return [row[0] for row in rows]
 
 
-def find_entities(c: Connection, *, count: int = -1) -> Result[List[EntitySnapshot], str]:
+def find_entities(
+    c: Connection, *, count: int = -1
+) -> Result[List[EntitySnapshot], str]:
     cursor = c.execute(
         """
         SELECT *
@@ -305,7 +328,9 @@ def find_entities(c: Connection, *, count: int = -1) -> Result[List[EntitySnapsh
         return Failure(str(e))
 
 
-def find_datasets(c: Connection, *, count: int = -1) -> Result[List[DatasetSnapshot], str]:
+def find_datasets(
+    c: Connection, *, count: int = -1
+) -> Result[List[DatasetSnapshot], str]:
     cursor = c.execute(
         """
         SELECT *
@@ -322,6 +347,7 @@ def find_datasets(c: Connection, *, count: int = -1) -> Result[List[DatasetSnaps
         return Success(snapshots)
     except Exception as e:
         return Failure(str(e))
+
 
 def find_videos(c: Connection, *, count: int = -1) -> Result[List[VideoSnapshot], str]:
     cursor = c.execute(
@@ -340,6 +366,7 @@ def find_videos(c: Connection, *, count: int = -1) -> Result[List[VideoSnapshot]
         return Success(snapshots)
     except Exception as e:
         return Failure(str(e))
+
 
 def delete_entity(c: Connection, entity_id: ID) -> Result[None, str]:
     print(f"[ Asset Manager ] Deleting entity(id={entity_id}).")

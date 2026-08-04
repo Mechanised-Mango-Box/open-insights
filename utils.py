@@ -72,23 +72,28 @@ class DatasetSnapshot:
     _id: ID
 
     path: Path
+    display_name: str
+
+    source: Optional[str]
 
     def from_row(row: Tuple):
         return DatasetSnapshot(
-            _id=row[0],
-            path=row[1],
+            _id=row[0], path=row[1], display_name=row[2], source=row[3]
         )
+
 
 @dataclass(frozen=True)
 class VideoSnapshot:
     _id: ID
 
     path: Path
+    display_name: str
 
     def from_row(row: Tuple):
         return VideoSnapshot(
             _id=row[0],
             path=row[1],
+            display_name=row[2],
         )
 
 

@@ -10,7 +10,7 @@ def dataset_table(u: Universe, element_id: str):
         | imgui.TableFlags_.resizable
     )
 
-    if imgui.begin_table(element_id, 3, table_flags):
+    if imgui.begin_table(element_id, 5, table_flags):
         # > Generate Headers
         imgui.table_setup_column(
             "ID",
@@ -20,8 +20,15 @@ def dataset_table(u: Universe, element_id: str):
             "Type",
             imgui.TableColumnFlags_.no_resize | imgui.TableColumnFlags_.width_fixed,
         )
+        imgui.table_setup_column(
+            "Name",
+            imgui.TableColumnFlags_.width_fixed,
+        )
+        imgui.table_setup_column(
+            "Source",
+            imgui.TableColumnFlags_.width_fixed,
+        )
         imgui.table_setup_column("Path")
-
         imgui.table_headers_row()
 
         # > Populate
@@ -33,8 +40,14 @@ def dataset_table(u: Universe, element_id: str):
             imgui.table_set_column_index(1)
             mime, _ = mimetypes.guess_type(snap.path)
             imgui.text(str(mime))
+
             imgui.table_set_column_index(2)
-            imgui.text(str(snap.path))
+            imgui.text(snap.display_name)
+            if snap.source:
+                imgui.table_set_column_index(3)
+                imgui.text(snap.source)
+            imgui.table_set_column_index(4)
+            imgui.text(snap.path)
 
         imgui.end_table()
 
@@ -46,7 +59,7 @@ def video_table(u: Universe, element_id: str):
         | imgui.TableFlags_.resizable
     )
 
-    if imgui.begin_table(element_id, 3, table_flags):
+    if imgui.begin_table(element_id, 4, table_flags):
         # > Generate Headers
         imgui.table_setup_column(
             "ID",
@@ -55,6 +68,10 @@ def video_table(u: Universe, element_id: str):
         imgui.table_setup_column(
             "Type",
             imgui.TableColumnFlags_.no_resize | imgui.TableColumnFlags_.width_fixed,
+        )
+        imgui.table_setup_column(
+            "Name",
+            imgui.TableColumnFlags_.width_fixed,
         )
         imgui.table_setup_column("Path")
 
@@ -69,7 +86,10 @@ def video_table(u: Universe, element_id: str):
             imgui.table_set_column_index(1)
             mime, _ = mimetypes.guess_type(snap.path)
             imgui.text(str(mime))
+
             imgui.table_set_column_index(2)
-            imgui.text(str(snap.path))
+            imgui.text(snap.display_name)
+            imgui.table_set_column_index(3)
+            imgui.text(snap.path)
 
         imgui.end_table()

@@ -64,15 +64,6 @@ def entity_table(u: Universe, element_id: str):
         imgui.open_popup("Export Configuration")
     if imgui.begin_popup_modal("Export Configuration", None)[0]:
         imgui.text(f"Under construction")
-        # if imgui.button("Delete"):
-        #     for e_id in u.selecting_entity_id_set:
-        #         match delete_entity(u.db, e_id):
-        #             case Failure(err):
-        #                 print(err)
-        #                 break
-        #     u.reload_entity_snapshots()
-        #     imgui.close_current_popup()
-        # imgui.same_line()
         if imgui.button("Cancel"):
             imgui.close_current_popup()
         imgui.end_popup()
@@ -270,12 +261,7 @@ def entity_edit_menu(
             u.editing_entity_snapshot.video_id,
             u._editing_entity_snapshot_original.video_id,
         )
-        if imgui.button("Cancel"):
-            imgui.close_current_popup()
-            u.editing_entity_snapshot = None
-            u._editing_entity_snapshot_original = None
 
-        imgui.same_line()
         if imgui.button("Save"):
             imgui.close_current_popup()
             print(u.editing_entity_snapshot)
@@ -284,6 +270,11 @@ def entity_edit_menu(
                     print(err)
                 case Success():
                     u.reload_entity_snapshots()
+            u.editing_entity_snapshot = None
+            u._editing_entity_snapshot_original = None
+        imgui.same_line()
+        if imgui.button("Cancel"):
+            imgui.close_current_popup()
             u.editing_entity_snapshot = None
             u._editing_entity_snapshot_original = None
         imgui.end_popup()
