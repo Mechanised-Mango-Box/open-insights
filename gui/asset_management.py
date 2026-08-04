@@ -1,36 +1,21 @@
+from asset_manager.db import register_file_video
 from gui.tables import video_table
 from gui.tables import dataset_table
 from imgui_bundle import imgui_md
-from gui.tables import register_files
-from asset_manager.yt import yt_content_upsert_file
 from imgui_bundle import portable_file_dialogs as pfd
 from imgui_bundle import imgui
 from universe import Universe
-
+from universe import Universe
+from imgui_bundle import imgui
+from typing import Optional, List
+from sqlite3 import Connection
+from asset_manager.db import find_entities, find_file_dataset, find_entities_using_dataset, register_file_dataset, find_entity_ids_from_yt_title, upsert_link_entity_data
+from asset_manager.training_resources import fetch_snapshot, TrainingResourcesManifest
+from utils import Failure, Success
+from utils import ID
+import mimetypes
 
 def build_page(u: Universe):
-    if imgui.begin_tab_item("Import")[0]:
-        imgui.text("Add a file or directory:")
-        if imgui.button("Add entities (PLACEHOLDER)"):
-            selection = pfd.open_file("Select a csv", ".", ["Dataset Files", "*.csv"]).result()
-            if len(selection) == 1:
-                yt_content_upsert_file(u.db, selection[0])
-
-                u.reload_entity_snapshots()
-            else:
-                print(f"[ ERR ] Unexpected number of files ({len(selection)})")
-
-        if imgui.button("Add dataset(s)"):
-            selection = pfd.open_file("Select a dataset...", ".", ["Dataset Files", "*.csv *.json"], options=pfd.opt.multiselect).result()
-            print(selection)
-            register_files(u.db, selection)
-            u.reload_dataset_snapshots()
-        imgui.end_tab_item()
-
-    if imgui.begin_tab_item("Export")[0]:
-        imgui.text("Under construction...")
-        imgui.end_tab_item()
-
     if imgui.begin_tab_item("Datasets")[0]:
         imgui_md.render(
             """
@@ -38,6 +23,11 @@ def build_page(u: Universe):
 This is a list of all datasets.
         """
         )
+        if imgui.button("Add dataset(s)"):
+            selection = pfd.open_file("Select datasets...", ".", ["Dataset Files", "*.csv *.json"], options=pfd.opt.multiselect).result()
+            print(selection)
+            __placeholder_register_files(u.db, selection)
+            u.reload_dataset_snapshots()
         dataset_table(u, "dataset_table")
         imgui.end_tab_item()
 
@@ -48,5 +38,59 @@ This is a list of all datasets.
 This is a list of all video files. This does not include data about said files (see: "Entity")
         """
         )
+        if imgui.button("Add video(s)"):
+            selection = pfd.open_file("Select videos...", ".", ["Video Files", "*.mp4 *.mkv", "*.*"], options=pfd.opt.multiselect).result()
+            print(selection)
+            for video_path in selection:
+                register_file_video(u.db, video_path)
+            u.reload_video_snapshots()
+
         video_table(u, "video_table")
         imgui.end_tab_item()
+
+
+def __placeholder_register_files(c: Connection, paths: List[str]):
+    ids_to_train: List[ID] = []
+
+    for path in paths:
+        dataset_id: Optional[ID] = None
+        match find_file_dataset(c, path):
+            case Success(ds_id):
+                print(f"File at {path} already exists with id={ds_id}")
+                dataset_id = ds_id
+
+            case Failure():
+                match register_file_dataset(c, path):
+                    case Success(ds_id):
+                        dataset_id = ds_id
+                    case Failure(err):
+                        print(f"Failed to register file: {err}")
+                        continue
+        assert dataset_id is not None
+
+        entity_id: Optional[ID] = None
+        match find_entities_using_dataset(c, dataset_id):
+            case []:
+                while True:
+                    yt_title: str = input("What is the title of the yt video to attach to? ")
+                    matching_entities = find_entity_ids_from_yt_title(c, yt_title)
+                    if len(matching_entities) > 0:
+                        break
+                    else:
+                        print("Invalid title")
+                entity_id = matching_entities[0]
+                upsert_link_entity_data(c, entity_id, dataset_id, "yt_audience_retention")
+
+            case [*entities]:
+                print(f"Entity already linked to video/s: {entities}. Selecting one.")
+                entity_id = entities[0]
+
+        assert entity_id is not None
+        ids_to_train.append(entity_id)
+
+    print(f"creating manifest with entity ids: {ids_to_train}")
+    m: TrainingResourcesManifest = TrainingResourcesManifest(
+        entity_ids=ids_to_train,
+        dataset_file_labels=["yt_audience_retention"],
+    )
+    print(fetch_snapshot(c, m))

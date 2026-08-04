@@ -1,3 +1,4 @@
+from typing_extensions import Set
 from typing_extensions import Optional
 from asset_manager.db import find_videos
 from utils import VideoSnapshot
@@ -44,3 +45,4 @@ class Universe:
 
     editing_entity_snapshot: Optional[EntitySnapshot]
     _editing_entity_snapshot_original: Optional[EntitySnapshot]
+    selecting_entity_id_set: Set[int] = set()

@@ -34,8 +34,9 @@ if __name__ == "__main__":
     u.db = connect_db("./index.sqlite")
     setup_schema(u.db)
 
-    # > Load the entities once at start of application
+    # > Load the "truths" once at start of application
     u.reload_entity_snapshots()
     u.reload_dataset_snapshots()
+    u.reload_video_snapshots()
 
     immapp.run(lambda: build_ui(u), window_title="Open Insights", window_size=(1280, 720), with_implot=True, with_markdown=True)

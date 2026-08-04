@@ -340,3 +340,19 @@ def find_videos(c: Connection, *, count: int = -1) -> Result[List[VideoSnapshot]
         return Success(snapshots)
     except Exception as e:
         return Failure(str(e))
+
+def delete_entity(c: Connection, entity_id: ID) -> Result[None, str]:
+    print(f"[ Asset Manager ] Deleting entity(id={entity_id}).")
+
+    try:
+        c.execute(
+            """
+            DELETE FROM entity 
+            WHERE _id = ?
+            """,
+            (str(entity_id),),
+        )
+        c.commit()
+        return Success(None)
+    except Exception as e:
+        return Failure(f"[ Asset Manager ] Failed to delete entity: {e}")

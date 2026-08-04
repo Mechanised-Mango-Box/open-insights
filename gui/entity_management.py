@@ -1,3 +1,6 @@
+import imgui_bundle.portable_file_dialogs as pfd
+from asset_manager.yt import yt_content_upsert_file
+from asset_manager.db import delete_entity
 import functools
 from utils import Success
 from utils import Failure
@@ -12,18 +15,71 @@ from imgui_bundle import imgui
 
 
 def build_page(u: Universe):
+    if imgui.button("Add entities (PLACEHOLDER)"):
+        selection = pfd.open_file("Select a csv", ".", ["Dataset Files", "*.csv"]).result()
+        if len(selection) == 1:
+            yt_content_upsert_file(u.db, selection[0])
+
+            u.reload_entity_snapshots()
+        else:
+            print(f"[ ERR ] Unexpected number of files ({len(selection)})")
+
     imgui_md.render(
         """
-## Entities
+# Entities
 This is a list of all entities.
 
-Double click to edit. Hold shift to multi-select. Multi-sort is enabled.
+Double click to edit. Multi-sort is enabled.
 """
     )
+    imgui.new_line()
     entity_table(u, "entity_table")
 
 
 def entity_table(u: Universe, element_id: str):
+    if len(u.selecting_entity_id_set) == 0:
+        imgui.begin_disabled()
+    imgui_md.render("**Selection Actions**")
+
+    if imgui.button("Delete"):
+        imgui.open_popup("Delete Confirmation")
+    if imgui.begin_popup_modal("Delete Confirmation", None, imgui.WindowFlags_.no_resize)[0]:
+        imgui.text(f"Deleting {len(u.selecting_entity_id_set)} items.")
+        if imgui.button("Delete"):
+            for e_id in u.selecting_entity_id_set:
+                match delete_entity(u.db, e_id):
+                    case Failure(err):
+                        print(err)
+                        break
+            u.reload_entity_snapshots()
+            imgui.close_current_popup()
+        imgui.same_line()
+        if imgui.button("Cancel"):
+            imgui.close_current_popup()
+        imgui.end_popup()
+
+
+    imgui.same_line()
+    if imgui.button("Export"):
+        imgui.open_popup("Export Configuration")
+    if imgui.begin_popup_modal("Export Configuration", None)[0]:
+        imgui.text(f"Under construction")
+        # if imgui.button("Delete"):
+        #     for e_id in u.selecting_entity_id_set:
+        #         match delete_entity(u.db, e_id):
+        #             case Failure(err):
+        #                 print(err)
+        #                 break
+        #     u.reload_entity_snapshots()
+        #     imgui.close_current_popup()
+        # imgui.same_line()
+        if imgui.button("Cancel"):
+            imgui.close_current_popup()
+        imgui.end_popup()
+
+    if len(u.selecting_entity_id_set) == 0:
+        imgui.end_disabled()
+
     table_flags = (
         imgui.TableFlags_.borders
         | imgui.TableFlags_.row_bg
@@ -32,8 +88,15 @@ def entity_table(u: Universe, element_id: str):
         | imgui.TableFlags_.sort_multi
         | imgui.TableFlags_.sortable
     )
-    if imgui.begin_table(element_id, 12, table_flags):
+    if imgui.begin_table(element_id, 13, table_flags):
         # > Generate Headers
+        imgui.table_setup_column(
+            "",
+            imgui.TableColumnFlags_.no_sort
+            | imgui.TableColumnFlags_.no_resize
+            | imgui.TableColumnFlags_.width_fixed,
+        )
+
         imgui.table_setup_column("Display Name")
         imgui.table_setup_column("Video File")
 
@@ -54,36 +117,45 @@ def entity_table(u: Universe, element_id: str):
 
         specs = imgui.table_get_sort_specs()
         sorted_snaps = list(u.entity_snapshots)
+
         if specs and specs.specs_dirty == True:
             specs.specs_dirty = False
         if specs and specs.specs_count > 0:
             # map column index -> value accessor
             def value_for_col(snap, col):
-                if col == 0:  return snap.display_name
-                if col == 1:  return snap.video_id
-                if col == 2:  return snap.yt_hash
-                if col == 3:  return snap.yt_title
-                if col == 4:  return snap.yt_pub_time
-                if col == 5:  return snap.yt_duration
-                if col == 6:  return snap.yt_views
-                if col == 7:  return snap.yt_watch_time
-                if col == 8:  return snap.yt_subscribers
-                if col == 9:  return snap.yt_average_view_duration
-                if col == 10: return snap.yt_impressions
-                if col == 11: return snap.yt_impressions_click_through_rate
+                if col == 1:
+                    return snap.display_name
+                if col == 2:
+                    return snap.video_id
+                if col == 3:
+                    return snap.yt_hash
+                if col == 4:
+                    return snap.yt_title
+                if col == 5:
+                    return snap.yt_pub_time
+                if col == 6:
+                    return snap.yt_duration
+                if col == 7:
+                    return snap.yt_views
+                if col == 8:
+                    return snap.yt_watch_time
+                if col == 9:
+                    return snap.yt_subscribers
+                if col == 10:
+                    return snap.yt_average_view_duration
+                if col == 11:
+                    return snap.yt_impressions
+                if col == 12:
+                    return snap.yt_impressions_click_through_rate
                 return None
 
             def col_direction(colspec):
-                # direction is binding-dependent; common are:
-                # Asc/Desc enums or ints. We'll handle both patterns.
                 d = colspec.sort_direction
-                # ImGui commonly uses 0=none/asc? but bindings differ.
-                # Easiest: treat “descending” as the one that equals imgui.SortDirection_.descending (if present).
                 try:
-                    return 'desc' if d == imgui.SortDirection.descending else 'asc'
+                    return "desc" if d == imgui.SortDirection.descending else "asc"
                 except Exception:
                     # fallback: if it's an int where desc is 1
-                    return 'desc' if d else 'asc'
+                    return "desc" if d else "asc"
 
             def cmp(a, b):
                 # multi-sort: iterate each column sort spec in order
@@ -99,65 +171,73 @@ def entity_table(u: Universe, element_id: str):
                     if va is None and vb is None:
                         continue
                     if va is None:
-                        return 1 if dir_ == 'asc' else -1
+                        return 1 if dir_ == "asc" else -1
                     if vb is None:
-                        return -1 if dir_ == 'asc' else 1
+                        return -1 if dir_ == "asc" else 1
 
                     if va == vb:
                         continue
 
                     if va < vb:
-                        return -1 if dir_ == 'asc' else 1
+                        return -1 if dir_ == "asc" else 1
                     else:
-                        return 1 if dir_ == 'asc' else -1
+                        return 1 if dir_ == "asc" else -1
 
                 return 0
 
             sorted_snaps.sort(key=functools.cmp_to_key(cmp))
         # > Populate
         for snap in sorted_snaps:
-            sub_element_id: str = str(snap._id)
             imgui.table_next_row()
 
             imgui.table_set_column_index(0)
+            in_set = snap._id in u.selecting_entity_id_set
+            clicked, _ = imgui.checkbox(f"##{snap._id}", in_set)
+            if clicked:
+                if in_set:
+                    u.selecting_entity_id_set.remove(snap._id)
+                else:
+                    u.selecting_entity_id_set.add(snap._id)
+
+            imgui.table_set_column_index(1)
             _, _ = imgui.selectable(
-                f"{snap.display_name}##{sub_element_id}",
+                f"{snap.display_name}##{snap._id}",
                 False,
                 imgui.SelectableFlags_.span_all_columns
                 | imgui.SelectableFlags_.allow_overlap,
             )
             entity_edit_menu(
                 u,
-                sub_element_id,
+                str(snap._id),
                 snap,
                 imgui.is_item_hovered() and imgui.is_mouse_double_clicked(0),
             )
 
-            imgui.table_set_column_index(1)
+            imgui.table_set_column_index(2)
             imgui.text(str(snap.video_id))
 
-            imgui.table_set_column_index(2)
-            imgui.text(str(snap.yt_hash))
             imgui.table_set_column_index(3)
+            imgui.text(str(snap.yt_hash))
+            imgui.table_set_column_index(4)
             imgui.text(str(snap.yt_title))
 
-            imgui.table_set_column_index(4)
-            imgui.text(str(snap.yt_pub_time))
             imgui.table_set_column_index(5)
-            imgui.text(str(snap.yt_duration))
+            imgui.text(str(snap.yt_pub_time))
             imgui.table_set_column_index(6)
+            imgui.text(str(snap.yt_duration))
+            imgui.table_set_column_index(7)
             imgui.text(str(snap.yt_views))
 
-            imgui.table_set_column_index(7)
-            imgui.text(str(snap.yt_watch_time))
             imgui.table_set_column_index(8)
-            imgui.text(str(snap.yt_subscribers))
+            imgui.text(str(snap.yt_watch_time))
             imgui.table_set_column_index(9)
+            imgui.text(str(snap.yt_subscribers))
+            imgui.table_set_column_index(10)
             imgui.text(str(snap.yt_average_view_duration))
 
-            imgui.table_set_column_index(10)
-            imgui.text(str(snap.yt_impressions))
             imgui.table_set_column_index(11)
+            imgui.text(str(snap.yt_impressions))
+            imgui.table_set_column_index(12)
             imgui.text(str(snap.yt_impressions_click_through_rate))
 
         imgui.end_table()
@@ -166,7 +246,7 @@ def entity_table(u: Universe, element_id: str):
 def entity_edit_menu(
     u: Universe, popup_id: str, entity_snapshot: EntitySnapshot, just_activated: bool
 ):
-    element_id: str = f"Stacked##{popup_id}"
+    element_id: str = f"Edit Entity##{popup_id}"
 
     if just_activated:
         imgui.open_popup(element_id)
