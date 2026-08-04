@@ -3,11 +3,23 @@ from typing import Tuple
 from dataclasses import dataclass
 from typing import Generic, TypeVar, Union
 
+T = TypeVar("T") # Generic
+E = TypeVar("E") # generic Error
+
+class Ref(Generic[T]):
+    def __init__(self, value: T):
+        self.value = value
+
+# usage
+def f(x: Ref[int]) -> None:
+    x.value += 1
+
+r = Ref(10)
+f(r)
+print(r.value)  # 11
+
+
 # region Result types
-T = TypeVar("T")
-E = TypeVar("E")
-
-
 @dataclass(frozen=True)
 class Success(Generic[T]):
     value: T

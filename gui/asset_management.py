@@ -1,3 +1,4 @@
+from typing_extensions import Set
 from utils import VideoSnapshot
 import pathlib
 from utils import DatasetSnapshot
@@ -13,20 +14,16 @@ from imgui_bundle import imgui
 from typing import Optional, List
 from sqlite3 import Connection
 from asset_manager.db import (
-    find_entities,
-    find_file_dataset,
-    find_entities_using_dataset,
     register_file_dataset,
-    find_entity_ids_from_yt_title,
-    upsert_link_entity_data,
 )
 from asset_manager.training_resources import fetch_snapshot, TrainingResourcesManifest
 from utils import Failure, Success
 from utils import ID
-import mimetypes
 
+foo: Set[ID] = set()
 
 def build_page(u: Universe):
+    global foo
     if imgui.begin_tab_item("Datasets")[0]:
         imgui_md.render(
             """
@@ -80,7 +77,7 @@ This is a list of all video files. This does not include data about said files (
                         break
             u.reload_video_snapshots()
 
-        video_table(u, "video_table")
+        video_table("video_table", u.video_snapshots, foo, True)
         imgui.end_tab_item()
 
 

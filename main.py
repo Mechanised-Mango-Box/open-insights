@@ -8,6 +8,9 @@ from imgui_bundle import immapp, implot, imgui_md, imgui
 
 
 def build_ui(u: Universe):
+    # imgui.show_demo_window()
+    # imgui.show_metrics_window()
+
     if imgui.begin_tab_bar("views", imgui.TabBarFlags_.none):
         if imgui.begin_tab_item("Asset Management")[0]:
             imgui.text("Import and manage local files for analysis.")
@@ -29,6 +32,7 @@ def build_ui(u: Universe):
             imgui.end_tab_item()
         imgui.end_tab_bar()
 
+
 if __name__ == "__main__":
     u: Universe = Universe()
     u.db = connect_db("./index.sqlite")
@@ -39,4 +43,10 @@ if __name__ == "__main__":
     u.reload_dataset_snapshots()
     u.reload_video_snapshots()
 
-    immapp.run(lambda: build_ui(u), window_title="Open Insights", window_size=(1280, 720), with_implot=True, with_markdown=True)
+    immapp.run(
+        lambda: build_ui(u),
+        window_title="Open Insights",
+        window_size=(1280, 720),
+        with_implot=True,
+        with_markdown=True,
+    )
