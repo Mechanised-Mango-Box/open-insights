@@ -20,10 +20,9 @@ from asset_manager.training_resources import fetch_snapshot, TrainingResourcesMa
 from utils import Failure, Success
 from utils import ID
 
-foo: Set[ID] = set()
+__video_table_selected: Set[ID] = set()
 
 def build_page(u: Universe):
-    global foo
     if imgui.begin_tab_item("Datasets")[0]:
         imgui_md.render(
             """
@@ -77,7 +76,7 @@ This is a list of all video files. This does not include data about said files (
                         break
             u.reload_video_snapshots()
 
-        video_table("video_table", u.video_snapshots, foo, True)
+        video_table("video_table", u.video_snapshots, __video_table_selected, True)
         imgui.end_tab_item()
 
 
