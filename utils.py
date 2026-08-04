@@ -14,11 +14,6 @@ class Ref(Generic[T]):
 def f(x: Ref[int]) -> None:
     x.value += 1
 
-r = Ref(10)
-f(r)
-print(r.value)  # 11
-
-
 # region Result types
 @dataclass(frozen=True)
 class Success(Generic[T]):

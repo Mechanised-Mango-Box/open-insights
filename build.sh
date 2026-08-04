@@ -1,0 +1,1 @@
+pyinstaller --onefile --add-data "assets:assets" --collect-data imgui_bundle main.py
