@@ -13,13 +13,13 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            executable_name: main.exe
+            executable_name: open-insights.exe
             output_name: open-insights-windows.exe
           # - os: macos-latest
           #   executable_name: main
           #   output_name: open-insights-macos
           - os: ubuntu-latest
-            executable_name: main
+            executable_name: open-insights
             output_name: open-insights-linux
 
     steps:
