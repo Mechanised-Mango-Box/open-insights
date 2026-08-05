@@ -13,6 +13,6 @@ else
 fi
 
 # Run PyInstaller
-pyinstaller --onefile --add-data "assets${SEPARATOR}assets" --collect-data imgui_bundle main.py
+pyinstaller --onefile --add-data "assets${SEPARATOR}assets" --collect-data imgui_bundle --name open-insights main.py
 
 echo "Build complete."
