@@ -299,7 +299,7 @@ def entity_edit_menu(
             text_filter.draw()
             lines = list(
                 filter(
-                    lambda snapshot: text_filter.pass_filter(snapshot.display_name),
+                    lambda snapshot: text_filter.pass_filter(snapshot.display_name + snapshot.path),
                     u.video_snapshots,
                 )
             )
