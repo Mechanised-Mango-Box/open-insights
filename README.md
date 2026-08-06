@@ -1,8 +1,5 @@
 # Open Insights
-## Quickstart
-- [Electron Forge](https://www.electronforge.io/)
-- [Electron](https://www.electronjs.org/docs/latest/)
-## Debug Run
-```sh
-npm start
-```
+
+
+## Dev Notes:
+- `Open_Insights.ini` holds the state of the menus (i.e. resized state, menu folding). This has been excluded.
