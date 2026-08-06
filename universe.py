@@ -22,7 +22,7 @@ class Universe:
     def reload_entity_snapshots(self):
         match find_entities(self.db):
             case Failure(err):
-                print(err)
+                print(f"[ ERR ] {err}")
             case Success(snaps):
                 self.entity_snapshots.clear()
                 self.entity_snapshots.extend(snaps)
@@ -30,7 +30,7 @@ class Universe:
     def reload_dataset_snapshots(self):
         match find_datasets(self.db):
             case Failure(err):
-                print(err)
+                print(f"[ ERR ] {err}")
             case Success(snaps):
                 self.dataset_snapshots.clear()
                 self.dataset_snapshots.extend(snaps)
@@ -38,11 +38,7 @@ class Universe:
     def reload_video_snapshots(self):
         match find_videos(self.db):
             case Failure(err):
-                print(err)
+                print(f"[ ERR ] {err}")
             case Success(snaps):
                 self.video_snapshots.clear()
                 self.video_snapshots.extend(snaps)
-
-    editing_entity_snapshot: Optional[EntitySnapshot]
-    _editing_entity_snapshot_original: Optional[EntitySnapshot]
-    selecting_entity_id_set: Set[int] = set()

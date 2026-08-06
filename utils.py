@@ -1,22 +1,23 @@
+from typing_extensions import List
 from typing_extensions import Optional
 from typing import Tuple
 from dataclasses import dataclass
 from typing import Generic, TypeVar, Union
+import csv
+import io
 
-T = TypeVar("T") # Generic
-E = TypeVar("E") # generic Error
+T = TypeVar("T")  # Generic
+E = TypeVar("E")  # generic Error
+
 
 class Ref(Generic[T]):
     def __init__(self, value: T):
-        self.value = value
+        self._: T = value
 
-# usage
-def f(x: Ref[int]) -> None:
-    x.value += 1
 
-r = Ref(10)
-f(r)
-print(r.value)  # 11
+class RefNullable(Ref[Optional[T]]):
+    def __init__(self, value: Optional[T]):
+        self._: Optional[T] = value
 
 
 # region Result types
@@ -41,6 +42,13 @@ DatasetFileLabel = str
 # endregion
 
 
+def tuple_to_csv_row(t: Tuple) -> str:
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(t)
+    return output.getvalue().rstrip("\r\n")
+
+
 # region Container Structs
 @dataclass()
 class EntitySnapshot:
@@ -61,6 +69,7 @@ class EntitySnapshot:
     yt_impressions: int
     yt_impressions_click_through_rate: float
 
+    @staticmethod
     def from_row(row: Tuple):
         return EntitySnapshot(
             _id=row[0],
@@ -78,6 +87,41 @@ class EntitySnapshot:
             yt_impressions_click_through_rate=row[12],
         )
 
+    @staticmethod
+    def csv_header() -> List[str]:
+        return [
+            "_id",
+            "display_name",
+            "video_id",
+            "yt_hash",
+            "yt_title",
+            "yt_pub_time",
+            "yt_duration",
+            "yt_views",
+            "yt_watch_time",
+            "yt_subscribers",
+            "yt_average_view_duration",
+            "yt_impressions",
+            "yt_impressions_click_through_rate",
+        ]
+
+    def to_row(self) -> List:
+        return [
+            self._id,
+            self.display_name,
+            self.video_id,
+            self.yt_hash,
+            self.yt_title,
+            self.yt_pub_time,
+            self.yt_duration,
+            self.yt_views,
+            self.yt_watch_time,
+            self.yt_subscribers,
+            self.yt_average_view_duration,
+            self.yt_impressions,
+            self.yt_impressions_click_through_rate,
+        ]
+
 
 @dataclass()
 class DatasetSnapshot:
@@ -94,7 +138,7 @@ class DatasetSnapshot:
         )
 
 
-@dataclass(frozen=True)
+@dataclass()
 class VideoSnapshot:
     _id: ID
 
@@ -107,6 +151,21 @@ class VideoSnapshot:
             path=row[1],
             display_name=row[2],
         )
+
+    @staticmethod
+    def csv_header() -> List[str]:
+        return [
+            "_id",
+            "path",
+            "display_name",
+        ]
+
+    def to_row(self) -> List:
+        return [
+            self._id,
+            self.path,
+            self.display_name,
+        ]
 
 
 # endregion

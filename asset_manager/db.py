@@ -230,6 +230,54 @@ def update_entity(c: Connection, snap: EntitySnapshot) -> Result[None, str]:
         return Failure(f"Failed to update entity (id={snap._id}): {e}")
 
 
+def update_dataset(c: Connection, snap: DatasetSnapshot) -> Result[None, str]:
+    print(f"[ Asset Manager ] Updating dataset (id={snap._id})...")
+    try:
+        cur = c.execute(
+            """
+            UPDATE file_dataset
+            SET
+                path = ?,
+                display_name = ?,
+                source = ?
+            WHERE _id = ?
+            """,
+            (
+                snap.path,
+                snap.display_name,
+                snap.source,
+                snap._id,
+            ),
+        )
+        c.commit()
+        return Success(None)
+    except Exception as e:
+        return Failure(f"Failed to update dataset (id={snap._id}): {e}")
+
+
+def update_video(c: Connection, snap: VideoSnapshot) -> Result[None, str]:
+    print(f"[ Asset Manager ] Updating video (id={snap._id})...")
+    try:
+        cur = c.execute(
+            """
+            UPDATE file_video
+            SET
+                path = ?,
+                display_name = ?
+            WHERE _id = ?
+            """,
+            (
+                snap.path,
+                snap.display_name,
+                snap._id,
+            ),
+        )
+        c.commit()
+        return Success(None)
+    except Exception as e:
+        return Failure(f"Failed to update video (id={snap._id}): {e}")
+
+
 def upsert_entity_video(c: Connection, entity_id: ID, video_id: ID):
     print(f"[ Asset Manager ] Updating entity (id={entity_id}).")
     c.execute(
@@ -383,3 +431,18 @@ def delete_entity(c: Connection, entity_id: ID) -> Result[None, str]:
         return Success(None)
     except Exception as e:
         return Failure(f"[ Asset Manager ] Failed to delete entity: {e}")
+def delete_video(c: Connection, video_id: ID) -> Result[None, str]:
+    print(f"[ Asset Manager ] Deleting video(id={video_id}).")
+
+    try:
+        c.execute(
+            """
+            DELETE FROM files_video 
+            WHERE _id = ?
+            """,
+            (str(video_id),),
+        )
+        c.commit()
+        return Success(None)
+    except Exception as e:
+        return Failure(f"[ Asset Manager ] Failed to delete video: {e}")

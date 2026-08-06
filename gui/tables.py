@@ -1,3 +1,12 @@
+import functools
+from asset_manager.db import update_video
+from utils import Success
+from utils import Failure
+from asset_manager.db import update_dataset
+from copy import deepcopy
+from utils import Ref
+from utils import DatasetSnapshot
+from utils import RefNullable
 from utils import VideoSnapshot
 from typing_extensions import List
 from typing_extensions import Optional
@@ -56,16 +65,28 @@ def dataset_table(u: Universe, element_id: str):
 
         imgui.end_table()
 
+
+__entity_edit_menu_video_selection: Set[ID] = set()
+__editing_video_snapshot: RefNullable[VideoSnapshot] = RefNullable(None)
+__editing_video_snapshot_original: RefNullable[VideoSnapshot] = RefNullable(None)
+__dirty_video_edit_menu_is_active: Ref[bool] = Ref(False)
+
+
 def video_table(
-    element_id: str, 
-    video_snapshots: List[VideoSnapshot], 
+    element_id: str,
+    u: Universe,
+    video_snapshots: List[VideoSnapshot],
     selected_videos: Set[ID],
-    multi_select: bool
+    multi_select: bool,
+    allow_edit_menu: bool,
 ):
     table_flags = (
         imgui.TableFlags_.borders
         | imgui.TableFlags_.row_bg
         | imgui.TableFlags_.resizable
+        | imgui.TableFlags_.sort_tristate
+        | imgui.TableFlags_.sort_multi
+        | imgui.TableFlags_.sortable
     )
 
     if imgui.begin_table(element_id, 5, table_flags):
@@ -76,7 +97,6 @@ def video_table(
             | imgui.TableColumnFlags_.no_resize
             | imgui.TableColumnFlags_.width_fixed,
         )
-
         imgui.table_setup_column(
             "ID",
             imgui.TableColumnFlags_.no_resize | imgui.TableColumnFlags_.width_fixed,
@@ -90,11 +110,65 @@ def video_table(
             imgui.TableColumnFlags_.width_fixed,
         )
         imgui.table_setup_column("Path")
-
         imgui.table_headers_row()
 
+        specs = imgui.table_get_sort_specs()
+        sorted_snaps = list(u.video_snapshots)
+
+        if specs and specs.specs_dirty == True:
+            specs.specs_dirty = False
+        if specs and specs.specs_count > 0:
+            # map column index -> value accessor
+            def value_for_col(snap, col):
+                if col == 1:
+                    return snap._id
+                if col == 2:
+                    return mimetypes.guess_type(snap.path)[0]
+                if col == 3:
+                    return snap.display_name
+                if col == 4:
+                    return snap.path
+                return None
+
+            def col_direction(colspec):
+                d = colspec.sort_direction
+                try:
+                    return "desc" if d == imgui.SortDirection.descending else "asc"
+                except Exception:
+                    # fallback: if it's an int where desc is 1
+                    return "desc" if d else "asc"
+
+            def cmp(a, b):
+                # multi-sort: iterate each column sort spec in order
+                for i in range(specs.specs_count):
+                    s = specs.get_specs(i)
+                    col = s.column_index
+                    dir_ = col_direction(s)
+
+                    va = value_for_col(a, col)
+                    vb = value_for_col(b, col)
+
+                    # handle None deterministically
+                    if va is None and vb is None:
+                        continue
+                    if va is None:
+                        return 1 if dir_ == "asc" else -1
+                    if vb is None:
+                        return -1 if dir_ == "asc" else 1
+
+                    if va == vb:
+                        continue
+
+                    if va < vb:
+                        return -1 if dir_ == "asc" else 1
+                    else:
+                        return 1 if dir_ == "asc" else -1
+
+                return 0
+
+            sorted_snaps.sort(key=functools.cmp_to_key(cmp))
         # > Populate
-        for snap in video_snapshots:
+        for snap in sorted_snaps:
             imgui.table_next_row()
 
             imgui.table_set_column_index(0)
@@ -104,14 +178,14 @@ def video_table(
             )
 
             imgui.table_set_column_index(1)
-            selected_row, _ = imgui.selectable(
+            _, _ = imgui.selectable(
                 f"{snap._id}##{element_id}/rows/{snap._id}",
                 in_set,
                 imgui.SelectableFlags_.span_all_columns
                 | imgui.SelectableFlags_.no_auto_close_popups,
             )
-            
-            if clicked_checkbox or selected_row:
+
+            if clicked_checkbox:
                 if in_set:
                     selected_videos.remove(snap._id)
                 else:
@@ -120,6 +194,16 @@ def video_table(
                         selected_videos.clear()
                     selected_videos.add(snap._id)
 
+            if allow_edit_menu:
+                video_edit_menu(
+                    f"{element_id}/video_edit_menu/{snap._id}",
+                    u,
+                    __editing_video_snapshot,
+                    __editing_video_snapshot_original,
+                    snap,
+                    imgui.is_item_hovered() and imgui.is_mouse_double_clicked(0),
+                    __dirty_video_edit_menu_is_active,
+                )
 
             imgui.table_set_column_index(2)
             mime, _ = mimetypes.guess_type(snap.path)
@@ -131,3 +215,104 @@ def video_table(
             imgui.text(snap.path)
 
         imgui.end_table()
+
+
+STD_TEXT_FLAGS = 4224  # auto_select_all (12) | escape_clears_all (7)
+
+
+def draw_labeled_text_field(
+    label: str,
+    field_id: str,
+    hint: str,
+    current_value: str,
+    original_value: str,
+    flags: int = STD_TEXT_FLAGS,
+) -> str:
+    imgui.text(f"{label}: ")
+    imgui.same_line()
+    just_changed, new_value = imgui.input_text_with_hint(
+        f"##{field_id}", hint, current_value, flags
+    )
+    if new_value != original_value:
+        imgui.same_line()
+        imgui.text("*")
+    return new_value if just_changed else current_value
+
+
+def draw_labeled_int_field(
+    label: str,
+    field_id: str,
+    current_value: Optional[int],
+    original_value: Optional[int],
+) -> Optional[int]:
+    imgui.text(f"{label}: ")
+    imgui.same_line()
+    just_changed, new_value = imgui.input_int(
+        f"##{field_id}",
+        0 if current_value is None else current_value,
+        flags=(1 << 13 | 1 << 14),
+    )  # display_empty_ref_val | parse_empty_ref_val
+    new_value = max(0, new_value)
+    if new_value != original_value and current_value is not None:
+        imgui.same_line()
+        imgui.text("*")
+
+    if new_value == 0:
+        new_value = None
+    return new_value if just_changed else current_value
+
+
+def video_edit_menu(
+    popup_id: str,
+    u: Universe,
+    REF_editing_video_snapshot: RefNullable[VideoSnapshot],
+    REF_editing_video_snapshot_original: RefNullable[VideoSnapshot],
+    edit_target_video: VideoSnapshot,
+    just_activated: bool,
+    REF_is_active: Ref[bool],
+):
+    element_id: str = f"Edit Video##{popup_id}"
+
+    if just_activated:
+        imgui.open_popup(element_id)
+        assert edit_target_video
+        REF_editing_video_snapshot._ = deepcopy(edit_target_video)
+        REF_editing_video_snapshot_original._ = deepcopy(edit_target_video)
+        REF_is_active._ = True
+
+    is_active = REF_is_active._
+    if imgui.begin_popup_modal(element_id, None, imgui.WindowFlags_.no_saved_settings)[
+        0
+    ]:
+        assert REF_editing_video_snapshot._
+        assert REF_editing_video_snapshot_original._
+
+        # > Display name
+        REF_editing_video_snapshot._.display_name = draw_labeled_text_field(
+            "Display Name",
+            "field_display_name",
+            "Enter text here...",
+            REF_editing_video_snapshot._.display_name,
+            REF_editing_video_snapshot_original._.display_name,
+        )
+
+        # > Actions
+        if imgui.button("Save"):
+            imgui.close_current_popup()
+            REF_is_active._ = False
+            print(REF_editing_video_snapshot._)
+            match update_video(u.db, REF_editing_video_snapshot._):
+                case Failure(err):
+                    print(err)
+                case Success():
+                    u.reload_video_snapshots()
+            REF_editing_video_snapshot._ = None
+            REF_editing_video_snapshot_original._ = None
+        imgui.same_line()
+        if imgui.button("Cancel"):
+            imgui.close_current_popup()
+            REF_is_active._ = False
+            REF_editing_video_snapshot._ = None
+            REF_editing_video_snapshot_original._ = None
+
+        imgui.end_popup()

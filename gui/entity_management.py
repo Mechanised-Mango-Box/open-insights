@@ -1,3 +1,9 @@
+import csv
+from utils import tuple_to_csv_row
+from asset_manager.training_resources import fetch_entity_snapshot
+from asset_manager.training_resources import TrainingResourcesManifest
+from gui.tables import draw_labeled_text_field
+from utils import RefNullable
 from imgui_bundle.imgui import same_line
 from utils import Ref
 from gui.tables import video_table
@@ -18,10 +24,24 @@ from utils import EntitySnapshot
 from universe import Universe
 from imgui_bundle import imgui
 
-entity_edit_menu_video_selection: Set[ID] = set()
+# MARK: Static
+#> Export
+__export_save_dialog = None
+__selecting_entity_id_set: Set[int] = set()
+#> Table
+__entity_edit_menu_video_selection: Set[ID] = set()
+
+#> Edit Menu
+__edit_menu_video_search_filter = imgui.TextFilter()
+__editing_entity_snapshot: RefNullable[EntitySnapshot] = RefNullable(None)
+__editing_entity_snapshot_original: RefNullable[EntitySnapshot] = RefNullable(None)
+__dirty_entity_edit_menu_is_active: Ref[bool] = Ref(False)
 
 
 def build_page(u: Universe):
+    global __export_save_dialog
+    global __selecting_entity_id_set
+
     if imgui.button("Add entities (PLACEHOLDER)"):
         selection = pfd.open_file(
             "Select a csv", ".", ["Dataset Files", "*.csv"]
@@ -42,23 +62,29 @@ Double click to edit. Multi-sort is enabled.
 """
     )
     imgui.new_line()
-    entity_table(u, "entity_table", u.selecting_entity_id_set)
 
 
-def entity_table(u: Universe, element_id: str, OUT_selected_entity_set: Set[ID]):
-    global entity_edit_menu_video_selection
-    if len(OUT_selected_entity_set) == 0:
+    if imgui.button("Select All"):
+        if len(__selecting_entity_id_set) == len(u.entity_snapshots):
+            __selecting_entity_id_set.clear()
+        else:
+            __selecting_entity_id_set |= set(map(lambda snap: snap._id, u.entity_snapshots))
+        # for snap in u.entity_snapshots:
+        #     REF_selected_entity_set.add(snap._id)
+
+    if len(__selecting_entity_id_set) == 0:
         imgui.begin_disabled()
-    imgui_md.render("**Selection Actions**")
+        
+    imgui.same_line()
 
     if imgui.button("Delete"):
         imgui.open_popup("Delete Confirmation")
     if imgui.begin_popup_modal(
         "Delete Confirmation", None, imgui.WindowFlags_.no_resize
     )[0]:
-        imgui.text(f"Deleting {len(OUT_selected_entity_set)} items.")
+        imgui.text(f"Deleting {len(__selecting_entity_id_set)} items.")
         if imgui.button("Delete"):
-            for e_id in OUT_selected_entity_set:
+            for e_id in __selecting_entity_id_set:
                 match delete_entity(u.db, e_id):
                     case Failure(err):
                         print(err)
@@ -71,17 +97,36 @@ def entity_table(u: Universe, element_id: str, OUT_selected_entity_set: Set[ID])
         imgui.end_popup()
 
     imgui.same_line()
-    if imgui.button("Export"):
-        imgui.open_popup("Export Configuration")
-    if imgui.begin_popup_modal("Export Configuration", None)[0]:
-        imgui.text(f"Under construction")
-        if imgui.button("Cancel"):
-            imgui.close_current_popup()
-        imgui.end_popup()
 
-    if len(OUT_selected_entity_set) == 0:
+    if imgui.button("Export"):
+        __export_save_dialog = pfd.save_file("Export selected as CSV", "./entities.csv")
+
+    if __export_save_dialog and __export_save_dialog.ready():
+        saved_file_path = __export_save_dialog.result()
+        if saved_file_path:
+            try:
+                export_snaps = filter(
+                    lambda snap: snap._id in __selecting_entity_id_set, u.entity_snapshots
+                )
+
+                export_body = map(lambda snap: snap.to_row(), export_snaps)
+                with open(
+                    saved_file_path, mode="w", newline="", encoding="utf-8"
+                ) as file:
+                    writer = csv.writer(file)
+                    writer.writerow(EntitySnapshot.csv_header())
+                    writer.writerows(export_body)
+
+            except Exception as e:
+                print(f"Error creating file: {e}")
+
+    if len(__selecting_entity_id_set) == 0:
         imgui.end_disabled()
 
+    entity_table(u, "entity_table", __selecting_entity_id_set)
+
+
+def entity_table(u: Universe, element_id: str, REF_selected_entity_set: Set[ID]):
     table_flags = (
         imgui.TableFlags_.borders
         | imgui.TableFlags_.row_bg
@@ -102,8 +147,8 @@ def entity_table(u: Universe, element_id: str, OUT_selected_entity_set: Set[ID])
         imgui.table_setup_column("Display Name")
         imgui.table_setup_column("Video File")
 
-        imgui.table_setup_column("YouTube Hash")
-        imgui.table_setup_column("YouTube Title")
+        imgui.table_setup_column("Youtube Hash")
+        imgui.table_setup_column("Youtube Title")
 
         imgui.table_setup_column("Pub Time")
         imgui.table_setup_column("Duration (s)")
@@ -193,13 +238,13 @@ def entity_table(u: Universe, element_id: str, OUT_selected_entity_set: Set[ID])
             imgui.table_next_row()
 
             imgui.table_set_column_index(0)
-            in_set = snap._id in OUT_selected_entity_set
+            in_set = snap._id in REF_selected_entity_set
             clicked, _ = imgui.checkbox(f"##{element_id}/{snap._id}", in_set)
             if clicked:
                 if in_set:
-                    OUT_selected_entity_set.remove(snap._id)
+                    REF_selected_entity_set.remove(snap._id)
                 else:
-                    OUT_selected_entity_set.add(snap._id)
+                    REF_selected_entity_set.add(snap._id)
 
             imgui.table_set_column_index(1)
             _, _ = imgui.selectable(
@@ -210,12 +255,14 @@ def entity_table(u: Universe, element_id: str, OUT_selected_entity_set: Set[ID])
             )
 
             entity_edit_menu(
-                u,
                 str(snap._id),
+                u,
+                __editing_entity_snapshot,
+                __editing_entity_snapshot_original,
                 snap,
                 imgui.is_item_hovered() and imgui.is_mouse_double_clicked(0),
-                dirty_entity_edit_menu_is_active,
-                entity_edit_menu_video_selection,
+                __dirty_entity_edit_menu_is_active,
+                __entity_edit_menu_video_selection,
             )
 
             imgui.table_set_column_index(2)
@@ -248,127 +295,86 @@ def entity_table(u: Universe, element_id: str, OUT_selected_entity_set: Set[ID])
         imgui.end_table()
 
 
-dirty_entity_edit_menu_is_active: Ref[bool] = Ref(False)
-text_filter = imgui.TextFilter()
-
-
 def entity_edit_menu(
-    u: Universe,
     popup_id: str,
-    entity_snapshot: EntitySnapshot,
+    u: Universe,
+    REF_editing_entity_snapshot: RefNullable[EntitySnapshot],
+    REF_editing_entity_snapshot_original: RefNullable[EntitySnapshot],
+    edit_target_entity: EntitySnapshot,
     just_activated: bool,
-    OUT_is_active: Ref[bool],
+    REF_is_active: Ref[bool],
     video_selection: Set[ID],
 ):
     element_id: str = f"Edit Entity##{popup_id}"
 
     if just_activated:
         imgui.open_popup(element_id)
-        u.editing_entity_snapshot = deepcopy(entity_snapshot)
-        u._editing_entity_snapshot_original = deepcopy(entity_snapshot)
-        OUT_is_active.value = True
+        assert edit_target_entity
+        REF_editing_entity_snapshot._ = deepcopy(edit_target_entity)
+        REF_editing_entity_snapshot_original._ = deepcopy(edit_target_entity)
+        REF_is_active._ = True
 
-    foo = OUT_is_active.value
-    if imgui.begin_popup_modal(element_id, foo, imgui.WindowFlags_.menu_bar)[0]:
-        assert u.editing_entity_snapshot
-        assert u._editing_entity_snapshot_original
+    if imgui.begin_popup_modal(element_id, None, imgui.WindowFlags_.no_saved_settings)[
+        0
+    ]:
+        assert REF_editing_entity_snapshot._
+        assert REF_editing_entity_snapshot_original._
 
         # > Display name
-        u.editing_entity_snapshot.display_name = draw_labeled_text_field(
+        REF_editing_entity_snapshot._.display_name = draw_labeled_text_field(
             "Display Name",
             "field_display_name",
             "Enter text here...",
-            u.editing_entity_snapshot.display_name,
-            u._editing_entity_snapshot_original.display_name,
+            REF_editing_entity_snapshot._.display_name,
+            REF_editing_entity_snapshot_original._.display_name,
         )
         # > Video file
-        imgui.text(f"Video ID: {u.editing_entity_snapshot.video_id}") 
+        imgui.text(f"Video ID: {REF_editing_entity_snapshot._.video_id}")
         imgui.same_line()
-        if imgui.tree_node(
-            f"(expand to edit)##{element_id}/search_video_id"
-        ):
+        if imgui.tree_node(f"(expand to edit)##{element_id}/search_video_id"):
             if imgui.button("Use Selected Video"):
                 assert len(video_selection) <= 1
                 if len(video_selection) > 0:
-                    u.editing_entity_snapshot.video_id = next(iter(video_selection))
+                    REF_editing_entity_snapshot._.video_id = next(iter(video_selection))
                 else:
-                    u.editing_entity_snapshot.video_id = None
+                    REF_editing_entity_snapshot._.video_id = None
 
             imgui.text("Search video name: ")
             imgui.same_line()
-            text_filter.draw()
+            __edit_menu_video_search_filter.draw()
             lines = list(
                 filter(
-                    lambda snapshot: text_filter.pass_filter(snapshot.display_name + snapshot.path),
+                    lambda snapshot: __edit_menu_video_search_filter.pass_filter(
+                        snapshot.display_name + snapshot.path
+                    ),
                     u.video_snapshots,
                 )
             )
 
-            video_table(f"{element_id}/video_query_res", lines, video_selection, False)
+            video_table(
+                f"{element_id}/video_query_res", u, lines, video_selection, False, False
+            )
             imgui.tree_pop()
 
         # > Actions
         if imgui.button("Save"):
             imgui.close_current_popup()
-            OUT_is_active.value = False
-            print(u.editing_entity_snapshot)
-            match update_entity(u.db, u.editing_entity_snapshot):
+            REF_is_active._ = False
+            print(REF_editing_entity_snapshot._)
+            match update_entity(u.db, REF_editing_entity_snapshot._):
                 case Failure(err):
                     print(err)
                 case Success():
                     u.reload_entity_snapshots()
-            u.editing_entity_snapshot = None
-            u._editing_entity_snapshot_original = None
+            REF_editing_entity_snapshot._ = None
+            REF_editing_entity_snapshot_original._ = None
+            video_selection.clear()
         imgui.same_line()
         if imgui.button("Cancel"):
             imgui.close_current_popup()
-            OUT_is_active.value = False
-            u.editing_entity_snapshot = None
-            u._editing_entity_snapshot_original = None
+            REF_is_active._ = False
+            REF_editing_entity_snapshot._ = None
+            REF_editing_entity_snapshot_original._ = None
+            video_selection.clear()
 
         imgui.end_popup()
-
-
-STD_TEXT_FLAGS = 4224  # auto_select_all (12) | escape_clears_all (7)
-
-
-def draw_labeled_text_field(
-    label: str,
-    field_id: str,
-    hint: str,
-    current_value: str,
-    original_value: str,
-    flags: int = STD_TEXT_FLAGS,
-) -> str:
-    imgui.text(f"{label}: ")
-    imgui.same_line()
-    just_changed, new_value = imgui.input_text_with_hint(
-        f"##{field_id}", hint, current_value, flags
-    )
-    if new_value != original_value:
-        imgui.same_line()
-        imgui.text("*")
-    return new_value if just_changed else current_value
-
-
-def draw_labeled_int_field(
-    label: str,
-    field_id: str,
-    current_value: Optional[int],
-    original_value: Optional[int],
-) -> Optional[int]:
-    imgui.text(f"{label}: ")
-    imgui.same_line()
-    just_changed, new_value = imgui.input_int(
-        f"##{field_id}",
-        0 if current_value is None else current_value,
-        flags=(1 << 13 | 1 << 14),
-    )  # display_empty_ref_val | parse_empty_ref_val
-    new_value = max(0, new_value)
-    if new_value != original_value and current_value is not None:
-        imgui.same_line()
-        imgui.text("*")
-
-    if new_value == 0:
-        new_value = None
-    return new_value if just_changed else current_value

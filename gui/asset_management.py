@@ -1,3 +1,10 @@
+import csv
+from asset_manager.db import delete_video
+from asset_manager.db import update_dataset
+from gui.tables import draw_labeled_text_field
+from copy import deepcopy
+from utils import RefNullable
+from utils import Ref
 from typing_extensions import Set
 from utils import VideoSnapshot
 import pathlib
@@ -20,9 +27,15 @@ from asset_manager.training_resources import fetch_snapshot, TrainingResourcesMa
 from utils import Failure, Success
 from utils import ID
 
-__video_table_selected: Set[ID] = set()
+# MARK: Statics
+# > Export
+__export_save_dialog = None
+# > Table
+__selecting_video_id_set: Set[ID] = set()
 
 def build_page(u: Universe):
+    global __selecting_video_id_set
+    global __export_save_dialog
     if imgui.begin_tab_item("Datasets")[0]:
         imgui_md.render(
             """
@@ -67,16 +80,78 @@ This is a list of all video files. This does not include data about said files (
             ).result()
             print(selection)
             for video_path in selection:
-                snap = VideoSnapshot(
-                    -1, video_path, pathlib.Path(video_path).stem
-                )
+                snap = VideoSnapshot(-1, video_path, pathlib.Path(video_path).stem)
                 match register_file_video(u.db, snap):
                     case Failure(err):
                         print(err)
                         break
             u.reload_video_snapshots()
 
-        video_table("video_table", u.video_snapshots, __video_table_selected, True)
+        if imgui.button("Select All"):
+            if len(__selecting_video_id_set) == len(u.video_snapshots):
+                __selecting_video_id_set.clear()
+            else:
+                __selecting_video_id_set |= set(
+                    map(lambda snap: snap._id, u.video_snapshots)
+                )
+
+        if len(__selecting_video_id_set) == 0:
+            imgui.begin_disabled()
+
+        imgui.same_line()
+
+        if imgui.button("Delete"):
+            imgui.open_popup("Delete Confirmation")
+        if imgui.begin_popup_modal(
+            "Delete Confirmation", None, imgui.WindowFlags_.no_resize
+        )[0]:
+            imgui.text(f"Deleting {len(__selecting_video_id_set)} items.")
+            if imgui.button("Delete"):
+                for v_id in __selecting_video_id_set:
+                    match delete_video(u.db, v_id):
+                        case Failure(err):
+                            print(err)
+                            break
+                u.reload_video_snapshots()
+                imgui.close_current_popup()
+            imgui.same_line()
+            if imgui.button("Cancel"):
+                imgui.close_current_popup()
+            imgui.end_popup()
+
+        imgui.same_line()
+
+        if imgui.button("Export"):
+            __export_save_dialog = pfd.save_file(
+                "Export selected as CSV", "./videos.csv"
+            )
+
+        if __export_save_dialog and __export_save_dialog.ready():
+            saved_file_path = __export_save_dialog.result()
+            if saved_file_path:
+                try:
+                    export_snaps = filter(
+                        lambda snap: snap._id in __selecting_video_id_set,
+                        u.video_snapshots,
+                    )
+
+                    export_body = map(lambda snap: snap.to_row(), export_snaps)
+                    with open(
+                        saved_file_path, mode="w", newline="", encoding="utf-8"
+                    ) as file:
+                        writer = csv.writer(file)
+                        writer.writerow(VideoSnapshot.csv_header())
+                        writer.writerows(export_body)
+
+                except Exception as e:
+                    print(f"Error creating file: {e}")
+
+        if len(__selecting_video_id_set) == 0:
+            imgui.end_disabled()
+
+        video_table(
+            "video_table", u, u.video_snapshots, __selecting_video_id_set, True, True
+        )
         imgui.end_tab_item()
 
 
