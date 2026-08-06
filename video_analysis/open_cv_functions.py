@@ -2,13 +2,13 @@ from collections import list
 import cv2
 import pandas as pd
 
+video_capture = cv2.VideoCapture(video_path) # this just asks opencv to open the video file 
 
 # next function we need is to get the video duration 
 # to get this we need to use a tool called open cv which is a computer vision Tool used to analsye images, video analysis, and more.
 def video_duration_mins(video_path: str) -> float:
    
-    video_capture = cv2.VideoCapture(video_path) # this just asks opencv to open the video file 
-
+    
     # check if the file has opened
     if video_capture.isOpened():
         #get the frames per second property
@@ -35,7 +35,7 @@ def word_per_min(word_count: int, video_duration: float) -> float:
  # Open CV only lets you or gives you the tools to analyse frames/images, we have to write our own algorithm to define what a change in scene is. 
 # VideoCapture.read() returns two values which are, success and frame, a boolean and an array of pixel data.
 def count_scene_transitions(video_path: str, threshold: float = 30.0) -> int:
-    video_capture = cv2.VideoCapture(video_path)
+
 
     if not video_capture.isOpened():
         raise ValueError("Video file could not be opened")
