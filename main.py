@@ -1,3 +1,7 @@
+from gui.tables import video_edit_menu
+from gui.tables import TableSelectMode
+from utils import VideoSnapshot
+from gui.tables import smart_table
 from universe import Universe
 import gui.asset_management
 import gui.entity_management
@@ -6,13 +10,23 @@ import gui.model_analysis
 from asset_manager.db import setup_schema, connect_db
 from imgui_bundle import immapp, implot, imgui_md, imgui
 
+__temp_selected_id = set()
+
 
 def build_ui(u: Universe):
     # imgui.show_demo_window()
     # imgui.show_metrics_window()
-
     if imgui.begin_tab_bar("views", imgui.TabBarFlags_.none):
         if imgui.begin_tab_item("Asset Management")[0]:
+            smart_table(
+                "TEMP",
+                u.video_snapshots,
+                VideoSnapshot.get_header(),
+                __temp_selected_id,
+                TableSelectMode.MULTIPLE,
+                video_edit_menu()
+            )
+
             imgui.text("Import and manage local files for analysis.")
             imgui.end_tab_item()
             if imgui.begin_tab_bar("asset_management_page", imgui.TabBarFlags_.none):

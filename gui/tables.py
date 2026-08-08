@@ -1,3 +1,11 @@
+from traceback import print_tb
+from typing_extensions import Sequence
+from utils import Rowable
+from enum import auto
+from enum import Enum
+import enum
+from typing import Any
+from typing_extensions import Callable
 import functools
 from asset_manager.db import update_video
 from utils import Success
@@ -18,11 +26,7 @@ import mimetypes
 
 
 def dataset_table(u: Universe, element_id: str):
-    table_flags = (
-        imgui.TableFlags_.borders
-        | imgui.TableFlags_.row_bg
-        | imgui.TableFlags_.resizable
-    )
+    table_flags = imgui.TableFlags_.borders | imgui.TableFlags_.row_bg | imgui.TableFlags_.resizable
 
     if imgui.begin_table(element_id, 5, table_flags):
         # > Generate Headers
@@ -113,7 +117,7 @@ def video_table(
         imgui.table_headers_row()
 
         specs = imgui.table_get_sort_specs()
-        sorted_snaps = list(u.video_snapshots)
+        sorted_snaps = list(video_snapshots)
 
         if specs and specs.specs_dirty == True:
             specs.specs_dirty = False
@@ -173,9 +177,7 @@ def video_table(
 
             imgui.table_set_column_index(0)
             in_set = snap._id in selected_videos
-            clicked_checkbox, _ = imgui.checkbox(
-                f"##{element_id}/checkboxes/{snap._id}", in_set
-            )
+            clicked_checkbox, _ = imgui.checkbox(f"##{element_id}/checkboxes/{snap._id}", in_set)
 
             imgui.table_set_column_index(1)
             _, _ = imgui.selectable(
@@ -281,9 +283,7 @@ def video_edit_menu(
         REF_is_active._ = True
 
     is_active = REF_is_active._
-    if imgui.begin_popup_modal(element_id, None, imgui.WindowFlags_.no_saved_settings)[
-        0
-    ]:
+    if imgui.begin_popup_modal(element_id, None, imgui.WindowFlags_.no_saved_settings)[0]:
         assert REF_editing_video_snapshot._
         assert REF_editing_video_snapshot_original._
 
@@ -316,3 +316,96 @@ def video_edit_menu(
             REF_editing_video_snapshot_original._ = None
 
         imgui.end_popup()
+
+
+class TableSelectMode(Enum):
+    NONE = auto()
+    SINGLE = auto()
+    MULTIPLE = auto()
+
+
+def smart_table(
+    element_id: str,
+    # * Rows
+    rows: Sequence[Rowable],
+    headers: Sequence[str],
+    # column_flags: List[int],
+    # on_update_row: Callable[[None], None],
+    # * Selection
+    selected_ids: Set[ID],
+    table_select_mode: TableSelectMode,
+    # * Events
+    on_double_click: Optional[Callable[[Rowable, bool], None]],
+):
+    # > Data Validation & Setup
+    assert len(rows) > 0
+    # assert len(rows) == len(column_flags)
+    column_count: int = len(headers)
+    show_select_box = table_select_mode is not TableSelectMode.NONE
+
+    table_flags = (
+        imgui.TableFlags_.borders
+        | imgui.TableFlags_.row_bg
+        | imgui.TableFlags_.resizable
+        | imgui.TableFlags_.sort_tristate
+        | imgui.TableFlags_.sort_multi
+        | imgui.TableFlags_.sortable
+    )
+
+    # > Construct Table
+    if imgui.begin_table(element_id, column_count + (1 if show_select_box else 0), table_flags):
+        # > Generate Headers
+        if show_select_box:
+            imgui.table_setup_column(
+                "",
+                imgui.TableColumnFlags_.no_sort
+                | imgui.TableColumnFlags_.no_resize
+                | imgui.TableColumnFlags_.width_fixed,
+            )
+        for header in headers:
+            imgui.table_setup_column(header)
+        imgui.table_headers_row()
+
+        for row in rows:
+            imgui.table_next_row()
+            in_selected = row._id in selected_ids
+            if show_select_box:
+                imgui.table_next_column()
+
+                clicked_checkbox, _ = imgui.checkbox(
+                    f"##{element_id}/checkboxes/{row._id}", in_selected
+                )
+                if clicked_checkbox:
+                    if in_selected:
+                        selected_ids.remove(row._id)
+                    else:
+                        if table_select_mode is not TableSelectMode.MULTIPLE:
+                            # ? if single select, always clear selection
+                            selected_ids.clear()
+                        selected_ids.add(row._id)
+            for j, cell in enumerate(row.as_row()):
+                imgui.table_next_column()
+                if j == 0:
+                    _, _ = imgui.selectable(
+                        f"{row._id}##{element_id}/rows/{row._id}",
+                        in_selected,
+                        imgui.SelectableFlags_.span_all_columns
+                        | imgui.SelectableFlags_.no_auto_close_popups,
+                    )
+
+                    if on_double_click is not None:
+                        on_double_click(row, imgui.is_item_hovered() and imgui.is_mouse_double_clicked(0))
+                else:
+                    imgui.text(str(cell))
+
+                # video_edit_menu(
+                #     f"{element_id}/video_edit_menu/{snap._id}",
+                #     u,
+                #     __editing_video_snapshot,
+                #     __editing_video_snapshot_original,
+                #     snap,
+                #     imgui.is_item_hovered() and imgui.is_mouse_double_clicked(0),
+                #     __dirty_video_edit_menu_is_active,
+                # )
+
+    imgui.end_table()

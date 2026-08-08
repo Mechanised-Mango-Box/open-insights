@@ -1,3 +1,7 @@
+from typing import Any
+from abc import ABC
+from abc import abstractmethod
+from typing_extensions import Never
 from typing_extensions import List
 from typing_extensions import Optional
 from typing import Tuple
@@ -50,6 +54,18 @@ def tuple_to_csv_row(t: Tuple) -> str:
 
 
 # region Container Structs
+@dataclass()
+class Rowable(ABC):
+    _id: ID
+
+    @abstractmethod
+    def get_header()-> List[str]:
+        assert False
+
+    @abstractmethod
+    def as_row(self)-> List[Any]:
+        assert False
+
 @dataclass()
 class EntitySnapshot:
     _id: ID
@@ -139,7 +155,7 @@ class DatasetSnapshot:
 
 
 @dataclass()
-class VideoSnapshot:
+class VideoSnapshot(Rowable):
     _id: ID
 
     path: Path
@@ -154,11 +170,7 @@ class VideoSnapshot:
 
     @staticmethod
     def csv_header() -> List[str]:
-        return [
-            "_id",
-            "path",
-            "display_name",
-        ]
+        return VideoSnapshot.get_header()
 
     def to_row(self) -> List:
         return [
@@ -167,5 +179,14 @@ class VideoSnapshot:
             self.display_name,
         ]
 
+    def get_header():
+        return [
+            "_id",
+            "path",
+            "display_name",
+        ]
+
+    def as_row(self):
+        return self.to_row()
 
 # endregion
