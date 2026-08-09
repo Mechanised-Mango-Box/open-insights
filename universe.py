@@ -11,7 +11,6 @@ from asset_manager.db import find_entities
 from typing import List
 from sqlite3 import Connection
 
-
 class Universe:
     db: Connection
 

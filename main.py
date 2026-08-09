@@ -24,7 +24,7 @@ def build_ui(u: Universe):
                 VideoSnapshot.get_header(),
                 __temp_selected_id,
                 TableSelectMode.MULTIPLE,
-                video_edit_menu()
+                None,  # video_edit_menu()
             )
 
             imgui.text("Import and manage local files for analysis.")
@@ -47,7 +47,7 @@ def build_ui(u: Universe):
         imgui.end_tab_bar()
 
 
-if __name__ == "__main__":
+def main():
     u: Universe = Universe()
     u.db = connect_db("./index.sqlite")
     setup_schema(u.db)
@@ -64,3 +64,7 @@ if __name__ == "__main__":
         with_implot=True,
         with_markdown=True,
     )
+
+
+if __name__ == "__main__":
+    main()

@@ -1,4 +1,3 @@
-from traceback import print_tb
 from typing_extensions import Sequence
 from utils import Rowable
 from enum import auto
@@ -338,7 +337,8 @@ def smart_table(
     on_double_click: Optional[Callable[[Rowable, bool], None]],
 ):
     # > Data Validation & Setup
-    assert len(rows) > 0
+    if len(rows) <= 0:
+        return
     # assert len(rows) == len(column_flags)
     column_count: int = len(headers)
     show_select_box = table_select_mode is not TableSelectMode.NONE
