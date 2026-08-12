@@ -1,13 +1,11 @@
-from gui.tables import video_edit_menu
-from gui.tables import TableSelectMode
-from utils import VideoSnapshot
-from gui.tables import smart_table
+
 from universe import Universe
-import gui.asset_management
-import gui.entity_management
+# import gui.asset_management
+# import gui.entity_management
+import gui.entity_management_2
 import gui.feature_extraction
 import gui.model_analysis
-from asset_manager.db import setup_schema, connect_db
+# from asset_manager.db import setup_schema, connect_db
 from imgui_bundle import immapp, implot, imgui_md, imgui
 
 __temp_selected_id = set()
@@ -17,24 +15,27 @@ def build_ui(u: Universe):
     # imgui.show_demo_window()
     # imgui.show_metrics_window()
     if imgui.begin_tab_bar("views", imgui.TabBarFlags_.none):
-        if imgui.begin_tab_item("Asset Management")[0]:
-            smart_table(
-                "TEMP",
-                u.video_snapshots,
-                VideoSnapshot.get_header(),
-                __temp_selected_id,
-                TableSelectMode.MULTIPLE,
-                None,  # video_edit_menu()
-            )
+        # if imgui.begin_tab_item("Asset Management")[0]:
+        #     # smart_table(
+        #     #     "TEMP",
+        #     #     u.video_snapshots,
+        #     #     VideoSnapshot.get_header(),
+        #     #     __temp_selected_id,
+        #     #     TableSelectMode.MULTIPLE,
+        #     #     None,  # video_edit_menu()
+        #     # )
 
-            imgui.text("Import and manage local files for analysis.")
-            imgui.end_tab_item()
-            if imgui.begin_tab_bar("asset_management_page", imgui.TabBarFlags_.none):
-                gui.asset_management.build_page(u)
-                imgui.end_tab_bar()
+        #     imgui.text("Import and manage local files for analysis.")
+        #     imgui.end_tab_item()
+        #     if imgui.begin_tab_bar("asset_management_page", imgui.TabBarFlags_.none):
+        #         gui.asset_management.build_page(u)
+        #         imgui.end_tab_bar()
 
-        if imgui.begin_tab_item("Entity List")[0]:
-            gui.entity_management.build_page(u)
+        # if imgui.begin_tab_item("Entity List")[0]:
+        #     gui.entity_management.build_page(u)
+        #     imgui.end_tab_item()
+        if imgui.begin_tab_item("Entity Management")[0]:
+            gui.entity_management_2.build_page(u)
             imgui.end_tab_item()
 
         if imgui.begin_tab_item("Feature Extraction")[0]:
@@ -46,16 +47,15 @@ def build_ui(u: Universe):
             imgui.end_tab_item()
         imgui.end_tab_bar()
 
-
 def main():
     u: Universe = Universe()
-    u.db = connect_db("./index.sqlite")
-    setup_schema(u.db)
+    # u.db = connect_db("./index.sqlite")
+    # setup_schema(u.db)
 
-    # > Load the "truths" once at start of application
-    u.reload_entity_snapshots()
-    u.reload_dataset_snapshots()
-    u.reload_video_snapshots()
+    # # > Load the "truths" once at start of application
+    # u.reload_entity_snapshots()
+    # u.reload_dataset_snapshots()
+    # u.reload_video_snapshots()
 
     immapp.run(
         lambda: build_ui(u),
