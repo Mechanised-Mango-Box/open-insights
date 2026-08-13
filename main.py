@@ -7,6 +7,7 @@ import gui.feature_extraction
 import gui.model_analysis
 # from asset_manager.db import setup_schema, connect_db
 from imgui_bundle import immapp, implot, imgui_md, imgui
+import whisper
 
 __temp_selected_id = set()
 
@@ -51,6 +52,8 @@ def main():
     u: Universe = Universe()
     # u.db = connect_db("./index.sqlite")
     # setup_schema(u.db)
+    print("[ Startup ] Loading whisper model...")
+    u.whisper_model = whisper.load_model("tiny.en")
 
     # # > Load the "truths" once at start of application
     # u.reload_entity_snapshots()

@@ -233,10 +233,11 @@ class DatasetYoutubeAudienceRetention:
     absolute_audience_retention: List[float]
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, kw_only=True)
 class DatasetWhisperTranscript:
     model_kind: Literal["tiny", "base", "small", "medium", "large"]
     transcript: str
+    word_count: int
 
 
 Dataset = DatasetYoutubeContent | DatasetYoutubeAudienceRetention | DatasetWhisperTranscript

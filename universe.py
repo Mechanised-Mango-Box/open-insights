@@ -15,6 +15,7 @@ from sqlite3 import Connection
 
 class Universe:
     db: Connection
+    whisper_model: Whisper
 
     entities: List[Video] = []
     # et: EntityTable = EntityTable()
