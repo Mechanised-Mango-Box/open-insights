@@ -138,6 +138,8 @@ if __name__ == "__main__":
             setStatus("Loading numpy...");
             await pyodide.loadPackage('numpy');  // numpy will be loaded from the CDN jsdelivr
             
+            setStatus("Loading openai-whisper...");
+            await micropip.install('openai-whisper');
             
             setStatus("Loading deps...");
             await micropip.install('typing-extensions');  // numpy will be loaded from the CDN jsdelivr
@@ -147,7 +149,7 @@ if __name__ == "__main__":
                 "universe.py",
                 "utils.py",
                 "gui/tables.py",
-                "gui/entity_management.py",
+                "gui/entity_management_2.py",
                 "gui/model_analysis.py",
                 "gui/feature_extraction.py",
                 "gui/asset_management.py",

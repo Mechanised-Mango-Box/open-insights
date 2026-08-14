@@ -1,7 +1,6 @@
 from utils import Result, Success, Failure
 from utils import OpenCVSceneStats
 from utils import DatasetWhisperTranscript
-from video_analysis.whisper_functions import transcribe_and_wordcount
 from imgui_bundle import imgui
 from universe import Universe
 import whisper
