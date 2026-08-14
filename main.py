@@ -53,7 +53,7 @@ def main():
     # u.db = connect_db("./index.sqlite")
     # setup_schema(u.db)
     print("[ Startup ] Loading whisper model...")
-    u.whisper_model = whisper.load_model("tiny.en")
+    u.whisper_model = whisper.load_model("tiny.en") # 30min video ~2 mins on gaming rig - cpu only
 
     # # > Load the "truths" once at start of application
     # u.reload_entity_snapshots()

@@ -117,7 +117,7 @@ def build_page(u: Universe):
     )
 
     # > Construct Table
-    if imgui.begin_table(element_id, 7 + (1 if show_select_box else 0), table_flags):
+    if imgui.begin_table(element_id, 8 + (1 if show_select_box else 0), table_flags):
         # > Generate Headers
         if show_select_box:
             imgui.table_setup_column(
@@ -131,9 +131,10 @@ def build_page(u: Universe):
         imgui.table_setup_column("Title")
         imgui.table_setup_column("File Hash")
         imgui.table_setup_column("File Handle")
-        imgui.table_setup_column("YT C")
-        imgui.table_setup_column("YT AR")
-        imgui.table_setup_column("W T")
+        imgui.table_setup_column("YT Content")
+        imgui.table_setup_column("YT Audience Retention")
+        imgui.table_setup_column("Transcript")
+        imgui.table_setup_column("Scene Stats")
         imgui.table_headers_row()
 
         for row in rows:
@@ -176,6 +177,8 @@ def build_page(u: Universe):
             imgui.text(str(row.ds_yt_audience_retention))
             imgui.table_next_column()
             imgui.text(str(row.ds_whisper_transcript))
+            imgui.table_next_column()
+            imgui.text(str(row.ds_opencv_scene_stats))
 
     imgui.end_table()
 

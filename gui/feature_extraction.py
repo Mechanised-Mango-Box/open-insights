@@ -1,8 +1,12 @@
+from utils import Result, Success, Failure
+from utils import OpenCVSceneStats
 from utils import DatasetWhisperTranscript
 from video_analysis.whisper_functions import transcribe_and_wordcount
 from imgui_bundle import imgui
 from universe import Universe
 import whisper
+import cv2
+import pandas as pd
 
 
 def build_page(u: Universe):
@@ -19,6 +23,7 @@ def build_page(u: Universe):
                     path = ent.file_path
                     if path is None:
                         continue
+
                     whisper_res = whisper.transcribe(model=u.whisper_model, audio=str(path))
                     ent.ds_whisper_transcript = DatasetWhisperTranscript(
                         model_kind="tiny",
@@ -30,36 +35,86 @@ def build_page(u: Universe):
             imgui.end_tab_item()
 
         if imgui.begin_tab_item("Scene Stats (OpenCV)")[0]:
-            if imgui.button("PLACEHOLDER - APPLY TO ALL, OVERWRITE MODE"):
+            if imgui.button("PLACEHOLDER - Apply to first without data"):
                 for ent in u.entities:
+                    if ent.ds_opencv_scene_stats:
+                        print(f"Skipping: {ent}")
+                        continue
+
                     # > Update
+                    print(f"\n\nOpenCV on {ent}")
                     path = ent.file_path
                     if path is None:
                         continue
-                    whisper_res = whisper.transcribe(model=u.whisper_model, audio=path)
-                    ent.ds_whisper_transcript = DatasetWhisperTranscript(
-                        model_kind="tiny",
-                        transcript=whisper_res["text"],
-                        word_count=len(whisper_res["text"].split()),
-                    )
 
+                    video_capture = cv2.VideoCapture(str(path))
+                    # TODO
+                    match (
+                        video_duration_mins(video_capture),
+                        count_scene_transitions(video_capture),
+                    ):
+                        case (Success(duration), Success(scene_transition_count)):
+                            ent.ds_opencv_scene_stats = OpenCVSceneStats(
+                                duration_minutes=duration,
+                                scene_transition_count=scene_transition_count,
+                                scene_transition_rate=scene_transition_count / duration,
+                            )
+                        case errs:
+                            print(f"[ OpenCV ] Failed with errors: {errs}")
+                    print("[ OpenCV ] Releasing file handle.")
+                    video_capture.release()
+                    print("Done")
+                    break
             imgui.end_tab_item()
-
         imgui.end_tab_bar()
 
     imgui.text("WIP - TABLE HERE")
 
 
-def transcribe_and_wordcount(video_path: str, model) -> tuple[int, str]:
+# next function we need is to get the video duration
+# to get this we need to use a tool called open cv which is a computer vision Tool used to analsye images, video analysis, and more.
+def video_duration_mins(video_capture: cv2.VideoCapture) -> Result[float, str]:
+    # check if the file has opened
+    if not video_capture.isOpened():
+        return Failure(f"Failed to open video file: {video_capture}")
 
-    # First we need to transcribe the video
-    result = model.transcribe(video_path)  # returns a dictionary
+    # get the frames per second property
+    fps = video_capture.get(cv2.CAP_PROP_FPS)
 
-    transcript: str = result["text"]  # this holds a string of all the text from the video
+    # get totatl frames in video
+    total_frames = video_capture.get(cv2.CAP_PROP_FRAME_COUNT)
 
-    # now we need to get the word count
+    duration = (total_frames / fps) / 60  # in mins
+    return Success(duration)
 
-    # to do this we need to split each word from the long string of text above
-    word_count = len(transcript.split())
 
-    return word_count, transcript
+# Open CV only lets you or gives you the tools to analyse frames/images, we have to write our own algorithm to define what a change in scene is.
+# VideoCapture.read() returns two values which are, success and frame, a boolean and an array of pixel data.
+def count_scene_transitions(
+    video_capture: cv2.VideoCapture, threshold: float = 30.0
+) -> Result[int, str]:
+    if not video_capture.isOpened():
+        return Failure(f"Failed to open video file: {video_capture}")
+
+    transition_count = 0
+    previous_frame = None
+
+    while True:
+        success, frame = video_capture.read()
+
+        if not success:
+            break
+
+        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+        if previous_frame is not None:
+            difference = cv2.absdiff(previous_frame, gray_frame)
+
+            mean_difference = difference.mean()
+
+            if mean_difference > threshold:
+                transition_count += 1
+
+        previous_frame = gray_frame
+
+    return Success(transition_count)

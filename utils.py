@@ -240,7 +240,19 @@ class DatasetWhisperTranscript:
     word_count: int
 
 
-Dataset = DatasetYoutubeContent | DatasetYoutubeAudienceRetention | DatasetWhisperTranscript
+@dataclass(slots=True, kw_only=True)
+class OpenCVSceneStats:
+    duration_minutes: float
+    scene_transition_count: int
+    scene_transition_rate: float
+
+
+Dataset: type = (
+    DatasetYoutubeContent
+    | DatasetYoutubeAudienceRetention
+    | DatasetWhisperTranscript
+    | OpenCVSceneStats
+)
 
 # def row_to_arr(obj: Rowable) -> Result[Sequence, str]:
 #     match obj:
@@ -289,3 +301,5 @@ class Video:
     )
 
     ds_whisper_transcript: Optional[DatasetWhisperTranscript] = field(default=None, kw_only=True)
+
+    ds_opencv_scene_stats: Optional[OpenCVSceneStats] = field(default=None, kw_only=True)
