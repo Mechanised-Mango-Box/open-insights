@@ -1,3 +1,12 @@
+from utils import DatasetWhisperTranscript
+from utils import DatasetOpenCVSceneStats
+from utils import DatasetYoutubeAudienceRetention
+from dataclasses import fields
+from dataclasses import asdict
+from datetime import datetime
+from utils import Success
+from utils import Failure
+from utils import Result
 from pathlib import Path
 from uuid import UUID
 import uuid
@@ -74,7 +83,10 @@ def build_page(u: Universe):
                 if len(matching) <= 0:
                     # * None match, insert new
                     new_entity = Video(
-                        _id=uuid.uuid4(), file_hash=selected_hash, file_path=path, display_name=path.stem
+                        _id=uuid.uuid4(),
+                        file_hash=selected_hash,
+                        file_path=path,
+                        display_name=path.stem,
                     )  # TODO make file the name not the whole path
                     u.entities.append(new_entity)
                 else:
@@ -84,15 +96,12 @@ def build_page(u: Universe):
         print(u.entities)
 
     if imgui.button("Export"):
-        # > Entity Export
-        for entity in u.entities:
-            #! Entity File
-            # > YT - Content
-
-            #! External Files
-            # > YT - AudRe
-            # > Whisper Transcript
-            pass
+        out_dir = pfd.select_folder(
+            "Select export location...",
+            ".",
+            options=pfd.opt.none,
+        ).result()
+        export(Path(out_dir), u.entities)
 
     element_id: str = "fsfes"
     # * Rows
@@ -223,3 +232,81 @@ def upsert_yt_content_csv(path: str, ptr_entities: List[Video]):
                     ds_yt_content=obj,
                 )
                 ptr_entities.append(new_entity)
+
+
+def export(target_dir: Path, entities: List[Video]) -> Result[None, str]:
+    ts_start = datetime.now()
+    ts_start_iso = ts_start.isoformat()
+    print(
+        f"""[ Export] Starting export at {ts_start_iso}.
+    \t> Target: {target_dir}
+    \t> Count: {len(entities)}"""
+    )
+
+    # > MARK: 1. Validation
+    if len(entities) <= 0:
+        return Failure("No entities selected.")
+    if not (target_dir.exists(), target_dir.is_dir()):
+        return Failure(f"Path provided is invalid: {target_dir}")
+
+    # > MARK: 2. Make export folder
+    print("[ Export ] Generating output folder...")
+    out_dir = target_dir / ts_start_iso
+    out_dir.mkdir()
+    print(f"[ Export ] Output folder: {out_dir}")
+
+    # > MARK: 3. Generate manifest
+    print(f"[ Export ] Generating manifest...")
+    manifest_path = out_dir / "manifest.csv"
+    with manifest_path.open("w") as f:
+        f.writelines("id,file_hash,display_name\n")
+        manifest_text = map(lambda ent: f"{ent._id},{ent.file_hash},{ent.display_name}\n", entities)
+        f.writelines(manifest_text)
+    print(f"[ Export ] Manifest complete at {manifest_path}")
+
+    # > MARK: 4. Datasets
+    print("[ Export ] Generating dataset folder...")
+    data_dir = out_dir / "data"
+    data_dir.mkdir()
+    print(f"[ Export ] Dataset folder: {data_dir}")
+
+    # > MARK: 4.x Youtube - Content
+    print("[ Export ] Generating: Youtube Content...")
+    yt_content_path = data_dir / (DatasetYoutubeContent.get_label() + ".csv")
+    with yt_content_path.open("w") as f:
+        writer = csv.DictWriter(f, fieldnames=DatasetYoutubeContent.get_fieldnames())
+        f.writelines("id,")
+        writer.writeheader()
+        for entity in entities:
+            data = entity.ds_yt_content
+            if not data:
+                continue
+            f.writelines(str(entity._id) + ",")
+            writer.writerow(asdict(data))
+    print(f"[ Export ] Youtube Content complete at {yt_content_path}")
+
+    # > MARK: 4.x Youtube - Audience Retention
+    # TODO
+    # > MARK: 4.x Whisper - Transcript
+    print("[ Export ] Generating: Whisper - Transcript...")
+    print("[ Export ] Generating folder...")
+    transcript_dir = data_dir / DatasetWhisperTranscript.get_label()
+    transcript_dir.mkdir()
+    print(f"[ Export ] Folder: {transcript_dir}")
+    for entity in entities:
+        whisper_transcript = entity.ds_whisper_transcript
+        if not whisper_transcript:
+            continue
+
+        print(f"[ Export ] Exporting transcript for {entity._id}")
+
+        curr_file_path = transcript_dir / (str(entity._id) + ".txt")
+        with curr_file_path.open("w") as f:
+            f.writelines(whisper_transcript.transcript)
+
+    # > MARK: 4.x Transcript Stats
+    # TODO
+    # > MARK: 4.x OpenCV - Scene Stats
+    # TODO
+
+    return Success(None)

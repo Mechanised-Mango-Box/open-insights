@@ -1,6 +1,5 @@
-from utils import Result, Success, Failure
-from utils import OpenCVSceneStats
-from utils import DatasetWhisperTranscript
+from utils import DatasetOpenCVSceneStats
+from utils import DatasetTranscriptStats, DatasetWhisperTranscript, Result, Success, Failure
 from imgui_bundle import imgui
 from universe import Universe
 import whisper
@@ -11,7 +10,7 @@ import pandas as pd
 def build_page(u: Universe):
     if imgui.begin_tab_bar("views", imgui.TabBarFlags_.none):
         if imgui.begin_tab_item("Transcript (Whisper)")[0]:
-            if imgui.button("PLACEHOLDER - Apply to first without data"):
+            if imgui.button("Extract Transcript (PLACEHOLDER) - Apply to first without data"):
                 for ent in u.entities:
                     if ent.ds_whisper_transcript:
                         print(f"Skipping: {ent}")
@@ -25,9 +24,21 @@ def build_page(u: Universe):
 
                     whisper_res = whisper.transcribe(model=u.whisper_model, audio=str(path))
                     ent.ds_whisper_transcript = DatasetWhisperTranscript(
-                        model_kind="tiny",
                         transcript=whisper_res["text"],
-                        word_count=len(whisper_res["text"].split()),
+                    )
+                    print("Done")
+                    break
+            if imgui.button("Process Transcript Stats (PLACEHOLDER) - Apply to first without data"):
+                for ent in u.entities:
+                    if ent.ds_transcript_stats or not ent.ds_whisper_transcript:
+                        print(f"Skipping: {ent}")
+                        continue
+
+                    # > Update
+                    print(f"\n\nProcessing transcript stats...")
+                    tscript = ent.ds_whisper_transcript
+                    ent.ds_transcript_stats = DatasetTranscriptStats(
+                        word_count=len(tscript.transcript.split()),
                     )
                     print("Done")
                     break
@@ -53,7 +64,7 @@ def build_page(u: Universe):
                         count_scene_transitions(video_capture),
                     ):
                         case (Success(duration), Success(scene_transition_count)):
-                            ent.ds_opencv_scene_stats = OpenCVSceneStats(
+                            ent.ds_opencv_scene_stats = DatasetOpenCVSceneStats(
                                 duration_minutes=duration,
                                 scene_transition_count=scene_transition_count,
                                 scene_transition_rate=scene_transition_count / duration,

@@ -1,3 +1,4 @@
+from dataclasses import fields
 from pathlib import Path
 from uuid import UUID
 from dataclasses import field
@@ -213,8 +214,24 @@ def file_hash(path: Path, algo: str = "sha256", chunk_size: int = 1024 * 1024) -
 # endregion
 
 
+@dataclass(slots=True, kw_only=True)
+class Dataset(ABC):
+    @staticmethod
+    @abstractmethod
+    def get_label() -> str:
+        assert False
+
+    @classmethod
+    def get_fieldnames(cls) -> list[str]:
+        return [field.name for field in fields(cls)]
+
+
 @dataclass(slots=True)
-class DatasetYoutubeContent:
+class DatasetYoutubeContent(Dataset):
+    @staticmethod
+    def get_label():
+        return "yt_content"
+
     yt_id: str
     title: str
     pub_time: str
@@ -228,31 +245,51 @@ class DatasetYoutubeContent:
 
 
 @dataclass(slots=True)
-class DatasetYoutubeAudienceRetention:
+class DatasetYoutubeAudienceRetention(Dataset):
+    @staticmethod
+    def get_label():
+        return "yt_audience_retention"
+
     video_positions: List[int]
     absolute_audience_retention: List[float]
 
 
 @dataclass(slots=True, kw_only=True)
-class DatasetWhisperTranscript:
-    model_kind: Literal["tiny", "base", "small", "medium", "large"]
+class DatasetWhisperTranscript(Dataset):
+    @staticmethod
+    def get_label():
+        return "whisper_transcript"
+
     transcript: str
+
+
+@dataclass(slots=True, kw_only=True)
+class DatasetTranscriptStats(Dataset):
+    @staticmethod
+    def get_label():
+        return "transcript_stats"
+
     word_count: int
 
 
 @dataclass(slots=True, kw_only=True)
-class OpenCVSceneStats:
+class DatasetOpenCVSceneStats(Dataset):
+    @staticmethod
+    def get_label():
+        return "opencv_scene_stats"
+
     duration_minutes: float
     scene_transition_count: int
     scene_transition_rate: float
 
 
-Dataset: type = (
-    DatasetYoutubeContent
-    | DatasetYoutubeAudienceRetention
-    | DatasetWhisperTranscript
-    | OpenCVSceneStats
-)
+# Dataset: type = (
+#     DatasetYoutubeContent
+#     | DatasetYoutubeAudienceRetention
+#     | DatasetWhisperTranscript
+#     | DatasetTranscriptStats
+#     | DatasetOpenCVSceneStats
+# )
 
 # def row_to_arr(obj: Rowable) -> Result[Sequence, str]:
 #     match obj:
@@ -295,11 +332,14 @@ class Video:
     display_name: str
 
     # > Datasets
+    # > YT
     ds_yt_content: Optional[DatasetYoutubeContent] = field(default=None, kw_only=True)
     ds_yt_audience_retention: Optional[DatasetYoutubeAudienceRetention] = field(
         default=None, kw_only=True
     )
-
+    # > Audio
     ds_whisper_transcript: Optional[DatasetWhisperTranscript] = field(default=None, kw_only=True)
+    ds_transcript_stats: Optional[DatasetTranscriptStats] = field(default=None, kw_only=True)
 
-    ds_opencv_scene_stats: Optional[OpenCVSceneStats] = field(default=None, kw_only=True)
+    # > Video
+    ds_opencv_scene_stats: Optional[DatasetOpenCVSceneStats] = field(default=None, kw_only=True)
