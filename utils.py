@@ -48,6 +48,14 @@ class Failure(Generic[E]):
 Result = Union[Success[T], Failure[E]]
 # endregion
 
+
+def e_str(x: Any) -> str:
+    """
+    Cast to string that handles empty.
+    """
+    return str(x) if x else ""
+
+
 # region Custom type aliases
 CustomResourceType = str
 ID = int
@@ -221,37 +229,66 @@ class Dataset(ABC):
     def get_label() -> str:
         assert False
 
+    @staticmethod
+    @abstractmethod
+    def new_empty() -> Dataset:
+        assert False
+
     @classmethod
     def get_fieldnames(cls) -> list[str]:
         return [field.name for field in fields(cls)]
 
 
-@dataclass(slots=True)
+@dataclass
 class DatasetYoutubeContent(Dataset):
     @staticmethod
     def get_label():
         return "yt_content"
 
-    yt_id: str
-    title: str
-    pub_time: str
-    duration: int
-    views: int
-    watch_time: float
-    subscribers: int
-    average_view_duration: str
-    impressions: int
+    @staticmethod
+    def new_empty():
+        return DatasetYoutubeContent(
+            yt_id=None,
+            title=None,
+            pub_time=None,
+            duration=None,
+            views=None,
+            watch_time=None,
+            subscribers=None,
+            average_view_duration=None,
+            impressions=None,
+            impressions_click_through_rate=None,
+        )
+
+    yt_id: str | None
+    title: str | None
+    pub_time: str | None
+    duration: int | None
+    views: int | None
+    watch_time: float | None
+    subscribers: int | None
+    average_view_duration: str | None
+    impressions: int | None
     impressions_click_through_rate: float | None
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, kw_only=True)
+class DatasetYoutubeAudienceRetentionTimeslice:
+    video_position: int
+    absolute_audience_retention: float
+
+
+@dataclass
 class DatasetYoutubeAudienceRetention(Dataset):
     @staticmethod
     def get_label():
         return "yt_audience_retention"
 
-    video_positions: List[int]
-    absolute_audience_retention: List[float]
+    @staticmethod
+    def new_empty():
+        return DatasetYoutubeAudienceRetention(slices=[])
+
+    slices: List[DatasetYoutubeAudienceRetentionTimeslice]
 
 
 @dataclass(slots=True, kw_only=True)
@@ -259,6 +296,10 @@ class DatasetWhisperTranscript(Dataset):
     @staticmethod
     def get_label():
         return "whisper_transcript"
+
+    @staticmethod
+    def new_empty():
+        return DatasetWhisperTranscript(transcript="")
 
     transcript: str
 
