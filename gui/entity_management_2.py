@@ -175,20 +175,37 @@ def build_page(u: Universe):
             # if on_double_click is not None:
             #     on_double_click(row, imgui.is_item_hovered() and imgui.is_mouse_double_clicked(0))
             imgui.table_next_column()
-            imgui.text(str(row.display_name))
+            imgui.text(row.display_name)
             imgui.table_next_column()
-            imgui.text(str(row.file_hash))
+            if row.file_hash:
+                imgui.text(row.file_hash)
+            else:
+                imgui.text("")
             imgui.table_next_column()
-            imgui.text(str(row.file_path))
+            if row.file_path:
+                imgui.text(row.file_path.name)
+            else:
+                imgui.text("")
             imgui.table_next_column()
-            imgui.text(str(row.ds_yt_content))
+            if row.ds_yt_content:
+                imgui.text(row.ds_yt_content.yt_id)
+            else:
+                imgui.text("")
             imgui.table_next_column()
-            imgui.text(str(row.ds_yt_audience_retention))
+            if row.ds_yt_audience_retention:
+                imgui.text(str(row.ds_yt_audience_retention))
+            else:
+                imgui.text("")
             imgui.table_next_column()
-            imgui.text(str(row.ds_whisper_transcript))
+            if row.ds_whisper_transcript:
+                imgui.text("Yes")
+            else:
+                imgui.text("")
             imgui.table_next_column()
-            imgui.text(str(row.ds_opencv_scene_stats))
-
+            if row.ds_opencv_scene_stats:
+                imgui.text(str(row.ds_opencv_scene_stats))
+            else:
+                imgui.text("")
     imgui.end_table()
 
 
@@ -309,4 +326,5 @@ def export(target_dir: Path, entities: List[Video]) -> Result[None, str]:
     # > MARK: 4.x OpenCV - Scene Stats
     # TODO
 
+    print(("[ Export ] Complete."))
     return Success(None)
