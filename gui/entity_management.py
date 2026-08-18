@@ -1,11 +1,8 @@
-from utils import Ref
-from typedef import ALL_DATASETS
+from datetime import timezone
 import csv
-from copy import deepcopy
 from datetime import datetime
 from enum import Enum, auto
 from pathlib import Path
-from typing import Any, List, Set
 from uuid import UUID, uuid4
 
 from imgui_bundle import imgui
@@ -13,16 +10,17 @@ from imgui_bundle import portable_file_dialogs as pfd
 from imgui_bundle.imgui import same_line
 
 from typedef import (
-    ID,
+    ALL_DATASETS,
     DatasetOpenCVSceneStats,
-    DatasetWhisperTranscript,
     DatasetTranscriptStats,
+    DatasetWhisperTranscript,
     DatasetYoutubeAudienceRetention,
     DatasetYoutubeContent,
     Video,
 )
 from universe import Universe
 from utils import *
+from utils import Ref
 
 
 class TableSelectMode(Enum):
@@ -31,7 +29,7 @@ class TableSelectMode(Enum):
     MULTIPLE = auto()
 
 
-__selected_ids: Set[UUID] = set()
+__selected_ids: set[UUID] = set()
 
 
 def build_page(u: Universe):
@@ -214,13 +212,13 @@ def build_page(u: Universe):
     imgui.end_table()
 
 
-def upsert_yt_content_csv(path: str, ptr_entities: List[Video]):
+def upsert_yt_content_csv(path: str, ptr_entities: list[Video]):
     with open(path, newline="") as f:
         reader = csv.DictReader(f)  # columns become dict keys
         for row in reader:
             # > Read as obj
             obj = DatasetYoutubeContent(
-                yt_id=row["Content"],
+                content_id=row["Content"],
                 title=row["Video title"],
                 pub_time=row["Video publish time"],
                 duration=int(row["Duration"]),
@@ -240,7 +238,7 @@ def upsert_yt_content_csv(path: str, ptr_entities: List[Video]):
             has_repalced_existing = False
             for entity in ptr_entities:
                 # > Same ID -> replace
-                if entity.ds_yt_content and entity.ds_yt_content.yt_id == obj.yt_id:
+                if entity.ds_yt_content and entity.ds_yt_content.content_id == obj.content_id:
                     entity.ds_yt_content = obj
                     has_repalced_existing = True
                     break
@@ -256,8 +254,8 @@ def upsert_yt_content_csv(path: str, ptr_entities: List[Video]):
                 ptr_entities.append(new_entity)
 
 
-def export_all(target_dir: Path, entities: List[Video]) -> Result[None, str]:
-    ts_start = datetime.now()
+def export_all(target_dir: Path, entities: list[Video]) -> Result[None, str]:
+    ts_start = datetime.now(timezone.utc)
     ts_start_iso = ts_start.isoformat()
     print(
         f"""[ Export] Starting export at {ts_start_iso}.
@@ -278,11 +276,11 @@ def export_all(target_dir: Path, entities: List[Video]) -> Result[None, str]:
     print(f"[ Export ] Output folder: {out_dir}")
 
     # > MARK: 3. Generate manifest
-    print(f"[ Export ] Generating manifest...")
+    print("[ Export ] Generating manifest...")
     manifest_path = out_dir / "manifest.csv"
     with manifest_path.open("w") as f:
         f.writelines("id,file_hash,display_name\n")
-        manifest_text = map(lambda ent: f"{ent._id},{ent.file_hash},{ent.display_name}\n", entities)
+        manifest_text = (f"{ent._id},{ent.file_hash},{ent.display_name}\n" for ent in entities)
         f.writelines(manifest_text)
     print(f"[ Export ] Manifest complete at {manifest_path}")
 
@@ -305,6 +303,7 @@ ptr_edit_menu_all_edit_youtube_audience_retention: Ref[DatasetYoutubeAudienceRet
 )
 ptr_edit_menu_all_edit_whisper_transcript: Ref[DatasetWhisperTranscript | None] = Ref(None)
 ptr_edit_menu_all_edit_transcript_stats: Ref[DatasetTranscriptStats | None] = Ref(None)
+ptr_edit_menu_all_edit_scene_stats: Ref[DatasetOpenCVSceneStats | None] = Ref(None)
 
 
 def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
@@ -325,7 +324,7 @@ def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
             print("BUTTON - SELECT PATH")
         imgui.separator_text("Datasets")
 
-        DatasetYoutubeContent.render_edit_menu(
+        entity.ds_yt_content = DatasetYoutubeContent.render_edit_menu(
             element_id + "/edit_menu_yt_content",
             imgui.button("Edit Youtube Content"),
             entity.ds_yt_content,
@@ -333,11 +332,11 @@ def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
         )
         same_line()
         if entity.ds_yt_content:
-            imgui.text(f"Content ID: {entity.ds_yt_content.yt_id}")
+            imgui.text(f"Content ID: {entity.ds_yt_content.content_id}")
         else:
-            imgui.text(f"Not assigned")
+            imgui.text("Not assigned")
 
-        DatasetYoutubeAudienceRetention.render_edit_menu(
+        entity.ds_yt_audience_retention = DatasetYoutubeAudienceRetention.render_edit_menu(
             element_id + "/edit_menu_yt_audience_retention",
             imgui.button("Edit Audience Retention"),
             (entity.ds_yt_audience_retention),
@@ -347,8 +346,8 @@ def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
         if entity.ds_yt_audience_retention:
             imgui.text(f"Time Slice Counts: {len(entity.ds_yt_audience_retention.slices)}")
         else:
-            imgui.text(f"Not assigned")
-        entity.ds_whisper_transcript= DatasetWhisperTranscript.render_edit_menu(
+            imgui.text("Not assigned")
+        entity.ds_whisper_transcript = DatasetWhisperTranscript.render_edit_menu(
             element_id + "/edit_menu_whisper_transcript",
             imgui.button("Edit Transcript"),
             (entity.ds_whisper_transcript),
@@ -358,9 +357,9 @@ def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
         if entity.ds_whisper_transcript:
             imgui.text(f"Characters: {len(entity.ds_whisper_transcript.transcript)}")
         else:
-            imgui.text(f"Not assigned")
+            imgui.text("Not assigned")
 
-        entity.ds_transcript_stats= DatasetTranscriptStats.render_edit_menu(
+        entity.ds_transcript_stats = DatasetTranscriptStats.render_edit_menu(
             element_id + "/edit_menu_transcript_stats",
             imgui.button("Edit Transcript Stats"),
             (entity.ds_transcript_stats),
@@ -370,7 +369,19 @@ def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
         if entity.ds_transcript_stats:
             imgui.text(f"Word Count: {entity.ds_transcript_stats.word_count}")
         else:
-            imgui.text(f"Not assigned")
+            imgui.text("Not assigned")
+
+        entity.ds_opencv_scene_stats = DatasetOpenCVSceneStats.render_edit_menu(
+            element_id + "/edit_menu_scene_stats",
+            imgui.button("Edit Scene Stats"),
+            (entity.ds_opencv_scene_stats),
+            ptr_edit_menu_all_edit_scene_stats,
+        )
+        same_line()
+        if entity.ds_opencv_scene_stats:
+            imgui.text(f"Scene Count: {entity.ds_opencv_scene_stats.scene_transition_count}")
+        else:
+            imgui.text("Not assigned")
 
         imgui.separator_text("")
         if imgui.button("Close"):

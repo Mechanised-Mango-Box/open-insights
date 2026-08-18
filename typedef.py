@@ -56,7 +56,7 @@ class Dataset(ABC):
 # > MARK: Youtube Content
 @dataclass
 class DatasetYoutubeContent(Dataset):
-    yt_id: str | None
+    content_id: str | None
     title: str | None
     pub_time: str | None
     duration: int | None
@@ -81,7 +81,7 @@ class DatasetYoutubeContent(Dataset):
     @override
     def new_empty(cls):
         return DatasetYoutubeContent(
-            yt_id=None,
+            content_id=None,
             title=None,
             pub_time=None,
             duration=None,
@@ -99,7 +99,9 @@ class DatasetYoutubeContent(Dataset):
         print("[ Export ] Generating: Youtube Content...")
         yt_content_path = output_dir / (DatasetYoutubeContent.get_label() + ".csv")
         with yt_content_path.open("w") as f:
-            writer = csv.DictWriter(f, fieldnames=DatasetYoutubeContent.get_fieldnames())
+            writer = csv.DictWriter(
+                f, fieldnames=DatasetYoutubeContent.get_fieldnames()
+            )
             f.writelines("id,")
             writer.writeheader()
             for entity in entities:
@@ -112,7 +114,7 @@ class DatasetYoutubeContent(Dataset):
 
     @override
     def render_cell(self, element_id: str) -> None:
-        imgui.text(e_str(self.yt_id))
+        imgui.text(e_str(self.content_id))
 
     @classmethod
     @override
@@ -125,25 +127,41 @@ class DatasetYoutubeContent(Dataset):
     ):
         if just_activated:
             ptr_data._ = (
-                DatasetYoutubeContent.new_empty() if original is None else deepcopy(original)
+                DatasetYoutubeContent.new_empty()
+                if original is None
+                else deepcopy(original)
             )
             imgui.open_popup(element_id)
-            return
 
         if imgui.begin_popup_modal(
             element_id,
             None,
-            imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
+            imgui.WindowFlags_.no_saved_settings
+            | imgui.WindowFlags_.always_auto_resize,
         )[0]:
             assert ptr_data._
-            imgui.input_text(f"Content ID##{element_id}", e_str(ptr_data._.yt_id))
-            imgui.input_text(f"Duration##{element_id}", e_str(ptr_data._.duration))
-            imgui.input_text(f"Title##{element_id}", e_str(ptr_data._.title))
+            _, ptr_data._.content_id = imgui.input_text(
+                f"Content ID##{element_id}", e_str(ptr_data._.content_id)
+            )
+            _, ptr_data._.duration = imgui.input_int(
+                f"Duration (mins)##{element_id}", ptr_data._.duration or 0
+            )
+            _, ptr_data._.title = imgui.input_text(
+                f"Title##{element_id}", e_str(ptr_data._.title)
+            )
             imgui.text("WIP")
 
-            if imgui.button("Close"):
+            imgui.separator_text("")
+            if imgui.button("Save"):
+                imgui.close_current_popup()
+                imgui.end_popup()
+                return ptr_data._
+            imgui.same_line()
+            if imgui.button("Cancel"):
                 ptr_data._ = None
                 imgui.close_current_popup()
+                imgui.end_popup()
+                return original
 
             imgui.end_popup()
         return original
@@ -181,7 +199,9 @@ class DatasetYoutubeAudienceRetention(Dataset):
         print("[ Export ] Generating: Youtube Audience Retention...")
         path = output_dir / (DatasetYoutubeAudienceRetention.get_label() + ".csv")
         with path.open("w") as f:
-            writer = csv.DictWriter(f, fieldnames=DatasetYoutubeAudienceRetention.get_fieldnames())
+            writer = csv.DictWriter(
+                f, fieldnames=DatasetYoutubeAudienceRetention.get_fieldnames()
+            )
             f.writelines("id,")
             writer.writeheader()
             for entity in entities:
@@ -212,20 +232,28 @@ class DatasetYoutubeAudienceRetention(Dataset):
                 else deepcopy(original)
             )
             imgui.open_popup(element_id)
-            return
 
         if imgui.begin_popup_modal(
             element_id,
             None,
-            imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
+            imgui.WindowFlags_.no_saved_settings
+            | imgui.WindowFlags_.always_auto_resize,
         )[0]:
             assert ptr_data._
             imgui.input_text(f"Slices##{element_id}", e_str(ptr_data._.slices))
             imgui.text("WIP")
 
-            if imgui.button("Close"):
+            imgui.separator_text("")
+            if imgui.button("Save"):
+                imgui.close_current_popup()
+                imgui.end_popup()
+                return ptr_data._
+            imgui.same_line()
+            if imgui.button("Cancel"):
                 ptr_data._ = None
                 imgui.close_current_popup()
+                imgui.end_popup()
+                return original
 
             imgui.end_popup()
         return original
@@ -288,14 +316,17 @@ class DatasetWhisperTranscript(Dataset):
     ):
         if just_activated:
             ptr_data._ = (
-                DatasetWhisperTranscript.new_empty() if original is None else deepcopy(original)
+                DatasetWhisperTranscript.new_empty()
+                if original is None
+                else deepcopy(original)
             )
             imgui.open_popup(element_id)
 
         if imgui.begin_popup_modal(
             element_id,
             None,
-            imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
+            imgui.WindowFlags_.no_saved_settings
+            | imgui.WindowFlags_.always_auto_resize,
         )[0]:
             assert ptr_data._
             just_changed, text = imgui.input_text_multiline(
@@ -305,12 +336,12 @@ class DatasetWhisperTranscript(Dataset):
             if just_changed:
                 ptr_data._.transcript = text
 
-            imgui.separator_text("Actions")
+            imgui.separator_text("")
             if imgui.button("Save"):
                 imgui.close_current_popup()
                 imgui.end_popup()
                 return ptr_data._
-
+            imgui.same_line()
             if imgui.button("Cancel"):
                 ptr_data._ = None
                 imgui.close_current_popup()
@@ -347,7 +378,9 @@ class DatasetTranscriptStats(Dataset):
         print("[ Export ] Generating: Transcript Stats...")
         path = output_dir / (DatasetTranscriptStats.get_label() + ".csv")
         with path.open("w") as f:
-            writer = csv.DictWriter(f, fieldnames=DatasetTranscriptStats.get_fieldnames())
+            writer = csv.DictWriter(
+                f, fieldnames=DatasetTranscriptStats.get_fieldnames()
+            )
             f.writelines("id,")
             writer.writeheader()
             for entity in entities:
@@ -373,23 +406,33 @@ class DatasetTranscriptStats(Dataset):
     ):
         if just_activated:
             ptr_data._ = (
-                DatasetTranscriptStats.new_empty() if original is None else deepcopy(original)
+                DatasetTranscriptStats.new_empty()
+                if original is None
+                else deepcopy(original)
             )
             imgui.open_popup(element_id)
-            return
 
         if imgui.begin_popup_modal(
             element_id,
             None,
-            imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
+            imgui.WindowFlags_.no_saved_settings
+            | imgui.WindowFlags_.always_auto_resize,
         )[0]:
             assert ptr_data._
             imgui.input_int(f"Word Count##{element_id}", ptr_data._.word_count)
             imgui.text("WIP")
 
-            if imgui.button("Close"):
+            imgui.separator_text("")
+            if imgui.button("Save"):
+                imgui.close_current_popup()
+                imgui.end_popup()
+                return ptr_data._
+            imgui.same_line()
+            if imgui.button("Cancel"):
                 ptr_data._ = None
                 imgui.close_current_popup()
+                imgui.end_popup()
+                return original
 
             imgui.end_popup()
         return original
@@ -425,7 +468,9 @@ class DatasetOpenCVSceneStats(Dataset):
         print("[ Export ] Generating: OpenCV Scene Stats...")
         path = output_dir / (DatasetOpenCVSceneStats.get_label() + ".csv")
         with path.open("w") as f:
-            writer = csv.DictWriter(f, fieldnames=DatasetOpenCVSceneStats.get_fieldnames())
+            writer = csv.DictWriter(
+                f, fieldnames=DatasetOpenCVSceneStats.get_fieldnames()
+            )
             f.writelines("id,")
             writer.writeheader()
             for entity in entities:
@@ -438,7 +483,9 @@ class DatasetOpenCVSceneStats(Dataset):
 
     @override
     def render_cell(self, element_id: str) -> None:
-        imgui.text(f"{self.scene_transition_count} scenes / {round(self.duration_minutes,2)} mins")
+        imgui.text(
+            f"{self.scene_transition_count} scenes / {round(self.duration_minutes, 2)} mins"
+        )
 
     @classmethod
     @override
@@ -451,25 +498,41 @@ class DatasetOpenCVSceneStats(Dataset):
     ):
         if just_activated:
             ptr_data._ = (
-                DatasetOpenCVSceneStats.new_empty() if original is None else deepcopy(original)
+                DatasetOpenCVSceneStats.new_empty()
+                if original is None
+                else deepcopy(original)
             )
             imgui.open_popup(element_id)
-            return
 
         if imgui.begin_popup_modal(
             element_id,
             None,
-            imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
+            imgui.WindowFlags_.no_saved_settings
+            | imgui.WindowFlags_.always_auto_resize,
         )[0]:
             assert ptr_data._
-            imgui.input_int(f"Transition Count ##{element_id}", ptr_data._.scene_transition_count)
-            imgui.input_float(f"Duration (mins)##{element_id}", ptr_data._.duration_minutes)
-            imgui.input_float(f"Transition Rate##{element_id}", ptr_data._.scene_transition_rate)
+            imgui.input_int(
+                f"Transition Count ##{element_id}", ptr_data._.scene_transition_count
+            )
+            imgui.input_float(
+                f"Duration (mins)##{element_id}", ptr_data._.duration_minutes
+            )
+            imgui.input_float(
+                f"Transition Rate##{element_id}", ptr_data._.scene_transition_rate
+            )
             imgui.text("WIP")
 
-            if imgui.button("Close"):
+            imgui.separator_text("")
+            if imgui.button("Save"):
+                imgui.close_current_popup()
+                imgui.end_popup()
+                return ptr_data._
+            imgui.same_line()
+            if imgui.button("Cancel"):
                 ptr_data._ = None
                 imgui.close_current_popup()
+                imgui.end_popup()
+                return original
 
             imgui.end_popup()
         return original
@@ -503,8 +566,14 @@ class Video:
         default=None, kw_only=True
     )
     # > Audio
-    ds_whisper_transcript: DatasetWhisperTranscript | None = field(default=None, kw_only=True)
-    ds_transcript_stats: DatasetTranscriptStats | None = field(default=None, kw_only=True)
+    ds_whisper_transcript: DatasetWhisperTranscript | None = field(
+        default=None, kw_only=True
+    )
+    ds_transcript_stats: DatasetTranscriptStats | None = field(
+        default=None, kw_only=True
+    )
 
     # > Video
-    ds_opencv_scene_stats: DatasetOpenCVSceneStats | None = field(default=None, kw_only=True)
+    ds_opencv_scene_stats: DatasetOpenCVSceneStats | None = field(
+        default=None, kw_only=True
+    )

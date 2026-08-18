@@ -1,20 +1,25 @@
-from typedef import DatasetOpenCVSceneStats, DatasetTranscriptStats, DatasetWhisperTranscript
-from utils import *
-from imgui_bundle import imgui
-from universe import Universe
+# pyrefly: ignore [missing-import]
+import cv2
 
 # pyrefly: ignore [missing-import]
 import whisper
+from imgui_bundle import imgui
 
-# pyrefly: ignore [missing-import]
-import cv2
-import pandas as pd
+from typedef import (
+    DatasetOpenCVSceneStats,
+    DatasetTranscriptStats,
+    DatasetWhisperTranscript,
+)
+from universe import Universe
+from utils import *
 
 
 def build_page(u: Universe):
     if imgui.begin_tab_bar("views", imgui.TabBarFlags_.none):
         if imgui.begin_tab_item("Transcript (Whisper)")[0]:
-            if imgui.button("Extract Transcript (PLACEHOLDER) - Apply to first without data"):
+            if imgui.button(
+                "Extract Transcript (PLACEHOLDER) - Apply to first without data"
+            ):
                 for ent in u.entities:
                     if ent.ds_whisper_transcript:
                         print(f"Skipping: {ent}")
@@ -26,20 +31,24 @@ def build_page(u: Universe):
                     if path is None:
                         continue
 
-                    whisper_res = whisper.transcribe(model=u.whisper_model, audio=str(path))
+                    whisper_res = whisper.transcribe(
+                        model=u.whisper_model, audio=str(path)
+                    )
                     ent.ds_whisper_transcript = DatasetWhisperTranscript(
                         transcript=whisper_res["text"],
                     )
                     print("Done")
                     break
-            if imgui.button("Process Transcript Stats (PLACEHOLDER) - Apply to first without data"):
+            if imgui.button(
+                "Process Transcript Stats (PLACEHOLDER) - Apply to first without data"
+            ):
                 for ent in u.entities:
                     if ent.ds_transcript_stats or not ent.ds_whisper_transcript:
                         print(f"Skipping: {ent}")
                         continue
 
                     # > Update
-                    print(f"\n\nProcessing transcript stats...")
+                    print("\n\nProcessing transcript stats...")
                     tscript = ent.ds_whisper_transcript
                     ent.ds_transcript_stats = DatasetTranscriptStats(
                         word_count=len(tscript.transcript.split()),
