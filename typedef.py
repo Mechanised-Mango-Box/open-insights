@@ -22,6 +22,10 @@ class Dataset(ABC):
     @abstractmethod
     def get_label() -> str: ...
 
+    @staticmethod
+    @abstractmethod
+    def get_label_display() -> str: ...
+
     @classmethod
     @abstractmethod
     def new_empty(cls) -> Self: ...
@@ -65,6 +69,11 @@ class DatasetYoutubeContent(Dataset):
     @override
     def get_label():
         return "yt_content"
+
+    @staticmethod
+    @override
+    def get_label_display():
+        return "Youtube Content"
 
     @classmethod
     @override
@@ -154,6 +163,11 @@ class DatasetYoutubeAudienceRetention(Dataset):
     def get_label():
         return "yt_audience_retention"
 
+    @staticmethod
+    @override
+    def get_label_display():
+        return "Youtube Audience Retention"
+
     @classmethod
     @override
     def new_empty(cls):
@@ -210,6 +224,11 @@ class DatasetWhisperTranscript(Dataset):
     @override
     def get_label():
         return "whisper_transcript"
+
+    @staticmethod
+    @override
+    def get_label_display():
+        return "Whisper Transcript"
 
     @classmethod
     @override
@@ -285,6 +304,11 @@ class DatasetTranscriptStats(Dataset):
     def get_label():
         return "transcript_stats"
 
+    @staticmethod
+    @override
+    def get_label_display():
+        return "Transcript Stats"
+
     @classmethod
     @override
     def new_empty(cls):
@@ -343,6 +367,11 @@ class DatasetOpenCVSceneStats(Dataset):
     @override
     def get_label():
         return "opencv_scene_stats"
+
+    @staticmethod
+    @override
+    def get_label_display():
+        return "OpenCV Scene Stats"
 
     @classmethod
     @override

@@ -138,11 +138,14 @@ def build_page(u: Universe):
         imgui.table_setup_column("Title")
         imgui.table_setup_column("File Hash")
         imgui.table_setup_column("File Handle")
-        imgui.table_setup_column("YT Content")
-        imgui.table_setup_column("YT Audience Retention")
-        imgui.table_setup_column("Transcript")
-        imgui.table_setup_column("Transcript Stats")
-        imgui.table_setup_column("Scene Stats")
+        for DS in [
+            DatasetYoutubeContent,
+            DatasetYoutubeAudienceRetention,
+            DatasetWhisperTranscript,
+            DatasetTranscriptStats,
+            DatasetOpenCVSceneStats,
+        ]:
+            imgui.table_setup_column(DS.get_label_display())
         imgui.table_headers_row()
 
         for row in rows:
@@ -198,44 +201,20 @@ def build_page(u: Universe):
                 imgui.text(row.file_path.name)
             else:
                 imgui.text("")
-            imgui.table_next_column()
 
-            if row.ds_yt_content:
-                row.ds_yt_content.render_cell(f"##{row._id}/{DatasetYoutubeContent.get_label()}")
-            else:
-                imgui.text("")
-            imgui.table_next_column()
+            for ds in [
+                row.ds_yt_content,
+                row.ds_yt_audience_retention,
+                row.ds_whisper_transcript,
+                row.ds_transcript_stats,
+                row.ds_opencv_scene_stats,
+            ]:
+                imgui.table_next_column()
 
-            if row.ds_yt_audience_retention:
-                row.ds_yt_audience_retention.render_cell(
-                    f"##{row._id}/{DatasetYoutubeAudienceRetention.get_label()}"
-                )
-            else:
-                imgui.text("")
-            imgui.table_next_column()
-
-            if row.ds_whisper_transcript:
-                row.ds_whisper_transcript.render_cell(
-                    f"##{row._id}/{DatasetWhisperTranscript.get_label()}"
-                )
-            else:
-                imgui.text("")
-            imgui.table_next_column()
-
-            if row.ds_transcript_stats:
-                row.ds_transcript_stats.render_cell(
-                    f"##{row._id}/{DatasetTranscriptStats.get_label()}"
-                )
-            else:
-                imgui.text("")
-            imgui.table_next_column()
-
-            if row.ds_opencv_scene_stats:
-                row.ds_opencv_scene_stats.render_cell(
-                    f"##{row._id}/{DatasetOpenCVSceneStats.get_label()}"
-                )
-            else:
-                imgui.text("")
+                if ds:
+                    ds.render_cell(f"##{row._id}/{ds.get_label()}")
+                else:
+                    imgui.text("")
     imgui.end_table()
 
 
@@ -404,4 +383,3 @@ def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
         if imgui.button("Close"):
             imgui.close_current_popup()
         imgui.end_popup()
-
