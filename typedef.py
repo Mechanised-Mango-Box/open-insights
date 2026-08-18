@@ -16,6 +16,7 @@ DatasetFileLabel = str
 
 
 # > MARK: Container Structs
+# > MARK: Dataset
 @dataclass(slots=True, kw_only=True)
 class Dataset(ABC):
     @staticmethod
@@ -47,11 +48,12 @@ class Dataset(ABC):
         cls,
         element_id: str,
         just_activated: bool,
-        ptr_pre_snapshot: RefNullable[Self],
-        ptr_data: RefNullable[Self],
-    ): ...
+        original: Self | None,
+        ptr_data: Ref[Self | None],
+    ) -> Self | None: ...
 
 
+# > MARK: Youtube Content
 @dataclass
 class DatasetYoutubeContent(Dataset):
     yt_id: str | None
@@ -116,16 +118,14 @@ class DatasetYoutubeContent(Dataset):
     @override
     def render_edit_menu(
         cls,
-        element_id: str,
-        just_activated: bool,
-        ptr_pre_snapshot: RefNullable[DatasetYoutubeContent],
-        ptr_data: RefNullable[DatasetYoutubeContent],
+        element_id,
+        just_activated,
+        original,
+        ptr_data,
     ):
         if just_activated:
             ptr_data._ = (
-                DatasetYoutubeContent.new_empty()
-                if ptr_pre_snapshot._ is None
-                else deepcopy(ptr_pre_snapshot._)
+                DatasetYoutubeContent.new_empty() if original is None else deepcopy(original)
             )
             imgui.open_popup(element_id)
             return
@@ -146,6 +146,7 @@ class DatasetYoutubeContent(Dataset):
                 imgui.close_current_popup()
 
             imgui.end_popup()
+        return original
 
 
 @dataclass(slots=True, kw_only=True)
@@ -154,6 +155,7 @@ class DatasetYoutubeAudienceRetentionTimeslice:
     absolute_audience_retention: float
 
 
+# > MARK: Youtube Audience Retention
 @dataclass
 class DatasetYoutubeAudienceRetention(Dataset):
     slices: list[DatasetYoutubeAudienceRetentionTimeslice]
@@ -176,7 +178,19 @@ class DatasetYoutubeAudienceRetention(Dataset):
     @classmethod
     @override
     def export(cls, output_dir: Path, entities: list[Video]):
-        assert False
+        print("[ Export ] Generating: Youtube Audience Retention...")
+        path = output_dir / (DatasetYoutubeAudienceRetention.get_label() + ".csv")
+        with path.open("w") as f:
+            writer = csv.DictWriter(f, fieldnames=DatasetYoutubeAudienceRetention.get_fieldnames())
+            f.writelines("id,")
+            writer.writeheader()
+            for entity in entities:
+                data = entity.ds_yt_audience_retention
+                if not data:
+                    continue
+                f.writelines(str(entity._id) + ",")
+                writer.writerow(asdict(data))
+        print(f"[ Export ] Youtube Audience Retention export complete @ {path}")
 
     @override
     def render_cell(self, element_id: str) -> None:
@@ -186,16 +200,16 @@ class DatasetYoutubeAudienceRetention(Dataset):
     @override
     def render_edit_menu(
         cls,
-        element_id: str,
-        just_activated: bool,
-        ptr_pre_snapshot: RefNullable[DatasetYoutubeAudienceRetention],
-        ptr_data: RefNullable[DatasetYoutubeAudienceRetention],
+        element_id,
+        just_activated,
+        original,
+        ptr_data,
     ):
         if just_activated:
             ptr_data._ = (
                 DatasetYoutubeAudienceRetention.new_empty()
-                if ptr_pre_snapshot._ is None
-                else deepcopy(ptr_pre_snapshot._)
+                if original is None
+                else deepcopy(original)
             )
             imgui.open_popup(element_id)
             return
@@ -214,8 +228,10 @@ class DatasetYoutubeAudienceRetention(Dataset):
                 imgui.close_current_popup()
 
             imgui.end_popup()
+        return original
 
 
+# > MARK: Whisper Transcript
 @dataclass
 class DatasetWhisperTranscript(Dataset):
     transcript: str
@@ -265,19 +281,16 @@ class DatasetWhisperTranscript(Dataset):
     @override
     def render_edit_menu(
         cls,
-        element_id: str,
-        just_activated: bool,
-        ptr_pre_snapshot: RefNullable[DatasetWhisperTranscript],
-        ptr_data: RefNullable[DatasetWhisperTranscript],
+        element_id,
+        just_activated,
+        original,
+        ptr_data,
     ):
         if just_activated:
             ptr_data._ = (
-                DatasetWhisperTranscript.new_empty()
-                if ptr_pre_snapshot._ is None
-                else deepcopy(ptr_pre_snapshot._)
+                DatasetWhisperTranscript.new_empty() if original is None else deepcopy(original)
             )
             imgui.open_popup(element_id)
-            return
 
         if imgui.begin_popup_modal(
             element_id,
@@ -285,16 +298,30 @@ class DatasetWhisperTranscript(Dataset):
             imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
         )[0]:
             assert ptr_data._
-            imgui.input_text_multiline(f"Transcript##{element_id}", e_str(ptr_data._.transcript))
-            imgui.text("WIP")
+            just_changed, text = imgui.input_text_multiline(
+                f"Transcript##{element_id}", ptr_data._.transcript
+            )
 
-            if imgui.button("Close"):
+            if just_changed:
+                ptr_data._.transcript = text
+
+            imgui.separator_text("Actions")
+            if imgui.button("Save"):
+                imgui.close_current_popup()
+                imgui.end_popup()
+                return ptr_data._
+
+            if imgui.button("Cancel"):
                 ptr_data._ = None
                 imgui.close_current_popup()
+                imgui.end_popup()
+                return original
 
             imgui.end_popup()
+        return original
 
 
+# > MARK: Transcript Stats
 @dataclass(slots=True, kw_only=True)
 class DatasetTranscriptStats(Dataset):
     word_count: int
@@ -317,7 +344,19 @@ class DatasetTranscriptStats(Dataset):
     @classmethod
     @override
     def export(cls, output_dir: Path, entities: list[Video]):
-        assert False
+        print("[ Export ] Generating: Transcript Stats...")
+        path = output_dir / (DatasetTranscriptStats.get_label() + ".csv")
+        with path.open("w") as f:
+            writer = csv.DictWriter(f, fieldnames=DatasetTranscriptStats.get_fieldnames())
+            f.writelines("id,")
+            writer.writeheader()
+            for entity in entities:
+                data = entity.ds_transcript_stats
+                if not data:
+                    continue
+                f.writelines(str(entity._id) + ",")
+                writer.writerow(asdict(data))
+        print(f"[ Export ] Transcript Stats export complete @ {path}")
 
     @override
     def render_cell(self, element_id: str) -> None:
@@ -327,16 +366,14 @@ class DatasetTranscriptStats(Dataset):
     @override
     def render_edit_menu(
         cls,
-        element_id: str,
-        just_activated: bool,
-        ptr_pre_snapshot: RefNullable[DatasetTranscriptStats],
-        ptr_data: RefNullable[DatasetTranscriptStats],
+        element_id,
+        just_activated,
+        original,
+        ptr_data,
     ):
         if just_activated:
             ptr_data._ = (
-                DatasetTranscriptStats.new_empty()
-                if ptr_pre_snapshot._ is None
-                else deepcopy(ptr_pre_snapshot._)
+                DatasetTranscriptStats.new_empty() if original is None else deepcopy(original)
             )
             imgui.open_popup(element_id)
             return
@@ -355,8 +392,10 @@ class DatasetTranscriptStats(Dataset):
                 imgui.close_current_popup()
 
             imgui.end_popup()
+        return original
 
 
+# > MARK: OpenCV Scene Stats
 @dataclass(slots=True, kw_only=True)
 class DatasetOpenCVSceneStats(Dataset):
     duration_minutes: float
@@ -383,26 +422,36 @@ class DatasetOpenCVSceneStats(Dataset):
     @classmethod
     @override
     def export(cls, output_dir: Path, entities: list[Video]):
-        assert False
+        print("[ Export ] Generating: OpenCV Scene Stats...")
+        path = output_dir / (DatasetOpenCVSceneStats.get_label() + ".csv")
+        with path.open("w") as f:
+            writer = csv.DictWriter(f, fieldnames=DatasetOpenCVSceneStats.get_fieldnames())
+            f.writelines("id,")
+            writer.writeheader()
+            for entity in entities:
+                data = entity.ds_opencv_scene_stats
+                if not data:
+                    continue
+                f.writelines(str(entity._id) + ",")
+                writer.writerow(asdict(data))
+        print(f"[ Export ] OpenCV Scene Stats export complete @ {path}")
 
     @override
     def render_cell(self, element_id: str) -> None:
-        imgui.text(f"{self.scene_transition_count} scenes / {self.duration_minutes} mins")
+        imgui.text(f"{self.scene_transition_count} scenes / {round(self.duration_minutes,2)} mins")
 
     @classmethod
     @override
     def render_edit_menu(
         cls,
-        element_id: str,
-        just_activated: bool,
-        ptr_pre_snapshot: RefNullable[DatasetOpenCVSceneStats],
-        ptr_data: RefNullable[DatasetOpenCVSceneStats],
+        element_id,
+        just_activated,
+        original,
+        ptr_data,
     ):
         if just_activated:
             ptr_data._ = (
-                DatasetOpenCVSceneStats.new_empty()
-                if ptr_pre_snapshot._ is None
-                else deepcopy(ptr_pre_snapshot._)
+                DatasetOpenCVSceneStats.new_empty() if original is None else deepcopy(original)
             )
             imgui.open_popup(element_id)
             return
@@ -423,8 +472,19 @@ class DatasetOpenCVSceneStats(Dataset):
                 imgui.close_current_popup()
 
             imgui.end_popup()
+        return original
 
 
+ALL_DATASETS = [
+    DatasetYoutubeContent,
+    DatasetYoutubeAudienceRetention,
+    DatasetWhisperTranscript,
+    DatasetTranscriptStats,
+    DatasetOpenCVSceneStats,
+]
+
+
+# > MARK: Video
 @dataclass(slots=True, kw_only=True)
 class Video:
     _id: UUID

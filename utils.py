@@ -14,12 +14,6 @@ class Ref(Generic[T]):
     def __init__(self, value: T):
         self._: T = value
 
-
-class RefNullable(Ref[T | None]):
-    def __init__(self, value: T | None):
-        self._ = value
-
-
 # region Result types
 @dataclass(frozen=True)
 class Success(Generic[T]):

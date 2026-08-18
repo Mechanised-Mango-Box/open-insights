@@ -1,3 +1,5 @@
+from utils import Ref
+from typedef import ALL_DATASETS
 import csv
 from copy import deepcopy
 from datetime import datetime
@@ -138,13 +140,7 @@ def build_page(u: Universe):
         imgui.table_setup_column("Title")
         imgui.table_setup_column("File Hash")
         imgui.table_setup_column("File Handle")
-        for DS in [
-            DatasetYoutubeContent,
-            DatasetYoutubeAudienceRetention,
-            DatasetWhisperTranscript,
-            DatasetTranscriptStats,
-            DatasetOpenCVSceneStats,
-        ]:
+        for DS in ALL_DATASETS:
             imgui.table_setup_column(DS.get_label_display())
         imgui.table_headers_row()
 
@@ -295,23 +291,20 @@ def export_all(target_dir: Path, entities: List[Video]) -> Result[None, str]:
     data_dir = out_dir / "data"
     data_dir.mkdir()
     print(f"[ Export ] Dataset folder: {data_dir}")
+    for DS in ALL_DATASETS:
+        DS.export(data_dir, entities)
+    print("[ Export ] Complete.")
 
-    DatasetYoutubeContent.export(data_dir, entities)
-    # TODO 4.x Youtube - Audience Retention
-    DatasetWhisperTranscript.export(data_dir, entities)
-    # TODO 4.x Transcript Stats
-    # TODO 4.x OpenCV - Scene Stats
-
-    print(("[ Export ] Complete."))
+    print("[ Export ] Export process complete.")
     return Success(None)
 
 
-ptr_edit_menu_all_edit_youtube_content: RefNullable[DatasetYoutubeContent] = RefNullable(None)
-ptr_edit_menu_all_edit_youtube_audience_retention: RefNullable[DatasetYoutubeAudienceRetention] = (
-    RefNullable(None)
+ptr_edit_menu_all_edit_youtube_content: Ref[DatasetYoutubeContent | None] = Ref(None)
+ptr_edit_menu_all_edit_youtube_audience_retention: Ref[DatasetYoutubeAudienceRetention | None] = (
+    Ref(None)
 )
-ptr_edit_menu_all_edit_whisper_transcript: RefNullable[DatasetWhisperTranscript] = RefNullable(None)
-ptr_edit_menu_all_edit_transcript_stats: RefNullable[DatasetTranscriptStats] = RefNullable(None)
+ptr_edit_menu_all_edit_whisper_transcript: Ref[DatasetWhisperTranscript | None] = Ref(None)
+ptr_edit_menu_all_edit_transcript_stats: Ref[DatasetTranscriptStats | None] = Ref(None)
 
 
 def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
@@ -331,54 +324,54 @@ def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
         if imgui.button("WIP - Select Path"):
             print("BUTTON - SELECT PATH")
         imgui.separator_text("Datasets")
-        if imgui.collapsing_header("Youtube"):
-            DatasetYoutubeContent.render_edit_menu(
-                element_id + "/edit_menu_yt_content",
-                imgui.button("Edit Youtube Content"),
-                RefNullable(entity.ds_yt_content),
-                ptr_edit_menu_all_edit_youtube_content,
-            )
-            same_line()
-            if entity.ds_yt_content:
-                imgui.text(f"Content ID: {entity.ds_yt_content.yt_id}")
-            else:
-                imgui.text(f"Not assigned")
 
-            DatasetYoutubeAudienceRetention.render_edit_menu(
-                element_id + "/edit_menu_yt_audience_retention",
-                imgui.button("Edit Audience Retention"),
-                RefNullable(entity.ds_yt_audience_retention),
-                ptr_edit_menu_all_edit_youtube_audience_retention,
-            )
-            same_line()
-            if entity.ds_yt_audience_retention:
-                imgui.text(f"Time Slice Counts: {len(entity.ds_yt_audience_retention.slices)}")
-            else:
-                imgui.text(f"Not assigned")
-        if imgui.collapsing_header("Whisper"):
-            DatasetWhisperTranscript.render_edit_menu(
-                element_id + "/edit_menu_whisper_transcript",
-                imgui.button("Edit Transcript"),
-                RefNullable(entity.ds_whisper_transcript),
-                ptr_edit_menu_all_edit_whisper_transcript,
-            )
-            same_line()
-            if entity.ds_whisper_transcript:
-                imgui.text(f"Characters: {len(entity.ds_whisper_transcript.transcript)}")
-            else:
-                imgui.text(f"Not assigned")
+        DatasetYoutubeContent.render_edit_menu(
+            element_id + "/edit_menu_yt_content",
+            imgui.button("Edit Youtube Content"),
+            entity.ds_yt_content,
+            ptr_edit_menu_all_edit_youtube_content,
+        )
+        same_line()
+        if entity.ds_yt_content:
+            imgui.text(f"Content ID: {entity.ds_yt_content.yt_id}")
+        else:
+            imgui.text(f"Not assigned")
 
-            DatasetTranscriptStats.render_edit_menu(
-                element_id + "/edit_menu_transcript_stats",
-                imgui.button("Edit Transcript Stats"),
-                RefNullable(entity.ds_transcript_stats),
-                ptr_edit_menu_all_edit_transcript_stats,
-            )
-            same_line()
-            if entity.ds_transcript_stats:
-                imgui.text(f"Word Count: {entity.ds_transcript_stats.word_count}")
-            else:
-                imgui.text(f"Not assigned")
+        DatasetYoutubeAudienceRetention.render_edit_menu(
+            element_id + "/edit_menu_yt_audience_retention",
+            imgui.button("Edit Audience Retention"),
+            (entity.ds_yt_audience_retention),
+            ptr_edit_menu_all_edit_youtube_audience_retention,
+        )
+        same_line()
+        if entity.ds_yt_audience_retention:
+            imgui.text(f"Time Slice Counts: {len(entity.ds_yt_audience_retention.slices)}")
+        else:
+            imgui.text(f"Not assigned")
+        entity.ds_whisper_transcript= DatasetWhisperTranscript.render_edit_menu(
+            element_id + "/edit_menu_whisper_transcript",
+            imgui.button("Edit Transcript"),
+            (entity.ds_whisper_transcript),
+            ptr_edit_menu_all_edit_whisper_transcript,
+        )
+        same_line()
+        if entity.ds_whisper_transcript:
+            imgui.text(f"Characters: {len(entity.ds_whisper_transcript.transcript)}")
+        else:
+            imgui.text(f"Not assigned")
+
+        entity.ds_transcript_stats= DatasetTranscriptStats.render_edit_menu(
+            element_id + "/edit_menu_transcript_stats",
+            imgui.button("Edit Transcript Stats"),
+            (entity.ds_transcript_stats),
+            ptr_edit_menu_all_edit_transcript_stats,
+        )
+        same_line()
+        if entity.ds_transcript_stats:
+            imgui.text(f"Word Count: {entity.ds_transcript_stats.word_count}")
+        else:
+            imgui.text(f"Not assigned")
+
         imgui.separator_text("")
         if imgui.button("Close"):
             imgui.close_current_popup()
