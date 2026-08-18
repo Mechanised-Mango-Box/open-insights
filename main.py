@@ -1,13 +1,10 @@
-
-from universe import Universe
-# import gui.asset_management
-# import gui.entity_management
-import gui.entity_management_2
+# pyrefly: ignore [missing-import]
+import whisper
+from imgui_bundle import imgui, immapp
+import gui.entity_management
 import gui.feature_extraction
 import gui.model_analysis
-# from asset_manager.db import setup_schema, connect_db
-from imgui_bundle import immapp, implot, imgui_md, imgui
-import whisper
+from universe import Universe
 
 __temp_selected_id = set()
 
@@ -16,27 +13,8 @@ def build_ui(u: Universe):
     # imgui.show_demo_window()
     # imgui.show_metrics_window()
     if imgui.begin_tab_bar("views", imgui.TabBarFlags_.none):
-        # if imgui.begin_tab_item("Asset Management")[0]:
-        #     # smart_table(
-        #     #     "TEMP",
-        #     #     u.video_snapshots,
-        #     #     VideoSnapshot.get_header(),
-        #     #     __temp_selected_id,
-        #     #     TableSelectMode.MULTIPLE,
-        #     #     None,  # video_edit_menu()
-        #     # )
-
-        #     imgui.text("Import and manage local files for analysis.")
-        #     imgui.end_tab_item()
-        #     if imgui.begin_tab_bar("asset_management_page", imgui.TabBarFlags_.none):
-        #         gui.asset_management.build_page(u)
-        #         imgui.end_tab_bar()
-
-        # if imgui.begin_tab_item("Entity List")[0]:
-        #     gui.entity_management.build_page(u)
-        #     imgui.end_tab_item()
-        if imgui.begin_tab_item("Entity Management")[0]:
-            gui.entity_management_2.build_page(u)
+        if imgui.begin_tab_item("Video Data Management")[0]:
+            gui.entity_management.build_page(u)
             imgui.end_tab_item()
 
         if imgui.begin_tab_item("Feature Extraction")[0]:
@@ -48,22 +26,16 @@ def build_ui(u: Universe):
             imgui.end_tab_item()
         imgui.end_tab_bar()
 
+
 def main():
     u: Universe = Universe()
-    # u.db = connect_db("./index.sqlite")
-    # setup_schema(u.db)
     print("[ Startup ] Loading whisper model...")
-    u.whisper_model = whisper.load_model("tiny.en") # 30min video ~2 mins on gaming rig - cpu only
-
-    # # > Load the "truths" once at start of application
-    # u.reload_entity_snapshots()
-    # u.reload_dataset_snapshots()
-    # u.reload_video_snapshots()
+    u.whisper_model = whisper.load_model("tiny.en")  # 30min video ~2 mins on gaming rig - cpu only
 
     immapp.run(
         lambda: build_ui(u),
         window_title="Open Insights",
-        window_size=(1280, 720),
+        window_size=(1920, 1080),
         with_implot=True,
         with_markdown=True,
     )

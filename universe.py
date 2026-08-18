@@ -1,23 +1,23 @@
-from utils import ID
-from typing_extensions import Dict
-from utils import Video
+from sqlite3 import Connection
+
+# pyrefly: ignore [missing-import]
+from whisper import Whisper
+
+# from asset_manager.db import find_entities
+from typedef import Video
+
 # from typing_extensions import Set
 # from typing_extensions import Optional
 # from asset_manager.db import find_videos
 # from asset_manager.db import find_datasets
 # from utils import VideoSnapshot, DatasetSnapshot, EntitySnapshot
-from utils import Success
-from utils import Failure
-# from asset_manager.db import find_entities
-from typing import List
-from sqlite3 import Connection
 
 
 class Universe:
     db: Connection
     whisper_model: Whisper
 
-    entities: List[Video] = []
+    entities: list[Video] = []
     # et: EntityTable = EntityTable()
 
     # entity_snapshots: List[EntitySnapshot] = []

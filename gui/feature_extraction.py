@@ -1,8 +1,10 @@
-from utils import DatasetOpenCVSceneStats
-from utils import DatasetTranscriptStats, DatasetWhisperTranscript, Result, Success, Failure
+from typedef import DatasetOpenCVSceneStats, DatasetTranscriptStats, DatasetWhisperTranscript
+from utils import Result, Success, Failure
 from imgui_bundle import imgui
 from universe import Universe
+# pyrefly: ignore [missing-import]
 import whisper
+# pyrefly: ignore [missing-import]
 import cv2
 import pandas as pd
 
