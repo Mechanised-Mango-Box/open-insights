@@ -1,175 +1,66 @@
+from copy import deepcopy
+from utils import *
+import csv
+from dataclasses import asdict
+from imgui_bundle import imgui
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field, fields
 from pathlib import Path
 from typing import Self, override
 from uuid import UUID
 
-# region Custom type aliases
+# > MARK: Custom type aliases
 CustomResourceType = str
 ID = int
 DatasetFileLabel = str
-# endregion
-
-# region Container Structs
-# @dataclass()
-# class Rowable(ABC):
-#     _id: ID
-
-#     @abstractmethod
-#     def get_header() -> List[str]:
-#         assert False
-
-#     @abstractmethod
-#     def to_row(self) -> List[Any]:
-#         assert False
-
-#     @abstractmethod
-#     def from_row(self, row: List[str]) -> Result[Self, str]:
-#         assert False
-#         return Failure("Implement Method")
 
 
-# @dataclass()
-# class EntitySnapshot:
-#     _id: ID
-
-#     display_name: str
-
-#     video_id: Optional[int]
-
-#     yt_hash: str
-#     yt_title: str
-#     yt_pub_time: str
-#     yt_duration: int
-#     yt_views: int
-#     yt_watch_time: float
-#     yt_subscribers: int
-#     yt_average_view_duration: int
-#     yt_impressions: int
-#     yt_impressions_click_through_rate: float
-
-#     @staticmethod
-#     def from_row(row: Tuple):
-#         return EntitySnapshot(
-#             _id=row[0],
-#             display_name=row[1],
-#             video_id=row[2],
-#             yt_hash=row[3],
-#             yt_title=row[4],
-#             yt_pub_time=row[5],
-#             yt_duration=row[6],
-#             yt_views=row[7],
-#             yt_watch_time=row[8],
-#             yt_subscribers=row[9],
-#             yt_average_view_duration=row[10],
-#             yt_impressions=row[11],
-#             yt_impressions_click_through_rate=row[12],
-#         )
-
-#     @staticmethod
-#     def csv_header() -> List[str]:
-#         return [
-#             "_id",
-#             "display_name",
-#             "video_id",
-#             "yt_hash",
-#             "yt_title",
-#             "yt_pub_time",
-#             "yt_duration",
-#             "yt_views",
-#             "yt_watch_time",
-#             "yt_subscribers",
-#             "yt_average_view_duration",
-#             "yt_impressions",
-#             "yt_impressions_click_through_rate",
-#         ]
-
-#     def to_row(self) -> List:
-#         return [
-#             self._id,
-#             self.display_name,
-#             self.video_id,
-#             self.yt_hash,
-#             self.yt_title,
-#             self.yt_pub_time,
-#             self.yt_duration,
-#             self.yt_views,
-#             self.yt_watch_time,
-#             self.yt_subscribers,
-#             self.yt_average_view_duration,
-#             self.yt_impressions,
-#             self.yt_impressions_click_through_rate,
-#         ]
-
-
-# @dataclass()
-# class DatasetSnapshot:
-#     _id: ID
-
-#     path: Path
-#     display_name: str
-
-#     source: Optional[str]
-
-#     def from_row(row: Tuple):
-#         return DatasetSnapshot(_id=row[0], path=row[1], display_name=row[2], source=row[3])
-
-
-# @dataclass()
-# class VideoSnapshot(Rowable):
-#     _id: ID
-
-#     path: Path
-#     display_name: str
-
-#     def from_row(row: Tuple):
-#         return VideoSnapshot(
-#             _id=row[0],
-#             path=row[1],
-#             display_name=row[2],
-#         )
-
-#     @staticmethod
-#     def csv_header() -> List[str]:
-#         return VideoSnapshot.get_header()
-
-#     def to_row(self) -> List:
-#         return [
-#             self._id,
-#             self.path,
-#             self.display_name,
-#         ]
-
-#     def get_header():
-#         return [
-#             "_id",
-#             "path",
-#             "display_name",
-#         ]
-
-#     def to_row(self):
-#         return self.to_row()
-
-
+# > MARK: Container Structs
 @dataclass(slots=True, kw_only=True)
 class Dataset(ABC):
     @staticmethod
     @abstractmethod
-    def get_label() -> str:
-        ...
+    def get_label() -> str: ...
 
     @classmethod
     @abstractmethod
-    def new_empty(cls) -> Self:
-        ...
+    def new_empty(cls) -> Self: ...
 
     @classmethod
     def get_fieldnames(cls) -> list[str]:
         return [field.name for field in fields(cls)]
 
+    @classmethod
+    @abstractmethod
+    def export(cls, output_dir: Path, entities: list[Video]): ...
+
+    @abstractmethod
+    def render_cell(self, element_id: str) -> None: ...
+
+    @classmethod
+    @abstractmethod
+    def render_edit_menu(
+        cls,
+        element_id: str,
+        just_activated: bool,
+        ptr_pre_snapshot: RefNullable[Self],
+        ptr_data: RefNullable[Self],
+    ): ...
+
 
 @dataclass
 class DatasetYoutubeContent(Dataset):
+    yt_id: str | None
+    title: str | None
+    pub_time: str | None
+    duration: int | None
+    views: int | None
+    watch_time: float | None
+    subscribers: int | None
+    average_view_duration: str | None
+    impressions: int | None
+    impressions_click_through_rate: float | None
+
     @staticmethod
     @override
     def get_label():
@@ -191,16 +82,61 @@ class DatasetYoutubeContent(Dataset):
             impressions_click_through_rate=None,
         )
 
-    yt_id: str | None
-    title: str | None
-    pub_time: str | None
-    duration: int | None
-    views: int | None
-    watch_time: float | None
-    subscribers: int | None
-    average_view_duration: str | None
-    impressions: int | None
-    impressions_click_through_rate: float | None
+    @classmethod
+    @override
+    def export(cls, output_dir: Path, entities: list[Video]):
+        print("[ Export ] Generating: Youtube Content...")
+        yt_content_path = output_dir / (DatasetYoutubeContent.get_label() + ".csv")
+        with yt_content_path.open("w") as f:
+            writer = csv.DictWriter(f, fieldnames=DatasetYoutubeContent.get_fieldnames())
+            f.writelines("id,")
+            writer.writeheader()
+            for entity in entities:
+                data = entity.ds_yt_content
+                if not data:
+                    continue
+                f.writelines(str(entity._id) + ",")
+                writer.writerow(asdict(data))
+        print(f"[ Export ] Youtube Content export complete @ {yt_content_path}")
+
+    @override
+    def render_cell(self, element_id: str) -> None:
+        imgui.text(e_str(self.yt_id))
+
+    @classmethod
+    @override
+    def render_edit_menu(
+        cls,
+        element_id: str,
+        just_activated: bool,
+        ptr_pre_snapshot: RefNullable[DatasetYoutubeContent],
+        ptr_data: RefNullable[DatasetYoutubeContent],
+    ):
+        if just_activated:
+            ptr_data._ = (
+                DatasetYoutubeContent.new_empty()
+                if ptr_pre_snapshot._ is None
+                else deepcopy(ptr_pre_snapshot._)
+            )
+            imgui.open_popup(element_id)
+            return
+
+        if imgui.begin_popup_modal(
+            element_id,
+            None,
+            imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
+        )[0]:
+            assert ptr_data._
+            imgui.input_text(f"Content ID##{element_id}", e_str(ptr_data._.yt_id))
+            imgui.input_text(f"Duration##{element_id}", e_str(ptr_data._.duration))
+            imgui.input_text(f"Title##{element_id}", e_str(ptr_data._.title))
+            imgui.text("WIP")
+
+            if imgui.button("Close"):
+                ptr_data._ = None
+                imgui.close_current_popup()
+
+            imgui.end_popup()
 
 
 @dataclass(slots=True, kw_only=True)
@@ -211,6 +147,8 @@ class DatasetYoutubeAudienceRetentionTimeslice:
 
 @dataclass
 class DatasetYoutubeAudienceRetention(Dataset):
+    slices: list[DatasetYoutubeAudienceRetentionTimeslice]
+
     @staticmethod
     @override
     def get_label():
@@ -221,11 +159,53 @@ class DatasetYoutubeAudienceRetention(Dataset):
     def new_empty(cls):
         return DatasetYoutubeAudienceRetention(slices=[])
 
-    slices: list[DatasetYoutubeAudienceRetentionTimeslice]
+    @classmethod
+    @override
+    def export(cls, output_dir: Path, entities: list[Video]):
+        assert False
+
+    @override
+    def render_cell(self, element_id: str) -> None:
+        imgui.text(str(self))
+
+    @classmethod
+    @override
+    def render_edit_menu(
+        cls,
+        element_id: str,
+        just_activated: bool,
+        ptr_pre_snapshot: RefNullable[DatasetYoutubeAudienceRetention],
+        ptr_data: RefNullable[DatasetYoutubeAudienceRetention],
+    ):
+        if just_activated:
+            ptr_data._ = (
+                DatasetYoutubeAudienceRetention.new_empty()
+                if ptr_pre_snapshot._ is None
+                else deepcopy(ptr_pre_snapshot._)
+            )
+            imgui.open_popup(element_id)
+            return
+
+        if imgui.begin_popup_modal(
+            element_id,
+            None,
+            imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
+        )[0]:
+            assert ptr_data._
+            imgui.input_text(f"Slices##{element_id}", e_str(ptr_data._.slices))
+            imgui.text("WIP")
+
+            if imgui.button("Close"):
+                ptr_data._ = None
+                imgui.close_current_popup()
+
+            imgui.end_popup()
 
 
 @dataclass
 class DatasetWhisperTranscript(Dataset):
+    transcript: str
+
     @staticmethod
     @override
     def get_label():
@@ -236,11 +216,70 @@ class DatasetWhisperTranscript(Dataset):
     def new_empty(cls):
         return DatasetWhisperTranscript(transcript="")
 
-    transcript: str
+    @classmethod
+    @override
+    def export(cls, output_dir: Path, entities: list[Video]):
+        print("[ Export ] Generating: Whisper ranscript...")
+
+        print("[ Export ] Generating folder...")
+        transcript_dir = output_dir / DatasetWhisperTranscript.get_label()
+        transcript_dir.mkdir()
+        print(f"[ Export ] Folder: {transcript_dir}")
+        for entity in entities:
+            whisper_transcript = entity.ds_whisper_transcript
+            if not whisper_transcript:
+                continue
+
+            print(f"[ Export ] Exporting transcript for {entity._id}")
+
+            curr_file_path = transcript_dir / (str(entity._id) + ".txt")
+            with curr_file_path.open("w") as f:
+                f.writelines(whisper_transcript.transcript)
+
+        print(f"[ Export ] Whisper Transcript export complete @ {transcript_dir}")
+
+    @override
+    def render_cell(self, element_id: str) -> None:
+        imgui.text("Yes")
+
+    @classmethod
+    @override
+    def render_edit_menu(
+        cls,
+        element_id: str,
+        just_activated: bool,
+        ptr_pre_snapshot: RefNullable[DatasetWhisperTranscript],
+        ptr_data: RefNullable[DatasetWhisperTranscript],
+    ):
+        if just_activated:
+            ptr_data._ = (
+                DatasetWhisperTranscript.new_empty()
+                if ptr_pre_snapshot._ is None
+                else deepcopy(ptr_pre_snapshot._)
+            )
+            imgui.open_popup(element_id)
+            return
+
+        if imgui.begin_popup_modal(
+            element_id,
+            None,
+            imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
+        )[0]:
+            assert ptr_data._
+            imgui.input_text_multiline(f"Transcript##{element_id}", e_str(ptr_data._.transcript))
+            imgui.text("WIP")
+
+            if imgui.button("Close"):
+                ptr_data._ = None
+                imgui.close_current_popup()
+
+            imgui.end_popup()
 
 
 @dataclass(slots=True, kw_only=True)
 class DatasetTranscriptStats(Dataset):
+    word_count: int
+
     @staticmethod
     @override
     def get_label():
@@ -251,11 +290,55 @@ class DatasetTranscriptStats(Dataset):
     def new_empty(cls):
         return DatasetTranscriptStats(word_count=0)
 
-    word_count: int
+    @classmethod
+    @override
+    def export(cls, output_dir: Path, entities: list[Video]):
+        assert False
+
+    @override
+    def render_cell(self, element_id: str) -> None:
+        imgui.text("Yes")
+
+    @classmethod
+    @override
+    def render_edit_menu(
+        cls,
+        element_id: str,
+        just_activated: bool,
+        ptr_pre_snapshot: RefNullable[DatasetTranscriptStats],
+        ptr_data: RefNullable[DatasetTranscriptStats],
+    ):
+        if just_activated:
+            ptr_data._ = (
+                DatasetTranscriptStats.new_empty()
+                if ptr_pre_snapshot._ is None
+                else deepcopy(ptr_pre_snapshot._)
+            )
+            imgui.open_popup(element_id)
+            return
+
+        if imgui.begin_popup_modal(
+            element_id,
+            None,
+            imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
+        )[0]:
+            assert ptr_data._
+            imgui.input_int(f"Word Count##{element_id}", ptr_data._.word_count)
+            imgui.text("WIP")
+
+            if imgui.button("Close"):
+                ptr_data._ = None
+                imgui.close_current_popup()
+
+            imgui.end_popup()
 
 
 @dataclass(slots=True, kw_only=True)
 class DatasetOpenCVSceneStats(Dataset):
+    duration_minutes: float
+    scene_transition_count: int
+    scene_transition_rate: float
+
     @staticmethod
     @override
     def get_label():
@@ -268,48 +351,51 @@ class DatasetOpenCVSceneStats(Dataset):
             duration_minutes=0, scene_transition_count=0, scene_transition_rate=0
         )
 
-    duration_minutes: float
-    scene_transition_count: int
-    scene_transition_rate: float
+    @classmethod
+    @override
+    def export(cls, output_dir: Path, entities: list[Video]):
+        assert False
+
+    @override
+    def render_cell(self, element_id: str) -> None:
+        imgui.text(f"{self.scene_transition_count} scenes / {self.duration_minutes} mins")
+
+    @classmethod
+    @override
+    def render_edit_menu(
+        cls,
+        element_id: str,
+        just_activated: bool,
+        ptr_pre_snapshot: RefNullable[DatasetOpenCVSceneStats],
+        ptr_data: RefNullable[DatasetOpenCVSceneStats],
+    ):
+        if just_activated:
+            ptr_data._ = (
+                DatasetOpenCVSceneStats.new_empty()
+                if ptr_pre_snapshot._ is None
+                else deepcopy(ptr_pre_snapshot._)
+            )
+            imgui.open_popup(element_id)
+            return
+
+        if imgui.begin_popup_modal(
+            element_id,
+            None,
+            imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
+        )[0]:
+            assert ptr_data._
+            imgui.input_int(f"Transition Count ##{element_id}", ptr_data._.scene_transition_count)
+            imgui.input_float(f"Duration (mins)##{element_id}", ptr_data._.duration_minutes)
+            imgui.input_float(f"Transition Rate##{element_id}", ptr_data._.scene_transition_rate)
+            imgui.text("WIP")
+
+            if imgui.button("Close"):
+                ptr_data._ = None
+                imgui.close_current_popup()
+
+            imgui.end_popup()
 
 
-# Dataset: type = (
-#     DatasetYoutubeContent
-#     | DatasetYoutubeAudienceRetention
-#     | DatasetWhisperTranscript
-#     | DatasetTranscriptStats
-#     | DatasetOpenCVSceneStats
-# )
-
-# def row_to_arr(obj: Rowable) -> Result[Sequence, str]:
-#     match obj:
-#         case Entity():
-#             return Success(astuple(obj))
-#         case DatasetYoutubeContent():
-#             return Success(astuple(obj))
-#         case _:
-#             return Failure("Not a rowable type.")
-
-# def arr_to_row(arr: Tuple, ptr_row: Rowable) -> Result[None, str]:
-#     match ptr_row:
-#         case Entity():
-
-
-#             return Failure("Not implemented yet.")
-#         case DatasetYoutubeContent():
-#             ptr_row.yt_id = arr[0]
-#             ptr_row.title = arr[1]
-#             ptr_row.pub_time = arr[2]
-#             ptr_row.duration = int(arr[3])
-#             ptr_row.views = int(arr[4])
-#             ptr_row.watch_time = float(arr[5])
-#             ptr_row.subscribers = int(arr[6])
-#             ptr_row.average_view_duration = int(arr[7])
-#             ptr_row.impressions = int(arr[8])
-#             ptr_row.impressions_click_through_rate = float(arr[9])
-#             return Success(None)
-#         case _:
-#             return Failure("Not a rowable type.")
 @dataclass(slots=True, kw_only=True)
 class Video:
     _id: UUID
@@ -328,17 +414,8 @@ class Video:
         default=None, kw_only=True
     )
     # > Audio
-    ds_whisper_transcript: DatasetWhisperTranscript | None = field(
-        default=None, kw_only=True
-    )
-    ds_transcript_stats: DatasetTranscriptStats | None = field(
-        default=None, kw_only=True
-    )
+    ds_whisper_transcript: DatasetWhisperTranscript | None = field(default=None, kw_only=True)
+    ds_transcript_stats: DatasetTranscriptStats | None = field(default=None, kw_only=True)
 
     # > Video
-    ds_opencv_scene_stats: DatasetOpenCVSceneStats | None = field(
-        default=None, kw_only=True
-    )
-
-
-# endregion
+    ds_opencv_scene_stats: DatasetOpenCVSceneStats | None = field(default=None, kw_only=True)

@@ -1,6 +1,5 @@
 import csv
 from copy import deepcopy
-from dataclasses import asdict, astuple, fields
 from datetime import datetime
 from enum import Enum, auto
 from pathlib import Path
@@ -21,7 +20,7 @@ from typedef import (
     Video,
 )
 from universe import Universe
-from utils import Failure, Ref, RefNullable, Result, Success, e_str, file_hash
+from utils import *
 
 
 class TableSelectMode(Enum):
@@ -99,7 +98,7 @@ def build_page(u: Universe):
             ".",
             options=pfd.opt.none,
         ).result()
-        _ = export(Path(out_dir), u.entities)
+        _ = export_all(Path(out_dir), u.entities)
 
     element_id: str = "fsfes"
     # * Rows
@@ -179,8 +178,8 @@ def build_page(u: Universe):
                     row,
                     imgui.is_item_hovered() and imgui.is_mouse_double_clicked(0),
                 )
-
             imgui.table_next_column()
+
             imgui.set_next_item_width(-imgui.FLT_MIN)
             imgui.input_text(
                 f"##{row._id}/display_name",
@@ -188,38 +187,53 @@ def build_page(u: Universe):
                 imgui.InputTextFlags_.read_only,
             )
             imgui.table_next_column()
+
             if row.file_hash:
                 imgui.text(row.file_hash)
             else:
                 imgui.text("")
             imgui.table_next_column()
+
             if row.file_path:
                 imgui.text(row.file_path.name)
             else:
                 imgui.text("")
             imgui.table_next_column()
+
             if row.ds_yt_content:
-                imgui.text(e_str(row.ds_yt_content.yt_id))
+                row.ds_yt_content.render_cell(f"##{row._id}/{DatasetYoutubeContent.get_label()}")
             else:
                 imgui.text("")
             imgui.table_next_column()
+
             if row.ds_yt_audience_retention:
-                imgui.text(str(row.ds_yt_audience_retention))
+                row.ds_yt_audience_retention.render_cell(
+                    f"##{row._id}/{DatasetYoutubeAudienceRetention.get_label()}"
+                )
             else:
                 imgui.text("")
             imgui.table_next_column()
+
             if row.ds_whisper_transcript:
-                imgui.text("Yes")
+                row.ds_whisper_transcript.render_cell(
+                    f"##{row._id}/{DatasetWhisperTranscript.get_label()}"
+                )
             else:
                 imgui.text("")
             imgui.table_next_column()
+
             if row.ds_transcript_stats:
-                imgui.text("Yes")
+                row.ds_transcript_stats.render_cell(
+                    f"##{row._id}/{DatasetTranscriptStats.get_label()}"
+                )
             else:
                 imgui.text("")
             imgui.table_next_column()
+
             if row.ds_opencv_scene_stats:
-                imgui.text(str(row.ds_opencv_scene_stats))
+                row.ds_opencv_scene_stats.render_cell(
+                    f"##{row._id}/{DatasetOpenCVSceneStats.get_label()}"
+                )
             else:
                 imgui.text("")
     imgui.end_table()
@@ -267,7 +281,7 @@ def upsert_yt_content_csv(path: str, ptr_entities: List[Video]):
                 ptr_entities.append(new_entity)
 
 
-def export(target_dir: Path, entities: List[Video]) -> Result[None, str]:
+def export_all(target_dir: Path, entities: List[Video]) -> Result[None, str]:
     ts_start = datetime.now()
     ts_start_iso = ts_start.isoformat()
     print(
@@ -303,44 +317,11 @@ def export(target_dir: Path, entities: List[Video]) -> Result[None, str]:
     data_dir.mkdir()
     print(f"[ Export ] Dataset folder: {data_dir}")
 
-    # > MARK: 4.x Youtube - Content
-    print("[ Export ] Generating: Youtube Content...")
-    yt_content_path = data_dir / (DatasetYoutubeContent.get_label() + ".csv")
-    with yt_content_path.open("w") as f:
-        writer = csv.DictWriter(f, fieldnames=DatasetYoutubeContent.get_fieldnames())
-        f.writelines("id,")
-        writer.writeheader()
-        for entity in entities:
-            data = entity.ds_yt_content
-            if not data:
-                continue
-            f.writelines(str(entity._id) + ",")
-            writer.writerow(asdict(data))
-    print(f"[ Export ] Youtube Content complete at {yt_content_path}")
-
-    # > MARK: 4.x Youtube - Audience Retention
-    # TODO
-    # > MARK: 4.x Whisper - Transcript
-    print("[ Export ] Generating: Whisper - Transcript...")
-    print("[ Export ] Generating folder...")
-    transcript_dir = data_dir / DatasetWhisperTranscript.get_label()
-    transcript_dir.mkdir()
-    print(f"[ Export ] Folder: {transcript_dir}")
-    for entity in entities:
-        whisper_transcript = entity.ds_whisper_transcript
-        if not whisper_transcript:
-            continue
-
-        print(f"[ Export ] Exporting transcript for {entity._id}")
-
-        curr_file_path = transcript_dir / (str(entity._id) + ".txt")
-        with curr_file_path.open("w") as f:
-            f.writelines(whisper_transcript.transcript)
-
-    # > MARK: 4.x Transcript Stats
-    # TODO
-    # > MARK: 4.x OpenCV - Scene Stats
-    # TODO
+    DatasetYoutubeContent.export(data_dir, entities)
+    # TODO 4.x Youtube - Audience Retention
+    DatasetWhisperTranscript.export(data_dir, entities)
+    # TODO 4.x Transcript Stats
+    # TODO 4.x OpenCV - Scene Stats
 
     print(("[ Export ] Complete."))
     return Success(None)
@@ -372,7 +353,7 @@ def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
             print("BUTTON - SELECT PATH")
         imgui.separator_text("Datasets")
         if imgui.collapsing_header("Youtube"):
-            edit_menu_youtube_content(
+            DatasetYoutubeContent.render_edit_menu(
                 element_id + "/edit_menu_yt_content",
                 imgui.button("Edit Youtube Content"),
                 RefNullable(entity.ds_yt_content),
@@ -384,7 +365,7 @@ def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
             else:
                 imgui.text(f"Not assigned")
 
-            edit_menu_youtube_audience_retention(
+            DatasetYoutubeAudienceRetention.render_edit_menu(
                 element_id + "/edit_menu_yt_audience_retention",
                 imgui.button("Edit Audience Retention"),
                 RefNullable(entity.ds_yt_audience_retention),
@@ -396,7 +377,7 @@ def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
             else:
                 imgui.text(f"Not assigned")
         if imgui.collapsing_header("Whisper"):
-            edit_menu_transcript(
+            DatasetWhisperTranscript.render_edit_menu(
                 element_id + "/edit_menu_whisper_transcript",
                 imgui.button("Edit Transcript"),
                 RefNullable(entity.ds_whisper_transcript),
@@ -408,7 +389,7 @@ def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
             else:
                 imgui.text(f"Not assigned")
 
-            edit_menu_transcript_stats(
+            DatasetTranscriptStats.render_edit_menu(
                 element_id + "/edit_menu_transcript_stats",
                 imgui.button("Edit Transcript Stats"),
                 RefNullable(entity.ds_transcript_stats),
@@ -424,128 +405,3 @@ def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
             imgui.close_current_popup()
         imgui.end_popup()
 
-
-def edit_menu_youtube_content(
-    element_id: str,
-    just_activated: bool,
-    ptr_pre_snapshot: RefNullable[DatasetYoutubeContent],
-    ptr_data: RefNullable[DatasetYoutubeContent],
-):
-    if just_activated:
-        ptr_data._ = (
-            DatasetYoutubeContent.new_empty()
-            if ptr_pre_snapshot._ is None
-            else deepcopy(ptr_pre_snapshot._)
-        )
-        imgui.open_popup(element_id)
-        return
-
-    if imgui.begin_popup_modal(
-        element_id,
-        None,
-        imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
-    )[0]:
-        assert ptr_data._
-        imgui.input_text(f"Content ID##{element_id}", e_str(ptr_data._.yt_id))
-        imgui.input_text(f"Duration##{element_id}", e_str(ptr_data._.duration))
-        imgui.input_text(f"Title##{element_id}", e_str(ptr_data._.title))
-        imgui.text("WIP")
-
-        if imgui.button("Close"):
-            ptr_data._ = None
-            imgui.close_current_popup()
-
-        imgui.end_popup()
-
-
-def edit_menu_youtube_audience_retention(
-    element_id: str,
-    just_activated: bool,
-    ptr_pre_snapshot: RefNullable[DatasetYoutubeAudienceRetention],
-    ptr_data: RefNullable[DatasetYoutubeAudienceRetention],
-):
-    if just_activated:
-        ptr_data._ = (
-            DatasetYoutubeAudienceRetention.new_empty()
-            if ptr_pre_snapshot._ is None
-            else deepcopy(ptr_pre_snapshot._)
-        )
-        imgui.open_popup(element_id)
-        return
-
-    if imgui.begin_popup_modal(
-        element_id,
-        None,
-        imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
-    )[0]:
-        assert ptr_data._
-        imgui.input_text(f"Slices##{element_id}", e_str(ptr_data._.slices))
-        imgui.text("WIP")
-
-        if imgui.button("Close"):
-            ptr_data._ = None
-            imgui.close_current_popup()
-
-        imgui.end_popup()
-
-
-def edit_menu_transcript(
-    element_id: str,
-    just_activated: bool,
-    ptr_pre_snapshot: RefNullable[DatasetWhisperTranscript],
-    ptr_data: RefNullable[DatasetWhisperTranscript],
-):
-    if just_activated:
-        ptr_data._ = (
-            DatasetWhisperTranscript.new_empty()
-            if ptr_pre_snapshot._ is None
-            else deepcopy(ptr_pre_snapshot._)
-        )
-        imgui.open_popup(element_id)
-        return
-
-    if imgui.begin_popup_modal(
-        element_id,
-        None,
-        imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
-    )[0]:
-        assert ptr_data._
-        imgui.input_text_multiline(f"Transcript##{element_id}", e_str(ptr_data._.transcript))
-        imgui.text("WIP")
-
-        if imgui.button("Close"):
-            ptr_data._ = None
-            imgui.close_current_popup()
-
-        imgui.end_popup()
-
-
-def edit_menu_transcript_stats(
-    element_id: str,
-    just_activated: bool,
-    ptr_pre_snapshot: RefNullable[DatasetTranscriptStats],
-    ptr_data: RefNullable[DatasetTranscriptStats],
-):
-    if just_activated:
-        ptr_data._ = (
-            DatasetTranscriptStats.new_empty()
-            if ptr_pre_snapshot._ is None
-            else deepcopy(ptr_pre_snapshot._)
-        )
-        imgui.open_popup(element_id)
-        return
-
-    if imgui.begin_popup_modal(
-        element_id,
-        None,
-        imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
-    )[0]:
-        assert ptr_data._
-        imgui.input_int(f"Word Count##{element_id}", ptr_data._.word_count)
-        imgui.text("WIP")
-
-        if imgui.button("Close"):
-            ptr_data._ = None
-            imgui.close_current_popup()
-
-        imgui.end_popup()
