@@ -96,13 +96,13 @@ class DatasetYoutubeContent(Dataset):
             writer = csv.DictWriter(
                 f, fieldnames=DatasetYoutubeContent.get_fieldnames()
             )
-            f.writelines("id,")
+            f.write("id,")
             writer.writeheader()
             for entity in entities:
                 data = entity.ds_yt_content
                 if not data:
                     continue
-                f.writelines(str(entity._id) + ",")
+                f.write(str(entity._id) + ",")
                 writer.writerow(asdict(data))
         print(f"[ Export ] Youtube Content export complete @ {yt_content_path}")
 
@@ -196,13 +196,13 @@ class DatasetYoutubeAudienceRetention(Dataset):
             writer = csv.DictWriter(
                 f, fieldnames=DatasetYoutubeAudienceRetention.get_fieldnames()
             )
-            f.writelines("id,")
+            f.write("id,")
             writer.writeheader()
             for entity in entities:
                 data = entity.ds_yt_audience_retention
                 if not data:
                     continue
-                f.writelines(str(entity._id) + ",")
+                f.write(str(entity._id) + ",")
                 writer.writerow(asdict(data))
         print(f"[ Export ] Youtube Audience Retention export complete @ {path}")
 
@@ -291,7 +291,7 @@ class DatasetWhisperTranscript(Dataset):
 
             curr_file_path = transcript_dir / (str(entity._id) + ".txt")
             with curr_file_path.open("w") as f:
-                f.writelines(whisper_transcript.transcript)
+                f.write(whisper_transcript.transcript)
 
         print(f"[ Export ] Whisper Transcript export complete @ {transcript_dir}")
 
@@ -375,13 +375,13 @@ class DatasetTranscriptStats(Dataset):
             writer = csv.DictWriter(
                 f, fieldnames=DatasetTranscriptStats.get_fieldnames()
             )
-            f.writelines("id,")
+            f.write("id,")
             writer.writeheader()
             for entity in entities:
                 data = entity.ds_transcript_stats
                 if not data:
                     continue
-                f.writelines(str(entity._id) + ",")
+                f.write(str(entity._id) + ",")
                 writer.writerow(asdict(data))
         print(f"[ Export ] Transcript Stats export complete @ {path}")
 
@@ -467,13 +467,13 @@ class DatasetOpenCVSceneStats(Dataset):
             writer = csv.DictWriter(
                 f, fieldnames=DatasetOpenCVSceneStats.get_fieldnames()
             )
-            f.writelines("id,")
+            f.write("id,")
             writer.writeheader()
             for entity in entities:
                 data = entity.ds_opencv_scene_stats
                 if not data:
                     continue
-                f.writelines(str(entity._id) + ",")
+                f.write(str(entity._id) + ",")
                 writer.writerow(asdict(data))
         print(f"[ Export ] OpenCV Scene Stats export complete @ {path}")
 

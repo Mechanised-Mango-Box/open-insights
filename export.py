@@ -33,7 +33,7 @@ def export_selection(target_dir: Path, entities: list[Video]) -> Result[None, st
     print("[ Export ] Generating manifest...")
     manifest_path = out_dir / "manifest.csv"
     with manifest_path.open("w") as f:
-        f.writelines("id,file_hash,display_name\n")
+        f.write("id,file_hash,display_name\n")
         manifest_text = (
             f"{ent._id},{ent.file_hash},{ent.display_name}\n" for ent in entities
         )
