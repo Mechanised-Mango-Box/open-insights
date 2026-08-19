@@ -5,7 +5,7 @@ import cv2
 import whisper
 from imgui_bundle import imgui
 
-from typedef.dataset_variants import (
+from typedef.dataset import (
     DatasetOpenCVSceneStats,
     DatasetTranscriptStats,
     DatasetWhisperTranscript,

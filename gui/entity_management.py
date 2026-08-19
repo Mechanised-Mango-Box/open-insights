@@ -7,7 +7,7 @@ from uuid import UUID, uuid4
 from imgui_bundle import imgui
 from imgui_bundle import portable_file_dialogs as pfd
 
-from typedef.dataset_variants import (
+from typedef.dataset import (
     ALL_DATASETS,
     DatasetOpenCVSceneStats,
     DatasetTranscriptStats,

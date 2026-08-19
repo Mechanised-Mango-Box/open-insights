@@ -2,13 +2,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from uuid import UUID
 
-from typedef.dataset_variants import (
-    DatasetOpenCVSceneStats,
-    DatasetTranscriptStats,
-    DatasetWhisperTranscript,
-    DatasetYoutubeAudienceRetention,
-    DatasetYoutubeContent,
-)
+from typedef.dataset import *
 from utils import *
 
 
@@ -26,19 +20,19 @@ class Video:
 
     # > Datasets
     # > YT
-    ds_yt_content: "DatasetYoutubeContent | None" = field(default=None, kw_only=True)
-    ds_yt_audience_retention: "DatasetYoutubeAudienceRetention | None" = field(
+    ds_yt_content: DatasetYoutubeContent | None = field(default=None, kw_only=True)
+    ds_yt_audience_retention: DatasetYoutubeAudienceRetention | None = field(
         default=None, kw_only=True
     )
     # > Audio
-    ds_whisper_transcript: "DatasetWhisperTranscript | None" = field(
+    ds_whisper_transcript: DatasetWhisperTranscript | None = field(
         default=None, kw_only=True
     )
-    ds_transcript_stats: "DatasetTranscriptStats | None" = field(
+    ds_transcript_stats: DatasetTranscriptStats | None = field(
         default=None, kw_only=True
     )
 
     # > Video
-    ds_opencv_scene_stats: "DatasetOpenCVSceneStats | None" = field(
+    ds_opencv_scene_stats: DatasetOpenCVSceneStats | None = field(
         default=None, kw_only=True
     )
