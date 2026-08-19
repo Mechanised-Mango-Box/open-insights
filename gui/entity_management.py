@@ -37,7 +37,7 @@ __selected_ids: set[UUID] = set()
 
 
 # > MARK: SECTION: Import / Export
-def tab_import_export(u: Universe, selected_ids: set[UUID]):
+def tab_import_export(u: Universe):
     # > YT Content
     if imgui.button("Import from: Youtube Content"):
         selection = pfd.open_file(
@@ -99,53 +99,55 @@ def tab_import_export(u: Universe, selected_ids: set[UUID]):
                     for matching_entity in matching:
                         print("MATCH", matching_entity)
 
+    # > Export
+    if imgui.button("Export"):
+        out_dir = pfd.select_folder(
+            "Select export location...",
+            ".",
+            options=pfd.opt.none,
+        ).result()
+        _ = export_selection(Path(out_dir), u.entities)
+
 
 def tab_transcript(u: Universe, selected_ids: set[UUID]):
     if imgui.button("Extract Transcript"):
-        for ent in u.entities:
-            if ent.ds_whisper_transcript:
-                print(f"Skipping: {ent}")
-                continue
-
+        for entity in filter(lambda ent: ent._id in selected_ids, u.entities):
             # > Update
-            print(f"\n\nWhisper on {ent}")
-            path = ent.file_path
+            print(f"\n\nWhisper on {entity}")
+            path = entity.file_path
             if path is None:
+                print(f"\tSkipping, file not provided for: {entity._id}")
                 continue
 
             whisper_res = whisper.transcribe(model=u.whisper_model, audio=str(path))
-            ent.ds_whisper_transcript = DatasetWhisperTranscript(
+            entity.ds_whisper_transcript = DatasetWhisperTranscript(
                 transcript=whisper_res["text"],
             )
-            print("Done")
-            break
+        print("Done")
+
     if imgui.button("Calculate Transcript Stats"):
-        for ent in u.entities:
-            if ent.ds_transcript_stats or not ent.ds_whisper_transcript:
-                print(f"Skipping: {ent}")
+        for entity in filter(lambda ent: ent._id in selected_ids, u.entities):
+            if not entity.ds_whisper_transcript:
+                print(f"\tSkipping, no transcript: {entity._id}")
                 continue
 
             # > Update
             print("\n\nProcessing transcript stats...")
-            tscript = ent.ds_whisper_transcript
-            ent.ds_transcript_stats = DatasetTranscriptStats(
+            tscript = entity.ds_whisper_transcript
+            entity.ds_transcript_stats = DatasetTranscriptStats(
                 word_count=len(tscript.transcript.split()),
             )
-            print("Done")
-            break
+        print("Done")
 
 
 def tab_scenes_stats(u: Universe, selected_ids: set[UUID]):
     if imgui.button("Extract Scene Stats"):
-        for ent in u.entities:
-            if ent.ds_opencv_scene_stats:
-                print(f"Skipping: {ent}")
-                continue
-
+        for entity in filter(lambda ent: ent._id in selected_ids, u.entities):
             # > Update
-            print(f"\n\nOpenCV on {ent}")
-            path = ent.file_path
+            print(f"\n\nOpenCV on {entity}")
+            path = entity.file_path
             if path is None:
+                print(f"\tSkipping, file not provided for: {entity._id}")
                 continue
 
             video_capture = cv2.VideoCapture(str(path))
@@ -155,7 +157,7 @@ def tab_scenes_stats(u: Universe, selected_ids: set[UUID]):
                 count_scene_transitions(video_capture),
             ):
                 case (Success(duration), Success(scene_transition_count)):
-                    ent.ds_opencv_scene_stats = DatasetOpenCVSceneStats(
+                    entity.ds_opencv_scene_stats = DatasetOpenCVSceneStats(
                         duration_minutes=duration,
                         scene_transition_count=scene_transition_count,
                         scene_transition_rate=scene_transition_count / duration,
@@ -164,15 +166,14 @@ def tab_scenes_stats(u: Universe, selected_ids: set[UUID]):
                     print(f"[ OpenCV ] Failed with errors: {errs}")
             print("[ OpenCV ] Releasing file handle.")
             video_capture.release()
-            print("Done")
-            break
+        print("Done")
 
 
 def build_page(u: Universe):
     global __selected_ids
     if imgui.begin_tab_bar("Entity Actions", imgui.TabBarFlags_.none):
         if imgui.begin_tab_item("Import / Export")[0]:
-            tab_import_export(u, __selected_ids)
+            tab_import_export(u)
             imgui.end_tab_item()
 
         # > MARK: SECTION: Feature Extraction
@@ -209,16 +210,6 @@ def build_page(u: Universe):
 
     if len(__selected_ids) < 1:
         imgui.begin_disabled()
-
-    if imgui.button("Export"):
-        out_dir = pfd.select_folder(
-            "Select export location...",
-            ".",
-            options=pfd.opt.none,
-        ).result()
-        _ = export_selection(Path(out_dir), u.entities)
-    imgui.same_line()
-
     DELETE_ROW_ID = "Delete Items##delete_row"
     if imgui.button("Delete"):
         imgui.open_popup(DELETE_ROW_ID)
