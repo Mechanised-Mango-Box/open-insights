@@ -1,5 +1,4 @@
 import csv
-from datetime import datetime, timezone
 from enum import Enum, auto
 from pathlib import Path
 from uuid import UUID, uuid4
@@ -12,6 +11,7 @@ import whisper
 from imgui_bundle import imgui
 from imgui_bundle import portable_file_dialogs as pfd
 
+from export import export_selection
 from gui.edit_menu_all import edit_menu_all
 from gui.feature_extraction import count_scene_transitions, video_duration_mins
 from typedef.dataset import (
@@ -36,143 +36,152 @@ class TableSelectMode(Enum):
 __selected_ids: set[UUID] = set()
 
 
+# > MARK: SECTION: Import / Export
+def tab_import_export(u: Universe, selected_ids: set[UUID]):
+    # > YT Content
+    if imgui.button("Import from: Youtube Content"):
+        selection = pfd.open_file(
+            "Upload Youtube Content Report...",
+            ".",
+            ["Youtube Content Report (CSV)", "*.csv"],
+            options=pfd.opt.none,
+        ).result()
+        assert len(selection) <= 1
+
+        if len(selection) == 0:
+            print("No file selected.")
+        else:
+            path = selection[0]
+
+            upsert_yt_content_csv(path, u.entities)
+            print(u.entities)
+    # > Video
+    if imgui.button("Import from: Video File"):
+        selection = pfd.open_file(
+            "Upload Video(s)...",
+            ".",
+            ["Video(s)", "*.mp4"],
+            options=pfd.opt.multiselect,
+        ).result()
+
+        if len(selection) == 0:
+            print("No file selected.")
+        else:
+            for str_path in selection:
+                path = Path(str_path)
+                selected_hash = file_hash(path)
+
+                def is_same_hash(entity: Video, other_hash: str):
+                    if not entity.file_hash:
+                        return False
+                    return entity.file_hash == other_hash
+
+                print(selected_hash)
+                matching = list(
+                    filter(
+                        lambda entity: is_same_hash(entity, selected_hash),
+                        u.entities,
+                    )
+                )
+                print(matching)
+
+                if len(matching) <= 0:
+                    # * None match, insert new
+                    new_entity = Video(
+                        _id=uuid4(),
+                        file_hash=selected_hash,
+                        file_path=path,
+                        display_name=path.stem,
+                    )  # TODO make file the name not the whole path
+                    u.entities.append(new_entity)
+                else:
+                    # * Update
+                    for matching_entity in matching:
+                        print("MATCH", matching_entity)
+
+
+def tab_transcript(u: Universe, selected_ids: set[UUID]):
+    if imgui.button("Extract Transcript"):
+        for ent in u.entities:
+            if ent.ds_whisper_transcript:
+                print(f"Skipping: {ent}")
+                continue
+
+            # > Update
+            print(f"\n\nWhisper on {ent}")
+            path = ent.file_path
+            if path is None:
+                continue
+
+            whisper_res = whisper.transcribe(model=u.whisper_model, audio=str(path))
+            ent.ds_whisper_transcript = DatasetWhisperTranscript(
+                transcript=whisper_res["text"],
+            )
+            print("Done")
+            break
+    if imgui.button("Calculate Transcript Stats"):
+        for ent in u.entities:
+            if ent.ds_transcript_stats or not ent.ds_whisper_transcript:
+                print(f"Skipping: {ent}")
+                continue
+
+            # > Update
+            print("\n\nProcessing transcript stats...")
+            tscript = ent.ds_whisper_transcript
+            ent.ds_transcript_stats = DatasetTranscriptStats(
+                word_count=len(tscript.transcript.split()),
+            )
+            print("Done")
+            break
+
+
+def tab_scenes_stats(u: Universe, selected_ids: set[UUID]):
+    if imgui.button("Extract Scene Stats"):
+        for ent in u.entities:
+            if ent.ds_opencv_scene_stats:
+                print(f"Skipping: {ent}")
+                continue
+
+            # > Update
+            print(f"\n\nOpenCV on {ent}")
+            path = ent.file_path
+            if path is None:
+                continue
+
+            video_capture = cv2.VideoCapture(str(path))
+            # TODO
+            match (
+                video_duration_mins(video_capture),
+                count_scene_transitions(video_capture),
+            ):
+                case (Success(duration), Success(scene_transition_count)):
+                    ent.ds_opencv_scene_stats = DatasetOpenCVSceneStats(
+                        duration_minutes=duration,
+                        scene_transition_count=scene_transition_count,
+                        scene_transition_rate=scene_transition_count / duration,
+                    )
+                case errs:
+                    print(f"[ OpenCV ] Failed with errors: {errs}")
+            print("[ OpenCV ] Releasing file handle.")
+            video_capture.release()
+            print("Done")
+            break
+
+
 def build_page(u: Universe):
     global __selected_ids
     if imgui.begin_tab_bar("Entity Actions", imgui.TabBarFlags_.none):
-        # > MARK: SECTION: Import / Export
         if imgui.begin_tab_item("Import / Export")[0]:
-            # > YT Content
-            if imgui.button("Import from: Youtube Content"):
-                selection = pfd.open_file(
-                    "Upload Youtube Content Report...",
-                    ".",
-                    ["Youtube Content Report (CSV)", "*.csv"],
-                    options=pfd.opt.none,
-                ).result()
-                assert len(selection) <= 1
-
-                if len(selection) == 0:
-                    print("No file selected.")
-                else:
-                    path = selection[0]
-
-                    upsert_yt_content_csv(path, u.entities)
-                    print(u.entities)
-            # > Video
-            if imgui.button("Import from: Video File"):
-                selection = pfd.open_file(
-                    "Upload Video(s)...",
-                    ".",
-                    ["Video(s)", "*.mp4"],
-                    options=pfd.opt.multiselect,
-                ).result()
-
-                if len(selection) == 0:
-                    print("No file selected.")
-                else:
-                    for str_path in selection:
-                        path = Path(str_path)
-                        selected_hash = file_hash(path)
-
-                        def is_same_hash(entity: Video, other_hash: str):
-                            if not entity.file_hash:
-                                return False
-                            return entity.file_hash == other_hash
-
-                        print(selected_hash)
-                        matching = list(
-                            filter(
-                                lambda entity: is_same_hash(entity, selected_hash),
-                                u.entities,
-                            )
-                        )
-                        print(matching)
-
-                        if len(matching) <= 0:
-                            # * None match, insert new
-                            new_entity = Video(
-                                _id=uuid4(),
-                                file_hash=selected_hash,
-                                file_path=path,
-                                display_name=path.stem,
-                            )  # TODO make file the name not the whole path
-                            u.entities.append(new_entity)
-                        else:
-                            # * Update
-                            for matching_entity in matching:
-                                print("MATCH", matching_entity)
-                print(u.entities)
+            tab_import_export(u, __selected_ids)
             imgui.end_tab_item()
 
         # > MARK: SECTION: Feature Extraction
         if imgui.begin_tab_item("Transcript (Whisper)")[0]:
-            if imgui.button("Extract Transcript"):
-                for ent in u.entities:
-                    if ent.ds_whisper_transcript:
-                        print(f"Skipping: {ent}")
-                        continue
-
-                    # > Update
-                    print(f"\n\nWhisper on {ent}")
-                    path = ent.file_path
-                    if path is None:
-                        continue
-
-                    whisper_res = whisper.transcribe(
-                        model=u.whisper_model, audio=str(path)
-                    )
-                    ent.ds_whisper_transcript = DatasetWhisperTranscript(
-                        transcript=whisper_res["text"],
-                    )
-                    print("Done")
-                    break
-            if imgui.button("Calculate Transcript Stats"):
-                for ent in u.entities:
-                    if ent.ds_transcript_stats or not ent.ds_whisper_transcript:
-                        print(f"Skipping: {ent}")
-                        continue
-
-                    # > Update
-                    print("\n\nProcessing transcript stats...")
-                    tscript = ent.ds_whisper_transcript
-                    ent.ds_transcript_stats = DatasetTranscriptStats(
-                        word_count=len(tscript.transcript.split()),
-                    )
-                    print("Done")
-                    break
+            tab_transcript(u, __selected_ids)
             imgui.end_tab_item()
 
         if imgui.begin_tab_item("Scene Stats (OpenCV)")[0]:
-            if imgui.button("Extract Scene Stats"):
-                for ent in u.entities:
-                    if ent.ds_opencv_scene_stats:
-                        print(f"Skipping: {ent}")
-                        continue
-
-                    # > Update
-                    print(f"\n\nOpenCV on {ent}")
-                    path = ent.file_path
-                    if path is None:
-                        continue
-
-                    video_capture = cv2.VideoCapture(str(path))
-                    # TODO
-                    match (
-                        video_duration_mins(video_capture),
-                        count_scene_transitions(video_capture),
-                    ):
-                        case (Success(duration), Success(scene_transition_count)):
-                            ent.ds_opencv_scene_stats = DatasetOpenCVSceneStats(
-                                duration_minutes=duration,
-                                scene_transition_count=scene_transition_count,
-                                scene_transition_rate=scene_transition_count / duration,
-                            )
-                        case errs:
-                            print(f"[ OpenCV ] Failed with errors: {errs}")
-                    print("[ OpenCV ] Releasing file handle.")
-                    video_capture.release()
-                    print("Done")
-                    break
+            tab_scenes_stats(u, __selected_ids)
             imgui.end_tab_item()
         imgui.end_tab_bar()
     # > MARK: SECTION: Selection Actions
@@ -388,48 +397,3 @@ def upsert_yt_content_csv(path: str, ptr_entities: list[Video]):
                     ds_yt_content=obj,
                 )
                 ptr_entities.append(new_entity)
-
-
-def export_selection(target_dir: Path, entities: list[Video]) -> Result[None, str]:
-    ts_start = datetime.now(timezone.utc)
-    ts_start_iso = ts_start.isoformat()
-    print(
-        f"""[ Export] Starting export at {ts_start_iso}.
-    \t> Target: {target_dir}
-    \t> Count: {len(entities)}"""
-    )
-
-    # > MARK: 1. Validation
-    if len(entities) <= 0:
-        return Failure("No entities selected.")
-    if not (target_dir.exists(), target_dir.is_dir()):
-        return Failure(f"Path provided is invalid: {target_dir}")
-
-    # > MARK: 2. Make export folder
-    print("[ Export ] Generating output folder...")
-    out_dir = target_dir / ts_start_iso
-    out_dir.mkdir()
-    print(f"[ Export ] Output folder: {out_dir}")
-
-    # > MARK: 3. Generate manifest
-    print("[ Export ] Generating manifest...")
-    manifest_path = out_dir / "manifest.csv"
-    with manifest_path.open("w") as f:
-        f.writelines("id,file_hash,display_name\n")
-        manifest_text = (
-            f"{ent._id},{ent.file_hash},{ent.display_name}\n" for ent in entities
-        )
-        f.writelines(manifest_text)
-    print(f"[ Export ] Manifest complete at {manifest_path}")
-
-    # > MARK: 4. Datasets
-    print("[ Export ] Generating dataset folder...")
-    data_dir = out_dir / "data"
-    data_dir.mkdir()
-    print(f"[ Export ] Dataset folder: {data_dir}")
-    for DS in ALL_DATASETS:
-        DS.export(data_dir, entities)
-    print("[ Export ] Complete.")
-
-    print("[ Export ] Export process complete.")
-    return Success(None)
