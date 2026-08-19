@@ -1,8 +1,7 @@
 # pyrefly: ignore [missing-import]
 from whisper import Whisper
 
-from typedef import Video
-
+from typedef.video import Video
 
 
 class Universe:

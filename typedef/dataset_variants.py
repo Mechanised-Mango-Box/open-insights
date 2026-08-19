@@ -1,57 +1,14 @@
 import csv
-from abc import ABC, abstractmethod
 from copy import deepcopy
-from dataclasses import asdict, dataclass, field, fields
+from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Self, override
-from uuid import UUID
+from typing import override
 
 from imgui_bundle import imgui
 
+from typedef.dataset import Dataset
+from typedef.video import Video
 from utils import *
-
-# > MARK: Custom type aliases
-CustomResourceType = str
-ID = int
-DatasetFileLabel = str
-
-
-# > MARK: Container Structs
-# > MARK: Dataset
-@dataclass(slots=True, kw_only=True)
-class Dataset(ABC):
-    @staticmethod
-    @abstractmethod
-    def get_label() -> str: ...
-
-    @staticmethod
-    @abstractmethod
-    def get_label_display() -> str: ...
-
-    @classmethod
-    @abstractmethod
-    def new_empty(cls) -> Self: ...
-
-    @classmethod
-    def get_fieldnames(cls) -> list[str]:
-        return [field.name for field in fields(cls)]
-
-    @classmethod
-    @abstractmethod
-    def export(cls, output_dir: Path, entities: list[Video]): ...
-
-    @abstractmethod
-    def render_cell(self, element_id: str) -> None: ...
-
-    @classmethod
-    @abstractmethod
-    def render_edit_menu(
-        cls,
-        element_id: str,
-        just_activated: bool,
-        original: Self | None,
-        ptr_data: Ref[Self | None],
-    ) -> Self | None: ...
 
 
 # > MARK: Youtube Content
@@ -152,8 +109,8 @@ class DatasetYoutubeContent(Dataset):
             )
             imgui.text("WIP")
 
-            imgui.separator_text("")
-            if imgui.button("Save" if original else "Attach"):
+            imgui.separator()
+            if imgui.button("Save" if original else "Create"):
                 imgui.close_current_popup()
                 imgui.end_popup()
                 return ptr_data._
@@ -244,8 +201,8 @@ class DatasetYoutubeAudienceRetention(Dataset):
             imgui.input_text(f"Slices##{element_id}", e_str(ptr_data._.slices))
             imgui.text("WIP")
 
-            imgui.separator_text("")
-            if imgui.button("Save" if original else "Attach"):
+            imgui.separator()
+            if imgui.button("Save" if original else "Create"):
                 imgui.close_current_popup()
                 imgui.end_popup()
                 return ptr_data._
@@ -337,8 +294,8 @@ class DatasetWhisperTranscript(Dataset):
             if just_changed:
                 ptr_data._.transcript = text
 
-            imgui.separator_text("")
-            if imgui.button("Save" if original else "Attach"):
+            imgui.separator()
+            if imgui.button("Save" if original else "Create"):
                 imgui.close_current_popup()
                 imgui.end_popup()
                 return ptr_data._
@@ -420,11 +377,13 @@ class DatasetTranscriptStats(Dataset):
             | imgui.WindowFlags_.always_auto_resize,
         )[0]:
             assert ptr_data._
-            imgui.input_int(f"Word Count##{element_id}", ptr_data._.word_count)
+            _, ptr_data._.word_count = imgui.input_int(
+                f"Word Count##{element_id}", ptr_data._.word_count
+            )
             imgui.text("WIP")
 
-            imgui.separator_text("")
-            if imgui.button("Save" if original else "Attach"):
+            imgui.separator()
+            if imgui.button("Save" if original else "Create"):
                 imgui.close_current_popup()
                 imgui.end_popup()
                 return ptr_data._
@@ -512,19 +471,19 @@ class DatasetOpenCVSceneStats(Dataset):
             | imgui.WindowFlags_.always_auto_resize,
         )[0]:
             assert ptr_data._
-            imgui.input_int(
+            _, ptr_data._.scene_transition_count = imgui.input_int(
                 f"Transition Count ##{element_id}", ptr_data._.scene_transition_count
             )
-            imgui.input_float(
+            _, ptr_data._.duration_minutes = imgui.input_float(
                 f"Duration (mins)##{element_id}", ptr_data._.duration_minutes
             )
-            imgui.input_float(
+            _, ptr_data._.scene_transition_rate = imgui.input_float(
                 f"Transition Rate##{element_id}", ptr_data._.scene_transition_rate
             )
             imgui.text("WIP")
 
-            imgui.separator_text("")
-            if imgui.button("Save" if original else "Attach"):
+            imgui.separator()
+            if imgui.button("Save" if original else "Create"):
                 imgui.close_current_popup()
                 imgui.end_popup()
                 return ptr_data._
@@ -546,35 +505,3 @@ ALL_DATASETS = [
     DatasetTranscriptStats,
     DatasetOpenCVSceneStats,
 ]
-
-
-# > MARK: Video
-@dataclass(slots=True, kw_only=True)
-class Video:
-    _id: UUID
-
-    # > File
-    file_hash: str | None
-    file_path: Path | None
-
-    # > Display/Sorting
-    display_name: str
-
-    # > Datasets
-    # > YT
-    ds_yt_content: DatasetYoutubeContent | None = field(default=None, kw_only=True)
-    ds_yt_audience_retention: DatasetYoutubeAudienceRetention | None = field(
-        default=None, kw_only=True
-    )
-    # > Audio
-    ds_whisper_transcript: DatasetWhisperTranscript | None = field(
-        default=None, kw_only=True
-    )
-    ds_transcript_stats: DatasetTranscriptStats | None = field(
-        default=None, kw_only=True
-    )
-
-    # > Video
-    ds_opencv_scene_stats: DatasetOpenCVSceneStats | None = field(
-        default=None, kw_only=True
-    )

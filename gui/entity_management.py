@@ -6,20 +6,18 @@ from uuid import UUID, uuid4
 
 from imgui_bundle import imgui
 from imgui_bundle import portable_file_dialogs as pfd
-from imgui_bundle.imgui import same_line
 
-from typedef import (
+from typedef.dataset_variants import (
     ALL_DATASETS,
     DatasetOpenCVSceneStats,
     DatasetTranscriptStats,
     DatasetWhisperTranscript,
     DatasetYoutubeAudienceRetention,
     DatasetYoutubeContent,
-    Video,
 )
+from typedef.video import Video
 from universe import Universe
 from utils import *
-from utils import Ref
 
 
 class TableSelectMode(Enum):
@@ -32,6 +30,7 @@ __selected_ids: set[UUID] = set()
 
 
 def build_page(u: Universe):
+    global __selected_ids
     # > YT Content
     if imgui.button("Import from: Youtube Content"):
         selection = pfd.open_file(
@@ -72,7 +71,9 @@ def build_page(u: Universe):
 
                 print(selected_hash)
                 matching = list(
-                    filter(lambda entity: is_same_hash(entity, selected_hash), u.entities)
+                    filter(
+                        lambda entity: is_same_hash(entity, selected_hash), u.entities
+                    )
                 )
                 print(matching)
 
@@ -90,6 +91,31 @@ def build_page(u: Universe):
                     for matching_entity in matching:
                         print("MATCH", matching_entity)
         print(u.entities)
+    # > MARK: Selection Actions
+    imgui.separator_text("Selection")
+    if imgui.button("Select All"):
+        __selected_ids |= {ent._id for ent in u.entities}
+    imgui.same_line()
+    if imgui.button("Deselect All"):
+        __selected_ids.clear()
+    imgui.same_line()
+    if imgui.button("Invert Selection"):
+        __selected_ids = {ent._id for ent in u.entities} ^ __selected_ids
+    imgui.same_line()
+    imgui.input_text("Filter", "")
+
+    imgui.text(f"Selected: {len(__selected_ids)}")
+    imgui.same_line()
+    if len(__selected_ids) < 2:
+        imgui.begin_disabled()
+    if imgui.button("Merge"):
+        ...
+    imgui.same_line()
+    if len(__selected_ids) < 2:
+        imgui.end_disabled()
+
+    if len(__selected_ids) < 1:
+        imgui.begin_disabled()
 
     if imgui.button("Export"):
         out_dir = pfd.select_folder(
@@ -98,8 +124,31 @@ def build_page(u: Universe):
             options=pfd.opt.none,
         ).result()
         _ = export_all(Path(out_dir), u.entities)
+    imgui.same_line()
 
-    element_id: str = "fsfes"
+    DELETE_ROW_ID = "Delete Items##delete_row"
+    if imgui.button("Delete"):
+        imgui.open_popup(DELETE_ROW_ID)
+    if len(__selected_ids) < 1:
+        imgui.end_disabled()
+    if imgui.begin_popup_modal(
+        DELETE_ROW_ID,
+        None,
+        imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
+    )[0]:
+        imgui.text(f"Are you sure you want to delete {len(__selected_ids)} items?")
+
+        imgui.separator()
+        if imgui.button("Confirm"):
+            imgui.close_current_popup()
+            u.entities = list(filter(lambda ent: ent._id in __selected_ids, u.entities))
+            __selected_ids.clear()
+        imgui.same_line()
+        if imgui.button("Cancel"):
+            imgui.close_current_popup()
+        imgui.end_popup()
+
+    element_id: str = "entity_table"
     # * Rows
     rows = u.entities
     # column_flags: List[int],
@@ -108,7 +157,6 @@ def build_page(u: Universe):
     selected_ids: set[UUID] = __selected_ids
     table_select_mode: TableSelectMode = TableSelectMode.MULTIPLE
     # * Events
-    # on_double_click: Optional[Callable[[Rowable, bool], None]]
     on_double_click = edit_menu_all
 
     show_select_box = table_select_mode is not TableSelectMode.NONE
@@ -228,7 +276,8 @@ def upsert_yt_content_csv(path: str, ptr_entities: list[Video]):
                 impressions=int(row["Impressions"]),
                 impressions_click_through_rate=(
                     float(x)
-                    if (x := row["Impressions click-through rate (%)"]) is not None and ""
+                    if (x := row["Impressions click-through rate (%)"]) is not None
+                    and ""
                     else None
                 ),
             )
@@ -237,7 +286,10 @@ def upsert_yt_content_csv(path: str, ptr_entities: list[Video]):
             has_repalced_existing = False
             for entity in ptr_entities:
                 # > Same ID -> replace
-                if entity.ds_yt_content and entity.ds_yt_content.content_id == obj.content_id:
+                if (
+                    entity.ds_yt_content
+                    and entity.ds_yt_content.content_id == obj.content_id
+                ):
                     entity.ds_yt_content = obj
                     has_repalced_existing = True
                     break
@@ -279,7 +331,9 @@ def export_all(target_dir: Path, entities: list[Video]) -> Result[None, str]:
     manifest_path = out_dir / "manifest.csv"
     with manifest_path.open("w") as f:
         f.writelines("id,file_hash,display_name\n")
-        manifest_text = (f"{ent._id},{ent.file_hash},{ent.display_name}\n" for ent in entities)
+        manifest_text = (
+            f"{ent._id},{ent.file_hash},{ent.display_name}\n" for ent in entities
+        )
         f.writelines(manifest_text)
     print(f"[ Export ] Manifest complete at {manifest_path}")
 
@@ -297,16 +351,17 @@ def export_all(target_dir: Path, entities: list[Video]) -> Result[None, str]:
 
 
 ptr_edit_menu_all_edit_youtube_content: Ref[DatasetYoutubeContent | None] = Ref(None)
-ptr_edit_menu_all_edit_youtube_audience_retention: Ref[DatasetYoutubeAudienceRetention | None] = (
-    Ref(None)
+ptr_edit_menu_all_edit_youtube_audience_retention: Ref[
+    DatasetYoutubeAudienceRetention | None
+] = Ref(None)
+ptr_edit_menu_all_edit_whisper_transcript: Ref[DatasetWhisperTranscript | None] = Ref(
+    None
 )
-ptr_edit_menu_all_edit_whisper_transcript: Ref[DatasetWhisperTranscript | None] = Ref(None)
 ptr_edit_menu_all_edit_transcript_stats: Ref[DatasetTranscriptStats | None] = Ref(None)
 ptr_edit_menu_all_edit_scene_stats: Ref[DatasetOpenCVSceneStats | None] = Ref(None)
 
 
 def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
-
     if just_activated:
         imgui.open_popup(element_id)
     if imgui.begin_popup_modal(
@@ -315,10 +370,20 @@ def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
         imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
     )[0]:
         imgui.separator_text("General")
-        imgui.input_text(f"Display Name##{element_id}", entity.display_name)
-        imgui.input_text(f"File Hash##{element_id}", e_str(entity.file_hash))
-        imgui.input_text(f"File Path##{element_id}", e_str(entity.file_path))
-        same_line()
+        _, entity.display_name = imgui.input_text(
+            f"Display Name##{element_id}", entity.display_name
+        )
+        _, entity.file_hash = imgui.input_text(
+            f"File Hash##{element_id}", e_str(entity.file_hash)
+        )
+        _, __new_path = imgui.input_text(
+            f"File Path##{element_id}", e_str(entity.file_path)
+        )
+        if __new_path != "":
+            entity.file_path = Path(__new_path)
+        else:
+            entity.file_path = None
+        imgui.same_line()
         if imgui.button("WIP - Select Path"):
             print("BUTTON - SELECT PATH")
         imgui.separator_text("Datasets")
@@ -329,21 +394,25 @@ def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
             entity.ds_yt_content,
             ptr_edit_menu_all_edit_youtube_content,
         )
-        same_line()
+        imgui.same_line()
         if entity.ds_yt_content:
             imgui.text(f"Content ID: {entity.ds_yt_content.content_id}")
         else:
             imgui.text("Not assigned")
 
-        entity.ds_yt_audience_retention = DatasetYoutubeAudienceRetention.render_edit_menu(
-            element_id + "/edit_menu_yt_audience_retention",
-            imgui.button("Edit Audience Retention"),
-            (entity.ds_yt_audience_retention),
-            ptr_edit_menu_all_edit_youtube_audience_retention,
+        entity.ds_yt_audience_retention = (
+            DatasetYoutubeAudienceRetention.render_edit_menu(
+                element_id + "/edit_menu_yt_audience_retention",
+                imgui.button("Edit Audience Retention"),
+                (entity.ds_yt_audience_retention),
+                ptr_edit_menu_all_edit_youtube_audience_retention,
+            )
         )
-        same_line()
+        imgui.same_line()
         if entity.ds_yt_audience_retention:
-            imgui.text(f"Time Slice Counts: {len(entity.ds_yt_audience_retention.slices)}")
+            imgui.text(
+                f"Time Slice Counts: {len(entity.ds_yt_audience_retention.slices)}"
+            )
         else:
             imgui.text("Not assigned")
         entity.ds_whisper_transcript = DatasetWhisperTranscript.render_edit_menu(
@@ -352,7 +421,7 @@ def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
             (entity.ds_whisper_transcript),
             ptr_edit_menu_all_edit_whisper_transcript,
         )
-        same_line()
+        imgui.same_line()
         if entity.ds_whisper_transcript:
             imgui.text(f"Characters: {len(entity.ds_whisper_transcript.transcript)}")
         else:
@@ -364,7 +433,7 @@ def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
             (entity.ds_transcript_stats),
             ptr_edit_menu_all_edit_transcript_stats,
         )
-        same_line()
+        imgui.same_line()
         if entity.ds_transcript_stats:
             imgui.text(f"Word Count: {entity.ds_transcript_stats.word_count}")
         else:
@@ -376,13 +445,15 @@ def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
             (entity.ds_opencv_scene_stats),
             ptr_edit_menu_all_edit_scene_stats,
         )
-        same_line()
+        imgui.same_line()
         if entity.ds_opencv_scene_stats:
-            imgui.text(f"Scene Count: {entity.ds_opencv_scene_stats.scene_transition_count}")
+            imgui.text(
+                f"Scene Count: {entity.ds_opencv_scene_stats.scene_transition_count}"
+            )
         else:
             imgui.text("Not assigned")
 
-        imgui.separator_text("")
+        imgui.separator()
         if imgui.button("Close"):
             imgui.close_current_popup()
         imgui.end_popup()
