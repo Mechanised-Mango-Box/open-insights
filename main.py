@@ -14,12 +14,8 @@ def build_ui(u: Universe):
     # imgui.show_demo_window()
     # imgui.show_metrics_window()
     if imgui.begin_tab_bar("views", imgui.TabBarFlags_.none):
-        if imgui.begin_tab_item("Video Data Management")[0]:
+        if imgui.begin_tab_item("Data Management")[0]:
             gui.entity_management.build_page(u)
-            imgui.end_tab_item()
-
-        if imgui.begin_tab_item("Feature Extraction")[0]:
-            gui.feature_extraction.build_page(u)
             imgui.end_tab_item()
 
         if imgui.begin_tab_item("Analysis")[0]:

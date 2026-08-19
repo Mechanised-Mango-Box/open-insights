@@ -4,9 +4,16 @@ from enum import Enum, auto
 from pathlib import Path
 from uuid import UUID, uuid4
 
+# pyrefly: ignore [missing-import]
+import cv2
+
+# pyrefly: ignore [missing-import]
+import whisper
 from imgui_bundle import imgui
 from imgui_bundle import portable_file_dialogs as pfd
 
+from gui.edit_menu_all import edit_menu_all
+from gui.feature_extraction import count_scene_transitions, video_duration_mins
 from typedef.dataset import (
     ALL_DATASETS,
     DatasetOpenCVSceneStats,
@@ -31,67 +38,144 @@ __selected_ids: set[UUID] = set()
 
 def build_page(u: Universe):
     global __selected_ids
-    # > YT Content
-    if imgui.button("Import from: Youtube Content"):
-        selection = pfd.open_file(
-            "Upload Youtube Content Report...",
-            ".",
-            ["Youtube Content Report (CSV)", "*.csv"],
-            options=pfd.opt.none,
-        ).result()
-        assert len(selection) <= 1
+    if imgui.begin_tab_bar("Entity Actions", imgui.TabBarFlags_.none):
+        # > MARK: SECTION: Import / Export
+        if imgui.begin_tab_item("Import / Export")[0]:
+            # > YT Content
+            if imgui.button("Import from: Youtube Content"):
+                selection = pfd.open_file(
+                    "Upload Youtube Content Report...",
+                    ".",
+                    ["Youtube Content Report (CSV)", "*.csv"],
+                    options=pfd.opt.none,
+                ).result()
+                assert len(selection) <= 1
 
-        if len(selection) == 0:
-            print("No file selected.")
-        else:
-            path = selection[0]
-
-            upsert_yt_content_csv(path, u.entities)
-            print(u.entities)
-    # > Video
-    if imgui.button("Import from: Video File"):
-        selection = pfd.open_file(
-            "Upload Video(s)...",
-            ".",
-            ["Video(s)", "*.mp4"],
-            options=pfd.opt.multiselect,
-        ).result()
-
-        if len(selection) == 0:
-            print("No file selected.")
-        else:
-            for str_path in selection:
-                path = Path(str_path)
-                selected_hash = file_hash(path)
-
-                def is_same_hash(entity: Video, other_hash: str):
-                    if not entity.file_hash:
-                        return False
-                    return entity.file_hash == other_hash
-
-                print(selected_hash)
-                matching = list(
-                    filter(
-                        lambda entity: is_same_hash(entity, selected_hash), u.entities
-                    )
-                )
-                print(matching)
-
-                if len(matching) <= 0:
-                    # * None match, insert new
-                    new_entity = Video(
-                        _id=uuid4(),
-                        file_hash=selected_hash,
-                        file_path=path,
-                        display_name=path.stem,
-                    )  # TODO make file the name not the whole path
-                    u.entities.append(new_entity)
+                if len(selection) == 0:
+                    print("No file selected.")
                 else:
-                    # * Update
-                    for matching_entity in matching:
-                        print("MATCH", matching_entity)
-        print(u.entities)
-    # > MARK: Selection Actions
+                    path = selection[0]
+
+                    upsert_yt_content_csv(path, u.entities)
+                    print(u.entities)
+            # > Video
+            if imgui.button("Import from: Video File"):
+                selection = pfd.open_file(
+                    "Upload Video(s)...",
+                    ".",
+                    ["Video(s)", "*.mp4"],
+                    options=pfd.opt.multiselect,
+                ).result()
+
+                if len(selection) == 0:
+                    print("No file selected.")
+                else:
+                    for str_path in selection:
+                        path = Path(str_path)
+                        selected_hash = file_hash(path)
+
+                        def is_same_hash(entity: Video, other_hash: str):
+                            if not entity.file_hash:
+                                return False
+                            return entity.file_hash == other_hash
+
+                        print(selected_hash)
+                        matching = list(
+                            filter(
+                                lambda entity: is_same_hash(entity, selected_hash),
+                                u.entities,
+                            )
+                        )
+                        print(matching)
+
+                        if len(matching) <= 0:
+                            # * None match, insert new
+                            new_entity = Video(
+                                _id=uuid4(),
+                                file_hash=selected_hash,
+                                file_path=path,
+                                display_name=path.stem,
+                            )  # TODO make file the name not the whole path
+                            u.entities.append(new_entity)
+                        else:
+                            # * Update
+                            for matching_entity in matching:
+                                print("MATCH", matching_entity)
+                print(u.entities)
+            imgui.end_tab_item()
+
+        # > MARK: SECTION: Feature Extraction
+        if imgui.begin_tab_item("Transcript (Whisper)")[0]:
+            if imgui.button("Extract Transcript"):
+                for ent in u.entities:
+                    if ent.ds_whisper_transcript:
+                        print(f"Skipping: {ent}")
+                        continue
+
+                    # > Update
+                    print(f"\n\nWhisper on {ent}")
+                    path = ent.file_path
+                    if path is None:
+                        continue
+
+                    whisper_res = whisper.transcribe(
+                        model=u.whisper_model, audio=str(path)
+                    )
+                    ent.ds_whisper_transcript = DatasetWhisperTranscript(
+                        transcript=whisper_res["text"],
+                    )
+                    print("Done")
+                    break
+            if imgui.button("Calculate Transcript Stats"):
+                for ent in u.entities:
+                    if ent.ds_transcript_stats or not ent.ds_whisper_transcript:
+                        print(f"Skipping: {ent}")
+                        continue
+
+                    # > Update
+                    print("\n\nProcessing transcript stats...")
+                    tscript = ent.ds_whisper_transcript
+                    ent.ds_transcript_stats = DatasetTranscriptStats(
+                        word_count=len(tscript.transcript.split()),
+                    )
+                    print("Done")
+                    break
+            imgui.end_tab_item()
+
+        if imgui.begin_tab_item("Scene Stats (OpenCV)")[0]:
+            if imgui.button("Extract Scene Stats"):
+                for ent in u.entities:
+                    if ent.ds_opencv_scene_stats:
+                        print(f"Skipping: {ent}")
+                        continue
+
+                    # > Update
+                    print(f"\n\nOpenCV on {ent}")
+                    path = ent.file_path
+                    if path is None:
+                        continue
+
+                    video_capture = cv2.VideoCapture(str(path))
+                    # TODO
+                    match (
+                        video_duration_mins(video_capture),
+                        count_scene_transitions(video_capture),
+                    ):
+                        case (Success(duration), Success(scene_transition_count)):
+                            ent.ds_opencv_scene_stats = DatasetOpenCVSceneStats(
+                                duration_minutes=duration,
+                                scene_transition_count=scene_transition_count,
+                                scene_transition_rate=scene_transition_count / duration,
+                            )
+                        case errs:
+                            print(f"[ OpenCV ] Failed with errors: {errs}")
+                    print("[ OpenCV ] Releasing file handle.")
+                    video_capture.release()
+                    print("Done")
+                    break
+            imgui.end_tab_item()
+        imgui.end_tab_bar()
+    # > MARK: SECTION: Selection Actions
     imgui.separator_text("Selection")
     if imgui.button("Select All"):
         __selected_ids |= {ent._id for ent in u.entities}
@@ -123,7 +207,7 @@ def build_page(u: Universe):
             ".",
             options=pfd.opt.none,
         ).result()
-        _ = export_all(Path(out_dir), u.entities)
+        _ = export_selection(Path(out_dir), u.entities)
     imgui.same_line()
 
     DELETE_ROW_ID = "Delete Items##delete_row"
@@ -148,6 +232,7 @@ def build_page(u: Universe):
             imgui.close_current_popup()
         imgui.end_popup()
 
+    # > MARK: SECTION Table
     element_id: str = "entity_table"
     # * Rows
     rows = u.entities
@@ -305,7 +390,7 @@ def upsert_yt_content_csv(path: str, ptr_entities: list[Video]):
                 ptr_entities.append(new_entity)
 
 
-def export_all(target_dir: Path, entities: list[Video]) -> Result[None, str]:
+def export_selection(target_dir: Path, entities: list[Video]) -> Result[None, str]:
     ts_start = datetime.now(timezone.utc)
     ts_start_iso = ts_start.isoformat()
     print(
@@ -348,112 +433,3 @@ def export_all(target_dir: Path, entities: list[Video]) -> Result[None, str]:
 
     print("[ Export ] Export process complete.")
     return Success(None)
-
-
-ptr_edit_menu_all_edit_youtube_content: Ref[DatasetYoutubeContent | None] = Ref(None)
-ptr_edit_menu_all_edit_youtube_audience_retention: Ref[
-    DatasetYoutubeAudienceRetention | None
-] = Ref(None)
-ptr_edit_menu_all_edit_whisper_transcript: Ref[DatasetWhisperTranscript | None] = Ref(
-    None
-)
-ptr_edit_menu_all_edit_transcript_stats: Ref[DatasetTranscriptStats | None] = Ref(None)
-ptr_edit_menu_all_edit_scene_stats: Ref[DatasetOpenCVSceneStats | None] = Ref(None)
-
-
-def edit_menu_all(element_id: str, entity: Video, just_activated: bool):
-    if just_activated:
-        imgui.open_popup(element_id)
-    if imgui.begin_popup_modal(
-        element_id,
-        None,
-        imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
-    )[0]:
-        imgui.separator_text("General")
-        _, entity.display_name = imgui.input_text(
-            f"Display Name##{element_id}", entity.display_name
-        )
-        _, entity.file_hash = imgui.input_text(
-            f"File Hash##{element_id}", e_str(entity.file_hash)
-        )
-        _, __new_path = imgui.input_text(
-            f"File Path##{element_id}", e_str(entity.file_path)
-        )
-        if __new_path != "":
-            entity.file_path = Path(__new_path)
-        else:
-            entity.file_path = None
-        imgui.same_line()
-        if imgui.button("WIP - Select Path"):
-            print("BUTTON - SELECT PATH")
-        imgui.separator_text("Datasets")
-
-        entity.ds_yt_content = DatasetYoutubeContent.render_edit_menu(
-            element_id + "/edit_menu_yt_content",
-            imgui.button("Edit Youtube Content"),
-            entity.ds_yt_content,
-            ptr_edit_menu_all_edit_youtube_content,
-        )
-        imgui.same_line()
-        if entity.ds_yt_content:
-            imgui.text(f"Content ID: {entity.ds_yt_content.content_id}")
-        else:
-            imgui.text("Not assigned")
-
-        entity.ds_yt_audience_retention = (
-            DatasetYoutubeAudienceRetention.render_edit_menu(
-                element_id + "/edit_menu_yt_audience_retention",
-                imgui.button("Edit Audience Retention"),
-                (entity.ds_yt_audience_retention),
-                ptr_edit_menu_all_edit_youtube_audience_retention,
-            )
-        )
-        imgui.same_line()
-        if entity.ds_yt_audience_retention:
-            imgui.text(
-                f"Time Slice Counts: {len(entity.ds_yt_audience_retention.slices)}"
-            )
-        else:
-            imgui.text("Not assigned")
-        entity.ds_whisper_transcript = DatasetWhisperTranscript.render_edit_menu(
-            element_id + "/edit_menu_whisper_transcript",
-            imgui.button("Edit Transcript"),
-            (entity.ds_whisper_transcript),
-            ptr_edit_menu_all_edit_whisper_transcript,
-        )
-        imgui.same_line()
-        if entity.ds_whisper_transcript:
-            imgui.text(f"Characters: {len(entity.ds_whisper_transcript.transcript)}")
-        else:
-            imgui.text("Not assigned")
-
-        entity.ds_transcript_stats = DatasetTranscriptStats.render_edit_menu(
-            element_id + "/edit_menu_transcript_stats",
-            imgui.button("Edit Transcript Stats"),
-            (entity.ds_transcript_stats),
-            ptr_edit_menu_all_edit_transcript_stats,
-        )
-        imgui.same_line()
-        if entity.ds_transcript_stats:
-            imgui.text(f"Word Count: {entity.ds_transcript_stats.word_count}")
-        else:
-            imgui.text("Not assigned")
-
-        entity.ds_opencv_scene_stats = DatasetOpenCVSceneStats.render_edit_menu(
-            element_id + "/edit_menu_scene_stats",
-            imgui.button("Edit Scene Stats"),
-            (entity.ds_opencv_scene_stats),
-            ptr_edit_menu_all_edit_scene_stats,
-        )
-        imgui.same_line()
-        if entity.ds_opencv_scene_stats:
-            imgui.text(
-                f"Scene Count: {entity.ds_opencv_scene_stats.scene_transition_count}"
-            )
-        else:
-            imgui.text("Not assigned")
-
-        imgui.separator()
-        if imgui.button("Close"):
-            imgui.close_current_popup()
-        imgui.end_popup()
