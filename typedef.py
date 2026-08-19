@@ -1,13 +1,14 @@
-from copy import deepcopy
-from utils import *
 import csv
-from dataclasses import asdict
-from imgui_bundle import imgui
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field, fields
+from copy import deepcopy
+from dataclasses import asdict, dataclass, field, fields
 from pathlib import Path
 from typing import Self, override
 from uuid import UUID
+
+from imgui_bundle import imgui
+
+from utils import *
 
 # > MARK: Custom type aliases
 CustomResourceType = str
@@ -152,7 +153,7 @@ class DatasetYoutubeContent(Dataset):
             imgui.text("WIP")
 
             imgui.separator_text("")
-            if imgui.button("Save"):
+            if imgui.button("Save" if original else "Attach"):
                 imgui.close_current_popup()
                 imgui.end_popup()
                 return ptr_data._
@@ -244,7 +245,7 @@ class DatasetYoutubeAudienceRetention(Dataset):
             imgui.text("WIP")
 
             imgui.separator_text("")
-            if imgui.button("Save"):
+            if imgui.button("Save" if original else "Attach"):
                 imgui.close_current_popup()
                 imgui.end_popup()
                 return ptr_data._
@@ -337,7 +338,7 @@ class DatasetWhisperTranscript(Dataset):
                 ptr_data._.transcript = text
 
             imgui.separator_text("")
-            if imgui.button("Save"):
+            if imgui.button("Save" if original else "Attach"):
                 imgui.close_current_popup()
                 imgui.end_popup()
                 return ptr_data._
@@ -423,7 +424,7 @@ class DatasetTranscriptStats(Dataset):
             imgui.text("WIP")
 
             imgui.separator_text("")
-            if imgui.button("Save"):
+            if imgui.button("Save" if original else "Attach"):
                 imgui.close_current_popup()
                 imgui.end_popup()
                 return ptr_data._
@@ -523,7 +524,7 @@ class DatasetOpenCVSceneStats(Dataset):
             imgui.text("WIP")
 
             imgui.separator_text("")
-            if imgui.button("Save"):
+            if imgui.button("Save" if original else "Attach"):
                 imgui.close_current_popup()
                 imgui.end_popup()
                 return ptr_data._

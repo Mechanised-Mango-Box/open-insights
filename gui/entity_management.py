@@ -1,6 +1,5 @@
-from datetime import timezone
 import csv
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum, auto
 from pathlib import Path
 from uuid import UUID, uuid4

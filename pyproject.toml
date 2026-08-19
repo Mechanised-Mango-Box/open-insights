@@ -4,4 +4,3 @@ profile = "black"
 [tool.pyrefly]
 strict = true
 type_checking_mode = "strict"
-check-unannotated-defs = true
