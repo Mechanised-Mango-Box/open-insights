@@ -2,7 +2,7 @@
 Evaluation Module for Model Performance.
 
 Metrics:
-    - Root Mean Square Error (RMSE): Measures the average magnitude of prediction errors.
+    - Root Mean Square Error (RMSE): Measures the average difference between the predicted and actual values.
     - R-squared (R^2): Measures how much variation in engagement is explained by the model.
 """
 from typing import Dict, Any

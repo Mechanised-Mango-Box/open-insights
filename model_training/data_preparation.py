@@ -37,7 +37,16 @@ def extract_features_from_snapshot() -> pd.DataFrame:
     )
 
 
-def prepare_training_data():
+def prepare_training_data(raw_df: Optional[pd.DataFrame] = None):
     """
-    Place holder function
+    Prepares training dataset. If raw_df is None, generates synthetic mock data.
     """
+    if raw_df is None:
+        from model_training.mock_data import generate_mock_training_data
+        raw_df = generate_mock_training_data(num_samples=200, random_state=42)
+    # Validate required columns
+    required_cols = FEATURE_COLUMNS + [TARGET_COLUMN]
+    missing = [col for col in required_cols if col not in raw_df.columns]
+    if missing:
+        raise ValueError(f"Missing required columns in dataset: {missing}")
+    return raw_df[required_cols].dropna()
