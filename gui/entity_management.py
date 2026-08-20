@@ -1,86 +1,106 @@
-from imgui_bundle.imgui import same_line
-from utils import Ref
-from gui.tables import video_table
-from utils import ID
-from typing_extensions import Set
-import imgui_bundle.portable_file_dialogs as pfd
-from asset_manager.yt import yt_content_upsert_file
-from asset_manager.db import delete_entity
-import functools
-from utils import Success
-from utils import Failure
-from asset_manager.db import update_entity
-from typing_extensions import Optional
-from imgui_bundle import imgui_md
-from universe import Universe
-from copy import deepcopy
-from utils import EntitySnapshot
-from universe import Universe
+from enum import Enum, auto
+from uuid import UUID
+
 from imgui_bundle import imgui
 
-entity_edit_menu_video_selection: Set[ID] = set()
+from gui.edit_menu_all import edit_menu_all
+from gui.tab_import_export import tab_import_export
+from gui.tab_scenes_stats import tab_scenes_stats
+from gui.tab_transcript import tab_transcript
+from typedef.dataset import (
+    ALL_DATASETS,
+)
+from universe import Universe
+from utils import *
+
+
+class TableSelectMode(Enum):
+    NONE = auto()
+    SINGLE = auto()
+    MULTIPLE = auto()
+
+
+__selected_ids: set[UUID] = set()
 
 
 def build_page(u: Universe):
-    if imgui.button("Add entities (PLACEHOLDER)"):
-        selection = pfd.open_file(
-            "Select a csv", ".", ["Dataset Files", "*.csv"]
-        ).result()
-        if len(selection) == 1:
-            yt_content_upsert_file(u.db, selection[0])
+    global __selected_ids
 
-            u.reload_entity_snapshots()
-        else:
-            print(f"[ ERR ] Unexpected number of files ({len(selection)})")
+    # > MARK: SECTION: Entity Actions
+    if imgui.begin_tab_bar("Entity Actions", imgui.TabBarFlags_.none):
+        if imgui.begin_tab_item("Import / Export")[0]:
+            tab_import_export(u)
+            imgui.end_tab_item()
 
-    imgui_md.render(
-        """
-# Entities
-This is a list of all entities.
+        if imgui.begin_tab_item("Transcript (Whisper)")[0]:
+            tab_transcript(u, __selected_ids)
+            imgui.end_tab_item()
 
-Double click to edit. Multi-sort is enabled.
-"""
-    )
-    imgui.new_line()
-    entity_table(u, "entity_table", u.selecting_entity_id_set)
+        if imgui.begin_tab_item("Scene Stats (OpenCV)")[0]:
+            tab_scenes_stats(u, __selected_ids)
+            imgui.end_tab_item()
+        imgui.end_tab_bar()
 
+    # > MARK: SECTION: Selection Actions
+    imgui.separator_text("Selection")
+    if imgui.button("Select All"):
+        __selected_ids |= {ent._id for ent in u.entities}
+    imgui.same_line()
+    if imgui.button("Deselect All"):
+        __selected_ids.clear()
+    imgui.same_line()
+    if imgui.button("Invert Selection"):
+        __selected_ids = {ent._id for ent in u.entities} ^ __selected_ids
+    imgui.same_line()
+    imgui.input_text("Filter", "")
 
-def entity_table(u: Universe, element_id: str, OUT_selected_entity_set: Set[ID]):
-    global entity_edit_menu_video_selection
-    if len(OUT_selected_entity_set) == 0:
+    imgui.text(f"Selected: {len(__selected_ids)}")
+    imgui.same_line()
+    if len(__selected_ids) < 2:
         imgui.begin_disabled()
-    imgui_md.render("**Selection Actions**")
+    if imgui.button("Merge"):
+        ...
+    imgui.same_line()
+    if len(__selected_ids) < 2:
+        imgui.end_disabled()
 
+    if len(__selected_ids) < 1:
+        imgui.begin_disabled()
+    DELETE_ROW_ID = "Delete Items##delete_row"
     if imgui.button("Delete"):
-        imgui.open_popup("Delete Confirmation")
+        imgui.open_popup(DELETE_ROW_ID)
+    if len(__selected_ids) < 1:
+        imgui.end_disabled()
     if imgui.begin_popup_modal(
-        "Delete Confirmation", None, imgui.WindowFlags_.no_resize
+        DELETE_ROW_ID,
+        None,
+        imgui.WindowFlags_.no_saved_settings | imgui.WindowFlags_.always_auto_resize,
     )[0]:
-        imgui.text(f"Deleting {len(OUT_selected_entity_set)} items.")
-        if imgui.button("Delete"):
-            for e_id in OUT_selected_entity_set:
-                match delete_entity(u.db, e_id):
-                    case Failure(err):
-                        print(err)
-                        break
-            u.reload_entity_snapshots()
+        imgui.text(f"Are you sure you want to delete {len(__selected_ids)} items?")
+
+        imgui.separator()
+        if imgui.button("Confirm"):
+            u.entities = [ent for ent in u.entities if ent._id not in __selected_ids]
+            __selected_ids.clear()
             imgui.close_current_popup()
         imgui.same_line()
         if imgui.button("Cancel"):
             imgui.close_current_popup()
         imgui.end_popup()
 
-    imgui.same_line()
-    if imgui.button("Export"):
-        imgui.open_popup("Export Configuration")
-    if imgui.begin_popup_modal("Export Configuration", None)[0]:
-        imgui.text(f"Under construction")
-        if imgui.button("Cancel"):
-            imgui.close_current_popup()
-        imgui.end_popup()
+    # > MARK: SECTION Table
+    element_id: str = "entity_table"
+    # * Rows
+    rows = u.entities
+    # column_flags: List[int],
+    # on_update_row: Callable[[None], None],
+    # * Selection
+    selected_ids: set[UUID] = __selected_ids
+    table_select_mode: TableSelectMode = TableSelectMode.MULTIPLE
+    # * Events
+    on_double_click = edit_menu_all
 
-    if len(OUT_selected_entity_set) == 0:
-        imgui.end_disabled()
+    show_select_box = table_select_mode is not TableSelectMode.NONE
 
     table_flags = (
         imgui.TableFlags_.borders
@@ -90,285 +110,91 @@ def entity_table(u: Universe, element_id: str, OUT_selected_entity_set: Set[ID])
         | imgui.TableFlags_.sort_multi
         | imgui.TableFlags_.sortable
     )
-    if imgui.begin_table(element_id, 13, table_flags):
+
+    # > Construct Table
+    if imgui.begin_table(element_id, 9 + (1 if show_select_box else 0), table_flags):
         # > Generate Headers
-        imgui.table_setup_column(
-            "",
-            imgui.TableColumnFlags_.no_sort
-            | imgui.TableColumnFlags_.no_resize
-            | imgui.TableColumnFlags_.width_fixed,
-        )
+        if show_select_box:
+            imgui.table_setup_column(
+                "",
+                imgui.TableColumnFlags_.no_sort
+                | imgui.TableColumnFlags_.no_resize
+                | imgui.TableColumnFlags_.width_fixed,
+            )
 
-        imgui.table_setup_column("Display Name")
-        imgui.table_setup_column("Video File")
-
-        imgui.table_setup_column("YouTube Hash")
-        imgui.table_setup_column("YouTube Title")
-
-        imgui.table_setup_column("Pub Time")
-        imgui.table_setup_column("Duration (s)")
-        imgui.table_setup_column("Views")
-
-        imgui.table_setup_column("Watch Time (hrs)")
-        imgui.table_setup_column("Subscribers")
-        imgui.table_setup_column("Avg View Duration (s)")
-
-        imgui.table_setup_column("Impressions")
-        imgui.table_setup_column("CTR %")
+        imgui.table_setup_column("ID")
+        imgui.table_setup_column("Title")
+        imgui.table_setup_column("File Hash")
+        imgui.table_setup_column("File Handle")
+        for DS in ALL_DATASETS:
+            imgui.table_setup_column(DS.get_label_display())
         imgui.table_headers_row()
 
-        specs = imgui.table_get_sort_specs()
-        sorted_snaps = list(u.entity_snapshots)
-
-        if specs and specs.specs_dirty == True:
-            specs.specs_dirty = False
-        if specs and specs.specs_count > 0:
-            # map column index -> value accessor
-            def value_for_col(snap, col):
-                if col == 1:
-                    return snap.display_name
-                if col == 2:
-                    return snap.video_id
-                if col == 3:
-                    return snap.yt_hash
-                if col == 4:
-                    return snap.yt_title
-                if col == 5:
-                    return snap.yt_pub_time
-                if col == 6:
-                    return snap.yt_duration
-                if col == 7:
-                    return snap.yt_views
-                if col == 8:
-                    return snap.yt_watch_time
-                if col == 9:
-                    return snap.yt_subscribers
-                if col == 10:
-                    return snap.yt_average_view_duration
-                if col == 11:
-                    return snap.yt_impressions
-                if col == 12:
-                    return snap.yt_impressions_click_through_rate
-                return None
-
-            def col_direction(colspec):
-                d = colspec.sort_direction
-                try:
-                    return "desc" if d == imgui.SortDirection.descending else "asc"
-                except Exception:
-                    # fallback: if it's an int where desc is 1
-                    return "desc" if d else "asc"
-
-            def cmp(a, b):
-                # multi-sort: iterate each column sort spec in order
-                for i in range(specs.specs_count):
-                    s = specs.get_specs(i)
-                    col = s.column_index
-                    dir_ = col_direction(s)
-
-                    va = value_for_col(a, col)
-                    vb = value_for_col(b, col)
-
-                    # handle None deterministically
-                    if va is None and vb is None:
-                        continue
-                    if va is None:
-                        return 1 if dir_ == "asc" else -1
-                    if vb is None:
-                        return -1 if dir_ == "asc" else 1
-
-                    if va == vb:
-                        continue
-
-                    if va < vb:
-                        return -1 if dir_ == "asc" else 1
-                    else:
-                        return 1 if dir_ == "asc" else -1
-
-                return 0
-
-            sorted_snaps.sort(key=functools.cmp_to_key(cmp))
-        # > Populate
-        for snap in sorted_snaps:
+        for row in rows:
             imgui.table_next_row()
+            in_selected = row._id in selected_ids
+            if show_select_box:
+                imgui.table_next_column()
 
-            imgui.table_set_column_index(0)
-            in_set = snap._id in OUT_selected_entity_set
-            clicked, _ = imgui.checkbox(f"##{element_id}/{snap._id}", in_set)
-            if clicked:
-                if in_set:
-                    OUT_selected_entity_set.remove(snap._id)
-                else:
-                    OUT_selected_entity_set.add(snap._id)
-
-            imgui.table_set_column_index(1)
-            _, _ = imgui.selectable(
-                f"{snap.display_name}##{snap._id}",
-                False,
-                imgui.SelectableFlags_.span_all_columns
-                | imgui.SelectableFlags_.no_auto_close_popups,
-            )
-
-            entity_edit_menu(
-                u,
-                str(snap._id),
-                snap,
-                imgui.is_item_hovered() and imgui.is_mouse_double_clicked(0),
-                dirty_entity_edit_menu_is_active,
-                entity_edit_menu_video_selection,
-            )
-
-            imgui.table_set_column_index(2)
-            imgui.text(str(snap.video_id))
-
-            imgui.table_set_column_index(3)
-            imgui.text(str(snap.yt_hash))
-            imgui.table_set_column_index(4)
-            imgui.text(str(snap.yt_title))
-
-            imgui.table_set_column_index(5)
-            imgui.text(str(snap.yt_pub_time))
-            imgui.table_set_column_index(6)
-            imgui.text(str(snap.yt_duration))
-            imgui.table_set_column_index(7)
-            imgui.text(str(snap.yt_views))
-
-            imgui.table_set_column_index(8)
-            imgui.text(str(snap.yt_watch_time))
-            imgui.table_set_column_index(9)
-            imgui.text(str(snap.yt_subscribers))
-            imgui.table_set_column_index(10)
-            imgui.text(str(snap.yt_average_view_duration))
-
-            imgui.table_set_column_index(11)
-            imgui.text(str(snap.yt_impressions))
-            imgui.table_set_column_index(12)
-            imgui.text(str(snap.yt_impressions_click_through_rate))
-
-        imgui.end_table()
-
-
-dirty_entity_edit_menu_is_active: Ref[bool] = Ref(False)
-text_filter = imgui.TextFilter()
-
-
-def entity_edit_menu(
-    u: Universe,
-    popup_id: str,
-    entity_snapshot: EntitySnapshot,
-    just_activated: bool,
-    OUT_is_active: Ref[bool],
-    video_selection: Set[ID],
-):
-    element_id: str = f"Edit Entity##{popup_id}"
-
-    if just_activated:
-        imgui.open_popup(element_id)
-        u.editing_entity_snapshot = deepcopy(entity_snapshot)
-        u._editing_entity_snapshot_original = deepcopy(entity_snapshot)
-        OUT_is_active.value = True
-
-    foo = OUT_is_active.value
-    if imgui.begin_popup_modal(element_id, foo, imgui.WindowFlags_.menu_bar)[0]:
-        assert u.editing_entity_snapshot
-        assert u._editing_entity_snapshot_original
-
-        # > Display name
-        u.editing_entity_snapshot.display_name = draw_labeled_text_field(
-            "Display Name",
-            "field_display_name",
-            "Enter text here...",
-            u.editing_entity_snapshot.display_name,
-            u._editing_entity_snapshot_original.display_name,
-        )
-        # > Video file
-        imgui.text(f"Video ID: {u.editing_entity_snapshot.video_id}") 
-        imgui.same_line()
-        if imgui.tree_node(
-            f"(expand to edit)##{element_id}/search_video_id"
-        ):
-            if imgui.button("Use Selected Video"):
-                assert len(video_selection) <= 1
-                if len(video_selection) > 0:
-                    u.editing_entity_snapshot.video_id = next(iter(video_selection))
-                else:
-                    u.editing_entity_snapshot.video_id = None
-
-            imgui.text("Search video name: ")
-            imgui.same_line()
-            text_filter.draw()
-            lines = list(
-                filter(
-                    lambda snapshot: text_filter.pass_filter(snapshot.display_name),
-                    u.video_snapshots,
+                clicked_checkbox, _ = imgui.checkbox(
+                    f"##{element_id}/checkboxes/{row._id}", in_selected
                 )
+                if clicked_checkbox:
+                    if in_selected:
+                        selected_ids.remove(row._id)
+                    else:
+                        if table_select_mode is not TableSelectMode.MULTIPLE:
+                            # ? if single select, always clear selection
+                            selected_ids.clear()
+                        selected_ids.add(row._id)
+
+            imgui.table_next_column()
+            _, _ = imgui.selectable(
+                f"{row._id}##{element_id}/rows/{row._id}",
+                in_selected,
+                # imgui.SelectableFlags_.span_all_columns
+                # |
+                imgui.SelectableFlags_.no_auto_close_popups,
             )
 
-            video_table(f"{element_id}/video_query_res", lines, video_selection, False)
-            imgui.tree_pop()
+            if on_double_click is not None:
+                on_double_click(
+                    f"Edit##{row._id}/edit_menu_all",
+                    row,
+                    imgui.is_item_hovered() and imgui.is_mouse_double_clicked(0),
+                )
+            imgui.table_next_column()
 
-        # > Actions
-        if imgui.button("Save"):
-            imgui.close_current_popup()
-            OUT_is_active.value = False
-            print(u.editing_entity_snapshot)
-            match update_entity(u.db, u.editing_entity_snapshot):
-                case Failure(err):
-                    print(err)
-                case Success():
-                    u.reload_entity_snapshots()
-            u.editing_entity_snapshot = None
-            u._editing_entity_snapshot_original = None
-        imgui.same_line()
-        if imgui.button("Cancel"):
-            imgui.close_current_popup()
-            OUT_is_active.value = False
-            u.editing_entity_snapshot = None
-            u._editing_entity_snapshot_original = None
+            imgui.set_next_item_width(-imgui.FLT_MIN)
+            imgui.input_text(
+                f"##{row._id}/display_name",
+                row.display_name,
+                imgui.InputTextFlags_.read_only,
+            )
+            imgui.table_next_column()
 
-        imgui.end_popup()
+            if row.file_hash:
+                imgui.text(row.file_hash)
+            else:
+                imgui.text("")
+            imgui.table_next_column()
 
+            if row.file_path:
+                imgui.text(row.file_path.name)
+            else:
+                imgui.text("")
 
-STD_TEXT_FLAGS = 4224  # auto_select_all (12) | escape_clears_all (7)
+            for ds in [
+                row.ds_yt_content,
+                row.ds_yt_audience_retention,
+                row.ds_whisper_transcript,
+                row.ds_transcript_stats,
+                row.ds_opencv_scene_stats,
+            ]:
+                imgui.table_next_column()
 
-
-def draw_labeled_text_field(
-    label: str,
-    field_id: str,
-    hint: str,
-    current_value: str,
-    original_value: str,
-    flags: int = STD_TEXT_FLAGS,
-) -> str:
-    imgui.text(f"{label}: ")
-    imgui.same_line()
-    just_changed, new_value = imgui.input_text_with_hint(
-        f"##{field_id}", hint, current_value, flags
-    )
-    if new_value != original_value:
-        imgui.same_line()
-        imgui.text("*")
-    return new_value if just_changed else current_value
-
-
-def draw_labeled_int_field(
-    label: str,
-    field_id: str,
-    current_value: Optional[int],
-    original_value: Optional[int],
-) -> Optional[int]:
-    imgui.text(f"{label}: ")
-    imgui.same_line()
-    just_changed, new_value = imgui.input_int(
-        f"##{field_id}",
-        0 if current_value is None else current_value,
-        flags=(1 << 13 | 1 << 14),
-    )  # display_empty_ref_val | parse_empty_ref_val
-    new_value = max(0, new_value)
-    if new_value != original_value and current_value is not None:
-        imgui.same_line()
-        imgui.text("*")
-
-    if new_value == 0:
-        new_value = None
-    return new_value if just_changed else current_value
+                if ds:
+                    ds.render_cell(f"##{row._id}/{ds.get_label()}")
+                else:
+                    imgui.text("")
+        imgui.end_table()

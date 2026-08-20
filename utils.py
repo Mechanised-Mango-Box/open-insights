@@ -1,18 +1,23 @@
-from typing_extensions import Optional
-from typing import Tuple
+import csv
+import hashlib
+import io
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Generic, TypeVar, Union
 
-T = TypeVar("T") # Generic
-E = TypeVar("E") # generic Error
+# from enum import Enum, auto
+from pathlib import Path
+from typing import Any, Generic, TypeVar
+
+# from imgui_bundle import portable_file_dialogs as pfd
+
+T = TypeVar("T")  # Generic
+E = TypeVar("E")  # generic Error
+
 
 class Ref(Generic[T]):
     def __init__(self, value: T):
-        self.value = value
+        self._: T = value
 
-# usage
-def f(x: Ref[int]) -> None:
-    x.value += 1
 
 # region Result types
 @dataclass(frozen=True)
@@ -25,83 +30,43 @@ class Failure(Generic[E]):
     error: E
 
 
-Result = Union[Success[T], Failure[E]]
-# endregion
-
-# region Custom type aliases
-Path = str
-CustomResourceType = str
-ID = int
-DatasetFileLabel = str
+Result = Success[T] | Failure[E]
 # endregion
 
 
-# region Container Structs
-@dataclass()
-class EntitySnapshot:
-    _id: ID
-
-    display_name: str
-
-    video_id: Optional[int]
-
-    yt_hash: str
-    yt_title: str
-    yt_pub_time: str
-    yt_duration: int
-    yt_views: int
-    yt_watch_time: float
-    yt_subscribers: int
-    yt_average_view_duration: int
-    yt_impressions: int
-    yt_impressions_click_through_rate: float
-
-    def from_row(row: Tuple):
-        return EntitySnapshot(
-            _id=row[0],
-            display_name=row[1],
-            video_id=row[2],
-            yt_hash=row[3],
-            yt_title=row[4],
-            yt_pub_time=row[5],
-            yt_duration=row[6],
-            yt_views=row[7],
-            yt_watch_time=row[8],
-            yt_subscribers=row[9],
-            yt_average_view_duration=row[10],
-            yt_impressions=row[11],
-            yt_impressions_click_through_rate=row[12],
-        )
+def e_str(x: object) -> str:
+    """
+    Cast to string that handles empty.
+    """
+    return str(x) if x else ""
 
 
-@dataclass()
-class DatasetSnapshot:
-    _id: ID
-
-    path: Path
-    display_name: str
-
-    source: Optional[str]
-
-    def from_row(row: Tuple):
-        return DatasetSnapshot(
-            _id=row[0], path=row[1], display_name=row[2], source=row[3]
-        )
+def tuple_to_csv_row(t: Iterable[Any]) -> str:
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(t)
+    return output.getvalue().rstrip("\r\n")
 
 
-@dataclass(frozen=True)
-class VideoSnapshot:
-    _id: ID
-
-    path: Path
-    display_name: str
-
-    def from_row(row: Tuple):
-        return VideoSnapshot(
-            _id=row[0],
-            path=row[1],
-            display_name=row[2],
-        )
+def file_hash(path: Path, algo: str = "sha256", chunk_size: int = 1024 * 1024) -> str:
+    h = hashlib.new(algo)
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(chunk_size), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 
-# endregion
+# class Runtime(Enum):
+#     NATIVE = auto()
+#     WEB = auto()
+
+
+# def file_select(runtime: Runtime) -> Result[list, str]:
+#     match runtime:
+#         case Runtime.NATIVE:
+#             selection = pfd.open_file(
+#                 "Upload Youtube Content Report...",
+#                 ".",
+#                 ["Youtube Content Report (CSV)", "*.csv"],
+#                 options=pfd.opt.none,
+#             ).result()

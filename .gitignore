@@ -1,6 +1,9 @@
 # ImGui
 *.ini
 
+# Local Datasets
+/data/local/*
+
 # sqlite files
 *.sqlite
 
