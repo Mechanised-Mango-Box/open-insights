@@ -80,7 +80,7 @@ def build_page(u: Universe):
 
         imgui.separator()
         if imgui.button("Confirm"):
-            u.entities = list(filter(lambda ent: ent._id not in __selected_ids, u.entities))
+            u.entities = [ent for ent in u.entities if ent._id not in __selected_ids]
             __selected_ids.clear()
             imgui.close_current_popup()
         imgui.same_line()
