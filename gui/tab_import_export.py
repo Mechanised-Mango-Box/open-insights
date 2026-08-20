@@ -11,42 +11,47 @@ from universe import Universe
 from utils import *
 
 
+def safe_cast(val: str | None, to_type: type, default=None):
+    """Safely casts a string value to a type. Returns default if casting fails."""
+    if val is None or val.strip() == "":
+        return default
+    try:
+        return to_type(val)
+    except (ValueError, TypeError):
+        return default
+
+
 def upsert_yt_content_csv(path: str, ptr_entities: list[Video]):
-    with open(path, newline="") as f:
-        reader = csv.DictReader(f)  # columns become dict keys
+    with open(path, newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
         for row in reader:
-            # > Read as obj
             obj = DatasetYoutubeContent(
-                content_id=row["Content"],
-                title=row["Video title"],
-                pub_time=row["Video publish time"],
-                duration=int(row["Duration"]),
-                views=int(row["Views"]),
-                watch_time=float(row["Watch time (hours)"]),
-                subscribers=int(row["Subscribers"]),
-                average_view_duration=row["Average view duration"],
-                impressions=int(row["Impressions"]),
-                impressions_click_through_rate=(
-                    float(x)
-                    if (x := row["Impressions click-through rate (%)"]) is not None
-                    and ""
-                    else None
+                content_id=row.get("Content"),
+                title=row.get("Video title"),
+                pub_time=row.get("Video publish time"),
+                duration=safe_cast(row.get("Duration"), int, 0),
+                views=safe_cast(row.get("Views"), int, 0),
+                watch_time=safe_cast(row.get("Watch time (hours)"), float, 0.0),
+                subscribers=safe_cast(row.get("Subscribers"), int, 0),
+                average_view_duration=row.get("Average view duration"),
+                impressions=safe_cast(row.get("Impressions"), int, 0),
+                impressions_click_through_rate=safe_cast(
+                    row.get("Impressions click-through rate (%)"), float, None
                 ),
             )
 
-            # >  Insert into universe
-            has_repalced_existing = False
+            # > Insert into universe
+            has_replaced_existing = False
             for entity in ptr_entities:
-                # > Same ID -> replace
                 if (
                     entity.ds_yt_content
                     and entity.ds_yt_content.content_id == obj.content_id
                 ):
                     entity.ds_yt_content = obj
-                    has_repalced_existing = True
+                    has_replaced_existing = True
                     break
 
-            if not has_repalced_existing:
+            if not has_replaced_existing:
                 new_entity = Video(
                     _id=uuid4(),
                     file_hash=None,
@@ -55,6 +60,7 @@ def upsert_yt_content_csv(path: str, ptr_entities: list[Video]):
                     ds_yt_content=obj,
                 )
                 ptr_entities.append(new_entity)
+
 
 def tab_import_export(u: Universe):
     # > YT Content
@@ -111,7 +117,7 @@ def tab_import_export(u: Universe):
                         file_hash=selected_hash,
                         file_path=path,
                         display_name=path.stem,
-                    )  # TODO make file the name not the whole path
+                    )
                     u.entities.append(new_entity)
                 else:
                     # * Update

@@ -80,9 +80,9 @@ def build_page(u: Universe):
 
         imgui.separator()
         if imgui.button("Confirm"):
-            imgui.close_current_popup()
-            u.entities = list(filter(lambda ent: ent._id in __selected_ids, u.entities))
+            u.entities = list(filter(lambda ent: ent._id not in __selected_ids, u.entities))
             __selected_ids.clear()
+            imgui.close_current_popup()
         imgui.same_line()
         if imgui.button("Cancel"):
             imgui.close_current_popup()
