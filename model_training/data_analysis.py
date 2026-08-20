@@ -144,6 +144,15 @@ def plot_feature_histograms(
     return fig
 
 
+FEATURE_DISPLAY_NAMES: Dict[str, str] = {
+    "duration": "Duration in minutes",
+    "word_count": "Total number of words",
+    "wpm": "Average speaking speed (wpm)",
+    "scene_count": "Total number of scenes",
+    "scene_change_rate": "Average scenes change rate (spm)",
+}
+
+
 def plot_pearson_correlation(
     df: pd.DataFrame,
     features: Optional[List[str]] = None,
@@ -151,8 +160,8 @@ def plot_pearson_correlation(
     save_path: Optional[str] = None,
 ) -> plt.Figure:
     """
-    Computes Pearson Correlation matrix for features and target variable,
-    displaying all correlations in a single combined graph heatmap.
+    Computes Pearson Correlation coefficients between each feature and the target variable,
+    displaying the results as a horizontal bar chart matching standard EDA reporting style.
 
     Parameters:
         df: Pandas DataFrame containing features and target.
@@ -163,39 +172,47 @@ def plot_pearson_correlation(
     Returns:
         Matplotlib Figure object.
     """
+    preferred_order = ["duration", "word_count", "wpm", "scene_count", "scene_change_rate"]
+    
     if features is None:
-        features = [col for col in FEATURE_COLUMNS if col in df.columns]
+        # Use preferred order if available in df, followed by any remaining columns in FEATURE_COLUMNS
+        valid_features = [col for col in preferred_order if col in df.columns]
+        for col in FEATURE_COLUMNS:
+            if col in df.columns and col not in valid_features:
+                valid_features.append(col)
+    else:
+        valid_features = [col for col in features if col in df.columns]
 
-    columns_to_corr = [col for col in features if col in df.columns]
-    if target in df.columns and target not in columns_to_corr:
-        columns_to_corr.append(target)
+    correlations = []
+    labels = []
+    for feat in valid_features:
+        corr_val = df[feat].corr(df[target], method="pearson")
+        correlations.append(corr_val if not np.isnan(corr_val) else 0.0)
+        labels.append(FEATURE_DISPLAY_NAMES.get(feat, feat.replace("_", " ").title()))
 
-    corr_matrix = df[columns_to_corr].corr(method="pearson")
+    fig, ax = plt.subplots(figsize=(8, 2.5))
 
-    fig, ax = plt.subplots(figsize=(8, 6))
-    cax = ax.matshow(corr_matrix, cmap="coolwarm", vmin=-1.0, vmax=1.0)
-    fig.colorbar(cax, shrink=0.8)
+    # Red bar (#d62424) for negative correlation, Blue bar (#1f24d1) for positive correlation
+    colors = ["#d62424" if val < 0 else "#1f24d1" for val in correlations]
 
-    labels = [c.replace("_", " ").title() for c in columns_to_corr]
-    ax.set_xticks(range(len(labels)))
-    ax.set_yticks(range(len(labels)))
-    ax.set_xticklabels(labels, rotation=45, ha="left", fontsize=10)
+    y_positions = np.arange(len(labels))
+    ax.barh(y_positions, correlations, color=colors, height=0.65, edgecolor="none")
+
+    ax.set_yticks(y_positions)
     ax.set_yticklabels(labels, fontsize=10)
+    ax.invert_yaxis()  # Top feature first
 
-    # Annotate correlation values inside heatmap cells
-    for i in range(len(columns_to_corr)):
-        for j in range(len(columns_to_corr)):
-            val = corr_matrix.iloc[i, j]
-            color = "white" if abs(val) > 0.5 else "black"
-            ax.text(j, i, f"{val:.2f}", ha="center", va="center", color=color, fontweight="bold", fontsize=11)
+    ax.set_xlabel("Correlation Coefficient", fontsize=11)
+    ax.grid(True, which="both", color="#cccccc", linestyle="-", linewidth=0.8)
+    ax.set_axisbelow(True)
+    ax.axvline(0, color="black", linewidth=0.8)
 
-    ax.set_title("Pearson Correlation Analysis (Features & Target)", fontsize=14, fontweight="bold", pad=40)
     plt.tight_layout()
 
     if save_path:
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
         fig.savefig(save_path, dpi=300, bbox_inches="tight")
-        print(f"[ Analysis ] Saved correlation heatmap to: {save_path}")
+        print(f"[ Analysis ] Saved correlation plot to: {save_path}")
 
     return fig
 
