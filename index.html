@@ -137,30 +137,32 @@ if __name__ == "__main__":
             // 4. Load additional required packages used by the demo
             setStatus("Loading numpy...");
             await pyodide.loadPackage('numpy');  // numpy will be loaded from the CDN jsdelivr
-            
-            setStatus("Loading openai-whisper...");
-            await micropip.install('openai-whisper');
-            
+            setStatus("Loading opencv...");
+            await pyodide.loadPackage('opencv-python'); 
+
             setStatus("Loading deps...");
             await micropip.install('typing-extensions');  // numpy will be loaded from the CDN jsdelivr
             setStatus("Loading Python files...");
             const pythonFiles = [
-                "main.py",
-                "universe.py",
                 "utils.py",
-                "gui/tables.py",
-                "gui/entity_management_2.py",
+                "gui/tab_import_export.py",
+                "gui/tab_transcript.py",
+                "gui/entity_management.py",
                 "gui/model_analysis.py",
+                "gui/tab_scenes_stats.py",
                 "gui/feature_extraction.py",
-                "gui/asset_management.py",
-                "asset_manager/file_utils.py",
-                "asset_manager/__init__.py",
-                "asset_manager/yt.py",
-                "asset_manager/training_resources.py",
-                "asset_manager/db.py",
+                "gui/edit_menu_all.py",
+                "export.py",
+                "main.py",
+                "video_analysis/whisper_functions.py",
+                "video_analysis/extracting_metadata.py",
+                "video_analysis/open_cv_functions.py",
+                "typedef/video.py",
+                "typedef/dataset.py",
+                "universe.py"
             ];
 
-try {
+            try {
                 for (let fileName of pythonFiles) {
                     console.log(fileName);
 

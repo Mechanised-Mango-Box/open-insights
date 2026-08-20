@@ -1,5 +1,3 @@
-# pyrefly: ignore [missing-import]
-import whisper
 from imgui_bundle import imgui, immapp
 
 import gui.entity_management
@@ -26,10 +24,6 @@ def build_ui(u: Universe):
 
 def main():
     u: Universe = Universe()
-    print("[ Startup ] Loading whisper model...")
-    u.whisper_model = whisper.load_model(
-        "tiny.en"
-    )  # 30min video ~2 mins on gaming rig - cpu only
 
     immapp.run(
         lambda: build_ui(u),

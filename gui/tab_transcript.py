@@ -1,6 +1,5 @@
 from uuid import UUID
 
-import whisper  # pyrefly: ignore [missing-import]
 from imgui_bundle import imgui
 
 from typedef.dataset import (
@@ -13,6 +12,8 @@ from utils import *
 
 def tab_transcript(u: Universe, selected_ids: set[UUID]):
     if imgui.button("Extract Transcript"):
+        print("[ ERR ] Not supported.")
+        return
         for entity in filter(lambda ent: ent._id in selected_ids, u.entities):
             # > Update
             print(f"\n\nWhisper on {entity}")

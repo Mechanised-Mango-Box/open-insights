@@ -3,8 +3,12 @@ import hashlib
 import io
 from collections.abc import Iterable
 from dataclasses import dataclass
+
+# from enum import Enum, auto
 from pathlib import Path
 from typing import Any, Generic, TypeVar
+
+# from imgui_bundle import portable_file_dialogs as pfd
 
 T = TypeVar("T")  # Generic
 E = TypeVar("E")  # generic Error
@@ -13,6 +17,7 @@ E = TypeVar("E")  # generic Error
 class Ref(Generic[T]):
     def __init__(self, value: T):
         self._: T = value
+
 
 # region Result types
 @dataclass(frozen=True)
@@ -49,3 +54,19 @@ def file_hash(path: Path, algo: str = "sha256", chunk_size: int = 1024 * 1024) -
         for chunk in iter(lambda: f.read(chunk_size), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+# class Runtime(Enum):
+#     NATIVE = auto()
+#     WEB = auto()
+
+
+# def file_select(runtime: Runtime) -> Result[list, str]:
+#     match runtime:
+#         case Runtime.NATIVE:
+#             selection = pfd.open_file(
+#                 "Upload Youtube Content Report...",
+#                 ".",
+#                 ["Youtube Content Report (CSV)", "*.csv"],
+#                 options=pfd.opt.none,
+#             ).result()
