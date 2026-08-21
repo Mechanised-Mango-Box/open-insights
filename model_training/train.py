@@ -118,3 +118,17 @@ def run_training_pipeline(
     print(f"Intercept & Coefficients:\n  {coef_summary}")
 
     return results
+
+
+if __name__ == "__main__":
+    from model_training.mock_data import generate_mock_training_data
+
+    print("[ Test ] Generating mock dataset (200 samples)...")
+    mock_df = generate_mock_training_data(num_samples=200, random_state=42)
+
+    print("[ Test ] Running training pipeline...")
+    results = run_training_pipeline(raw_df=mock_df, save_dir="models")
+
+    print("\n[ Check Complete ] Model training executed successfully!")
+    print(f"  Model saved to:  {results['model_path']}")
+    print(f"  Scaler saved to: {results['scaler_path']}")
