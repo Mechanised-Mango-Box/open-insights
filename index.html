@@ -45,7 +45,6 @@ if __name__ == "__main__":
     main()
 </script>
 
-
     <!--===========================================================================
     Part 3 - Page DOM + styles
     --------------------------
@@ -138,7 +137,7 @@ if __name__ == "__main__":
             setStatus("Loading numpy...");
             await pyodide.loadPackage('numpy');  // numpy will be loaded from the CDN jsdelivr
             setStatus("Loading opencv...");
-            await pyodide.loadPackage('opencv-python'); 
+            await pyodide.loadPackage('opencv-python');
 
             setStatus("Loading deps...");
             await micropip.install('typing-extensions');  // numpy will be loaded from the CDN jsdelivr
@@ -189,11 +188,31 @@ if __name__ == "__main__":
             //    Option a (default): run the Python code embedded in Part 2 above
             pyodide.runPython(document.getElementById("pythonCode").textContent);
             //    Option b: load the Python code from an external file (e.g. app.py next to this HTML):
-            // pyodide.runPython(await (await fetch('app.py')).text());
+            // pyodide.runPython(await (await fetch('main.py')).text());
             hideLoader();
         }
         main().catch(showError);
     </script>
+    <script>
+        async function handle_file_change(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // 1. Convert the file to an ArrayBuffer (raw data)
+            const arrayBuffer = await file.arrayBuffer();
+
+            // 2. Convert to a Uint8Array (standard format)
+            const uint8Array = new Uint8Array(arrayBuffer);
+
+            // 3. Send this data to a Python function we define later
+            // We will use a global function to bridge the gap
+            if (window.process_file_from_js) {
+                window.process_file_from_js(uint8Array);
+            }
+        }
+    </script>
+    <input type="file" id="file-picker" style="display: none;" onchange="handle_file_change(event)" />
+
 
 </body>
 

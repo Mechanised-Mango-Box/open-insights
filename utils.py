@@ -3,12 +3,11 @@ import hashlib
 import io
 from collections.abc import Iterable
 from dataclasses import dataclass
-
-# from enum import Enum, auto
+from enum import Enum, auto
 from pathlib import Path
 from typing import Any, Generic, TypeVar
-
-# from imgui_bundle import portable_file_dialogs as pfd
+from js import document, window  # pyrefly: ignore [missing-import]
+from imgui_bundle import portable_file_dialogs
 
 T = TypeVar("T")  # Generic
 E = TypeVar("E")  # generic Error
@@ -56,17 +55,42 @@ def file_hash(path: Path, algo: str = "sha256", chunk_size: int = 1024 * 1024) -
     return h.hexdigest()
 
 
-# class Runtime(Enum):
-#     NATIVE = auto()
-#     WEB = auto()
+class Runtime(Enum):
+    NATIVE = auto()
+    WEB = auto()
 
 
-# def file_select(runtime: Runtime) -> Result[list, str]:
-#     match runtime:
-#         case Runtime.NATIVE:
-#             selection = pfd.open_file(
-#                 "Upload Youtube Content Report...",
-#                 ".",
-#                 ["Youtube Content Report (CSV)", "*.csv"],
-#                 options=pfd.opt.none,
-#             ).result()
+def file_select(runtime: Runtime) -> Result[list[Path], str]:
+    match runtime:
+        case Runtime.NATIVE:
+            selection = portable_file_dialogs.open_file(
+                "Upload Youtube Content Report...",
+                ".",
+                ["Youtube Content Report (CSV)", "*.csv"],
+                options=portable_file_dialogs.opt.none,
+            ).result()
+            return Success([Path(s) for s in selection])
+
+        case Runtime.WEB:
+            try:
+                trigger_web_file_picker()
+
+                return Success([])
+
+            except Exception as exc:
+                return Failure(str(exc))
+
+
+
+
+def trigger_web_file_picker():
+    try:
+        print("Triggering file picker...")
+        # We reach out of the Python sandbox into the browser DOM
+        file_input = document.getElementById("file-picker")
+        if file_input:
+            file_input.click()
+        else:
+            print("Error: HTML element 'file-picker' not found!")
+    except Exception as e:
+        print(f"Error: {e}")

@@ -1,3 +1,4 @@
+from utils import Success
 from pathlib import Path
 from uuid import uuid4
 
@@ -21,7 +22,7 @@ def safe_cast(val: str | None, to_type: type, default=None):
         return default
 
 
-def upsert_yt_content_csv(path: str, ptr_entities: list[Video]):
+def upsert_yt_content_csv(path: Path, ptr_entities: list[Video]):
     with open(path, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
@@ -65,12 +66,12 @@ def upsert_yt_content_csv(path: str, ptr_entities: list[Video]):
 def tab_import_export(u: Universe):
     # > YT Content
     if imgui.button("Import from: Youtube Content"):
-        selection = pfd.open_file(
-            "Upload Youtube Content Report...",
-            ".",
-            ["Youtube Content Report (CSV)", "*.csv"],
-            options=pfd.opt.none,
-        ).result()
+        match file_select(Runtime.WEB):
+            case Failure(err):
+                print(err)
+                return
+            case Success(paths):
+                selection = paths
         assert len(selection) <= 1
 
         if len(selection) == 0:
