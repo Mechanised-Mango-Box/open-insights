@@ -6,35 +6,7 @@ import gui.entity_management
 import gui.feature_extraction
 import gui.model_analysis
 from universe import Universe
-
-
-def process_file_from_js(uint8_array):
-    try:
-        # CORRECT WAY: Convert the JS Proxy/Uint8Array to Python bytes
-        file_bytes = bytes(uint8_array)
-        
-        print(f"Successfully received file! Size: {len(file_bytes)} bytes")
-        
-        # Save it to the virtual filesystem so ImGui/Python can read it
-        with open("/tmp/user_file.dat", "wb") as f:
-            f.write(file_bytes)
-            
-        print("File saved to /tmp/user_file.dat")
-
-        with open("/tmp/user_file.dat", "r") as f:
-            print(f.readlines())
-        
-    except Exception as e:
-        print(f"Error processing file in Python: {e}")
-
-
-
-def trigger_web_file_picker():
-    js.document.getElementById("file-picker").click()
-
-
-# Example: Triggering it via an ImGui button click (simplified)
-# trigger_web_file_picker()
+from utils import Runtime, js_fs_import
 
 
 def build_ui(u: Universe):
@@ -52,11 +24,10 @@ def build_ui(u: Universe):
 
 
 def main():
-    # IMPORTANT: You must expose this function to the global 'window' object
-    # so JavaScript can see it.
-    js.window.process_file_from_js = create_proxy(process_file_from_js)
+    js.window.js_fs_import = create_proxy(js_fs_import)
 
     u: Universe = Universe()
+    u.runtime = Runtime.WEB
 
     immapp.run(
         lambda: build_ui(u),

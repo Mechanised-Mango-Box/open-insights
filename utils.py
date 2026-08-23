@@ -6,7 +6,8 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from pathlib import Path
 from typing import Any, Generic, TypeVar
-from js import document, window  # pyrefly: ignore [missing-import]
+
+import js  # pyrefly: ignore [missing-import]
 from imgui_bundle import portable_file_dialogs
 
 T = TypeVar("T")  # Generic
@@ -60,6 +61,9 @@ class Runtime(Enum):
     WEB = auto()
 
 
+Uint8Array = Any
+
+
 def file_select(runtime: Runtime) -> Result[list[Path], str]:
     match runtime:
         case Runtime.NATIVE:
@@ -73,7 +77,7 @@ def file_select(runtime: Runtime) -> Result[list[Path], str]:
 
         case Runtime.WEB:
             try:
-                trigger_web_file_picker()
+                js_file_picker()
 
                 return Success([])
 
@@ -81,16 +85,33 @@ def file_select(runtime: Runtime) -> Result[list[Path], str]:
                 return Failure(str(exc))
 
 
-
-
-def trigger_web_file_picker():
+def js_file_picker():
     try:
         print("Triggering file picker...")
-        # We reach out of the Python sandbox into the browser DOM
-        file_input = document.getElementById("file-picker")
+        file_input = js.document.getElementById("file-picker")
         if file_input:
             file_input.click()
         else:
             print("Error: HTML element 'file-picker' not found!")
     except Exception as e:
         print(f"Error: {e}")
+
+
+def js_fs_import(filename: str, uint8_array: "Uint8Array"):
+    path = Path(filename)
+    try:
+        file_bytes = bytes(uint8_array)
+
+        print(f"Successfully received file! Size: {len(file_bytes)} bytes")
+
+        # Write to emscripten
+        with open(path, "wb") as f:
+            f.write(file_bytes)
+
+        print(f"File saved to {path}")
+
+        # with open(path, "r") as f:
+        #     print(f.readlines())
+
+    except Exception as e:
+        print(f"Error processing file in Python: {e}")

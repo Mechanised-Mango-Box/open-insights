@@ -195,21 +195,33 @@ if __name__ == "__main__":
     </script>
     <script>
         async function handle_file_change(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+            const files = event.target.files;
 
-            // 1. Convert the file to an ArrayBuffer (raw data)
-            const arrayBuffer = await file.arrayBuffer();
+            if (!files || files.length === 0) return;
 
-            // 2. Convert to a Uint8Array (standard format)
-            const uint8Array = new Uint8Array(arrayBuffer);
+            console.log(`Starting import of ${files.length} files...`);
 
-            // 3. Send this data to a Python function we define later
-            // We will use a global function to bridge the gap
-            if (window.process_file_from_js) {
-                window.process_file_from_js(uint8Array);
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+
+                try {
+                    console.log(`Processing: ${file.name}`);
+                    const arrayBuffer = await file.arrayBuffer();
+                    const uint8Array = new Uint8Array(arrayBuffer);
+
+                    if (window.js_fs_import) {
+                        window.js_fs_import(file.name, uint8Array);
+                    } else {
+                        console.error("Python bridge not found!");
+                    }
+                } catch (err) {
+                    console.error(`Error processing file ${file.name}:`, err);
+                }
             }
+
+            console.log("All files have been sent to Python.");
         }
+
     </script>
     <input type="file" id="file-picker" style="display: none;" onchange="handle_file_change(event)" />
 
