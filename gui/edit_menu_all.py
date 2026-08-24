@@ -8,8 +8,8 @@ from typedef.dataset import (
     DatasetWhisperTranscript,
     DatasetYoutubeAudienceRetention,
     DatasetYoutubeContent,
+    Video,
 )
-from typedef.video import Video
 from utils import *
 
 __ptr_edit_menu_all_edit_youtube_content: Ref[DatasetYoutubeContent | None] = Ref(None)

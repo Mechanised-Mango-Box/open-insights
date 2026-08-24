@@ -1,9 +1,8 @@
-from imgui_bundle import implot
-from imgui_bundle import imgui_md
-from universe import Universe
 import numpy as np
+from imgui_bundle import imgui_md, implot
 
-def build_page(u:Universe):
+
+def build_page():
     imgui_md.render("# **UNDER CONSTRUCTION**")
     # ImPlot example
     if implot.begin_plot("My Plot"):

@@ -3,11 +3,14 @@ import hashlib
 import io
 from collections.abc import Iterable
 from dataclasses import dataclass
-from enum import Enum, auto
 from pathlib import Path
 from typing import Any, Generic, TypeVar
 
-import js  # pyrefly: ignore [missing-import]
+from flags import PLATFORM, Platform
+from universe import Universe
+
+if PLATFORM is Platform.WEB:
+    import js  # pyrefly: ignore [missing-import]
 from imgui_bundle import portable_file_dialogs
 
 T = TypeVar("T")  # Generic
@@ -56,48 +59,46 @@ def file_hash(path: Path, algo: str = "sha256", chunk_size: int = 1024 * 1024) -
     return h.hexdigest()
 
 
-class Runtime(Enum):
-    NATIVE = auto()
-    WEB = auto()
-
-
 Uint8Array = Any
 
 
-def file_select(runtime: Runtime) -> Result[list[Path], str]:
-    match runtime:
-        case Runtime.NATIVE:
-            selection = portable_file_dialogs.open_file(
-                "Upload Youtube Content Report...",
-                ".",
-                ["Youtube Content Report (CSV)", "*.csv"],
-                options=portable_file_dialogs.opt.none,
-            ).result()
-            return Success([Path(s) for s in selection])
-
-        case Runtime.WEB:
-            try:
-                js_file_picker()
-
-                return Success([])
-
-            except Exception as exc:
-                return Failure(str(exc))
+def file_select_native(
+    dialog_title: str,
+    file_filter_desc: str,
+    file_filter_match: str,
+):
+    # ) -> Result[list[Path], str]:
+    selection = portable_file_dialogs.open_file(
+        dialog_title,
+        ".",
+        [file_filter_desc, file_filter_match],
+        options=portable_file_dialogs.opt.none,
+    ).result()
+    print(selection)
+    new_file_paths = [Path(s) for s in selection]
+    Universe.new_file_paths = new_file_paths
 
 
-def js_file_picker():
+def file_select_web(
+    file_filter_MIMEs: list[str] | None = None,
+):
     try:
         print("Triggering file picker...")
         file_input = js.document.getElementById("file-picker")
         if file_input:
+            file_input.accept = ",".join(file_filter_MIMEs) if file_filter_MIMEs else ""
             file_input.click()
         else:
-            print("Error: HTML element 'file-picker' not found!")
+            print("HTML element 'file-picker' not found")
     except Exception as e:
         print(f"Error: {e}")
 
 
-def js_fs_import(filename: str, uint8_array: "Uint8Array"):
+def js_fs_import_file_begin():
+        print("Ready to submit files")
+        Universe.new_file_paths = []
+
+def js_fs_import_file(filename: str, uint8_array: "Uint8Array"):
     path = Path(filename)
     try:
         file_bytes = bytes(uint8_array)
@@ -109,9 +110,11 @@ def js_fs_import(filename: str, uint8_array: "Uint8Array"):
             f.write(file_bytes)
 
         print(f"File saved to {path}")
+        print("TODO: trigger FS refresh")
 
-        # with open(path, "r") as f:
-        #     print(f.readlines())
+        if Universe.new_file_paths is None:
+            Universe.new_file_paths = []
+        Universe.new_file_paths.append(path)
 
     except Exception as e:
         print(f"Error processing file in Python: {e}")

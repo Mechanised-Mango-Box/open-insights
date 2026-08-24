@@ -1,4 +1,3 @@
-from utils import Success
 from pathlib import Path
 from uuid import uuid4
 
@@ -6,10 +5,11 @@ from imgui_bundle import imgui
 from imgui_bundle import portable_file_dialogs as pfd
 
 from export import export_selection
-from typedef.dataset import DatasetYoutubeContent
-from typedef.video import Video
+from flags import PLATFORM
+from typedef.dataset import DatasetYoutubeContent, Video
 from universe import Universe
 from utils import *
+from utils import Success, file_select_native, file_select_web
 
 
 def safe_cast(val: str | None, to_type: type, default=None):
@@ -63,24 +63,35 @@ def upsert_yt_content_csv(path: Path, ptr_entities: list[Video]):
                 ptr_entities.append(new_entity)
 
 
-def tab_import_export(u: Universe):
+__show_wait = False
+
+
+def tab_import_export():
+    global __show_wait
     # > YT Content
     if imgui.button("Import from: Youtube Content"):
-        match file_select(Runtime.WEB):
-            case Failure(err):
-                print(err)
-                return
-            case Success(paths):
-                selection = paths
-        assert len(selection) <= 1
+        __show_wait = True
+        match PLATFORM:
+            case Platform.NATIVE:
+                file_select_native(
+                    dialog_title="Upload Youtube Content Report...",
+                    file_filter_desc="Youtube Report (.csv)",
+                    file_filter_match="*.csv",
+                )
+            case Platform.WEB:
+                file_select_web(["text/csv"])
+    if __show_wait:
+        imgui.text("uploading files")
+        print("test"+str(Universe.new_file_paths))
+        if Universe.new_file_paths is not None:
+            if len(Universe.new_file_paths) == 0:
+                print("No file selected.")
+            else:
+                for path in Universe.new_file_paths:
+                    upsert_yt_content_csv(Path(path), Universe.entities)
+            __show_wait = False
+            Universe.new_file_paths = None
 
-        if len(selection) == 0:
-            print("No file selected.")
-        else:
-            path = selection[0]
-
-            upsert_yt_content_csv(path, u.entities)
-            print(u.entities)
     # > Video
     if imgui.button("Import from: Video File"):
         selection = pfd.open_file(
@@ -106,7 +117,7 @@ def tab_import_export(u: Universe):
                 matching = list(
                     filter(
                         lambda entity: is_same_hash(entity, selected_hash),
-                        u.entities,
+                        Universe.entities,
                     )
                 )
                 print(matching)
@@ -119,7 +130,7 @@ def tab_import_export(u: Universe):
                         file_path=path,
                         display_name=path.stem,
                     )
-                    u.entities.append(new_entity)
+                    Universe.entities.append(new_entity)
                 else:
                     # * Update
                     for matching_entity in matching:
@@ -132,4 +143,4 @@ def tab_import_export(u: Universe):
             ".",
             options=pfd.opt.none,
         ).result()
-        _ = export_selection(Path(out_dir), u.entities)
+        _ = export_selection(Path(out_dir), Universe.entities)

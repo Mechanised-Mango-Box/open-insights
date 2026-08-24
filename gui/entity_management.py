@@ -23,34 +23,34 @@ class TableSelectMode(Enum):
 __selected_ids: set[UUID] = set()
 
 
-def build_page(u: Universe):
+def build_page():
     global __selected_ids
 
     # > MARK: SECTION: Entity Actions
     if imgui.begin_tab_bar("Entity Actions", imgui.TabBarFlags_.none):
         if imgui.begin_tab_item("Import / Export")[0]:
-            tab_import_export(u)
+            tab_import_export()
             imgui.end_tab_item()
 
         if imgui.begin_tab_item("Transcript (Whisper)")[0]:
-            tab_transcript(u, __selected_ids)
+            tab_transcript( __selected_ids)
             imgui.end_tab_item()
 
         if imgui.begin_tab_item("Scene Stats (OpenCV)")[0]:
-            tab_scenes_stats(u, __selected_ids)
+            tab_scenes_stats( __selected_ids)
             imgui.end_tab_item()
         imgui.end_tab_bar()
 
     # > MARK: SECTION: Selection Actions
     imgui.separator_text("Selection")
     if imgui.button("Select All"):
-        __selected_ids |= {ent._id for ent in u.entities}
+        __selected_ids |= {ent._id for ent in Universe.entities}
     imgui.same_line()
     if imgui.button("Deselect All"):
         __selected_ids.clear()
     imgui.same_line()
     if imgui.button("Invert Selection"):
-        __selected_ids = {ent._id for ent in u.entities} ^ __selected_ids
+        __selected_ids = {ent._id for ent in Universe.entities} ^ __selected_ids
     imgui.same_line()
     imgui.input_text("Filter", "")
 
@@ -80,7 +80,7 @@ def build_page(u: Universe):
 
         imgui.separator()
         if imgui.button("Confirm"):
-            u.entities = [ent for ent in u.entities if ent._id not in __selected_ids]
+            Universe.entities = [ent for ent in Universe.entities if ent._id not in __selected_ids]
             __selected_ids.clear()
             imgui.close_current_popup()
         imgui.same_line()
@@ -91,7 +91,7 @@ def build_page(u: Universe):
     # > MARK: SECTION Table
     element_id: str = "entity_table"
     # * Rows
-    rows = u.entities
+    rows = Universe.entities
     # column_flags: List[int],
     # on_update_row: Callable[[None], None],
     # * Selection

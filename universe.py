@@ -1,7 +1,8 @@
-from typedef.video import Video
-from utils import Runtime
+from pathlib import Path
+
+from typedef.dataset import *
 
 
 class Universe:
-    runtime: Runtime = Runtime.WEB
     entities: list[Video] = []
+    new_file_paths: list[Path] | None = None

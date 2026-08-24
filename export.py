@@ -1,10 +1,7 @@
 from datetime import datetime, timezone
 from pathlib import Path
 
-from typedef.dataset import (
-    ALL_DATASETS,
-)
-from typedef.video import Video
+from typedef.dataset import ALL_DATASETS, Video
 from utils import *
 
 

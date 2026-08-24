@@ -11,9 +11,9 @@ from universe import Universe
 from utils import *
 
 
-def tab_scenes_stats(u: Universe, selected_ids: set[UUID]):
+def tab_scenes_stats( selected_ids: set[UUID]):
     if imgui.button("Extract Scene Stats"):
-        for entity in filter(lambda ent: ent._id in selected_ids, u.entities):
+        for entity in filter(lambda ent: ent._id in selected_ids, Universe.entities):
             # > Update
             print(f"\n\nOpenCV on {entity}")
             path = entity.file_path

@@ -143,6 +143,7 @@ if __name__ == "__main__":
             await micropip.install('typing-extensions');  // numpy will be loaded from the CDN jsdelivr
             setStatus("Loading Python files...");
             const pythonFiles = [
+                "flags.py",
                 "utils.py",
                 "gui/tab_import_export.py",
                 "gui/tab_transcript.py",
@@ -156,7 +157,6 @@ if __name__ == "__main__":
                 "video_analysis/whisper_functions.py",
                 "video_analysis/extracting_metadata.py",
                 "video_analysis/open_cv_functions.py",
-                "typedef/video.py",
                 "typedef/dataset.py",
                 "universe.py"
             ];
@@ -195,8 +195,10 @@ if __name__ == "__main__":
     </script>
     <script>
         async function handle_file_change(event) {
+            console.log("Handling File change")
             const files = event.target.files;
 
+            window.js_fs_import_file_begin()
             if (!files || files.length === 0) return;
 
             console.log(`Starting import of ${files.length} files...`);
@@ -209,8 +211,8 @@ if __name__ == "__main__":
                     const arrayBuffer = await file.arrayBuffer();
                     const uint8Array = new Uint8Array(arrayBuffer);
 
-                    if (window.js_fs_import) {
-                        window.js_fs_import(file.name, uint8Array);
+                    if (window.js_fs_import_file) {
+                        window.js_fs_import_file(file.name, uint8Array);
                     } else {
                         console.error("Python bridge not found!");
                     }
@@ -220,12 +222,11 @@ if __name__ == "__main__":
             }
 
             console.log("All files have been sent to Python.");
+            event.target.value = ''; 
         }
 
     </script>
-    <input type="file" id="file-picker" style="display: none;" onchange="handle_file_change(event)" />
-
-
+    <input type="file" id="file-picker" style="display: none;" onchange="handle_file_change(event)"  oncancel="handle_file_change(event)"/>
 </body>
 
 </html>
