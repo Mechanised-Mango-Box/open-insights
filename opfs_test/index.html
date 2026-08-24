@@ -111,6 +111,7 @@ try:
     print(f"Loading: {filename}")
     video_capture = cv2.VideoCapture(filename)
     print(f"scenes: {count_scene_transitions(video_capture)}")
+    print(f"dur: {video_duration_mins(video_capture)}")
     print("done")
 
 except Exception as e:
