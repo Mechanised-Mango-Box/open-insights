@@ -3,13 +3,13 @@ from flags import PLATFORM, Platform
 if PLATFORM is Platform.WEB:
     import js  # pyrefly: ignore [missing-import]
 
-    from utils import js_fs_import_file, js_fs_import_file_begin
 from imgui_bundle import imgui, immapp
 from pyodide.ffi import create_proxy
 
 import gui.entity_management
 import gui.feature_extraction
 import gui.model_analysis
+from utils import js_fs_import_file, js_fs_import_file_oncancel
 
 
 def build_ui():
@@ -28,7 +28,7 @@ def build_ui():
 
 def main():
     if PLATFORM is Platform.WEB:
-        js.window.js_fs_import_file_begin = create_proxy(js_fs_import_file_begin)
+        js.window.js_fs_import_file_oncancel = create_proxy(js_fs_import_file_oncancel)
         js.window.js_fs_import_file = create_proxy(js_fs_import_file)
     immapp.run(
         lambda: build_ui(),

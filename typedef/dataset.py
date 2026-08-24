@@ -1,47 +1,14 @@
 import csv
 from abc import ABC, abstractmethod
 from copy import deepcopy
-from dataclasses import asdict, dataclass, field, fields
+from dataclasses import asdict, dataclass, fields
 from pathlib import Path
 from typing import Self, override
-from uuid import UUID
 
 from imgui_bundle import imgui
 
-from typedef.dataset import *
-from utils import *
-
-
-# > MARK: Video
-@dataclass(slots=True, kw_only=True)
-class Video:
-    _id: UUID
-
-    # > File
-    file_hash: str | None
-    file_path: Path | None
-
-    # > Display/Sorting
-    display_name: str
-
-    # > Datasets
-    # > YT
-    ds_yt_content: DatasetYoutubeContent | None = field(default=None, kw_only=True)
-    ds_yt_audience_retention: DatasetYoutubeAudienceRetention | None = field(
-        default=None, kw_only=True
-    )
-    # > Audio
-    ds_whisper_transcript: DatasetWhisperTranscript | None = field(
-        default=None, kw_only=True
-    )
-    ds_transcript_stats: DatasetTranscriptStats | None = field(
-        default=None, kw_only=True
-    )
-
-    # > Video
-    ds_opencv_scene_stats: DatasetOpenCVSceneStats | None = field(
-        default=None, kw_only=True
-    )
+from typedef.video import *
+from utils import Ref, e_str
 
 
 @dataclass(slots=True, kw_only=True)
@@ -64,7 +31,7 @@ class Dataset(ABC):
 
     @classmethod
     @abstractmethod
-    def export(cls, output_dir: Path, entities: list[Video]): ...
+    def export(cls, output_dir: Path, entities: list["Video"]): ...
 
     @abstractmethod
     def render_cell(self, element_id: str) -> None: ...

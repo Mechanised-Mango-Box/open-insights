@@ -8,7 +8,7 @@ from typedef.dataset import (
     DatasetOpenCVSceneStats,
 )
 from universe import Universe
-from utils import *
+
 
 
 def tab_scenes_stats( selected_ids: set[UUID]):

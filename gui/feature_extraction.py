@@ -1,9 +1,6 @@
 # pyrefly: ignore [missing-import]
 import cv2
 
-# pyrefly: ignore [missing-import]
-from utils import *
-
 
 # next function we need is to get the video duration
 # to get this we need to use a tool called open cv which is a computer vision Tool used to analsye images, video analysis, and more.

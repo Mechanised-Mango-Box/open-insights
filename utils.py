@@ -94,9 +94,8 @@ def file_select_web(
         print(f"Error: {e}")
 
 
-def js_fs_import_file_begin():
-        print("Ready to submit files")
-        Universe.new_file_paths = []
+def js_fs_import_file_oncancel():
+    Universe.new_file_paths = []
 
 def js_fs_import_file(filename: str, uint8_array: "Uint8Array"):
     path = Path(filename)

@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from typedef.dataset import ALL_DATASETS, Video
-from utils import *
+from utils import Failure, Result, Success
 
 
 def export_selection(target_dir: Path, entities: list[Video]) -> Result[None, str]:

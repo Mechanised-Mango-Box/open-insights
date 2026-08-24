@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from typedef.dataset import *
+from typedef.video import Video
 
 
 class Universe:

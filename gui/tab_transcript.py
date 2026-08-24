@@ -7,7 +7,7 @@ from typedef.dataset import (
     DatasetWhisperTranscript,
 )
 from universe import Universe
-from utils import *
+
 
 
 def tab_transcript(selected_ids: set[UUID]):

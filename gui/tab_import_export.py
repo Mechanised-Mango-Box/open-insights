@@ -1,3 +1,4 @@
+import csv
 from pathlib import Path
 from uuid import uuid4
 
@@ -5,11 +6,10 @@ from imgui_bundle import imgui
 from imgui_bundle import portable_file_dialogs as pfd
 
 from export import export_selection
-from flags import PLATFORM
+from flags import PLATFORM, Platform
 from typedef.dataset import DatasetYoutubeContent, Video
 from universe import Universe
-from utils import *
-from utils import Success, file_select_native, file_select_web
+from utils import e_str, file_hash, file_select_native, file_select_web
 
 
 def safe_cast(val: str | None, to_type: type, default=None):
@@ -81,8 +81,8 @@ def tab_import_export():
             case Platform.WEB:
                 file_select_web(["text/csv"])
     if __show_wait:
-        imgui.text("uploading files")
-        print("test"+str(Universe.new_file_paths))
+        imgui.same_line()
+        imgui.text("Processing...")
         if Universe.new_file_paths is not None:
             if len(Universe.new_file_paths) == 0:
                 print("No file selected.")

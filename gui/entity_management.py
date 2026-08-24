@@ -7,11 +7,8 @@ from gui.edit_menu_all import edit_menu_all
 from gui.tab_import_export import tab_import_export
 from gui.tab_scenes_stats import tab_scenes_stats
 from gui.tab_transcript import tab_transcript
-from typedef.dataset import (
-    ALL_DATASETS,
-)
+from typedef.dataset import ALL_DATASETS
 from universe import Universe
-from utils import *
 
 
 class TableSelectMode(Enum):
@@ -33,11 +30,11 @@ def build_page():
             imgui.end_tab_item()
 
         if imgui.begin_tab_item("Transcript (Whisper)")[0]:
-            tab_transcript( __selected_ids)
+            tab_transcript(__selected_ids)
             imgui.end_tab_item()
 
         if imgui.begin_tab_item("Scene Stats (OpenCV)")[0]:
-            tab_scenes_stats( __selected_ids)
+            tab_scenes_stats(__selected_ids)
             imgui.end_tab_item()
         imgui.end_tab_bar()
 
@@ -80,7 +77,9 @@ def build_page():
 
         imgui.separator()
         if imgui.button("Confirm"):
-            Universe.entities = [ent for ent in Universe.entities if ent._id not in __selected_ids]
+            Universe.entities = [
+                ent for ent in Universe.entities if ent._id not in __selected_ids
+            ]
             __selected_ids.clear()
             imgui.close_current_popup()
         imgui.same_line()
