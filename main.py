@@ -9,7 +9,11 @@ from pyodide.ffi import create_proxy
 import gui.entity_management
 import gui.feature_extraction
 import gui.model_analysis
-from utils import js_fs_import_file, js_fs_import_file_oncancel
+from utils import (
+    js_fs_import_file,
+    js_fs_import_file_complete,
+    js_fs_import_file_oncancel,
+)
 
 
 def build_ui():
@@ -28,8 +32,10 @@ def build_ui():
 
 def main():
     if PLATFORM is Platform.WEB:
-        js.window.js_fs_import_file_oncancel = create_proxy(js_fs_import_file_oncancel)
         js.window.js_fs_import_file = create_proxy(js_fs_import_file)
+        js.window.js_fs_import_file_oncancel = create_proxy(js_fs_import_file_oncancel)
+        js.window.js_fs_import_file_complete = create_proxy(js_fs_import_file_complete)
+        
     immapp.run(
         lambda: build_ui(),
         window_title="Open Insights",

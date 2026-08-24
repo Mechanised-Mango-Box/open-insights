@@ -223,6 +223,7 @@ if __name__ == "__main__":
 
             console.log("All files have been sent to Python.");
             event.target.value = '';
+            window.js_fs_import_file_complete()
         }
         async function handle_file_cancel(event) {
             console.log("Cancelled import.")
@@ -230,7 +231,7 @@ if __name__ == "__main__":
         }
 
     </script>
-    <input type="file" id="file-picker" style="display: none;" onchange="handle_file_change(event)"
+    <input type="file" id="file-picker" style="display: none;" multiple onchange="handle_file_change(event)"
         oncancel="handle_file_cancel(event)" />
 </body>
 

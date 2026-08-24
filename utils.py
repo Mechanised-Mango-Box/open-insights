@@ -72,12 +72,12 @@ def file_select_native(
         dialog_title,
         ".",
         [file_filter_desc, file_filter_match],
-        options=portable_file_dialogs.opt.none,
+        options=portable_file_dialogs.opt.multiselect,
     ).result()
     print(selection)
     new_file_paths = [Path(s) for s in selection]
     Universe.new_file_paths = new_file_paths
-
+    Universe.new_file_uploaded = True
 
 def file_select_web(
     file_filter_MIMEs: list[str] | None = None,
@@ -95,25 +95,27 @@ def file_select_web(
 
 
 def js_fs_import_file_oncancel():
-    Universe.new_file_paths = []
+    Universe.new_file_paths.clear()
+    Universe.new_file_uploaded = True
+
 
 def js_fs_import_file(filename: str, uint8_array: "Uint8Array"):
     path = Path(filename)
     try:
         file_bytes = bytes(uint8_array)
 
-        print(f"Successfully received file! Size: {len(file_bytes)} bytes")
+        # print(f"Successfully received file! Size: {len(file_bytes)} bytes")
 
         # Write to emscripten
         with open(path, "wb") as f:
             f.write(file_bytes)
 
-        print(f"File saved to {path}")
-        print("TODO: trigger FS refresh")
+        # print(f"File saved to {path}")
 
-        if Universe.new_file_paths is None:
-            Universe.new_file_paths = []
         Universe.new_file_paths.append(path)
 
     except Exception as e:
         print(f"Error processing file in Python: {e}")
+
+def js_fs_import_file_complete():
+    Universe.new_file_uploaded = True

@@ -63,14 +63,17 @@ def upsert_yt_content_csv(path: Path, ptr_entities: list[Video]):
                 ptr_entities.append(new_entity)
 
 
-__show_wait = False
+__waiting_yt_content_upload = False
+__waiting_video_upload = False
 
 
 def tab_import_export():
-    global __show_wait
+    global __waiting_yt_content_upload
+    global __waiting_video_upload
+
     # > YT Content
     if imgui.button("Import from: Youtube Content"):
-        __show_wait = True
+        __waiting_yt_content_upload = True
         match PLATFORM:
             case Platform.NATIVE:
                 file_select_native(
@@ -80,61 +83,75 @@ def tab_import_export():
                 )
             case Platform.WEB:
                 file_select_web(["text/csv"])
-    if __show_wait:
+    if __waiting_yt_content_upload:
         imgui.same_line()
         imgui.text("Processing...")
-        if Universe.new_file_paths is not None:
+        if Universe.new_file_uploaded:
             if len(Universe.new_file_paths) == 0:
                 print("No file selected.")
             else:
                 for path in Universe.new_file_paths:
                     upsert_yt_content_csv(Path(path), Universe.entities)
-            __show_wait = False
-            Universe.new_file_paths = None
+            __waiting_yt_content_upload = False
+            Universe.new_file_paths.clear()
+            Universe.new_file_uploaded = False
 
     # > Video
     if imgui.button("Import from: Video File"):
-        selection = pfd.open_file(
-            "Upload Video(s)...",
-            ".",
-            ["Video(s)", "*.mp4"],
-            options=pfd.opt.multiselect,
-        ).result()
-
-        if len(selection) == 0:
-            print("No file selected.")
-        else:
-            for str_path in selection:
-                path = Path(str_path)
-                selected_hash = file_hash(path)
-
-                def is_same_hash(entity: Video, other_hash: str):
-                    if not entity.file_hash:
-                        return False
-                    return entity.file_hash == other_hash
-
-                print(selected_hash)
-                matching = list(
-                    filter(
-                        lambda entity: is_same_hash(entity, selected_hash),
-                        Universe.entities,
-                    )
+        __waiting_video_upload = True
+        match PLATFORM:
+            case Platform.NATIVE:
+                file_select_native(
+                    dialog_title="Upload Video(s)...",
+                    file_filter_desc="Video/s",
+                    file_filter_match="*.mp4 *.mkv",
                 )
-                print(matching)
+            case Platform.WEB:
+                file_select_web(["video/*"])
+    if __waiting_video_upload:
+        imgui.same_line()
+        imgui.text("Processing...")
+        if Universe.new_file_uploaded:
+            if len(Universe.new_file_paths) == 0:
+                print("No file selected.")
+            else:
+                for path in Universe.new_file_paths:
+                    selected_hash = file_hash(path)
 
-                if len(matching) <= 0:
-                    # * None match, insert new
-                    new_entity = Video(
-                        _id=uuid4(),
-                        file_hash=selected_hash,
-                        file_path=path,
-                        display_name=path.stem,
+                    def is_same_hash(entity: Video, other_hash: str):
+                        if not entity.file_hash:
+                            return False
+                        return entity.file_hash == other_hash
+
+                    print(f"File: {path} is hashed as {selected_hash}")
+                    matching = list(
+                        filter(
+                            lambda entity: is_same_hash(entity, selected_hash),
+                            Universe.entities,
+                        )
                     )
-                    Universe.entities.append(new_entity)
-                else:
-                    # * Update
-                    for matching_entity in matching:
-                        print("MATCH", matching_entity)
+                    print(matching)
+
+                    if len(matching) <= 0:
+                        # * None match, insert new
+                        new_entity = Video(
+                            _id=uuid4(),
+                            file_hash=selected_hash,
+                            file_path=path,
+                            display_name=path.stem,
+                        )
+                        Universe.entities.append(new_entity)
+                    else:
+                        # * Update
+                        for matching_entity in matching:
+                            print("MATCH", matching_entity)
+
+            __waiting_video_upload = False
+            Universe.new_file_paths.clear()
+            Universe.new_file_uploaded = False
+
+            # for str_path in selection:
+            #     path = Path(str_path)
 
     # > Export
     if imgui.button("Export"):

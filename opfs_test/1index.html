@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pyodide OPFS Example</title>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js"></script>
+</head>
+<body>
+    <h2>OPFS + Pyodide File Lister</h2>
+    
+    <input type="file" id="fileInput">
+    <button id="uploadBtn">Upload to OPFS & List</button>
+    
+    <pre id="output">Loading Pyodide...</pre>
+
+    <script type="module">
+        const output = document.getElementById("output");
+        const fileInput = document.getElementById("fileInput");
+        const uploadBtn = document.getElementById("uploadBtn");
+
+        let pyodide;
+
+        // Initialize Pyodide
+        async function init() {
+            pyodide = await loadPyodide();
+            output.innerText = "Pyodide Ready. Please select a file.";
+        }
+        init();
+
+        async function handleUploadAndList() {
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a file first!");
+                return;
+            }
+
+            try {
+                // 1. Write file to OPFS using JavaScript
+                const root = await navigator.storage.getDirectory();
+                const fileHandle = await root.getFileHandle(file.name, { create: true });
+                const writable = await fileHandle.createWritable();
+                await writable.write(file);
+                await writable.close();
+                
+                output.innerText = `Uploaded ${file.name} to OPFS. Listing files...\n`;
+
+                // 2. List files in OPFS via JavaScript
+                const filesInOpfs = [];
+                for await (const [name, handle] of root.entries()) {
+                    filesInOpfs.push(name);
+                }
+
+                // 3. Pass the list to Pyodide and process it with Python
+                // We convert the JS array to a Python list
+                pyodide.globals.set("opfs_files", filesInOpfs);
+                
+                const pythonCode = `
+import os
+
+# opfs_files is passed from JS
+print(f"Python received {len(opfs_files)} files from OPFS:")
+for f in opfs_files:
+    print(f"- {f}")
+                `;
+                
+                const result = await pyodide.runPythonAsync(pythonCode);
+                
+                // Pyodide prints to a virtual stdout; we can capture it or use a custom print
+                // For this example, we'll just append the result of the logic to the screen
+                output.innerText += "\nPython Output:\n" + (result || "Check browser console for print logs.");
+                
+                // To see the 'print' statements specifically, we redirect stdout
+                pyodide.setStdout({
+                    batched: (str) => {
+                        output.innerText += "\n" + str;
+                    }
+                });
+                await pyodide.runPythonAsync(pythonCode);
+
+            } catch (err) {
+                console.error(err);
+                output.innerText += "\nError: " + err.message;
+            }
+        }
+
+        uploadBtn.addEventListener("click", handleUploadAndList);
+    </script>
+</body>
+</html>

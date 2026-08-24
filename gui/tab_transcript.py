@@ -2,6 +2,7 @@ from uuid import UUID
 
 from imgui_bundle import imgui
 
+from flags import PLATFORM, Platform
 from typedef.dataset import (
     DatasetTranscriptStats,
     DatasetWhisperTranscript,
@@ -9,11 +10,11 @@ from typedef.dataset import (
 from universe import Universe
 
 
-
 def tab_transcript(selected_ids: set[UUID]):
     if imgui.button("Extract Transcript"):
-        print("[ ERR ] Not supported.")
-        return
+        if PLATFORM is Platform.WEB:
+            print("[ ERR ] Not supported.")
+            return
         for entity in filter(lambda ent: ent._id in selected_ids, Universe.entities):
             # > Update
             print(f"\n\nWhisper on {entity}")
