@@ -1,5 +1,6 @@
+from copy import copy
 from enum import Enum, auto
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from imgui_bundle import imgui
 
@@ -10,6 +11,7 @@ from gui.tab_transcript import tab_transcript
 from typedef.dataset import (
     ALL_DATASETS,
 )
+from typedef.video import Video
 from universe import Universe
 from utils import *
 
@@ -58,8 +60,53 @@ def build_page(u: Universe):
     imgui.same_line()
     if len(__selected_ids) < 2:
         imgui.begin_disabled()
-    if imgui.button("Merge"):
-        ...
+    elif imgui.button("Merge"):
+        ents = [ent for ent in u.entities if ent._id in __selected_ids]
+
+        new_ent = Video(_id=uuid4(), file_hash=None, file_path=None, display_name="")
+        if len(ents) < 2:
+            print("[ Merge ] Err: must have at least 2 valid targets")
+        else:
+            for ent in ents:
+                if new_ent.file_hash is None and ent.file_hash is not None:
+                    new_ent.file_hash = ent.file_hash
+                if new_ent.file_path is None and ent.file_path is not None:
+                    new_ent.file_path = ent.file_path
+                if new_ent.display_name == "" and ent.display_name != "":
+                    new_ent.display_name = ent.display_name
+
+                if new_ent.ds_yt_content is None and ent.ds_yt_content is not None:
+                    new_ent.ds_yt_content = ent.ds_yt_content
+
+                if (
+                    new_ent.ds_yt_audience_retention is None
+                    and ent.ds_yt_audience_retention is not None
+                ):
+                    new_ent.ds_yt_audience_retention = ent.ds_yt_audience_retention
+
+                if (
+                    new_ent.ds_whisper_transcript is None
+                    and ent.ds_whisper_transcript is not None
+                ):
+                    new_ent.ds_whisper_transcript = ent.ds_whisper_transcript
+
+                if (
+                    new_ent.ds_transcript_stats is None
+                    and ent.ds_transcript_stats is not None
+                ):
+                    new_ent.ds_transcript_stats = ent.ds_transcript_stats
+
+                if (
+                    new_ent.ds_opencv_scene_stats is None
+                    and ent.ds_opencv_scene_stats is not None
+                ):
+                    new_ent.ds_opencv_scene_stats = ent.ds_opencv_scene_stats
+
+            for ent in ents:
+                u.entities.remove(ent)
+                
+            u.entities.append(new_ent)
+
     imgui.same_line()
     if len(__selected_ids) < 2:
         imgui.end_disabled()
