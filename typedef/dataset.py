@@ -57,7 +57,7 @@ class DatasetYoutubeContent(Dataset):
     views: int | None
     watch_time: float | None
     subscribers: int | None
-    average_view_duration: str | None
+    average_view_duration: float | None
     impressions: int | None
     impressions_click_through_rate: float | None
 
