@@ -33,7 +33,9 @@ def upsert_yt_content_csv(path: str, ptr_entities: list[Video]):
                 views=safe_cast(row.get("Views"), int, 0),
                 watch_time=safe_cast(row.get("Watch time (hours)"), float, 0.0),
                 subscribers=safe_cast(row.get("Subscribers"), int, 0),
-                average_view_duration=row.get("Average view duration"),
+                average_view_duration=safe_cast(
+                    row.get("Average view duration"), float, 0.0
+                ),
                 impressions=safe_cast(row.get("Impressions"), int, 0),
                 impressions_click_through_rate=safe_cast(
                     row.get("Impressions click-through rate (%)"), float, None

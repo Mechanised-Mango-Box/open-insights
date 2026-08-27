@@ -1,3 +1,6 @@
+import asyncio
+import time
+
 from imgui_bundle import imgui, immapp
 
 import gui.entity_management
@@ -6,7 +9,6 @@ import gui.model_analysis
 from universe import Universe
 
 __temp_selected_id = set()
-
 
 def build_ui(u: Universe):
     # imgui.show_demo_window()
@@ -22,17 +24,19 @@ def build_ui(u: Universe):
         imgui.end_tab_bar()
 
 
-def main():
+async def main():
     u: Universe = Universe()
 
-    immapp.run(
-        lambda: build_ui(u),
-        window_title="Open Insights",
-        window_size=(1920, 1080),
-        with_implot=True,
-        with_markdown=True,
+    await(
+        immapp.run_async(
+            lambda: build_ui(u),
+            window_title="Open Insights",
+            window_size=(1920, 1080),
+            with_implot=True,
+            with_markdown=True,
+        )
     )
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
