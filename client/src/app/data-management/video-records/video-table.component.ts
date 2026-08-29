@@ -1,0 +1,70 @@
+import { Component, effect, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
+import { OpfsService, VideoItem } from '../opfs.service';
+import { VideoDatabaseService } from './video-db.service';
+
+@Component({
+  selector: 'video-table',
+  standalone: true,
+  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatTableModule],
+  templateUrl: './video-table.component.html',
+})
+export class VideoTableComponent {
+  // opfsService = inject(OpfsService);
+  videoDatabaseService = inject(VideoDatabaseService);
+  // activeVideo: VideoItem | null = null;
+  dataSource = new MatTableDataSource<VideoRecord>([]);
+
+constructor() {
+    effect(() => {
+      const records = this.videoDatabaseService.videoRecords();
+      this.dataSource.data = records;
+    });
+  }
+
+  // async onFilesSelected(event: any) {
+  //   const files: FileList = event.target.files;
+  //   if (files && files.length > 0) {
+  //     await this.opfsService.uploadVideos(files);
+  //     event.target.value = ''; // Reset input so selecting the same files again triggers change
+  //   }
+  // }
+
+  // playVideo(video: VideoItem) {
+  //   this.activeVideo = video;
+  // }
+
+  // async deleteVideo(name: string) {
+  //   if (confirm(`Are you sure you want to delete ${name} from OPFS?`)) {
+  //     if (this.activeVideo?.name === name) {
+  //       this.activeVideo = null;
+  //     }
+  //     await this.opfsService.deleteVideo(name);
+  //   }
+  // }
+  // getSceneStats(names: string[]) {
+  //   startSceneWW(names);
+  // }
+  displayedColumns: string[] = [
+    'name',
+    'file-hash',
+    'file',
+    'youtube-content',
+    'youtube-audience-retention',
+    'transcript',
+    'scene-stats',
+    'actions',
+  ];
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+}
+
+const startSceneWW = (names: string[]) => {
+  console.log(`Starting WebWorker for ${names.length} items.`);
+};
