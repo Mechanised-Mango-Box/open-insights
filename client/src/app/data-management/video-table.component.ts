@@ -1,17 +1,17 @@
 import { Component, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OpfsService, VideoItem } from '../services/opfs.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
+import { OpfsService, VideoItem } from './opfs.service';
 
 @Component({
-  selector: 'app-video-manager',
+  selector: 'video-table',
   standalone: true,
   imports: [CommonModule, MatFormFieldModule, MatInputModule, MatTableModule],
-  templateUrl: './video-manager.component.html',
+  templateUrl: './video-table.component.html',
 })
-export class VideoManagerComponent {
+export class VideoTableComponent {
   opfsService = inject(OpfsService);
   activeVideo: VideoItem | null = null;
   dataSource = new MatTableDataSource<VideoItem>([]);
@@ -58,17 +58,4 @@ export class VideoManagerComponent {
 const startSceneWW = (names: string[]) => {
   console.log(`Starting WebWorker for ${names.length} items.`);
 
-  if (window.Worker) {
-    const w = new Worker(new URL('../workers/pyodide-scene-stats.worker.ts', import.meta.url), {
-      type: 'module',
-    });
-    w.postMessage(names);
-
-    w.onmessage = (ev) => {
-      console.log('Message received from worker' + ev.data);
-    };
-    
-  } else {
-    console.error('[ WebWorkers ] No supported.');
-  }
 };

@@ -54,13 +54,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "options": {
-            "prebundle": {
-              "exclude": [
-                "pyodide"
-              ]
-            }
-          },
+          "options": {},
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {

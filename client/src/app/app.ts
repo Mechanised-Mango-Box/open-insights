@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { ViewManager } from '../components/view-manager';
+import { ViewManager } from './views/view-manager.component';
 
 @Component({
   imports: [RouterOutlet, MatSlideToggleModule, ViewManager],
