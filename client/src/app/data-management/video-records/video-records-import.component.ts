@@ -1,12 +1,22 @@
 import { Component, inject, signal } from '@angular/core';
-import { VideoDatabaseService } from './video-db.service';
-
+import { VideoDatabaseService } from './video-database.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'video-records-import',
   template: `
-    <button (click)="insertNewEmpty()">Create Empty</button>
-    <button (click)="insertFromYoutubeContent()">Import From: Youtube Content</button>
+    <div class="import-actions">
+      <button mat-raised-button color="primary" (click)="insertNewEmpty()">
+        <mat-icon>add</mat-icon>
+        Create Empty
+      </button>
+      <button mat-raised-button color="accent" (click)="insertFromYoutubeContent()">
+        <mat-icon>add</mat-icon>
+        Import From: Youtube Content
+      </button>
+    </div>
   `,
+  imports: [MatIcon, MatButtonModule],
 })
 export class VideoRecordsImport {
   private dbService = inject(VideoDatabaseService);

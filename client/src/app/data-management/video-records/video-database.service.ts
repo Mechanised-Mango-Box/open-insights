@@ -21,7 +21,7 @@ export class VideoDatabaseService {
     this.loadInitialVideos();
   }
 
-  private async initDB() {
+  private initDB = async () => {
     return openDB<VideoDBSchema>('video-library-db', 1, {
       upgrade(db) {
         const store = db.createObjectStore('videos', {
@@ -31,15 +31,15 @@ export class VideoDatabaseService {
         store.createIndex('by_file_hash', 'file_hash', { unique: false });
       },
     });
-  }
-  private async loadInitialVideos() {
+  };
+  private loadInitialVideos = async () => {
     try {
       const records = await this.getAllVideos();
       this.videoRecords.set(records);
     } catch (error) {
       console.error('Failed to load initial videos into signal:', error);
     }
-  }
+  };
   async addVideo(record: Omit<VideoRecord, 'id'>): Promise<number> {
     const db = await this.dbPromise;
     // Insert into IndexedDB
@@ -71,4 +71,20 @@ export class VideoDatabaseService {
     // Remove the deleted record from the signal reactively
     this.videoRecords.update((records) => records.filter((v) => v.id !== id));
   }
+
+  updateVideo = async (record: VideoRecord): Promise<number> => {
+    if (!record.id) {
+      throw new Error('Cannot update a video record without an ID.');
+    }
+
+    const db = await this.dbPromise;
+
+    // db.put updates the existing record with the same primary key 'id'
+    const updatedId = (await db.put('videos', record)) as number;
+
+    // Update the signal reactively so components re-render automatically
+    this.videoRecords.update((records) => records.map((v) => (v.id === record.id ? record : v)));
+
+    return updatedId;
+  };
 }

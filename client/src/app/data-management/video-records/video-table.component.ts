@@ -4,21 +4,25 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { OpfsService, VideoItem } from '../opfs.service';
-import { VideoDatabaseService } from './video-db.service';
+import { VideoDatabaseService } from './video-database.service';
+import { MatDialog } from '@angular/material/dialog';
+import { EditVideoDialogComponent } from './edit-video-dialog.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'video-table',
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatTableModule],
+  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatTableModule,MatButtonModule],
   templateUrl: './video-table.component.html',
 })
 export class VideoTableComponent {
   // opfsService = inject(OpfsService);
+  private dialog = inject(MatDialog);
   videoDatabaseService = inject(VideoDatabaseService);
   // activeVideo: VideoItem | null = null;
   dataSource = new MatTableDataSource<VideoRecord>([]);
 
-constructor() {
+  constructor() {
     effect(() => {
       const records = this.videoDatabaseService.videoRecords();
       this.dataSource.data = records;
@@ -48,6 +52,24 @@ constructor() {
   // getSceneStats(names: string[]) {
   //   startSceneWW(names);
   // }
+
+  openEditMenu = (videoRecord: VideoRecord) => {
+    const dialogRef = this.dialog.open(EditVideoDialogComponent, {
+      data: videoRecord, // Pass the record data to the popup
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log('Updated record data:', result);
+        try {
+          this.videoDatabaseService.updateVideo(result).then();
+          console.log('Video updated successfully!');
+        } catch (error) {
+          console.error('Failed to update video:', error);
+        }
+      }
+    });
+  };
   displayedColumns: string[] = [
     'name',
     'file-hash',
