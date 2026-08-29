@@ -8,11 +8,12 @@ import { VideoDatabaseService } from './video-database.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditVideoDialogComponent } from './edit-video-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'video-table',
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatTableModule,MatButtonModule],
+  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatTableModule, MatButtonModule, MatIcon],
   templateUrl: './video-table.component.html',
 })
 export class VideoTableComponent {
@@ -72,9 +73,9 @@ export class VideoTableComponent {
   };
   displayedColumns: string[] = [
     'name',
-    'file-hash',
+    'youtube-content-id',
     'file',
-    'youtube-content',
+    'youtube-content-report',
     'youtube-audience-retention',
     'transcript',
     'scene-stats',
@@ -85,6 +86,9 @@ export class VideoTableComponent {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
+  getFileDisplayValue = (element: VideoRecord): string | null =>
+    element.file_handle?.name || element.file_hash || null;
 }
 
 const startSceneWW = (names: string[]) => {

@@ -4,7 +4,7 @@ type VideoRecord = {
   file_hash?: string;
   youtube_content_id?: string;
 
-  file_handle?: string;
+  file_handle?: File;
 
   ds_youtubeContent?: YoutubeContent;
   ds_youtubeAudienceRetention?: YoutubeAudienceRetention;

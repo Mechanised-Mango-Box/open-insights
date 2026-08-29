@@ -25,7 +25,7 @@ export class VideoRecordsImport {
 
   async insertNewEmpty() {
     const sampleRecord: VideoRecord = {
-      sort_name: 'New Record',
+      sort_name: 'Untitled New Record',
     };
 
     try {
