@@ -35,26 +35,76 @@ import { MatDividerModule, MatDivider } from '@angular/material/divider';
         <input matInput [(ngModel)]="localData.youtube_content_id" />
       </mat-form-field>
 
-      <div class="file-upload-container" style="margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
+      <div
+        class="file-upload-container"
+        style="margin-bottom: 16px; display: flex; align-items: center; gap: 12px;"
+      >
         <button mat-stroked-button color="primary" (click)="fileInput.click()">
           <mat-icon>upload</mat-icon> File
         </button>
-        <span class="file-name">{{ selectedFileName || 'No file chosen' }}</span>
-        
-        @if (selectedFile) {
+        <span class="file-name">{{ localData.file_handle?.name }}</span>
+
+        @if (localData.file_handle) {
           <button mat-icon-button color="warn" (click)="clearFile()" title="Clear file">
             <mat-icon>close</mat-icon>
           </button>
         }
-        
+
         <input type="file" #fileInput style="display: none" (change)="onFileSelected($event)" />
       </div>
 
       <mat-form-field appearance="outline">
         <mat-label>Hash</mat-label>
-        <input matInput [(ngModel)]="localData.file_hash" [disabled]="!!selectedFile" />
+        <input matInput [(ngModel)]="localData.file_hash" [disabled]="!!localData.file_handle" />
       </mat-form-field>
     </mat-dialog-content>
+
+    <div
+      class="file-upload-container"
+      style="margin-bottom: 16px; display: flex; align-items: center; gap: 12px;"
+    >
+      <button mat-stroked-button color="primary" (click)="fileInput.click()">
+        <mat-icon>upload</mat-icon> YouTube Content Report
+      </button>
+      <span class="file-name">{{ localData.file_handle?.name || 'No file chosen' }}</span>
+
+      @if (localData.file_handle) {
+        <button mat-icon-button color="warn" (click)="clearFile()" title="Clear file">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+
+      <input
+        type="file"
+        #fileInput
+        style="display: none"
+        (change)="onYoutubeContentReport($event)"
+      />
+    </div>
+    <div
+      class="file-upload-container"
+      style="margin-bottom: 16px; display: flex; align-items: center; gap: 12px;"
+    >
+      <button mat-stroked-button color="primary" (click)="fileInput.click()">
+        <mat-icon>upload</mat-icon> YouTube Content Report
+      </button>
+      <span class="file-name">{{ localData.file_handle?.name || 'No file chosen' }}</span>
+
+      @if (localData.file_handle) {
+        <button mat-icon-button color="warn" (click)="clearFile()" title="Clear file">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+
+      <input
+        type="file"
+        #fileInput
+        style="display: none"
+        (change)="onYoutubeAudienceRetention($event)"
+      />
+    </div>
+
+    <mat-divider /><br />
     <mat-dialog-actions align="end">
       <button mat-button (click)="onCancel()">Cancel</button>
       <button mat-raised-button color="primary" (click)="onSave()">Save</button>
@@ -66,25 +116,43 @@ export class EditVideoDialogComponent {
   readonly data = inject<VideoRecord>(MAT_DIALOG_DATA);
 
   localData: VideoRecord = { ...this.data };
-  selectedFileName: string = '';
-  selectedFile: File | null = null;
+  //   selectedFileName: string = '';
+  //   selectedFile: File | null = null;
 
-  onFileSelected(event: Event): void {
+  onFileSelected = (event: Event): void => {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
-      this.selectedFileName = this.selectedFile.name;
-      
+      //   this.selectedFile = input.files[0];
+      //   this.selectedFileName = this.selectedFile.name;
+      //   this.localData.file_handle = this.selectedFile;
+      this.localData.file_handle = input.files[0];
       // Clear out the existing hash value since a new file will replace it upon saving
-      this.localData.file_hash = '';
+      this.localData.file_hash = undefined;
     }
-  }
+  };
 
+  onYoutubeContentReport = (event: Event): void => {
+    // const input = event.target as HTMLInputElement;
+    // if (input.files && input.files.length > 0) {
+    //   this.selectedFile = input.files[0];
+    //   this.selectedFileName = this.selectedFile.name;
+    //   // Clear out the existing hash value since a new file will replace it upon saving
+    //   this.localData.file_hash = undefined;
+    // }
+  };
+  onYoutubeAudienceRetention = (event: Event): void => {
+    // const input = event.target as HTMLInputElement;
+    // if (input.files && input.files.length > 0) {
+    //   this.selectedFile = input.files[0];
+    //   this.selectedFileName = this.selectedFile.name;
+    //   // Clear out the existing hash value since a new file will replace it upon saving
+    //   this.localData.file_hash = undefined;
+    // }
+  };
   clearFile(): void {
-    this.selectedFile = null;
-    this.selectedFileName = '';
-    // Restore original hash or keep it blank depending on your workflow
-    this.localData.file_hash = this.data.file_hash; 
+    // this.selectedFile = null;
+    // this.selectedFileName = '';
+    this.localData.file_handle = undefined;
   }
 
   onCancel(): void {
@@ -92,9 +160,6 @@ export class EditVideoDialogComponent {
   }
 
   onSave(): void {
-    // Pass back localData along with `selectedFile` if your parent component needs to process the binary upload/hashing
-    this.localData.file_handle = this.selectedFile ?? undefined
-
     this.dialogRef.close({
       ...this.localData,
     });

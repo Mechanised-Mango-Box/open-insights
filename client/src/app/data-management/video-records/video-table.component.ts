@@ -13,7 +13,7 @@ import { MatIcon } from "@angular/material/icon";
 @Component({
   selector: 'video-table',
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatTableModule, MatButtonModule, MatIcon],
+  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatTableModule, MatButtonModule],
   templateUrl: './video-table.component.html',
 })
 export class VideoTableComponent {
