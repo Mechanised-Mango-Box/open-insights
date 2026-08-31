@@ -17,6 +17,11 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="file-hash">
+      <th mat-header-cell *matHeaderCellDef>File Hash</th>
+      <td mat-cell *matCellDef="let element">{{ element.file_hash || 'N/a' }}</td>
+    </ng-container>
+
     <ng-container matColumnDef="youtube-content-report">
       <th mat-header-cell *matHeaderCellDef>YouTube Content Report</th>
       <td mat-cell *matCellDef="let element">

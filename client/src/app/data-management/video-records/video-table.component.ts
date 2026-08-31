@@ -75,6 +75,7 @@ export class VideoTableComponent {
   displayedColumns: string[] = [
     'name',
     'file',
+    'file-hash',
     'youtube-content-report',
     'youtube-audience-retention',
     'transcript',
