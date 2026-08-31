@@ -17,13 +17,11 @@
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="youtube-content-id">
-      <th mat-header-cell *matHeaderCellDef>YouTube Content ID</th>
-      <td mat-cell *matCellDef="let element">{{ element.youtube_content_id}}</td>
-    </ng-container>
     <ng-container matColumnDef="youtube-content-report">
       <th mat-header-cell *matHeaderCellDef>YouTube Content Report</th>
-      <td mat-cell *matCellDef="let element">{{ element.youtube_content_id? "Yes": null}}</td>
+      <td mat-cell *matCellDef="let element">
+        {{ element.ds_youtubeContent ? (element.ds_youtubeContent.content?.trim() || 'N/a') : null }}
+      </td>
     </ng-container>
     <ng-container matColumnDef="youtube-audience-retention">
       <th mat-header-cell *matHeaderCellDef>YouTube Audience Retention</th>

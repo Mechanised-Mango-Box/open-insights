@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EditVideoDialogComponent } from './edit-video-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from "@angular/material/icon";
+import { VideoRecord } from './VideoRecord';
 
 @Component({
   selector: 'video-table',
@@ -73,7 +74,6 @@ export class VideoTableComponent {
   };
   displayedColumns: string[] = [
     'name',
-    'youtube-content-id',
     'file',
     'youtube-content-report',
     'youtube-audience-retention',
@@ -90,7 +90,3 @@ export class VideoTableComponent {
   getFileDisplayValue = (element: VideoRecord): string | null =>
     element.file_handle?.name || element.file_hash || null;
 }
-
-const startSceneWW = (names: string[]) => {
-  console.log(`Starting WebWorker for ${names.length} items.`);
-};

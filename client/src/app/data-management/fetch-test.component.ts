@@ -5,6 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { calculateSha256 } from './video-records/VideoRecord';
 
 const SERVER_URL = 'http://localhost:5000';
 
@@ -50,17 +51,8 @@ export class FetchTestComponent {
       this.selectedFile = file;
       this.selectedFileName = file.name;
       this.selectedFileHash = null; // Clear while waiting
-      this.selectedFileHash = await this.calculateSha256(file);
+      this.selectedFileHash = await calculateSha256(file);
     }
-  };
-  private calculateSha256 = async (file: File): Promise<string> => {
-    const buffer = await file.arrayBuffer();
-    const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
-
-    // Convert ArrayBuffer to Hex string
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
   };
   onGetRecord = () => {
     const url = SERVER_URL + '/api/get_record';
