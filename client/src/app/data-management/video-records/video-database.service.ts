@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
+import { VideoRecord } from './VideoRecord';
 
 interface VideoDBSchema extends DBSchema {
   videos: {

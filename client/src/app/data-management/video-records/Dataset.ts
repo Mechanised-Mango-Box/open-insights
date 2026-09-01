@@ -41,6 +41,11 @@ export const createEmptyTranscript = (): Transcript => ({
   count_words: 0,
 });
 
+export const createEmptyYoutubeAudienceRetention = (): YoutubeAudienceRetention => ({
+  video_position: [],
+  absolute_audience_retention: [],
+});
+
 export const createEmptyYoutubeContent = (): YoutubeContent => ({
   content: null,
   engaged_views: null,

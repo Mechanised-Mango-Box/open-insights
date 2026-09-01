@@ -6,7 +6,9 @@ from pathlib import Path
 from typing import Literal, cast
 
 import cv2
+import pandas as pd
 import whisper
+from analysis import compute_correlations, compute_histogram, compute_loess
 from flask import Flask, g, jsonify, redirect, request
 from flask_cors import CORS
 
@@ -211,6 +213,43 @@ def __route_create_video():
     file.save(file_path)
     insert_file(file_hash, file_ext)
     return jsonify({"file_hash": file_hash, "filename": file_name}), 201, headers
+
+
+ANALYSIS_FEATURE_COLUMNS = ["duration_mins", "wpm", "scene_change_rate", "word_count"]
+ANALYSIS_TARGET_COLUMN = "average_percentage_viewed"
+
+
+@app.post("/api/analysis")
+def __route_analysis():
+    rows = request.get_json(silent=True)
+    if not isinstance(rows, list) or len(rows) < 2:
+        return jsonify(
+            {"err": "Request body must be a JSON array of at least 2 feature rows."}
+        ), 400
+
+    required = [*ANALYSIS_FEATURE_COLUMNS, ANALYSIS_TARGET_COLUMN]
+    for i, row in enumerate(rows):
+        missing = [key for key in required if not isinstance(row, dict) or key not in row]
+        if missing:
+            return jsonify({"err": f"Row {i} is missing required field(s): {', '.join(missing)}"}), 400
+
+    df = pd.DataFrame(rows)
+
+    histograms = {}
+    for feature in ANALYSIS_FEATURE_COLUMNS:
+        bins, counts = compute_histogram(df[feature].to_numpy())
+        histograms[feature] = {"bins": bins, "counts": counts}
+
+    correlations = compute_correlations(df, ANALYSIS_FEATURE_COLUMNS, ANALYSIS_TARGET_COLUMN)
+
+    loess = {}
+    for feature in ANALYSIS_FEATURE_COLUMNS:
+        x_smooth, y_smooth = compute_loess(
+            df[feature].to_numpy(), df[ANALYSIS_TARGET_COLUMN].to_numpy()
+        )
+        loess[feature] = {"x": x_smooth.tolist(), "y": y_smooth.tolist()}
+
+    return jsonify({"histograms": histograms, "correlations": correlations, "loess": loess})
 
 
 # MARK: Operations
