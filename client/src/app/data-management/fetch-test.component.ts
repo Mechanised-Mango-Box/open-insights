@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -55,40 +55,38 @@ export class FetchTestComponent {
     }
   };
   onGetRecord = () => {
-    const url = SERVER_URL + '/api/get_record';
-
     if (this.selectedFileHash == null) {
       console.log('No SHA256 provided');
       return;
     }
-    let params = new HttpParams().set('file_hash', this.selectedFileHash);
+    const base = `${SERVER_URL}/api/videos/${this.selectedFileHash}`;
 
-    params = params.set('transcript', 'true');
-    params = params.set('scene_stats', 'true');
-
-    this.http.get(url, { params }).subscribe({
+    this.http.get(`${base}/transcript`).subscribe({
       next: (response) => {
-        console.log(`Success!`, response);
+        console.log(`Transcript success!`, response);
       },
       error: (error) => {
-        console.error(`Failed:`, error);
+        console.error(`Transcript failed:`, error);
+      },
+    });
+    this.http.get(`${base}/scene_stats`).subscribe({
+      next: (response) => {
+        console.log(`Scene stats success!`, response);
+      },
+      error: (error) => {
+        console.error(`Scene stats failed:`, error);
       },
     });
   };
   onHasVideo = () => {
-    const url = SERVER_URL + '/api/has_video';
-
     if (this.selectedFileHash == null) {
       console.log('No SHA256 provided');
       return;
     }
 
-    const options = {
-      params: new HttpParams().set('file_hash', this.selectedFileHash),
-    };
+    const url = `${SERVER_URL}/api/videos/${this.selectedFileHash}`;
 
-    // 3. Pass options as the second argument to http.get()
-    this.http.get(url, options).subscribe({
+    this.http.get(url).subscribe({
       next: (response) => {
         console.log(`Success! `, response);
       },
@@ -98,7 +96,7 @@ export class FetchTestComponent {
     });
   };
   onUploadVideo = () => {
-    const url = SERVER_URL + '/api/upload_video';
+    const url = SERVER_URL + '/api/videos';
     const formData = new FormData();
 
     if (this.selectedFile) {
