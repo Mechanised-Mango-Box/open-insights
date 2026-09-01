@@ -5,6 +5,7 @@ import { VideoTableComponent } from '../data-management/video-records/video-tabl
 import { VideoRecordsImport } from '../data-management/video-records/video-records-import.component';
 import { ExportRecordsComponent } from '../data-management/video-records/export-records.component';
 import { AnalysisComponent } from '../data-management/analysis/analysis.component';
+import { ServerSettingsComponent } from '../data-management/server-settings.component';
 
 /**
  * @title Basic use of the tab group
@@ -23,6 +24,7 @@ import { AnalysisComponent } from '../data-management/analysis/analysis.componen
         <video-table />
       </mat-tab>
       <mat-tab label="Analysis"><analysis /></mat-tab>
+      <mat-tab label="Settings"><server-settings /></mat-tab>
     </mat-tab-group>
   `,
   imports: [
@@ -32,6 +34,7 @@ import { AnalysisComponent } from '../data-management/analysis/analysis.componen
     VideoRecordsImport,
     ExportRecordsComponent,
     AnalysisComponent,
+    ServerSettingsComponent,
   ],
 })
 export class ViewManager {}

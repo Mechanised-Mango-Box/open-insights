@@ -68,7 +68,15 @@ app = Flask(__name__)
 # Allow angular - TBD
 CORS(
     app,
-    resources={r"/api/*": {"origins": ["http://localhost:4200", "http://localhost"]}},
+    resources={
+        r"/api/*": {
+            "origins": [
+                "http://localhost:4200",
+                "http://localhost",
+                "https://mechanised-mango-box.github.io",
+            ]
+        }
+    },
 )
 
 UPLOAD_FOLDER = "../data/local/uploads"

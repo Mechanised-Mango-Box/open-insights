@@ -6,8 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { calculateSha256 } from './video-records/VideoRecord';
-
-const SERVER_URL = 'http://localhost:5000';
+import { ServerConfigService } from './server-config.service';
 
 @Component({
   selector: 'fetch-test',
@@ -40,6 +39,7 @@ const SERVER_URL = 'http://localhost:5000';
 export class FetchTestComponent {
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
+  private serverConfig = inject(ServerConfigService);
 
   selectedFile: File | null = null;
   selectedFileName: string = '';
@@ -59,7 +59,7 @@ export class FetchTestComponent {
       console.log('No SHA256 provided');
       return;
     }
-    const base = `${SERVER_URL}/api/videos/${this.selectedFileHash}`;
+    const base = `${this.serverConfig.serverUrl()}/api/videos/${this.selectedFileHash}`;
 
     this.http.get(`${base}/transcript`).subscribe({
       next: (response) => {
@@ -84,7 +84,7 @@ export class FetchTestComponent {
       return;
     }
 
-    const url = `${SERVER_URL}/api/videos/${this.selectedFileHash}`;
+    const url = `${this.serverConfig.serverUrl()}/api/videos/${this.selectedFileHash}`;
 
     this.http.get(url).subscribe({
       next: (response) => {
@@ -96,7 +96,7 @@ export class FetchTestComponent {
     });
   };
   onUploadVideo = () => {
-    const url = SERVER_URL + '/api/videos';
+    const url = this.serverConfig.serverUrl() + '/api/videos';
     const formData = new FormData();
 
     if (this.selectedFile) {
