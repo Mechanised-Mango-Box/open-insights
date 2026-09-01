@@ -1,0 +1,318 @@
+<h1 mat-dialog-title>Edit Video Record</h1>
+<mat-divider /><br />
+<mat-dialog-content>
+  <mat-form-field appearance="outline">
+    <mat-label>Sorting Name</mat-label>
+    <input matInput [(ngModel)]="localData.sort_name" />
+  </mat-form-field>
+
+  <br />
+
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Video File</mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="file-upload-container" style="margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
+        <button mat-stroked-button color="primary" (click)="fileInput.click()">
+          <mat-icon>upload</mat-icon>Upload
+        </button>
+        <span class="file-name">{{ localData.file_handle?.name || 'No file chosen' }}</span>
+
+        @if (localData.file_handle) {
+        <button mat-icon-button color="warn" (click)="clearFile()" title="Clear file">
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+
+        <input type="file" #fileInput style="display: none" (change)="onVideoFileSelected($event)" />
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Hash</mat-label>
+        <input matInput [(ngModel)]="localData.file_hash" [disabled]="!!localData.file_handle" />
+      </mat-form-field>
+
+      <br />
+      <button
+        mat-stroked-button
+        color="primary"
+        [disabled]="uploadPending()"
+        (click)="uploadToServer()"
+      >
+        {{ uploadPending() ? 'Uploading...' : 'Upload to Server' }}
+      </button>
+      @if (uploadError()) {
+      <p class="error-text">{{ uploadError() }}</p>
+      }
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header> <mat-panel-title>Transcript Analysis</mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <button
+        mat-stroked-button
+        color="primary"
+        [disabled]="transcriptPending()"
+        (click)="computeTranscriptViaServer()"
+      >
+        {{ transcriptPending() ? 'Computing...' : 'Compute via Server (Whisper)' }}
+      </button>
+      @if (transcriptError()) {
+      <p class="error-text">{{ transcriptError() }}</p>
+      }
+      <br />
+
+      @if (localData.ds_transcript) {
+      <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label>Transcript Text</mat-label>
+        <textarea
+          matInput
+          rows="8"
+          [ngModel]="localData.ds_transcript.text"
+          (ngModelChange)="onTranscriptTextChanged($event)"
+        ></textarea>
+      </mat-form-field>
+      <br />
+
+      <mat-form-field appearance="outline">
+        <mat-label>Character Count</mat-label>
+        <input matInput type="number" [value]="localData.ds_transcript.count_chars" disabled />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Word Count</mat-label>
+        <input matInput type="number" [value]="localData.ds_transcript.count_words" disabled />
+      </mat-form-field>
+
+      <mat-divider /><button mat-button (click)="localData.ds_transcript = undefined">Clear</button>
+      } @else {
+      <button mat-button (click)="localData.ds_transcript = createEmptyTranscript()">Create Empty</button>
+      <button mat-stroked-button color="primary" (click)="transcriptFileInput.click()">
+        <mat-icon>upload</mat-icon>Upload File
+      </button>
+      <input
+        type="file"
+        #transcriptFileInput
+        style="display: none"
+        accept=".txt,.srt,.vtt"
+        (change)="onTranscriptFileSelected($event)"
+      />
+      }
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header> <mat-panel-title>Scene Analysis</mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <button
+        mat-stroked-button
+        color="primary"
+        [disabled]="sceneStatsPending()"
+        (click)="computeSceneStatsViaServer()"
+      >
+        {{ sceneStatsPending() ? 'Computing...' : 'Compute via Server (OpenCV)' }}
+      </button>
+      @if (sceneStatsError()) {
+      <p class="error-text">{{ sceneStatsError() }}</p>
+      }
+      <br />
+
+      @if (localData.ds_sceneStats) {
+      <mat-form-field appearance="outline">
+        <mat-label>Duration (Secs)</mat-label>
+        <input matInput type="number" [value]="localData.ds_sceneStats.duration_secs" disabled />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Scenes</mat-label>
+        <input matInput type="number" [value]="localData.ds_sceneStats.scenes" disabled />
+      </mat-form-field>
+
+      <mat-divider /><button mat-button (click)="localData.ds_sceneStats = undefined">
+        Clear
+      </button>
+      } @else {
+      <p>Not yet computed.</p>
+      }
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header><mat-panel-title>Youtube Content Report</mat-panel-title></mat-expansion-panel-header>
+      @if (localData.ds_youtubeContent) {
+      <!-- Content ID -->
+      <mat-form-field appearance="outline">
+        <mat-label>Content ID</mat-label>
+        <input matInput [(ngModel)]="localData.ds_youtubeContent.content" />
+      </mat-form-field>
+      <br>
+
+      <!-- Engaged Views -->
+      <mat-form-field appearance="outline">
+        <mat-label>Engaged Views</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.engaged_views" />
+      </mat-form-field>
+      <br>
+
+      <!-- Average % Viewed -->
+      <mat-form-field appearance="outline">
+        <mat-label>Average % Viewed</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.average_percentage_viewed" />
+      </mat-form-field>
+      <br>
+
+      <!-- Stayed to Watch -->
+      <mat-form-field appearance="outline">
+        <mat-label>Stayed to Watch</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.stayed_to_watch" />
+      </mat-form-field>
+      <br>
+
+      <!-- Unique Viewers -->
+      <mat-form-field appearance="outline">
+        <mat-label>Unique Viewers</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.unique_viewers" />
+      </mat-form-field>
+      <br>
+
+      <!-- Unique Reach -->
+      <mat-form-field appearance="outline">
+        <mat-label>Unique Reach</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.unique_reach" />
+      </mat-form-field>
+      <br>
+
+      <!-- Average Views Per Viewer -->
+      <mat-form-field appearance="outline">
+        <mat-label>Average Views Per Viewer</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.average_views_per_viewer" />
+      </mat-form-field>
+      <br>
+
+      <!-- New Viewers -->
+      <mat-form-field appearance="outline">
+        <mat-label>New Viewers</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.new_viewers" />
+      </mat-form-field>
+      <br>
+
+      <!-- Regular Viewers -->
+      <mat-form-field appearance="outline">
+        <mat-label>Regular Viewers</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.regular_viewers" />
+      </mat-form-field>
+      <br>
+
+      <!-- Casual Viewers -->
+      <mat-form-field appearance="outline">
+        <mat-label>Casual Viewers</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.casual_viewers" />
+      </mat-form-field>
+      <br>
+
+      <!-- Returning Viewers -->
+      <mat-form-field appearance="outline">
+        <mat-label>Returning Viewers</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.returning_viewers" />
+      </mat-form-field>
+      <br>
+
+      <!-- Views -->
+      <mat-form-field appearance="outline">
+        <mat-label>Views</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.views" />
+      </mat-form-field>
+      <br>
+
+      <!-- Watch Time Hours -->
+      <mat-form-field appearance="outline">
+        <mat-label>Watch Time (Hours)</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.watch_time_hours" />
+      </mat-form-field>
+      <br>
+
+      <!-- Subscribers -->
+      <mat-form-field appearance="outline">
+        <mat-label>Subscribers Gained/Lost</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.subscribers" />
+      </mat-form-field>
+      <br>
+
+      <!-- Average View Duration (Secs) -->
+      <mat-form-field appearance="outline">
+        <mat-label>Avg View Duration (Secs)</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.average_view_duration_secs" />
+      </mat-form-field>
+      <br>
+
+      <!-- Impressions -->
+      <mat-form-field appearance="outline">
+        <mat-label>Impressions</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.impressions" />
+      </mat-form-field>
+      <br>
+
+      <!-- Impressions Click-Through Rate -->
+      <mat-form-field appearance="outline">
+        <mat-label>Impressions CTR</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.impressions_click_through_rate" />
+      </mat-form-field>
+
+      <mat-divider /><button mat-button (click)="localData.ds_youtubeContent = undefined ">Clear</button>
+      }
+      @else {
+      <button mat-button (click)="localData.ds_youtubeContent = createEmptyYoutubeContent()">
+        Create Empty
+      </button>
+      <button mat-button (click)="contentCsvInput.click()">From CSV</button>
+      <input
+        type="file"
+        #contentCsvInput
+        style="display: none"
+        accept=".csv"
+        (change)="onYoutubeContentReport($event)"
+      />
+      }
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header> <mat-panel-title>Youtube Audience Retention Report</mat-panel-title>
+      </mat-expansion-panel-header>
+      @if (localData.ds_youtubeAudienceRetention) {
+      <p>{{ localData.ds_youtubeAudienceRetention.video_position.length }} data point(s).</p>
+      <mat-divider /><button
+        mat-button
+        (click)="localData.ds_youtubeAudienceRetention = undefined"
+      >
+        Clear
+      </button>
+      } @else {
+      <button
+        mat-button
+        (click)="localData.ds_youtubeAudienceRetention = createEmptyYoutubeAudienceRetention()"
+      >
+        Create Empty
+      </button>
+      <button mat-stroked-button color="primary" (click)="retentionCsvInput.click()">
+        <mat-icon>upload</mat-icon>Upload CSV
+      </button>
+      <input
+        type="file"
+        #retentionCsvInput
+        style="display: none"
+        accept=".csv"
+        (change)="onYoutubeAudienceRetention($event)"
+      />
+      }
+    </mat-expansion-panel>
+  </mat-accordion>
+</mat-dialog-content>
+
+
+
+<mat-divider /><br />
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSave()">Save</button>
+</mat-dialog-actions>
