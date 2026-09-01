@@ -1,0 +1,31 @@
+<h1 mat-dialog-title>Merge {{ data.length }} Records</h1>
+<mat-divider /><br />
+<mat-dialog-content>
+  @if (preview.conflicts.length === 0) {
+  <p>No conflicts — all fields will merge automatically into one new record.</p>
+  } @else {
+  <p>Some fields differ between the selected records. Choose which value to keep for each:</p>
+
+  @for (conflict of preview.conflicts; track conflict.key) {
+  <div class="merge-conflict" style="margin-bottom: 16px;">
+    <strong>{{ conflict.label }}</strong>
+    <mat-radio-group style="display: flex; flex-direction: column;">
+      @for (option of conflict.options; track option.value) {
+      <mat-radio-button
+        [checked]="isSelected(conflict.key, option)"
+        (change)="select(conflict.key, option)"
+      >
+        {{ conflict.describe(option.value) }} (from {{ option.sourceLabel }})
+      </mat-radio-button>
+      }
+    </mat-radio-group>
+  </div>
+  }
+  }
+</mat-dialog-content>
+
+<mat-divider /><br />
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onMerge()">Merge</button>
+</mat-dialog-actions>

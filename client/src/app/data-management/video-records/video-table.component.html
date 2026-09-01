@@ -4,7 +4,50 @@
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input />
   </mat-form-field>
 
+  <div class="bulk-actions" style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+    <span>{{ selectedCount }} selected</span>
+    <button
+      mat-stroked-button
+      color="warn"
+      [disabled]="isSelectionEmpty || bulkActionPending()"
+      (click)="deleteSelected()"
+    >
+      Delete Selected
+    </button>
+    <button
+      mat-stroked-button
+      [disabled]="isSelectionEmpty || bulkActionPending()"
+      (click)="exportSelected()"
+    >
+      Export Selected
+    </button>
+    <button
+      mat-stroked-button
+      [disabled]="selectedCount < 2 || bulkActionPending()"
+      (click)="mergeSelected()"
+    >
+      Merge Selected
+    </button>
+  </div>
+
   <table mat-table [dataSource]="dataSource" class="mat-shadow-2">
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox
+          [checked]="isAllSelected()"
+          [indeterminate]="isSomeSelected()"
+          (change)="masterToggle()"
+        ></mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <mat-checkbox
+          [checked]="selection.isSelected(element)"
+          (click)="$event.stopPropagation()"
+          (change)="selection.toggle(element)"
+        ></mat-checkbox>
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Name</th>
       <td mat-cell *matCellDef="let element"> {{ element.sort_name }} </td>
@@ -19,7 +62,20 @@
 
     <ng-container matColumnDef="file-hash">
       <th mat-header-cell *matHeaderCellDef>File Hash</th>
-      <td mat-cell *matCellDef="let element">{{ element.file_hash || 'N/a' }}</td>
+      <td mat-cell *matCellDef="let element">
+        @if (element.file_hash) {
+        <button
+          mat-icon-button
+          class="server-status"
+          [ngClass]="getServerStatusIcon(element)?.cssClass"
+          [title]="getServerStatusIcon(element)?.label"
+          (click)="checkServerStatus(element.file_hash)"
+        >
+          <mat-icon>{{ getServerStatusIcon(element)?.icon }}</mat-icon>
+        </button>
+        {{ element.file_hash }}
+        }
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="youtube-content-report">

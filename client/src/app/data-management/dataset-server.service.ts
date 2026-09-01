@@ -21,6 +21,17 @@ export type AnalysisResult = {
   loess: Record<string, { x: number[]; y: number[] }>;
 };
 
+// The server computes transcript/scene_stats asynchronously: a GET returns
+// this shape immediately, and the caller polls the same URL until the
+// dataset reaches a terminal ('complete' or 'failed') state.
+type DatasetStatusResponse<T> =
+  | { status: 'processing' }
+  | { status: 'failed'; error: string }
+  | ({ status: 'complete' } & T);
+
+const DATASET_POLL_INTERVAL_MS = 1500;
+const DATASET_POLL_TIMEOUT_MS = 10 * 60 * 1000;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -43,19 +54,32 @@ export class DatasetServerService {
   }
 
   getTranscript(fileHash: string): Promise<Transcript> {
-    return firstValueFrom(
-      this.http.get<Transcript>(
-        `${this.serverConfig.serverUrl()}/api/videos/${fileHash}/transcript`,
-      ),
+    return this.pollDataset<Transcript>(
+      `${this.serverConfig.serverUrl()}/api/videos/${fileHash}/transcript`,
     );
   }
 
   getSceneStats(fileHash: string): Promise<SceneStats> {
-    return firstValueFrom(
-      this.http.get<SceneStats>(
-        `${this.serverConfig.serverUrl()}/api/videos/${fileHash}/scene_stats`,
-      ),
+    return this.pollDataset<SceneStats>(
+      `${this.serverConfig.serverUrl()}/api/videos/${fileHash}/scene_stats`,
     );
+  }
+
+  private async pollDataset<T>(url: string): Promise<T> {
+    const deadline = Date.now() + DATASET_POLL_TIMEOUT_MS;
+
+    let result = await firstValueFrom(this.http.get<DatasetStatusResponse<T>>(url));
+    while (result.status === 'processing') {
+      if (Date.now() > deadline) {
+        throw new Error('Timed out waiting for dataset generation to complete.');
+      }
+      await new Promise((resolve) => setTimeout(resolve, DATASET_POLL_INTERVAL_MS));
+      result = await firstValueFrom(this.http.get<DatasetStatusResponse<T>>(url));
+    }
+    if (result.status === 'failed') {
+      throw new Error(result.error);
+    }
+    return result;
   }
 
   runAnalysis(rows: AnalysisFeatureRow[]): Promise<AnalysisResult> {
