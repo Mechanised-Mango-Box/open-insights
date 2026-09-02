@@ -176,9 +176,6 @@
       <th mat-header-cell *matHeaderCellDef>Actions</th>
       <td mat-cell *matCellDef="let element">
         <button mat-stroked-button (click)="openEditMenu(element)">Edit</button>
-        <!-- <button (click)="playVideo(element)">Play</button>
-        <button class="delete" (click)="deleteVideo(element.name)">Delete</button>
-        <button (click)="getSceneStats([element.name])">SCENE STATS</button> -->
       </td>
     </ng-container>
 
@@ -190,13 +187,4 @@
       <td class="mat-cell" colspan="4">No data matching the filter "{{ input.value }}"</td>
     </tr>
   </table>
-
-  <!-- Video Preview Player Modal/Section
-  @if (activeVideo) {
-  <div class="player-container">
-    <h3>Now Playing: {{ activeVideo.name }}</h3>
-    <video [src]="activeVideo.url" controls autoplay width="600"></video>
-    <button (click)="activeVideo = null">Close Player</button>
-  </div> -->
-  <!-- } -->
 </div>

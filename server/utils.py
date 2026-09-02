@@ -1,12 +1,9 @@
-import csv
 import hashlib
-import io
-from collections.abc import Iterable
 from dataclasses import dataclass
 
 # from enum import Enum, auto
 from pathlib import Path
-from typing import Any, Generic, TypeVar
+from typing import IO, Generic, TypeVar
 
 # from imgui_bundle import portable_file_dialogs as pfd
 
@@ -41,19 +38,16 @@ def e_str(x: object) -> str:
     return str(x) if x else ""
 
 
-def tuple_to_csv_row(t: Iterable[Any]) -> str:
-    output = io.StringIO()
-    writer = csv.writer(output)
-    writer.writerow(t)
-    return output.getvalue().rstrip("\r\n")
+def hash_stream(stream: IO[bytes], algo: str = "sha256", chunk_size: int = 1024 * 1024) -> str:
+    h = hashlib.new(algo)
+    for chunk in iter(lambda: stream.read(chunk_size), b""):
+        h.update(chunk)
+    return h.hexdigest()
 
 
 def file_hash(path: Path, algo: str = "sha256", chunk_size: int = 1024 * 1024) -> str:
-    h = hashlib.new(algo)
     with open(path, "rb") as f:
-        for chunk in iter(lambda: f.read(chunk_size), b""):
-            h.update(chunk)
-    return h.hexdigest()
+        return hash_stream(f, algo, chunk_size)
 
 
 # class Runtime(Enum):

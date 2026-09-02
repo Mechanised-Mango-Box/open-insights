@@ -1,9 +1,39 @@
 import { AfterViewInit, Component, ElementRef, ViewChild, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import Chart from 'chart.js/auto';
+import {
+  BarController,
+  BarElement,
+  CategoryScale,
+  Chart,
+  Legend,
+  LinearScale,
+  LineController,
+  LineElement,
+  PointElement,
+  ScatterController,
+  Title,
+  Tooltip,
+} from 'chart.js';
 import { AnalysisFeatureRow, AnalysisResult } from '../dataset-server.service';
 import { AnalysisService } from './analysis.service';
 import { VideoDatabaseService } from '../video-records/video-database.service';
+
+// Only the chart types this component actually renders (bar/scatter/line with
+// category+linear scales) - chart.js/auto would pull in every controller,
+// scale, and plugin the library ships, which blew the initial bundle budget.
+Chart.register(
+  BarController,
+  BarElement,
+  CategoryScale,
+  Legend,
+  LinearScale,
+  LineController,
+  LineElement,
+  PointElement,
+  ScatterController,
+  Title,
+  Tooltip,
+);
 
 type FeatureKey = 'duration_mins' | 'wpm' | 'scene_change_rate' | 'word_count';
 
