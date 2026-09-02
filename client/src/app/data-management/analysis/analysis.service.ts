@@ -22,19 +22,19 @@ export class AnalysisService {
     const rows: AnalysisFeatureRow[] = [];
 
     for (const record of records) {
-      const sceneStats = record.ds_sceneStats;
-      const transcript = record.ds_transcript;
+      const sceneStats = record.ds_sceneStats?.data;
+      const transcriptStats = record.ds_transcriptStats?.data;
       const avgViewDurationSecs = record.ds_youtubeContent?.average_view_duration_secs;
 
-      if (!sceneStats || !transcript || avgViewDurationSecs == null) continue;
+      if (!sceneStats || !transcriptStats || avgViewDurationSecs == null) continue;
       if (sceneStats.duration_secs <= 0) continue;
 
       const duration_mins = sceneStats.duration_secs / 60;
       rows.push({
         duration_mins,
-        wpm: transcript.count_words / duration_mins,
+        wpm: transcriptStats.count_words / duration_mins,
         scene_change_rate: sceneStats.scenes / duration_mins,
-        word_count: transcript.count_words,
+        word_count: transcriptStats.count_words,
         average_percentage_viewed: (avgViewDurationSecs / sceneStats.duration_secs) * 100,
       });
     }

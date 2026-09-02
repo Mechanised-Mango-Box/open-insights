@@ -23,13 +23,30 @@ export class VideoDatabaseService {
   }
 
   private initDB = async () => {
-    return openDB<VideoDBSchema>('video-library-db', 1, {
-      upgrade(db) {
+    return openDB<VideoDBSchema>('video-library-db', 2, {
+      async upgrade(db, oldVersion, _newVersion, transaction) {
+        if (oldVersion < 1) {
+          const store = db.createObjectStore('videos', {
+            keyPath: '__id',
+            autoIncrement: true,
+          });
+          store.createIndex('by_file_hash', 'video_file.hash', { unique: false });
+          return;
+        }
+
+        // v1 used keyPath 'id', which predates the VideoRecord.__id rename - recreate
+        // the store under the corrected keyPath, carrying existing rows over.
+        const oldStore = transaction.objectStore('videos');
+        const existingRecords = (await oldStore.getAll()) as (VideoRecord & { id?: number })[];
+        db.deleteObjectStore('videos');
         const store = db.createObjectStore('videos', {
-          keyPath: 'id',
+          keyPath: '__id',
           autoIncrement: true,
         });
-        store.createIndex('by_file_hash', 'file_hash', { unique: false });
+        store.createIndex('by_file_hash', 'video_file.hash', { unique: false });
+        for (const { id, ...record } of existingRecords) {
+          await store.add({ ...record, __id: record.__id ?? id } as VideoRecord);
+        }
       },
     });
   };
@@ -70,11 +87,11 @@ export class VideoDatabaseService {
     await db.delete('videos', id);
 
     // Remove the deleted record from the signal reactively
-    this.videoRecords.update((records) => records.filter((v) => v.id !== id));
+    this.videoRecords.update((records) => records.filter((v) => v.__id !== id));
   }
 
   updateVideo = async (record: VideoRecord): Promise<number> => {
-    if (!record.id) {
+    if (!record.__id) {
       throw new Error('Cannot update a video record without an ID.');
     }
 
@@ -84,7 +101,7 @@ export class VideoDatabaseService {
     const updatedId = (await db.put('videos', record)) as number;
 
     // Update the signal reactively so components re-render automatically
-    this.videoRecords.update((records) => records.map((v) => (v.id === record.id ? record : v)));
+    this.videoRecords.update((records) => records.map((v) => (v.__id === record.__id ? record : v)));
 
     return updatedId;
   };

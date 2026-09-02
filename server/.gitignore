@@ -1,13 +1,3 @@
-# ImGui
-*.ini
-
-# Local Datasets
-/data/local/*
-
-# sqlite files
-*.sqlite
-
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

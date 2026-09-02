@@ -3,7 +3,19 @@ import { VideoDatabaseService } from './video-database.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { parseYoutubeContentCsv } from './youtube-csv-import';
-import { VideoRecord } from './VideoRecord';
+import { calculateSha256, VideoFile, VideoRecord } from './VideoRecord';
+
+/** Shared "blank slate" for every dataset field a freshly-created VideoRecord needs
+ * beyond sort_name - kept in one place so each creation site only supplies what's
+ * actually known at that point. */
+const newRecordDefaults = (): Omit<VideoRecord, '__id' | 'sort_name'> => ({
+  video_file: VideoFile.createEmpty(),
+  ds_youtubeContent: null,
+  ds_youtubeAudienceRetention: null,
+  ds_transcript: null,
+  ds_transcriptStats: null,
+  ds_sceneStats: null,
+});
 
 @Component({
   selector: 'video-records-import',
@@ -24,6 +36,18 @@ import { VideoRecord } from './VideoRecord';
         accept=".csv"
         (change)="insertFromYoutubeContent($event)"
       />
+      <button mat-raised-button color="accent" (click)="videoInput.click()">
+        <mat-icon>add</mat-icon>
+        Create From: Video Files
+      </button>
+      <input
+        type="file"
+        #videoInput
+        style="display: none"
+        accept="video/*"
+        multiple
+        (change)="insertFromVideoFiles($event)"
+      />
       @if (importSummary()) {
       <span class="import-summary">{{ importSummary() }}</span>
       }
@@ -40,6 +64,7 @@ export class VideoRecordsImport {
   async insertNewEmpty() {
     const sampleRecord: VideoRecord = {
       sort_name: 'Untitled New Record',
+      ...newRecordDefaults(),
     };
 
     try {
@@ -69,12 +94,48 @@ export class VideoRecordsImport {
         await this.dbService.updateVideo({ ...match, ds_youtubeContent: row.content });
         updated++;
       } else {
-        await this.dbService.addVideo({ sort_name: row.title, ds_youtubeContent: row.content });
+        await this.dbService.addVideo({
+          ...newRecordDefaults(),
+          sort_name: row.title,
+          ds_youtubeContent: row.content,
+        });
         created++;
       }
     }
 
     this.importSummary.set(`Imported ${rows.length} row(s): ${created} created, ${updated} updated.`);
+    input.value = '';
+  }
+
+  async insertFromVideoFiles(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+    if (!files || files.length === 0) return;
+
+    const existing = await this.dbService.getAllVideos();
+    const existingHashes = new Set(existing.map((record) => record.video_file.hash));
+
+    let created = 0;
+    let skipped = 0;
+    for (const file of Array.from(files)) {
+      const file_hash = await calculateSha256(file);
+      if (existingHashes.has(file_hash)) {
+        skipped++;
+        continue;
+      }
+
+      await this.dbService.addVideo({
+        ...newRecordDefaults(),
+        sort_name: file.name,
+        video_file: { file, hash: file_hash, exists_on_server: false },
+      });
+      existingHashes.add(file_hash);
+      created++;
+    }
+
+    this.importSummary.set(
+      `Processed ${files.length} file(s): ${created} created, ${skipped} skipped (already exist).`,
+    );
     input.value = '';
   }
 
