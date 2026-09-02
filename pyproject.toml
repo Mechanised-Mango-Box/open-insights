@@ -3,4 +3,4 @@ profile = "black"
 
 [tool.pyrefly]
 preset = "strict"
-search-path = ["dataset-server"]
+search-path = ["server"]
