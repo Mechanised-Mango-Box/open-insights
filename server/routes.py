@@ -5,8 +5,6 @@ from typing import cast
 
 import pandas as pd
 from analysis import compute_correlations, compute_histogram, compute_loess
-from flask import Blueprint, jsonify, redirect, request
-
 from config import UPLOAD_FOLDER, allowed_file
 from db import (
     get_file_ext,
@@ -18,6 +16,7 @@ from db import (
     start_scene_stats_job,
     start_transcript_job,
 )
+from flask import Blueprint, jsonify, redirect, request
 from models import FileExt
 from processing import submit_scene_stats_job, submit_transcript_job
 

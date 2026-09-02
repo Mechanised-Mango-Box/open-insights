@@ -65,9 +65,11 @@ export class ScanActionsComponent {
 
   extractTranscript(): Promise<void> {
     return this.runBulk('transcript', async (record) => {
-      record.ds_transcript = await this.fetchOrUpload(record, () =>
-        this.datasetServerService.getTranscript(record.file_hash!),
+      const { transcript, stats } = await this.fetchOrUpload(record, () =>
+        this.datasetServerService.getTranscript(record.video_file.hash),
       );
+      record.ds_transcript = { upload_state: { is_local: false }, data: transcript };
+      record.ds_transcriptStats = { upload_state: { is_local: false }, data: stats };
     });
   }
 
@@ -77,24 +79,24 @@ export class ScanActionsComponent {
     // action, useful after a transcript's text was edited/imported without its stats
     // being refreshed. Requires a transcript to already be set (run Extract Transcript first).
     return this.runBulk('transcript stats', async (record) => {
-      if (!record.ds_transcript) {
+      if (!record.ds_transcript || !('text' in record.ds_transcript.data)) {
         throw new Error('No transcript to compute stats from - run Extract Transcript first.');
       }
-      const text = record.ds_transcript.text;
+      const text = record.ds_transcript.data.text;
       const words = text.trim().length ? text.trim().split(/\s+/) : [];
-      record.ds_transcript = {
-        ...record.ds_transcript,
-        count_chars: text.length,
-        count_words: words.length,
+      record.ds_transcriptStats = {
+        upload_state: { is_local: true, server_side_state: 'ready' },
+        data: { count_chars: text.length, count_words: words.length },
       };
     });
   }
 
   extractSceneStats(): Promise<void> {
     return this.runBulk('scene stats', async (record) => {
-      record.ds_sceneStats = await this.fetchOrUpload(record, () =>
-        this.datasetServerService.getSceneStats(record.file_hash!),
+      const sceneStats = await this.fetchOrUpload(record, () =>
+        this.datasetServerService.getSceneStats(record.video_file.hash),
       );
+      record.ds_sceneStats = { upload_state: { is_local: false }, data: sceneStats };
     });
   }
 
@@ -118,7 +120,7 @@ export class ScanActionsComponent {
           await this.dbService.updateVideo(record);
           succeeded++;
         } catch (error) {
-          console.error(`Failed to extract ${label} for record ${record.id}:`, error);
+          console.error(`Failed to extract ${label} for record ${record.__id}:`, error);
           failed++;
         }
       }
@@ -132,15 +134,15 @@ export class ScanActionsComponent {
   // sends the file over the network on a 404 (server has no video for this hash yet), and
   // only if we actually have the bytes in memory this session.
   private async fetchOrUpload<T>(record: VideoRecord, fetchFn: () => Promise<T>): Promise<T> {
-    if (!record.file_hash) {
+    if (!record.video_file.hash) {
       throw new Error('No file hash for this record.');
     }
     try {
       return await fetchFn();
     } catch (error) {
       const notFound = error instanceof HttpErrorResponse && error.status === 404;
-      if (notFound && record.file_handle) {
-        await this.datasetServerService.uploadVideo(record.file_handle);
+      if (notFound && record.video_file.file) {
+        await this.datasetServerService.uploadVideo(record.video_file.file);
         return await fetchFn();
       }
       throw error;

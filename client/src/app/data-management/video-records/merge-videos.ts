@@ -1,15 +1,14 @@
-import { SceneStats, Transcript, YoutubeAudienceRetention, YoutubeContent } from './Dataset';
-import { VideoRecord } from './VideoRecord';
+import { Cacheable, SceneStats, Transcript, TranscriptStats, YoutubeAudienceRetention, YoutubeContent } from './Dataset';
+import { VideoFile, VideoRecord } from './VideoRecord';
 
 export type MergeFieldKey =
   | 'sort_name'
-  | 'file'
+  | 'video_file'
   | 'ds_youtubeContent'
   | 'ds_youtubeAudienceRetention'
   | 'ds_transcript'
+  | 'ds_transcriptStats'
   | 'ds_sceneStats';
-
-type FileValue = { file_hash?: string; file_handle?: File };
 
 export type MergeOption = { sourceLabel: string; value: unknown };
 
@@ -27,52 +26,60 @@ export type MergePreview = {
 
 const MERGE_FIELD_KEYS: MergeFieldKey[] = [
   'sort_name',
-  'file',
+  'video_file',
   'ds_youtubeContent',
   'ds_youtubeAudienceRetention',
   'ds_transcript',
+  'ds_transcriptStats',
   'ds_sceneStats',
 ];
 
 const FIELD_LABELS: Record<MergeFieldKey, string> = {
   sort_name: 'Name',
-  file: 'Video File',
+  video_file: 'Video File',
   ds_youtubeContent: 'YouTube Content Report',
   ds_youtubeAudienceRetention: 'YouTube Audience Retention',
   ds_transcript: 'Transcript',
+  ds_transcriptStats: 'Transcript Stats',
   ds_sceneStats: 'Scene Stats',
 };
 
 const DESCRIBERS: Record<MergeFieldKey, (value: unknown) => string> = {
   sort_name: (value) => value as string,
-  file: (value) => {
-    const file = value as FileValue;
-    return file.file_handle?.name ?? file.file_hash ?? '(no file)';
+  video_file: (value) => {
+    const file = value as VideoFile;
+    return file.file?.name ?? file.hash ?? '(no file)';
   },
   ds_youtubeContent: (value) => (value as YoutubeContent).content?.trim() || 'N/a',
   ds_youtubeAudienceRetention: (value) =>
     `Audience retention (${(value as YoutubeAudienceRetention).video_position.length} points)`,
   ds_transcript: (value) => {
-    const transcript = value as Transcript;
+    const transcript = (value as Cacheable<Transcript>).data;
+    if (!('text' in transcript)) return 'Timestamped transcript';
     const preview = transcript.text.slice(0, 60);
     const ellipsis = transcript.text.length > 60 ? '…' : '';
-    return `${transcript.count_words} words: "${preview}${ellipsis}"`;
+    return `"${preview}${ellipsis}"`;
+  },
+  ds_transcriptStats: (value) => {
+    const stats = (value as Cacheable<TranscriptStats>).data;
+    return `${stats.count_words} words`;
   },
   ds_sceneStats: (value) => {
-    const stats = value as SceneStats;
+    const stats = (value as Cacheable<SceneStats>).data;
     return `${stats.scenes} scenes over ${stats.duration_secs}s`;
   },
 };
 
-// `file` bundles file_hash + file_handle so a raw File object is never compared
-// with ===/JSON.stringify (its interesting properties are inherited accessors,
-// not own enumerable ones, so two different Files would both stringify to '{}').
+// video_file compares by hash, not deep-equality: it also carries a raw File
+// object whose interesting properties are inherited accessors, not own
+// enumerable ones, so two different Files would both JSON.stringify to '{}'.
 const EQUALS: Record<MergeFieldKey, (a: unknown, b: unknown) => boolean> = {
   sort_name: (a, b) => a === b,
-  file: (a, b) => (a as FileValue).file_hash === (b as FileValue).file_hash,
+  video_file: (a, b) => (a as VideoFile).hash === (b as VideoFile).hash,
   ds_youtubeContent: (a, b) => JSON.stringify(a) === JSON.stringify(b),
   ds_youtubeAudienceRetention: (a, b) => JSON.stringify(a) === JSON.stringify(b),
   ds_transcript: (a, b) => JSON.stringify(a) === JSON.stringify(b),
+  ds_transcriptStats: (a, b) => JSON.stringify(a) === JSON.stringify(b),
   ds_sceneStats: (a, b) => JSON.stringify(a) === JSON.stringify(b),
 };
 
@@ -80,20 +87,14 @@ const recordLabel = (record: VideoRecord, index: number): string =>
   record.sort_name?.trim() || `Row ${index + 1}`;
 
 const getFieldValue = (record: VideoRecord, key: MergeFieldKey): unknown => {
-  if (key === 'file') {
-    const file: FileValue = { file_hash: record.file_hash, file_handle: record.file_handle };
-    return record.file_hash ? file : undefined;
+  if (key === 'video_file') {
+    const file = record.video_file;
+    return file.hash || file.file ? file : undefined;
   }
   return record[key];
 };
 
 const applyValue = (target: Partial<VideoRecord>, key: MergeFieldKey, value: unknown): void => {
-  if (key === 'file') {
-    const file = value as FileValue;
-    target.file_hash = file.file_hash;
-    target.file_handle = file.file_handle;
-    return;
-  }
   (target as Record<string, unknown>)[key] = value;
 };
 
@@ -140,11 +141,11 @@ export function resolveMerge(
 
   return {
     sort_name: merged.sort_name ?? 'Untitled Merged Record',
-    file_hash: merged.file_hash,
-    file_handle: merged.file_handle,
-    ds_youtubeContent: merged.ds_youtubeContent,
-    ds_youtubeAudienceRetention: merged.ds_youtubeAudienceRetention,
-    ds_transcript: merged.ds_transcript,
-    ds_sceneStats: merged.ds_sceneStats,
+    video_file: merged.video_file ?? VideoFile.createEmpty(),
+    ds_youtubeContent: merged.ds_youtubeContent ?? null,
+    ds_youtubeAudienceRetention: merged.ds_youtubeAudienceRetention ?? null,
+    ds_transcript: merged.ds_transcript ?? null,
+    ds_transcriptStats: merged.ds_transcriptStats ?? null,
+    ds_sceneStats: merged.ds_sceneStats ?? null,
   };
 }

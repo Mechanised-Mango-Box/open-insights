@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { SceneStats, Transcript } from './video-records/Dataset';
+import { SceneStats, Transcript, TranscriptBasic, TranscriptStats } from './video-records/Dataset';
 import { ServerConfigService } from './server-config.service';
 
 export type VideoMeta = { file_hash: string; file_ext: string };
@@ -58,10 +58,13 @@ export class DatasetServerService {
     );
   }
 
-  getTranscript(fileHash: string): Promise<Transcript> {
-    return this.pollDataset<Transcript>(
+  // The server returns transcript text and stats (count_chars/count_words) in one
+  // payload; the client models them as two separate cacheable fields, so split here.
+  async getTranscript(fileHash: string): Promise<{ transcript: Transcript; stats: TranscriptStats }> {
+    const { text, count_chars, count_words } = await this.pollDataset<TranscriptBasic & TranscriptStats>(
       `${this.serverConfig.serverUrl()}/api/videos/${fileHash}/transcript`,
     );
+    return { transcript: { text }, stats: { count_chars, count_words } };
   }
 
   getSceneStats(fileHash: string): Promise<SceneStats> {

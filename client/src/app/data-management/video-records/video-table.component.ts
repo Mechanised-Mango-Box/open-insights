@@ -12,13 +12,19 @@ import { EditVideoDialogComponent } from './edit-video-dialog.component';
 import { MergeVideosDialogComponent } from './merge-videos-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { VideoRecord } from './VideoRecord';
-import { buildExportCsv, downloadCsv } from './csv-export';
+import { calculateSha256, VideoRecord } from './VideoRecord';
+import { buildExportZip, downloadBlob } from './manifest-export';
 import { SelectionService } from './selection.service';
-import { DatasetServerService, DatasetStatus } from '../dataset-server.service';
-
-type ServerStatus = 'checking' | 'exists' | 'missing' | 'error';
-type DatasetPeekResult = { status: DatasetStatus | 'checking' | 'error'; error?: string };
+import { DatasetServerService } from '../dataset-server.service';
+import {
+  DatasetPeekResult,
+  ServerStatus,
+  STATUS_ICON_STYLES,
+  StatusIcon,
+  datasetPeekStatusIcon,
+  serverStatusIcon,
+  uploadStateIcon,
+} from './dataset-status';
 
 @Component({
   selector: 'video-table',
@@ -33,22 +39,7 @@ type DatasetPeekResult = { status: DatasetStatus | 'checking' | 'error'; error?:
     MatIcon,
   ],
   templateUrl: './video-table.component.html',
-  styles: [
-    `
-      .server-status.status-exists {
-        color: #2e7d32;
-      }
-      .server-status.status-missing {
-        color: #9e9e9e;
-      }
-      .server-status.status-error {
-        color: #c62828;
-      }
-      .server-status.status-checking {
-        color: #9e9e9e;
-      }
-    `,
-  ],
+  styles: [STATUS_ICON_STYLES],
 })
 export class VideoTableComponent {
   // opfsService = inject(OpfsService);
@@ -75,6 +66,9 @@ export class VideoTableComponent {
   serverStatusByHash = signal<Map<string, ServerStatus>>(new Map());
   transcriptStatusByHash = signal<Map<string, DatasetPeekResult>>(new Map());
   sceneStatsStatusByHash = signal<Map<string, DatasetPeekResult>>(new Map());
+  sendingTranscript = signal<Set<string>>(new Set());
+  sendingSceneStats = signal<Set<string>>(new Set());
+  uploadingFile = signal<Set<string>>(new Set());
 
   constructor() {
     effect(() => {
@@ -86,15 +80,16 @@ export class VideoTableComponent {
       if (stillPresent.length > 0) this.selection.select(...stillPresent);
 
       for (const record of records) {
-        if (!record.file_hash) continue;
-        if (!this.serverStatusByHash().has(record.file_hash)) {
-          this.checkServerStatus(record.file_hash);
+        const hash = record.video_file.hash;
+        if (!hash) continue;
+        if (!this.serverStatusByHash().has(hash)) {
+          this.checkServerStatus(hash);
         }
-        if (!this.transcriptStatusByHash().has(record.file_hash)) {
-          this.checkTranscriptStatus(record.file_hash);
+        if (!this.transcriptStatusByHash().has(hash)) {
+          this.checkTranscriptStatus(hash);
         }
-        if (!this.sceneStatsStatusByHash().has(record.file_hash)) {
-          this.checkSceneStatsStatus(record.file_hash);
+        if (!this.sceneStatsStatusByHash().has(hash)) {
+          this.checkSceneStatsStatus(hash);
         }
       }
     });
@@ -112,19 +107,57 @@ export class VideoTableComponent {
     this.serverStatusByHash.update((map) => new Map(map).set(hash, status));
   }
 
-  getServerStatusIcon(record: VideoRecord): { icon: string; label: string; cssClass: string } | null {
-    if (!record.file_hash) return null;
-    const status = this.serverStatusByHash().get(record.file_hash) ?? 'checking';
-    switch (status) {
-      case 'checking':
-        return { icon: 'hourglass_empty', label: 'Checking server...', cssClass: 'status-checking' };
-      case 'exists':
-        return { icon: 'cloud_done', label: 'Video exists on server', cssClass: 'status-exists' };
-      case 'missing':
-        return { icon: 'cloud_off', label: 'Video not on server', cssClass: 'status-missing' };
-      case 'error':
-        return { icon: 'error_outline', label: 'Could not reach server', cssClass: 'status-error' };
+  getServerStatusIcon(record: VideoRecord): StatusIcon | null {
+    if (!record.video_file.hash) return null;
+    const status = this.serverStatusByHash().get(record.video_file.hash) ?? 'checking';
+    return serverStatusIcon(status, {
+      hasLocalFile: !!record.video_file.file,
+      uploading: this.uploadingFile().has(record.video_file.hash),
+    });
+  }
+
+  // Picks a local video file for a row directly from the table (no need to open the
+  // edit dialog): computes its hash and attaches it, ready for uploadFileToServer.
+  onFileSelected = (record: VideoRecord, event: Event): void => {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    record.video_file.file = file;
+    calculateSha256(file).then((hash) => {
+      record.video_file.hash = hash;
+      this.videoDatabaseService.updateVideo(record);
+    });
+
+    input.value = '';
+  };
+
+  // The file-hash column's button doubles as an upload trigger: if a local file is
+  // attached and the server doesn't have it yet, clicking sends it; otherwise this
+  // just re-checks status (same as before this row had upload capability).
+  async uploadFileToServer(record: VideoRecord): Promise<void> {
+    const hash = record.video_file.hash;
+    if (!hash) return;
+    if (!record.video_file.file) {
+      await this.checkServerStatus(hash);
+      return;
     }
+
+    this.uploadingFile.update((set) => new Set(set).add(hash));
+    try {
+      await this.datasetServerService.uploadVideo(record.video_file.file);
+      record.video_file.exists_on_server = true;
+      await this.videoDatabaseService.updateVideo(record);
+    } catch (error) {
+      console.error('Failed to upload video:', error);
+    } finally {
+      this.uploadingFile.update((set) => {
+        const next = new Set(set);
+        next.delete(hash);
+        return next;
+      });
+    }
+    await this.checkServerStatus(hash);
   }
 
   async checkTranscriptStatus(hash: string): Promise<void> {
@@ -164,31 +197,87 @@ export class VideoTableComponent {
   private getDatasetStatusIcon(
     record: VideoRecord,
     statusMap: Map<string, DatasetPeekResult>,
-  ): { icon: string; label: string; cssClass: string } | null {
-    if (!record.file_hash) return null;
-    const result = statusMap.get(record.file_hash) ?? { status: 'checking' };
-    switch (result.status) {
-      case 'checking':
-        return { icon: 'hourglass_empty', label: 'Checking status...', cssClass: 'status-checking' };
-      case 'not_started':
-        return { icon: 'radio_button_unchecked', label: 'Not started', cssClass: 'status-missing' };
-      case 'processing':
-        return { icon: 'sync', label: 'Processing...', cssClass: 'status-checking' };
-      case 'complete':
-        return { icon: 'check_circle', label: 'Complete', cssClass: 'status-exists' };
-      case 'failed':
-        return { icon: 'error_outline', label: `Failed: ${result.error}`, cssClass: 'status-error' };
-      case 'error':
-        return { icon: 'error_outline', label: 'Could not reach server', cssClass: 'status-error' };
-    }
+  ): StatusIcon | null {
+    if (!record.video_file.hash) return null;
+    const result = statusMap.get(record.video_file.hash) ?? { status: 'checking' };
+    return datasetPeekStatusIcon(result);
   }
 
-  getTranscriptStatusIcon(record: VideoRecord): { icon: string; label: string; cssClass: string } | null {
+  getTranscriptStatusIcon(record: VideoRecord): StatusIcon | null {
     return this.getDatasetStatusIcon(record, this.transcriptStatusByHash());
   }
 
-  getSceneStatsStatusIcon(record: VideoRecord): { icon: string; label: string; cssClass: string } | null {
+  getSceneStatsStatusIcon(record: VideoRecord): StatusIcon | null {
     return this.getDatasetStatusIcon(record, this.sceneStatsStatusByHash());
+  }
+
+  getTranscriptUploadIcon(record: VideoRecord): StatusIcon | null {
+    return uploadStateIcon(record.ds_transcript, this.sendingTranscript().has(record.video_file.hash));
+  }
+
+  getSceneStatsUploadIcon(record: VideoRecord): StatusIcon | null {
+    return uploadStateIcon(record.ds_sceneStats, this.sendingSceneStats().has(record.video_file.hash));
+  }
+
+  // Re-runs server generation for this row's transcript (uploading the video first if
+  // it hasn't been already), overwriting local data with the server's result - this is
+  // "send to server" in the sense of reconciling with the server, not pushing local
+  // edits verbatim (the dataset-server API has no endpoint to accept those).
+  async sendTranscriptToServer(record: VideoRecord): Promise<void> {
+    const hash = record.video_file.hash;
+    if (!hash) return;
+    this.sendingTranscript.update((set) => new Set(set).add(hash));
+    try {
+      if (record.video_file.file) {
+        await this.datasetServerService.uploadVideo(record.video_file.file);
+      }
+      const { transcript, stats } = await this.datasetServerService.getTranscript(hash);
+      record.ds_transcript = { upload_state: { is_local: false }, data: transcript };
+      record.ds_transcriptStats = { upload_state: { is_local: false }, data: stats };
+    } catch (error) {
+      console.error('Failed to send transcript to server:', error);
+      if (record.ds_transcript) {
+        record.ds_transcript = {
+          ...record.ds_transcript,
+          upload_state: { is_local: true, server_side_state: 'failed' },
+        };
+      }
+    } finally {
+      this.sendingTranscript.update((set) => {
+        const next = new Set(set);
+        next.delete(hash);
+        return next;
+      });
+    }
+    await this.videoDatabaseService.updateVideo(record);
+  }
+
+  async sendSceneStatsToServer(record: VideoRecord): Promise<void> {
+    const hash = record.video_file.hash;
+    if (!hash) return;
+    this.sendingSceneStats.update((set) => new Set(set).add(hash));
+    try {
+      if (record.video_file.file) {
+        await this.datasetServerService.uploadVideo(record.video_file.file);
+      }
+      const sceneStats = await this.datasetServerService.getSceneStats(hash);
+      record.ds_sceneStats = { upload_state: { is_local: false }, data: sceneStats };
+    } catch (error) {
+      console.error('Failed to send scene stats to server:', error);
+      if (record.ds_sceneStats) {
+        record.ds_sceneStats = {
+          ...record.ds_sceneStats,
+          upload_state: { is_local: true, server_side_state: 'failed' },
+        };
+      }
+    } finally {
+      this.sendingSceneStats.update((set) => {
+        const next = new Set(set);
+        next.delete(hash);
+        return next;
+      });
+    }
+    await this.videoDatabaseService.updateVideo(record);
   }
 
   // async onFilesSelected(event: any) {
@@ -228,6 +317,7 @@ export class VideoTableComponent {
     'youtube-content-report',
     'youtube-audience-retention',
     'transcript',
+    'transcript-stats',
     'scene-stats',
     'actions',
   ];
@@ -238,7 +328,7 @@ export class VideoTableComponent {
   }
 
   getFileDisplayValue = (element: VideoRecord): string | null =>
-    element.file_handle?.name || element.file_hash || null;
+    element.video_file.file?.name || element.video_file.hash || null;
 
   isAllSelected(): boolean {
     return (
@@ -267,8 +357,8 @@ export class VideoTableComponent {
     this.bulkActionPending.set(true);
     try {
       for (const record of records) {
-        if (record.id != null) {
-          await this.videoDatabaseService.deleteVideo(record.id);
+        if (record.__id != null) {
+          await this.videoDatabaseService.deleteVideo(record.__id);
         }
       }
       this.selection.clear();
@@ -277,11 +367,20 @@ export class VideoTableComponent {
     }
   }
 
-  exportSelected(): void {
+  async exportSelected(): Promise<void> {
     const records = this.selection.selected;
     if (records.length === 0) return;
-    const csv = buildExportCsv(records);
-    downloadCsv(csv, `open-insights-export-selected-${new Date().toISOString()}.csv`);
+
+    this.bulkActionPending.set(true);
+    try {
+      const blob = await buildExportZip(records);
+      downloadBlob(blob, `open-insights-export-selected-${new Date().toISOString()}.zip`);
+    } catch (error) {
+      console.error('Export failed:', error);
+      alert('Export failed - see console for details.');
+    } finally {
+      this.bulkActionPending.set(false);
+    }
   }
 
   mergeSelected(): void {
@@ -296,8 +395,8 @@ export class VideoTableComponent {
       try {
         await this.videoDatabaseService.addVideo(merged);
         for (const record of records) {
-          if (record.id != null) {
-            await this.videoDatabaseService.deleteVideo(record.id);
+          if (record.__id != null) {
+            await this.videoDatabaseService.deleteVideo(record.__id);
           }
         }
         this.selection.clear();

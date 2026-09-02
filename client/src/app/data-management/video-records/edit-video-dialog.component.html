@@ -17,9 +17,9 @@
         <button mat-stroked-button color="primary" (click)="fileInput.click()">
           <mat-icon>upload</mat-icon>Upload
         </button>
-        <span class="file-name">{{ localData.file_handle?.name || 'No file chosen' }}</span>
+        <span class="file-name">{{ localData.video_file.file?.name || 'No file chosen' }}</span>
 
-        @if (localData.file_handle) {
+        @if (localData.video_file.file) {
         <button mat-icon-button color="warn" (click)="clearFile()" title="Clear file">
           <mat-icon>close</mat-icon>
         </button>
@@ -30,8 +30,21 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Hash</mat-label>
-        <input matInput [(ngModel)]="localData.file_hash" [disabled]="!!localData.file_handle" />
+        <input matInput [(ngModel)]="localData.video_file.hash" [disabled]="!!localData.video_file.file" />
       </mat-form-field>
+
+      @if (localData.video_file.hash) {
+      <button
+        mat-icon-button
+        class="server-status"
+        [ngClass]="videoFileStatusIcon.cssClass"
+        [title]="videoFileStatusIcon.label"
+        (click)="checkServerStatus(localData.video_file.hash)"
+      >
+        <mat-icon>{{ videoFileStatusIcon.icon }}</mat-icon>
+      </button>
+      {{ videoFileStatusIcon.label }}
+      }
 
       <br />
       <button
@@ -65,12 +78,17 @@
       <br />
 
       @if (localData.ds_transcript) {
+      @if (transcriptUploadIcon) {
+      <p class="server-status" [ngClass]="transcriptUploadIcon.cssClass">
+        <mat-icon>{{ transcriptUploadIcon.icon }}</mat-icon> {{ transcriptUploadIcon.label }}
+      </p>
+      }
       <mat-form-field appearance="outline" style="width: 100%">
         <mat-label>Transcript Text</mat-label>
         <textarea
           matInput
           rows="8"
-          [ngModel]="localData.ds_transcript.text"
+          [ngModel]="transcriptText"
           (ngModelChange)="onTranscriptTextChanged($event)"
         ></textarea>
       </mat-form-field>
@@ -78,17 +96,17 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Character Count</mat-label>
-        <input matInput type="number" [value]="localData.ds_transcript.count_chars" disabled />
+        <input matInput type="number" [value]="localData.ds_transcriptStats?.data.count_chars" disabled />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Word Count</mat-label>
-        <input matInput type="number" [value]="localData.ds_transcript.count_words" disabled />
+        <input matInput type="number" [value]="localData.ds_transcriptStats?.data.count_words" disabled />
       </mat-form-field>
 
-      <mat-divider /><button mat-button (click)="localData.ds_transcript = undefined">Clear</button>
+      <mat-divider /><button mat-button (click)="clearLocalTranscript()">Clear</button>
       } @else {
-      <button mat-button (click)="localData.ds_transcript = createEmptyTranscript()">Create Empty</button>
+      <button mat-button (click)="createEmptyLocalTranscript()">Create Empty</button>
       <button mat-stroked-button color="primary" (click)="transcriptFileInput.click()">
         <mat-icon>upload</mat-icon>Upload File
       </button>
@@ -99,6 +117,19 @@
         accept=".txt,.srt,.vtt"
         (change)="onTranscriptFileSelected($event)"
       />
+      @if (localData.video_file.hash) {
+      <br />
+      <button
+        mat-icon-button
+        class="server-status"
+        [ngClass]="transcriptPeekIcon.cssClass"
+        [title]="transcriptPeekIcon.label"
+        (click)="checkTranscriptStatus(localData.video_file.hash)"
+      >
+        <mat-icon>{{ transcriptPeekIcon.icon }}</mat-icon>
+      </button>
+      {{ transcriptPeekIcon.label }}
+      }
       }
     </mat-expansion-panel>
     <mat-expansion-panel>
@@ -119,21 +150,38 @@
       <br />
 
       @if (localData.ds_sceneStats) {
+      @if (sceneStatsUploadIcon) {
+      <p class="server-status" [ngClass]="sceneStatsUploadIcon.cssClass">
+        <mat-icon>{{ sceneStatsUploadIcon.icon }}</mat-icon> {{ sceneStatsUploadIcon.label }}
+      </p>
+      }
       <mat-form-field appearance="outline">
         <mat-label>Duration (Secs)</mat-label>
-        <input matInput type="number" [value]="localData.ds_sceneStats.duration_secs" disabled />
+        <input matInput type="number" [value]="localData.ds_sceneStats.data.duration_secs" disabled />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Scenes</mat-label>
-        <input matInput type="number" [value]="localData.ds_sceneStats.scenes" disabled />
+        <input matInput type="number" [value]="localData.ds_sceneStats.data.scenes" disabled />
       </mat-form-field>
 
-      <mat-divider /><button mat-button (click)="localData.ds_sceneStats = undefined">
+      <mat-divider /><button mat-button (click)="localData.ds_sceneStats = null">
         Clear
       </button>
       } @else {
       <p>Not yet computed.</p>
+      @if (localData.video_file.hash) {
+      <button
+        mat-icon-button
+        class="server-status"
+        [ngClass]="sceneStatsPeekIcon.cssClass"
+        [title]="sceneStatsPeekIcon.label"
+        (click)="checkSceneStatsStatus(localData.video_file.hash)"
+      >
+        <mat-icon>{{ sceneStatsPeekIcon.icon }}</mat-icon>
+      </button>
+      {{ sceneStatsPeekIcon.label }}
+      }
       }
     </mat-expansion-panel>
   </mat-accordion>
@@ -260,10 +308,10 @@
         <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.impressions_click_through_rate" />
       </mat-form-field>
 
-      <mat-divider /><button mat-button (click)="localData.ds_youtubeContent = undefined ">Clear</button>
+      <mat-divider /><button mat-button (click)="localData.ds_youtubeContent = null">Clear</button>
       }
       @else {
-      <button mat-button (click)="localData.ds_youtubeContent = createEmptyYoutubeContent()">
+      <button mat-button (click)="localData.ds_youtubeContent = YoutubeContent.createEmpty()">
         Create Empty
       </button>
       <button mat-button (click)="contentCsvInput.click()">From CSV</button>
@@ -283,14 +331,14 @@
       <p>{{ localData.ds_youtubeAudienceRetention.video_position.length }} data point(s).</p>
       <mat-divider /><button
         mat-button
-        (click)="localData.ds_youtubeAudienceRetention = undefined"
+        (click)="localData.ds_youtubeAudienceRetention = null"
       >
         Clear
       </button>
       } @else {
       <button
         mat-button
-        (click)="localData.ds_youtubeAudienceRetention = createEmptyYoutubeAudienceRetention()"
+        (click)="localData.ds_youtubeAudienceRetention = YoutubeAudienceRetention.createEmpty()"
       >
         Create Empty
       </button>

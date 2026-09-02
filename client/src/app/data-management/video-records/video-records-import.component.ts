@@ -3,7 +3,19 @@ import { VideoDatabaseService } from './video-database.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { parseYoutubeContentCsv } from './youtube-csv-import';
-import { calculateSha256, VideoRecord } from './VideoRecord';
+import { calculateSha256, VideoFile, VideoRecord } from './VideoRecord';
+
+/** Shared "blank slate" for every dataset field a freshly-created VideoRecord needs
+ * beyond sort_name - kept in one place so each creation site only supplies what's
+ * actually known at that point. */
+const newRecordDefaults = (): Omit<VideoRecord, '__id' | 'sort_name'> => ({
+  video_file: VideoFile.createEmpty(),
+  ds_youtubeContent: null,
+  ds_youtubeAudienceRetention: null,
+  ds_transcript: null,
+  ds_transcriptStats: null,
+  ds_sceneStats: null,
+});
 
 @Component({
   selector: 'video-records-import',
@@ -52,6 +64,7 @@ export class VideoRecordsImport {
   async insertNewEmpty() {
     const sampleRecord: VideoRecord = {
       sort_name: 'Untitled New Record',
+      ...newRecordDefaults(),
     };
 
     try {
@@ -81,7 +94,11 @@ export class VideoRecordsImport {
         await this.dbService.updateVideo({ ...match, ds_youtubeContent: row.content });
         updated++;
       } else {
-        await this.dbService.addVideo({ sort_name: row.title, ds_youtubeContent: row.content });
+        await this.dbService.addVideo({
+          ...newRecordDefaults(),
+          sort_name: row.title,
+          ds_youtubeContent: row.content,
+        });
         created++;
       }
     }
@@ -96,7 +113,7 @@ export class VideoRecordsImport {
     if (!files || files.length === 0) return;
 
     const existing = await this.dbService.getAllVideos();
-    const existingHashes = new Set(existing.map((record) => record.file_hash));
+    const existingHashes = new Set(existing.map((record) => record.video_file.hash));
 
     let created = 0;
     let skipped = 0;
@@ -107,7 +124,11 @@ export class VideoRecordsImport {
         continue;
       }
 
-      await this.dbService.addVideo({ sort_name: file.name, file_hash, file_handle: file });
+      await this.dbService.addVideo({
+        ...newRecordDefaults(),
+        sort_name: file.name,
+        video_file: { file, hash: file_hash, exists_on_server: false },
+      });
       existingHashes.add(file_hash);
       created++;
     }
