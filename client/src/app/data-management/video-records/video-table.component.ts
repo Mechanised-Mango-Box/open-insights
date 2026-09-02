@@ -15,9 +15,10 @@ import { MatIcon } from '@angular/material/icon';
 import { VideoRecord } from './VideoRecord';
 import { buildExportCsv, downloadCsv } from './csv-export';
 import { SelectionService } from './selection.service';
-import { DatasetServerService } from '../dataset-server.service';
+import { DatasetServerService, DatasetStatus } from '../dataset-server.service';
 
 type ServerStatus = 'checking' | 'exists' | 'missing' | 'error';
+type DatasetPeekResult = { status: DatasetStatus | 'checking' | 'error'; error?: string };
 
 @Component({
   selector: 'video-table',
@@ -72,6 +73,8 @@ export class VideoTableComponent {
 
   bulkActionPending = signal(false);
   serverStatusByHash = signal<Map<string, ServerStatus>>(new Map());
+  transcriptStatusByHash = signal<Map<string, DatasetPeekResult>>(new Map());
+  sceneStatsStatusByHash = signal<Map<string, DatasetPeekResult>>(new Map());
 
   constructor() {
     effect(() => {
@@ -83,8 +86,15 @@ export class VideoTableComponent {
       if (stillPresent.length > 0) this.selection.select(...stillPresent);
 
       for (const record of records) {
-        if (record.file_hash && !this.serverStatusByHash().has(record.file_hash)) {
+        if (!record.file_hash) continue;
+        if (!this.serverStatusByHash().has(record.file_hash)) {
           this.checkServerStatus(record.file_hash);
+        }
+        if (!this.transcriptStatusByHash().has(record.file_hash)) {
+          this.checkTranscriptStatus(record.file_hash);
+        }
+        if (!this.sceneStatsStatusByHash().has(record.file_hash)) {
+          this.checkSceneStatsStatus(record.file_hash);
         }
       }
     });
@@ -115,6 +125,70 @@ export class VideoTableComponent {
       case 'error':
         return { icon: 'error_outline', label: 'Could not reach server', cssClass: 'status-error' };
     }
+  }
+
+  async checkTranscriptStatus(hash: string): Promise<void> {
+    this.transcriptStatusByHash.update((map) => new Map(map).set(hash, { status: 'checking' }));
+    let result: DatasetPeekResult;
+    try {
+      const response = await this.datasetServerService.peekTranscriptStatus(hash);
+      result =
+        response.status === 'failed'
+          ? { status: 'failed', error: response.error }
+          : { status: response.status };
+    } catch (error) {
+      result = error instanceof HttpErrorResponse && error.status === 404
+        ? { status: 'not_started' }
+        : { status: 'error' };
+    }
+    this.transcriptStatusByHash.update((map) => new Map(map).set(hash, result));
+  }
+
+  async checkSceneStatsStatus(hash: string): Promise<void> {
+    this.sceneStatsStatusByHash.update((map) => new Map(map).set(hash, { status: 'checking' }));
+    let result: DatasetPeekResult;
+    try {
+      const response = await this.datasetServerService.peekSceneStatsStatus(hash);
+      result =
+        response.status === 'failed'
+          ? { status: 'failed', error: response.error }
+          : { status: response.status };
+    } catch (error) {
+      result = error instanceof HttpErrorResponse && error.status === 404
+        ? { status: 'not_started' }
+        : { status: 'error' };
+    }
+    this.sceneStatsStatusByHash.update((map) => new Map(map).set(hash, result));
+  }
+
+  private getDatasetStatusIcon(
+    record: VideoRecord,
+    statusMap: Map<string, DatasetPeekResult>,
+  ): { icon: string; label: string; cssClass: string } | null {
+    if (!record.file_hash) return null;
+    const result = statusMap.get(record.file_hash) ?? { status: 'checking' };
+    switch (result.status) {
+      case 'checking':
+        return { icon: 'hourglass_empty', label: 'Checking status...', cssClass: 'status-checking' };
+      case 'not_started':
+        return { icon: 'radio_button_unchecked', label: 'Not started', cssClass: 'status-missing' };
+      case 'processing':
+        return { icon: 'sync', label: 'Processing...', cssClass: 'status-checking' };
+      case 'complete':
+        return { icon: 'check_circle', label: 'Complete', cssClass: 'status-exists' };
+      case 'failed':
+        return { icon: 'error_outline', label: `Failed: ${result.error}`, cssClass: 'status-error' };
+      case 'error':
+        return { icon: 'error_outline', label: 'Could not reach server', cssClass: 'status-error' };
+    }
+  }
+
+  getTranscriptStatusIcon(record: VideoRecord): { icon: string; label: string; cssClass: string } | null {
+    return this.getDatasetStatusIcon(record, this.transcriptStatusByHash());
+  }
+
+  getSceneStatsStatusIcon(record: VideoRecord): { icon: string; label: string; cssClass: string } | null {
+    return this.getDatasetStatusIcon(record, this.sceneStatsStatusByHash());
   }
 
   // async onFilesSelected(event: any) {

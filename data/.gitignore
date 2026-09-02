@@ -1,0 +1,5 @@
+# Local Datasets
+/local/*
+
+# sqlite files
+*.sqlite

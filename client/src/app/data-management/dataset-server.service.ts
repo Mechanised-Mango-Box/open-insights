@@ -23,8 +23,13 @@ export type AnalysisResult = {
 
 // The server computes transcript/scene_stats asynchronously: a GET returns
 // this shape immediately, and the caller polls the same URL until the
-// dataset reaches a terminal ('complete' or 'failed') state.
-type DatasetStatusResponse<T> =
+// dataset reaches a terminal ('complete' or 'failed') state. 'not_started'
+// is only returned when the caller passes `?peek=true` (see peek*Status
+// below) - a plain GET always starts generation instead of reporting it.
+export type DatasetStatus = 'not_started' | 'processing' | 'complete' | 'failed';
+
+export type DatasetStatusResponse<T> =
+  | { status: 'not_started' }
   | { status: 'processing' }
   | { status: 'failed'; error: string }
   | ({ status: 'complete' } & T);
@@ -65,11 +70,37 @@ export class DatasetServerService {
     );
   }
 
+  /** Reports current transcript status without ever starting generation -
+   * safe to call for every row in a table without side effects. */
+  peekTranscriptStatus(fileHash: string): Promise<DatasetStatusResponse<Transcript>> {
+    return firstValueFrom(
+      this.http.get<DatasetStatusResponse<Transcript>>(
+        `${this.serverConfig.serverUrl()}/api/videos/${fileHash}/transcript?peek=true`,
+      ),
+    );
+  }
+
+  /** Reports current scene_stats status without ever starting generation -
+   * safe to call for every row in a table without side effects. */
+  peekSceneStatsStatus(fileHash: string): Promise<DatasetStatusResponse<SceneStats>> {
+    return firstValueFrom(
+      this.http.get<DatasetStatusResponse<SceneStats>>(
+        `${this.serverConfig.serverUrl()}/api/videos/${fileHash}/scene_stats?peek=true`,
+      ),
+    );
+  }
+
   private async pollDataset<T>(url: string): Promise<T> {
     const deadline = Date.now() + DATASET_POLL_TIMEOUT_MS;
 
-    let result = await firstValueFrom(this.http.get<DatasetStatusResponse<T>>(url));
-    while (result.status === 'processing') {
+    // Every call to pollDataset() is a fresh, top-level, user-initiated action
+    // (never a passive continuation), so the *first* request may reclaim a
+    // previously-failed job - inert unless the row happens to be 'failed'.
+    // Only this first request retries; the poll loop below never does, so a
+    // failure discovered mid-poll still surfaces as 'failed' and throws below,
+    // rather than silently retrying forever.
+    let result = await firstValueFrom(this.http.get<DatasetStatusResponse<T>>(`${url}?retry=true`));
+    while (result.status === 'processing' || result.status === 'not_started') {
       if (Date.now() > deadline) {
         throw new Error('Timed out waiting for dataset generation to complete.');
       }

@@ -90,11 +90,39 @@
     </ng-container>
     <ng-container matColumnDef="transcript">
       <th mat-header-cell *matHeaderCellDef>Transcript</th>
-      <td mat-cell *matCellDef="let element">{{ element.ds_transcript ? "Yes": null}}</td>
+      <td mat-cell *matCellDef="let element">
+        @if (element.file_hash) {
+        <button
+          mat-icon-button
+          class="server-status"
+          [ngClass]="getTranscriptStatusIcon(element)?.cssClass"
+          [title]="getTranscriptStatusIcon(element)?.label"
+          (click)="checkTranscriptStatus(element.file_hash)"
+        >
+          <mat-icon>{{ getTranscriptStatusIcon(element)?.icon }}</mat-icon>
+        </button>
+        } @else {
+        {{ element.ds_transcript ? "Yes": null}}
+        }
+      </td>
     </ng-container>
     <ng-container matColumnDef="scene-stats">
       <th mat-header-cell *matHeaderCellDef>Scenes Stats</th>
-      <td mat-cell *matCellDef="let element">{{ element.ds_sceneStats? "Yes": null }}</td>
+      <td mat-cell *matCellDef="let element">
+        @if (element.file_hash) {
+        <button
+          mat-icon-button
+          class="server-status"
+          [ngClass]="getSceneStatsStatusIcon(element)?.cssClass"
+          [title]="getSceneStatsStatusIcon(element)?.label"
+          (click)="checkSceneStatsStatus(element.file_hash)"
+        >
+          <mat-icon>{{ getSceneStatsStatusIcon(element)?.icon }}</mat-icon>
+        </button>
+        } @else {
+        {{ element.ds_sceneStats? "Yes": null }}
+        }
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
