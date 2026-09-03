@@ -72,17 +72,6 @@
       >
         {{ transcriptPending() ? 'Computing...' : 'Compute via Server (Whisper)' }}
       </button>
-      @if (canRecomputeWithTimestamps) {
-      <button
-        mat-stroked-button
-        color="accent"
-        [disabled]="transcriptPending()"
-        title="This transcript has no timestamps. Discards the server's cached transcript and runs Whisper again to get per-segment timing."
-        (click)="computeTranscriptViaServer({ regenerate: true })"
-      >
-        {{ transcriptPending() ? 'Computing...' : 'Recompute with Timestamps (Whisper)' }}
-      </button>
-      }
       @if (transcriptError()) {
       <p class="error-text">{{ transcriptError() }}</p>
       }
@@ -104,7 +93,7 @@
         }
       </div>
       } @else {
-      <p>No segments - this transcript predates timestamped transcripts. Recompute it to fill it in.</p>
+      <p>No segments.</p>
       }
       <br />
 

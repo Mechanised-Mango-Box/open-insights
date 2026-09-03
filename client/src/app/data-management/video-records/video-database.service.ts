@@ -24,29 +24,12 @@ export class VideoDatabaseService {
 
   private initDB = async () => {
     return openDB<VideoDBSchema>('video-library-db', 2, {
-      async upgrade(db, oldVersion, _newVersion, transaction) {
-        if (oldVersion < 1) {
-          const store = db.createObjectStore('videos', {
-            keyPath: '__id',
-            autoIncrement: true,
-          });
-          store.createIndex('by_file_hash', 'video_file.hash', { unique: false });
-          return;
-        }
-
-        // v1 used keyPath 'id', which predates the VideoRecord.__id rename - recreate
-        // the store under the corrected keyPath, carrying existing rows over.
-        const oldStore = transaction.objectStore('videos');
-        const existingRecords = (await oldStore.getAll()) as (VideoRecord & { id?: number })[];
-        db.deleteObjectStore('videos');
+      upgrade(db) {
         const store = db.createObjectStore('videos', {
           keyPath: '__id',
           autoIncrement: true,
         });
         store.createIndex('by_file_hash', 'video_file.hash', { unique: false });
-        for (const { id, ...record } of existingRecords) {
-          await store.add({ ...record, __id: record.__id ?? id } as VideoRecord);
-        }
       },
     });
   };
@@ -58,7 +41,7 @@ export class VideoDatabaseService {
       console.error('Failed to load initial videos into signal:', error);
     }
   };
-  async addVideo(record: Omit<VideoRecord, 'id'>): Promise<number> {
+  async addVideo(record: Omit<VideoRecord, '__id'>): Promise<number> {
     const db = await this.dbPromise;
     // Insert into IndexedDB
     const newId = (await db.add('videos', record as VideoRecord)) as number;
@@ -97,7 +80,7 @@ export class VideoDatabaseService {
 
     const db = await this.dbPromise;
 
-    // db.put updates the existing record with the same primary key 'id'
+    // db.put updates the existing record with the same primary key
     const updatedId = (await db.put('videos', record)) as number;
 
     // Update the signal reactively so components re-render automatically

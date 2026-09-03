@@ -11,10 +11,10 @@ def _rebuild_if_pre_async_schema(
     conn: sqlite3.Connection, table: str, create_sql: str, data_columns: str
 ) -> None:
     """A DB created before async generation existed has its data columns
-    (e.g. `text`, `duration_secs`) declared NOT NULL, which rejects a
-    'processing' row that hasn't computed them yet. SQLite can't relax a
-    NOT NULL constraint via ALTER TABLE, so a table missing the `status`
-    column gets rebuilt from scratch, with existing rows carried over as
+    (e.g. `duration_secs`) declared NOT NULL, which rejects a 'processing'
+    row that hasn't computed them yet. SQLite can't relax a NOT NULL
+    constraint via ALTER TABLE, so a table missing the `status` column gets
+    rebuilt from scratch, with existing rows carried over as
     status='complete'."""
     columns = [row[1] for row in conn.execute(f"PRAGMA table_info({table})")]
     if "status" in columns:
@@ -30,54 +30,22 @@ def _rebuild_if_pre_async_schema(
     conn.commit()
 
 
-def _add_column_if_missing(conn: sqlite3.Connection, table: str, column: str, declaration: str) -> None:
-    """Additive, nullable columns (unlike the NOT NULL case above) can just be ALTER-ed in,
-    no rebuild needed."""
-    columns = [row[1] for row in conn.execute(f"PRAGMA table_info({table})")]
-    if column not in columns:
-        conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {declaration}")
-        conn.commit()
-
-
-# Declared once: init_db's CREATE and both rebuild migrations below have to agree on it.
-_TRANSCRIPTS_COLUMNS = """
+def init_db() -> None:
+    conn = sqlite3.connect(DB_PATH)
+    conn.executescript("""
+        CREATE TABLE IF NOT EXISTS files (
+            file_hash   TEXT PRIMARY KEY,
+            file_ext    TEXT NOT NULL,
+            uploaded_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+        CREATE TABLE IF NOT EXISTS transcripts (
             file_hash     TEXT PRIMARY KEY REFERENCES files(file_hash),
             status        TEXT NOT NULL DEFAULT 'processing',
             count_chars   INTEGER,
             count_words   INTEGER,
             segments_json TEXT,
             error         TEXT
-"""
-
-
-def _drop_transcript_text_column(conn: sqlite3.Connection) -> None:
-    """Transcripts are timestamped-only now, so the flattened `text` column is gone. Rows
-    written before segment storage existed keep their counts but lose their text: there's no
-    timing to reconstruct it into, so they have to be transcribed again (the client offers
-    this as "Recompute with Timestamps", via regenerate_transcript_job). Rebuilds the table
-    rather than using ALTER TABLE DROP COLUMN, matching the migration above and working on
-    SQLite older than 3.35."""
-    columns = [row[1] for row in conn.execute("PRAGMA table_info(transcripts)")]
-    if "text" not in columns:
-        return
-
-    carried = "file_hash, status, count_chars, count_words, segments_json, error"
-    conn.execute("ALTER TABLE transcripts RENAME TO transcripts_old")
-    conn.execute(f"CREATE TABLE transcripts ({_TRANSCRIPTS_COLUMNS})")
-    conn.execute(f"INSERT INTO transcripts ({carried}) SELECT {carried} FROM transcripts_old")
-    conn.execute("DROP TABLE transcripts_old")
-    conn.commit()
-
-
-def init_db() -> None:
-    conn = sqlite3.connect(DB_PATH)
-    conn.executescript(f"""
-        CREATE TABLE IF NOT EXISTS files (
-            file_hash   TEXT PRIMARY KEY,
-            file_ext    TEXT NOT NULL,
-            uploaded_at TEXT NOT NULL DEFAULT (datetime('now'))
         );
-        CREATE TABLE IF NOT EXISTS transcripts ({_TRANSCRIPTS_COLUMNS});
         CREATE TABLE IF NOT EXISTS scene_stats (
             file_hash     TEXT PRIMARY KEY REFERENCES files(file_hash),
             status        TEXT NOT NULL DEFAULT 'processing',
@@ -88,15 +56,6 @@ def init_db() -> None:
     """)
     conn.commit()
 
-    _rebuild_if_pre_async_schema(
-        conn,
-        table="transcripts",
-        create_sql=f"CREATE TABLE transcripts ({_TRANSCRIPTS_COLUMNS})",
-        data_columns="count_chars, count_words",
-    )
-    # Ordering matters: segments_json has to exist before the rebuild below carries it over.
-    _add_column_if_missing(conn, "transcripts", "segments_json", "TEXT")
-    _drop_transcript_text_column(conn)
     _rebuild_if_pre_async_schema(
         conn,
         table="scene_stats",
@@ -201,27 +160,6 @@ def retry_transcript_job(file_hash: str) -> bool:
         cursor = conn.execute(
             "UPDATE transcripts SET status = 'processing', error = NULL "
             "WHERE file_hash = ? AND status = 'failed'",
-            (file_hash,),
-        )
-        conn.commit()
-        return cursor.rowcount == 1
-    finally:
-        conn.close()
-
-
-def regenerate_transcript_job(file_hash: str) -> bool:
-    """Reclaims an already-finished (complete or failed) transcript job so Whisper runs
-    again - the way to replace a transcript that was computed before segment timing was
-    stored. Unlike retry_transcript_job this also reclaims 'complete' rows, so it's only
-    ever driven by an explicit user action, never by the client's routine polling. Existing
-    text/segments are left in place until complete_transcript overwrites them, so a failed
-    regeneration doesn't destroy the old transcript. Returns True iff this call claimed the
-    job (i.e. no concurrent request already reclaimed it, and none was already running)."""
-    conn = _connect()
-    try:
-        cursor = conn.execute(
-            "UPDATE transcripts SET status = 'processing', error = NULL "
-            "WHERE file_hash = ? AND status IN ('complete', 'failed')",
             (file_hash,),
         )
         conn.commit()

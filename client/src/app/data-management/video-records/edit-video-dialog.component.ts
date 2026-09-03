@@ -1,7 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpErrorResponse } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -18,12 +17,10 @@ import {
   YoutubeContent,
 } from './Dataset';
 import { calculateSha256, VideoRecord } from './VideoRecord';
-import { DatasetServerService } from '../dataset-server.service';
+import { DatasetActionsService } from './dataset-actions.service';
 import { parseYoutubeAudienceRetentionCsv, parseYoutubeContentCsv } from './youtube-csv-import';
 import { parseTranscriptFile } from './transcript-import';
 import {
-  DatasetPeekResult,
-  ServerStatus,
   STATUS_ICON_STYLES,
   StatusIcon,
   datasetPeekStatusIcon,
@@ -51,7 +48,7 @@ import {
 export class EditVideoDialogComponent {
   readonly dialogRef = inject(MatDialogRef<EditVideoDialogComponent>);
   readonly data = inject<VideoRecord>(MAT_DIALOG_DATA);
-  private readonly datasetServerService = inject(DatasetServerService);
+  private readonly datasetActions = inject(DatasetActionsService);
 
   localData: VideoRecord = { ...this.data };
 
@@ -59,16 +56,21 @@ export class EditVideoDialogComponent {
   readonly YoutubeAudienceRetention = YoutubeAudienceRetention;
   readonly formatTimestamp = formatTimestamp;
 
-  uploadPending = signal(false);
   uploadError = signal<string | null>(null);
-  transcriptPending = signal(false);
   transcriptError = signal<string | null>(null);
-  sceneStatsPending = signal(false);
   sceneStatsError = signal<string | null>(null);
 
-  serverStatus = signal<ServerStatus>('checking');
-  transcriptStatus = signal<DatasetPeekResult>({ status: 'checking' });
-  sceneStatsStatus = signal<DatasetPeekResult>({ status: 'checking' });
+  // Pending state and server statuses live in DatasetActionsService, keyed by file hash, so the
+  // dialog and the table row behind it always agree about what's in flight.
+  uploadPending = () => this.datasetActions.uploadingFile().has(this.localData.video_file.hash);
+  transcriptPending = () =>
+    this.datasetActions.sendingTranscript().has(this.localData.video_file.hash);
+  sceneStatsPending = () =>
+    this.datasetActions.sendingSceneStats().has(this.localData.video_file.hash);
+
+  checkServerStatus = (hash: string) => this.datasetActions.checkServerStatus(hash);
+  checkTranscriptStatus = (hash: string) => this.datasetActions.checkTranscriptStatus(hash);
+  checkSceneStatsStatus = (hash: string) => this.datasetActions.checkSceneStatsStatus(hash);
 
   constructor() {
     const hash = this.localData.video_file.hash;
@@ -76,7 +78,9 @@ export class EditVideoDialogComponent {
   }
 
   get videoFileStatusIcon(): StatusIcon {
-    return serverStatusIcon(this.serverStatus(), {
+    const status =
+      this.datasetActions.serverStatusByHash().get(this.localData.video_file.hash) ?? 'checking';
+    return serverStatusIcon(status, {
       hasLocalFile: !!this.localData.video_file.file,
       uploading: this.uploadPending(),
     });
@@ -87,7 +91,11 @@ export class EditVideoDialogComponent {
   }
 
   get transcriptPeekIcon(): StatusIcon {
-    return datasetPeekStatusIcon(this.transcriptStatus());
+    return datasetPeekStatusIcon(
+      this.datasetActions.transcriptStatusByHash().get(this.localData.video_file.hash) ?? {
+        status: 'checking',
+      },
+    );
   }
 
   get sceneStatsUploadIcon(): StatusIcon | null {
@@ -95,51 +103,17 @@ export class EditVideoDialogComponent {
   }
 
   get sceneStatsPeekIcon(): StatusIcon {
-    return datasetPeekStatusIcon(this.sceneStatsStatus());
+    return datasetPeekStatusIcon(
+      this.datasetActions.sceneStatsStatusByHash().get(this.localData.video_file.hash) ?? {
+        status: 'checking',
+      },
+    );
   }
 
   private refreshStatuses(hash: string): void {
     this.checkServerStatus(hash);
     this.checkTranscriptStatus(hash);
     this.checkSceneStatsStatus(hash);
-  }
-
-  async checkServerStatus(hash: string): Promise<void> {
-    this.serverStatus.set('checking');
-    try {
-      await this.datasetServerService.getVideoMeta(hash);
-      this.serverStatus.set('exists');
-    } catch (error) {
-      this.serverStatus.set(error instanceof HttpErrorResponse && error.status === 404 ? 'missing' : 'error');
-    }
-  }
-
-  async checkTranscriptStatus(hash: string): Promise<void> {
-    this.transcriptStatus.set({ status: 'checking' });
-    try {
-      const response = await this.datasetServerService.peekTranscriptStatus(hash);
-      this.transcriptStatus.set(
-        response.status === 'failed' ? { status: 'failed', error: response.error } : { status: response.status },
-      );
-    } catch (error) {
-      this.transcriptStatus.set(
-        error instanceof HttpErrorResponse && error.status === 404 ? { status: 'not_started' } : { status: 'error' },
-      );
-    }
-  }
-
-  async checkSceneStatsStatus(hash: string): Promise<void> {
-    this.sceneStatsStatus.set({ status: 'checking' });
-    try {
-      const response = await this.datasetServerService.peekSceneStatsStatus(hash);
-      this.sceneStatsStatus.set(
-        response.status === 'failed' ? { status: 'failed', error: response.error } : { status: response.status },
-      );
-    } catch (error) {
-      this.sceneStatsStatus.set(
-        error instanceof HttpErrorResponse && error.status === 404 ? { status: 'not_started' } : { status: 'error' },
-      );
-    }
   }
 
   onVideoFileSelected = (event: Event): void => {
@@ -185,76 +159,50 @@ export class EditVideoDialogComponent {
     this.localData.video_file.file = null;
   }
 
+  // The dataset actions below mutate `localData` only - the dialog still persists nothing until
+  // Save, which hands the record back for the table to write.
   async uploadToServer(): Promise<void> {
-    if (!this.localData.video_file.file) {
-      this.uploadError.set('Select the video file first.');
-      return;
-    }
-    this.uploadPending.set(true);
     this.uploadError.set(null);
     try {
-      await this.datasetServerService.uploadVideo(this.localData.video_file.file);
-      this.localData.video_file.exists_on_server = true;
-      await this.checkServerStatus(this.localData.video_file.hash);
+      if ((await this.datasetActions.uploadFile(this.localData)) === 'no-local-file') {
+        this.uploadError.set('Select the video file first.');
+      }
     } catch (error) {
       console.error('Upload failed:', error);
       this.uploadError.set('Upload failed. See console for details.');
-    } finally {
-      this.uploadPending.set(false);
     }
   }
 
-  async computeTranscriptViaServer(options?: { regenerate?: boolean }): Promise<void> {
-    if (!this.localData.video_file.file) {
+  async computeTranscriptViaServer(): Promise<void> {
+    this.transcriptError.set(null);
+    if (!this.localData.video_file.hash) {
       this.transcriptError.set('Select the video file first.');
       return;
     }
-    this.transcriptPending.set(true);
-    this.transcriptError.set(null);
     try {
-      await this.datasetServerService.uploadVideo(this.localData.video_file.file);
-      const { transcript, stats } = await this.datasetServerService.getTranscript(
-        this.localData.video_file.hash,
-        options,
-      );
-      this.localData.ds_transcript = { upload_state: { is_local: false }, data: transcript };
-      this.localData.ds_transcriptStats = { upload_state: { is_local: false }, data: stats };
+      await this.datasetActions.fetchTranscript(this.localData);
     } catch (error) {
       console.error('Transcript computation failed:', error);
       this.transcriptError.set('Transcript computation failed. See console for details.');
-    } finally {
-      this.transcriptPending.set(false);
     }
   }
 
   async computeSceneStatsViaServer(): Promise<void> {
-    if (!this.localData.video_file.file) {
+    this.sceneStatsError.set(null);
+    if (!this.localData.video_file.hash) {
       this.sceneStatsError.set('Select the video file first.');
       return;
     }
-    this.sceneStatsPending.set(true);
-    this.sceneStatsError.set(null);
     try {
-      await this.datasetServerService.uploadVideo(this.localData.video_file.file);
-      const sceneStats = await this.datasetServerService.getSceneStats(this.localData.video_file.hash);
-      this.localData.ds_sceneStats = { upload_state: { is_local: false }, data: sceneStats };
+      await this.datasetActions.fetchSceneStats(this.localData);
     } catch (error) {
       console.error('Scene stats computation failed:', error);
       this.sceneStatsError.set('Scene stats computation failed. See console for details.');
-    } finally {
-      this.sceneStatsPending.set(false);
     }
   }
 
   get transcriptSegments(): TranscriptSegment[] {
     return this.localData.ds_transcript?.data.segments ?? [];
-  }
-
-  /** A transcript with no segments is the tell-tale of a server row transcribed before
-   * segment timing was stored - its text didn't survive the move to timestamped-only
-   * transcripts, so the only way to fill it back in is another Whisper run. */
-  get canRecomputeWithTimestamps(): boolean {
-    return !!this.localData.ds_transcript && this.transcriptSegments.length === 0;
   }
 
   onTranscriptFileSelected = (event: Event): void => {

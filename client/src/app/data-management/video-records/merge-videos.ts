@@ -140,7 +140,7 @@ export function computeMergePreview(records: VideoRecord[]): MergePreview {
 export function resolveMerge(
   preview: MergePreview,
   choices: Partial<Record<MergeFieldKey, unknown>>,
-): Omit<VideoRecord, 'id'> {
+): Omit<VideoRecord, '__id'> {
   const merged: Partial<VideoRecord> = { ...preview.autoMerged };
 
   for (const conflict of preview.conflicts) {

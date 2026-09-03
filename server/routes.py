@@ -11,7 +11,6 @@ from db import (
     get_scene_stats_row,
     get_transcript_row,
     insert_file,
-    regenerate_transcript_job,
     retry_scene_stats_job,
     retry_transcript_job,
     start_scene_stats_job,
@@ -59,24 +58,13 @@ def __route_get_transcript(file_hash: str):
             submit_transcript_job(file_hash, file_path)
         return jsonify({"status": "processing"}), 200
 
-    # Discards an already-finished transcript and runs Whisper again - the escape hatch for
-    # rows transcribed before segment timing was stored, which would otherwise keep serving
-    # their cached segment-less text forever. Never honoured for a peek, which must stay
-    # side-effect free.
-    if "regenerate" in request.args and "peek" not in request.args:
-        if regenerate_transcript_job(file_hash):
-            submit_transcript_job(file_hash, file_path)
-        return jsonify({"status": "processing"}), 200
-
     if row["status"] == "complete":
-        # Rows completed before segment storage existed have segments_json = NULL; they come
-        # back with an empty segment list, which the client reads as "needs regenerating".
         return jsonify(
             {
                 "status": "complete",
                 "count_chars": row["count_chars"],
                 "count_words": row["count_words"],
-                "segments": json.loads(row["segments_json"]) if row["segments_json"] else [],
+                "segments": json.loads(row["segments_json"]),
             }
         ), 200
     if row["status"] == "failed":
