@@ -11,7 +11,6 @@ import { MergeVideosDialogComponent } from './merge-videos-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { calculateSha256, VideoRecord } from './VideoRecord';
-import { buildExportZip, downloadBlob } from './manifest-export';
 import { SelectionService } from './selection.service';
 import { DatasetActionsService } from './dataset-actions.service';
 import {
@@ -248,22 +247,6 @@ export class VideoTableComponent {
         }
       }
       this.selection.clear();
-    } finally {
-      this.bulkActionPending.set(false);
-    }
-  }
-
-  async exportSelected(): Promise<void> {
-    const records = this.selection.selected;
-    if (records.length === 0) return;
-
-    this.bulkActionPending.set(true);
-    try {
-      const blob = await buildExportZip(records);
-      downloadBlob(blob, `open-insights-export-selected-${new Date().toISOString()}.zip`);
-    } catch (error) {
-      console.error('Export failed:', error);
-      alert('Export failed - see console for details.');
     } finally {
       this.bulkActionPending.set(false);
     }

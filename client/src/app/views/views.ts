@@ -36,7 +36,7 @@ export const WORKFLOW: View[] = [
     id: 'export',
     label: 'Export',
     icon: 'download',
-    blurb: 'Download every record as a zip: manifest, transcripts and media.',
+    blurb: 'Download the selected records as a zip: manifest, transcripts and media.',
   },
   {
     id: 'analysis',

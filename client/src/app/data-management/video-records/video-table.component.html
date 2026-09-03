@@ -16,13 +16,6 @@
     </button>
     <button
       mat-stroked-button
-      [disabled]="isSelectionEmpty || bulkActionPending()"
-      (click)="exportSelected()"
-    >
-      Export Selected
-    </button>
-    <button
-      mat-stroked-button
       [disabled]="selectedCount < 2 || bulkActionPending()"
       (click)="mergeSelected()"
     >

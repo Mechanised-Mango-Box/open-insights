@@ -28,6 +28,16 @@ const fileExtension = (filename: string): string => {
   return dot === -1 ? '' : filename.slice(dot + 1);
 };
 
+export interface ExportOptions {
+  /**
+   * Video files dwarf everything else in the zip, so an export can leave them out. The
+   * records still carry their hash in the manifest - only video_file_path goes null, exactly
+   * as it already does for a record whose file isn't in this browser.
+   */
+  includeVideoFiles?: boolean;
+  onProgress?: (done: number, total: number) => void;
+}
+
 /**
  * Builds the README-documented export tree (manifest.json + transcript/, video_files/ and
  * audience_retention/ subdirectories) as a zip Blob. Simple/scalar fields are inlined into
@@ -35,7 +45,7 @@ const fileExtension = (filename: string): string => {
  */
 export async function buildExportZip(
   records: VideoRecord[],
-  onProgress?: (done: number, total: number) => void,
+  { includeVideoFiles = true, onProgress }: ExportOptions = {},
 ): Promise<Blob> {
   const zip = new JSZip();
   const manifest: ExportManifest = { generated_at: new Date().toISOString(), records: [] };
@@ -60,7 +70,7 @@ export async function buildExportZip(
       manifestRecord.transcript_path = path;
     }
 
-    if (hash && record.video_file.file) {
+    if (includeVideoFiles && hash && record.video_file.file) {
       const ext = fileExtension(record.video_file.file.name);
       const path = `video_files/${hash}${ext ? '.' + ext : ''}`;
       zip.file(path, record.video_file.file);
