@@ -24,12 +24,19 @@ export class VideoDatabaseService {
 
   private initDB = async () => {
     return openDB<VideoDBSchema>('video-library-db', 2, {
-      upgrade(db) {
-        const store = db.createObjectStore('videos', {
-          keyPath: '__id',
-          autoIncrement: true,
-        });
-        store.createIndex('by_file_hash', 'video_file.hash', { unique: false });
+      upgrade(db, oldVersion) {
+        // `upgrade` runs on every version increase, not just on first creation, so the
+        // initial schema is gated on the version that introduced it - re-running
+        // createObjectStore over an existing store throws ConstraintError, which would
+        // leave every caller stuck on a rejected dbPromise. A future bump adds its own
+        // `if (oldVersion < 3)` block alongside this one.
+        if (oldVersion < 2) {
+          const store = db.createObjectStore('videos', {
+            keyPath: '__id',
+            autoIncrement: true,
+          });
+          store.createIndex('by_file_hash', 'video_file.hash', { unique: false });
+        }
       },
     });
   };

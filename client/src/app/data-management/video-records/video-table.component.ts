@@ -77,19 +77,13 @@ export class VideoTableComponent {
       this.selection.clear();
       if (stillPresent.length > 0) this.selection.select(...stillPresent);
 
-      for (const record of records) {
-        const hash = record.video_file.hash;
-        if (!hash) continue;
-        if (!this.datasetActions.serverStatusByHash().has(hash)) {
-          this.datasetActions.checkServerStatus(hash);
-        }
-        if (!this.datasetActions.transcriptStatusByHash().has(hash)) {
-          this.datasetActions.checkTranscriptStatus(hash);
-        }
-        if (!this.datasetActions.sceneStatsStatusByHash().has(hash)) {
-          this.datasetActions.checkSceneStatsStatus(hash);
-        }
-      }
+      // Hand the on-screen hashes to DatasetActionsService, which owns keeping their badges
+      // fresh. It reads no signals, so this effect stays subscribed to videoRecords() alone -
+      // checking the status maps here instead would re-run it once per status write, and
+      // re-walk every record each time.
+      this.datasetActions.trackHashes(
+        records.map((record) => record.video_file.hash).filter((hash) => !!hash),
+      );
     });
   }
 

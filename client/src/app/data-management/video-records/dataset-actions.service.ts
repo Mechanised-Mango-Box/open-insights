@@ -1,9 +1,19 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { DestroyRef, Injectable, effect, inject, signal, untracked } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DatasetServerService } from '../dataset-server.service';
+import { ServerConfigService } from '../server-config.service';
 import { VideoRecord } from './VideoRecord';
 import { computeTranscriptStats } from './Dataset';
 import { DatasetPeekResult, ServerStatus } from './dataset-status';
+
+/** How often a hash still in a non-terminal state gets re-peeked in the background. */
+const STATUS_REFRESH_INTERVAL_MS = 5000;
+
+type CheckOptions = {
+  /** Skip the leading 'checking' state. Background refreshes set this so a settled icon
+   * never flickers back to a spinner underneath the user. */
+  quiet?: boolean;
+};
 
 /**
  * The one implementation of "do a server dataset action to a video record", shared by every
@@ -11,6 +21,11 @@ import { DatasetPeekResult, ServerStatus } from './dataset-status';
  * are just these actions applied across the selection) and the edit dialog. Also owns the
  * per-hash status/in-flight state behind the badges, so an action started from one place shows
  * up everywhere the same record is on screen.
+ *
+ * Those badges are a cache of answers from one particular server, so keeping them honest takes
+ * three things, all handled here rather than by each consumer: a first check when a hash comes
+ * on screen (trackHashes), wiping the lot when the nominated server changes, and a background
+ * re-peek of anything still in a state that can change without the user doing something.
  *
  * Deliberately does *not* touch VideoDatabaseService: persistence stays with the caller,
  * because the edit dialog mustn't write to the DB until the user hits Save.
@@ -24,6 +39,8 @@ import { DatasetPeekResult, ServerStatus } from './dataset-status';
 })
 export class DatasetActionsService {
   private datasetServerService = inject(DatasetServerService);
+  private serverConfig = inject(ServerConfigService);
+  private destroyRef = inject(DestroyRef);
 
   // In-flight actions, keyed by file hash.
   uploadingFile = signal<Set<string>>(new Set());
@@ -35,8 +52,47 @@ export class DatasetActionsService {
   transcriptStatusByHash = signal<Map<string, DatasetPeekResult>>(new Map());
   sceneStatsStatusByHash = signal<Map<string, DatasetPeekResult>>(new Map());
 
-  async checkServerStatus(hash: string): Promise<void> {
-    this.serverStatusByHash.update((map) => new Map(map).set(hash, 'checking'));
+  // Hashes currently on screen. Only these are kept fresh - a record that leaves the table
+  // stops being polled and drops its cached status.
+  private trackedHashes = new Set<string>();
+
+  // Background re-checks in flight. Kept outside the status signals precisely because a
+  // background refresh must not publish a 'checking' state.
+  private refreshing = new Set<string>();
+
+  constructor() {
+    // Every cached status is an answer from one specific server, so pointing the app at a
+    // different one invalidates all of them at once. Harmless on the first run, when nothing
+    // is tracked yet.
+    effect(() => {
+      this.serverConfig.serverUrl();
+      untracked(() => this.recheckAll());
+    });
+
+    const timer = setInterval(() => this.refreshStaleStatuses(), STATUS_REFRESH_INTERVAL_MS);
+    this.destroyRef.onDestroy(() => clearInterval(timer));
+  }
+
+  /**
+   * Declares which hashes are currently on screen: newly-arrived ones get their first status
+   * check, departed ones are forgotten. Reads no signals, so callers can invoke it from an
+   * effect without that effect re-running on every status write.
+   */
+  trackHashes(hashes: Iterable<string>): void {
+    const next = new Set(hashes);
+
+    for (const hash of next) {
+      if (!this.trackedHashes.has(hash)) this.checkAll(hash);
+    }
+
+    const dropped = [...this.trackedHashes].filter((hash) => !next.has(hash));
+    if (dropped.length > 0) this.forget(dropped);
+
+    this.trackedHashes = next;
+  }
+
+  async checkServerStatus(hash: string, { quiet }: CheckOptions = {}): Promise<void> {
+    if (!quiet) this.serverStatusByHash.update((map) => new Map(map).set(hash, 'checking'));
     let status: ServerStatus;
     try {
       await this.datasetServerService.getVideoMeta(hash);
@@ -47,8 +103,10 @@ export class DatasetActionsService {
     this.serverStatusByHash.update((map) => new Map(map).set(hash, status));
   }
 
-  async checkTranscriptStatus(hash: string): Promise<void> {
-    this.transcriptStatusByHash.update((map) => new Map(map).set(hash, { status: 'checking' }));
+  async checkTranscriptStatus(hash: string, { quiet }: CheckOptions = {}): Promise<void> {
+    if (!quiet) {
+      this.transcriptStatusByHash.update((map) => new Map(map).set(hash, { status: 'checking' }));
+    }
     let result: DatasetPeekResult;
     try {
       const response = await this.datasetServerService.peekTranscriptStatus(hash);
@@ -65,8 +123,10 @@ export class DatasetActionsService {
     this.transcriptStatusByHash.update((map) => new Map(map).set(hash, result));
   }
 
-  async checkSceneStatsStatus(hash: string): Promise<void> {
-    this.sceneStatsStatusByHash.update((map) => new Map(map).set(hash, { status: 'checking' }));
+  async checkSceneStatsStatus(hash: string, { quiet }: CheckOptions = {}): Promise<void> {
+    if (!quiet) {
+      this.sceneStatsStatusByHash.update((map) => new Map(map).set(hash, { status: 'checking' }));
+    }
     let result: DatasetPeekResult;
     try {
       const response = await this.datasetServerService.peekSceneStatsStatus(hash);
@@ -186,6 +246,75 @@ export class DatasetActionsService {
       upload_state: { is_local: true, server_side_state: 'ready' },
       data: computeTranscriptStats(record.ds_transcript.data),
     };
+  }
+
+  private checkAll(hash: string, options?: CheckOptions): Promise<unknown> {
+    return Promise.all([
+      this.checkServerStatus(hash, options),
+      this.checkTranscriptStatus(hash, options),
+      this.checkSceneStatsStatus(hash, options),
+    ]);
+  }
+
+  /** Drops every cached answer and asks the current server again. */
+  private recheckAll(): void {
+    this.serverStatusByHash.set(new Map());
+    this.transcriptStatusByHash.set(new Map());
+    this.sceneStatsStatusByHash.set(new Map());
+    this.refreshing.clear();
+    for (const hash of this.trackedHashes) this.checkAll(hash);
+  }
+
+  private forget(hashes: string[]): void {
+    const without = <T>(map: Map<string, T>): Map<string, T> => {
+      const next = new Map(map);
+      for (const hash of hashes) next.delete(hash);
+      return next;
+    };
+    this.serverStatusByHash.update(without);
+    this.transcriptStatusByHash.update(without);
+    this.sceneStatsStatusByHash.update(without);
+    for (const hash of hashes) this.refreshing.delete(hash);
+  }
+
+  /**
+   * Re-peeks the two states that can still change with no input from this browser: a job the
+   * server is running (nothing else will tell us it finished - only the caller that started it
+   * polls, and it may have been started from another tab or by the Scan tab in a previous
+   * session), and a hash whose last check couldn't reach the server (which recovers on its own
+   * when the server comes back).
+   *
+   * 'complete', 'failed', 'not_started', 'exists' and 'missing' only move in response to
+   * something done here, and every one of those paths already re-checks the hash itself - so
+   * polling them would be traffic that can never change an icon.
+   */
+  private refreshStaleStatuses(): void {
+    if (this.trackedHashes.size === 0) return;
+
+    const serverStatuses = this.serverStatusByHash();
+    const transcriptStatuses = this.transcriptStatusByHash();
+    const sceneStatsStatuses = this.sceneStatsStatusByHash();
+    const busy = [this.uploadingFile(), this.sendingTranscript(), this.sendingSceneStats()];
+
+    for (const hash of this.trackedHashes) {
+      // An action already in flight writes its own result when it lands.
+      if (this.refreshing.has(hash) || busy.some((set) => set.has(hash))) continue;
+
+      const isStale = (result: DatasetPeekResult | undefined): boolean =>
+        result?.status === 'processing' || result?.status === 'error';
+
+      const server = serverStatuses.get(hash) === 'error';
+      const transcript = isStale(transcriptStatuses.get(hash));
+      const sceneStats = isStale(sceneStatsStatuses.get(hash));
+      if (!server && !transcript && !sceneStats) continue;
+
+      this.refreshing.add(hash);
+      Promise.all([
+        server ? this.checkServerStatus(hash, { quiet: true }) : null,
+        transcript ? this.checkTranscriptStatus(hash, { quiet: true }) : null,
+        sceneStats ? this.checkSceneStatsStatus(hash, { quiet: true }) : null,
+      ]).finally(() => this.refreshing.delete(hash));
+    }
   }
 
   // Tries the server first (cheap - covers "already uploaded" and "already cached"). Only

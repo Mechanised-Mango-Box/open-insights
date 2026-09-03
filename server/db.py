@@ -7,29 +7,6 @@ from config import DB_PATH
 from models import FileExt, SceneStats, Transcript
 
 
-def _rebuild_if_pre_async_schema(
-    conn: sqlite3.Connection, table: str, create_sql: str, data_columns: str
-) -> None:
-    """A DB created before async generation existed has its data columns
-    (e.g. `duration_secs`) declared NOT NULL, which rejects a 'processing'
-    row that hasn't computed them yet. SQLite can't relax a NOT NULL
-    constraint via ALTER TABLE, so a table missing the `status` column gets
-    rebuilt from scratch, with existing rows carried over as
-    status='complete'."""
-    columns = [row[1] for row in conn.execute(f"PRAGMA table_info({table})")]
-    if "status" in columns:
-        return  # freshly created with the current schema, or already migrated
-
-    conn.execute(f"ALTER TABLE {table} RENAME TO {table}_old")
-    conn.execute(create_sql)
-    conn.execute(
-        f"INSERT INTO {table} (file_hash, status, {data_columns}) "
-        f"SELECT file_hash, 'complete', {data_columns} FROM {table}_old"
-    )
-    conn.execute(f"DROP TABLE {table}_old")
-    conn.commit()
-
-
 def init_db() -> None:
     conn = sqlite3.connect(DB_PATH)
     conn.executescript("""
@@ -55,21 +32,6 @@ def init_db() -> None:
         );
     """)
     conn.commit()
-
-    _rebuild_if_pre_async_schema(
-        conn,
-        table="scene_stats",
-        create_sql="""
-            CREATE TABLE scene_stats (
-                file_hash     TEXT PRIMARY KEY REFERENCES files(file_hash),
-                status        TEXT NOT NULL DEFAULT 'processing',
-                duration_secs REAL,
-                scenes        REAL,
-                error         TEXT
-            )
-        """,
-        data_columns="duration_secs, scenes",
-    )
 
     # Anything still 'processing' at startup belonged to a job in a previous
     # process's in-memory ThreadPoolExecutor, which doesn't survive a restart -

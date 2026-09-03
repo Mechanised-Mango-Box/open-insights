@@ -14,7 +14,12 @@ import { ServerConfigService, DEFAULT_SERVER_URL } from './server-config.service
       <p>Choose which dataset-server this browser talks to. Saved only in this browser.</p>
       <mat-form-field>
         <mat-label>Server URL</mat-label>
-        <input matInput [value]="draftUrl()" (input)="onInput($event)" placeholder="http://localhost:5000" />
+        <input
+          matInput
+          [value]="draftUrl()"
+          (input)="onInput($event)"
+          placeholder="http://localhost:5000"
+        />
       </mat-form-field>
       <button mat-stroked-button type="button" (click)="useLocal()">Use Local</button>
       <button mat-raised-button color="primary" type="button" (click)="save()">Save</button>
