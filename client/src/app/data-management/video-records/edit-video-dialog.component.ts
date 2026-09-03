@@ -9,10 +9,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatDivider } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { Transcript, TranscriptStats, YoutubeAudienceRetention, YoutubeContent } from './Dataset';
+import {
+  computeTranscriptStats,
+  formatTimestamp,
+  Transcript,
+  TranscriptSegment,
+  YoutubeAudienceRetention,
+  YoutubeContent,
+} from './Dataset';
 import { calculateSha256, VideoRecord } from './VideoRecord';
 import { DatasetServerService } from '../dataset-server.service';
 import { parseYoutubeAudienceRetentionCsv, parseYoutubeContentCsv } from './youtube-csv-import';
+import { parseTranscriptFile } from './transcript-import';
 import {
   DatasetPeekResult,
   ServerStatus,
@@ -49,6 +57,7 @@ export class EditVideoDialogComponent {
 
   readonly YoutubeContent = YoutubeContent;
   readonly YoutubeAudienceRetention = YoutubeAudienceRetention;
+  readonly formatTimestamp = formatTimestamp;
 
   uploadPending = signal(false);
   uploadError = signal<string | null>(null);
@@ -195,7 +204,7 @@ export class EditVideoDialogComponent {
     }
   }
 
-  async computeTranscriptViaServer(): Promise<void> {
+  async computeTranscriptViaServer(options?: { regenerate?: boolean }): Promise<void> {
     if (!this.localData.video_file.file) {
       this.transcriptError.set('Select the video file first.');
       return;
@@ -206,6 +215,7 @@ export class EditVideoDialogComponent {
       await this.datasetServerService.uploadVideo(this.localData.video_file.file);
       const { transcript, stats } = await this.datasetServerService.getTranscript(
         this.localData.video_file.hash,
+        options,
       );
       this.localData.ds_transcript = { upload_state: { is_local: false }, data: transcript };
       this.localData.ds_transcriptStats = { upload_state: { is_local: false }, data: stats };
@@ -236,11 +246,15 @@ export class EditVideoDialogComponent {
     }
   }
 
-  // The editor here only ever creates/edits plain-text transcripts (TranscriptBasic);
-  // narrows away TranscriptTimestamped, which nothing in this dialog produces yet.
-  get transcriptText(): string {
-    const data = this.localData.ds_transcript?.data;
-    return data && 'text' in data ? data.text : '';
+  get transcriptSegments(): TranscriptSegment[] {
+    return this.localData.ds_transcript?.data.segments ?? [];
+  }
+
+  /** A transcript with no segments is the tell-tale of a server row transcribed before
+   * segment timing was stored - its text didn't survive the move to timestamped-only
+   * transcripts, so the only way to fill it back in is another Whisper run. */
+  get canRecomputeWithTimestamps(): boolean {
+    return !!this.localData.ds_transcript && this.transcriptSegments.length === 0;
   }
 
   onTranscriptFileSelected = (event: Event): void => {
@@ -249,37 +263,31 @@ export class EditVideoDialogComponent {
     if (!file) return;
 
     file.text().then((text) => {
-      this.setLocalTranscript(text);
+      const transcript = parseTranscriptFile(text);
+      if (transcript.segments.length === 0) {
+        this.transcriptError.set('No subtitle cues found - expected an SRT or VTT file.');
+        return;
+      }
+      this.transcriptError.set(null);
+      this.setLocalTranscript(transcript);
     });
 
     input.value = '';
   };
-
-  onTranscriptTextChanged = (text: string): void => {
-    this.setLocalTranscript(text);
-  };
-
-  createEmptyLocalTranscript(): void {
-    this.setLocalTranscript('');
-  }
 
   clearLocalTranscript(): void {
     this.localData.ds_transcript = null;
     this.localData.ds_transcriptStats = null;
   }
 
-  private setLocalTranscript(text: string): void {
-    const transcript: Transcript = { text };
-    const words = text.trim().length ? text.trim().split(/\s+/) : [];
-    const stats: TranscriptStats = { count_chars: text.length, count_words: words.length };
-
+  private setLocalTranscript(transcript: Transcript): void {
     this.localData.ds_transcript = {
       upload_state: { is_local: true, server_side_state: 'ready' },
       data: transcript,
     };
     this.localData.ds_transcriptStats = {
       upload_state: { is_local: true, server_side_state: 'ready' },
-      data: stats,
+      data: computeTranscriptStats(transcript),
     };
   }
 

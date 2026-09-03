@@ -62,21 +62,36 @@ export const YoutubeAudienceRetention: CanCreateEmpty<YoutubeAudienceRetention> 
   }),
 };
 
-export type Transcript = TranscriptBasic | TranscriptTimestamped;
-export interface TranscriptBasic {
+export interface TranscriptSegment {
+  start: number;
+  end: number;
   text: string;
 }
-export interface TranscriptTimestamped {
-  timestamps: {
-    time: number;
-    text: string;
-  }[];
+export interface Transcript {
+  segments: TranscriptSegment[];
 }
 
 export const Transcript: CanCreateEmpty<Transcript> = {
   createEmpty: () => ({
-    text: '',
+    segments: [],
   }),
+};
+
+/** Formats a seconds offset as "MM:SS" for display next to a transcript segment. */
+export const formatTimestamp = (seconds: number): string => {
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+};
+
+/** Flattens a transcript's segments down to plain text. */
+export const transcriptFullText = (transcript: Transcript): string =>
+  transcript.segments.map((segment) => segment.text).join(' ');
+
+export const computeTranscriptStats = (transcript: Transcript): TranscriptStats => {
+  const text = transcriptFullText(transcript);
+  const words = text.trim().length ? text.trim().split(/\s+/) : [];
+  return { count_chars: text.length, count_words: words.length };
 };
 
 export interface TranscriptStats {

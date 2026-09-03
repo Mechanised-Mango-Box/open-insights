@@ -1,4 +1,12 @@
-import { Cacheable, SceneStats, Transcript, TranscriptStats, YoutubeAudienceRetention, YoutubeContent } from './Dataset';
+import {
+  Cacheable,
+  SceneStats,
+  Transcript,
+  TranscriptStats,
+  YoutubeAudienceRetention,
+  YoutubeContent,
+  transcriptFullText,
+} from './Dataset';
 import { VideoFile, VideoRecord } from './VideoRecord';
 
 export type MergeFieldKey =
@@ -55,10 +63,10 @@ const DESCRIBERS: Record<MergeFieldKey, (value: unknown) => string> = {
     `Audience retention (${(value as YoutubeAudienceRetention).video_position.length} points)`,
   ds_transcript: (value) => {
     const transcript = (value as Cacheable<Transcript>).data;
-    if (!('text' in transcript)) return 'Timestamped transcript';
-    const preview = transcript.text.slice(0, 60);
-    const ellipsis = transcript.text.length > 60 ? '…' : '';
-    return `"${preview}${ellipsis}"`;
+    const text = transcriptFullText(transcript);
+    const preview = text.slice(0, 60);
+    const ellipsis = text.length > 60 ? '…' : '';
+    return `${transcript.segments.length} segment(s): "${preview}${ellipsis}"`;
   },
   ds_transcriptStats: (value) => {
     const stats = (value as Cacheable<TranscriptStats>).data;

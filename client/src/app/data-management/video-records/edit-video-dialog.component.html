@@ -72,6 +72,17 @@
       >
         {{ transcriptPending() ? 'Computing...' : 'Compute via Server (Whisper)' }}
       </button>
+      @if (canRecomputeWithTimestamps) {
+      <button
+        mat-stroked-button
+        color="accent"
+        [disabled]="transcriptPending()"
+        title="This transcript has no timestamps. Discards the server's cached transcript and runs Whisper again to get per-segment timing."
+        (click)="computeTranscriptViaServer({ regenerate: true })"
+      >
+        {{ transcriptPending() ? 'Computing...' : 'Recompute with Timestamps (Whisper)' }}
+      </button>
+      }
       @if (transcriptError()) {
       <p class="error-text">{{ transcriptError() }}</p>
       }
@@ -83,15 +94,18 @@
         <mat-icon>{{ transcriptUploadIcon.icon }}</mat-icon> {{ transcriptUploadIcon.label }}
       </p>
       }
-      <mat-form-field appearance="outline" style="width: 100%">
-        <mat-label>Transcript Text</mat-label>
-        <textarea
-          matInput
-          rows="8"
-          [ngModel]="transcriptText"
-          (ngModelChange)="onTranscriptTextChanged($event)"
-        ></textarea>
-      </mat-form-field>
+      @if (transcriptSegments.length) {
+      <div class="transcript-segments" style="max-height: 240px; overflow-y: auto; margin-bottom: 8px;">
+        @for (segment of transcriptSegments; track $index) {
+        <p>
+          <strong>[{{ formatTimestamp(segment.start) }}–{{ formatTimestamp(segment.end) }}]</strong>
+          {{ segment.text }}
+        </p>
+        }
+      </div>
+      } @else {
+      <p>No segments - this transcript predates timestamped transcripts. Recompute it to fill it in.</p>
+      }
       <br />
 
       <mat-form-field appearance="outline">
@@ -106,15 +120,14 @@
 
       <mat-divider /><button mat-button (click)="clearLocalTranscript()">Clear</button>
       } @else {
-      <button mat-button (click)="createEmptyLocalTranscript()">Create Empty</button>
       <button mat-stroked-button color="primary" (click)="transcriptFileInput.click()">
-        <mat-icon>upload</mat-icon>Upload File
+        <mat-icon>upload</mat-icon>Upload SRT/VTT
       </button>
       <input
         type="file"
         #transcriptFileInput
         style="display: none"
-        accept=".txt,.srt,.vtt"
+        accept=".srt,.vtt"
         (change)="onTranscriptFileSelected($event)"
       />
       @if (localData.video_file.hash) {

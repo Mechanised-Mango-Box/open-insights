@@ -6,7 +6,7 @@ import cv2
 import whisper
 
 from db import complete_scene_stats, complete_transcript, fail_scene_stats, fail_transcript
-from models import SceneStats, Transcript
+from models import SceneStats, Transcript, TranscriptSegment
 from utils import Failure, Result, Success
 
 # Ported from video_analysis/whisper_functions.py. Loaded eagerly at import time,
@@ -32,11 +32,18 @@ _executor = ThreadPoolExecutor(max_workers=2)
 def calculate_transcript(file_path: Path) -> Transcript:
     with _whisper_lock:
         result = _whisper_model.transcribe(str(file_path))
-    text: str = result["text"]
+    segments = [
+        TranscriptSegment(start=segment["start"], end=segment["end"], text=segment["text"])
+        for segment in result["segments"]
+    ]
+    # Counted off the joined segments rather than Whisper's own flattened result["text"], so
+    # these match what the client gets when it recomputes stats from the segments it holds
+    # (transcriptFullText joins the same way) - otherwise the two would drift apart.
+    text = " ".join(segment.text for segment in segments)
     return Transcript(
-        text=text,
         count_chars=len(text),
         count_words=len(text.split()),
+        segments=segments,
     )
 
 

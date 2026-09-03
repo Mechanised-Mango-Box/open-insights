@@ -5,6 +5,7 @@ import { SelectionService } from './selection.service';
 import { VideoDatabaseService } from './video-database.service';
 import { DatasetServerService } from '../dataset-server.service';
 import { VideoRecord } from './VideoRecord';
+import { computeTranscriptStats } from './Dataset';
 
 @Component({
   selector: 'scan-actions',
@@ -79,14 +80,12 @@ export class ScanActionsComponent {
     // action, useful after a transcript's text was edited/imported without its stats
     // being refreshed. Requires a transcript to already be set (run Extract Transcript first).
     return this.runBulk('transcript stats', async (record) => {
-      if (!record.ds_transcript || !('text' in record.ds_transcript.data)) {
+      if (!record.ds_transcript) {
         throw new Error('No transcript to compute stats from - run Extract Transcript first.');
       }
-      const text = record.ds_transcript.data.text;
-      const words = text.trim().length ? text.trim().split(/\s+/) : [];
       record.ds_transcriptStats = {
         upload_state: { is_local: true, server_side_state: 'ready' },
-        data: { count_chars: text.length, count_words: words.length },
+        data: computeTranscriptStats(record.ds_transcript.data),
       };
     });
   }

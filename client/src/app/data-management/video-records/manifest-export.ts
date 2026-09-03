@@ -1,6 +1,6 @@
 import JSZip from 'jszip';
 import { VideoRecord } from './VideoRecord';
-import { Transcript, TranscriptStats, SceneStats, YoutubeContent } from './Dataset';
+import { Transcript, TranscriptStats, SceneStats, YoutubeContent, formatTimestamp } from './Dataset';
 
 export interface ManifestRecord {
   id: string;
@@ -19,17 +19,9 @@ export interface ExportManifest {
   records: ManifestRecord[];
 }
 
-const formatTimestamp = (seconds: number): string => {
-  const m = Math.floor(seconds / 60);
-  const s = Math.floor(seconds % 60);
-  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-};
-
 /** Renders a Transcript as human-readable plain text for the transcript/ subdirectory. */
 const transcriptToText = (transcript: Transcript): string =>
-  'text' in transcript
-    ? transcript.text
-    : transcript.timestamps.map(({ time, text }) => `[${formatTimestamp(time)}] ${text}`).join('\n');
+  transcript.segments.map(({ start, text }) => `[${formatTimestamp(start)}] ${text}`).join('\n');
 
 const fileExtension = (filename: string): string => {
   const dot = filename.lastIndexOf('.');
