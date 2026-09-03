@@ -58,7 +58,6 @@ const newRecordDefaults = (): Omit<VideoRecord, '__id' | 'sort_name'> => ({
 export class VideoRecordsImport {
   private dbService = inject(VideoDatabaseService);
 
-  records = signal<VideoRecord[]>([]);
   importSummary = signal<string | null>(null);
 
   async insertNewEmpty() {
@@ -138,9 +137,4 @@ export class VideoRecordsImport {
     );
     input.value = '';
   }
-
-  // async loadRecords() {
-  //   const data = await this.dbService.getAllVideos();
-  //   this.records.set(data);
-  // }
 }

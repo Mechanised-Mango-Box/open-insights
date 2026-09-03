@@ -5,7 +5,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { OpfsService, VideoItem } from '../opfs.service';
 import { VideoDatabaseService } from './video-database.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditVideoDialogComponent } from './edit-video-dialog.component';
@@ -42,12 +41,10 @@ import {
   styles: [STATUS_ICON_STYLES],
 })
 export class VideoTableComponent {
-  // opfsService = inject(OpfsService);
   private dialog = inject(MatDialog);
   videoDatabaseService = inject(VideoDatabaseService);
   private selectionService = inject(SelectionService);
   private datasetServerService = inject(DatasetServerService);
-  // activeVideo: VideoItem | null = null;
   dataSource = new MatTableDataSource<VideoRecord>([]);
 
   get selection() {
@@ -279,18 +276,6 @@ export class VideoTableComponent {
     }
     await this.videoDatabaseService.updateVideo(record);
   }
-
-  // async onFilesSelected(event: any) {
-  //   const files: FileList = event.target.files;
-  //   if (files && files.length > 0) {
-  //     await this.opfsService.uploadVideos(files);
-  //     event.target.value = ''; // Reset input so selecting the same files again triggers change
-  //   }
-  // }
-
-  // playVideo(video: VideoItem) {
-  //   this.activeVideo = video;
-  // }
 
   openEditMenu = (videoRecord: VideoRecord) => {
     const dialogRef = this.dialog.open(EditVideoDialogComponent, {

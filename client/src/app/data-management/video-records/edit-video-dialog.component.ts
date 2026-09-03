@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
-import { MatDividerModule, MatDivider } from '@angular/material/divider';
+import { MatDivider } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Transcript, TranscriptStats, YoutubeAudienceRetention, YoutubeContent } from './Dataset';
 import { calculateSha256, VideoRecord } from './VideoRecord';
@@ -46,8 +46,6 @@ export class EditVideoDialogComponent {
   private readonly datasetServerService = inject(DatasetServerService);
 
   localData: VideoRecord = { ...this.data };
-  //   selectedFileName: string = '';
-  //   selectedFile: File | null = null;
 
   readonly YoutubeContent = YoutubeContent;
   readonly YoutubeAudienceRetention = YoutubeAudienceRetention;
@@ -175,8 +173,6 @@ export class EditVideoDialogComponent {
   };
 
   clearFile(): void {
-    // this.selectedFile = null;
-    // this.selectedFileName = '';
     this.localData.video_file.file = null;
   }
 

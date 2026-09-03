@@ -2,15 +2,16 @@
 
 A video analysis tool for audio/video features and audience engagement.
 
-## Architecture
-### Client
-A static site which renders and manages local data,  and communicates with the nominated server for its calculations.
+## Quickstart
 
-### Server
-A REST API server which performs the calculations for video analysis as well as model training and inference. It caches results based on the video's hash.
+Go to https://mechanised-mango-box.github.io/open-insights/
 
-## Export
+## Functionality
+
+### Export
+
 This tool will export the results that you have in the following format:
+
 ```
 output/
   |-- manifest.json
@@ -27,3 +28,23 @@ output/
 
 - Simple data will be stored within the `manifest.json`
 - Complex/large data will be given a sub-directory, `manifest.json` will link to it instead
+
+## For Developers/Hosts
+
+### Client
+
+A static site which renders and manages local data, and communicates with the nominated server for its calculations.
+
+```sh
+cd ./client
+ng serve
+```
+
+### Server
+
+A REST API server which performs the calculations for video analysis as well as model training and inference. It caches results based on the video's hash.
+
+```sh
+cd ./server
+py main.py
+```

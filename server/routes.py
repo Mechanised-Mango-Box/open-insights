@@ -1,4 +1,3 @@
-import hashlib
 import os
 from pathlib import Path
 from typing import cast
@@ -19,6 +18,7 @@ from db import (
 from flask import Blueprint, jsonify, redirect, request
 from models import FileExt
 from processing import submit_scene_stats_job, submit_transcript_job
+from utils import hash_stream
 
 bp = Blueprint("api", __name__)
 
@@ -123,14 +123,11 @@ def __route_create_video():
     # something.eXt -> ext; allowed_file() above already guarantees this is one of ALLOWED_EXTENSIONS
     file_ext = cast(FileExt, file_ext.lstrip(".").lower())
     # > Get hash (chunks at a time to reduce blocking load)
-    sha256_hash = hashlib.sha256()
-    for chunk in iter(lambda: file.stream.read(4096), b""):
-        sha256_hash.update(chunk)
+    file_hash = hash_stream(file.stream, chunk_size=4096).lower()
     file.stream.seek(
         0
     )  # Reset the file pointer back to the start so you can save it later
 
-    file_hash = sha256_hash.hexdigest().lower()
     file_name = f"{file_hash}.{file_ext}"
 
     file_path = os.path.join(UPLOAD_FOLDER, file_name)

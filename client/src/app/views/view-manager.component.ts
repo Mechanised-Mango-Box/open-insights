@@ -23,7 +23,13 @@ import { ServerSettingsComponent } from '../data-management/server-settings.comp
         <h2>Records</h2>
         <video-table />
       </mat-tab>
-      <mat-tab label="Analysis"><analysis /></mat-tab>
+      <mat-tab label="Analysis">
+        @defer (on idle) {
+          <analysis />
+        } @placeholder {
+          <p>Loading analysis…</p>
+        }
+      </mat-tab>
       <mat-tab label="Settings"><server-settings /></mat-tab>
     </mat-tab-group>
   `,
