@@ -20,8 +20,16 @@ export function serverStatusIcon(
       return { icon: 'cloud_done', label: 'Video exists on server', cssClass: 'status-exists' };
     case 'missing':
       return opts.hasLocalFile
-        ? { icon: 'cloud_upload', label: 'Video not on server - click to upload', cssClass: 'status-missing' }
-        : { icon: 'cloud_off', label: 'Video not on server - attach a file first', cssClass: 'status-missing' };
+        ? {
+            icon: 'cloud_upload',
+            label: 'Video not on server - click to upload',
+            cssClass: 'status-missing',
+          }
+        : {
+            icon: 'cloud_off',
+            label: 'Video not on server - attach a file first',
+            cssClass: 'status-missing',
+          };
     case 'error':
       return { icon: 'error_outline', label: 'Could not reach server', cssClass: 'status-error' };
   }
@@ -36,8 +44,15 @@ export function datasetPeekStatusIcon(result: DatasetPeekResult): StatusIcon {
       return { icon: 'radio_button_unchecked', label: 'Not started', cssClass: 'status-missing' };
     case 'processing':
       return { icon: 'sync', label: 'Processing...', cssClass: 'status-checking' };
+    // Deliberately not green: the job finished, but this browser holds none of the result,
+    // so the record still exports nothing and still doesn't count toward the analysis.
+    // Green is reserved for 'the data is here' - see uploadStateIcon.
     case 'complete':
-      return { icon: 'check_circle', label: 'Complete', cssClass: 'status-exists' };
+      return {
+        icon: 'cloud_download',
+        label: 'Ready on server - not fetched yet',
+        cssClass: 'status-missing',
+      };
     case 'failed':
       return { icon: 'error_outline', label: `Failed: ${result.error}`, cssClass: 'status-error' };
     case 'error':
@@ -49,9 +64,16 @@ export function datasetPeekStatusIcon(result: DatasetPeekResult): StatusIcon {
  * Icon/label for a Cacheable<T>'s upload_state: whether this locally-held dataset value
  * is known-synced with the server, still local-only, or failed to sync.
  */
-export function uploadStateIcon(cacheable: Cacheable<unknown> | null, sending: boolean): StatusIcon | null {
+export function uploadStateIcon(
+  cacheable: Cacheable<unknown> | null,
+  sending: boolean,
+): StatusIcon | null {
   if (sending) {
-    return { icon: 'hourglass_empty', label: 'Sending to server...', cssClass: 'status-checking' };
+    return {
+      icon: 'hourglass_empty',
+      label: 'Syncing with server...',
+      cssClass: 'status-checking',
+    };
   }
   if (!cacheable) return null;
   const state = cacheable.upload_state;
@@ -59,12 +81,27 @@ export function uploadStateIcon(cacheable: Cacheable<unknown> | null, sending: b
     return { icon: 'cloud_done', label: 'Synced with server', cssClass: 'status-exists' };
   }
   switch (state.server_side_state) {
+    // Not an upload: the click runs DatasetActionsService.fetchTranscript/fetchSceneStats,
+    // which re-runs generation server-side and overwrites this copy. There is no endpoint
+    // that accepts local edits, so nothing here ever travels upwards.
     case 'ready':
-      return { icon: 'cloud_upload', label: 'Local only - click to send to server', cssClass: 'status-missing' };
+      return {
+        icon: 'cloud_queue',
+        label: "Local only - click to replace with the server's version",
+        cssClass: 'status-missing',
+      };
     case 'in_progress':
-      return { icon: 'hourglass_empty', label: 'Sending to server...', cssClass: 'status-checking' };
+      return {
+        icon: 'hourglass_empty',
+        label: 'Syncing with server...',
+        cssClass: 'status-checking',
+      };
     case 'failed':
-      return { icon: 'cloud_off', label: 'Failed to sync with server - click to retry', cssClass: 'status-error' };
+      return {
+        icon: 'cloud_off',
+        label: 'Failed to sync with server - click to retry',
+        cssClass: 'status-error',
+      };
   }
 }
 
