@@ -5,12 +5,13 @@ from typing import cast
 
 import pandas as pd
 from analysis import compute_correlations, compute_histogram, compute_loess
-from config import UPLOAD_FOLDER, allowed_file
+from config import TRANSCRIPT_ENGINE, UPLOAD_FOLDER, allowed_file
 from db import (
     get_file_ext,
     get_scene_stats_row,
     get_transcript_row,
     insert_file,
+    invalidate_transcript_job,
     retry_scene_stats_job,
     retry_transcript_job,
     start_scene_stats_job,
@@ -59,6 +60,19 @@ def __route_get_transcript(file_hash: str):
         return jsonify({"status": "processing"}), 200
 
     if row["status"] == "complete":
+        # A row cached by a different engine has counts and segment boundaries
+        # that no longer match what this one produces, so it gets redone rather
+        # than served - lazily, only for videos actually asked for.
+        if row["engine"] != TRANSCRIPT_ENGINE:
+            # peek is called for every row in a table and is contracted never to
+            # start generation, so a stale row reports as not_started: from the
+            # caller's side there is no transcript for the current engine yet.
+            # Without this, opening the list would re-transcribe the whole table.
+            if "peek" in request.args:
+                return jsonify({"status": "not_started"}), 200
+            if invalidate_transcript_job(file_hash):
+                submit_transcript_job(file_hash, file_path)
+            return jsonify({"status": "processing"}), 200
         return jsonify(
             {
                 "status": "complete",

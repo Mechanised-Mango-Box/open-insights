@@ -3,42 +3,65 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import cv2
-import whisper
+from faster_whisper import WhisperModel
 
+from config import (
+    WHISPER_COMPUTE_TYPE,
+    WHISPER_CPU_THREADS,
+    WHISPER_DEVICE,
+    WHISPER_MODEL,
+    WHISPER_MODEL_DIR,
+    WHISPER_VAD,
+)
 from db import complete_scene_stats, complete_transcript, fail_scene_stats, fail_transcript
 from models import SceneStats, Transcript, TranscriptSegment
 from utils import Failure, Result, Success
 
-# Ported from video_analysis/whisper_functions.py. Loaded eagerly at import time,
-# same as the original — every server start pays the model load cost upfront.
-_whisper_model = whisper.load_model("turbo")
+# Loaded eagerly at import time — every server start pays the model load cost
+# upfront rather than making the first request wear it.
+_whisper_model = WhisperModel(
+    WHISPER_MODEL,
+    device=WHISPER_DEVICE,
+    compute_type=WHISPER_COMPUTE_TYPE,
+    cpu_threads=WHISPER_CPU_THREADS,
+    download_root=WHISPER_MODEL_DIR,
+)
 
-# _whisper_model is a single shared instance - concurrent transcribe() calls from
-# different threads corrupt its internal state (observed in practice as spurious
-# "cannot reshape tensor of 0 elements" failures), so all transcription is
-# serialized through this lock. scene_stats jobs don't touch _whisper_model (each
-# uses its own cv2.VideoCapture) and are unaffected, so they still run concurrently
-# with a transcript job.
+# CTranslate2 is thread-safe, unlike the openai-whisper model this replaced (whose
+# shared state corrupted under concurrent transcribe() calls, surfacing as spurious
+# "cannot reshape tensor of 0 elements" failures). The lock is kept as deliberate
+# admission control: one transcription already saturates the CPU, so overlapping
+# two only makes both slower. Lifting it in favour of num_workers > 1 is a
+# reasonable follow-up, but it should be measured rather than assumed.
 _whisper_lock = threading.Lock()
 
 # Runs transcript/scene_stats generation off the request thread so a GET can
 # return its "processing" status immediately instead of blocking for the
-# duration of the calculation. Whisper and OpenCV do their heavy work in
-# native/PyTorch code that releases the GIL, so a thread pool (rather than
+# duration of the calculation. CTranslate2 and OpenCV do their heavy work in
+# native code that releases the GIL, so a thread pool (rather than
 # multiprocessing) is sufficient to get real concurrency here.
 _executor = ThreadPoolExecutor(max_workers=2)
 
 
 def calculate_transcript(file_path: Path) -> Transcript:
     with _whisper_lock:
-        result = _whisper_model.transcribe(str(file_path))
-    segments = [
-        TranscriptSegment(start=segment["start"], end=segment["end"], text=segment["text"])
-        for segment in result["segments"]
-    ]
-    # Counted off the joined segments rather than Whisper's own flattened result["text"], so
-    # these match what the client gets when it recomputes stats from the segments it holds
-    # (transcriptFullText joins the same way) - otherwise the two would drift apart.
+        # NOT BatchedInferencePipeline: batching is ~1.5x faster but collapses
+        # segments from ~4s to ~25s, which guts the timestamps this exists to
+        # produce. faster-whisper also refuses to batch without vad_filter, so
+        # there is no fine-grained batched option to reach for.
+        segment_iter, _info = _whisper_model.transcribe(
+            str(file_path), vad_filter=WHISPER_VAD
+        )
+        # transcribe() returns a generator and the model only actually runs as it
+        # is consumed, so this list() has to stay inside the lock — hoisting it
+        # out would silently move every transcription outside the serialization.
+        segments = [
+            TranscriptSegment(start=segment.start, end=segment.end, text=segment.text)
+            for segment in segment_iter
+        ]
+    # Counted off the joined segments rather than any flattened whole-transcript string,
+    # so these match what the client gets when it recomputes stats from the segments it
+    # holds (transcriptFullText joins the same way) - otherwise the two would drift apart.
     text = " ".join(segment.text for segment in segments)
     return Transcript(
         count_chars=len(text),
