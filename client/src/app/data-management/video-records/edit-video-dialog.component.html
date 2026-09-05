@@ -77,44 +77,46 @@
       }
       <br />
 
-      @if (localData.ds_transcript) {
+      @if (hasLocalTranscript) {
       @if (transcriptUploadIcon) {
       <p class="server-status" [ngClass]="transcriptUploadIcon.cssClass">
         <mat-icon>{{ transcriptUploadIcon.icon }}</mat-icon> {{ transcriptUploadIcon.label }}
       </p>
       }
-      <mat-form-field appearance="outline" style="width: 100%">
-        <mat-label>Transcript Text</mat-label>
-        <textarea
-          matInput
-          rows="8"
-          [ngModel]="transcriptText"
-          (ngModelChange)="onTranscriptTextChanged($event)"
-        ></textarea>
-      </mat-form-field>
+      @if (transcriptSegments.length) {
+      <div class="transcript-segments" style="max-height: 240px; overflow-y: auto; margin-bottom: 8px;">
+        @for (segment of transcriptSegments; track $index) {
+        <p>
+          <strong>[{{ formatTimestamp(segment.start) }}–{{ formatTimestamp(segment.end) }}]</strong>
+          {{ segment.text }}
+        </p>
+        }
+      </div>
+      } @else {
+      <p>No segments.</p>
+      }
       <br />
 
       <mat-form-field appearance="outline">
         <mat-label>Character Count</mat-label>
-        <input matInput type="number" [value]="localData.ds_transcriptStats?.data.count_chars" disabled />
+        <input matInput type="number" [value]="transcriptStatsData?.count_chars" disabled />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Word Count</mat-label>
-        <input matInput type="number" [value]="localData.ds_transcriptStats?.data.count_words" disabled />
+        <input matInput type="number" [value]="transcriptStatsData?.count_words" disabled />
       </mat-form-field>
 
       <mat-divider /><button mat-button (click)="clearLocalTranscript()">Clear</button>
       } @else {
-      <button mat-button (click)="createEmptyLocalTranscript()">Create Empty</button>
       <button mat-stroked-button color="primary" (click)="transcriptFileInput.click()">
-        <mat-icon>upload</mat-icon>Upload File
+        <mat-icon>upload</mat-icon>Upload SRT/VTT
       </button>
       <input
         type="file"
         #transcriptFileInput
         style="display: none"
-        accept=".txt,.srt,.vtt"
+        accept=".srt,.vtt"
         (change)="onTranscriptFileSelected($event)"
       />
       @if (localData.video_file.hash) {
@@ -149,7 +151,7 @@
       }
       <br />
 
-      @if (localData.ds_sceneStats) {
+      @if (sceneStatsData) {
       @if (sceneStatsUploadIcon) {
       <p class="server-status" [ngClass]="sceneStatsUploadIcon.cssClass">
         <mat-icon>{{ sceneStatsUploadIcon.icon }}</mat-icon> {{ sceneStatsUploadIcon.label }}
@@ -157,15 +159,15 @@
       }
       <mat-form-field appearance="outline">
         <mat-label>Duration (Secs)</mat-label>
-        <input matInput type="number" [value]="localData.ds_sceneStats.data.duration_secs" disabled />
+        <input matInput type="number" [value]="sceneStatsData?.duration_secs" disabled />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Scenes</mat-label>
-        <input matInput type="number" [value]="localData.ds_sceneStats.data.scenes" disabled />
+        <input matInput type="number" [value]="sceneStatsData?.scenes" disabled />
       </mat-form-field>
 
-      <mat-divider /><button mat-button (click)="localData.ds_sceneStats = null">
+      <mat-divider /><button mat-button (click)="clearLocalSceneStats()">
         Clear
       </button>
       } @else {
@@ -292,6 +294,14 @@
       <mat-form-field appearance="outline">
         <mat-label>Avg View Duration (Secs)</mat-label>
         <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.average_view_duration_secs" />
+      </mat-form-field>
+      <br>
+
+      <!-- Video Duration (Secs) - "Video" is load-bearing: the Scene Stats section
+           above has its own read-only "Duration (Secs)" for the file-derived value. -->
+      <mat-form-field appearance="outline">
+        <mat-label>Video Duration (Secs)</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.duration_secs" />
       </mat-form-field>
       <br>
 

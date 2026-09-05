@@ -4,6 +4,7 @@ import {
   AnalysisResult,
   DatasetServerService,
 } from '../dataset-server.service';
+import { readyData } from '../video-records/Dataset';
 import { VideoRecord } from '../video-records/VideoRecord';
 
 export type FeatureRowResult = {
@@ -22,8 +23,10 @@ export class AnalysisService {
     const rows: AnalysisFeatureRow[] = [];
 
     for (const record of records) {
-      const sceneStats = record.ds_sceneStats?.data;
-      const transcriptStats = record.ds_transcriptStats?.data;
+      // readyData() is null unless the value is actually held, so a queued or
+      // failed dataset drops out of the analysis exactly as a missing one does.
+      const sceneStats = readyData(record.ds_sceneStats);
+      const transcriptStats = readyData(record.ds_transcriptStats);
       const avgViewDurationSecs = record.ds_youtubeContent?.average_view_duration_secs;
 
       if (!sceneStats || !transcriptStats || avgViewDurationSecs == null) continue;

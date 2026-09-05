@@ -1,0 +1,16 @@
+# Transcription. Deliberately NOT openai-whisper: CTranslate2 reaches a cloud GPU
+# by switching WHISPER_DEVICE/WHISPER_COMPUTE_TYPE rather than a rewrite, and it
+# keeps torch (plus ~19 nvidia-* CUDA wheels, 3-4GB) out of the container image.
+faster-whisper>=1.2.1
+
+flask
+flask-cors
+
+# Scene stats. Swap for opencv-python-headless when containerising - the server
+# never opens a window, and headless drops the GUI shared-library dependencies.
+opencv-python
+
+pandas
+numpy
+scikit-learn
+matplotlib

@@ -5,10 +5,17 @@ FileExt = Literal["mp4", "avi", "mov", "mkv", "webm"]
 
 
 @dataclass
-class Transcript:
+class TranscriptSegment:
+    start: float
+    end: float
     text: str
+
+
+@dataclass
+class Transcript:
     count_chars: int
     count_words: int
+    segments: list[TranscriptSegment]
 
 
 @dataclass

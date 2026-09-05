@@ -1,6 +1,6 @@
 import {
-  Cacheable,
   CanCreateEmpty,
+  DatasetState,
   SceneStats,
   Transcript,
   TranscriptStats,
@@ -16,10 +16,13 @@ export type VideoRecord = {
   ds_youtubeContent: YoutubeContent | null;
   ds_youtubeAudienceRetention: YoutubeAudienceRetention | null;
 
-  ds_transcript: Cacheable<Transcript> | null;
-  ds_transcriptStats: Cacheable<TranscriptStats> | null;
+  // No `| null`: 'absent' is already the empty case of DatasetState, and having
+  // both meant two ways to say the same thing - which is how a first-time
+  // failure used to vanish, recorded as neither.
+  ds_transcript: DatasetState<Transcript>;
+  ds_transcriptStats: DatasetState<TranscriptStats>;
 
-  ds_sceneStats: Cacheable<SceneStats> | null;
+  ds_sceneStats: DatasetState<SceneStats>;
 };
 
 export const calculateSha256 = async (file: File): Promise<string> => {
@@ -35,6 +38,13 @@ export interface VideoFile {
   file: File | null;
   hash: string; // sha256 of the file, derived from `file` when one is present
   exists_on_server: boolean;
+  /**
+   * Length of `file` as the browser read it, stored rather than recomputed:
+   * reading it is asynchronous, so a table cell cannot ask for it while
+   * rendering. Null when there is no file, or when the browser could not get a
+   * duration out of the one there is.
+   */
+  duration_secs: number | null;
 }
 
 export const VideoFile: CanCreateEmpty<VideoFile> = {
@@ -42,5 +52,6 @@ export const VideoFile: CanCreateEmpty<VideoFile> = {
     file: null,
     hash: '',
     exists_on_server: false,
+    duration_secs: null,
   }),
 };
