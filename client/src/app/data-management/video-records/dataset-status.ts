@@ -58,9 +58,13 @@ export function datasetPeekStatusIcon(result: DatasetPeekResult): StatusIcon {
     // Deliberately not green: the job finished, but this browser holds none of the result,
     // so the record still exports nothing and still doesn't count toward the analysis.
     // Green is reserved for 'the data is here' - see datasetStateIcon.
+    //
+    // cloud_queue rather than cloud_download, because this badge does not download: the table
+    // renders a real download button beside it in exactly this state, and two identical
+    // cloud_download icons side by side would hide which of them is the one that acts.
     case 'ready':
       return {
-        icon: 'cloud_download',
+        icon: 'cloud_queue',
         label: 'Ready on server - not fetched yet',
         cssClass: 'status-missing',
       };

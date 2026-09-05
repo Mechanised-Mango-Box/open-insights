@@ -24,6 +24,7 @@ import {
 import { calculateSha256, VideoRecord } from './VideoRecord';
 import { DatasetActionsService } from './dataset-actions.service';
 import { parseYoutubeAudienceRetentionCsv, parseYoutubeContentCsv } from './youtube-csv-import';
+import { readFileDurationSecs } from './video-duration';
 import { parseTranscriptFile } from './transcript-import';
 import {
   STATUS_ICON_STYLES,
@@ -126,6 +127,9 @@ export class EditVideoDialogComponent {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       this.localData.video_file.file = file;
+      readFileDurationSecs(file).then((duration) => {
+        this.localData.video_file.duration_secs = duration;
+      });
       calculateSha256(file).then((hash) => {
         this.localData.video_file.hash = hash;
         this.refreshStatuses(hash);
@@ -162,6 +166,9 @@ export class EditVideoDialogComponent {
 
   clearFile(): void {
     this.localData.video_file.file = null;
+    // Cleared with the file it describes - a duration outliving its file would
+    // keep feeding the table's Duration column with no way to re-derive it.
+    this.localData.video_file.duration_secs = null;
   }
 
   // The dataset actions below mutate `localData` only - the dialog still persists nothing until

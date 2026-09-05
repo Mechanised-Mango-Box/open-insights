@@ -331,10 +331,32 @@ def enqueue(kind: DatasetKind, file_hash: str, *, force: bool = False) -> bool:
 
     Idempotent: a job already queued or running is left alone. A failed job is
     requeued only while it has attempts left, or when `force` says this is an
-    explicit retry - which also resets the attempt count."""
+    explicit retry - which also resets the attempt count. A result that is
+    already current is nothing to do at all."""
     conn = _connect()
     try:
         with conn:
+            # A producer-current result IS what the caller is asking for, so
+            # there is nothing to queue. Without this the cache never saved any
+            # work on the path that matters: put_result() deletes the job row on
+            # success, so a finished dataset looks enqueueable forever, and the
+            # client opens every fetch with a POST - meaning each one paid for a
+            # full re-transcription of a video that was already transcribed, and
+            # then blocked on it, because 'ready + refreshing' reads as pending.
+            #
+            # Read-then-write rather than one BEGIN IMMEDIATE: the only race is a
+            # result landing between the two statements, which re-runs once and
+            # is exactly the old behaviour. Taking the write lock up front would
+            # put every POST behind the executor threads' commits to close a gap
+            # that costs one redundant job.
+            if not force:
+                row = conn.execute(
+                    f"SELECT producer FROM {kind.table} WHERE file_hash = ?",
+                    (file_hash,),
+                ).fetchone()
+                if row is not None and row["producer"] == kind.producer:
+                    return False
+
             cursor = conn.execute(
                 "INSERT OR IGNORE INTO jobs (kind, file_hash, status) VALUES (?, ?, 'queued')",
                 (kind.name, file_hash),
@@ -432,6 +454,64 @@ def queued_jobs() -> list[sqlite3.Row]:
             "SELECT j.kind, j.file_hash, f.file_ext "
             "FROM jobs j JOIN files f ON f.file_hash = j.file_hash "
             "WHERE j.status = 'queued' ORDER BY j.updated_at"
+        ).fetchall()
+    finally:
+        conn.close()
+
+
+def uncomputed_datasets(kind: DatasetKind, limit: int) -> list[sqlite3.Row]:
+    """Uploaded videos that have no result of this kind at all and no job planning
+    to make one - the gaps the idle sweep exists to fill.
+
+    Deliberately narrower than dataset_state()'s 'absent'. That also covers a
+    result whose producer no longer matches, which would make a model or threshold
+    change silently queue the entire corpus for recompute. Filling a hole nobody
+    has ever filled is a different risk from re-doing work that already has a
+    usable answer, so only the first happens without being asked.
+
+    `j.file_hash IS NULL` is what keeps failed jobs out: they still hold their
+    attempt budget, and an explicit POST is what restarts them. Sweeping them up
+    would turn a video that fails in two seconds into a retry loop that burns
+    MAX_ATTEMPTS before anyone reads the error.
+
+    Newest upload first, so a video just added is picked up ahead of an old
+    backlog."""
+    conn = _connect()
+    try:
+        return conn.execute(
+            "SELECT f.file_hash, f.file_ext FROM files f "
+            f"LEFT JOIN {kind.table} r ON r.file_hash = f.file_hash "
+            "LEFT JOIN jobs j ON j.file_hash = f.file_hash AND j.kind = ? "
+            "WHERE r.file_hash IS NULL AND j.file_hash IS NULL "
+            "ORDER BY f.uploaded_at DESC LIMIT ?",
+            (kind.name, limit),
+        ).fetchall()
+    finally:
+        conn.close()
+
+
+def active_job_count(kind: DatasetKind) -> int:
+    """Jobs of this kind queued or running. Zero is what 'this kind has nothing to
+    do' means, and it counts user-requested work too - that is the point."""
+    conn = _connect()
+    try:
+        return conn.execute(
+            "SELECT COUNT(*) FROM jobs WHERE kind = ? AND status IN ('queued', 'running')",
+            (kind.name,),
+        ).fetchone()[0]
+    finally:
+        conn.close()
+
+
+def job_counts() -> list[sqlite3.Row]:
+    """Every (kind, status) pair that has jobs, with how many. One query rather
+    than a call per kind - a status read wants the whole picture at once, and
+    active_job_count() answers a different question (is this kind idle) for the
+    sweep. A pair with no jobs is simply absent; the caller seeds its own zeroes."""
+    conn = _connect()
+    try:
+        return conn.execute(
+            "SELECT kind, status, COUNT(*) AS count FROM jobs GROUP BY kind, status"
         ).fetchall()
     finally:
         conn.close()

@@ -300,15 +300,20 @@ export class DatasetActionsService {
   }
 
   /**
-   * Re-peeks the two states that can still change with no input from this browser: a job the
+   * Re-peeks the three states that can still change with no input from this browser: a job the
    * server is running (nothing else will tell us it finished - only the caller that started it
    * polls, and it may have been started from another tab or by the Scan tab in a previous
-   * session), and a hash whose last check couldn't reach the server (which recovers on its own
-   * when the server comes back).
+   * session), a hash whose last check couldn't reach the server (which recovers on its own
+   * when the server comes back), and 'absent'.
    *
-   * 'complete', 'failed', 'not_started', 'exists' and 'missing' only move in response to
-   * something done here, and every one of those paths already re-checks the hash itself - so
-   * polling them would be traffic that can never change an icon.
+   * 'absent' is the recent addition, and it is here because the server no longer waits to be
+   * asked: it now fills in videos with no dataset whenever it has nothing else to do. So a row
+   * can go absent -> queued -> ready with this browser doing nothing at all, and without this
+   * the badge would sit on "Not started" until a reload.
+   *
+   * 'complete', 'failed', 'exists' and 'missing' still only move in response to something done
+   * here, and every one of those paths already re-checks the hash itself - so polling them
+   * would be traffic that can never change an icon.
    */
   private refreshStaleStatuses(): void {
     if (this.trackedHashes.size === 0) return;
@@ -322,10 +327,12 @@ export class DatasetActionsService {
       // An action already in flight writes its own result when it lands.
       if (this.refreshing.has(hash) || busy.some((set) => set.has(hash))) continue;
 
-      // Worth re-asking about: work still in flight will change on its own, and
-      // an unreachable server may come back. Both queued and running count -
-      // they are two distinct states now, where 'processing' was one.
+      // Worth re-asking about: work still in flight will change on its own, an
+      // unreachable server may come back, and the server's idle backfill can turn
+      // an absent dataset into a ready one unprompted. Both queued and running
+      // count - they are two distinct states now, where 'processing' was one.
       const isStale = (result: DatasetPeekResult | undefined): boolean =>
+        result?.status === 'absent' ||
         result?.status === 'queued' ||
         result?.status === 'running' ||
         result?.status === 'error';

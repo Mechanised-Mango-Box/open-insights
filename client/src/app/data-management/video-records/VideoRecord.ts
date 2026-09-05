@@ -38,6 +38,13 @@ export interface VideoFile {
   file: File | null;
   hash: string; // sha256 of the file, derived from `file` when one is present
   exists_on_server: boolean;
+  /**
+   * Length of `file` as the browser read it, stored rather than recomputed:
+   * reading it is asynchronous, so a table cell cannot ask for it while
+   * rendering. Null when there is no file, or when the browser could not get a
+   * duration out of the one there is.
+   */
+  duration_secs: number | null;
 }
 
 export const VideoFile: CanCreateEmpty<VideoFile> = {
@@ -45,5 +52,6 @@ export const VideoFile: CanCreateEmpty<VideoFile> = {
     file: null,
     hash: '',
     exists_on_server: false,
+    duration_secs: null,
   }),
 };

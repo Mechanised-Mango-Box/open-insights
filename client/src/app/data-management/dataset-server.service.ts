@@ -1,7 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { SceneStats, Transcript, TranscriptSegment, TranscriptStats } from './video-records/Dataset';
+import {
+  SceneStats,
+  Transcript,
+  TranscriptSegment,
+  TranscriptStats,
+} from './video-records/Dataset';
 import { ServerConfigService } from './server-config.service';
 
 export type VideoMeta = { file_hash: string; file_ext: string };
@@ -13,6 +18,30 @@ export type AnalysisFeatureRow = {
   scene_change_rate: number;
   word_count: number;
   average_percentage_viewed: number;
+};
+
+export type ServerJobCounts = { queued: number; running: number; failed: number };
+
+export type ServerWorkerCounts = {
+  total: number;
+  busy: number;
+  idle: number;
+  /** Tasks handed to this pool that have not reached a thread yet - the executor's
+   * own backlog, which is not the same number as `jobs.queued`. */
+  awaiting_worker: number;
+};
+
+/** The /status payload: queue depth and worker load, as counts. Field names are
+ * the server's own (server/processing.py queue_status), deliberately unchanged in
+ * transit - the same rule the dataset states below follow.
+ *
+ * `kinds` is a Record rather than a fixed pair of keys so a third dataset kind
+ * registered on the server appears here without a client change. */
+export type ServerStatus = {
+  status: string;
+  queue: ServerJobCounts;
+  workers: { total: number; busy: number; idle: number };
+  kinds: Record<string, { jobs: ServerJobCounts; workers: ServerWorkerCounts }>;
 };
 
 export type AnalysisResult = {
@@ -70,6 +99,13 @@ export class DatasetServerService {
     );
   }
 
+  /** Queue depth and worker load on the *active* (saved) server - not whatever is
+   * currently typed into the Settings URL field. Doubles as a reachability check:
+   * an unreachable or misconfigured server rejects here rather than reporting. */
+  getServerStatus(): Promise<ServerStatus> {
+    return firstValueFrom(this.http.get<ServerStatus>(`${this.serverConfig.serverUrl()}/status`));
+  }
+
   getVideoMeta(fileHash: string): Promise<VideoMeta> {
     return firstValueFrom(
       this.http.get<VideoMeta>(`${this.serverConfig.serverUrl()}/api/videos/${fileHash}`),
@@ -117,7 +153,16 @@ export class DatasetServerService {
   /** Resolves to the full 'ready' envelope, not just the payload: `producer`
    * travels with the data so a caller can record what made the value it holds. */
   private async pollDataset<T>(url: string): Promise<DatasetReady<T>> {
-    const deadline = Date.now() + DATASET_POLL_TIMEOUT_MS;
+    // An idle timeout, not a total one: the clock restarts whenever the server reports
+    // something new. The server runs a fixed pool of workers, so a job can sit legitimately
+    // queued for far longer than any one job takes - a scan of ten videos leaves the last of
+    // them behind nine others - and a total deadline failed those on queue depth alone, which
+    // is not a fault and not something the caller can do anything about. A job that is truly
+    // stuck reports the same state every time and still times out on schedule.
+    const signature = (r: DatasetStatusResponse<T>) =>
+      `${r.state}/${r.state === 'ready' ? (r.refreshing ?? '') : ''}`;
+
+    let deadline = Date.now() + DATASET_POLL_TIMEOUT_MS;
 
     // Still in flight - including the case that only exists now: a regeneration
     // over a value that is already good. The server keeps serving the old
@@ -141,7 +186,9 @@ export class DatasetServerService {
         throw new Error('Timed out waiting for dataset generation to complete.');
       }
       await new Promise((resolve) => setTimeout(resolve, DATASET_POLL_INTERVAL_MS));
-      result = await firstValueFrom(this.http.get<DatasetStatusResponse<T>>(url));
+      const next = await firstValueFrom(this.http.get<DatasetStatusResponse<T>>(url));
+      if (signature(next) !== signature(result)) deadline = Date.now() + DATASET_POLL_TIMEOUT_MS;
+      result = next;
     }
     if (result.state === 'failed') {
       throw new Error(result.error);

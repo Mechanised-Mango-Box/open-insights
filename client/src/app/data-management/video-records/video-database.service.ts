@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { VideoRecord } from './VideoRecord';
 import { DatasetState, LOCAL_IMPORT } from './Dataset';
+import { readFileDurationSecs } from './video-duration';
 
 /** The pre-v3 stored shape, kept only so the upgrade can read it. */
 type LegacyCacheable = {
@@ -99,8 +100,40 @@ export class VideoDatabaseService {
     try {
       const records = await this.getAllVideos();
       this.videoRecords.set(records);
+      await this.backfillFileDurations(records);
     } catch (error) {
       console.error('Failed to load initial videos into signal:', error);
+    }
+  };
+
+  /**
+   * Fills in video_file.duration_secs for files attached before that field
+   * existed. Records stored under schema v3 read it back as undefined, and the
+   * field is only written when a file is attached - so without this pass an
+   * existing library would never show a file-derived duration until every file
+   * was re-attached by hand. No schema version bump goes with it: the field is
+   * additive and its absent case is already the same as its empty one.
+   *
+   * Deliberately a one-shot from the constructor rather than anything reactive.
+   * It writes records back, which updates videoRecords(), so running it from an
+   * effect subscribed to that signal would re-trigger itself on every write.
+   *
+   * Sequential rather than Promise.all: each read spins up a decoder over a
+   * whole video file, and a library of them at once is worth avoiding for a
+   * value nothing is waiting on.
+   */
+  private backfillFileDurations = async (records: VideoRecord[]): Promise<void> => {
+    for (const record of records) {
+      const { file, duration_secs } = record.video_file;
+      if (!file || duration_secs != null) continue;
+      try {
+        const duration = await readFileDurationSecs(file);
+        if (duration == null) continue;
+        record.video_file.duration_secs = duration;
+        await this.updateVideo(record);
+      } catch (error) {
+        console.error('Failed to read duration for', file.name, error);
+      }
     }
   };
   async addVideo(record: Omit<VideoRecord, '__id'>): Promise<number> {

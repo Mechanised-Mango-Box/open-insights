@@ -6,7 +6,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { VideoDatabaseService } from './video-database.service';
 import { MatDialog } from '@angular/material/dialog';
-import { SceneStats, Transcript, TranscriptStats, readyData } from './Dataset';
+import { SceneStats, Transcript, TranscriptStats, formatDuration, readyData } from './Dataset';
+import { readFileDurationSecs } from './video-duration';
 import { EditVideoDialogComponent } from './edit-video-dialog.component';
 import { MergeVideosDialogComponent } from './merge-videos-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,6 +24,37 @@ import {
   datasetStateIcon,
 } from './dataset-status';
 
+/**
+ * The File and File Hash columns hold the two unbounded strings in the table - an
+ * arbitrary filename and a 64-character sha256 - and the table has no width of its
+ * own, so left alone they push every column right of them off-screen and force the
+ * whole table into a sideways scroll to reach Actions.
+ *
+ * Truncation lives on an inner span rather than the cell: a `td` in an auto-layout
+ * table treats max-width as a suggestion and grows to fit its content anyway, while
+ * an inline-block honours it. The full value stays in the DOM either way, so it is
+ * still selectable and copyable, and each span carries it as a title tooltip.
+ *
+ * The hash gets the narrower cap of the two. It is read to tell rows apart and to
+ * eyeball against a filename on disk, which the leading characters already settle -
+ * whereas a truncated filename can lose the part that distinguishes it.
+ */
+const TABLE_COLUMN_STYLES = `
+  .truncate {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  .truncate-file {
+    max-width: 220px;
+  }
+  .truncate-hash {
+    max-width: 132px;
+  }
+`;
+
 @Component({
   selector: 'video-table',
   standalone: true,
@@ -36,7 +68,7 @@ import {
     MatIcon,
   ],
   templateUrl: './video-table.component.html',
-  styles: [STATUS_ICON_STYLES],
+  styles: [STATUS_ICON_STYLES, TABLE_COLUMN_STYLES],
 })
 export class VideoTableComponent {
   private dialog = inject(MatDialog);
@@ -105,8 +137,11 @@ export class VideoTableComponent {
     if (!file) return;
 
     record.video_file.file = file;
-    calculateSha256(file).then((hash) => {
+    // Both reads are over the same file and neither depends on the other, so
+    // they run together and persist once rather than writing the record twice.
+    Promise.all([calculateSha256(file), readFileDurationSecs(file)]).then(([hash, duration]) => {
       record.video_file.hash = hash;
+      record.video_file.duration_secs = duration;
       this.videoDatabaseService.updateVideo(record);
     });
 
@@ -135,6 +170,30 @@ export class VideoTableComponent {
     return datasetPeekStatusIcon(result);
   }
 
+  /**
+   * Whether the server holds a finished dataset that this browser does not.
+   *
+   * This is the one state the table had no action for. The cell shows the fetch button only in
+   * the branch where the data is already here, and the other branch's button merely re-peeks -
+   * so a dataset sitting ready on the server could be looked at and never collected. The badge
+   * even said so ("Ready on server - not fetched yet") with no way to act on it.
+   */
+  private isReadyOnServer(
+    record: VideoRecord,
+    statusMap: Map<string, DatasetPeekResult>,
+  ): boolean {
+    const hash = record.video_file.hash;
+    return !!hash && statusMap.get(hash)?.status === 'ready';
+  }
+
+  transcriptReadyOnServer(record: VideoRecord): boolean {
+    return this.isReadyOnServer(record, this.datasetActions.transcriptStatusByHash());
+  }
+
+  sceneStatsReadyOnServer(record: VideoRecord): boolean {
+    return this.isReadyOnServer(record, this.datasetActions.sceneStatsStatusByHash());
+  }
+
   // The template used to test these fields for truthiness to mean "has data".
   // DatasetState is always truthy - 'absent' is a value, not a null - so the
   // question has to be asked explicitly now.
@@ -148,6 +207,38 @@ export class VideoTableComponent {
 
   sceneStatsData(record: VideoRecord): SceneStats | null {
     return readyData(record.ds_sceneStats);
+  }
+
+  protected readonly formatDuration = formatDuration;
+
+  /**
+   * How long the video is, from whichever source has an answer: the YouTube
+   * export first, then the server's scene stats (OpenCV over the uploaded
+   * file), then the file sitting in the browser. Null when none of them do.
+   *
+   * Each tier is gated on > 0, not merely on being present, so a zero from a
+   * probe that opened a file but got nothing useful out of it falls through to
+   * the next source instead of winning and rendering as "0:00". This mirrors
+   * the `duration_secs <= 0` guard the analysis pipeline already applies.
+   */
+  private durationTiers(record: VideoRecord): { secs: number; source: string }[] {
+    const candidates = [
+      { secs: record.ds_youtubeContent?.duration_secs, source: 'From YouTube content report' },
+      { secs: this.sceneStatsData(record)?.duration_secs, source: 'From video file (scene stats)' },
+      { secs: record.video_file.duration_secs, source: 'From local video file' },
+    ];
+    return candidates.filter(
+      (tier): tier is { secs: number; source: string } => (tier.secs ?? 0) > 0,
+    );
+  }
+
+  durationSecs(record: VideoRecord): number | null {
+    return this.durationTiers(record)[0]?.secs ?? null;
+  }
+
+  /** Provenance of the value above, shown as the cell's tooltip. */
+  durationSource(record: VideoRecord): string | null {
+    return this.durationTiers(record)[0]?.source ?? null;
   }
 
   getTranscriptStatusIcon(record: VideoRecord): StatusIcon | null {
@@ -213,6 +304,7 @@ export class VideoTableComponent {
   displayedColumns: string[] = [
     'select',
     'name',
+    'duration',
     'file',
     'file-hash',
     'youtube-content-report',

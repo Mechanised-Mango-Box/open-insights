@@ -1,11 +1,11 @@
 import json
 import os
 from pathlib import Path
-from typing import cast
+from uuid import uuid4
 
 import pandas as pd
 from analysis import compute_correlations, compute_histogram, compute_loess
-from config import UPLOAD_FOLDER, allowed_file
+from config import UPLOAD_FOLDER, video_extension
 from db import (
     KINDS,
     DatasetKind,
@@ -17,8 +17,7 @@ from db import (
 )
 from flask import Blueprint, jsonify, make_response, redirect, request
 from werkzeug.exceptions import NotFound
-from models import FileExt
-from processing import SUBMIT
+from processing import SUBMIT, queue_status
 from utils import hash_stream
 
 bp = Blueprint("api", __name__)
@@ -31,7 +30,12 @@ def __reroute_to_status():
 
 @bp.get("/status")
 def __route_status():
-    return "OK"
+    """Liveness plus what the queue and the workers are doing. Deliberately does
+    not call requeue_expired(), unlike the dataset GET below: this is an
+    observability read, the backfill sweep already reclaims dead leases on its own
+    timer, and with backfill switched off a 'running' job that no worker is on is
+    exactly the thing you came here to see."""
+    return jsonify({"status": "ok", **queue_status()})
 
 
 @bp.get("/api/videos/<file_hash>")
@@ -100,14 +104,23 @@ def __route_start_dataset(file_hash: str, kind_name: str):
     something already queued or running changes nothing and reports the current
     state, so a double-click cannot start two workers.
 
-    ?force=true retries a job that has exhausted MAX_ATTEMPTS - the deliberate
+    Posting over a result that is already producer-current is also nothing:
+    enqueue() declines it and the current result comes straight back. That is
+    what makes the cache worth keeping - the client opens every fetch with a
+    POST, so without it each one re-ran a transcription that already existed.
+
+    ?force=true retries a job that has exhausted MAX_ATTEMPTS, and is also how
+    you deliberately regenerate a result that is already current - the
     'yes, I really do want to try that broken video again'."""
     kind, file_path = _resolve(file_hash, kind_name)
 
     requeue_expired()
-    if enqueue(kind, file_hash, force="force" in request.args):
+    queued = enqueue(kind, file_hash, force="force" in request.args)
+    if queued:
         SUBMIT[kind.name](file_hash, file_path)
-    return jsonify(_serialized(kind, file_hash)), 202
+    # 202 Accepted only when something actually was. Declining to queue and
+    # returning the result that made queueing unnecessary is a 200.
+    return jsonify(_serialized(kind, file_hash)), 202 if queued else 200
 
 
 @bp.post("/api/videos")
@@ -116,17 +129,17 @@ def __route_create_video():
     if "file" not in request.files:
         return jsonify({"err": "No file part in the request"}), 400
     file = request.files["file"]
-    if file.filename == "":
+    if not file.filename:
         return jsonify({"err": "No video selected"}), 400
 
-    # > Check file extention
-    if not file.filename or not allowed_file(file.filename):
+    # > Check file extention. One parse, so the extension that is validated is
+    # the same one that gets stored - see config.video_extension().
+    file_ext = video_extension(file.filename)
+    if file_ext is None:
         return jsonify({"err": "Invalid file type"}), 400
-    _, file_ext = os.path.splitext(file.filename)
-    # something.eXt -> ext; allowed_file() above already guarantees this is one of ALLOWED_EXTENSIONS
-    file_ext = cast(FileExt, file_ext.lstrip(".").lower())
+
     # > Get hash (chunks at a time to reduce blocking load)
-    file_hash = hash_stream(file.stream, chunk_size=4096).lower()
+    file_hash = hash_stream(file.stream).lower()
     file.stream.seek(
         0
     )  # Reset the file pointer back to the start so you can save it later
@@ -139,7 +152,21 @@ def __route_create_video():
         insert_file(file_hash, file_ext)
         return jsonify({"file_hash": file_hash, "filename": file_name}), 200, headers
 
-    file.save(file_path)
+    # Written under a temporary name and moved into place, so the final name
+    # only ever appears on a whole file. Saving directly to it meant a client
+    # that disconnected mid-upload left a truncated video there permanently:
+    # the exists() check above would then report it as already uploaded and
+    # never repair it, and whisper would transcribe the truncation and cache
+    # the short result under a current producer stamp - indistinguishable from
+    # a good one. Same directory, so the replace is atomic.
+    tmp_path = f"{file_path}.{uuid4().hex}.part"
+    try:
+        file.save(tmp_path)
+        os.replace(tmp_path, file_path)
+    except BaseException:
+        Path(tmp_path).unlink(missing_ok=True)
+        raise
+
     insert_file(file_hash, file_ext)
     return jsonify({"file_hash": file_hash, "filename": file_name}), 201, headers
 
@@ -163,6 +190,15 @@ def __route_analysis():
             return jsonify({"err": f"Row {i} is missing required field(s): {', '.join(missing)}"}), 400
 
     df = pd.DataFrame(rows)
+    # Presence was checked above; this checks the values are numbers. Without it a
+    # null or a string reaches np.asarray(dtype=float) inside compute_loess and
+    # raises there, which is a 500 for what is plainly a bad request.
+    for column in required:
+        df[column] = pd.to_numeric(df[column], errors="coerce")
+    bad_rows = df[required].isna().any(axis=1)
+    if bad_rows.any():
+        listed = ", ".join(str(i) for i in df.index[bad_rows])
+        return jsonify({"err": f"Non-numeric or missing value(s) in row(s): {listed}"}), 400
 
     histograms = {}
     for feature in ANALYSIS_FEATURE_COLUMNS:

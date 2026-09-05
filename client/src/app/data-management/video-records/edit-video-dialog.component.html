@@ -297,6 +297,14 @@
       </mat-form-field>
       <br>
 
+      <!-- Video Duration (Secs) - "Video" is load-bearing: the Scene Stats section
+           above has its own read-only "Duration (Secs)" for the file-derived value. -->
+      <mat-form-field appearance="outline">
+        <mat-label>Video Duration (Secs)</mat-label>
+        <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.duration_secs" />
+      </mat-form-field>
+      <br>
+
       <!-- Impressions -->
       <mat-form-field appearance="outline">
         <mat-label>Impressions</mat-label>

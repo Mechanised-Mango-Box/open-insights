@@ -21,6 +21,16 @@ const parseNullableNumber = (value: string | undefined): number | null => {
 };
 
 /**
+ * YouTube writes the "Duration" column as a plain integer count of seconds, but
+ * this routes on the shape rather than trusting that: a colon means it is a
+ * clock-style value and goes through parseDurationToSeconds, anything else is
+ * read as seconds. Older exports omit the column entirely, which lands as null
+ * like any other absent value.
+ */
+const parseDurationColumn = (value: string | undefined): number | null =>
+  value?.includes(':') ? parseDurationToSeconds(value) : parseNullableNumber(value);
+
+/**
  * Parses a YouTube Studio "Content" export. Columns with no corresponding field in
  * YoutubeContent (engaged_views, average_percentage_viewed, stayed_to_watch, unique_viewers,
  * unique_reach, average_views_per_viewer, new_viewers, regular_viewers, casual_viewers,
@@ -50,6 +60,7 @@ export function parseYoutubeContentCsv(csvText: string): YoutubeContentCsvRow[] 
       watch_time_hours: parseNullableNumber(row['Watch time (hours)']),
       subscribers: parseNullableNumber(row['Subscribers']),
       average_view_duration_secs: parseDurationToSeconds(row['Average view duration']),
+      duration_secs: parseDurationColumn(row['Duration']),
       impressions: parseNullableNumber(row['Impressions']),
       impressions_click_through_rate: parseNullableNumber(
         row['Impressions click-through rate (%)'],
