@@ -30,10 +30,29 @@ WHISPER_VAD = os.environ.get("WHISPER_VAD", "0") == "1"
 # its first request. None means the default HuggingFace cache.
 WHISPER_MODEL_DIR = os.environ.get("WHISPER_MODEL_DIR") or None
 
-# Stamped onto every cached transcript so rows produced by a previous engine can
-# be spotted and re-run, instead of silently mixing with new ones and skewing the
-# wpm/word_count features built off them.
-TRANSCRIPT_ENGINE = f"faster-whisper/{WHISPER_MODEL}"
+# How different a frame must be from its predecessor to count as a scene change.
+# Lifted out of processing.py, where it sat as a default argument that nothing
+# ever passed: as config it becomes a real input to SCENE_STATS_PRODUCER, so
+# changing it invalidates the cached results it would change.
+SCENE_THRESHOLD = float(os.environ.get("SCENE_THRESHOLD", "30.0"))
+
+# Stamped onto every cached result. A row whose producer no longer matches was
+# made by a different model or a different parameter, so it reads as absent and
+# gets recomputed rather than silently mixing with current results and skewing
+# the wpm/word_count/scene_change_rate features built off them.
+TRANSCRIPT_PRODUCER = f"faster-whisper/{WHISPER_MODEL}"
+SCENE_STATS_PRODUCER = f"opencv/threshold={SCENE_THRESHOLD}"
+
+# A job whose worker died is requeued rather than failed, so a genuinely broken
+# video would otherwise retry forever. Past this many attempts it stays failed
+# until someone explicitly POSTs a retry.
+MAX_ATTEMPTS = int(os.environ.get("MAX_ATTEMPTS", "3"))
+
+# How long a claimed job may run before another process may assume its worker is
+# gone and requeue it. Generously longer than the slowest plausible transcription
+# (a 42-min talk takes ~11 min on CPU), because requeueing work that is in fact
+# still running wastes an entire job.
+JOB_LEASE_SECONDS = int(os.environ.get("JOB_LEASE_SECONDS", str(2 * 60 * 60)))
 
 
 def allowed_file(filename: str) -> bool:

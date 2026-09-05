@@ -1,11 +1,15 @@
 import threading
+from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from typing import Any
 
 import cv2
 from faster_whisper import WhisperModel
 
 from config import (
+    SCENE_THRESHOLD,
+    UPLOAD_FOLDER,
     WHISPER_COMPUTE_TYPE,
     WHISPER_CPU_THREADS,
     WHISPER_DEVICE,
@@ -13,7 +17,18 @@ from config import (
     WHISPER_MODEL_DIR,
     WHISPER_VAD,
 )
-from db import complete_scene_stats, complete_transcript, fail_scene_stats, fail_transcript
+from db import (
+    KINDS,
+    SCENE_STATS,
+    TRANSCRIPT,
+    DatasetKind,
+    claim,
+    fail,
+    put_result,
+    queued_jobs,
+    scene_stats_values,
+    transcript_values,
+)
 from models import SceneStats, Transcript, TranscriptSegment
 from utils import Failure, Result, Success
 
@@ -70,17 +85,36 @@ def calculate_transcript(file_path: Path) -> Transcript:
     )
 
 
-def _run_transcript_job(file_hash: str, file_path: Path) -> None:
-    try:
-        transcript = calculate_transcript(file_path)
-    except Exception as e:
-        fail_transcript(file_hash, str(e))
-        return
-    complete_transcript(file_hash, transcript)
+def _submit[T](
+    kind: DatasetKind,
+    file_hash: str,
+    file_path: Path,
+    calculate: Callable[[Path], T],
+    to_values: Callable[[T], dict[str, Any]],
+) -> None:
+    """The one path from 'a job is queued' to 'a result exists or the job is
+    marked failed'. Both dataset kinds run through it, so the lifecycle is
+    written once and cannot drift between them.
+
+    claim() is what makes this safe to call more than once for the same hash:
+    only the caller whose UPDATE matched a queued row proceeds, so a duplicate
+    request never starts a second worker on the same video."""
+
+    def run() -> None:
+        if not claim(kind, file_hash):
+            return
+        try:
+            result = calculate(file_path)
+        except Exception as e:
+            fail(kind, file_hash, str(e))
+            return
+        put_result(kind, file_hash, to_values(result))
+
+    _executor.submit(run)
 
 
 def submit_transcript_job(file_hash: str, file_path: Path) -> None:
-    _executor.submit(_run_transcript_job, file_hash, file_path)
+    _submit(TRANSCRIPT, file_hash, file_path, calculate_transcript, transcript_values)
 
 
 # Ported from gui/feature_extraction.py (video_duration_mins, count_scene_transitions),
@@ -99,7 +133,7 @@ def video_duration_mins(video_capture: cv2.VideoCapture) -> Result[float, str]:
 
 
 def count_scene_transitions(
-    video_capture: cv2.VideoCapture, threshold: float = 30.0
+    video_capture: cv2.VideoCapture, threshold: float = SCENE_THRESHOLD
 ) -> Result[int, str]:
     if not video_capture.isOpened():
         return Failure(f"Failed to open video file: {video_capture}")
@@ -128,7 +162,13 @@ def count_scene_transitions(
 def calculate_scene_stats(file_path: Path) -> SceneStats:
     video_capture = cv2.VideoCapture(str(file_path))
     try:
-        match (video_duration_mins(video_capture), count_scene_transitions(video_capture)):
+        # Threshold passed explicitly rather than left to the default, so the
+        # value that shaped this result is the same one SCENE_STATS_PRODUCER
+        # records - otherwise a changed config would not invalidate the cache.
+        match (
+            video_duration_mins(video_capture),
+            count_scene_transitions(video_capture, SCENE_THRESHOLD),
+        ):
             case (Success(duration_mins), Success(transition_count)):
                 return SceneStats(
                     duration_secs=duration_mins * 60,
@@ -140,14 +180,29 @@ def calculate_scene_stats(file_path: Path) -> SceneStats:
         video_capture.release()
 
 
-def _run_scene_stats_job(file_hash: str, file_path: Path) -> None:
-    try:
-        scene_stats = calculate_scene_stats(file_path)
-    except Exception as e:
-        fail_scene_stats(file_hash, str(e))
-        return
-    complete_scene_stats(file_hash, scene_stats)
-
-
 def submit_scene_stats_job(file_hash: str, file_path: Path) -> None:
-    _executor.submit(_run_scene_stats_job, file_hash, file_path)
+    _submit(SCENE_STATS, file_hash, file_path, calculate_scene_stats, scene_stats_values)
+
+
+# Which submitter runs which kind. Lives here rather than in routes.py so the
+# startup resume below and the request path cannot disagree about it.
+SUBMIT: dict[str, Callable[[str, Path], None]] = {
+    TRANSCRIPT.name: submit_transcript_job,
+    SCENE_STATS.name: submit_scene_stats_job,
+}
+
+
+def resume_queued_jobs() -> int:
+    """Hands every queued job back to the executor at startup. The executor is
+    in-process, so a restart loses its workers while the job rows survive:
+    without this, init_db would faithfully requeue interrupted work that then
+    sat unattended forever, since GET is read-only and nothing else picks it up.
+    Returns how many were resubmitted."""
+    rows = queued_jobs()
+    for row in rows:
+        kind = KINDS.get(row["kind"])
+        if kind is None:
+            continue
+        file_path = Path(UPLOAD_FOLDER) / f"{row['file_hash']}.{row['file_ext']}"
+        SUBMIT[kind.name](row["file_hash"], file_path)
+    return len(rows)

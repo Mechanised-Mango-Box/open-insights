@@ -1,5 +1,5 @@
 import {
-  Cacheable,
+  DatasetState,
   SceneStats,
   Transcript,
   TranscriptStats,
@@ -62,18 +62,18 @@ const DESCRIBERS: Record<MergeFieldKey, (value: unknown) => string> = {
   ds_youtubeAudienceRetention: (value) =>
     `Audience retention (${(value as YoutubeAudienceRetention).video_position.length} points)`,
   ds_transcript: (value) => {
-    const transcript = (value as Cacheable<Transcript>).data;
+    const transcript = (value as DatasetState<Transcript> & { state: 'ready' }).data;
     const text = transcriptFullText(transcript);
     const preview = text.slice(0, 60);
     const ellipsis = text.length > 60 ? '…' : '';
     return `${transcript.segments.length} segment(s): "${preview}${ellipsis}"`;
   },
   ds_transcriptStats: (value) => {
-    const stats = (value as Cacheable<TranscriptStats>).data;
+    const stats = (value as DatasetState<TranscriptStats> & { state: 'ready' }).data;
     return `${stats.count_words} words`;
   },
   ds_sceneStats: (value) => {
-    const stats = (value as Cacheable<SceneStats>).data;
+    const stats = (value as DatasetState<SceneStats> & { state: 'ready' }).data;
     return `${stats.scenes} scenes over ${stats.duration_secs}s`;
   },
 };
@@ -109,6 +109,24 @@ const applyValue = (target: Partial<VideoRecord>, key: MergeFieldKey, value: unk
 /** Compares every merge field across the selected records. Fields where every
  * record either omits the field or agrees on its value are resolved automatically;
  * fields with 2+ distinct values become a MergeConflict for the user to resolve. */
+/**
+ * Whether a field value is worth merging at all.
+ *
+ * Dataset fields used to be `Cacheable<T> | null` and an empty one was literally
+ * null, so the old `value == null` test skipped it. DatasetState folds that
+ * empty case into the union as 'absent', which is not null - so without this a
+ * record holding no transcript would contribute 'absent' as a rival value,
+ * raising a conflict against a record that has one and handing the describer a
+ * value with no .data to read.
+ */
+function isMergeable(value: unknown): boolean {
+  if (value === undefined || value === null) return false;
+  if (typeof value === 'object' && 'state' in value) {
+    return (value as { state: string }).state === 'ready';
+  }
+  return true;
+}
+
 export function computeMergePreview(records: VideoRecord[]): MergePreview {
   const autoMerged: Partial<VideoRecord> = {};
   const conflicts: MergeConflict[] = [];
@@ -118,7 +136,7 @@ export function computeMergePreview(records: VideoRecord[]): MergePreview {
 
     records.forEach((record, index) => {
       const value = getFieldValue(record, key);
-      if (value === undefined || value === null) return;
+      if (!isMergeable(value)) return;
       if (!distinct.some((option) => EQUALS[key](option.value, value))) {
         distinct.push({ sourceLabel: recordLabel(record, index), value });
       }
@@ -152,8 +170,11 @@ export function resolveMerge(
     video_file: merged.video_file ?? VideoFile.createEmpty(),
     ds_youtubeContent: merged.ds_youtubeContent ?? null,
     ds_youtubeAudienceRetention: merged.ds_youtubeAudienceRetention ?? null,
-    ds_transcript: merged.ds_transcript ?? null,
-    ds_transcriptStats: merged.ds_transcriptStats ?? null,
-    ds_sceneStats: merged.ds_sceneStats ?? null,
+    // 'absent' rather than null: the empty case belongs inside DatasetState, so
+    // a merged record with no transcript says so in the same vocabulary as one
+    // whose transcript failed.
+    ds_transcript: merged.ds_transcript ?? { state: 'absent' },
+    ds_transcriptStats: merged.ds_transcriptStats ?? { state: 'absent' },
+    ds_sceneStats: merged.ds_sceneStats ?? { state: 'absent' },
   };
 }

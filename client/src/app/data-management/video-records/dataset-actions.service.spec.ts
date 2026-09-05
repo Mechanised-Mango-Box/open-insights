@@ -28,8 +28,8 @@ describe('DatasetActionsService status freshness', () => {
 
     server = {
       getVideoMeta: vi.fn().mockResolvedValue({ file_hash: 'a', file_ext: 'mp4' }),
-      peekTranscriptStatus: vi.fn().mockResolvedValue({ status: 'complete' }),
-      peekSceneStatsStatus: vi.fn().mockResolvedValue({ status: 'complete' }),
+      peekTranscriptStatus: vi.fn().mockResolvedValue({ state: 'ready' }),
+      peekSceneStatsStatus: vi.fn().mockResolvedValue({ state: 'ready' }),
     };
 
     TestBed.configureTestingModule({
@@ -79,7 +79,7 @@ describe('DatasetActionsService status freshness', () => {
   it('drops stale answers immediately when the server changes', async () => {
     service.trackHashes(['a']);
     await settle();
-    expect(service.transcriptStatusByHash().get('a')).toEqual({ status: 'complete' });
+    expect(service.transcriptStatusByHash().get('a')).toEqual({ status: 'ready' });
 
     // Never resolves, so the map stays as the switch left it.
     server.peekTranscriptStatus.mockReturnValue(new Promise(() => {}));
@@ -89,21 +89,21 @@ describe('DatasetActionsService status freshness', () => {
     expect(service.transcriptStatusByHash().get('a')).toEqual({ status: 'checking' });
   });
 
-  it('polls a processing job to completion without flickering to "checking"', async () => {
-    server.peekTranscriptStatus.mockResolvedValue({ status: 'processing' });
+  it('polls a running job to completion without flickering to "checking"', async () => {
+    server.peekTranscriptStatus.mockResolvedValue({ state: 'running' });
     service.trackHashes(['a']);
     await settle();
-    expect(service.transcriptStatusByHash().get('a')).toEqual({ status: 'processing' });
+    expect(service.transcriptStatusByHash().get('a')).toEqual({ status: 'running' });
 
-    server.peekTranscriptStatus.mockResolvedValue({ status: 'complete' });
+    server.peekTranscriptStatus.mockResolvedValue({ state: 'ready' });
     vi.advanceTimersByTime(REFRESH_MS);
 
     // The whole point of the quiet refresh: the badge holds its last real answer while the
     // request is in flight, rather than bouncing back to a spinner every five seconds.
-    expect(service.transcriptStatusByHash().get('a')).toEqual({ status: 'processing' });
+    expect(service.transcriptStatusByHash().get('a')).toEqual({ status: 'running' });
 
     await settle();
-    expect(service.transcriptStatusByHash().get('a')).toEqual({ status: 'complete' });
+    expect(service.transcriptStatusByHash().get('a')).toEqual({ status: 'ready' });
   });
 
   it('stops polling once nothing is in a non-terminal state', async () => {
@@ -134,7 +134,7 @@ describe('DatasetActionsService status freshness', () => {
   });
 
   it('leaves a hash alone while one of its actions is already in flight', async () => {
-    server.peekTranscriptStatus.mockResolvedValue({ status: 'processing' });
+    server.peekTranscriptStatus.mockResolvedValue({ state: 'running' });
     service.trackHashes(['a']);
     await settle();
 

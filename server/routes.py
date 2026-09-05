@@ -5,21 +5,20 @@ from typing import cast
 
 import pandas as pd
 from analysis import compute_correlations, compute_histogram, compute_loess
-from config import TRANSCRIPT_ENGINE, UPLOAD_FOLDER, allowed_file
+from config import UPLOAD_FOLDER, allowed_file
 from db import (
+    KINDS,
+    DatasetKind,
+    dataset_state,
+    enqueue,
     get_file_ext,
-    get_scene_stats_row,
-    get_transcript_row,
     insert_file,
-    invalidate_transcript_job,
-    retry_scene_stats_job,
-    retry_transcript_job,
-    start_scene_stats_job,
-    start_transcript_job,
+    requeue_expired,
 )
-from flask import Blueprint, jsonify, redirect, request
+from flask import Blueprint, jsonify, make_response, redirect, request
+from werkzeug.exceptions import NotFound
 from models import FileExt
-from processing import submit_scene_stats_job, submit_transcript_job
+from processing import SUBMIT
 from utils import hash_stream
 
 bp = Blueprint("api", __name__)
@@ -44,82 +43,71 @@ def __route_get_video(file_hash: str):
     return jsonify({"file_hash": file_hash, "file_ext": file_ext})
 
 
-@bp.get("/api/videos/<file_hash>/transcript")
-def __route_get_transcript(file_hash: str):
+# Both dataset kinds are served by one pair of handlers below rather than a
+# copied block each. The two used to be near-identical and had already drifted -
+# only the transcript one ever learned about stale results - which is exactly
+# the divergence a shared implementation prevents.
+def _not_found(message: str) -> NotFound:
+    """A 404 carrying the same {"err": ...} body the rest of the API uses -
+    werkzeug's default HTML page would break a client that only parses JSON."""
+    return NotFound(response=make_response(jsonify({"err": message}), 404))
+
+
+def _resolve(file_hash: str, kind_name: str) -> tuple[DatasetKind, Path]:
+    """Resolves the URL's two variables, or aborts 404. Aborting rather than
+    returning an error for the caller to forward keeps both handlers reading as
+    the happy path, and keeps the two failures distinct: 'that dataset kind does
+    not exist' and 'that video was never uploaded' send a caller to very
+    different places."""
+    kind = KINDS.get(kind_name)
+    if kind is None:
+        known = ", ".join(sorted(KINDS))
+        raise _not_found(f"Unknown dataset '{kind_name}'. Known: {known}.")
+
     file_ext = get_file_ext(file_hash)
     if file_ext is None:
-        return jsonify({"err": f"No uploaded video found for file hash '{file_hash}'."}), 404
-    file_path = Path(UPLOAD_FOLDER) / f"{file_hash}.{file_ext}"
-
-    row = get_transcript_row(file_hash)
-    if row is None:
-        if "peek" in request.args:
-            return jsonify({"status": "not_started"}), 200
-        if start_transcript_job(file_hash):
-            submit_transcript_job(file_hash, file_path)
-        return jsonify({"status": "processing"}), 200
-
-    if row["status"] == "complete":
-        # A row cached by a different engine has counts and segment boundaries
-        # that no longer match what this one produces, so it gets redone rather
-        # than served - lazily, only for videos actually asked for.
-        if row["engine"] != TRANSCRIPT_ENGINE:
-            # peek is called for every row in a table and is contracted never to
-            # start generation, so a stale row reports as not_started: from the
-            # caller's side there is no transcript for the current engine yet.
-            # Without this, opening the list would re-transcribe the whole table.
-            if "peek" in request.args:
-                return jsonify({"status": "not_started"}), 200
-            if invalidate_transcript_job(file_hash):
-                submit_transcript_job(file_hash, file_path)
-            return jsonify({"status": "processing"}), 200
-        return jsonify(
-            {
-                "status": "complete",
-                "count_chars": row["count_chars"],
-                "count_words": row["count_words"],
-                "segments": json.loads(row["segments_json"]),
-            }
-        ), 200
-    if row["status"] == "failed":
-        if "retry" in request.args:
-            if retry_transcript_job(file_hash):
-                submit_transcript_job(file_hash, file_path)
-            return jsonify({"status": "processing"}), 200
-        return jsonify({"status": "failed", "error": row["error"]}), 200
-    return jsonify({"status": "processing"}), 200
+        raise _not_found(f"No uploaded video found for file hash '{file_hash}'.")
+    return kind, Path(UPLOAD_FOLDER) / f"{file_hash}.{file_ext}"
 
 
-@bp.get("/api/videos/<file_hash>/scene_stats")
-def __route_get_scene_stats(file_hash: str):
-    file_ext = get_file_ext(file_hash)
-    if file_ext is None:
-        return jsonify({"err": f"No uploaded video found for file hash '{file_hash}'."}), 404
-    file_path = Path(UPLOAD_FOLDER) / f"{file_hash}.{file_ext}"
+def _serialized(kind: DatasetKind, file_hash: str):
+    """dataset_state() speaks the storage vocabulary; the wire adds only the one
+    transformation the client cannot do for itself - segments are stored as a
+    JSON string and belong on the wire as an array."""
+    state = dataset_state(kind, file_hash)
+    if state["state"] == "ready" and "segments_json" in state:
+        state["segments"] = json.loads(state.pop("segments_json"))
+    return state
 
-    row = get_scene_stats_row(file_hash)
-    if row is None:
-        if "peek" in request.args:
-            return jsonify({"status": "not_started"}), 200
-        if start_scene_stats_job(file_hash):
-            submit_scene_stats_job(file_hash, file_path)
-        return jsonify({"status": "processing"}), 200
 
-    if row["status"] == "complete":
-        return jsonify(
-            {
-                "status": "complete",
-                "duration_secs": row["duration_secs"],
-                "scenes": row["scenes"],
-            }
-        ), 200
-    if row["status"] == "failed":
-        if "retry" in request.args:
-            if retry_scene_stats_job(file_hash):
-                submit_scene_stats_job(file_hash, file_path)
-            return jsonify({"status": "processing"}), 200
-        return jsonify({"status": "failed", "error": row["error"]}), 200
-    return jsonify({"status": "processing"}), 200
+@bp.get("/api/videos/<file_hash>/<kind_name>")
+def __route_get_dataset(file_hash: str, kind_name: str):
+    """Read-only. Never enqueues, never mutates - which is what makes the
+    client's background re-poll of every visible row safe by construction
+    rather than by remembering to pass ?peek. Use POST to start work."""
+    kind, _ = _resolve(file_hash, kind_name)
+
+    # Reclaiming a job whose worker died is a repair of state that is already
+    # wrong, not a side effect of the read: without it a lost job would report
+    # 'running' forever and the caller would poll to its timeout.
+    requeue_expired()
+    return jsonify(_serialized(kind, file_hash)), 200
+
+
+@bp.post("/api/videos/<file_hash>/<kind_name>")
+def __route_start_dataset(file_hash: str, kind_name: str):
+    """Starts generation, or retries a failed job. Idempotent: posting to
+    something already queued or running changes nothing and reports the current
+    state, so a double-click cannot start two workers.
+
+    ?force=true retries a job that has exhausted MAX_ATTEMPTS - the deliberate
+    'yes, I really do want to try that broken video again'."""
+    kind, file_path = _resolve(file_hash, kind_name)
+
+    requeue_expired()
+    if enqueue(kind, file_hash, force="force" in request.args):
+        SUBMIT[kind.name](file_hash, file_path)
+    return jsonify(_serialized(kind, file_hash)), 202
 
 
 @bp.post("/api/videos")

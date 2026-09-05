@@ -1,6 +1,6 @@
 import {
-  Cacheable,
   CanCreateEmpty,
+  DatasetState,
   SceneStats,
   Transcript,
   TranscriptStats,
@@ -16,10 +16,13 @@ export type VideoRecord = {
   ds_youtubeContent: YoutubeContent | null;
   ds_youtubeAudienceRetention: YoutubeAudienceRetention | null;
 
-  ds_transcript: Cacheable<Transcript> | null;
-  ds_transcriptStats: Cacheable<TranscriptStats> | null;
+  // No `| null`: 'absent' is already the empty case of DatasetState, and having
+  // both meant two ways to say the same thing - which is how a first-time
+  // failure used to vanish, recorded as neither.
+  ds_transcript: DatasetState<Transcript>;
+  ds_transcriptStats: DatasetState<TranscriptStats>;
 
-  ds_sceneStats: Cacheable<SceneStats> | null;
+  ds_sceneStats: DatasetState<SceneStats>;
 };
 
 export const calculateSha256 = async (file: File): Promise<string> => {

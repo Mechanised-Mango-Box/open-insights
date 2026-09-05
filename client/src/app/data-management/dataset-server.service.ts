@@ -21,18 +21,33 @@ export type AnalysisResult = {
   loess: Record<string, { x: number[]; y: number[] }>;
 };
 
-// The server computes transcript/scene_stats asynchronously: a GET returns
-// this shape immediately, and the caller polls the same URL until the
-// dataset reaches a terminal ('complete' or 'failed') state. 'not_started'
-// is only returned when the caller passes `?peek=true` (see peek*Status
-// below) - a plain GET always starts generation instead of reporting it.
-export type DatasetStatus = 'not_started' | 'processing' | 'complete' | 'failed';
+// The server computes transcript/scene_stats asynchronously. GET reports state
+// and never starts anything; POST enqueues or retries. That split is why the
+// background re-poll below is safe: there is no request shape that accidentally
+// starts work, so it cannot be got wrong by forgetting a flag.
+//
+// These names are the server's own (server/db.py dataset_state), deliberately
+// unchanged in transit - the layers used to have three vocabularies for these
+// four states and translating between them is what let them drift.
+export type DatasetStatus = 'absent' | 'queued' | 'running' | 'ready' | 'failed';
+
+/** The 'ready' arm on its own: the payload plus what produced it. Named so
+ * callers can refer to it without an Extract<> that cannot see through the
+ * intersection with T. */
+export type DatasetReady<T> = {
+  state: 'ready';
+  producer: string;
+  produced_at?: string;
+  refreshing?: 'queued' | 'running';
+  refresh_error?: string;
+} & T;
 
 export type DatasetStatusResponse<T> =
-  | { status: 'not_started' }
-  | { status: 'processing' }
-  | { status: 'failed'; error: string }
-  | ({ status: 'complete' } & T);
+  | { state: 'absent' }
+  | { state: 'queued'; attempts?: number }
+  | { state: 'running'; attempts?: number }
+  | { state: 'failed'; error: string; attempts?: number }
+  | DatasetReady<T>;
 
 // The 'complete' shape of a GET .../transcript response.
 type TranscriptApiResponse = TranscriptStats & { segments: TranscriptSegment[] };
@@ -65,58 +80,77 @@ export class DatasetServerService {
   // two separate cacheable fields, so split here.
   async getTranscript(
     fileHash: string,
-  ): Promise<{ transcript: Transcript; stats: TranscriptStats }> {
-    const { count_chars, count_words, segments } = await this.pollDataset<TranscriptApiResponse>(
-      `${this.serverConfig.serverUrl()}/api/videos/${fileHash}/transcript`,
-    );
-    return { transcript: { segments }, stats: { count_chars, count_words } };
+  ): Promise<{ transcript: Transcript; stats: TranscriptStats; producer: string }> {
+    const { count_chars, count_words, segments, producer } =
+      await this.pollDataset<TranscriptApiResponse>(
+        `${this.serverConfig.serverUrl()}/api/videos/${fileHash}/transcript`,
+      );
+    return { transcript: { segments }, stats: { count_chars, count_words }, producer };
   }
 
-  getSceneStats(fileHash: string): Promise<SceneStats> {
-    return this.pollDataset<SceneStats>(
+  async getSceneStats(fileHash: string): Promise<{ sceneStats: SceneStats; producer: string }> {
+    const { duration_secs, scenes, producer } = await this.pollDataset<SceneStats>(
       `${this.serverConfig.serverUrl()}/api/videos/${fileHash}/scene_stats`,
     );
+    return { sceneStats: { duration_secs, scenes }, producer };
   }
 
-  /** Reports current transcript status without ever starting generation -
-   * safe to call for every row in a table without side effects. */
+  /** Reports current transcript state. A plain GET starts nothing, so this is
+   * safe to call for every row in a table - no ?peek flag to remember. */
   peekTranscriptStatus(fileHash: string): Promise<DatasetStatusResponse<TranscriptApiResponse>> {
     return firstValueFrom(
       this.http.get<DatasetStatusResponse<TranscriptApiResponse>>(
-        `${this.serverConfig.serverUrl()}/api/videos/${fileHash}/transcript?peek=true`,
+        `${this.serverConfig.serverUrl()}/api/videos/${fileHash}/transcript`,
       ),
     );
   }
 
-  /** Reports current scene_stats status without ever starting generation -
-   * safe to call for every row in a table without side effects. */
+  /** Reports current scene_stats state. As above: GET never starts work. */
   peekSceneStatsStatus(fileHash: string): Promise<DatasetStatusResponse<SceneStats>> {
     return firstValueFrom(
       this.http.get<DatasetStatusResponse<SceneStats>>(
-        `${this.serverConfig.serverUrl()}/api/videos/${fileHash}/scene_stats?peek=true`,
+        `${this.serverConfig.serverUrl()}/api/videos/${fileHash}/scene_stats`,
       ),
     );
   }
 
-  private async pollDataset<T>(url: string): Promise<T> {
+  /** Resolves to the full 'ready' envelope, not just the payload: `producer`
+   * travels with the data so a caller can record what made the value it holds. */
+  private async pollDataset<T>(url: string): Promise<DatasetReady<T>> {
     const deadline = Date.now() + DATASET_POLL_TIMEOUT_MS;
 
+    // Still in flight - including the case that only exists now: a regeneration
+    // over a value that is already good. The server keeps serving the old
+    // result (it stays valid until the new one lands) and flags it `refreshing`,
+    // so without testing that this would return the stale copy immediately and
+    // the fresh result would never be collected.
+    const pending = (r: DatasetStatusResponse<T>) =>
+      r.state === 'queued' ||
+      r.state === 'running' ||
+      r.state === 'absent' ||
+      (r.state === 'ready' && r.refreshing !== undefined);
+
     // Every call to pollDataset() is a fresh, top-level, user-initiated action
-    // (never a passive continuation), so the *first* request may reclaim a
-    // previously-failed job - inert unless the row happens to be 'failed'.
-    // Only this first request retries; the poll loop below never does, so a
-    // failure discovered mid-poll still surfaces as 'failed' and throws below,
-    // rather than silently retrying forever.
-    let result = await firstValueFrom(this.http.get<DatasetStatusResponse<T>>(`${url}?retry=true`));
-    while (result.status === 'processing' || result.status === 'not_started') {
+    // (never a passive continuation), so it opens with the one POST that starts
+    // or retries work. Everything after is a GET, which cannot start anything -
+    // so a failure discovered mid-poll surfaces as 'failed' and throws below,
+    // rather than being quietly retried forever.
+    let result = await firstValueFrom(this.http.post<DatasetStatusResponse<T>>(url, null));
+    while (pending(result)) {
       if (Date.now() > deadline) {
         throw new Error('Timed out waiting for dataset generation to complete.');
       }
       await new Promise((resolve) => setTimeout(resolve, DATASET_POLL_INTERVAL_MS));
       result = await firstValueFrom(this.http.get<DatasetStatusResponse<T>>(url));
     }
-    if (result.status === 'failed') {
+    if (result.state === 'failed') {
       throw new Error(result.error);
+    }
+    // pending() cannot narrow the union for the compiler (it is a function, not
+    // a type guard), so restate the invariant here: the loop only exits on a
+    // terminal state, and 'failed' is already handled above.
+    if (result.state !== 'ready') {
+      throw new Error(`Unexpected dataset state '${result.state}'.`);
     }
     return result;
   }

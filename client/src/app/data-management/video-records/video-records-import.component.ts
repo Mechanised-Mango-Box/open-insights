@@ -12,9 +12,9 @@ const newRecordDefaults = (): Omit<VideoRecord, '__id' | 'sort_name'> => ({
   video_file: VideoFile.createEmpty(),
   ds_youtubeContent: null,
   ds_youtubeAudienceRetention: null,
-  ds_transcript: null,
-  ds_transcriptStats: null,
-  ds_sceneStats: null,
+  ds_transcript: { state: 'absent' },
+  ds_transcriptStats: { state: 'absent' },
+  ds_sceneStats: { state: 'absent' },
 });
 
 @Component({

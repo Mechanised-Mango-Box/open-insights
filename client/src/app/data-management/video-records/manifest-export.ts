@@ -1,6 +1,13 @@
 import JSZip from 'jszip';
 import { VideoRecord } from './VideoRecord';
-import { Transcript, TranscriptStats, SceneStats, YoutubeContent, formatTimestamp } from './Dataset';
+import {
+  Transcript,
+  TranscriptStats,
+  SceneStats,
+  YoutubeContent,
+  formatTimestamp,
+  readyData,
+} from './Dataset';
 
 export interface ManifestRecord {
   id: string;
@@ -57,16 +64,17 @@ export async function buildExportZip(
       sort_name: record.sort_name,
       video_file: hash ? { hash, exists_on_server: record.video_file.exists_on_server } : null,
       youtube_content: record.ds_youtubeContent,
-      transcript_stats: record.ds_transcriptStats?.data ?? null,
-      scene_stats: record.ds_sceneStats?.data ?? null,
+      transcript_stats: readyData(record.ds_transcriptStats),
+      scene_stats: readyData(record.ds_sceneStats),
       transcript_path: null,
       video_file_path: null,
       audience_retention_path: null,
     };
 
-    if (hash && record.ds_transcript) {
+    const transcript = readyData(record.ds_transcript);
+    if (hash && transcript) {
       const path = `transcript/${hash}.txt`;
-      zip.file(path, transcriptToText(record.ds_transcript.data));
+      zip.file(path, transcriptToText(transcript));
       manifestRecord.transcript_path = path;
     }
 

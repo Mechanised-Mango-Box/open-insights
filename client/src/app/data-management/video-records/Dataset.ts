@@ -1,8 +1,50 @@
-export type Cacheable<T> = {
-  upload_state:
-    { is_local: false } | { is_local: true; server_side_state: 'ready' | 'failed' | 'in_progress' };
-  data: T;
-};
+/**
+ * Where a locally-held dataset value came from, when it does not come from a
+ * server run. `producer` is stamped by whatever made the data, so it doubles as
+ * provenance: the old model carried an `is_local` boolean, which said where the
+ * value was but nothing about what made it.
+ */
+export const LOCAL_IMPORT = 'local-import';
+export const LOCAL_RECOMPUTE = 'local-recompute';
+
+/**
+ * One dataset value and what is known about it, mirroring the states the server
+ * derives (see dataset_state() in server/db.py) so client and server share a
+ * single vocabulary instead of translating between three.
+ *
+ * `data` lives only in the 'ready' case. That is the point of the shape: a
+ * failed or in-flight value cannot carry a payload, which the previous model
+ * allowed and relied on convention to avoid.
+ */
+export type DatasetState<T> =
+  | { state: 'absent' }
+  | { state: 'queued' }
+  | { state: 'running' }
+  | { state: 'failed'; error: string; attempts?: number }
+  | {
+      state: 'ready';
+      data: T;
+      producer: string;
+      produced_at?: string;
+      /** A regeneration is in flight; the data below is still the current one. */
+      refreshing?: 'queued' | 'running';
+      /**
+       * A refresh over this value failed. The data is still usable and still
+       * exports - it just is not what the current producer would make now. Kept
+       * rather than discarded so a network blip cannot destroy a transcript
+       * that took eleven minutes to produce.
+       */
+      refresh_error?: string;
+    };
+
+/** Narrowing helper - reads better than checking the tag at every call site. */
+export const isReady = <T>(
+  value: DatasetState<T> | undefined,
+): value is Extract<DatasetState<T>, { state: 'ready' }> => value?.state === 'ready';
+
+/** The value if it is ready, otherwise null - for the many read-only consumers. */
+export const readyData = <T>(value: DatasetState<T> | undefined): T | null =>
+  isReady(value) ? value.data : null;
 
 export interface CanCreateEmpty<T> {
   createEmpty(): T;

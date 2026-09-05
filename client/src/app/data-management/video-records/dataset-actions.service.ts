@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { DatasetServerService } from '../dataset-server.service';
 import { ServerConfigService } from '../server-config.service';
 import { VideoRecord } from './VideoRecord';
-import { computeTranscriptStats } from './Dataset';
+import { DatasetState, LOCAL_RECOMPUTE, computeTranscriptStats, isReady } from './Dataset';
 import { DatasetPeekResult, ServerStatus } from './dataset-status';
 
 /** How often a hash still in a non-terminal state gets re-peeked in the background. */
@@ -111,13 +111,16 @@ export class DatasetActionsService {
     try {
       const response = await this.datasetServerService.peekTranscriptStatus(hash);
       result =
-        response.status === 'failed'
+        response.state === 'failed'
           ? { status: 'failed', error: response.error }
-          : { status: response.status };
+          : { status: response.state };
     } catch (error) {
+      // A 404 means the server has no such video at all, which is a different
+      // thing from having no dataset for it - but from a status badge's point
+      // of view both mean "nothing has been generated here".
       result =
         error instanceof HttpErrorResponse && error.status === 404
-          ? { status: 'not_started' }
+          ? { status: 'absent' }
           : { status: 'error' };
     }
     this.transcriptStatusByHash.update((map) => new Map(map).set(hash, result));
@@ -131,16 +134,36 @@ export class DatasetActionsService {
     try {
       const response = await this.datasetServerService.peekSceneStatsStatus(hash);
       result =
-        response.status === 'failed'
+        response.state === 'failed'
           ? { status: 'failed', error: response.error }
-          : { status: response.status };
+          : { status: response.state };
     } catch (error) {
+      // A 404 means the server has no such video at all, which is a different
+      // thing from having no dataset for it - but from a status badge's point
+      // of view both mean "nothing has been generated here".
       result =
         error instanceof HttpErrorResponse && error.status === 404
-          ? { status: 'not_started' }
+          ? { status: 'absent' }
           : { status: 'error' };
     }
     this.sceneStatsStatusByHash.update((map) => new Map(map).set(hash, result));
+  }
+
+  /**
+   * Records that a refresh failed, keeping any value already held.
+   *
+   * The two cases differ in what there is to preserve. Over a 'ready' value the
+   * data survives and gains refresh_error: it is still usable, still exports,
+   * and still counts toward the analysis - it simply is not the newest. With
+   * nothing held, the failure becomes the state in its own right, so that a
+   * first-time failure is visible instead of leaving the field looking as
+   * though generation had never been attempted.
+   */
+  private markRefreshFailure<T>(current: DatasetState<T>, error: string): DatasetState<T> {
+    if (isReady(current)) {
+      return { ...current, refreshing: undefined, refresh_error: error };
+    }
+    return { state: 'failed', error };
   }
 
   /**
@@ -182,18 +205,20 @@ export class DatasetActionsService {
 
     this.sendingTranscript.update((set) => new Set(set).add(hash));
     try {
-      const { transcript, stats } = await this.fetchOrUpload(record, () =>
+      const { transcript, stats, producer } = await this.fetchOrUpload(record, () =>
         this.datasetServerService.getTranscript(hash),
       );
-      record.ds_transcript = { upload_state: { is_local: false }, data: transcript };
-      record.ds_transcriptStats = { upload_state: { is_local: false }, data: stats };
+      record.ds_transcript = { state: 'ready', data: transcript, producer };
+      record.ds_transcriptStats = { state: 'ready', data: stats, producer };
     } catch (error) {
-      if (record.ds_transcript) {
-        record.ds_transcript = {
-          ...record.ds_transcript,
-          upload_state: { is_local: true, server_side_state: 'failed' },
-        };
-      }
+      // A failed refresh over a good value keeps the value and records why -
+      // losing an eleven-minute transcript to a network blip would be worse
+      // than holding one that is merely not the newest. With no prior value
+      // there is nothing to keep, so the failure itself becomes the state:
+      // previously that case was dropped entirely and read as 'never tried'.
+      const message = error instanceof Error ? error.message : String(error);
+      record.ds_transcript = this.markRefreshFailure(record.ds_transcript, message);
+      record.ds_transcriptStats = this.markRefreshFailure(record.ds_transcriptStats, message);
       throw error;
     } finally {
       this.sendingTranscript.update((set) => {
@@ -211,17 +236,13 @@ export class DatasetActionsService {
 
     this.sendingSceneStats.update((set) => new Set(set).add(hash));
     try {
-      const sceneStats = await this.fetchOrUpload(record, () =>
+      const { sceneStats, producer } = await this.fetchOrUpload(record, () =>
         this.datasetServerService.getSceneStats(hash),
       );
-      record.ds_sceneStats = { upload_state: { is_local: false }, data: sceneStats };
+      record.ds_sceneStats = { state: 'ready', data: sceneStats, producer };
     } catch (error) {
-      if (record.ds_sceneStats) {
-        record.ds_sceneStats = {
-          ...record.ds_sceneStats,
-          upload_state: { is_local: true, server_side_state: 'failed' },
-        };
-      }
+      const message = error instanceof Error ? error.message : String(error);
+      record.ds_sceneStats = this.markRefreshFailure(record.ds_sceneStats, message);
       throw error;
     } finally {
       this.sendingSceneStats.update((set) => {
@@ -239,12 +260,13 @@ export class DatasetActionsService {
    * refreshed. Requires a transcript to already be set.
    */
   recomputeTranscriptStats(record: VideoRecord): void {
-    if (!record.ds_transcript) {
+    if (!isReady(record.ds_transcript)) {
       throw new Error('No transcript to compute stats from - run Extract Transcript first.');
     }
     record.ds_transcriptStats = {
-      upload_state: { is_local: true, server_side_state: 'ready' },
+      state: 'ready',
       data: computeTranscriptStats(record.ds_transcript.data),
+      producer: LOCAL_RECOMPUTE,
     };
   }
 
@@ -300,8 +322,13 @@ export class DatasetActionsService {
       // An action already in flight writes its own result when it lands.
       if (this.refreshing.has(hash) || busy.some((set) => set.has(hash))) continue;
 
+      // Worth re-asking about: work still in flight will change on its own, and
+      // an unreachable server may come back. Both queued and running count -
+      // they are two distinct states now, where 'processing' was one.
       const isStale = (result: DatasetPeekResult | undefined): boolean =>
-        result?.status === 'processing' || result?.status === 'error';
+        result?.status === 'queued' ||
+        result?.status === 'running' ||
+        result?.status === 'error';
 
       const server = serverStatuses.get(hash) === 'error';
       const transcript = isStale(transcriptStatuses.get(hash));

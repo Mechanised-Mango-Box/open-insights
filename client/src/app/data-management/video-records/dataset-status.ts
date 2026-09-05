@@ -1,7 +1,16 @@
-import { Cacheable } from './Dataset';
+import { DatasetState, LOCAL_IMPORT, LOCAL_RECOMPUTE } from './Dataset';
 import { DatasetStatus } from '../dataset-server.service';
 
 export type ServerStatus = 'checking' | 'exists' | 'missing' | 'error';
+
+/**
+ * A server-reported dataset state, plus the two states that are purely local to
+ * this browser and have no server equivalent: 'checking' (a request is in
+ * flight) and 'error' (the server could not be reached at all). Keeping those
+ * two visibly separate from DatasetStatus is deliberate - conflating "the
+ * server says nothing has run" with "we could not ask" is what made the old
+ * vocabularies impossible to line up.
+ */
 export type DatasetPeekResult = { status: DatasetStatus | 'checking' | 'error'; error?: string };
 export type StatusIcon = { icon: string; label: string; cssClass: string };
 
@@ -40,14 +49,16 @@ export function datasetPeekStatusIcon(result: DatasetPeekResult): StatusIcon {
   switch (result.status) {
     case 'checking':
       return { icon: 'hourglass_empty', label: 'Checking status...', cssClass: 'status-checking' };
-    case 'not_started':
+    case 'absent':
       return { icon: 'radio_button_unchecked', label: 'Not started', cssClass: 'status-missing' };
-    case 'processing':
+    case 'queued':
+      return { icon: 'schedule', label: 'Queued...', cssClass: 'status-checking' };
+    case 'running':
       return { icon: 'sync', label: 'Processing...', cssClass: 'status-checking' };
     // Deliberately not green: the job finished, but this browser holds none of the result,
     // so the record still exports nothing and still doesn't count toward the analysis.
-    // Green is reserved for 'the data is here' - see uploadStateIcon.
-    case 'complete':
+    // Green is reserved for 'the data is here' - see datasetStateIcon.
+    case 'ready':
       return {
         icon: 'cloud_download',
         label: 'Ready on server - not fetched yet',
@@ -61,47 +72,62 @@ export function datasetPeekStatusIcon(result: DatasetPeekResult): StatusIcon {
 }
 
 /**
- * Icon/label for a Cacheable<T>'s upload_state: whether this locally-held dataset value
- * is known-synced with the server, still local-only, or failed to sync.
+ * Icon/label for a dataset value this browser actually holds.
+ *
+ * Replaces the old uploadStateIcon: nothing here was ever uploaded. The click
+ * runs DatasetActionsService.fetchTranscript/fetchSceneStats, which re-runs
+ * generation server-side and overwrites this copy - there is no endpoint that
+ * accepts local edits, so nothing here ever travels upwards. `producer` now
+ * records what made the value, which is the question the old `is_local` boolean
+ * was standing in for.
  */
-export function uploadStateIcon(
-  cacheable: Cacheable<unknown> | null,
+export function datasetStateIcon(
+  value: DatasetState<unknown> | undefined,
   sending: boolean,
 ): StatusIcon | null {
   if (sending) {
-    return {
-      icon: 'hourglass_empty',
-      label: 'Syncing with server...',
-      cssClass: 'status-checking',
-    };
+    return { icon: 'hourglass_empty', label: 'Syncing with server...', cssClass: 'status-checking' };
   }
-  if (!cacheable) return null;
-  const state = cacheable.upload_state;
-  if (!state.is_local) {
-    return { icon: 'cloud_done', label: 'Synced with server', cssClass: 'status-exists' };
-  }
-  switch (state.server_side_state) {
-    // Not an upload: the click runs DatasetActionsService.fetchTranscript/fetchSceneStats,
-    // which re-runs generation server-side and overwrites this copy. There is no endpoint
-    // that accepts local edits, so nothing here ever travels upwards.
-    case 'ready':
-      return {
-        icon: 'cloud_queue',
-        label: "Local only - click to replace with the server's version",
-        cssClass: 'status-missing',
-      };
-    case 'in_progress':
-      return {
-        icon: 'hourglass_empty',
-        label: 'Syncing with server...',
-        cssClass: 'status-checking',
-      };
+  if (!value) return null;
+
+  switch (value.state) {
+    case 'absent':
+      return null;
+    case 'queued':
+      return { icon: 'schedule', label: 'Queued on server...', cssClass: 'status-checking' };
+    case 'running':
+      return { icon: 'hourglass_empty', label: 'Generating on server...', cssClass: 'status-checking' };
     case 'failed':
       return {
         icon: 'cloud_off',
-        label: 'Failed to sync with server - click to retry',
+        label: `Failed: ${value.error} - click to retry`,
         cssClass: 'status-error',
       };
+    case 'ready':
+      // The data is here and usable in every branch below; these differ only in
+      // how much it can be trusted to match what the server would produce now.
+      if (value.refresh_error) {
+        return {
+          icon: 'cloud_off',
+          label: `Held, but the last refresh failed (${value.refresh_error}) - click to retry`,
+          cssClass: 'status-error',
+        };
+      }
+      if (value.refreshing) {
+        return {
+          icon: 'hourglass_empty',
+          label: 'Held - a newer version is generating...',
+          cssClass: 'status-checking',
+        };
+      }
+      if (value.producer === LOCAL_IMPORT || value.producer === LOCAL_RECOMPUTE) {
+        return {
+          icon: 'cloud_queue',
+          label: "Local only - click to replace with the server's version",
+          cssClass: 'status-missing',
+        };
+      }
+      return { icon: 'cloud_done', label: `Synced with server (${value.producer})`, cssClass: 'status-exists' };
   }
 }
 

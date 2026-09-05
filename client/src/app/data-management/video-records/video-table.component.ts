@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { VideoDatabaseService } from './video-database.service';
 import { MatDialog } from '@angular/material/dialog';
+import { SceneStats, Transcript, TranscriptStats, readyData } from './Dataset';
 import { EditVideoDialogComponent } from './edit-video-dialog.component';
 import { MergeVideosDialogComponent } from './merge-videos-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,7 +20,7 @@ import {
   StatusIcon,
   datasetPeekStatusIcon,
   serverStatusIcon,
-  uploadStateIcon,
+  datasetStateIcon,
 } from './dataset-status';
 
 @Component({
@@ -134,6 +135,21 @@ export class VideoTableComponent {
     return datasetPeekStatusIcon(result);
   }
 
+  // The template used to test these fields for truthiness to mean "has data".
+  // DatasetState is always truthy - 'absent' is a value, not a null - so the
+  // question has to be asked explicitly now.
+  transcriptData(record: VideoRecord): Transcript | null {
+    return readyData(record.ds_transcript);
+  }
+
+  transcriptStatsData(record: VideoRecord): TranscriptStats | null {
+    return readyData(record.ds_transcriptStats);
+  }
+
+  sceneStatsData(record: VideoRecord): SceneStats | null {
+    return readyData(record.ds_sceneStats);
+  }
+
   getTranscriptStatusIcon(record: VideoRecord): StatusIcon | null {
     return this.getDatasetStatusIcon(record, this.datasetActions.transcriptStatusByHash());
   }
@@ -143,14 +159,14 @@ export class VideoTableComponent {
   }
 
   getTranscriptUploadIcon(record: VideoRecord): StatusIcon | null {
-    return uploadStateIcon(
+    return datasetStateIcon(
       record.ds_transcript,
       this.sendingTranscript().has(record.video_file.hash),
     );
   }
 
   getSceneStatsUploadIcon(record: VideoRecord): StatusIcon | null {
-    return uploadStateIcon(
+    return datasetStateIcon(
       record.ds_sceneStats,
       this.sendingSceneStats().has(record.video_file.hash),
     );

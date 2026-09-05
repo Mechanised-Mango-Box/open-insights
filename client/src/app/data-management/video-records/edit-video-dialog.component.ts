@@ -9,7 +9,12 @@ import { MatIcon } from '@angular/material/icon';
 import { MatDivider } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import {
+  LOCAL_IMPORT,
+  SceneStats,
+  TranscriptStats,
   computeTranscriptStats,
+  isReady,
+  readyData,
   formatTimestamp,
   Transcript,
   TranscriptSegment,
@@ -25,7 +30,7 @@ import {
   StatusIcon,
   datasetPeekStatusIcon,
   serverStatusIcon,
-  uploadStateIcon,
+  datasetStateIcon,
 } from './dataset-status';
 
 @Component({
@@ -87,7 +92,7 @@ export class EditVideoDialogComponent {
   }
 
   get transcriptUploadIcon(): StatusIcon | null {
-    return uploadStateIcon(this.localData.ds_transcript, this.transcriptPending());
+    return datasetStateIcon(this.localData.ds_transcript, this.transcriptPending());
   }
 
   get transcriptPeekIcon(): StatusIcon {
@@ -99,7 +104,7 @@ export class EditVideoDialogComponent {
   }
 
   get sceneStatsUploadIcon(): StatusIcon | null {
-    return uploadStateIcon(this.localData.ds_sceneStats, this.sceneStatsPending());
+    return datasetStateIcon(this.localData.ds_sceneStats, this.sceneStatsPending());
   }
 
   get sceneStatsPeekIcon(): StatusIcon {
@@ -201,8 +206,24 @@ export class EditVideoDialogComponent {
     }
   }
 
+  get hasLocalTranscript(): boolean {
+    return isReady(this.localData.ds_transcript);
+  }
+
+  get transcriptStatsData(): TranscriptStats | null {
+    return readyData(this.localData.ds_transcriptStats);
+  }
+
+  get sceneStatsData(): SceneStats | null {
+    return readyData(this.localData.ds_sceneStats);
+  }
+
+  clearLocalSceneStats(): void {
+    this.localData.ds_sceneStats = { state: 'absent' };
+  }
+
   get transcriptSegments(): TranscriptSegment[] {
-    return this.localData.ds_transcript?.data.segments ?? [];
+    return readyData(this.localData.ds_transcript)?.segments ?? [];
   }
 
   onTranscriptFileSelected = (event: Event): void => {
@@ -224,18 +245,22 @@ export class EditVideoDialogComponent {
   };
 
   clearLocalTranscript(): void {
-    this.localData.ds_transcript = null;
-    this.localData.ds_transcriptStats = null;
+    this.localData.ds_transcript = { state: 'absent' };
+    this.localData.ds_transcriptStats = { state: 'absent' };
   }
 
   private setLocalTranscript(transcript: Transcript): void {
+    // producer records that this came from a file the user supplied, not a
+    // server run - the question the old is_local flag was gesturing at.
     this.localData.ds_transcript = {
-      upload_state: { is_local: true, server_side_state: 'ready' },
+      state: 'ready',
       data: transcript,
+      producer: LOCAL_IMPORT,
     };
     this.localData.ds_transcriptStats = {
-      upload_state: { is_local: true, server_side_state: 'ready' },
+      state: 'ready',
       data: computeTranscriptStats(transcript),
+      producer: LOCAL_IMPORT,
     };
   }
 
