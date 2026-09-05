@@ -51,7 +51,10 @@ ng serve
 
 A REST API server which performs the calculations for video analysis as well as model training and inference. It caches results based on the video's hash.
 
+The server never downloads its own transcription model - fetch it once before first run (and again whenever `WHISPER_MODEL` changes):
+
 ```sh
 cd ./server
+py scripts/fetch_whisper_model.py
 py main.py
 ```

@@ -1,13 +1,12 @@
 import os
 
-from flask import Flask, jsonify
-from flask_cors import CORS
-from werkzeug.exceptions import HTTPException
-
 from config import MAX_UPLOAD_BYTES, UPLOAD_FOLDER
 from db import close_db, init_db
+from flask import Flask, jsonify
+from flask_cors import CORS
 from processing import resubmit_orphaned_jobs, start_backfill
 from routes import bp
+from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
 

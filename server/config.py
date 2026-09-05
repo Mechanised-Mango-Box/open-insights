@@ -75,6 +75,11 @@ WHISPER_VAD = os.environ.get("WHISPER_VAD", "0") == "1"
 # Where CTranslate2 weights live (~1.6GB for turbo). Point this at a baked image
 # path or mounted volume in cloud so a cold container doesn't download them on
 # its first request. None means the default HuggingFace cache.
+#
+# The server runs with local_files_only=True (see processing.py) and never
+# downloads, so this directory must already be populated before it starts.
+# Run scripts/fetch_whisper_model.py to pull or update the model into it - it
+# reads this same env var, so the two always agree on location.
 WHISPER_MODEL_DIR = os.environ.get("WHISPER_MODEL_DIR") or None
 
 # How different a frame must be from its predecessor to count as a scene change.

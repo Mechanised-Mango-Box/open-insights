@@ -52,6 +52,11 @@ _log = logging.getLogger(__name__)
 
 # Loaded eagerly at import time — every server start pays the model load cost
 # upfront rather than making the first request wear it.
+#
+# local_files_only=True: this process never talks to Hugging Face. Fetching or
+# updating the weights is scripts/fetch_whisper_model.py's job, run by hand
+# ahead of time. If WHISPER_MODEL_DIR isn't already populated, this raises
+# immediately instead of the server silently reaching out to the Hub.
 _whisper_model = WhisperModel(
     WHISPER_MODEL,
     device=WHISPER_DEVICE,
@@ -59,6 +64,7 @@ _whisper_model = WhisperModel(
     cpu_threads=WHISPER_CPU_THREADS,
     num_workers=WHISPER_NUM_WORKERS,
     download_root=WHISPER_MODEL_DIR,
+    local_files_only=True,
 )
 
 # Runs transcript/scene_stats generation off the request thread so a GET can
