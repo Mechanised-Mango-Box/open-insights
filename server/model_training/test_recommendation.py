@@ -1,9 +1,13 @@
-"""
-Unit Tests for Feature Relationship Classification and Recommendation Logic.
-"""
+import sys
+from pathlib import Path
 import unittest
 import numpy as np
 from sklearn.linear_model import LinearRegression
+
+# Ensure server/ directory is in sys.path when script is executed directly
+server_dir = str(Path(__file__).resolve().parent.parent)
+if server_dir not in sys.path:
+    sys.path.insert(0, server_dir)
 
 from model_training.regression import (
     classify_feature_relationship,
@@ -11,6 +15,7 @@ from model_training.regression import (
 )
 from model_training.train import run_training_pipeline
 from model_training.mock_data import generate_mock_training_data
+
 
 
 class TestRecommendationLogic(unittest.TestCase):
