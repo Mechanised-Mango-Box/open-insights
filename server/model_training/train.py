@@ -17,6 +17,7 @@ from model_training.regression import (
     fit_scaler_and_train_model,
     predict_engagement,
     get_coefficient_summary,
+    generate_feature_recommendations,
 )
 from model_training.evaluation import (
     evaluate_model,
@@ -65,6 +66,7 @@ def run_training_pipeline(
     test_size: float = 0.2,
     random_state: int = 42,
     save_dir: Optional[str] = "models",
+    recommendation_threshold: float = 1.0,
 ) -> Dict[str, Any]:
     """
     Main programmatic execution pipeline for training the model.
@@ -74,9 +76,10 @@ def run_training_pipeline(
         test_size: Ratio of test split (default 0.2).
         random_state: Random seed for train_test_split reproducibility.
         save_dir: Directory path to persist trained model and scaler (Optional).
+        recommendation_threshold: Practical-effect threshold magnitude (default 1.0).
 
     Returns:
-        Dict containing trained model, scaler, evaluation metrics, and summary.
+        Dict containing trained model, scaler, evaluation metrics, coefficients, and recommendations.
     """
     # 1 & 2 & 3. Clean and prepare data
     # Currently prepare_training_data is a placeholder function that returns a random DataFrame
@@ -96,9 +99,12 @@ def run_training_pipeline(
     # 8. Predict on test set
     y_pred = predict_engagement(model, scaler, X_test)
 
-    # 9. Evaluate model performance
+    # 9. Evaluate model performance & feature relationships
     metrics = evaluate_model(y_test, y_pred)
     coef_summary = get_coefficient_summary(model, FEATURE_COLUMNS)
+    recommendations = generate_feature_recommendations(
+        model, FEATURE_COLUMNS, threshold=recommendation_threshold
+    )
 
     # 10. Persist model artifacts if directory specified
     model_path, scaler_path = None, None
@@ -110,14 +116,20 @@ def run_training_pipeline(
         "scaler": scaler,
         "metrics": metrics,
         "coefficients": coef_summary,
+        "recommendations": recommendations,
         "model_path": model_path,
         "scaler_path": scaler_path,
     }
 
     print(format_evaluation_report(metrics))
     print(f"Intercept & Coefficients:\n  {coef_summary}")
+    print(f"\nFeature Relationship Recommendations (threshold = {recommendation_threshold}):")
+    for feat, data in recommendations["features"].items():
+        print(f"  [{feat}] coef={data['coefficient']:+.4f} -> {data['relationship'].upper()}")
+        print(f"    Recommendation: {data['recommendation']}")
 
     return results
+
 
 
 if __name__ == "__main__":
