@@ -1,0 +1,6 @@
+/* The sidebar shell fills the viewport, so the height: 100% chain set on html/body
+   in material-theme.scss has to carry on through app-root. */
+:host {
+  display: block;
+  height: 100%;
+}

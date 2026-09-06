@@ -1,0 +1,10 @@
+Content,Video title,Video publish time,Duration,Views,Watch time (hours),Subscribers,Average view duration,Impressions,Impressions click-through rate (%)
+"VALID_01","Standard Valid Row","2026-07-20 13:18:00",8120,175,0.0182,90,"0:16:02",35,0.05
+"EMPTY_NUMBERS","All Numeric Fields Empty","2026-07-21 19:44:00",,,,,,
+"MALFORMED_TEXT","Non-Numeric Text in Numeric Columns","2026-07-05 20:12:00","not_a_number","unknown","error",0,"0:13:05",210,0.02
+"MISSING_ID","Missing Content ID (Critical)","2026-07-02 17:01:00",281000,680,0.0364,610,"0:00:30",420,0.05
+"DUPLICATE_ID","This should trigger the UPSERT logic","2026-07-04 12:25:00",480000,910,0.0528,1400,"0:00:44",760,0.05
+"VALID_01","UPDATED TITLE (Testing the replace logic)","2026-07-04 12:25:00",500,50,0.01,10,"0:00:05",10,0.01
+"SPECIAL_CHARS","Unicode & Emojis 🚀🔥 Testing UTF-8","2026-07-07 10:11:00",14900,230,0.0176,95,"0:10:55",180,0.01
+"EXTRA_WHITESPACE","   Spaced Title   ","2026-07-12 18:14:00", 17350 , 260 , 0.0229 , 180 , "0:10:02" , 240 , 0.02
+"NULL_VALUES","Testing actual null-like strings","2026-07-16 20:03:00",None,None,None,None,"0:00:28",1040,None
