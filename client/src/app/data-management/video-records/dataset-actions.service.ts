@@ -2,12 +2,14 @@ import {
   DestroyRef,
   Injectable,
   WritableSignal,
+  computed,
   effect,
   inject,
   signal,
   untracked,
 } from '@angular/core';
 import { DatasetKind, DatasetProvider, SourceResolver } from '../providers/dataset-provider';
+import { ComputeConfigService } from '../compute-config.service';
 import { ServerConfigService } from '../server-config.service';
 import { VideoRecord } from './VideoRecord';
 import { DatasetState, LOCAL_RECOMPUTE, computeTranscriptStats, isReady } from './Dataset';
@@ -49,7 +51,12 @@ type CheckOptions = {
 export class DatasetActionsService {
   private provider = inject(DatasetProvider);
   private serverConfig = inject(ServerConfigService);
+  private computeConfig = inject(ComputeConfigService);
   private destroyRef = inject(DestroyRef);
+
+  /** Where work currently goes, for badge wording - the badges say "on X", and X
+   * is no longer always a server. */
+  readonly providerLabel = computed(() => this.provider.label());
 
   // In-flight actions, keyed by file hash.
   uploadingFile = signal<Set<string>>(new Set());
@@ -70,11 +77,13 @@ export class DatasetActionsService {
   private refreshing = new Set<string>();
 
   constructor() {
-    // Every cached status is an answer from one specific server, so pointing the app at a
-    // different one invalidates all of them at once. Harmless on the first run, when nothing
-    // is tracked yet.
+    // Every cached status is an answer from one specific place, so changing where the
+    // question goes invalidates all of them at once - whether that is a different server
+    // or a kind moving between the server and this browser. Harmless on the first run,
+    // when nothing is tracked yet.
     effect(() => {
       this.serverConfig.serverUrl();
+      this.computeConfig.targets();
       untracked(() => this.recheckAll());
     });
 

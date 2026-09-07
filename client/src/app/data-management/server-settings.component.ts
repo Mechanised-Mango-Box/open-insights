@@ -3,7 +3,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ServerConfigService, DEFAULT_SERVER_URL } from './server-config.service';
-import { DatasetProvider, ProviderStatus } from './providers/dataset-provider';
+import { ComputeConfigService, ComputeTarget } from './compute-config.service';
+import { ComputeQueueService } from './local-compute/compute-queue.service';
+import {
+  DATASET_KINDS,
+  DatasetKind,
+  DatasetProvider,
+  ProviderStatus,
+} from './providers/dataset-provider';
 
 @Component({
   selector: 'server-settings',
@@ -11,6 +18,45 @@ import { DatasetProvider, ProviderStatus } from './providers/dataset-provider';
   imports: [MatFormFieldModule, MatInputModule, MatButtonModule],
   template: `
     <div class="server-settings">
+      <h2>Where Work Runs</h2>
+      <p>
+        Each task can run in this browser or on the dataset server below. Local work keeps your
+        video on this machine; it needs no server, but is only as fast as this device.
+      </p>
+      <table class="compute-table">
+        <tbody>
+          @for (kind of kinds; track kind) {
+            <tr>
+              <td>{{ kindLabels[kind] }}</td>
+              <td>
+                @if (localAvailable(kind)) {
+                  <button
+                    mat-stroked-button
+                    type="button"
+                    [disabled]="computeConfig.targetFor(kind) === 'local'"
+                    (click)="setTarget(kind, 'local')"
+                  >
+                    This browser
+                  </button>
+                } @else {
+                  <span class="not-yet">Not available in this browser yet</span>
+                }
+              </td>
+              <td>
+                <button
+                  mat-stroked-button
+                  type="button"
+                  [disabled]="computeConfig.targetFor(kind) === 'server'"
+                  (click)="setTarget(kind, 'server')"
+                >
+                  Server
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
       <h2>Dataset Server</h2>
       <p>Choose which dataset-server this browser talks to. Saved only in this browser.</p>
       <mat-form-field>
@@ -108,12 +154,42 @@ import { DatasetProvider, ProviderStatus } from './providers/dataset-provider';
         font: var(--mat-sys-body-small);
         color: var(--mat-sys-on-surface-variant);
       }
+      .compute-table {
+        border-collapse: collapse;
+      }
+      .compute-table td {
+        padding: 4px 12px 4px 0;
+      }
+      .not-yet {
+        font: var(--mat-sys-body-small);
+        color: var(--mat-sys-on-surface-variant);
+      }
     `,
   ],
 })
 export class ServerSettingsComponent {
   serverConfig = inject(ServerConfigService);
+  computeConfig = inject(ComputeConfigService);
   private provider = inject(DatasetProvider);
+  private queue = inject(ComputeQueueService);
+
+  // Widened from the const tuple: the template's @for infers `unknown` from a
+  // readonly tuple, but reads the union correctly off an array type.
+  protected readonly kinds: readonly DatasetKind[] = DATASET_KINDS;
+  protected readonly kindLabels: Record<DatasetKind, string> = {
+    transcript: 'Transcript',
+    scene_stats: 'Scene stats',
+  };
+
+  /** A kind can only be sent to this browser once something here knows how to
+   * compute it - offering the switch before then would just produce errors. */
+  protected localAvailable(kind: DatasetKind): boolean {
+    return this.queue.computerFor(kind) !== undefined;
+  }
+
+  protected setTarget(kind: DatasetKind, target: ComputeTarget): void {
+    this.computeConfig.setTarget(kind, target);
+  }
 
   draftUrl = signal(this.serverConfig.serverUrl());
 

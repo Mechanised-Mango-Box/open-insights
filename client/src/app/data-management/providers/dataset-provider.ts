@@ -14,6 +14,13 @@ import { SceneStats, TranscriptSegment, TranscriptStats } from '../video-records
 
 export type DatasetKind = 'transcript' | 'scene_stats';
 
+/** Every kind, for the places that have to iterate them (routing settings, queue
+ * bookkeeping). Kept beside the type so adding a kind is one edit, not a hunt. */
+export const DATASET_KINDS = [
+  'transcript',
+  'scene_stats',
+] as const satisfies readonly DatasetKind[];
+
 /** The 'complete' shape of a transcript dataset - segments and their stats
  * arrive together, though the records model them as two cacheable fields. */
 export type TranscriptPayload = TranscriptStats & { segments: TranscriptSegment[] };

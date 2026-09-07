@@ -14,38 +14,56 @@ export type ServerStatus = 'checking' | 'exists' | 'missing' | 'error';
 export type DatasetPeekResult = { status: DatasetStatus | 'checking' | 'error'; error?: string };
 export type StatusIcon = { icon: string; label: string; cssClass: string };
 
-/** Icon/label for whether a video file is known to exist on the server. */
+/**
+ * Icon/label for whether the video file is where the work happens.
+ *
+ * `where` names that place - a server URL, or this browser - rather than the
+ * word "server", which stopped being true once a kind could be computed
+ * locally. It comes from DatasetProvider.label.
+ */
 export function serverStatusIcon(
   status: ServerStatus,
-  opts: { hasLocalFile: boolean; uploading: boolean },
+  opts: { hasLocalFile: boolean; uploading: boolean; where: string },
 ): StatusIcon {
   if (opts.uploading) {
     return { icon: 'cloud_upload', label: 'Uploading...', cssClass: 'status-checking' };
   }
   switch (status) {
     case 'checking':
-      return { icon: 'hourglass_empty', label: 'Checking server...', cssClass: 'status-checking' };
+      return {
+        icon: 'hourglass_empty',
+        label: `Checking ${opts.where}...`,
+        cssClass: 'status-checking',
+      };
     case 'exists':
-      return { icon: 'cloud_done', label: 'Video exists on server', cssClass: 'status-exists' };
+      return {
+        icon: 'cloud_done',
+        label: `Video available to ${opts.where}`,
+        cssClass: 'status-exists',
+      };
     case 'missing':
       return opts.hasLocalFile
         ? {
             icon: 'cloud_upload',
-            label: 'Video not on server - click to upload',
+            label: `Video not on ${opts.where} - click to upload`,
             cssClass: 'status-missing',
           }
         : {
             icon: 'cloud_off',
-            label: 'Video not on server - attach a file first',
+            label: `Video not on ${opts.where} - attach a file first`,
             cssClass: 'status-missing',
           };
     case 'error':
-      return { icon: 'error_outline', label: 'Could not reach server', cssClass: 'status-error' };
+      return {
+        icon: 'error_outline',
+        label: `Could not reach ${opts.where}`,
+        cssClass: 'status-error',
+      };
   }
 }
 
-/** Icon/label for a peeked async server job's status (transcript/scene-stats generation). */
-export function datasetPeekStatusIcon(result: DatasetPeekResult): StatusIcon {
+/** Icon/label for a peeked job's status (transcript/scene-stats generation). */
+export function datasetPeekStatusIcon(result: DatasetPeekResult, where: string): StatusIcon {
   switch (result.status) {
     case 'checking':
       return { icon: 'hourglass_empty', label: 'Checking status...', cssClass: 'status-checking' };
@@ -65,13 +83,17 @@ export function datasetPeekStatusIcon(result: DatasetPeekResult): StatusIcon {
     case 'ready':
       return {
         icon: 'cloud_queue',
-        label: 'Ready on server - not fetched yet',
+        label: `Ready on ${where} - not fetched yet`,
         cssClass: 'status-missing',
       };
     case 'failed':
       return { icon: 'error_outline', label: `Failed: ${result.error}`, cssClass: 'status-error' };
     case 'error':
-      return { icon: 'error_outline', label: 'Could not reach server', cssClass: 'status-error' };
+      return {
+        icon: 'error_outline',
+        label: `Could not reach ${where}`,
+        cssClass: 'status-error',
+      };
   }
 }
 
@@ -80,17 +102,21 @@ export function datasetPeekStatusIcon(result: DatasetPeekResult): StatusIcon {
  *
  * Replaces the old uploadStateIcon: nothing here was ever uploaded. The click
  * runs DatasetActionsService.fetchTranscript/fetchSceneStats, which re-runs
- * generation server-side and overwrites this copy - there is no endpoint that
- * accepts local edits, so nothing here ever travels upwards. `producer` now
- * records what made the value, which is the question the old `is_local` boolean
- * was standing in for.
+ * generation and overwrites this copy - nothing here ever travels upwards.
+ * `producer` now records what made the value, which is the question the old
+ * `is_local` boolean was standing in for.
  */
 export function datasetStateIcon(
   value: DatasetState<unknown> | undefined,
   sending: boolean,
+  where: string,
 ): StatusIcon | null {
   if (sending) {
-    return { icon: 'hourglass_empty', label: 'Syncing with server...', cssClass: 'status-checking' };
+    return {
+      icon: 'hourglass_empty',
+      label: `Syncing with ${where}...`,
+      cssClass: 'status-checking',
+    };
   }
   if (!value) return null;
 
@@ -98,9 +124,13 @@ export function datasetStateIcon(
     case 'absent':
       return null;
     case 'queued':
-      return { icon: 'schedule', label: 'Queued on server...', cssClass: 'status-checking' };
+      return { icon: 'schedule', label: `Queued on ${where}...`, cssClass: 'status-checking' };
     case 'running':
-      return { icon: 'hourglass_empty', label: 'Generating on server...', cssClass: 'status-checking' };
+      return {
+        icon: 'hourglass_empty',
+        label: `Generating on ${where}...`,
+        cssClass: 'status-checking',
+      };
     case 'failed':
       return {
         icon: 'cloud_off',
@@ -109,7 +139,7 @@ export function datasetStateIcon(
       };
     case 'ready':
       // The data is here and usable in every branch below; these differ only in
-      // how much it can be trusted to match what the server would produce now.
+      // how much it can be trusted to match what would be produced now.
       if (value.refresh_error) {
         return {
           icon: 'cloud_off',
@@ -127,11 +157,15 @@ export function datasetStateIcon(
       if (value.producer === LOCAL_IMPORT || value.producer === LOCAL_RECOMPUTE) {
         return {
           icon: 'cloud_queue',
-          label: "Local only - click to replace with the server's version",
+          label: `Imported or recomputed here - click to replace with the version from ${where}`,
           cssClass: 'status-missing',
         };
       }
-      return { icon: 'cloud_done', label: `Synced with server (${value.producer})`, cssClass: 'status-exists' };
+      return {
+        icon: 'cloud_done',
+        label: `Synced with ${where} (${value.producer})`,
+        cssClass: 'status-exists',
+      };
   }
 }
 
