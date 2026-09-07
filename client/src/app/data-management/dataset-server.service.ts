@@ -13,7 +13,7 @@ export type VideoMeta = { file_hash: string; file_ext: string };
 export type UploadResult = { file_hash: string; filename: string };
 
 export type AnalysisFeatureRow = {
-  duration_mins: number;
+  duration: number;
   wpm: number;
   scene_change_rate: number;
   word_count: number;

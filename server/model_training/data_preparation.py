@@ -19,6 +19,8 @@ FEATURE_COLUMNS: List[str] = [
     "wpm",
     "scene_change_rate",
     "word_count",
+    "speech_pace_variation",
+    "speaking_ratio",
 ]
 
 TARGET_COLUMN: str = "average_percentage_viewed"

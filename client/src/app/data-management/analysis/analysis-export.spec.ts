@@ -4,14 +4,14 @@ import { AnalysisFeatureRow, AnalysisResult } from '../dataset-server.service';
 import { buildAnalysisExportZip } from './analysis-export';
 
 const rows: AnalysisFeatureRow[] = [
-  { duration_mins: 10, wpm: 120, scene_change_rate: 2, word_count: 1200, average_percentage_viewed: 50 },
-  { duration_mins: 20, wpm: 150, scene_change_rate: 4, word_count: 3000, average_percentage_viewed: 30 },
+  { duration: 10, wpm: 120, scene_change_rate: 2, word_count: 1200, speech_pace_variation: 15, speaking_ratio: 0.8, average_percentage_viewed: 50 },
+  { duration: 20, wpm: 150, scene_change_rate: 4, word_count: 3000, speech_pace_variation: 20, speaking_ratio: 0.7, average_percentage_viewed: 30 },
 ];
 
 const result: AnalysisResult = {
-  correlations: { duration_mins: -0.8 },
-  histograms: { duration_mins: { bins: [0, 10, 20], counts: [1, 1] } },
-  loess: { duration_mins: { x: [10, 20], y: [50, 30] } },
+  correlations: { duration: -0.8 },
+  histograms: { duration: { bins: [0, 10, 20], counts: [1, 1] } },
+  loess: { duration: { x: [10, 20], y: [50, 30] } },
 };
 
 /** Images are supplied pre-encoded by the caller, so these cover the figures/ side. */
@@ -19,7 +19,7 @@ const buildZip = () =>
   buildAnalysisExportZip({
     result,
     rows,
-    featureKeys: ['duration_mins'],
+    featureKeys: ['duration'],
     images: [],
   });
 
@@ -31,9 +31,9 @@ const readCsv = async (zip: JSZip, path: string) => {
 
 describe('buildAnalysisExportZip figures', () => {
   it('writes one histogram row per count, pairing each with its bin edges', async () => {
-    const zip = await JSZip.loadAsync(await buildZip());
+    const zip = await JSZip.loadAsync(await (await buildZip()).arrayBuffer());
 
-    expect(await readCsv(zip, 'figures/duration_mins-histogram.csv')).toEqual([
+    expect(await readCsv(zip, 'figures/duration-histogram.csv')).toEqual([
       'bin_start,bin_end,count',
       '0,10,1',
       '10,20,1',
@@ -41,19 +41,19 @@ describe('buildAnalysisExportZip figures', () => {
   });
 
   it('writes correlations, scatter points and the loess curve', async () => {
-    const zip = await JSZip.loadAsync(await buildZip());
+    const zip = await JSZip.loadAsync(await (await buildZip()).arrayBuffer());
 
     expect(await readCsv(zip, 'figures/correlations.csv')).toEqual([
       'feature,correlation',
-      'duration_mins,-0.8',
+      'duration,-0.8',
     ]);
-    expect(await readCsv(zip, 'figures/duration_mins-scatter.csv')).toEqual([
-      'duration_mins,average_percentage_viewed',
+    expect(await readCsv(zip, 'figures/duration-scatter.csv')).toEqual([
+      'duration,average_percentage_viewed',
       '10,50',
       '20,30',
     ]);
-    expect(await readCsv(zip, 'figures/duration_mins-loess.csv')).toEqual([
-      'duration_mins,fitted_percentage_viewed',
+    expect(await readCsv(zip, 'figures/duration-loess.csv')).toEqual([
+      'duration,fitted_percentage_viewed',
       '10,50',
       '20,30',
     ]);
@@ -63,7 +63,7 @@ describe('buildAnalysisExportZip figures', () => {
     const blob = await buildAnalysisExportZip({
       result,
       rows,
-      featureKeys: ['duration_mins'],
+      featureKeys: ['duration'],
       // A 1x1 PNG - enough to prove the base64 lands as binary under the right path.
       images: [
         {
@@ -73,7 +73,7 @@ describe('buildAnalysisExportZip figures', () => {
         },
       ],
     });
-    const zip = await JSZip.loadAsync(blob);
+    const zip = await JSZip.loadAsync(await blob.arrayBuffer());
 
     const png = zip.file('images/correlation.png');
     expect(png).not.toBeNull();
@@ -88,7 +88,7 @@ describe('buildAnalysisExportZip figures', () => {
       featureKeys: ['wpm'],
       images: [],
     });
-    const zip = await JSZip.loadAsync(blob);
+    const zip = await JSZip.loadAsync(await blob.arrayBuffer());
 
     expect(await readCsv(zip, 'figures/correlations.csv')).toEqual(['feature,correlation', 'wpm,0']);
   });

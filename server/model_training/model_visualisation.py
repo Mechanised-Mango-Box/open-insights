@@ -25,6 +25,8 @@ FEATURE_DISPLAY_NAMES: Dict[str, str] = {
     "wpm": "Average speaking speed (wpm)",
     "scene_count": "Total number of scenes",
     "scene_change_rate": "Average scenes change rate (spm)",
+    "speech_pace_variation": "Speech pace variation (WPM SD)",
+    "speaking_ratio": "Speaking ratio",
 }
 
 

@@ -70,7 +70,7 @@ const PALETTE = {
 } as const;
 
 type FeatureKey =
-  | 'duration_mins'
+  | 'duration'
   | 'wpm'
   | 'scene_change_rate'
   | 'word_count'
@@ -78,7 +78,7 @@ type FeatureKey =
   | 'speaking_ratio';
 
 const FEATURE_LABELS: Record<FeatureKey, string> = {
-  duration_mins: 'Duration (minutes)',
+  duration: 'Duration (minutes)',
   wpm: 'Speaking Speed (WPM)',
   scene_change_rate: 'Scene Change Rate (per min)',
   word_count: 'Word Count',

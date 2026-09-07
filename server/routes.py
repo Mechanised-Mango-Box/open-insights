@@ -172,7 +172,7 @@ def __route_create_video():
 
 
 ANALYSIS_FEATURE_COLUMNS = [
-    "duration_mins",
+    "duration",
     "wpm",
     "scene_change_rate",
     "word_count",

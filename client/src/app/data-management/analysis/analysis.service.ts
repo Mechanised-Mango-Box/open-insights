@@ -36,7 +36,7 @@ export class AnalysisService {
 
       const duration_mins = sceneStats.duration_secs / 60;
       rows.push({
-        duration_mins,
+        duration: duration_mins,
         wpm: transcriptStats.count_words / duration_mins,
         scene_change_rate: sceneStats.scenes / duration_mins,
         word_count: transcriptStats.count_words,
