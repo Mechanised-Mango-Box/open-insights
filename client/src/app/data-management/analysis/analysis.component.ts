@@ -69,13 +69,21 @@ const PALETTE = {
   trend: '#eb6834',
 } as const;
 
-type FeatureKey = 'duration_mins' | 'wpm' | 'scene_change_rate' | 'word_count';
+type FeatureKey =
+  | 'duration_mins'
+  | 'wpm'
+  | 'scene_change_rate'
+  | 'word_count'
+  | 'speech_pace_variation'
+  | 'speaking_ratio';
 
 const FEATURE_LABELS: Record<FeatureKey, string> = {
   duration_mins: 'Duration (minutes)',
   wpm: 'Speaking Speed (WPM)',
   scene_change_rate: 'Scene Change Rate (per min)',
   word_count: 'Word Count',
+  speech_pace_variation: 'Speech Pace Variation (WPM SD)',
+  speaking_ratio: 'Speaking Ratio',
 };
 
 const FEATURE_KEYS = Object.keys(FEATURE_LABELS) as FeatureKey[];

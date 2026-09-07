@@ -17,6 +17,8 @@ export type AnalysisFeatureRow = {
   wpm: number;
   scene_change_rate: number;
   word_count: number;
+  speech_pace_variation: number;
+  speaking_ratio: number;
   average_percentage_viewed: number;
 };
 

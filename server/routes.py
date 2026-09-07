@@ -171,7 +171,14 @@ def __route_create_video():
     return jsonify({"file_hash": file_hash, "filename": file_name}), 201, headers
 
 
-ANALYSIS_FEATURE_COLUMNS = ["duration_mins", "wpm", "scene_change_rate", "word_count"]
+ANALYSIS_FEATURE_COLUMNS = [
+    "duration_mins",
+    "wpm",
+    "scene_change_rate",
+    "word_count",
+    "speech_pace_variation",
+    "speaking_ratio",
+]
 ANALYSIS_TARGET_COLUMN = "average_percentage_viewed"
 
 
