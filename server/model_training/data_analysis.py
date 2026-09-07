@@ -14,7 +14,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from model_training.data_preparation import FEATURE_COLUMNS, TARGET_COLUMN
+from server.model_training.data_preparation import FEATURE_COLUMNS, TARGET_COLUMN
 
 
 def compute_loess(
@@ -333,7 +333,7 @@ def generate_full_analysis_report(
 
 
 if __name__ == "__main__":
-    from model_training.mock_data import generate_mock_training_data
+    from server.model_training.mock_data import generate_mock_training_data
 
     print("[ Analysis Test ] Generating mock data for visualization test...")
     df_test = generate_mock_training_data(num_samples=200, random_state=42)
