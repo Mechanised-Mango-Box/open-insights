@@ -110,7 +110,19 @@ describe('RoutingDatasetProvider', () => {
     expect(local.peek).not.toHaveBeenCalled();
   });
 
+  it('ignores a per-kind preference while browser compute is switched off', async () => {
+    // The preference survives being switched off, so a setting left over from an
+    // earlier session must not quietly send work to the browser on the next load.
+    config.setTarget('scene_stats', 'local');
+
+    await routing.peek('scene_stats', 'a');
+
+    expect(local.peek).not.toHaveBeenCalled();
+    expect(server.peek).toHaveBeenCalledWith('scene_stats', 'a');
+  });
+
   it('routes one kind locally while the other stays on the server', async () => {
+    config.setExperimental(true);
     config.setTarget('scene_stats', 'local');
 
     await routing.peek('scene_stats', 'a');
@@ -120,7 +132,18 @@ describe('RoutingDatasetProvider', () => {
     expect(server.peek).toHaveBeenCalledWith('transcript', 'a');
   });
 
+  it('restores the chosen kinds when browser compute is switched back on', async () => {
+    config.setExperimental(true);
+    config.setTarget('scene_stats', 'local');
+    config.setExperimental(false);
+    config.setExperimental(true);
+
+    await routing.peek('scene_stats', 'a');
+    expect(local.peek).toHaveBeenCalledWith('scene_stats', 'a');
+  });
+
   it('names both places while the kinds are split, and one when they agree', () => {
+    config.setExperimental(true);
     expect(routing.label()).toBe('http://s:5000');
 
     // Ordered by DATASET_KINDS, so transcript's server leads while only scene

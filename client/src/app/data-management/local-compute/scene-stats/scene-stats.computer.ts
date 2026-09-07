@@ -70,7 +70,16 @@ export const sceneStatsComputer: Computer<'scene_stats'> = {
   producer: SCENE_STATS_PRODUCER_LOCAL,
 
   async compute(file: File): Promise<SceneStats> {
-    const { result } = await measureSceneStats(file);
+    const { result, timings } = await measureSceneStats(file);
+    // Logged rather than shown: which of these three dominates is what decides
+    // whether this stage is worth optimising and where, and it is not something
+    // to have to re-instrument to find out.
+    console.log(
+      `Scene stats: ${timings.frames} frames in ${timings.total_secs.toFixed(1)}s ` +
+        `(readback ${timings.copy_secs.toFixed(1)}s, ` +
+        `greyscale+diff ${timings.pixels_secs.toFixed(1)}s, ` +
+        `demux+decode ${timings.other_secs.toFixed(1)}s)`,
+    );
     return result;
   },
 };

@@ -84,6 +84,7 @@ export class DatasetActionsService {
     effect(() => {
       this.serverConfig.serverUrl();
       this.computeConfig.targets();
+      this.computeConfig.experimental();
       untracked(() => this.recheckAll());
     });
 

@@ -2,7 +2,6 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { SceneStatsCheckComponent } from './local-compute/scene-stats/scene-stats-check.component';
 import { ServerConfigService, DEFAULT_SERVER_URL } from './server-config.service';
 import { ComputeConfigService, ComputeTarget } from './compute-config.service';
 import { ComputeQueueService } from './local-compute/compute-queue.service';
@@ -13,168 +12,264 @@ import {
   ProviderStatus,
 } from './providers/dataset-provider';
 
+/**
+ * Two cards, in the order the settings depend on each other: which server to
+ * talk to and whether it answers, then what is allowed to run somewhere else.
+ *
+ * The status check lives inside the server card rather than as a section of its
+ * own - it reads the URL set directly above it, and reading that URL is half of
+ * what it is for.
+ */
 @Component({
   selector: 'server-settings',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, SceneStatsCheckComponent],
+  imports: [MatFormFieldModule, MatInputModule, MatButtonModule],
   template: `
-    <div class="server-settings">
-      <h2>Where Work Runs</h2>
-      <p>
-        Each task can run in this browser or on the dataset server below. Local work keeps your
-        video on this machine; it needs no server, but is only as fast as this device.
-      </p>
-      <table class="compute-table">
-        <tbody>
-          @for (kind of kinds; track kind) {
-            <tr>
-              <td>{{ kindLabels[kind] }}</td>
-              <td>
-                @if (localAvailable(kind)) {
-                  <button
-                    mat-stroked-button
-                    type="button"
-                    [disabled]="computeConfig.targetFor(kind) === 'local'"
-                    (click)="setTarget(kind, 'local')"
-                  >
-                    This browser
-                  </button>
-                } @else {
-                  <span class="not-yet">Not available in this browser yet</span>
-                }
-              </td>
-              <td>
-                <button
-                  mat-stroked-button
-                  type="button"
-                  [disabled]="computeConfig.targetFor(kind) === 'server'"
-                  (click)="setTarget(kind, 'server')"
-                >
-                  Server
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="3" class="kind-note">{{ kindNotes[kind] }}</td>
-            </tr>
-          }
-        </tbody>
-      </table>
+    <div class="settings">
+      <section class="card">
+        <h2>Dataset Server</h2>
+        <p class="lead">Which server this browser sends its work to. Saved in this browser only.</p>
 
-      <scene-stats-check />
+        <div class="controls">
+          <mat-form-field subscriptSizing="dynamic">
+            <mat-label>Server URL</mat-label>
+            <input
+              matInput
+              [value]="draftUrl()"
+              (input)="onInput($event)"
+              placeholder="http://localhost:5000"
+            />
+          </mat-form-field>
+          <button mat-stroked-button type="button" (click)="useLocal()">Use local</button>
+          <button mat-raised-button color="primary" type="button" (click)="save()">Save</button>
+        </div>
+        <p class="muted">Active: {{ serverConfig.serverUrl() }}</p>
 
-      <h2>Dataset Server</h2>
-      <p>Choose which dataset-server this browser talks to. Saved only in this browser.</p>
-      <mat-form-field>
-        <mat-label>Server URL</mat-label>
-        <input
-          matInput
-          [value]="draftUrl()"
-          (input)="onInput($event)"
-          placeholder="http://localhost:5000"
-        />
-      </mat-form-field>
-      <button mat-stroked-button type="button" (click)="useLocal()">Use Local</button>
-      <button mat-raised-button color="primary" type="button" (click)="save()">Save</button>
-      <p>Active: {{ serverConfig.serverUrl() }}</p>
-
-      <h2>Server Status</h2>
-      <p>
-        How much work the active server has queued, and how many of its workers are on each task.
-        Reads the saved server above, so it also confirms that URL is reachable.
-      </p>
-      <button mat-stroked-button type="button" [disabled]="checking()" (click)="checkStatus()">
-        {{ checking() ? 'Checking…' : 'Check Server Status' }}
-      </button>
-
-      @if (error(); as message) {
-        <p class="status-error">Could not reach {{ serverConfig.serverUrl() }} — {{ message }}</p>
-      }
-
-      @if (status(); as report) {
-        <p class="status-summary">
-          {{ report.queue.queued }} queued · {{ report.queue.running }} running ·
-          {{ report.queue.failed }} failed — {{ report.workers.busy }} of
-          {{ report.workers.total }} workers busy
+        <h3>Status</h3>
+        <p class="lead">
+          How much work the active server has queued, and how many of its workers are on each task.
+          Reads the saved URL above, so it doubles as a reachability check.
         </p>
-        <table class="status-table">
+        <div class="controls">
+          <button mat-stroked-button type="button" [disabled]="checking()" (click)="checkStatus()">
+            {{ checking() ? 'Checking…' : 'Check status' }}
+          </button>
+          @if (status(); as report) {
+            <span class="status-summary">
+              {{ report.queue.queued }} queued · {{ report.queue.running }} running ·
+              {{ report.queue.failed }} failed — {{ report.workers.busy }} of
+              {{ report.workers.total }} workers busy
+            </span>
+          }
+        </div>
+
+        @if (error(); as message) {
+          <p class="status-error">Could not reach {{ serverConfig.serverUrl() }} — {{ message }}</p>
+        }
+
+        @if (status()) {
+          <table class="settings-table numeric">
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Queued</th>
+                <th>Running</th>
+                <th>Failed</th>
+                <th>Workers busy</th>
+                <th>Awaiting worker</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of kindRows(); track row[0]) {
+                <tr>
+                  <td>{{ row[0] }}</td>
+                  <td>{{ row[1].jobs.queued }}</td>
+                  <td>{{ row[1].jobs.running }}</td>
+                  <td>{{ row[1].jobs.failed }}</td>
+                  <td>{{ row[1].workers.busy }} of {{ row[1].workers.total }}</td>
+                  <td>{{ row[1].workers.awaiting_worker }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          <p class="muted">
+            A task showing more running than busy is a job whose worker was lost; the server
+            reclaims it once its lease expires.
+          </p>
+        }
+      </section>
+
+      <section class="card">
+        <h2>Where Work Runs</h2>
+        <p class="lead">
+          Work runs on the dataset server above. Running it in this browser instead is experimental.
+        </p>
+
+        <div class="experimental">
+          <h3>Experimental: run the work in this browser</h3>
+          <p class="muted">
+            Keeps your video on this machine and needs no server. It is
+            <strong>much slower</strong> — the server manages around 15× realtime for scene stats
+            across all its cores, where a browser has one thread and no SIMD — so a full batch can
+            take many hours. It also accepts less: MP4 and MOV only for scene stats, and
+            transcription needs WebGPU.
+          </p>
+          <p class="muted">
+            Results are stamped as coming from a different producer, so anything already computed by
+            the server reads as not started, and the two are never mixed into one analysis. None of
+            it has been checked against known-good results yet, so treat what it produces as
+            provisional.
+          </p>
+          <div class="controls">
+            @if (computeConfig.experimental()) {
+              <button mat-stroked-button type="button" (click)="setExperimental(false)">
+                Disable browser compute
+              </button>
+              <span class="muted">Enabled — choose per task below.</span>
+            } @else {
+              <button mat-stroked-button type="button" (click)="setExperimental(true)">
+                I understand — enable browser compute
+              </button>
+            }
+          </div>
+        </div>
+
+        <table class="settings-table">
           <thead>
             <tr>
               <th>Task</th>
-              <th>Queued</th>
-              <th>Running</th>
-              <th>Failed</th>
-              <th>Workers busy</th>
-              <th>Awaiting worker</th>
+              <th>This browser</th>
+              <th>Server</th>
             </tr>
           </thead>
           <tbody>
-            @for (row of kindRows(); track row[0]) {
+            @for (kind of kinds; track kind) {
+              <tr class="no-rule">
+                <td>{{ kindLabels[kind] }}</td>
+                <td>
+                  @if (!computeConfig.experimental()) {
+                    <span class="muted">Enable above to use this</span>
+                  } @else if (localAvailable(kind)) {
+                    <button
+                      mat-stroked-button
+                      type="button"
+                      [disabled]="computeConfig.targetFor(kind) === 'local'"
+                      (click)="setTarget(kind, 'local')"
+                    >
+                      This browser
+                    </button>
+                  } @else {
+                    <span class="muted">Not available in this browser</span>
+                  }
+                </td>
+                <td>
+                  <button
+                    mat-stroked-button
+                    type="button"
+                    [disabled]="computeConfig.targetFor(kind) === 'server'"
+                    (click)="setTarget(kind, 'server')"
+                  >
+                    Server
+                  </button>
+                </td>
+              </tr>
               <tr>
-                <td>{{ row[0] }}</td>
-                <td>{{ row[1].jobs.queued }}</td>
-                <td>{{ row[1].jobs.running }}</td>
-                <td>{{ row[1].jobs.failed }}</td>
-                <td>{{ row[1].workers.busy }} of {{ row[1].workers.total }}</td>
-                <td>{{ row[1].workers.awaiting_worker }}</td>
+                <td colspan="3" class="kind-note muted">{{ kindNotes[kind] }}</td>
               </tr>
             }
           </tbody>
         </table>
-        <p class="status-note">
-          A task showing more running than busy is a job whose worker was lost; the server reclaims
-          it once its lease expires.
-        </p>
-      }
+      </section>
     </div>
   `,
   styles: [
     `
+      .settings {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        max-width: 80ch;
+      }
+      .card {
+        background: var(--mat-sys-surface-container);
+        border: 1px solid var(--mat-sys-outline-variant);
+        border-radius: 12px;
+        padding: 20px 24px;
+      }
+      h2 {
+        font: var(--mat-sys-title-medium);
+        margin: 0 0 4px;
+      }
+      h3 {
+        font: var(--mat-sys-title-small);
+        margin: 24px 0 4px;
+      }
+      .experimental h3 {
+        margin-top: 0;
+      }
+      .lead {
+        color: var(--mat-sys-on-surface-variant);
+        margin: 0 0 16px;
+      }
+      /* One class for every piece of secondary text on the page - these were
+         four near-identical rules that had already started to drift apart. */
+      .muted {
+        font: var(--mat-sys-body-small);
+        color: var(--mat-sys-on-surface-variant);
+      }
+      .controls {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .controls mat-form-field {
+        width: 320px;
+      }
       .status-summary {
         font: var(--mat-sys-title-small);
       }
       .status-error {
         color: var(--mat-sys-error);
       }
-      /* A plain table rather than MatTable: this is a handful of static rows with no
-         sorting, filtering or selection, so a MatTableDataSource would be scaffolding
-         around nothing. */
-      .status-table {
-        border-collapse: collapse;
+      /* The experiment is bordered off rather than merely worded differently:
+         the warning has to survive being skim-read. */
+      .experimental {
+        border: 1px solid var(--mat-sys-outline-variant);
+        border-left: 4px solid var(--mat-sys-error);
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 20px;
       }
-      .status-table th,
-      .status-table td {
-        text-align: right;
-        padding: 4px 12px;
+      /* Plain tables rather than MatTable: these are a handful of static rows
+         with no sorting, filtering or selection, so a MatTableDataSource would
+         be scaffolding around nothing. */
+      .settings-table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      .settings-table th,
+      .settings-table td {
+        text-align: left;
+        padding: 6px 12px 6px 0;
         border-bottom: 1px solid var(--mat-sys-outline-variant);
       }
-      .status-table th:first-child,
-      .status-table td:first-child {
-        text-align: left;
-      }
-      .status-table th {
+      .settings-table th {
         font: var(--mat-sys-label-medium);
         color: var(--mat-sys-on-surface-variant);
       }
-      .status-note {
-        font: var(--mat-sys-body-small);
-        color: var(--mat-sys-on-surface-variant);
+      /* Counts read better right-aligned, but the task they belong to does not. */
+      .settings-table.numeric th:not(:first-child),
+      .settings-table.numeric td:not(:first-child) {
+        text-align: right;
       }
-      .compute-table {
-        border-collapse: collapse;
-      }
-      .compute-table td {
-        padding: 4px 12px 4px 0;
+      /* A task and its note are one entry, so only the note carries the rule. */
+      .settings-table tr.no-rule td {
+        border-bottom: none;
       }
       .kind-note {
-        font: var(--mat-sys-body-small);
-        color: var(--mat-sys-on-surface-variant);
-        padding: 0 12px 12px 0;
+        padding-bottom: 12px;
         max-width: 60ch;
-      }
-      .not-yet {
-        font: var(--mat-sys-body-small);
-        color: var(--mat-sys-on-surface-variant);
       }
     `,
   ],
@@ -216,6 +311,10 @@ export class ServerSettingsComponent {
 
   protected setTarget(kind: DatasetKind, target: ComputeTarget): void {
     this.computeConfig.setTarget(kind, target);
+  }
+
+  protected setExperimental(enabled: boolean): void {
+    this.computeConfig.setExperimental(enabled);
   }
 
   draftUrl = signal(this.serverConfig.serverUrl());

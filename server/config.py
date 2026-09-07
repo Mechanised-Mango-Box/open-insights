@@ -7,6 +7,21 @@ UPLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER", "../data/local/uploads")
 ALLOWED_EXTENSIONS = {"mp4", "avi", "mov", "mkv", "webm"}
 DB_PATH = os.environ.get("DB_PATH", "../data/local/db.sqlite")
 
+# How long a statement waits for SQLite's write lock before giving up. See the
+# note in db.py for why WAL alone is not enough.
+#
+# 30s rather than the 5s this started at, because the timeout is wall-clock and
+# the lock holder is competing for CPU to reach its commit. A full batch runs
+# four jobs at once, and OpenCV and CTranslate2 each spread across every core -
+# measured at 93 threads and 850% CPU on a 16-core box. A request thread can
+# then wait seconds simply to be scheduled, and 5s of real time expired before
+# the writer got there: uploads 500'd with "database is locked" exactly when the
+# last of them collided with the work starting on all the rest.
+#
+# This treats the symptom. The cause is the oversubscription, and capping the
+# pools below is what actually fixes it.
+DB_BUSY_TIMEOUT_MS = int(os.environ.get("DB_BUSY_TIMEOUT_MS", "30000"))
+
 # Videos are large, so this is a stop rather than a policy. Left unset, Flask
 # reads a body of any size into a spool file, which - with no auth and a public
 # origin in the CORS list - is one request away from filling the disk.

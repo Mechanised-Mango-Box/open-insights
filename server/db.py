@@ -6,6 +6,7 @@ from typing import Any
 from flask import g
 
 from config import (
+    DB_BUSY_TIMEOUT_MS,
     DB_PATH,
     JOB_LEASE_SECONDS,
     MAX_ATTEMPTS,
@@ -25,7 +26,7 @@ from models import FileExt, SceneStats, Transcript
 #     "database is locked" when an upload landed mid-transcription.
 # busy_timeout is per-connection and has to be set on every one; journal_mode is
 # a persistent property of the file and only needs setting once, at startup.
-_BUSY_TIMEOUT_MS = 5000
+_BUSY_TIMEOUT_MS = DB_BUSY_TIMEOUT_MS
 
 
 def _configure(conn: sqlite3.Connection) -> sqlite3.Connection:

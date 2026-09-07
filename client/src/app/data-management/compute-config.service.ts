@@ -4,6 +4,7 @@ import { DatasetKind } from './providers/dataset-provider';
 export type ComputeTarget = 'local' | 'server';
 
 const STORAGE_KEY = 'openInsights.computeTargets';
+const EXPERIMENTAL_KEY = 'openInsights.computeExperimental';
 
 /**
  * Where each kind of work runs by default.
@@ -22,8 +23,40 @@ const DEFAULT_TARGETS: Record<DatasetKind, ComputeTarget> = {
 export class ComputeConfigService {
   readonly targets = signal<Record<DatasetKind, ComputeTarget>>(this.readStored());
 
+  /**
+   * Whether browser compute may be used at all.
+   *
+   * The server is the supported path; running the work in the browser is an
+   * experiment - slower, narrower in what it accepts, and not yet checked
+   * against the known-good results. Off unless deliberately turned on.
+   */
+  readonly experimental = signal<boolean>(this.readExperimental());
+
+  /**
+   * Gated here rather than at each call site, so a per-kind preference left in
+   * localStorage from an earlier session cannot quietly route work to the
+   * browser once the experiment is switched back off. The preference is kept,
+   * not cleared - turning it on again restores what was chosen before.
+   */
   targetFor(kind: DatasetKind): ComputeTarget {
-    return this.targets()[kind];
+    return this.experimental() ? this.targets()[kind] : 'server';
+  }
+
+  setExperimental(enabled: boolean): void {
+    this.experimental.set(enabled);
+    try {
+      localStorage.setItem(EXPERIMENTAL_KEY, String(enabled));
+    } catch {
+      // localStorage unavailable (private mode etc.) - value still applies for this session
+    }
+  }
+
+  private readExperimental(): boolean {
+    try {
+      return localStorage.getItem(EXPERIMENTAL_KEY) === 'true';
+    } catch {
+      return false;
+    }
   }
 
   setTarget(kind: DatasetKind, target: ComputeTarget): void {
