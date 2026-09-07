@@ -54,6 +54,9 @@ import {
                 </button>
               </td>
             </tr>
+            <tr>
+              <td colspan="3" class="kind-note">{{ kindNotes[kind] }}</td>
+            </tr>
           }
         </tbody>
       </table>
@@ -163,6 +166,12 @@ import {
       .compute-table td {
         padding: 4px 12px 4px 0;
       }
+      .kind-note {
+        font: var(--mat-sys-body-small);
+        color: var(--mat-sys-on-surface-variant);
+        padding: 0 12px 12px 0;
+        max-width: 60ch;
+      }
       .not-yet {
         font: var(--mat-sys-body-small);
         color: var(--mat-sys-on-surface-variant);
@@ -182,6 +191,21 @@ export class ServerSettingsComponent {
   protected readonly kindLabels: Record<DatasetKind, string> = {
     transcript: 'Transcript',
     scene_stats: 'Scene stats',
+  };
+
+  /** What changes by moving a kind into the browser. Both of these alter the
+   * numbers, not just where they are computed, so neither should be discovered
+   * after a batch has run. */
+  protected readonly kindNotes: Record<DatasetKind, string> = {
+    transcript:
+      'In this browser: Whisper tiny.en, needing WebGPU and a one-time ~75MB model download. ' +
+      'It is a much smaller model than the server runs, so word counts - and the speaking-speed ' +
+      'feature built on them - will shift. Transcripts already held from a server were made by a ' +
+      'different model and will read as not started.',
+    scene_stats:
+      'In this browser: WebCodecs, MP4 and MOV only (not .mkv or .webm). Same threshold as the ' +
+      'server, but frames come through a different decoder, so counts may differ slightly. ' +
+      'Scene stats already held from a server will read as not started.',
   };
 
   /** A kind can only be sent to this browser once something here knows how to

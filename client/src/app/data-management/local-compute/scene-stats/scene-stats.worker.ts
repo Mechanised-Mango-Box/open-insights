@@ -249,10 +249,13 @@ async function computeSceneStats(
   const drain = async () => {
     while (decoder.decodeQueueSize > RESUME_DECODE_QUEUE) {
       if (decodeError) throw decodeError;
-      // Pumped here too, so waiting on the decoder is also spent reading frames
-      // back rather than idling.
       await pump();
-      await new Promise((resolve) => setTimeout(resolve, DRAIN_POLL_MS));
+      // Waiting on the decoder is spent counting frames that have already come
+      // back, not sleeping. Only when there is genuinely nothing to retire does
+      // this fall back to the timer - otherwise a 5ms nap would be taken after
+      // every batch of readbacks, thousands of times over.
+      if (readbacks.length > 0) await retireOldest();
+      else await new Promise((resolve) => setTimeout(resolve, DRAIN_POLL_MS));
     }
   };
 

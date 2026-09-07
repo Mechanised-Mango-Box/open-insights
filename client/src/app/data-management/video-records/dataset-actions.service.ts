@@ -200,6 +200,9 @@ export class DatasetActionsService {
     const hash = record.video_file.hash;
     if (!hash) throw new Error('No file hash for this record.');
 
+    const finished = this.logScan('transcript', record);
+    let outcome = 'failed';
+
     this.sendingTranscript.update((set) => new Set(set).add(hash));
     try {
       // Segments and their stats arrive in one payload; the record models them
@@ -211,6 +214,7 @@ export class DatasetActionsService {
       );
       record.ds_transcript = { state: 'ready', data: { segments }, producer };
       record.ds_transcriptStats = { state: 'ready', data: { count_chars, count_words }, producer };
+      outcome = `${count_words} words, ${segments.length} segments`;
     } catch (error) {
       // A failed refresh over a good value keeps the value and records why -
       // losing an eleven-minute transcript to a network blip would be worse
@@ -220,6 +224,7 @@ export class DatasetActionsService {
       const message = error instanceof Error ? error.message : String(error);
       record.ds_transcript = this.markRefreshFailure(record.ds_transcript, message);
       record.ds_transcriptStats = this.markRefreshFailure(record.ds_transcriptStats, message);
+      outcome = `failed - ${message}`;
       throw error;
     } finally {
       this.sendingTranscript.update((set) => {
@@ -228,12 +233,16 @@ export class DatasetActionsService {
         return next;
       });
       void this.checkTranscriptStatus(hash);
+      finished(outcome);
     }
   }
 
   async fetchSceneStats(record: VideoRecord): Promise<void> {
     const hash = record.video_file.hash;
     if (!hash) throw new Error('No file hash for this record.');
+
+    const finished = this.logScan('scene_stats', record);
+    let outcome = 'failed';
 
     this.sendingSceneStats.update((set) => new Set(set).add(hash));
     try {
@@ -243,9 +252,11 @@ export class DatasetActionsService {
         this.sourceFor(record),
       );
       record.ds_sceneStats = { state: 'ready', data: { duration_secs, scenes }, producer };
+      outcome = `${scenes} scenes over ${duration_secs.toFixed(1)}s`;
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       record.ds_sceneStats = this.markRefreshFailure(record.ds_sceneStats, message);
+      outcome = `failed - ${message}`;
       throw error;
     } finally {
       this.sendingSceneStats.update((set) => {
@@ -254,7 +265,27 @@ export class DatasetActionsService {
         return next;
       });
       void this.checkSceneStatsStatus(hash);
+      finished(outcome);
     }
+  }
+
+  /**
+   * Announces the start of a scan and hands back the call that ends it.
+   *
+   * Shaped this way so a start cannot be logged without a finish: the caller
+   * holds the closure and calls it from a `finally`, which covers the failure
+   * path as well as the successful one. Scans run for minutes, so the elapsed
+   * time is the useful part - it is how a slow file is told from a stuck one.
+   */
+  private logScan(kind: DatasetKind, record: VideoRecord): (outcome: string) => void {
+    const name = record.sort_name || record.video_file.hash.slice(0, 8);
+    const startedAt = performance.now();
+    console.log(`Scan started: ${kind} - ${name}`);
+
+    return (outcome: string) => {
+      const seconds = ((performance.now() - startedAt) / 1000).toFixed(1);
+      console.log(`Scan finished: ${kind} - ${name} (${outcome}) in ${seconds}s`);
+    };
   }
 
   /**

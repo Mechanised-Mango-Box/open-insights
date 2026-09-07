@@ -2,6 +2,7 @@ import { EnvironmentProviders, inject, makeEnvironmentProviders } from '@angular
 import { provideAppInitializer } from '@angular/core';
 import { ComputeQueueService } from './compute-queue.service';
 import { sceneStatsComputer, supportsSceneStats } from './scene-stats/scene-stats.computer';
+import { supportsTranscript, transcriptComputer } from './transcript/transcript.computer';
 
 /**
  * Declares what this browser can compute for itself.
@@ -15,6 +16,7 @@ export function provideLocalCompute(): EnvironmentProviders {
     provideAppInitializer(() => {
       const queue = inject(ComputeQueueService);
       if (supportsSceneStats()) queue.register('scene_stats', sceneStatsComputer);
+      if (supportsTranscript()) queue.register('transcript', transcriptComputer);
     }),
   ]);
 }
