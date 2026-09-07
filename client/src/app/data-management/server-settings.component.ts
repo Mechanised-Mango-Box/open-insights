@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { SceneStatsCheckComponent } from './local-compute/scene-stats/scene-stats-check.component';
 import { ServerConfigService, DEFAULT_SERVER_URL } from './server-config.service';
 import { ComputeConfigService, ComputeTarget } from './compute-config.service';
 import { ComputeQueueService } from './local-compute/compute-queue.service';
@@ -15,7 +16,7 @@ import {
 @Component({
   selector: 'server-settings',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatButtonModule],
+  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, SceneStatsCheckComponent],
   template: `
     <div class="server-settings">
       <h2>Where Work Runs</h2>
@@ -56,6 +57,8 @@ import {
           }
         </tbody>
       </table>
+
+      <scene-stats-check />
 
       <h2>Dataset Server</h2>
       <p>Choose which dataset-server this browser talks to. Saved only in this browser.</p>

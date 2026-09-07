@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { DatasetProvider } from './data-management/providers/dataset-provider';
 import { RoutingDatasetProvider } from './data-management/providers/routing-dataset.provider';
+import { provideLocalCompute } from './data-management/local-compute/provide-local-compute';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,5 +15,6 @@ export const appConfig: ApplicationConfig = {
     // computes a dataset asks for DatasetProvider; the routing provider picks
     // local or server per kind, so a call site never knows which it got.
     { provide: DatasetProvider, useExisting: RoutingDatasetProvider },
+    provideLocalCompute(),
   ],
 };
