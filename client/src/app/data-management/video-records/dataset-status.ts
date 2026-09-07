@@ -1,5 +1,5 @@
 import { DatasetState, LOCAL_IMPORT, LOCAL_RECOMPUTE } from './Dataset';
-import { DatasetStatus } from '../dataset-server.service';
+import { DatasetStatus } from '../providers/dataset-provider';
 
 export type ServerStatus = 'checking' | 'exists' | 'missing' | 'error';
 

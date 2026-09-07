@@ -1,6 +1,13 @@
-import { DestroyRef, Injectable, effect, inject, signal, untracked } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
-import { DatasetServerService } from '../dataset-server.service';
+import {
+  DestroyRef,
+  Injectable,
+  WritableSignal,
+  effect,
+  inject,
+  signal,
+  untracked,
+} from '@angular/core';
+import { DatasetKind, DatasetProvider, SourceResolver } from '../providers/dataset-provider';
 import { ServerConfigService } from '../server-config.service';
 import { VideoRecord } from './VideoRecord';
 import { DatasetState, LOCAL_RECOMPUTE, computeTranscriptStats, isReady } from './Dataset';
@@ -16,13 +23,15 @@ type CheckOptions = {
 };
 
 /**
- * The one implementation of "do a server dataset action to a video record", shared by every
+ * The one implementation of "do a dataset action to a video record", shared by every
  * entry point that offers one: the table's per-row buttons, the Scan tab's bulk buttons (which
  * are just these actions applied across the selection) and the edit dialog. Also owns the
  * per-hash status/in-flight state behind the badges, so an action started from one place shows
  * up everywhere the same record is on screen.
  *
- * Those badges are a cache of answers from one particular server, so keeping them honest takes
+ * The work itself belongs to a DatasetProvider - this knows nothing about where it happens.
+ *
+ * Those badges are a cache of answers from one particular provider, so keeping them honest takes
  * three things, all handled here rather than by each consumer: a first check when a hash comes
  * on screen (trackHashes), wiping the lot when the nominated server changes, and a background
  * re-peek of anything still in a state that can change without the user doing something.
@@ -38,7 +47,7 @@ type CheckOptions = {
   providedIn: 'root',
 })
 export class DatasetActionsService {
-  private datasetServerService = inject(DatasetServerService);
+  private provider = inject(DatasetProvider);
   private serverConfig = inject(ServerConfigService);
   private destroyRef = inject(DestroyRef);
 
@@ -93,60 +102,39 @@ export class DatasetActionsService {
 
   async checkServerStatus(hash: string, { quiet }: CheckOptions = {}): Promise<void> {
     if (!quiet) this.serverStatusByHash.update((map) => new Map(map).set(hash, 'checking'));
-    let status: ServerStatus;
-    try {
-      await this.datasetServerService.getVideoMeta(hash);
-      status = 'exists';
-    } catch (error) {
-      status = error instanceof HttpErrorResponse && error.status === 404 ? 'missing' : 'error';
-    }
+    const status = await this.provider.sourceStatus(hash);
     this.serverStatusByHash.update((map) => new Map(map).set(hash, status));
   }
 
-  async checkTranscriptStatus(hash: string, { quiet }: CheckOptions = {}): Promise<void> {
-    if (!quiet) {
-      this.transcriptStatusByHash.update((map) => new Map(map).set(hash, { status: 'checking' }));
-    }
-    let result: DatasetPeekResult;
-    try {
-      const response = await this.datasetServerService.peekTranscriptStatus(hash);
-      result =
-        response.state === 'failed'
-          ? { status: 'failed', error: response.error }
-          : { status: response.state };
-    } catch (error) {
-      // A 404 means the server has no such video at all, which is a different
-      // thing from having no dataset for it - but from a status badge's point
-      // of view both mean "nothing has been generated here".
-      result =
-        error instanceof HttpErrorResponse && error.status === 404
-          ? { status: 'absent' }
-          : { status: 'error' };
-    }
-    this.transcriptStatusByHash.update((map) => new Map(map).set(hash, result));
+  checkTranscriptStatus(hash: string, options: CheckOptions = {}): Promise<void> {
+    return this.checkDatasetStatus('transcript', this.transcriptStatusByHash, hash, options);
   }
 
-  async checkSceneStatsStatus(hash: string, { quiet }: CheckOptions = {}): Promise<void> {
-    if (!quiet) {
-      this.sceneStatsStatusByHash.update((map) => new Map(map).set(hash, { status: 'checking' }));
-    }
+  checkSceneStatsStatus(hash: string, options: CheckOptions = {}): Promise<void> {
+    return this.checkDatasetStatus('scene_stats', this.sceneStatsStatusByHash, hash, options);
+  }
+
+  /** One body for both kinds: they differ only in which signal they write to.
+   * The provider has already folded "no such video" into 'absent', so the only
+   * thing left to distinguish here is not being able to ask at all. */
+  private async checkDatasetStatus(
+    kind: DatasetKind,
+    target: WritableSignal<Map<string, DatasetPeekResult>>,
+    hash: string,
+    { quiet }: CheckOptions,
+  ): Promise<void> {
+    if (!quiet) target.update((map) => new Map(map).set(hash, { status: 'checking' }));
     let result: DatasetPeekResult;
     try {
-      const response = await this.datasetServerService.peekSceneStatsStatus(hash);
+      const response = await this.provider.peek(kind, hash);
       result =
         response.state === 'failed'
           ? { status: 'failed', error: response.error }
           : { status: response.state };
-    } catch (error) {
-      // A 404 means the server has no such video at all, which is a different
-      // thing from having no dataset for it - but from a status badge's point
-      // of view both mean "nothing has been generated here".
-      result =
-        error instanceof HttpErrorResponse && error.status === 404
-          ? { status: 'absent' }
-          : { status: 'error' };
+    } catch {
+      result = { status: 'error' };
     }
-    this.sceneStatsStatusByHash.update((map) => new Map(map).set(hash, result));
+    target.update((map) => new Map(map).set(hash, result));
   }
 
   /**
@@ -181,7 +169,7 @@ export class DatasetActionsService {
 
     this.uploadingFile.update((set) => new Set(set).add(hash));
     try {
-      await this.datasetServerService.uploadVideo(record.video_file.file);
+      await this.provider.putSource(record.video_file.file);
       record.video_file.exists_on_server = true;
     } finally {
       this.uploadingFile.update((set) => {
@@ -205,11 +193,15 @@ export class DatasetActionsService {
 
     this.sendingTranscript.update((set) => new Set(set).add(hash));
     try {
-      const { transcript, stats, producer } = await this.fetchOrUpload(record, () =>
-        this.datasetServerService.getTranscript(hash),
+      // Segments and their stats arrive in one payload; the record models them
+      // as two separately cacheable fields, so split here.
+      const { segments, count_chars, count_words, producer } = await this.provider.request(
+        'transcript',
+        hash,
+        this.sourceFor(record),
       );
-      record.ds_transcript = { state: 'ready', data: transcript, producer };
-      record.ds_transcriptStats = { state: 'ready', data: stats, producer };
+      record.ds_transcript = { state: 'ready', data: { segments }, producer };
+      record.ds_transcriptStats = { state: 'ready', data: { count_chars, count_words }, producer };
     } catch (error) {
       // A failed refresh over a good value keeps the value and records why -
       // losing an eleven-minute transcript to a network blip would be worse
@@ -236,10 +228,12 @@ export class DatasetActionsService {
 
     this.sendingSceneStats.update((set) => new Set(set).add(hash));
     try {
-      const { sceneStats, producer } = await this.fetchOrUpload(record, () =>
-        this.datasetServerService.getSceneStats(hash),
+      const { duration_secs, scenes, producer } = await this.provider.request(
+        'scene_stats',
+        hash,
+        this.sourceFor(record),
       );
-      record.ds_sceneStats = { state: 'ready', data: sceneStats, producer };
+      record.ds_sceneStats = { state: 'ready', data: { duration_secs, scenes }, producer };
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       record.ds_sceneStats = this.markRefreshFailure(record.ds_sceneStats, message);
@@ -351,20 +345,21 @@ export class DatasetActionsService {
     }
   }
 
-  // Tries the server first (cheap - covers "already uploaded" and "already cached"). Only
-  // sends the file over the network on a 404 (server has no video for this hash yet), and
-  // only if we actually have the bytes in memory this session.
-  private async fetchOrUpload<T>(record: VideoRecord, fetchFn: () => Promise<T>): Promise<T> {
-    try {
-      return await fetchFn();
-    } catch (error) {
-      const notFound = error instanceof HttpErrorResponse && error.status === 404;
-      if (notFound && record.video_file.file) {
-        await this.datasetServerService.uploadVideo(record.video_file.file);
+  /**
+   * Lets a provider reach this record's bytes if it turns out to need them, and
+   * marks the record once it has taken them.
+   *
+   * The provider asks only when it has to - it tries the cheap path first, which
+   * covers both "already uploaded" and "already cached" - so `read` is not
+   * called at all in the common case, and a record with no file in memory this
+   * session costs nothing until something actually wants it.
+   */
+  private sourceFor(record: VideoRecord): SourceResolver {
+    return {
+      read: async () => record.video_file.file,
+      stored: () => {
         record.video_file.exists_on_server = true;
-        return await fetchFn();
-      }
-      throw error;
-    }
+      },
+    };
   }
 }

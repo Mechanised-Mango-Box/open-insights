@@ -3,7 +3,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ServerConfigService, DEFAULT_SERVER_URL } from './server-config.service';
-import { DatasetServerService, ServerStatus } from './dataset-server.service';
+import { DatasetProvider, ProviderStatus } from './providers/dataset-provider';
 
 @Component({
   selector: 'server-settings',
@@ -113,11 +113,11 @@ import { DatasetServerService, ServerStatus } from './dataset-server.service';
 })
 export class ServerSettingsComponent {
   serverConfig = inject(ServerConfigService);
-  private datasetServer = inject(DatasetServerService);
+  private provider = inject(DatasetProvider);
 
   draftUrl = signal(this.serverConfig.serverUrl());
 
-  status = signal<ServerStatus | null>(null);
+  status = signal<ProviderStatus | null>(null);
   checking = signal(false);
   error = signal<string | null>(null);
 
@@ -144,10 +144,10 @@ export class ServerSettingsComponent {
     this.checking.set(true);
     this.error.set(null);
     try {
-      this.status.set(await this.datasetServer.getServerStatus());
+      this.status.set(await this.provider.status());
     } catch (error) {
-      // Same idiom as DatasetActionsService: an HttpErrorResponse from an unreachable
-      // or CORS-blocked server is still an Error carrying a usable message.
+      // Whatever the provider could not do, it rejected with - an unreachable or
+      // CORS-blocked server still arrives as an Error carrying a usable message.
       this.error.set(error instanceof Error ? error.message : String(error));
       // Cleared rather than left on screen: counts from a server that just failed to
       // answer are of unknown age, and reading them as current is the whole risk.
