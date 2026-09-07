@@ -8,18 +8,18 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import joblib
 
-from model_training.data_preparation import (
+from server.model_training.data_preparation import (
     prepare_training_data,
     FEATURE_COLUMNS,
     TARGET_COLUMN,
 )
-from model_training.regression import (
+from server.model_training.regression import (
     fit_scaler_and_train_model,
     predict_engagement,
     get_coefficient_summary,
     generate_feature_recommendations,
 )
-from model_training.evaluation import (
+from server.model_training.evaluation import (
     evaluate_model,
     format_evaluation_report,
 )
@@ -133,7 +133,7 @@ def run_training_pipeline(
 
 
 if __name__ == "__main__":
-    from model_training.mock_data import generate_mock_training_data
+    from server.model_training.mock_data import generate_mock_training_data
 
     print("[ Test ] Generating mock dataset (200 samples)...")
     mock_df = generate_mock_training_data(num_samples=200, random_state=42)
