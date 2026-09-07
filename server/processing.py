@@ -136,10 +136,11 @@ def calculate_transcript(file_path: Path) -> Transcript:
     # produce. faster-whisper also refuses to batch without vad_filter, so
     # there is no fine-grained batched option to reach for.
     #
-    # language is passed rather than left to detection: turbo has no .en
-    # build, so this is what makes the run English-only. It also drops the
-    # detection pass, which read only the first 30s and could label a whole
-    # video off an intro.
+    # language is passed rather than left to detection: it matches the .en
+    # weights the default model ships as, and holds the run to English if a
+    # multilingual model is configured instead. It also drops the detection
+    # pass, which read only the first 30s and could label a whole video off
+    # an intro.
     segment_iter, _info = _whisper_model.transcribe(
         str(file_path), language=WHISPER_LANGUAGE, vad_filter=WHISPER_VAD
     )

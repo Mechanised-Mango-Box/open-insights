@@ -12,14 +12,6 @@ import { ServerConfigService } from './server-config.service';
 export type VideoMeta = { file_hash: string; file_ext: string };
 export type UploadResult = { file_hash: string; filename: string };
 
-export type AnalysisFeatureRow = {
-  duration_mins: number;
-  wpm: number;
-  scene_change_rate: number;
-  word_count: number;
-  average_percentage_viewed: number;
-};
-
 export type ServerJobCounts = { queued: number; running: number; failed: number };
 
 export type ServerWorkerCounts = {
@@ -42,12 +34,6 @@ export type ServerStatus = {
   queue: ServerJobCounts;
   workers: { total: number; busy: number; idle: number };
   kinds: Record<string, { jobs: ServerJobCounts; workers: ServerWorkerCounts }>;
-};
-
-export type AnalysisResult = {
-  histograms: Record<string, { bins: number[]; counts: number[] }>;
-  correlations: Record<string, number>;
-  loess: Record<string, { x: number[]; y: number[] }>;
 };
 
 // The server computes transcript/scene_stats asynchronously. GET reports state
@@ -202,9 +188,4 @@ export class DatasetServerService {
     return result;
   }
 
-  runAnalysis(rows: AnalysisFeatureRow[]): Promise<AnalysisResult> {
-    return firstValueFrom(
-      this.http.post<AnalysisResult>(`${this.serverConfig.serverUrl()}/api/analysis`, rows),
-    );
-  }
 }

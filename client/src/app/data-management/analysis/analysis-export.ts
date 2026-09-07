@@ -1,6 +1,6 @@
 import JSZip from 'jszip';
 import { Chart } from 'chart.js';
-import { AnalysisFeatureRow, AnalysisResult } from '../dataset-server.service';
+import { AnalysisFeatureRow, AnalysisResult } from './stats';
 
 /** A chart already encoded as base64 PNG, destined for the export's images/ folder. */
 export interface ChartImage {

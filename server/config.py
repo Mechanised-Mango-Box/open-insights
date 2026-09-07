@@ -17,13 +17,14 @@ MAX_UPLOAD_BYTES = int(os.environ.get("MAX_UPLOAD_BYTES", str(4 * 1024**3)))
 # here, cuda/float16 there - so moving to a GPU is a config change, not a rewrite.
 # Set explicitly rather than device="auto" + compute_type="default", because
 # "default" resolves to float32 on CPU and gives back the little that int8 buys.
-WHISPER_MODEL = os.environ.get("WHISPER_MODEL", "turbo")
+WHISPER_MODEL = os.environ.get("WHISPER_MODEL", "tiny.en")
 WHISPER_DEVICE = os.environ.get("WHISPER_DEVICE", "cpu")
 WHISPER_COMPUTE_TYPE = os.environ.get("WHISPER_COMPUTE_TYPE", "int8")
 
-# Pinned rather than left to auto-detection. There is no English-only turbo build
-# - Whisper's .en variants stop at medium.en - so "turbo, English" is a language
-# pin on the multilingual weights, not a different model.
+# Pinned rather than left to auto-detection. The default weights are already an
+# English-only build, so this matches the model rather than constraining it; it
+# stays explicit because the model is an env var and a multilingual one set there
+# would otherwise silently fall back to detection.
 #
 # Detection otherwise runs on the first 30s window alone, so an instrumental
 # intro or a few accented seconds can mislabel an entire talk and return it
@@ -34,18 +35,20 @@ WHISPER_COMPUTE_TYPE = os.environ.get("WHISPER_COMPUTE_TYPE", "int8")
 WHISPER_LANGUAGE = os.environ.get("WHISPER_LANGUAGE", "en")
 
 # 0 lets CTranslate2 choose, which measured fastest: on a 300s clip this box did
-# 57.9s letting CT2 decide vs 69.3s pinned to 16 threads, and the *previous*
-# engine likewise got 8% slower when handed twice the threads. More threads is
-# not a free lever here - change this only with a measurement in hand.
+# 57.9s letting CT2 decide vs 69.3s pinned to 16 threads (measured on turbo, so
+# the absolute times are far above what the current default takes), and the
+# *previous* engine likewise got 8% slower when handed twice the threads. More
+# threads is not a free lever here - change this only with a measurement in hand.
 WHISPER_CPU_THREADS = int(os.environ.get("WHISPER_CPU_THREADS", "0"))
 
 # How many transcriptions may run at once. This is CTranslate2's inter_threads:
 # the weights are loaded once and each worker adds only its own compute buffers,
-# so a second worker costs a few hundred MB, not another ~1.6GB.
+# so a second worker costs a few hundred MB, not another copy of the weights.
 #
 # This is the knob that actually buys parallelism; the Python lock that used to
 # sit around transcribe() was never what serialised the work. Measured on 60s
-# clips, 16 threads, turbo/int8:
+# clips, 16 threads, turbo/int8 - the shape of the curve is what matters here,
+# not the absolute numbers, which a smaller model moves wholesale:
 #
 #   workers  concurrent  throughput   cores  model RSS
 #         1           1       3.49x    3.94     2063MB
@@ -72,9 +75,10 @@ WHISPER_NUM_WORKERS = int(os.environ.get("WHISPER_NUM_WORKERS", "2"))
 # sparse audio, hence the flag.
 WHISPER_VAD = os.environ.get("WHISPER_VAD", "0") == "1"
 
-# Where CTranslate2 weights live (~1.6GB for turbo). Point this at a baked image
-# path or mounted volume in cloud so a cold container doesn't download them on
-# its first request. None means the default HuggingFace cache.
+# Where CTranslate2 weights live (~75MB for tiny.en, ~1.6GB for turbo). Point
+# this at a baked image path or mounted volume in cloud so a cold container
+# doesn't download them on its first request. None means the default
+# HuggingFace cache.
 #
 # The server runs with local_files_only=True (see processing.py) and never
 # downloads, so this directory must already be populated before it starts.

@@ -24,7 +24,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
-import { AnalysisFeatureRow, AnalysisResult } from '../dataset-server.service';
+import { AnalysisFeatureRow, AnalysisResult, computeAnalysis } from './stats';
 import { AnalysisService } from './analysis.service';
 import { VideoDatabaseService } from '../video-records/video-database.service';
 import { downloadBlob } from '../video-records/manifest-export';
@@ -269,7 +269,7 @@ export class AnalysisComponent implements AfterViewInit {
         return;
       }
 
-      const result = await this.analysisService.runAnalysis(rows);
+      const result = computeAnalysis(rows);
       this.renderResult(rows, result);
       this.lastRows = rows;
       this.lastResult.set(result);
