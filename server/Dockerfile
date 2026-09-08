@@ -5,7 +5,7 @@
 #
 # 3.13 rather than 3.14: the code needs >=3.12 for PEP 695 generics
 # (processing.py's `def _submit[T]`), and 3.13 is the newest with a complete set
-# of aarch64 wheels across ctranslate2/onnxruntime/av/pandas - which is what the
+# of aarch64 wheels across ctranslate2/onnxruntime/av - which is what the
 # Oracle Ampere target needs. 3.14 has gaps that force source builds.
 FROM python:3.13-slim-bookworm
 

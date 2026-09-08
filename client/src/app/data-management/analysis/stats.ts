@@ -1,8 +1,12 @@
 /**
- * Ported from server/analysis.py (itself a pure-numpy port of
- * model_training/data_analysis.py). The Python remains the specification: the
- * golden values in stats.spec.ts were produced by running it, so a change here
- * that moves a number needs a matching check against that module.
+ * A port of the Python the analysis used to run server-side. That code is the
+ * specification, and it still exists: the LOESS smoother is
+ * server/model_training/data_analysis.py's compute_loess, which this follows
+ * line for line. The other two are library calls rather than algorithms -
+ * np.histogram with 15 bins, and pandas' Series.corr(method='pearson').
+ *
+ * The golden values in stats.spec.ts came from running that Python, so a change
+ * here that moves a number needs a matching check against it.
  *
  * Where numpy semantics are load-bearing rather than incidental - the zero-width
  * histogram range, the rank-deficient least-squares fallback - the reason is

@@ -68,13 +68,19 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    # Nothing on the request path imports any of these - analysis.py is numpy
-    # and pandas only - and they are the largest things that would otherwise be
-    # swept in from a development environment that also runs model_training/.
-    # torch especially: faster-whisper exists here precisely to avoid it, and
-    # letting it into the bundle would undo that in one step.
+    # Nothing on the request path imports any of these, and they are the largest
+    # things that would otherwise be swept in from a development environment
+    # that also runs model_training/. torch especially: faster-whisper exists
+    # here precisely to avoid it, and letting it into the bundle would undo that
+    # in one step.
+    #
+    # pandas joined the list when /api/analysis was removed - the client does
+    # that arithmetic in the browser now, and it was the server's only importer.
+    # numpy must NOT join it: cv2 and ctranslate2 load it at runtime, so a
+    # bundle without it does not start.
     excludes=[
         "torch",
+        "pandas",
         "matplotlib",
         "scipy",
         "sklearn",

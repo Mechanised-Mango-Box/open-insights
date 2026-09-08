@@ -9,7 +9,7 @@ import {
   pearson,
 } from './stats';
 
-describe('stats, against server/analysis.py', () => {
+describe('stats, against the Python it was ported from', () => {
   for (const golden of STATS_GOLDEN) {
     describe(golden.name, () => {
       it('smooths to the same curve', () => {

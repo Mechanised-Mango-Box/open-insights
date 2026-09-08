@@ -1,10 +1,14 @@
 # Extras for model_training/ only. Split out of requirements.txt so the deployed
-# image does not carry them: nothing under the request path imports sklearn or
-# matplotlib - analysis.py is pure numpy/pandas, by its own note, "since this
-# feeds a JSON API".
+# image does not carry them: nothing under the request path imports any of these.
+# numpy and pandas are here rather than in the runtime set because model_training
+# is now their only direct importer - the server dropped its last use of them
+# when the /api/analysis endpoint was removed (the client computes that in the
+# browser). numpy still reaches the image transitively, via opencv/ctranslate2.
 #
 # Install on top of the runtime set:
 #   pip install -r requirements.txt -r requirements-training.txt
 
 scikit-learn==1.9.0
 matplotlib==3.11.1
+pandas==3.0.5
+numpy==2.5.1

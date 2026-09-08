@@ -27,6 +27,3 @@ gunicorn==23.0.0
 # Scene stats. headless rather than opencv-python: the server never opens a
 # window, and it drops the GUI shared-library dependencies from the image.
 opencv-python-headless==5.0.0.93
-
-pandas==3.0.5
-numpy==2.5.1
