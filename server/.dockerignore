@@ -1,0 +1,17 @@
+# The build context is this directory, not the repo root - data/local is 8GB and
+# has no business in an image layer. These are what is left to exclude.
+
+# Offline-only, and drags in sklearn/matplotlib which the runtime set omits.
+model_training/
+
+tests/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Weights are baked in by fetch_whisper_model.py during the build (see
+# Dockerfile), so a developer's local cache must not be copied over the top.
+models/
+requirements-training.txt
+run.sh

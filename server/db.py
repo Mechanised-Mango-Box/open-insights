@@ -270,6 +270,66 @@ def get_file_ext(file_hash: str) -> str | None:
     return row["file_ext"] if row is not None else None
 
 
+def reapable_uploads(limit: int) -> list[sqlite3.Row]:
+    """Videos the upload reaper may delete, oldest first.
+
+    Oldest-uploaded rather than least-recently-used, because there is nothing to
+    read a last-use time from: the schema does not record one, and a file that is
+    only ever read has an mtime that never moves (and an atime that relatime is
+    free to lie about). The approximation is affordable here in a way it would
+    not be for a normal cache - see delete_upload() for why a wrong choice costs
+    an upload rather than a recomputation.
+
+    Excludes anything with a live job. Deleting a video out from under the worker
+    currently transcribing it would fail that job for a reason the video is not
+    responsible for."""
+    # _connect() rather than get_db(): the reaper calls this from its own thread,
+    # which has no Flask app context for g to live in.
+    conn = _connect()
+    try:
+        return conn.execute(
+            """
+            SELECT file_hash, file_ext FROM files
+            WHERE file_hash NOT IN (
+                SELECT file_hash FROM jobs WHERE status IN ('queued', 'running')
+            )
+            ORDER BY uploaded_at ASC
+            LIMIT ?
+            """,
+            (limit,),
+        ).fetchall()
+    finally:
+        conn.close()
+
+
+def delete_upload(file_hash: str) -> None:
+    """Forgets an uploaded video, keeping everything computed from it.
+
+    The results tables are deliberately left alone. They are the expensive half -
+    minutes of CPU each, and tens of KB on disk against the ~180MB of video that
+    produced them - so evicting them alongside the video would spend the scarce
+    resource to reclaim the plentiful one.
+
+    Dropping the files row is what makes the client re-upload: _resolve() in
+    routes.py 404s without it, the provider reads that as a missing source and
+    sends the file again. enqueue() then finds the cached result still
+    producer-current and declines to queue anything, so the video comes back and
+    the transcript is simply still there.
+
+    Job rows go with it. A stale 'failed' row would otherwise outlive the video
+    and, on re-upload, make a hash with a perfectly good cached result report
+    itself as failed."""
+    conn = _connect()
+    try:
+        # One transaction: a files row surviving its own job rows would be a
+        # video that reports itself present with no way to recompute anything.
+        with conn:
+            conn.execute("DELETE FROM jobs WHERE file_hash = ?", (file_hash,))
+            conn.execute("DELETE FROM files WHERE file_hash = ?", (file_hash,))
+    finally:
+        conn.close()
+
+
 # ---------------------------------------------------------------------------
 # Results
 # ---------------------------------------------------------------------------

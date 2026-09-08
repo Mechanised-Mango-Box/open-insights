@@ -27,6 +27,90 @@ DB_BUSY_TIMEOUT_MS = int(os.environ.get("DB_BUSY_TIMEOUT_MS", "30000"))
 # origin in the CORS list - is one request away from filling the disk.
 MAX_UPLOAD_BYTES = int(os.environ.get("MAX_UPLOAD_BYTES", str(4 * 1024**3)))
 
+# --- Public deployment gating -------------------------------------------------
+#
+# Everything below defaults to off, and with none of it set the server behaves
+# exactly as it did before any of it existed: no key, no limit, no reaping. That
+# is deliberate. A self-hoster running `py main.py` on their own machine is not
+# the threat model, and gating is something a *deployment* opts into rather than
+# a new baseline everyone pays for.
+#
+# The threat model is the one the two comments above already describe: a public
+# origin, no auth, and a 4GiB body allowance. Two keys rather than one because
+# the answer to "who is this?" here has exactly two useful values - the shared
+# key published in the client, which anyone has and which therefore has to be
+# assumed hostile, and the operator's own, which does not.
+PUBLIC_API_KEY = os.environ.get("PUBLIC_API_KEY", "")
+PRIVATE_API_KEY = os.environ.get("PRIVATE_API_KEY", "")
+
+# Whether tier resolution does anything at all. Both keys unset means every
+# caller is treated as private, which is what keeps the local quickstart working
+# with no configuration and no key header.
+AUTH_ENABLED = bool(PUBLIC_API_KEY or PRIVATE_API_KEY)
+
+# The public tier's own body limit, applied per-request on top of the global
+# MAX_UPLOAD_BYTES above (which stays the private ceiling). 0 means "no separate
+# limit" and the global one applies to everyone.
+#
+# When setting one, err high: this is a video tool, and a cap that rejects an
+# ordinary ten-minute upload makes the public tier a demo rather than a service.
+# The compose file uses 512MB.
+PUBLIC_MAX_UPLOAD_BYTES = int(os.environ.get("PUBLIC_MAX_UPLOAD_BYTES", "0"))
+
+# How many jobs may be waiting before the public tier is told to come back later.
+# 0 disables the check.
+#
+# This, not the rate limit, is what actually bounds CPU. A rate limit caps how
+# often work is *asked for*; on a 2-core box the queue is what decides whether
+# asking again is pointless. Rejecting at the door with a 503 is kinder than
+# accepting work that will sit behind an hour of someone else's.
+PUBLIC_MAX_QUEUE_DEPTH = int(os.environ.get("PUBLIC_MAX_QUEUE_DEPTH", "0"))
+
+# Per-IP rate limits for the public tier, in flask-limiter's syntax. The private
+# key is exempt from all three.
+#
+# The read limit has to be generous or normal use trips it: the client polls a
+# pending dataset every 1.5s (40/min each) and a bulk scan has several in flight
+# at once. The two write limits are where the actual cost is - an upload spends
+# bandwidth and disk, and starting a dataset spends minutes of CPU - so they are
+# counted per hour, which is the timescale a person works on, rather than per
+# minute, which only smooths bursts.
+PUBLIC_RATE_LIMIT = os.environ.get("PUBLIC_RATE_LIMIT", "600 per minute")
+PUBLIC_UPLOAD_RATE_LIMIT = os.environ.get("PUBLIC_UPLOAD_RATE_LIMIT", "20 per hour")
+PUBLIC_COMPUTE_RATE_LIMIT = os.environ.get("PUBLIC_COMPUTE_RATE_LIMIT", "120 per hour")
+
+# Cap on the upload directory, past which the least recently used videos are
+# deleted until it fits. 0 - the default - never deletes anything.
+#
+# Off by default because deleting someone's uploads is not a reasonable thing to
+# do to a self-hoster who has a disk and expects it to be used. On a shared box
+# it is the only thing standing between a public endpoint and a full volume,
+# since nothing else in the server has ever removed an upload.
+#
+# Deleting is safe rather than lossy: uploads are content-addressed and this
+# directory is a cache. The client holds the library in IndexedDB and re-uploads
+# on demand, so a reaped video costs one upload, not a record.
+UPLOAD_DIR_MAX_BYTES = int(os.environ.get("UPLOAD_DIR_MAX_BYTES", "0"))
+
+# How often the reaper wakes. It stats the upload directory, so unlike the
+# backfill sweep this is not free - hence minutes rather than seconds. Nothing
+# here needs to react quickly: the cap is a watermark, not a quota.
+UPLOAD_REAP_INTERVAL_SECONDS = int(os.environ.get("UPLOAD_REAP_INTERVAL_SECONDS", "300"))
+
+# Origins the browser client may call from. Env-overridable (comma-separated)
+# rather than the hardcoded list this used to be: a self-hoster serving the
+# client from anywhere else had to edit source to be allowed in.
+ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get(
+        "ALLOWED_ORIGINS",
+        "http://localhost:4200,http://localhost,https://mechanised-mango-box.github.io",
+    ).split(",")
+    if origin.strip()
+]
+
+# --- End public deployment gating ---------------------------------------------
+
 # Whisper runs through CTranslate2 (faster-whisper). device/compute_type are the
 # only settings that differ between a CPU box and a cloud GPU instance - cpu/int8
 # here, cuda/float16 there - so moving to a GPU is a config change, not a rewrite.

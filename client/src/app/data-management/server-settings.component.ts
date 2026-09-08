@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { ServerConfigService, DEFAULT_SERVER_URL } from './server-config.service';
+import { ServerConfigService, LOCAL_SERVER_URL, DEFAULT_API_KEY } from './server-config.service';
 import { ComputeConfigService, ComputeTarget } from './compute-config.service';
 import { ComputeQueueService } from './local-compute/compute-queue.service';
 import {
@@ -30,7 +30,7 @@ import {
         <h2>Dataset Server</h2>
         <p class="lead">Which server this browser sends its work to. Saved in this browser only.</p>
 
-        <div class="controls">
+        <div class="actions">
           <mat-form-field subscriptSizing="dynamic">
             <mat-label>Server URL</mat-label>
             <input
@@ -45,12 +45,33 @@ import {
         </div>
         <p class="muted">Active: {{ serverConfig.serverUrl() }}</p>
 
+        <h3>Access key</h3>
+        <p class="lead">
+          Sent with every request to the server above. The shared key the app ships with is rate
+          limited — it is published in this page, so it is friction against abuse rather than a
+          secret. If you run the server yourself, paste its private key here to lift those limits,
+          or clear this box entirely for a server started with no keys configured.
+        </p>
+        <div class="actions">
+          <mat-form-field subscriptSizing="dynamic">
+            <mat-label>API key</mat-label>
+            <input matInput [value]="draftKey()" (input)="onKeyInput($event)" />
+          </mat-form-field>
+          <button mat-stroked-button type="button" (click)="useSharedKey()">Use shared</button>
+          <button mat-raised-button color="primary" type="button" (click)="saveKey()">
+            Save key
+          </button>
+        </div>
+        <p class="muted">
+          {{ serverConfig.apiKey() ? 'A key is set for this browser.' : 'No key set.' }}
+        </p>
+
         <h3>Status</h3>
         <p class="lead">
           How much work the active server has queued, and how many of its workers are on each task.
           Reads the saved URL above, so it doubles as a reachability check.
         </p>
-        <div class="controls">
+        <div class="actions">
           <button mat-stroked-button type="button" [disabled]="checking()" (click)="checkStatus()">
             {{ checking() ? 'Checking…' : 'Check status' }}
           </button>
@@ -120,7 +141,7 @@ import {
             it has been checked against known-good results yet, so treat what it produces as
             provisional.
           </p>
-          <div class="controls">
+          <div class="actions">
             @if (computeConfig.experimental()) {
               <button mat-stroked-button type="button" (click)="setExperimental(false)">
                 Disable browser compute
@@ -217,13 +238,7 @@ import {
         font: var(--mat-sys-body-small);
         color: var(--mat-sys-on-surface-variant);
       }
-      .controls {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px;
-      }
-      .controls mat-form-field {
+      .actions mat-form-field {
         width: 320px;
       }
       .status-summary {
@@ -318,6 +333,7 @@ export class ServerSettingsComponent {
   }
 
   draftUrl = signal(this.serverConfig.serverUrl());
+  draftKey = signal(this.serverConfig.apiKey());
 
   status = signal<ProviderStatus | null>(null);
   checking = signal(false);
@@ -332,11 +348,23 @@ export class ServerSettingsComponent {
   }
 
   useLocal(): void {
-    this.draftUrl.set(DEFAULT_SERVER_URL);
+    this.draftUrl.set(LOCAL_SERVER_URL);
   }
 
   save(): void {
     this.serverConfig.setServerUrl(this.draftUrl());
+  }
+
+  onKeyInput(event: Event): void {
+    this.draftKey.set((event.target as HTMLInputElement).value);
+  }
+
+  useSharedKey(): void {
+    this.draftKey.set(DEFAULT_API_KEY);
+  }
+
+  saveKey(): void {
+    this.serverConfig.setApiKey(this.draftKey());
   }
 
   /** Manual refresh, one fetch per press. No polling, so there is no interval to tear

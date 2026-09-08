@@ -43,6 +43,22 @@ export class ServerDatasetProvider extends DatasetProvider {
 
   readonly label = computed(() => this.serverConfig.serverUrl());
 
+  /** The auth header, or nothing at all when no key is set.
+   *
+   * Omitted rather than sent empty on purpose: a server started with no keys
+   * configured - `py main.py`, the README quickstart - wants no header, and an
+   * empty one would be a key that matches neither tier. Built per request
+   * rather than cached, so rotating the key in Settings takes effect on the
+   * next call instead of the next reload.
+   *
+   * Set here rather than in an HTTP interceptor so the key can only ever reach
+   * the nominated server: an interceptor sees every HttpClient request, and
+   * would happily attach it to whatever else the app learns to fetch later. */
+  private authHeaders(): Record<string, string> {
+    const key = this.serverConfig.apiKey();
+    return key ? { 'X-API-Key': key } : {};
+  }
+
   private datasetUrl(kind: DatasetKind, hash: string): string {
     // The kind is the server's own path segment, so a third kind needs no
     // mapping table here.
@@ -55,7 +71,9 @@ export class ServerDatasetProvider extends DatasetProvider {
   ): Promise<DatasetStatusResponse<DatasetPayload[K]>> {
     try {
       return await firstValueFrom(
-        this.http.get<DatasetStatusResponse<DatasetPayload[K]>>(this.datasetUrl(kind, hash)),
+        this.http.get<DatasetStatusResponse<DatasetPayload[K]>>(this.datasetUrl(kind, hash), {
+          headers: this.authHeaders(),
+        }),
       );
     } catch (error) {
       // No video for this hash is not the same thing as no dataset for it, but
@@ -91,7 +109,9 @@ export class ServerDatasetProvider extends DatasetProvider {
   async sourceStatus(hash: string): Promise<SourceStatus> {
     try {
       await firstValueFrom(
-        this.http.get<VideoMeta>(`${this.serverConfig.serverUrl()}/api/videos/${hash}`),
+        this.http.get<VideoMeta>(`${this.serverConfig.serverUrl()}/api/videos/${hash}`, {
+          headers: this.authHeaders(),
+        }),
       );
       return 'exists';
     } catch (error) {
@@ -103,7 +123,9 @@ export class ServerDatasetProvider extends DatasetProvider {
     const formData = new FormData();
     formData.append('file', file, file.name);
     await firstValueFrom(
-      this.http.post<UploadResult>(`${this.serverConfig.serverUrl()}/api/videos`, formData),
+      this.http.post<UploadResult>(`${this.serverConfig.serverUrl()}/api/videos`, formData, {
+        headers: this.authHeaders(),
+      }),
     );
   }
 
@@ -111,7 +133,11 @@ export class ServerDatasetProvider extends DatasetProvider {
    * currently typed into the Settings URL field. Doubles as a reachability check:
    * an unreachable or misconfigured server rejects here rather than reporting. */
   status(): Promise<ProviderStatus> {
-    return firstValueFrom(this.http.get<ProviderStatus>(`${this.serverConfig.serverUrl()}/status`));
+    return firstValueFrom(
+      this.http.get<ProviderStatus>(`${this.serverConfig.serverUrl()}/status`, {
+        headers: this.authHeaders(),
+      }),
+    );
   }
 
   /** Resolves to the full 'ready' envelope, not just the payload: `producer`
@@ -144,13 +170,17 @@ export class ServerDatasetProvider extends DatasetProvider {
     // or retries work. Everything after is a GET, which cannot start anything -
     // so a failure discovered mid-poll surfaces as 'failed' and throws below,
     // rather than being quietly retried forever.
-    let result = await firstValueFrom(this.http.post<DatasetStatusResponse<T>>(url, null));
+    let result = await firstValueFrom(
+      this.http.post<DatasetStatusResponse<T>>(url, null, { headers: this.authHeaders() }),
+    );
     while (pending(result)) {
       if (Date.now() > deadline) {
         throw new Error('Timed out waiting for dataset generation to complete.');
       }
       await new Promise((resolve) => setTimeout(resolve, DATASET_POLL_INTERVAL_MS));
-      const next = await firstValueFrom(this.http.get<DatasetStatusResponse<T>>(url));
+      const next = await firstValueFrom(
+        this.http.get<DatasetStatusResponse<T>>(url, { headers: this.authHeaders() }),
+      );
       if (signature(next) !== signature(result)) deadline = Date.now() + DATASET_POLL_TIMEOUT_MS;
       result = next;
     }

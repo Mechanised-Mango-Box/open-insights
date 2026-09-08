@@ -22,12 +22,12 @@ const newRecordDefaults = (): Omit<VideoRecord, '__id' | 'sort_name'> => ({
 @Component({
   selector: 'video-records-import',
   template: `
-    <div class="import-actions">
-      <button mat-raised-button color="primary" [disabled]="pending()" (click)="insertNewEmpty()">
+    <div class="actions">
+      <button mat-stroked-button [disabled]="pending()" (click)="insertNewEmpty()">
         <mat-icon>add</mat-icon>
         Create Empty
       </button>
-      <button mat-raised-button color="accent" [disabled]="pending()" (click)="csvInput.click()">
+      <button mat-stroked-button [disabled]="pending()" (click)="csvInput.click()">
         <mat-icon>add</mat-icon>
         Import From: Youtube Content
       </button>
@@ -38,7 +38,7 @@ const newRecordDefaults = (): Omit<VideoRecord, '__id' | 'sort_name'> => ({
         accept=".csv"
         (change)="insertFromYoutubeContent($event)"
       />
-      <button mat-raised-button color="accent" [disabled]="pending()" (click)="videoInput.click()">
+      <button mat-stroked-button [disabled]="pending()" (click)="videoInput.click()">
         <mat-icon>add</mat-icon>
         Create From: Video Files
       </button>
@@ -50,7 +50,7 @@ const newRecordDefaults = (): Omit<VideoRecord, '__id' | 'sort_name'> => ({
         multiple
         (change)="insertFromVideoFiles($event)"
       />
-      <button mat-raised-button color="accent" [disabled]="pending()" (click)="zipInput.click()">
+      <button mat-stroked-button [disabled]="pending()" (click)="zipInput.click()">
         <mat-icon>upload</mat-icon>
         Import From: Export Zip
       </button>
@@ -62,7 +62,7 @@ const newRecordDefaults = (): Omit<VideoRecord, '__id' | 'sort_name'> => ({
         (change)="insertFromExportZip($event)"
       />
       @if (importSummary()) {
-      <span class="import-summary">{{ importSummary() }}</span>
+        <span class="action-status">{{ importSummary() }}</span>
       }
     </div>
   `,
@@ -117,7 +117,9 @@ export class VideoRecordsImport {
       }
     }
 
-    this.importSummary.set(`Imported ${rows.length} row(s): ${created} created, ${updated} updated.`);
+    this.importSummary.set(
+      `Imported ${rows.length} row(s): ${created} created, ${updated} updated.`,
+    );
     input.value = '';
   }
 

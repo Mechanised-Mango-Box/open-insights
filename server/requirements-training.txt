@@ -1,0 +1,10 @@
+# Extras for model_training/ only. Split out of requirements.txt so the deployed
+# image does not carry them: nothing under the request path imports sklearn or
+# matplotlib - analysis.py is pure numpy/pandas, by its own note, "since this
+# feeds a JSON API".
+#
+# Install on top of the runtime set:
+#   pip install -r requirements.txt -r requirements-training.txt
+
+scikit-learn==1.9.0
+matplotlib==3.11.1

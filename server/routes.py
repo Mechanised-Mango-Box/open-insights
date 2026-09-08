@@ -5,7 +5,14 @@ from uuid import uuid4
 
 import pandas as pd
 from analysis import compute_correlations, compute_histogram, compute_loess
-from config import UPLOAD_FOLDER, video_extension
+from auth import is_private, limiter
+from config import (
+    PUBLIC_COMPUTE_RATE_LIMIT,
+    PUBLIC_MAX_QUEUE_DEPTH,
+    PUBLIC_UPLOAD_RATE_LIMIT,
+    UPLOAD_FOLDER,
+    video_extension,
+)
 from db import (
     KINDS,
     DatasetKind,
@@ -99,6 +106,7 @@ def __route_get_dataset(file_hash: str, kind_name: str):
 
 
 @bp.post("/api/videos/<file_hash>/<kind_name>")
+@limiter.limit(PUBLIC_COMPUTE_RATE_LIMIT, exempt_when=is_private)
 def __route_start_dataset(file_hash: str, kind_name: str):
     """Starts generation, or retries a failed job. Idempotent: posting to
     something already queued or running changes nothing and reports the current
@@ -115,6 +123,28 @@ def __route_start_dataset(file_hash: str, kind_name: str):
     kind, file_path = _resolve(file_hash, kind_name)
 
     requeue_expired()
+
+    # Depth, not rate, is what bounds CPU on a small box. A rate limit caps how
+    # often work is asked for; this caps how much is outstanding, which is the
+    # number that decides whether accepting one more is a service or a lie. 503
+    # with Retry-After rather than a silent accept, so the client can report
+    # "busy, try later" instead of polling for ten minutes behind a queue that
+    # was never going to reach it.
+    #
+    # Only when there is nothing cached to hand back. The client opens every
+    # fetch with a POST (see the docstring above), so a depth check that fired
+    # unconditionally would turn a deep queue into a wall in front of results
+    # that are already computed and cost nothing to serve - refusing reads to
+    # protect the CPU from work it was not being asked to do.
+    if PUBLIC_MAX_QUEUE_DEPTH and not is_private():
+        already_have = dataset_state(kind, file_hash)["state"] == "ready"
+        if not already_have and queue_status()["queue"]["queued"] >= PUBLIC_MAX_QUEUE_DEPTH:
+            return (
+                jsonify({"err": "Server is busy; try again shortly."}),
+                503,
+                {"Retry-After": "120"},
+            )
+
     queued = enqueue(kind, file_hash, force="force" in request.args)
     if queued:
         SUBMIT[kind.name](file_hash, file_path)
@@ -124,6 +154,7 @@ def __route_start_dataset(file_hash: str, kind_name: str):
 
 
 @bp.post("/api/videos")
+@limiter.limit(PUBLIC_UPLOAD_RATE_LIMIT, exempt_when=is_private)
 def __route_create_video():
     # > Has file
     if "file" not in request.files:
