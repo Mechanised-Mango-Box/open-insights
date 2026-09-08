@@ -66,55 +66,41 @@ That gives you an **open** server: no key, no rate limit, and nothing ever
 deleted. That is the right default for something on your own machine, and it is
 what every gating setting in `config.py` is switched off to preserve.
 
-#### A portable build
+## Build and deploy your own
 
-`server/scripts/build_portable.py` packages all of the above into one executable
-that needs no Python, no pip and no network:
+### A portable executable
+
+One file, no Python, no pip, no network - the transcription weights are inside it:
 
 ```sh
 cd ./server
 python scripts/build_portable.py
 ```
 
-That leaves `dist/open-insights-server-<platform>-x86_64`. Copy it anywhere and
-run it - it keeps its database and uploaded videos in a `data` directory beside
-itself, so moving the executable moves the library with it, and deleting the
-folder removes both.
+Leaves `dist/open-insights-server-<platform>-x86_64`, around 430MB. Run it
+anywhere: it keeps its database and uploads in a `data` directory beside itself,
+and prints how to point a client at it. Set `SHOW_INSTRUCTIONS=0` to silence that.
 
-It starts by telling you how to connect a client to it, and serves the same
-instructions at `http://localhost:5000`. Set `SHOW_INSTRUCTIONS=0` to get the
-old redirect to `/status` instead; the Docker image already does, since a public
-server's front page should not be advice about pointing clients at it.
+- **Build it on the platform you will run it on.** PyInstaller cannot
+  cross-compile, and a Linux build will not run on an older distribution than the
+  machine that made it.
+- **It binds `127.0.0.1` only**, unlike `py main.py`. `SERVER_HOST=0.0.0.0` opens
+  it up - read the next section before you do.
+- **It unpacks itself on every launch**, so startup costs a few seconds.
 
-Three things worth knowing:
-
-- **Build it on the platform you want to run it on.** PyInstaller cannot
-  cross-compile, so the Windows executable has to be built on Windows. Build the
-  Linux one on the oldest distribution you intend to support - it will not run on
-  anything older than the machine that produced it.
-- **It is around 430MB and unpacks itself on every launch.** That is the cost of
-  a single file: the transcription weights, OpenCV, and CTranslate2's libraries
-  are all inside it, and the bootloader extracts them to a temporary directory
-  each time it starts.
-- **It listens on `127.0.0.1` only**, unlike `py main.py`, which binds every
-  interface. Set `SERVER_HOST=0.0.0.0` if you want to reach it from another
-  machine - and read the section below first, because nothing else about it is
-  configured for that.
-
-#### Running one publicly
+### A public server
 
 Everything needed to put it on the internet is off by default and turned on
-through the environment. `docker-compose.yml` sets the lot:
+through the environment. `docker-compose.yml` sets the lot, and brings up Caddy
+alongside it to get and renew a TLS certificate:
 
 ```sh
 cp .env.example .env      # fill in the keys, hostname and origin
 docker compose up -d --build
 ```
 
-That brings up the API server plus Caddy, which gets and renews a TLS
-certificate on its own - so `SITE_ADDRESS` must be a real hostname (a free
-DuckDNS subdomain pointed at the box) rather than a bare IP, which cannot have
-one.
+`SITE_ADDRESS` must be a real hostname (a free DuckDNS subdomain pointed at the
+box) rather than a bare IP, which cannot have a certificate.
 
 Two keys, sent as `X-API-Key`:
 
