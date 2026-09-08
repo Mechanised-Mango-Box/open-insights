@@ -23,8 +23,8 @@ from config import (
     WHISPER_CPU_THREADS,
     WHISPER_DEVICE,
     WHISPER_LANGUAGE,
-    WHISPER_MODEL,
     WHISPER_MODEL_DIR,
+    WHISPER_MODEL_PATH,
     WHISPER_NUM_WORKERS,
     WHISPER_VAD,
 )
@@ -62,8 +62,12 @@ _log = logging.getLogger(__name__)
 # updating the weights is scripts/fetch_whisper_model.py's job, run by hand
 # ahead of time. If WHISPER_MODEL_DIR isn't already populated, this raises
 # immediately instead of the server silently reaching out to the Hub.
+#
+# WHISPER_MODEL_PATH rather than WHISPER_MODEL: normally the same string, but a
+# frozen build carries its weights inside the executable and loads them by path.
+# config.py keeps the two separate so the producer stamp stays the model's name.
 _whisper_model = WhisperModel(
-    WHISPER_MODEL,
+    WHISPER_MODEL_PATH,
     device=WHISPER_DEVICE,
     compute_type=WHISPER_COMPUTE_TYPE,
     cpu_threads=WHISPER_CPU_THREADS,

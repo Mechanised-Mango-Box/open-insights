@@ -2,10 +2,34 @@ import os
 from typing import cast
 
 from models import FileExt
+from paths import FROZEN, base_dir, bundled
 
-UPLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER", "../data/local/uploads")
+# Anchored on the executable (frozen) or the repository root (not), rather than
+# on the working directory. The old defaults were '../data/local/...', which are
+# correct only when the process was started from server/ - fine for the README's
+# `cd ./server && py main.py`, and meaningless for a portable binary someone
+# double-clicked from their downloads folder.
+#
+# A frozen build keeps its data in a `data` directory beside the executable, so
+# moving the executable moves its library with it. Unfrozen this still resolves
+# to the repository's data/local, so an existing clone sees no change.
+_DATA_DIR = base_dir() / "data" if FROZEN else base_dir() / "data" / "local"
+
+UPLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER", str(_DATA_DIR / "uploads"))
 ALLOWED_EXTENSIONS = {"mp4", "avi", "mov", "mkv", "webm"}
-DB_PATH = os.environ.get("DB_PATH", "../data/local/db.sqlite")
+DB_PATH = os.environ.get("DB_PATH", str(_DATA_DIR / "db.sqlite"))
+
+# Where the server listens. Lifted out of main.py so the frozen entry point and
+# the development one cannot disagree, and so the startup banner can print an
+# address that matches reality.
+#
+# A portable build binds loopback by default: it is an application on someone's
+# laptop, and publishing it to every machine on the coffee shop's wifi is not
+# what double-clicking it asked for. Unfrozen keeps the 0.0.0.0 that main.py has
+# always used - that is a development server whose reachability from a phone on
+# the same network is often the point.
+SERVER_HOST = os.environ.get("SERVER_HOST", "127.0.0.1" if FROZEN else "0.0.0.0")
+SERVER_PORT = int(os.environ.get("SERVER_PORT", "5000"))
 
 # How long a statement waits for SQLite's write lock before giving up. See the
 # note in db.py for why WAL alone is not enough.
@@ -122,6 +146,22 @@ ALLOWED_ORIGINS = [
     if origin.strip()
 ]
 
+# Whether the server explains how to connect a client to it - a banner on the
+# console at startup, and a page at / instead of the redirect to /status.
+#
+# This is the one setting here that defaults *on* and asks a deployment to opt
+# out, rather than defaulting off and asking it to opt in. Same principle as the
+# rest of this section, applied to a different audience: the person who needs
+# telling is the one who just double-clicked a binary and has a JSON endpoint
+# and no idea what to do with it, and they should not have to configure
+# anything to be told. A public server has the opposite need - its address is
+# not where anyone should be pointed to set up their own - so the Dockerfile
+# sets this to 0.
+#
+# It reveals nothing that is not already public: the origins the server accepts,
+# the model it runs, and whether a key is required. Never a key itself.
+SHOW_INSTRUCTIONS = os.environ.get("SHOW_INSTRUCTIONS", "1") == "1"
+
 # --- End public deployment gating ---------------------------------------------
 
 # Whisper runs through CTranslate2 (faster-whisper). device/compute_type are the
@@ -197,6 +237,25 @@ WHISPER_VAD = os.environ.get("WHISPER_VAD", "0") == "1"
 # Run scripts/fetch_whisper_model.py to pull or update the model into it - it
 # reads this same env var, so the two always agree on location.
 WHISPER_MODEL_DIR = os.environ.get("WHISPER_MODEL_DIR") or None
+
+# What processing.py actually hands to WhisperModel. Normally the model *name*
+# above, which faster-whisper resolves through the cache in WHISPER_MODEL_DIR -
+# but a frozen build carries its weights inside the executable, so there it is
+# the absolute path of the unpacked copy. faster-whisper's first argument is
+# `model_size_or_path` and takes a directory of CTranslate2 files directly,
+# which avoids asking huggingface_hub to interpret a cache layout offline.
+#
+# Separate from WHISPER_MODEL rather than overwriting it, because WHISPER_MODEL
+# feeds TRANSCRIPT_PRODUCER below. Folding the path in there would stamp every
+# row with a machine-specific producer - a different temporary directory on
+# every launch, in fact - so nothing would ever read as cached and no result
+# would be shareable with a server that computed it under the plain name.
+_bundled_model = bundled("models", WHISPER_MODEL) if FROZEN else None
+WHISPER_MODEL_PATH = (
+    str(_bundled_model)
+    if _bundled_model is not None and _bundled_model.is_dir()
+    else WHISPER_MODEL
+)
 
 # How different a frame must be from its predecessor to count as a scene change.
 # Lifted out of processing.py, where it sat as a default argument that nothing

@@ -10,6 +10,7 @@ from config import (
     PUBLIC_COMPUTE_RATE_LIMIT,
     PUBLIC_MAX_QUEUE_DEPTH,
     PUBLIC_UPLOAD_RATE_LIMIT,
+    SHOW_INSTRUCTIONS,
     UPLOAD_FOLDER,
     video_extension,
 )
@@ -23,6 +24,7 @@ from db import (
     requeue_expired,
 )
 from flask import Blueprint, jsonify, make_response, redirect, request
+from instructions import page_html
 from werkzeug.exceptions import NotFound
 from processing import SUBMIT, queue_status
 from utils import hash_stream
@@ -31,8 +33,22 @@ bp = Blueprint("api", __name__)
 
 
 @bp.get("/")
-def __reroute_to_status():
-    return redirect("/status")
+def __route_root():
+    """Setup instructions for a local server, the status redirect for a public one.
+
+    Someone who opens the address a packaged server printed has arrived here
+    looking for what to do next, and a redirect to a JSON object does not answer
+    that. With SHOW_INSTRUCTIONS off this is byte-identical to what it has always
+    been - a deployment's landing page is not the place to explain how to point a
+    client somewhere else.
+
+    Exempt from the API key check in auth.py, so this stays reachable on a local
+    server that happens to have keys configured. See instructions.py for why
+    there is nothing here to gate.
+    """
+    if not SHOW_INSTRUCTIONS:
+        return redirect("/status")
+    return make_response(page_html(request.host_url))
 
 
 @bp.get("/status")

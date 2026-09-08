@@ -15,3 +15,15 @@ __pycache__/
 models/
 requirements-training.txt
 run.sh
+
+# The portable build's output and its staging area - a staged model plus a
+# ~430MB executable, which would otherwise be uploaded to the daemon as build
+# context on every `docker compose build` and land in a layer.
+build/
+dist/
+
+# Its build definition and entry point, which the image has no use for: it runs
+# gunicorn against app:app, not the frozen launcher.
+open-insights.spec
+entry.py
+scripts/build_portable.py

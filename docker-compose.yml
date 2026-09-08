@@ -28,10 +28,17 @@ services:
       # than a network mount.
       - ${DATA_DIR:-/opt/open-insights/data}:/data
     environment:
-      # The defaults for these are relative paths resolved against the working
-      # directory (../data/local/...), so they have to be set explicitly here.
+      # The defaults for these sit beside the source tree, wherever that landed
+      # in the image. They have to point at the bind mount instead, or the data
+      # lives inside the container and dies with it.
       UPLOAD_FOLDER: /data/uploads
       DB_PATH: /data/db.sqlite
+
+      # The Dockerfile already sets this to 0; repeated here so it is visible
+      # alongside the rest of the public-deployment settings and can be turned
+      # back on from .env for a private box. / redirects to /status while it is
+      # off - see config.py's comment for why this one defaults the other way.
+      SHOW_INSTRUCTIONS: ${SHOW_INSTRUCTIONS:-0}
 
       WHISPER_MODEL: ${WHISPER_MODEL:-tiny.en}
 

@@ -66,6 +66,41 @@ That gives you an **open** server: no key, no rate limit, and nothing ever
 deleted. That is the right default for something on your own machine, and it is
 what every gating setting in `config.py` is switched off to preserve.
 
+#### A portable build
+
+`server/scripts/build_portable.py` packages all of the above into one executable
+that needs no Python, no pip and no network:
+
+```sh
+cd ./server
+python scripts/build_portable.py
+```
+
+That leaves `dist/open-insights-server-<platform>-x86_64`. Copy it anywhere and
+run it - it keeps its database and uploaded videos in a `data` directory beside
+itself, so moving the executable moves the library with it, and deleting the
+folder removes both.
+
+It starts by telling you how to connect a client to it, and serves the same
+instructions at `http://localhost:5000`. Set `SHOW_INSTRUCTIONS=0` to get the
+old redirect to `/status` instead; the Docker image already does, since a public
+server's front page should not be advice about pointing clients at it.
+
+Three things worth knowing:
+
+- **Build it on the platform you want to run it on.** PyInstaller cannot
+  cross-compile, so the Windows executable has to be built on Windows. Build the
+  Linux one on the oldest distribution you intend to support - it will not run on
+  anything older than the machine that produced it.
+- **It is around 430MB and unpacks itself on every launch.** That is the cost of
+  a single file: the transcription weights, OpenCV, and CTranslate2's libraries
+  are all inside it, and the bootloader extracts them to a temporary directory
+  each time it starts.
+- **It listens on `127.0.0.1` only**, unlike `py main.py`, which binds every
+  interface. Set `SERVER_HOST=0.0.0.0` if you want to reach it from another
+  machine - and read the section below first, because nothing else about it is
+  configured for that.
+
 #### Running one publicly
 
 Everything needed to put it on the internet is off by default and turned on

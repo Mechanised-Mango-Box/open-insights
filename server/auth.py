@@ -29,6 +29,7 @@ from config import (
     PUBLIC_API_KEY,
     PUBLIC_MAX_UPLOAD_BYTES,
     PUBLIC_RATE_LIMIT,
+    SHOW_INSTRUCTIONS,
 )
 from flask import Flask, g, jsonify, request
 from flask_limiter import Limiter
@@ -99,6 +100,15 @@ def install(app: Flask) -> None:
         # it and the real request is never attempted, so the client fails with an
         # opaque CORS error rather than the 401 it would have understood.
         if request.method == "OPTIONS":
+            return None
+
+        # The instructions page, when it is being served at all. It exists to
+        # tell someone how to configure a client, which is advice they need
+        # before they have a key rather than after - answering it with a 401
+        # would make it useless to precisely the person it is for. It carries
+        # no key material and nothing else that a 401 would be protecting.
+        if SHOW_INSTRUCTIONS and request.path == "/":
+            g.tier = "public"
             return None
 
         tier = _resolve_tier()

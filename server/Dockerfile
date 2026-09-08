@@ -17,7 +17,16 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     # The server reports progress with print() and logs job failures from
     # background threads. Unbuffered, or none of it reaches `docker logs` until
     # the process dies.
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    # Off here, on everywhere else - the one setting in config.py's gating
+    # section that a deployment opts out of rather than into. The instructions
+    # tell a reader how to point a client at *this* address, which is the right
+    # thing to say to someone who just ran the packaged build on their laptop
+    # and the wrong thing for a public server to publish at /. Set in the image
+    # rather than only in docker-compose.yml so a plain `docker run` gets the
+    # deployment's default too. With this off, / is the redirect to /status that
+    # it has always been.
+    SHOW_INSTRUCTIONS=0
 
 # uid 1000 so a bind-mounted data directory owned by the usual first host user
 # is writable without a chown on the host side.

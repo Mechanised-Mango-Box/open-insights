@@ -1,7 +1,8 @@
 import os
+from pathlib import Path
 
 import auth
-from config import ALLOWED_ORIGINS, MAX_UPLOAD_BYTES, UPLOAD_FOLDER
+from config import ALLOWED_ORIGINS, DB_PATH, MAX_UPLOAD_BYTES, UPLOAD_FOLDER
 from db import close_db, init_db
 from flask import Flask, jsonify
 from flask_cors import CORS
@@ -50,6 +51,12 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 # origin in the CORS list above - is one request away from filling the volume.
 app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD_BYTES
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+# The database's directory too, which nothing has ever created. In a clone that
+# went unnoticed - data/local exists because the repository ships it - but a
+# packaged server started in an empty folder has no such luck, and sqlite3 does
+# not create missing parents: it raises "unable to open database file" from
+# init_db() below, before the port is ever bound.
+os.makedirs(Path(DB_PATH).parent, exist_ok=True)
 
 
 # The client parses JSON and only JSON, so an error that renders as werkzeug's
