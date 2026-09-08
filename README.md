@@ -4,14 +4,10 @@ A video analysis tool for audio/video features and audience engagement.
 
 ## Quickstart
 
-Go to https://open-insights.pages.dev/
+Go to https://open-insights-ccx.pages.dev/
 
 Scanning uses a shared public server, which is rate limited. Everything else -
 importing, analysis and export - runs entirely in your browser.
-
-> **Moved from `mechanised-mango-box.github.io`?** Your library lived in that
-> site's browser storage and cannot follow you to a new address. Open the old URL,
-> Export a zip, then Import it here. Nothing is lost, but nothing moves on its own.
 
 ## Functionality
 
@@ -53,13 +49,6 @@ A static site which renders and manages local data, and communicates with the no
 cd ./client
 ng serve
 ```
-
-The built site is static and serves from the root. Deployment is Cloudflare
-Pages, pointed at this repo: root directory `client`, build command
-`npm run build`, output directory `dist/open-insights/browser`, and
-`NODE_VERSION=22`. Response headers - caching, and a CSP that is currently
-report-only - come from [`client/public/_headers`](client/public/_headers),
-which also records why the site is not cross-origin isolated.
 
 ### Server
 

@@ -100,11 +100,24 @@ UPLOAD_REAP_INTERVAL_SECONDS = int(os.environ.get("UPLOAD_REAP_INTERVAL_SECONDS"
 # Origins the browser client may call from. Env-overridable (comma-separated)
 # rather than the hardcoded list this used to be: a self-hoster serving the
 # client from anywhere else had to edit source to be allowed in.
+#
+# The hosted client is in the default list because of the bring-your-own-server
+# flow: someone can load the public site and point it at a server they run
+# themselves, and that request carries the *site's* origin, not theirs. Without
+# it here, every such server would reject the public client until its operator
+# found this setting.
+#
+# Only the stable project URL. Cloudflare's per-deployment and branch aliases
+# (f05a2548.open-insights-ccx.pages.dev and the like) are separate origins that
+# change on every build, so they are deliberately not listed - a preview
+# deployment cannot talk to a server, by design.
 ALLOWED_ORIGINS = [
     origin.strip()
     for origin in os.environ.get(
         "ALLOWED_ORIGINS",
-        "http://localhost:4200,http://localhost,https://mechanised-mango-box.github.io",
+        "http://localhost:4200,"
+        "http://localhost,"
+        "https://open-insights-ccx.pages.dev",
     ).split(",")
     if origin.strip()
 ]
