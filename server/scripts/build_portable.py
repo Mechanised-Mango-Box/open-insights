@@ -45,7 +45,6 @@ REQUIRED_PACKAGES = {
     "faster_whisper": "faster-whisper",
     "cv2": "opencv-python-headless",
     "flask": "flask",
-    "pandas": "pandas",
 }
 
 
