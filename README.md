@@ -4,40 +4,44 @@ A video analysis tool for audio/video features and audience engagement.
 
 ## Quickstart
 
-Go to https://open-insights-ccx.pages.dev/
-
-Scanning uses a shared public server, which is rate limited. Everything else -
-importing, analysis and export - runs entirely in your browser.
+1. Go to https://open-insights-ccx.pages.dev/
+2. Download the server and run it locally.
 
 ## Functionality
 
 ### Export
 
-This tool will export the results that you have in the following format:
+Exporting your results gives you `open-insights-export-<timestamp>.zip`, laid out
+like this:
 
 ```
-output/
-  |-- manifest.json
-  |-- transcript/
-  |     |-- abcd1234.srt
-  |     `-- hjkl0987.srt
-  |
-  |-- video_files/
-  |     |-- abcd1234.mp4
-  |     `-- hjkl0987.mkv
-  |
-(And so on...)
+manifest.json
+transcript/
+  |-- abcd1234.srt
+  `-- hjkl0987.srt
+video_files/
+  |-- abcd1234.mp4
+  `-- hjkl0987.mkv
+audience_retention/
+  |-- abcd1234.json
+  `-- hjkl0987.json
 ```
 
 - Simple data will be stored within the `manifest.json`
 - Complex/large data will be given a sub-directory, `manifest.json` will link to it instead
-- Transcripts are written as SRT so they read as subtitles and import back without loss
 
 ### Import
 
-"Import From: Export Zip" on the Import step reads one of the above back in, video files
-included. Records already in your library are only ever filled in, never overwritten - so
-re-importing a zip is safe, and an older export cannot undo newer work.
+The output `.zip` can be similarly imported back into the app.
+
+### Browser compute (experimental)
+
+Run certain jobs on the browser instead
+
+- Transcription needs WebGPU
+- Scene stats read MP4 and MOV only
+
+> It is unstable and may be slow. Off by default
 
 ## For Developers/Hosts
 
@@ -47,7 +51,8 @@ A static site which renders and manages local data, and communicates with the no
 
 ```sh
 cd ./client
-ng serve
+npm install
+npm start
 ```
 
 ### Server
@@ -58,13 +63,10 @@ The server never downloads its own transcription model - fetch it once before fi
 
 ```sh
 cd ./server
-py scripts/fetch_whisper_model.py
-py main.py
+pip install -r requirements.txt
+python scripts/fetch_whisper_model.py
+python main.py
 ```
-
-That gives you an **open** server: no key, no rate limit, and nothing ever
-deleted. That is the right default for something on your own machine, and it is
-what every gating setting in `config.py` is switched off to preserve.
 
 ## Build and deploy your own
 
@@ -74,17 +76,20 @@ One file, no Python, no pip, no network - the transcription weights are inside i
 
 ```sh
 cd ./server
-python scripts/build_portable.py
+python scripts/build_portable.py    # --install fetches what is missing
 ```
 
-Leaves `dist/open-insights-server-<platform>-x86_64`, around 430MB. Run it
+The build also needs `pyinstaller` and `pandas`, neither of which is in
+`requirements.txt`.
+
+Leaves `dist/open-insights-server-<platform>-<arch>`, around 400MB. Run it
 anywhere: it keeps its database and uploads in a `data` directory beside itself,
 and prints how to point a client at it. Set `SHOW_INSTRUCTIONS=0` to silence that.
 
 - **Build it on the platform you will run it on.** PyInstaller cannot
   cross-compile, and a Linux build will not run on an older distribution than the
   machine that made it.
-- **It binds `127.0.0.1` only**, unlike `py main.py`. `SERVER_HOST=0.0.0.0` opens
+- **It binds `127.0.0.1` only**, unlike `python main.py`. `SERVER_HOST=0.0.0.0` opens
   it up - read the next section before you do.
 - **It unpacks itself on every launch**, so startup costs a few seconds.
 
@@ -95,12 +100,15 @@ through the environment. `docker-compose.yml` sets the lot, and brings up Caddy
 alongside it to get and renew a TLS certificate:
 
 ```sh
-cp .env.example .env      # fill in the keys, hostname and origin
+cp .env.example .env      # SITE_ADDRESS, DATA_DIR, ALLOWED_ORIGINS, both keys
 docker compose up -d --build
 ```
 
 `SITE_ADDRESS` must be a real hostname (a free DuckDNS subdomain pointed at the
-box) rather than a bare IP, which cannot have a certificate.
+box) rather than a bare IP, which cannot have a certificate. `ALLOWED_ORIGINS` is
+the origin your client is served from; compose refuses to start without it.
+`DATA_DIR` must exist and be writable by uid 1000 before the first `up`, or the
+server dies on boot - `.env.example` has the `chown`.
 
 Two keys, sent as `X-API-Key`:
 
@@ -125,5 +133,6 @@ Two more things a public box wants, both set in `docker-compose.yml`:
   scene stats are **kept**, so a reaped video costs one re-upload rather than a
   re-transcription.
 
-Deployment notes, including the Oracle Always Free host and its firewall
-gotchas, are in the deployment plan.
+Caddy caps request bodies separately, at `MAX_BODY_SIZE`. Keep it at or above
+`PUBLIC_MAX_UPLOAD_BYTES` or uploads are refused at the proxy before the server
+ever sees them.
