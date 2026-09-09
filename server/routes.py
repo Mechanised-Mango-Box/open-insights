@@ -3,9 +3,15 @@ import os
 from pathlib import Path
 from uuid import uuid4
 
-import pandas as pd
-from analysis import compute_correlations, compute_histogram, compute_loess
-from config import UPLOAD_FOLDER, video_extension
+from auth import is_private, limiter
+from config import (
+    PUBLIC_COMPUTE_RATE_LIMIT,
+    PUBLIC_MAX_QUEUE_DEPTH,
+    PUBLIC_UPLOAD_RATE_LIMIT,
+    SHOW_INSTRUCTIONS,
+    UPLOAD_FOLDER,
+    video_extension,
+)
 from db import (
     KINDS,
     DatasetKind,
@@ -16,6 +22,7 @@ from db import (
     requeue_expired,
 )
 from flask import Blueprint, jsonify, make_response, redirect, request
+from instructions import page_html
 from werkzeug.exceptions import NotFound
 from processing import SUBMIT, queue_status
 from utils import hash_stream
@@ -24,8 +31,22 @@ bp = Blueprint("api", __name__)
 
 
 @bp.get("/")
-def __reroute_to_status():
-    return redirect("/status")
+def __route_root():
+    """Setup instructions for a local server, the status redirect for a public one.
+
+    Someone who opens the address a packaged server printed has arrived here
+    looking for what to do next, and a redirect to a JSON object does not answer
+    that. With SHOW_INSTRUCTIONS off this is byte-identical to what it has always
+    been - a deployment's landing page is not the place to explain how to point a
+    client somewhere else.
+
+    Exempt from the API key check in auth.py, so this stays reachable on a local
+    server that happens to have keys configured. See instructions.py for why
+    there is nothing here to gate.
+    """
+    if not SHOW_INSTRUCTIONS:
+        return redirect("/status")
+    return make_response(page_html(request.host_url))
 
 
 @bp.get("/status")
@@ -99,6 +120,7 @@ def __route_get_dataset(file_hash: str, kind_name: str):
 
 
 @bp.post("/api/videos/<file_hash>/<kind_name>")
+@limiter.limit(PUBLIC_COMPUTE_RATE_LIMIT, exempt_when=is_private)
 def __route_start_dataset(file_hash: str, kind_name: str):
     """Starts generation, or retries a failed job. Idempotent: posting to
     something already queued or running changes nothing and reports the current
@@ -115,6 +137,28 @@ def __route_start_dataset(file_hash: str, kind_name: str):
     kind, file_path = _resolve(file_hash, kind_name)
 
     requeue_expired()
+
+    # Depth, not rate, is what bounds CPU on a small box. A rate limit caps how
+    # often work is asked for; this caps how much is outstanding, which is the
+    # number that decides whether accepting one more is a service or a lie. 503
+    # with Retry-After rather than a silent accept, so the client can report
+    # "busy, try later" instead of polling for ten minutes behind a queue that
+    # was never going to reach it.
+    #
+    # Only when there is nothing cached to hand back. The client opens every
+    # fetch with a POST (see the docstring above), so a depth check that fired
+    # unconditionally would turn a deep queue into a wall in front of results
+    # that are already computed and cost nothing to serve - refusing reads to
+    # protect the CPU from work it was not being asked to do.
+    if PUBLIC_MAX_QUEUE_DEPTH and not is_private():
+        already_have = dataset_state(kind, file_hash)["state"] == "ready"
+        if not already_have and queue_status()["queue"]["queued"] >= PUBLIC_MAX_QUEUE_DEPTH:
+            return (
+                jsonify({"err": "Server is busy; try again shortly."}),
+                503,
+                {"Retry-After": "120"},
+            )
+
     queued = enqueue(kind, file_hash, force="force" in request.args)
     if queued:
         SUBMIT[kind.name](file_hash, file_path)
@@ -124,6 +168,7 @@ def __route_start_dataset(file_hash: str, kind_name: str):
 
 
 @bp.post("/api/videos")
+@limiter.limit(PUBLIC_UPLOAD_RATE_LIMIT, exempt_when=is_private)
 def __route_create_video():
     # > Has file
     if "file" not in request.files:
@@ -169,49 +214,3 @@ def __route_create_video():
 
     insert_file(file_hash, file_ext)
     return jsonify({"file_hash": file_hash, "filename": file_name}), 201, headers
-
-
-ANALYSIS_FEATURE_COLUMNS = ["duration_mins", "wpm", "scene_change_rate", "word_count"]
-ANALYSIS_TARGET_COLUMN = "average_percentage_viewed"
-
-
-@bp.post("/api/analysis")
-def __route_analysis():
-    rows = request.get_json(silent=True)
-    if not isinstance(rows, list) or len(rows) < 2:
-        return jsonify(
-            {"err": "Request body must be a JSON array of at least 2 feature rows."}
-        ), 400
-
-    required = [*ANALYSIS_FEATURE_COLUMNS, ANALYSIS_TARGET_COLUMN]
-    for i, row in enumerate(rows):
-        missing = [key for key in required if not isinstance(row, dict) or key not in row]
-        if missing:
-            return jsonify({"err": f"Row {i} is missing required field(s): {', '.join(missing)}"}), 400
-
-    df = pd.DataFrame(rows)
-    # Presence was checked above; this checks the values are numbers. Without it a
-    # null or a string reaches np.asarray(dtype=float) inside compute_loess and
-    # raises there, which is a 500 for what is plainly a bad request.
-    for column in required:
-        df[column] = pd.to_numeric(df[column], errors="coerce")
-    bad_rows = df[required].isna().any(axis=1)
-    if bad_rows.any():
-        listed = ", ".join(str(i) for i in df.index[bad_rows])
-        return jsonify({"err": f"Non-numeric or missing value(s) in row(s): {listed}"}), 400
-
-    histograms = {}
-    for feature in ANALYSIS_FEATURE_COLUMNS:
-        bins, counts = compute_histogram(df[feature].to_numpy())
-        histograms[feature] = {"bins": bins, "counts": counts}
-
-    correlations = compute_correlations(df, ANALYSIS_FEATURE_COLUMNS, ANALYSIS_TARGET_COLUMN)
-
-    loess = {}
-    for feature in ANALYSIS_FEATURE_COLUMNS:
-        x_smooth, y_smooth = compute_loess(
-            df[feature].to_numpy(), df[ANALYSIS_TARGET_COLUMN].to_numpy()
-        )
-        loess[feature] = {"x": x_smooth.tolist(), "y": y_smooth.tolist()}
-
-    return jsonify({"histograms": histograms, "correlations": correlations, "loess": loess})

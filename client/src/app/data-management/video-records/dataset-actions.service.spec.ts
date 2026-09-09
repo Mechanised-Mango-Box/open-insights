@@ -1,7 +1,8 @@
 import { TestBed } from '@angular/core/testing';
+import { signal } from '@angular/core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DatasetActionsService } from './dataset-actions.service';
-import { DatasetServerService } from '../dataset-server.service';
+import { DatasetKind, DatasetProvider } from '../providers/dataset-provider';
 import { ServerConfigService } from '../server-config.service';
 
 const REFRESH_MS = 5000;
@@ -12,13 +13,20 @@ const settle = async () => {
 };
 
 describe('DatasetActionsService status freshness', () => {
-  let server: {
-    getVideoMeta: ReturnType<typeof vi.fn>;
-    peekTranscriptStatus: ReturnType<typeof vi.fn>;
-    peekSceneStatsStatus: ReturnType<typeof vi.fn>;
+  let provider: {
+    label: ReturnType<typeof signal<string>>;
+    sourceStatus: ReturnType<typeof vi.fn>;
+    peek: ReturnType<typeof vi.fn>;
+    request: ReturnType<typeof vi.fn>;
+    putSource: ReturnType<typeof vi.fn>;
+    status: ReturnType<typeof vi.fn>;
   };
   let service: DatasetActionsService;
   let config: ServerConfigService;
+
+  /** peek() is kind-generic, so a per-kind view keeps these assertions readable. */
+  const peeks = (kind: DatasetKind) =>
+    provider.peek.mock.calls.filter(([called]) => called === kind);
 
   beforeEach(() => {
     // localStorage is not exposed in this test environment - ServerConfigService tolerates
@@ -26,14 +34,17 @@ describe('DatasetActionsService status freshness', () => {
     globalThis.localStorage?.clear();
     vi.useFakeTimers();
 
-    server = {
-      getVideoMeta: vi.fn().mockResolvedValue({ file_hash: 'a', file_ext: 'mp4' }),
-      peekTranscriptStatus: vi.fn().mockResolvedValue({ state: 'ready' }),
-      peekSceneStatsStatus: vi.fn().mockResolvedValue({ state: 'ready' }),
+    provider = {
+      label: signal('http://test-server:5000'),
+      sourceStatus: vi.fn().mockResolvedValue('exists'),
+      peek: vi.fn().mockResolvedValue({ state: 'ready' }),
+      request: vi.fn(),
+      putSource: vi.fn().mockResolvedValue(undefined),
+      status: vi.fn(),
     };
 
     TestBed.configureTestingModule({
-      providers: [{ provide: DatasetServerService, useValue: server }],
+      providers: [{ provide: DatasetProvider, useValue: provider }],
     });
 
     service = TestBed.inject(DatasetActionsService);
@@ -47,10 +58,10 @@ describe('DatasetActionsService status freshness', () => {
 
   it('checks a hash when it first appears, and not again on re-track', () => {
     service.trackHashes(['a', 'b']);
-    expect(server.peekTranscriptStatus).toHaveBeenCalledTimes(2);
+    expect(peeks('transcript')).toHaveLength(2);
 
     service.trackHashes(['a', 'b']);
-    expect(server.peekTranscriptStatus).toHaveBeenCalledTimes(2);
+    expect(peeks('transcript')).toHaveLength(2);
   });
 
   it('forgets a hash once it leaves the table', async () => {
@@ -66,14 +77,14 @@ describe('DatasetActionsService status freshness', () => {
   it('re-checks every tracked hash when the nominated server changes', async () => {
     service.trackHashes(['a']);
     await settle();
-    server.peekTranscriptStatus.mockClear();
-    server.getVideoMeta.mockClear();
+    provider.peek.mockClear();
+    provider.sourceStatus.mockClear();
 
     config.setServerUrl('http://somewhere-else:5000');
     TestBed.tick();
 
-    expect(server.peekTranscriptStatus).toHaveBeenCalledWith('a');
-    expect(server.getVideoMeta).toHaveBeenCalledWith('a');
+    expect(provider.peek).toHaveBeenCalledWith('transcript', 'a');
+    expect(provider.sourceStatus).toHaveBeenCalledWith('a');
   });
 
   it('drops stale answers immediately when the server changes', async () => {
@@ -82,7 +93,7 @@ describe('DatasetActionsService status freshness', () => {
     expect(service.transcriptStatusByHash().get('a')).toEqual({ status: 'ready' });
 
     // Never resolves, so the map stays as the switch left it.
-    server.peekTranscriptStatus.mockReturnValue(new Promise(() => {}));
+    provider.peek.mockReturnValue(new Promise(() => {}));
     config.setServerUrl('http://somewhere-else:5000');
     TestBed.tick();
 
@@ -90,12 +101,12 @@ describe('DatasetActionsService status freshness', () => {
   });
 
   it('polls a running job to completion without flickering to "checking"', async () => {
-    server.peekTranscriptStatus.mockResolvedValue({ state: 'running' });
+    provider.peek.mockResolvedValue({ state: 'running' });
     service.trackHashes(['a']);
     await settle();
     expect(service.transcriptStatusByHash().get('a')).toEqual({ status: 'running' });
 
-    server.peekTranscriptStatus.mockResolvedValue({ state: 'ready' });
+    provider.peek.mockResolvedValue({ state: 'ready' });
     vi.advanceTimersByTime(REFRESH_MS);
 
     // The whole point of the quiet refresh: the badge holds its last real answer while the
@@ -106,27 +117,33 @@ describe('DatasetActionsService status freshness', () => {
     expect(service.transcriptStatusByHash().get('a')).toEqual({ status: 'ready' });
   });
 
+  it('reports a provider that could not be asked as an error, distinct from absent', async () => {
+    provider.peek.mockRejectedValue(new Error('connection refused'));
+    service.trackHashes(['a']);
+    await settle();
+
+    expect(service.transcriptStatusByHash().get('a')).toEqual({ status: 'error' });
+  });
+
   it('stops polling once nothing is in a non-terminal state', async () => {
     service.trackHashes(['a']);
     await settle();
-    server.peekTranscriptStatus.mockClear();
-    server.peekSceneStatsStatus.mockClear();
-    server.getVideoMeta.mockClear();
+    provider.peek.mockClear();
+    provider.sourceStatus.mockClear();
 
     vi.advanceTimersByTime(REFRESH_MS * 3);
 
-    expect(server.peekTranscriptStatus).not.toHaveBeenCalled();
-    expect(server.peekSceneStatsStatus).not.toHaveBeenCalled();
-    expect(server.getVideoMeta).not.toHaveBeenCalled();
+    expect(provider.peek).not.toHaveBeenCalled();
+    expect(provider.sourceStatus).not.toHaveBeenCalled();
   });
 
   it('keeps retrying a hash it could not reach the server for, and recovers', async () => {
-    server.getVideoMeta.mockRejectedValue(new Error('connection refused'));
+    provider.sourceStatus.mockResolvedValue('error');
     service.trackHashes(['a']);
     await settle();
     expect(service.serverStatusByHash().get('a')).toBe('error');
 
-    server.getVideoMeta.mockResolvedValue({ file_hash: 'a', file_ext: 'mp4' });
+    provider.sourceStatus.mockResolvedValue('exists');
     vi.advanceTimersByTime(REFRESH_MS);
     await settle();
 
@@ -134,15 +151,15 @@ describe('DatasetActionsService status freshness', () => {
   });
 
   it('leaves a hash alone while one of its actions is already in flight', async () => {
-    server.peekTranscriptStatus.mockResolvedValue({ state: 'running' });
+    provider.peek.mockResolvedValue({ state: 'running' });
     service.trackHashes(['a']);
     await settle();
 
     // fetchTranscript marks the hash as sending; it polls and writes its own result.
     service.sendingTranscript.set(new Set(['a']));
-    server.peekTranscriptStatus.mockClear();
+    provider.peek.mockClear();
 
     vi.advanceTimersByTime(REFRESH_MS);
-    expect(server.peekTranscriptStatus).not.toHaveBeenCalled();
+    expect(peeks('transcript')).toHaveLength(0);
   });
 });

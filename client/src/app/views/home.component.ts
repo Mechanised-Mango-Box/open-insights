@@ -14,15 +14,14 @@ import { ViewId, WORKFLOW } from './views';
   template: `
     <div class="home">
       <section class="setup">
-        <div class="fact">
-        </div>
+        <div class="fact"></div>
         <div class="fact">
           <mat-icon>dns</mat-icon>
           <p>
-            <strong>A dataset server does the compute.</strong> Point it at yours in
-            <button class="jump" (click)="navigate.emit('settings')">Settings</button> - it defaults
-            to <code>http://localhost:5000</code>. Scan and Analysis need it; Import and Export
-            don't.
+            <strong>A dataset server does the compute.</strong> Scanning uses the shared public
+            server by default, which is rate limited - point
+            <button class="jump" (click)="navigate.emit('settings')">Settings</button> at your own
+            to lift that. Only Scan needs it; Import, Analysis and Export all run in this browser.
           </p>
         </div>
       </section>

@@ -26,7 +26,7 @@ const formatBytes = (bytes: number): string => {
 @Component({
   selector: 'export-records',
   template: `
-    <div class="export">
+    <div class="actions-column">
       <mat-slide-toggle
         [checked]="includeVideoFiles()"
         (change)="includeVideoFiles.set($event.checked)"
@@ -35,7 +35,7 @@ const formatBytes = (bytes: number): string => {
       </mat-slide-toggle>
 
       @if (videoFiles().count > 0) {
-        <p class="hint">
+        <p class="action-hint">
           {{ videoFiles().count }} of the {{ selectionService.selectedCount() }} selected record(s)
           have their video file in this browser, totalling {{ formatBytes(videoFiles().bytes) }}.
         </p>
@@ -52,30 +52,14 @@ const formatBytes = (bytes: number): string => {
       </button>
 
       @if (selectionService.isEmpty()) {
-        <p class="hint">Tick the records you want in the table below.</p>
+        <p class="action-hint">Tick the records you want in the table below.</p>
       }
 
       @if (status()) {
-        <p>{{ status() }}</p>
+        <p class="action-status">{{ status() }}</p>
       }
     </div>
   `,
-  styles: [
-    `
-      .export {
-        display: grid;
-        justify-items: start;
-        gap: 12px;
-      }
-      .hint {
-        margin: 0;
-        color: var(--mat-sys-on-surface-variant);
-      }
-      p {
-        margin: 0;
-      }
-    `,
-  ],
   imports: [MatButtonModule, MatIcon, MatSlideToggleModule],
 })
 export class ExportRecordsComponent {

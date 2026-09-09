@@ -1,0 +1,81 @@
+# Response headers for Cloudflare Pages. Copied to the build output root by the
+# `public/**/*` assets glob in angular.json, where Pages parses it - it is never
+# served as a file itself.
+#
+# This file is the reason the client is on Pages rather than GitHub Pages, which
+# cannot send custom headers at all. See the note on cross-origin isolation at
+# the bottom.
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+
+  # Safe on its own. Cross-Origin-Embedder-Policy is deliberately NOT set
+  # alongside it - see the bottom of this file.
+  Cross-Origin-Opener-Policy: same-origin
+
+  # index.html must not be cached: it names the hashed bundles, so a stale copy
+  # points at files that no longer exist. The hashed assets themselves are
+  # overridden below.
+  Cache-Control: public, max-age=0, must-revalidate
+
+  # REPORT-ONLY, deliberately, and it should stay that way until someone has
+  # loaded the deployed site with devtools open and seen zero violations on all
+  # three paths: first load (fonts), a server-backed Scan, and - with the
+  # experimental flag on - a browser-compute Scan, which is the one that pulls
+  # the ORT wasm and the ~75MB model. Then delete "-Report-Only" from the line
+  # below to start enforcing it.
+  #
+  # Enforcing an untested CSP on this app is a real risk rather than a
+  # theoretical one: browser compute reaches two third-party origins at runtime
+  # and the failure mode is silent.
+  #
+  # What each source is for:
+  #   'wasm-unsafe-eval'  onnxruntime-web compiles WebAssembly; without it the
+  #                       transcript worker cannot start at all.
+  #   cdn.jsdelivr.net    where transformers.js loads the ORT wasm binaries from
+  #                       by default (nothing overrides env.backends.onnx.wasm.wasmPaths).
+  #   *.hf.co, huggingface.co
+  #                       the model weights. Written broadly on purpose: the
+  #                       download redirects through changing LFS/Xet hosts.
+  #   style 'unsafe-inline'
+  #                       Angular Material writes inline styles, and index.html
+  #                       carries inlined critical CSS.
+  #   blob:               worker bundles, and <video> playback from the File
+  #                       objects held in IndexedDB.
+  #
+  # connect-src also has to name your API server. Update it when SITE_ADDRESS
+  # changes, or the browser blocks every call with the CSP as the only clue.
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; worker-src 'self' blob:; connect-src 'self' blob: https://open-insights.duckdns.org https://cdn.jsdelivr.net https://huggingface.co https://*.huggingface.co https://*.hf.co; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'
+
+# Content-hashed by the build (outputHashing: "all"), so the name changes
+# whenever the bytes do and these can never go stale.
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+# ---------------------------------------------------------------------------
+# On cross-origin isolation
+# ---------------------------------------------------------------------------
+# Adding
+#     Cross-Origin-Embedder-Policy: require-corp
+# to the /* block above would make the page cross-origin isolated, which is what
+# SharedArrayBuffer and multi-threaded WebAssembly need. transcript.worker.ts
+# settled on `device: 'webgpu'` specifically because GitHub Pages could not send
+# that header and single-threaded WASM is slower than real time - so isolation
+# would let the WASM fallback work on browsers without WebGPU.
+#
+# It is not enabled because it is not free. Under require-corp every cross-origin
+# subresource needs CORP or CORS, which currently breaks:
+#   - the Google Fonts <link>s in index.html (self-host them, or mark them
+#     crossorigin and accept the CDN's headers)
+#   - the ORT wasm from jsDelivr (self-host it and set
+#     env.backends.onnx.wasm.wasmPaths)
+# COEP: credentialless avoids most of that but is not supported everywhere.
+#
+# Worth doing when browser compute stops being experimental. Until then the
+# server does the work, and this is a door left open rather than one walked
+# through.
