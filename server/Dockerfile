@@ -50,12 +50,16 @@ USER app
 # time with local_files_only=True, so a container whose WHISPER_MODEL_DIR is
 # empty does not fail on its first request - it fails to boot at all.
 #
-# Only the three files fetch_whisper_model.py actually needs are copied first
-# (it imports config, which imports models). Copying the whole tree here instead
-# would make every source edit re-download the weights.
+# Only the files fetch_whisper_model.py actually needs are copied first (it
+# imports config, which imports models and paths). Copying the whole tree here
+# instead would make every source edit re-download the weights.
+#
+# Keep this list in step with config.py's imports: it is the whole of what the
+# fetch runs against, so a new one that is missing here fails the build here
+# rather than at runtime.
 ARG WHISPER_MODEL=tiny.en
 ENV WHISPER_MODEL=${WHISPER_MODEL}
-COPY --chown=app:app models.py config.py ./
+COPY --chown=app:app models.py config.py paths.py ./
 COPY --chown=app:app scripts/ ./scripts/
 RUN python scripts/fetch_whisper_model.py
 
