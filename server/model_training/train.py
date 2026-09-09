@@ -6,6 +6,7 @@ from typing import Optional, Dict, Any, Tuple
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
 import joblib
 
 from model_training.data_preparation import (
@@ -96,6 +97,11 @@ def run_training_pipeline(
     # 5, 6, 7. Standardise features & train model
     model, scaler = fit_scaler_and_train_model(X_train, y_train)
 
+    # Both models learn from the same training split. The forest uses raw features.
+    random_forest = RandomForestRegressor(random_state=random_state)
+    random_forest.fit(X_train, y_train)
+    forest_metrics = evaluate_model(y_test, random_forest.predict(X_test))
+
     # 8. Predict on test set
     y_pred = predict_engagement(model, scaler, X_test)
 
@@ -111,7 +117,22 @@ def run_training_pipeline(
     if save_dir:
         model_path, scaler_path = save_model_artifacts(model, scaler, save_dir=save_dir)
 
+    inference_path = None
+    if save_dir:
+        inference_path = os.path.join(save_dir, "engagement_model_inference.joblib")
+        # One bundle keeps the prediction and feedback models from the same run.
+        joblib.dump({
+            "random_forest": random_forest,
+            "linear_regression": model,
+            "scaler": scaler,
+            "feature_columns": list(FEATURE_COLUMNS),
+            "recommendation_threshold": recommendation_threshold,
+        }, inference_path)
+
     results = {
+        "random_forest": random_forest,
+        "random_forest_metrics": forest_metrics,
+        "inference_path": inference_path,
         "model": model,
         "scaler": scaler,
         "metrics": metrics,
