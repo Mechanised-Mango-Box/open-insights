@@ -33,7 +33,7 @@ class EngagementPredictor:
             model_dir = SERVER_DIR / model_dir
 
         # Missing artifacts raise FileNotFoundError; inference never trains a replacement.
-        bundle = joblib.load(model_dir / f"{filename_prefix}_inference.joblib")
+        bundle = joblib.load(model_dir / f"{filename_prefix}_inference.joblib") 
         if bundle["feature_columns"] != list(FEATURE_COLUMNS):
             raise ValueError("Saved model features do not match the inference feature schema.")
         self.model = bundle["random_forest"]

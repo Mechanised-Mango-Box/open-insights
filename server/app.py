@@ -7,8 +7,13 @@ from flask_cors import CORS
 from processing import resubmit_orphaned_jobs, start_backfill
 from routes import bp
 from werkzeug.exceptions import HTTPException
+from inference import EngagementPredictor
 
 app = Flask(__name__)
+
+
+# Creating the Engagement Predictor when the server starts
+app.extensions["engagement_predictor"] = EngagementPredictor()
 
 # Allow angular - TBD
 _ALLOWED_ORIGINS = [
@@ -73,3 +78,5 @@ start_backfill()
 app.teardown_appcontext(close_db)
 
 app.register_blueprint(bp)
+
+

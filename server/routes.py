@@ -20,6 +20,11 @@ from werkzeug.exceptions import NotFound
 from processing import SUBMIT, queue_status
 from utils import hash_stream
 
+from flask import Flask
+from flask import current_app
+app = Flask(__name__)
+
+
 bp = Blueprint("api", __name__)
 
 
@@ -215,3 +220,18 @@ def __route_analysis():
         loess[feature] = {"x": x_smooth.tolist(), "y": y_smooth.tolist()}
 
     return jsonify({"histograms": histograms, "correlations": correlations, "loess": loess})
+
+
+@bp.post("/api/predict")
+def predict_video():
+
+    # we want to retreive the instance created from inference.py loaded models 
+    models = current_app.extensions["engagement_predictor"]
+
+    # read the features from the request's JSON
+    readings = request.get_json()
+    
+    # call the predictor's predict() method with those features. 
+    # return the result as JSON
+    return models.predict(readings)
+    
