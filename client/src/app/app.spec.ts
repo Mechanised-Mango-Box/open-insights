@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
 import { appConfig } from './app.config';
+import { SERVER_CHOICE_PROMPT } from './data-management/server-choice';
 
 describe('App', () => {
   beforeEach(async () => {
@@ -10,7 +11,10 @@ describe('App', () => {
     // sidebar's processing-mode badge reaches through.
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [...appConfig.providers],
+      // The where-does-work-run prompt is switched off: it opens an overlay from
+      // the shell's first render, which would outlive this fixture and bury the
+      // markup below it.
+      providers: [...appConfig.providers, { provide: SERVER_CHOICE_PROMPT, useValue: false }],
     }).compileComponents();
   });
 

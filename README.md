@@ -77,9 +77,9 @@ cd ./server
 python scripts/build_portable.py
 ```
 
-Leaves `dist/open-insights-server-<platform>-x86_64`, around 430MB. Run it
-anywhere: it keeps its database and uploads in a `data` directory beside itself,
-and prints how to point a client at it. Set `SHOW_INSTRUCTIONS=0` to silence that.
+Leaves `dist/open-insights-server-<platform>-x86_64`. Run it anywhere: it keeps
+its database and uploads in a `data` directory beside itself, and prints how to
+point a client at it. Set `SHOW_INSTRUCTIONS=0` to silence that.
 
 - **Build it on the platform you will run it on.** PyInstaller cannot
   cross-compile, and a Linux build will not run on an older distribution than the

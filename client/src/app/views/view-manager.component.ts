@@ -1,6 +1,7 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, afterNextRender, computed, inject, signal } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { MatIcon } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
 import { VideoTableComponent } from '../data-management/video-records/video-table.component';
 import { VideoRecordsImport } from '../data-management/video-records/video-records-import.component';
 import { ExportRecordsComponent } from '../data-management/video-records/export-records.component';
@@ -8,6 +9,9 @@ import { ScanActionsComponent } from '../data-management/video-records/scan-acti
 import { AnalysisComponent } from '../data-management/analysis/analysis.component';
 import { ServerSettingsComponent } from '../data-management/server-settings.component';
 import { ProcessingModeBadgeComponent } from '../data-management/processing-mode-badge.component';
+import { ServerChoiceDialogComponent } from '../data-management/server-choice-dialog.component';
+import { ComputeConfigService } from '../data-management/compute-config.service';
+import { SERVER_CHOICE_PROMPT, ServerChoice } from '../data-management/server-choice';
 import { HomeComponent } from './home.component';
 import { HOME, SETTINGS, VIEWS_WITH_RECORDS, ViewId, WORKFLOW } from './views';
 
@@ -189,11 +193,44 @@ import { HOME, SETTINGS, VIEWS_WITH_RECORDS, ViewId, WORKFLOW } from './views';
   ],
 })
 export class ViewManager {
+  private dialog = inject(MatDialog);
+  private computeConfig = inject(ComputeConfigService);
+  private promptEnabled = inject(SERVER_CHOICE_PROMPT);
+
   readonly workflow = WORKFLOW;
   readonly settings = SETTINGS;
   readonly home = HOME;
 
   view = signal<ViewId>(HOME.id);
+
+  constructor() {
+    // After the first render rather than during it: opening a dialog attaches a
+    // view synchronously, and this shell renders the processing-mode badge off
+    // the same server settings the dialog reads. Doing it inside the pass is
+    // how that pair turns into ExpressionChangedAfterItHasBeenChecked.
+    afterNextRender(() => this.askWhereWorkRuns());
+  }
+
+  /**
+   * Asked once per load. There is exactly one ViewManager, so no flag is needed
+   * to keep it to one - and none is stored, because the question is meant to be
+   * asked again next time rather than settled forever.
+   */
+  private askWhereWorkRuns(): void {
+    // Nothing to ask when no kind is going to a server at all. Note this is
+    // stricter than "the experiment is on": one kind in the browser and one on
+    // the server still leaves the server question live.
+    if (!this.promptEnabled || !this.computeConfig.usesServer()) return;
+
+    this.dialog
+      .open(ServerChoiceDialogComponent, { width: 'min(560px, 92vw)' })
+      .afterClosed()
+      .subscribe((choice?: ServerChoice) => {
+        // The dialog has already saved the choice; all that is left is to put
+        // them where the URL and key it just set are visible and checkable.
+        if (choice === 'local') this.view.set(this.settings.id);
+      });
+  }
 
   activeView = computed(
     () => [HOME, ...WORKFLOW, SETTINGS].find((entry) => entry.id === this.view()) ?? HOME,

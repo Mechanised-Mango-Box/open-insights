@@ -21,11 +21,34 @@ import {
  * own - it reads the URL set directly above it, and reading that URL is half of
  * what it is for.
  */
+/**
+ * The one failure a status 0 cannot explain but we can: a page served over
+ * https cannot reach an http:// server, and the browser blocks it as mixed
+ * content before a request is made. localhost is the exception - it counts as
+ * a trustworthy origin - which is exactly why a LAN address looks identical to
+ * the user and fails anyway.
+ */
+function mixedContentHint(url: string): string {
+  try {
+    const target = new URL(url);
+    const isLoopback =
+      target.hostname === 'localhost' ||
+      target.hostname === '127.0.0.1' ||
+      target.hostname === '[::1]';
+    if (location.protocol === 'https:' && target.protocol === 'http:' && !isLoopback) {
+      return ' - an http:// server other than localhost cannot be reached from this https page';
+    }
+  } catch {
+    // Not a URL we can parse; the generic reason above is all there is to say.
+  }
+  return '';
+}
+
 /** Turns whatever a provider rejected with into something a person can act on. */
-function describeRequestFailure(error: unknown): string {
+function describeRequestFailure(error: unknown, url: string): string {
   if (error instanceof HttpErrorResponse) {
     if (error.status === 0) {
-      return 'no response (unreachable, DNS, TLS or blocked by CORS)';
+      return `no response (unreachable, DNS, TLS or blocked by CORS)${mixedContentHint(url)}`;
     }
     if (error.status === 401 || error.status === 403) {
       return `${error.status} - the server refused this API key`;
@@ -393,7 +416,7 @@ export class ServerSettingsComponent {
       // generic String(error) below renders it as "[object Object]" and hides the
       // one thing worth knowing. status 0 is the browser refusing to hand over a
       // reason - unreachable, DNS, TLS or a CORS block all look identical here.
-      this.error.set(describeRequestFailure(error));
+      this.error.set(describeRequestFailure(error, this.serverConfig.serverUrl()));
       // Cleared rather than left on screen: counts from a server that just failed to
       // answer are of unknown age, and reading them as current is the whole risk.
       this.status.set(null);

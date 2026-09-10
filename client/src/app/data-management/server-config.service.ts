@@ -47,6 +47,40 @@ export class ServerConfigService {
     this.write(API_KEY_STORAGE_KEY, trimmed);
   }
 
+  /**
+   * Back to the server this build ships with.
+   *
+   * Clears the stored values rather than writing the current constants into
+   * them: an absent setting means "follow whatever the bundle points at", which
+   * is how a change of host reaches everyone who never chose anything. Writing
+   * DEFAULT_SERVER_URL in would pin this browser to today's address forever.
+   *
+   * Guarded, because this runs from a dialog that opens on every load: someone
+   * who pasted a private key - the rate-limit-exempt one - against the shared
+   * server would otherwise lose it to a stray Continue.
+   */
+  usePublicServer(): void {
+    if (this.serverUrl() === DEFAULT_SERVER_URL) return;
+    this.serverUrl.set(DEFAULT_SERVER_URL);
+    this.apiKey.set(DEFAULT_API_KEY);
+    this.clear(STORAGE_KEY);
+    this.clear(API_KEY_STORAGE_KEY);
+  }
+
+  /**
+   * Point at a server the user runs, and drop the shared key on the way - a
+   * server started with no keys configured wants no X-API-Key header at all.
+   *
+   * Only moves a browser that is still on the shipped default. Anything else is
+   * already a server somebody chose - a box on the LAN, a colleague's machine -
+   * and localhost is not a safe guess at what they meant.
+   */
+  useLocalServer(): void {
+    if (this.serverUrl() !== DEFAULT_SERVER_URL) return;
+    this.setServerUrl(LOCAL_SERVER_URL);
+    this.setApiKey('');
+  }
+
   private read(key: string): string | null {
     try {
       return localStorage.getItem(key);
@@ -60,6 +94,14 @@ export class ServerConfigService {
       localStorage.setItem(key, value);
     } catch {
       // localStorage unavailable (private mode etc.) — value still applies for this session
+    }
+  }
+
+  private clear(key: string): void {
+    try {
+      localStorage.removeItem(key);
+    } catch {
+      // As above - nothing stored means the shipped default applies next load.
     }
   }
 }

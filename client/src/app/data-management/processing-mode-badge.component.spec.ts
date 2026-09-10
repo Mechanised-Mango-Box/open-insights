@@ -4,6 +4,7 @@ import { appConfig } from '../app.config';
 import { ViewManager } from '../views/view-manager.component';
 import { ComputeConfigService } from './compute-config.service';
 import { LOCAL_SERVER_URL, ServerConfigService } from './server-config.service';
+import { SERVER_CHOICE_PROMPT } from './server-choice';
 
 /**
  * Rendered through the real sidebar rather than the badge on its own: half of
@@ -22,7 +23,9 @@ describe('the processing-mode badge in the sidebar', () => {
 
     await TestBed.configureTestingModule({
       imports: [ViewManager],
-      providers: [...appConfig.providers],
+      // Without this the shell opens the server-choice dialog on first render,
+      // leaking an overlay into every later spec.
+      providers: [...appConfig.providers, { provide: SERVER_CHOICE_PROMPT, useValue: false }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ViewManager);

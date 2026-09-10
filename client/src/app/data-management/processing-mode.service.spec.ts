@@ -65,6 +65,23 @@ describe('ProcessingModeService', () => {
     expect(mode.mode()).toBe('local');
   });
 
+  it('keeps the server question live while any kind still goes to one', () => {
+    // Off entirely: targetFor forces 'server' regardless of the stored targets.
+    compute.setTarget('transcript', 'local');
+    compute.setTarget('scene_stats', 'local');
+    expect(compute.usesServer()).toBe(true);
+
+    // On, but split - the badge reads 'experimental' here, which is exactly why
+    // the prompt cannot gate on the mode: a server is still doing half the work.
+    compute.setExperimental(true);
+    compute.setTarget('transcript', 'server');
+    expect(mode.mode()).toBe('experimental');
+    expect(compute.usesServer()).toBe(true);
+
+    compute.setTarget('transcript', 'local');
+    expect(compute.usesServer()).toBe(false);
+  });
+
   it('carries the routing provider label for the tooltip', () => {
     expect(mode.detail()).toBe('somewhere');
   });
