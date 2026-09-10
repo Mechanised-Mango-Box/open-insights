@@ -230,12 +230,6 @@ function describeRequestFailure(error: unknown): string {
         gap: 24px;
         max-width: 80ch;
       }
-      .card {
-        background: var(--mat-sys-surface-container);
-        border: 1px solid var(--mat-sys-outline-variant);
-        border-radius: 12px;
-        padding: 20px 24px;
-      }
       h2 {
         font: var(--mat-sys-title-medium);
         margin: 0 0 4px;
