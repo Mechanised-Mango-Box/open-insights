@@ -7,6 +7,7 @@ import { ExportRecordsComponent } from '../data-management/video-records/export-
 import { ScanActionsComponent } from '../data-management/video-records/scan-actions.component';
 import { AnalysisComponent } from '../data-management/analysis/analysis.component';
 import { ServerSettingsComponent } from '../data-management/server-settings.component';
+import { ProcessingModeBadgeComponent } from '../data-management/processing-mode-badge.component';
 import { HomeComponent } from './home.component';
 import { HOME, SETTINGS, VIEWS_WITH_RECORDS, ViewId, WORKFLOW } from './views';
 
@@ -33,16 +34,20 @@ import { HOME, SETTINGS, VIEWS_WITH_RECORDS, ViewId, WORKFLOW } from './views';
           }
         </mat-action-list>
 
-        <mat-action-list class="settings">
-          <button
-            mat-list-item
-            [activated]="view() === settings.id"
-            (click)="view.set(settings.id)"
-          >
-            <mat-icon matListItemIcon>{{ settings.icon }}</mat-icon>
-            <span matListItemTitle>{{ settings.label }}</span>
-          </button>
-        </mat-action-list>
+        <div class="sidebar-footer">
+          <processing-mode-badge />
+
+          <mat-action-list class="settings">
+            <button
+              mat-list-item
+              [activated]="view() === settings.id"
+              (click)="view.set(settings.id)"
+            >
+              <mat-icon matListItemIcon>{{ settings.icon }}</mat-icon>
+              <span matListItemTitle>{{ settings.label }}</span>
+            </button>
+          </mat-action-list>
+        </div>
       </nav>
 
       <main class="content">
@@ -128,9 +133,16 @@ import { HOME, SETTINGS, VIEWS_WITH_RECORDS, ViewId, WORKFLOW } from './views';
       .steps {
         flex: 1 1 auto;
       }
-      .settings {
+      /* The badge and Settings are one block: the badge says where work goes,
+         and the item under it is what changes that, so the rule goes round both
+         rather than between them. */
+      .sidebar-footer {
         flex: 0 0 auto;
         border-top: 1px solid var(--mat-sys-outline-variant);
+      }
+      .sidebar-footer processing-mode-badge {
+        display: block;
+        padding: 12px 16px 4px;
       }
       .content {
         flex: 1 1 auto;
@@ -173,6 +185,7 @@ import { HOME, SETTINGS, VIEWS_WITH_RECORDS, ViewId, WORKFLOW } from './views';
     ScanActionsComponent,
     AnalysisComponent,
     ServerSettingsComponent,
+    ProcessingModeBadgeComponent,
   ],
 })
 export class ViewManager {
