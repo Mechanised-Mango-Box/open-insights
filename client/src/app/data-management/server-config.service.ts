@@ -22,7 +22,7 @@ export const LOCAL_SERVER_URL = 'http://localhost:5000';
  * A private key, which is exempt from those limits, is pasted into Settings by
  * whoever runs the server and never appears here.
  */
-export const DEFAULT_API_KEY = 'REPLACE_WITH_PUBLIC_API_KEY';
+export const DEFAULT_API_KEY = 'uhGlfDyQ6V1CCUwIo90j722MQfzg3N3O';
 
 @Injectable({ providedIn: 'root' })
 export class ServerConfigService {

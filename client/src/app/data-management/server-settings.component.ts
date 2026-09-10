@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -20,6 +21,24 @@ import {
  * own - it reads the URL set directly above it, and reading that URL is half of
  * what it is for.
  */
+/** Turns whatever a provider rejected with into something a person can act on. */
+function describeRequestFailure(error: unknown): string {
+  if (error instanceof HttpErrorResponse) {
+    if (error.status === 0) {
+      return 'no response (unreachable, DNS, TLS or blocked by CORS)';
+    }
+    if (error.status === 401 || error.status === 403) {
+      return `${error.status} - the server refused this API key`;
+    }
+    if (error.status === 429) {
+      return '429 - rate limited; the public key has a per-hour cap';
+    }
+    return `${error.status} ${error.statusText}`.trim();
+  }
+  if (error instanceof Error) return error.message;
+  return String(error);
+}
+
 @Component({
   selector: 'server-settings',
   standalone: true,
@@ -376,9 +395,11 @@ export class ServerSettingsComponent {
     try {
       this.status.set(await this.provider.status());
     } catch (error) {
-      // Whatever the provider could not do, it rejected with - an unreachable or
-      // CORS-blocked server still arrives as an Error carrying a usable message.
-      this.error.set(error instanceof Error ? error.message : String(error));
+      // HttpClient rejects with HttpErrorResponse, which is not an Error, so the
+      // generic String(error) below renders it as "[object Object]" and hides the
+      // one thing worth knowing. status 0 is the browser refusing to hand over a
+      // reason - unreachable, DNS, TLS or a CORS block all look identical here.
+      this.error.set(describeRequestFailure(error));
       // Cleared rather than left on screen: counts from a server that just failed to
       // answer are of unknown age, and reading them as current is the whole risk.
       this.status.set(null);
