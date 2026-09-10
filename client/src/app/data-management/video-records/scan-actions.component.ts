@@ -15,70 +15,66 @@ import { BulkScanService } from './bulk-scan.service';
   standalone: true,
   imports: [MatButtonModule],
   template: `
-    <div class="scan-actions">
-      <p>{{ selectionService.selectedCount() }} record(s) selected.</p>
+    <div class="actions-column">
+      <p class="action-status">{{ selectionService.selectedCount() }} record(s) selected.</p>
 
-      <div class="scan-action">
+      <div class="actions">
         <button
-          mat-raised-button
-          color="primary"
+          mat-stroked-button
+          [disabled]="selectionService.isEmpty() || scans.isRunning('upload')"
+          (click)="scans.run('upload')"
+        >
+          Upload to Server
+        </button>
+        @if (scans.statusFor('upload')) {
+          <span class="action-status">{{ scans.statusFor('upload') }}</span>
+        }
+      </div>
+      <p class="action-hint">
+        Uploading first is optional — an extract sends any video the server is missing. Doing it as
+        its own pass keeps the transfers out of the way of the work.
+      </p>
+
+      <div class="actions">
+        <button
+          mat-stroked-button
           [disabled]="selectionService.isEmpty() || scans.isRunning('transcript')"
           (click)="scans.run('transcript')"
         >
           Extract Transcript
         </button>
         @if (scans.statusFor('transcript')) {
-        <span class="scan-status">{{ scans.statusFor('transcript') }}</span>
+          <span class="action-status">{{ scans.statusFor('transcript') }}</span>
         }
       </div>
 
-      <div class="scan-action">
+      <div class="actions">
         <button
-          mat-raised-button
+          mat-stroked-button
           [disabled]="selectionService.isEmpty() || scans.isRunning('transcriptStats')"
           (click)="scans.run('transcriptStats')"
         >
           Extract Transcript Stats
         </button>
         @if (scans.statusFor('transcriptStats')) {
-        <span class="scan-status">{{ scans.statusFor('transcriptStats') }}</span>
+          <span class="action-status">{{ scans.statusFor('transcriptStats') }}</span>
         }
       </div>
 
-      <div class="scan-action">
+      <div class="actions">
         <button
-          mat-raised-button
-          color="accent"
+          mat-stroked-button
           [disabled]="selectionService.isEmpty() || scans.isRunning('sceneStats')"
           (click)="scans.run('sceneStats')"
         >
           Extract Scene Stats
         </button>
         @if (scans.statusFor('sceneStats')) {
-        <span class="scan-status">{{ scans.statusFor('sceneStats') }}</span>
+          <span class="action-status">{{ scans.statusFor('sceneStats') }}</span>
         }
       </div>
     </div>
   `,
-  styles: [
-    `
-      .scan-actions {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-        padding: 16px 0;
-      }
-      .scan-action {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-      .scan-status {
-        color: #9e9e9e;
-      }
-    `,
-  ],
 })
 export class ScanActionsComponent {
   selectionService = inject(SelectionService);

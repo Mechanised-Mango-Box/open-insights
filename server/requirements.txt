@@ -1,16 +1,29 @@
+# What the API server needs at runtime, and nothing else. Model training pulls a
+# heavier set - see requirements-training.txt, which nothing under the request
+# path imports.
+#
+# Pinned rather than floating because there is no lockfile: the container is
+# rebuilt from this file on a host whose wheels must match the ones this was
+# tested against. Direct dependencies only - pip resolves the rest.
+
 # Transcription. Deliberately NOT openai-whisper: CTranslate2 reaches a cloud GPU
 # by switching WHISPER_DEVICE/WHISPER_COMPUTE_TYPE rather than a rewrite, and it
 # keeps torch (plus ~19 nvidia-* CUDA wheels, 3-4GB) out of the container image.
-faster-whisper>=1.2.1
+faster-whisper==1.2.1
 
-flask
-flask-cors
+flask==3.1.3
+flask-cors==6.0.5
 
-# Scene stats. Swap for opencv-python-headless when containerising - the server
-# never opens a window, and headless drops the GUI shared-library dependencies.
-opencv-python
+# Per-IP rate limiting for the public API key tier. Its in-memory storage is the
+# right backend here precisely because the server is single-process by design
+# (see the -w 1 note in the Dockerfile) - a shared store would be solving a
+# problem this deployment does not have.
+flask-limiter==4.1.1
 
-pandas
-numpy
-scikit-learn
-matplotlib
+# WSGI server. The Werkzeug one main.py uses is fine for a desktop and is not
+# meant to face the internet.
+gunicorn==23.0.0
+
+# Scene stats. headless rather than opencv-python: the server never opens a
+# window, and it drops the GUI shared-library dependencies from the image.
+opencv-python-headless==5.0.0.93

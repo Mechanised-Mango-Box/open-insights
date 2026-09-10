@@ -1,12 +1,8 @@
-import { Injectable, inject } from '@angular/core';
-import {
-  AnalysisFeatureRow,
-  AnalysisResult,
-  DatasetServerService,
-} from '../dataset-server.service';
+import { Injectable } from '@angular/core';
 import { readyData } from '../video-records/Dataset';
 import { VideoRecord } from '../video-records/VideoRecord';
 import { calculateSpeakingRatio, calculateSpeechPaceVariation } from './speech-features';
+import { AnalysisFeatureRow } from './stats';
 
 export type FeatureRowResult = {
   rows: AnalysisFeatureRow[];
@@ -18,8 +14,6 @@ export type FeatureRowResult = {
   providedIn: 'root',
 })
 export class AnalysisService {
-  private datasetServerService = inject(DatasetServerService);
-
   buildFeatureRows(records: VideoRecord[]): FeatureRowResult {
     const rows: AnalysisFeatureRow[] = [];
 
@@ -47,9 +41,5 @@ export class AnalysisService {
     }
 
     return { rows, eligibleCount: rows.length, totalCount: records.length };
-  }
-
-  runAnalysis(rows: AnalysisFeatureRow[]): Promise<AnalysisResult> {
-    return this.datasetServerService.runAnalysis(rows);
   }
 }

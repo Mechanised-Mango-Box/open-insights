@@ -1,4 +1,5 @@
 import logging
+import os
 import threading
 import time
 from collections import Counter
@@ -15,13 +16,15 @@ from config import (
     BACKFILL_INTERVAL_SECONDS,
     SCENE_STATS_WORKERS,
     SCENE_THRESHOLD,
+    UPLOAD_DIR_MAX_BYTES,
     UPLOAD_FOLDER,
+    UPLOAD_REAP_INTERVAL_SECONDS,
     WHISPER_COMPUTE_TYPE,
     WHISPER_CPU_THREADS,
     WHISPER_DEVICE,
     WHISPER_LANGUAGE,
-    WHISPER_MODEL,
     WHISPER_MODEL_DIR,
+    WHISPER_MODEL_PATH,
     WHISPER_NUM_WORKERS,
     WHISPER_VAD,
 )
@@ -32,11 +35,13 @@ from db import (
     DatasetKind,
     active_job_count,
     claim,
+    delete_upload,
     enqueue,
     fail,
     job_counts,
     put_result,
     queued_jobs,
+    reapable_uploads,
     requeue_expired,
     scene_stats_values,
     transcript_values,
@@ -57,8 +62,12 @@ _log = logging.getLogger(__name__)
 # updating the weights is scripts/fetch_whisper_model.py's job, run by hand
 # ahead of time. If WHISPER_MODEL_DIR isn't already populated, this raises
 # immediately instead of the server silently reaching out to the Hub.
+#
+# WHISPER_MODEL_PATH rather than WHISPER_MODEL: normally the same string, but a
+# frozen build carries its weights inside the executable and loads them by path.
+# config.py keeps the two separate so the producer stamp stays the model's name.
 _whisper_model = WhisperModel(
-    WHISPER_MODEL,
+    WHISPER_MODEL_PATH,
     device=WHISPER_DEVICE,
     compute_type=WHISPER_COMPUTE_TYPE,
     cpu_threads=WHISPER_CPU_THREADS,
@@ -136,10 +145,11 @@ def calculate_transcript(file_path: Path) -> Transcript:
     # produce. faster-whisper also refuses to batch without vad_filter, so
     # there is no fine-grained batched option to reach for.
     #
-    # language is passed rather than left to detection: turbo has no .en
-    # build, so this is what makes the run English-only. It also drops the
-    # detection pass, which read only the first 30s and could label a whole
-    # video off an intro.
+    # language is passed rather than left to detection: it matches the .en
+    # weights the default model ships as, and holds the run to English if a
+    # multilingual model is configured instead. It also drops the detection
+    # pass, which read only the first 30s and could label a whole video off
+    # an intro.
     segment_iter, _info = _whisper_model.transcribe(
         str(file_path), language=WHISPER_LANGUAGE, vad_filter=WHISPER_VAD
     )
@@ -467,5 +477,109 @@ def start_backfill() -> threading.Thread | None:
                 print(f"Backfill sweep failed: {e}")
 
     thread = threading.Thread(target=loop, name="backfill", daemon=True)
+    thread.start()
+    return thread
+
+
+# How many candidates one pass will consider. A bound rather than the whole table
+# so a pass over a large library stays short; being over the watermark is not an
+# emergency, and the next tick continues from wherever this one stopped.
+_REAP_CANDIDATES = 50
+
+
+def upload_dir_bytes() -> int:
+    """Total bytes currently sitting in the upload directory.
+
+    Counts everything, including the *.part spool files of uploads still in
+    flight. Those are real bytes on a real disk and a burst of concurrent
+    uploads is exactly when the cap matters - but they have no files row, so
+    reap_uploads_once() can never select one and pull it out from under the
+    client still writing it."""
+    total = 0
+    with os.scandir(UPLOAD_FOLDER) as entries:
+        for entry in entries:
+            try:
+                if entry.is_file(follow_symlinks=False):
+                    total += entry.stat(follow_symlinks=False).st_size
+            except OSError:
+                # Raced with a rename or a delete. It is a measurement, and the
+                # next tick takes another one.
+                continue
+    return total
+
+
+def reap_uploads_once() -> int:
+    """Deletes oldest-first until the upload directory is under the cap. Returns
+    how many videos were removed.
+
+    Does nothing at all unless UPLOAD_DIR_MAX_BYTES is set. Off is the default,
+    because deleting an upload is not a reasonable thing to do to someone who
+    self-hosts this on a machine with a disk; it is the public deployment, where
+    nothing else has ever removed an upload, that needs it."""
+    if not UPLOAD_DIR_MAX_BYTES:
+        return 0
+
+    total = upload_dir_bytes()
+    if total <= UPLOAD_DIR_MAX_BYTES:
+        return 0
+
+    reaped = 0
+    for row in reapable_uploads(_REAP_CANDIDATES):
+        if total <= UPLOAD_DIR_MAX_BYTES:
+            break
+
+        path = Path(UPLOAD_FOLDER) / f"{row['file_hash']}.{row['file_ext']}"
+        try:
+            size = path.stat().st_size
+        except OSError:
+            # The row outlived its file. Still worth dropping the row, and it
+            # frees nothing, so the running total does not move.
+            size = 0
+
+        path.unlink(missing_ok=True)
+        # Only after the file is gone: a row deleted first would strand the video
+        # as an unreferenced file that nothing will ever select again.
+        delete_upload(row["file_hash"])
+
+        total -= size
+        reaped += 1
+
+    if reaped:
+        _log.info(
+            "Reaped %d upload(s); %d bytes remain against a %d byte cap",
+            reaped,
+            total,
+            UPLOAD_DIR_MAX_BYTES,
+        )
+    return reaped
+
+
+def start_upload_reaper() -> threading.Thread | None:
+    """Keeps the upload directory under its cap, for the life of the process.
+
+    Its own thread rather than a step inside sweep_once(), because it answers to
+    its own switch. The public deployment wants backfill off - it is the one
+    thing here that starts work nobody asked for, which on a shared box means
+    transcribing every stranger's upload unprompted - and reaping on. Sharing a
+    thread would have meant splitting BACKFILL_ENABLED and changing what an
+    existing flag means.
+
+    Nothing is lost by that separation: requeue_expired() is already called on
+    every dataset GET and POST, and the client polls every 1.5s, so dead leases
+    are still reclaimed with the sweeper's timer switched off.
+
+    Daemon, and every tick wrapped, for the same reasons start_backfill() gives."""
+    if not UPLOAD_DIR_MAX_BYTES:
+        return None
+
+    def loop() -> None:
+        while True:
+            time.sleep(UPLOAD_REAP_INTERVAL_SECONDS)
+            try:
+                reap_uploads_once()
+            except Exception as e:
+                _log.warning("Upload reap failed: %s", e)
+
+    thread = threading.Thread(target=loop, name="upload-reaper", daemon=True)
     thread.start()
     return thread

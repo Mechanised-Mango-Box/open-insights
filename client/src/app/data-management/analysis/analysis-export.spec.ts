@@ -1,6 +1,6 @@
 import JSZip from 'jszip';
 import { describe, expect, it } from 'vitest';
-import { AnalysisFeatureRow, AnalysisResult } from '../dataset-server.service';
+import { AnalysisFeatureRow, AnalysisResult } from './stats';
 import { buildAnalysisExportZip } from './analysis-export';
 
 const rows: AnalysisFeatureRow[] = [

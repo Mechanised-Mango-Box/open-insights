@@ -2,28 +2,181 @@ import os
 from typing import cast
 
 from models import FileExt
+from paths import FROZEN, base_dir, bundled
 
-UPLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER", "../data/local/uploads")
+# Anchored on the executable (frozen) or the repository root (not), rather than
+# on the working directory. The old defaults were '../data/local/...', which are
+# correct only when the process was started from server/ - fine for the README's
+# `cd ./server && py main.py`, and meaningless for a portable binary someone
+# double-clicked from their downloads folder.
+#
+# A frozen build keeps its data in a `data` directory beside the executable, so
+# moving the executable moves its library with it. Unfrozen this still resolves
+# to the repository's data/local, so an existing clone sees no change.
+_DATA_DIR = base_dir() / "data" if FROZEN else base_dir() / "data" / "local"
+
+UPLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER", str(_DATA_DIR / "uploads"))
 ALLOWED_EXTENSIONS = {"mp4", "avi", "mov", "mkv", "webm"}
-DB_PATH = os.environ.get("DB_PATH", "../data/local/db.sqlite")
+DB_PATH = os.environ.get("DB_PATH", str(_DATA_DIR / "db.sqlite"))
+
+# Where the server listens. Lifted out of main.py so the frozen entry point and
+# the development one cannot disagree, and so the startup banner can print an
+# address that matches reality.
+#
+# A portable build binds loopback by default: it is an application on someone's
+# laptop, and publishing it to every machine on the coffee shop's wifi is not
+# what double-clicking it asked for. Unfrozen keeps the 0.0.0.0 that main.py has
+# always used - that is a development server whose reachability from a phone on
+# the same network is often the point.
+SERVER_HOST = os.environ.get("SERVER_HOST", "127.0.0.1" if FROZEN else "0.0.0.0")
+SERVER_PORT = int(os.environ.get("SERVER_PORT", "5000"))
+
+# How long a statement waits for SQLite's write lock before giving up. See the
+# note in db.py for why WAL alone is not enough.
+#
+# 30s rather than the 5s this started at, because the timeout is wall-clock and
+# the lock holder is competing for CPU to reach its commit. A full batch runs
+# four jobs at once, and OpenCV and CTranslate2 each spread across every core -
+# measured at 93 threads and 850% CPU on a 16-core box. A request thread can
+# then wait seconds simply to be scheduled, and 5s of real time expired before
+# the writer got there: uploads 500'd with "database is locked" exactly when the
+# last of them collided with the work starting on all the rest.
+#
+# This treats the symptom. The cause is the oversubscription, and capping the
+# pools below is what actually fixes it.
+DB_BUSY_TIMEOUT_MS = int(os.environ.get("DB_BUSY_TIMEOUT_MS", "30000"))
 
 # Videos are large, so this is a stop rather than a policy. Left unset, Flask
 # reads a body of any size into a spool file, which - with no auth and a public
 # origin in the CORS list - is one request away from filling the disk.
 MAX_UPLOAD_BYTES = int(os.environ.get("MAX_UPLOAD_BYTES", str(4 * 1024**3)))
 
+# --- Public deployment gating -------------------------------------------------
+#
+# Everything below defaults to off, and with none of it set the server behaves
+# exactly as it did before any of it existed: no key, no limit, no reaping. That
+# is deliberate. A self-hoster running `py main.py` on their own machine is not
+# the threat model, and gating is something a *deployment* opts into rather than
+# a new baseline everyone pays for.
+#
+# The threat model is the one the two comments above already describe: a public
+# origin, no auth, and a 4GiB body allowance. Two keys rather than one because
+# the answer to "who is this?" here has exactly two useful values - the shared
+# key published in the client, which anyone has and which therefore has to be
+# assumed hostile, and the operator's own, which does not.
+PUBLIC_API_KEY = os.environ.get("PUBLIC_API_KEY", "")
+PRIVATE_API_KEY = os.environ.get("PRIVATE_API_KEY", "")
+
+# Whether tier resolution does anything at all. Both keys unset means every
+# caller is treated as private, which is what keeps the local quickstart working
+# with no configuration and no key header.
+AUTH_ENABLED = bool(PUBLIC_API_KEY or PRIVATE_API_KEY)
+
+# The public tier's own body limit, applied per-request on top of the global
+# MAX_UPLOAD_BYTES above (which stays the private ceiling). 0 means "no separate
+# limit" and the global one applies to everyone.
+#
+# When setting one, err high: this is a video tool, and a cap that rejects an
+# ordinary ten-minute upload makes the public tier a demo rather than a service.
+# The compose file uses 512MB.
+PUBLIC_MAX_UPLOAD_BYTES = int(os.environ.get("PUBLIC_MAX_UPLOAD_BYTES", "0"))
+
+# How many jobs may be waiting before the public tier is told to come back later.
+# 0 disables the check.
+#
+# This, not the rate limit, is what actually bounds CPU. A rate limit caps how
+# often work is *asked for*; on a 2-core box the queue is what decides whether
+# asking again is pointless. Rejecting at the door with a 503 is kinder than
+# accepting work that will sit behind an hour of someone else's.
+PUBLIC_MAX_QUEUE_DEPTH = int(os.environ.get("PUBLIC_MAX_QUEUE_DEPTH", "0"))
+
+# Per-IP rate limits for the public tier, in flask-limiter's syntax. The private
+# key is exempt from all three.
+#
+# The read limit has to be generous or normal use trips it: the client polls a
+# pending dataset every 1.5s (40/min each) and a bulk scan has several in flight
+# at once. The two write limits are where the actual cost is - an upload spends
+# bandwidth and disk, and starting a dataset spends minutes of CPU - so they are
+# counted per hour, which is the timescale a person works on, rather than per
+# minute, which only smooths bursts.
+PUBLIC_RATE_LIMIT = os.environ.get("PUBLIC_RATE_LIMIT", "600 per minute")
+PUBLIC_UPLOAD_RATE_LIMIT = os.environ.get("PUBLIC_UPLOAD_RATE_LIMIT", "20 per hour")
+PUBLIC_COMPUTE_RATE_LIMIT = os.environ.get("PUBLIC_COMPUTE_RATE_LIMIT", "120 per hour")
+
+# Cap on the upload directory, past which the least recently used videos are
+# deleted until it fits. 0 - the default - never deletes anything.
+#
+# Off by default because deleting someone's uploads is not a reasonable thing to
+# do to a self-hoster who has a disk and expects it to be used. On a shared box
+# it is the only thing standing between a public endpoint and a full volume,
+# since nothing else in the server has ever removed an upload.
+#
+# Deleting is safe rather than lossy: uploads are content-addressed and this
+# directory is a cache. The client holds the library in IndexedDB and re-uploads
+# on demand, so a reaped video costs one upload, not a record.
+UPLOAD_DIR_MAX_BYTES = int(os.environ.get("UPLOAD_DIR_MAX_BYTES", "0"))
+
+# How often the reaper wakes. It stats the upload directory, so unlike the
+# backfill sweep this is not free - hence minutes rather than seconds. Nothing
+# here needs to react quickly: the cap is a watermark, not a quota.
+UPLOAD_REAP_INTERVAL_SECONDS = int(os.environ.get("UPLOAD_REAP_INTERVAL_SECONDS", "300"))
+
+# Origins the browser client may call from. Env-overridable (comma-separated)
+# rather than the hardcoded list this used to be: a self-hoster serving the
+# client from anywhere else had to edit source to be allowed in.
+#
+# The hosted client is in the default list because of the bring-your-own-server
+# flow: someone can load the public site and point it at a server they run
+# themselves, and that request carries the *site's* origin, not theirs. Without
+# it here, every such server would reject the public client until its operator
+# found this setting.
+#
+# Only the stable project URL. Cloudflare's per-deployment and branch aliases
+# (f05a2548.open-insights-ccx.pages.dev and the like) are separate origins that
+# change on every build, so they are deliberately not listed - a preview
+# deployment cannot talk to a server, by design.
+ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get(
+        "ALLOWED_ORIGINS",
+        "http://localhost:4200,"
+        "http://localhost,"
+        "https://open-insights-ccx.pages.dev",
+    ).split(",")
+    if origin.strip()
+]
+
+# Whether the server explains how to connect a client to it - a banner on the
+# console at startup, and a page at / instead of the redirect to /status.
+#
+# This is the one setting here that defaults *on* and asks a deployment to opt
+# out, rather than defaulting off and asking it to opt in. Same principle as the
+# rest of this section, applied to a different audience: the person who needs
+# telling is the one who just double-clicked a binary and has a JSON endpoint
+# and no idea what to do with it, and they should not have to configure
+# anything to be told. A public server has the opposite need - its address is
+# not where anyone should be pointed to set up their own - so the Dockerfile
+# sets this to 0.
+#
+# It reveals nothing that is not already public: the origins the server accepts,
+# the model it runs, and whether a key is required. Never a key itself.
+SHOW_INSTRUCTIONS = os.environ.get("SHOW_INSTRUCTIONS", "1") == "1"
+
+# --- End public deployment gating ---------------------------------------------
+
 # Whisper runs through CTranslate2 (faster-whisper). device/compute_type are the
 # only settings that differ between a CPU box and a cloud GPU instance - cpu/int8
 # here, cuda/float16 there - so moving to a GPU is a config change, not a rewrite.
 # Set explicitly rather than device="auto" + compute_type="default", because
 # "default" resolves to float32 on CPU and gives back the little that int8 buys.
-WHISPER_MODEL = os.environ.get("WHISPER_MODEL", "turbo")
+WHISPER_MODEL = os.environ.get("WHISPER_MODEL", "tiny.en")
 WHISPER_DEVICE = os.environ.get("WHISPER_DEVICE", "cpu")
 WHISPER_COMPUTE_TYPE = os.environ.get("WHISPER_COMPUTE_TYPE", "int8")
 
-# Pinned rather than left to auto-detection. There is no English-only turbo build
-# - Whisper's .en variants stop at medium.en - so "turbo, English" is a language
-# pin on the multilingual weights, not a different model.
+# Pinned rather than left to auto-detection. The default weights are already an
+# English-only build, so this matches the model rather than constraining it; it
+# stays explicit because the model is an env var and a multilingual one set there
+# would otherwise silently fall back to detection.
 #
 # Detection otherwise runs on the first 30s window alone, so an instrumental
 # intro or a few accented seconds can mislabel an entire talk and return it
@@ -34,18 +187,20 @@ WHISPER_COMPUTE_TYPE = os.environ.get("WHISPER_COMPUTE_TYPE", "int8")
 WHISPER_LANGUAGE = os.environ.get("WHISPER_LANGUAGE", "en")
 
 # 0 lets CTranslate2 choose, which measured fastest: on a 300s clip this box did
-# 57.9s letting CT2 decide vs 69.3s pinned to 16 threads, and the *previous*
-# engine likewise got 8% slower when handed twice the threads. More threads is
-# not a free lever here - change this only with a measurement in hand.
+# 57.9s letting CT2 decide vs 69.3s pinned to 16 threads (measured on turbo, so
+# the absolute times are far above what the current default takes), and the
+# *previous* engine likewise got 8% slower when handed twice the threads. More
+# threads is not a free lever here - change this only with a measurement in hand.
 WHISPER_CPU_THREADS = int(os.environ.get("WHISPER_CPU_THREADS", "0"))
 
 # How many transcriptions may run at once. This is CTranslate2's inter_threads:
 # the weights are loaded once and each worker adds only its own compute buffers,
-# so a second worker costs a few hundred MB, not another ~1.6GB.
+# so a second worker costs a few hundred MB, not another copy of the weights.
 #
 # This is the knob that actually buys parallelism; the Python lock that used to
 # sit around transcribe() was never what serialised the work. Measured on 60s
-# clips, 16 threads, turbo/int8:
+# clips, 16 threads, turbo/int8 - the shape of the curve is what matters here,
+# not the absolute numbers, which a smaller model moves wholesale:
 #
 #   workers  concurrent  throughput   cores  model RSS
 #         1           1       3.49x    3.94     2063MB
@@ -72,15 +227,35 @@ WHISPER_NUM_WORKERS = int(os.environ.get("WHISPER_NUM_WORKERS", "2"))
 # sparse audio, hence the flag.
 WHISPER_VAD = os.environ.get("WHISPER_VAD", "0") == "1"
 
-# Where CTranslate2 weights live (~1.6GB for turbo). Point this at a baked image
-# path or mounted volume in cloud so a cold container doesn't download them on
-# its first request. None means the default HuggingFace cache.
+# Where CTranslate2 weights live (~75MB for tiny.en, ~1.6GB for turbo). Point
+# this at a baked image path or mounted volume in cloud so a cold container
+# doesn't download them on its first request. None means the default
+# HuggingFace cache.
 #
 # The server runs with local_files_only=True (see processing.py) and never
 # downloads, so this directory must already be populated before it starts.
 # Run scripts/fetch_whisper_model.py to pull or update the model into it - it
 # reads this same env var, so the two always agree on location.
 WHISPER_MODEL_DIR = os.environ.get("WHISPER_MODEL_DIR") or None
+
+# What processing.py actually hands to WhisperModel. Normally the model *name*
+# above, which faster-whisper resolves through the cache in WHISPER_MODEL_DIR -
+# but a frozen build carries its weights inside the executable, so there it is
+# the absolute path of the unpacked copy. faster-whisper's first argument is
+# `model_size_or_path` and takes a directory of CTranslate2 files directly,
+# which avoids asking huggingface_hub to interpret a cache layout offline.
+#
+# Separate from WHISPER_MODEL rather than overwriting it, because WHISPER_MODEL
+# feeds TRANSCRIPT_PRODUCER below. Folding the path in there would stamp every
+# row with a machine-specific producer - a different temporary directory on
+# every launch, in fact - so nothing would ever read as cached and no result
+# would be shareable with a server that computed it under the plain name.
+_bundled_model = bundled("models", WHISPER_MODEL) if FROZEN else None
+WHISPER_MODEL_PATH = (
+    str(_bundled_model)
+    if _bundled_model is not None and _bundled_model.is_dir()
+    else WHISPER_MODEL
+)
 
 # How different a frame must be from its predecessor to count as a scene change.
 # Lifted out of processing.py, where it sat as a default argument that nothing
