@@ -125,5 +125,5 @@ Two more things a public box wants, both set in `docker-compose.yml`:
   scene stats are **kept**, so a reaped video costs one re-upload rather than a
   re-transcription.
 
-Deployment notes, including the Oracle Always Free host and its firewall
-gotchas, are in the deployment plan.
+Deployment notes, including host provisioning and firewall setup, are in the
+deployment plan.
