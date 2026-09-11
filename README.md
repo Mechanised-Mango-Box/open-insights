@@ -4,105 +4,108 @@ A video analysis tool for audio/video features and audience engagement.
 
 ## Quickstart
 
-Go to https://open-insights-ccx.pages.dev/
-
-Scanning uses a shared public server, which is rate limited. Everything else -
-importing, analysis and export - runs entirely in your browser.
-
-## Functionality
+1. Go to https://open-insights-ccx.pages.dev/
+2. Download the server and run it locally.
 
 ### Export
 
-This tool will export the results that you have in the following format:
+Exporting your results gives you `open-insights-export-<timestamp>.zip`, laid out
+like this:
 
 ```
-output/
-  |-- manifest.json
-  |-- transcript/
-  |     |-- abcd1234.srt
-  |     `-- hjkl0987.srt
-  |
-  |-- video_files/
-  |     |-- abcd1234.mp4
-  |     `-- hjkl0987.mkv
-  |
-(And so on...)
+manifest.json
+transcript/
+  |-- abcd1234.srt
+  `-- hjkl0987.srt
+video_files/
+  |-- abcd1234.mp4
+  `-- hjkl0987.mkv
+audience_retention/
+  |-- abcd1234.json
+  `-- hjkl0987.json
 ```
 
 - Simple data will be stored within the `manifest.json`
 - Complex/large data will be given a sub-directory, `manifest.json` will link to it instead
-- Transcripts are written as SRT so they read as subtitles and import back without loss
 
 ### Import
 
-"Import From: Export Zip" on the Import step reads one of the above back in, video files
-included. Records already in your library are only ever filled in, never overwritten - so
-re-importing a zip is safe, and an older export cannot undo newer work.
+The output `.zip` can be similarly imported back into the app.
+
+### Browser compute (experimental)
+
+Run certain jobs on the browser instead
+
+- Transcription needs WebGPU
+- Scene stats read MP4 and MOV only
+
+> It is unstable and may be slow. Off by default
 
 ## For Developers/Hosts
 
 ### Client
 
-A static site which renders and manages local data, and communicates with the nominated server for its calculations.
+A static site. Manages your local data and sends calculation work to the configured server.
 
 ```sh
 cd ./client
-ng serve
+npm install
+npm start
 ```
 
 ### Server
 
-A REST API server which performs the calculations for video analysis as well as model training and inference. It caches results based on the video's hash.
+A REST API server. Runs video analysis, model training and inference, and caches results by video hash.
 
-The server never downloads its own transcription model - fetch it once before first run (and again whenever `WHISPER_MODEL` changes):
+Fetch the transcription model once before the first run, and again whenever `WHISPER_MODEL` changes:
 
 ```sh
 cd ./server
-py scripts/fetch_whisper_model.py
-py main.py
+pip install -r requirements.txt
+python scripts/fetch_whisper_model.py
+python main.py
 ```
-
-That gives you an **open** server: no key, no rate limit, and nothing ever
-deleted. That is the right default for something on your own machine, and it is
-what every gating setting in `config.py` is switched off to preserve.
 
 ## Build and deploy your own
 
 ### A portable executable
 
-One file, no Python, no pip, no network - the transcription weights are inside it:
+A single file with the transcription weights inside. No Python, no pip, no network.
 
 ```sh
 cd ./server
-python scripts/build_portable.py
+python scripts/build_portable.py    # --install fetches what is missing
 ```
-
 Leaves `dist/open-insights-server-<platform>-x86_64`. Run it anywhere: it keeps
 its database and uploads in a `data` directory beside itself, and prints how to
 point a client at it. Set `SHOW_INSTRUCTIONS=0` to silence that.
 
-- **Build it on the platform you will run it on.** PyInstaller cannot
-  cross-compile, and a Linux build will not run on an older distribution than the
-  machine that made it.
-- **It binds `127.0.0.1` only**, unlike `py main.py`. `SERVER_HOST=0.0.0.0` opens
-  it up - read the next section before you do.
-- **It unpacks itself on every launch**, so startup costs a few seconds.
+- Build it on the platform you will run it on. PyInstaller cannot cross-compile,
+  and a Linux build will not run on an older distribution than the one that built it.
+- Binds `127.0.0.1` only, unlike `python main.py`. Set `SERVER_HOST=0.0.0.0` to expose it.
+- Unpacks itself on every launch, so startup takes a few seconds.
 
 ### A public server
 
-Everything needed to put it on the internet is off by default and turned on
-through the environment. `docker-compose.yml` sets the lot, and brings up Caddy
-alongside it to get and renew a TLS certificate:
+Public-facing features are off by default and enabled through the environment.
+`docker-compose.yml` sets them, and runs Caddy alongside for TLS certificates.
 
 ```sh
-cp .env.example .env      # fill in the keys, hostname and origin
+cp .env.example .env
 docker compose up -d --build
 ```
 
-`SITE_ADDRESS` must be a real hostname (a free DuckDNS subdomain pointed at the
-box) rather than a bare IP, which cannot have a certificate.
+Required in `.env`:
 
-Two keys, sent as `X-API-Key`:
+- `SITE_ADDRESS` - a real hostname, not a bare IP. A free DuckDNS subdomain works.
+- `ALLOWED_ORIGINS` - where your client is served from. Compose will not start without it.
+- `DATA_DIR` - must exist and be writable by uid 1000 before the first `up`.
+  See `.env.example` for the `chown`.
+- `PUBLIC_API_KEY` and `PRIVATE_API_KEY`.
+
+#### API keys
+
+Sent as `X-API-Key`.
 
 | | `PUBLIC_API_KEY` | `PRIVATE_API_KEY` |
 |---|---|---|
@@ -111,19 +114,17 @@ Two keys, sent as `X-API-Key`:
 | Upload size | `PUBLIC_MAX_UPLOAD_BYTES` | `MAX_UPLOAD_BYTES` |
 | Queue depth | refused past `PUBLIC_MAX_QUEUE_DEPTH` | never refused |
 
-The public key is **not a secret** and nothing here treats it as one - it is
-served inside a public static site. What it buys is friction against scripted
-abuse and something you can rotate. The caps above are what actually bound cost.
+> The public key is not a secret. It ships inside a public static site. It exists to
+> slow down scripted abuse and to give you something to rotate. The size and queue
+> caps are what limit your costs.
 
-Two more things a public box wants, both set in `docker-compose.yml`:
+#### Recommended settings
 
-- `BACKFILL_ENABLED=0`. The idle sweep is the only thing that starts work nobody
-  asked for; on a shared server that means transcribing every stranger's upload
-  unprompted. Dead jobs are still reclaimed on the request path.
-- `UPLOAD_DIR_MAX_BYTES`. Nothing else in the server has ever deleted an upload.
-  Past this watermark the oldest videos are removed - but their transcripts and
-  scene stats are **kept**, so a reaped video costs one re-upload rather than a
-  re-transcription.
+Set in `docker-compose.yml`.
 
-Deployment notes, including host provisioning and firewall setup, are in the
-deployment plan.
+- `BACKFILL_ENABLED=0` - stops the idle sweep transcribing uploads nobody asked for.
+  Dead jobs are still reclaimed on the request path.
+- `UPLOAD_DIR_MAX_BYTES` - deletes the oldest videos past this size. Transcripts and
+  scene stats are kept, so a deleted video costs one re-upload.
+- `MAX_BODY_SIZE` - Caddy's own cap. Keep it at or above `PUBLIC_MAX_UPLOAD_BYTES`
+  or uploads fail at the proxy.
