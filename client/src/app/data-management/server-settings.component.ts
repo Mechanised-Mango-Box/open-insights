@@ -3,7 +3,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { ServerConfigService, LOCAL_SERVER_URL, DEFAULT_API_KEY } from './server-config.service';
+import {
+  ServerConfigService,
+  LOCAL_SERVER_URL,
+  DEFAULT_SERVER_URL,
+  DEFAULT_API_KEY,
+} from './server-config.service';
 import { ComputeConfigService, ComputeTarget } from './compute-config.service';
 import { ComputeQueueService } from './local-compute/compute-queue.service';
 import {
@@ -21,11 +26,34 @@ import {
  * own - it reads the URL set directly above it, and reading that URL is half of
  * what it is for.
  */
+/**
+ * The one failure a status 0 cannot explain but we can: a page served over
+ * https cannot reach an http:// server, and the browser blocks it as mixed
+ * content before a request is made. localhost is the exception - it counts as
+ * a trustworthy origin - which is exactly why a LAN address looks identical to
+ * the user and fails anyway.
+ */
+function mixedContentHint(url: string): string {
+  try {
+    const target = new URL(url);
+    const isLoopback =
+      target.hostname === 'localhost' ||
+      target.hostname === '127.0.0.1' ||
+      target.hostname === '[::1]';
+    if (location.protocol === 'https:' && target.protocol === 'http:' && !isLoopback) {
+      return ' - an http:// server other than localhost cannot be reached from this https page';
+    }
+  } catch {
+    // Not a URL we can parse; the generic reason above is all there is to say.
+  }
+  return '';
+}
+
 /** Turns whatever a provider rejected with into something a person can act on. */
-function describeRequestFailure(error: unknown): string {
+function describeRequestFailure(error: unknown, url: string): string {
   if (error instanceof HttpErrorResponse) {
     if (error.status === 0) {
-      return 'no response (unreachable, DNS, TLS or blocked by CORS)';
+      return `no response (unreachable, DNS, TLS or blocked by CORS)${mixedContentHint(url)}`;
     }
     if (error.status === 401 || error.status === 403) {
       return `${error.status} - the server refused this API key`;
@@ -59,6 +87,7 @@ function describeRequestFailure(error: unknown): string {
               placeholder="http://localhost:5000"
             />
           </mat-form-field>
+          <button mat-stroked-button type="button" (click)="usePublic()">Use public</button>
           <button mat-stroked-button type="button" (click)="useLocal()">Use local</button>
           <button mat-raised-button color="primary" type="button" (click)="save()">Save</button>
         </div>
@@ -230,12 +259,6 @@ function describeRequestFailure(error: unknown): string {
         gap: 24px;
         max-width: 80ch;
       }
-      .card {
-        background: var(--mat-sys-surface-container);
-        border: 1px solid var(--mat-sys-outline-variant);
-        border-radius: 12px;
-        padding: 20px 24px;
-      }
       h2 {
         font: var(--mat-sys-title-medium);
         margin: 0 0 4px;
@@ -366,8 +389,24 @@ export class ServerSettingsComponent {
     this.draftUrl.set((event.target as HTMLInputElement).value);
   }
 
+  /**
+   * Both of these stage the URL *and* the key, because the two belong together:
+   * a server started with no keys wants no X-API-Key header at all, and the
+   * shared key is meaningless anywhere but the public box. Leaving the key
+   * behind was how "Use local" used to hand a self-run server a credential its
+   * owner never set - harmless against a keyless server, a 403 against one with
+   * keys configured.
+   *
+   * Drafts only, like everything else in this card: Save is what commits.
+   */
+  usePublic(): void {
+    this.draftUrl.set(DEFAULT_SERVER_URL);
+    this.draftKey.set(DEFAULT_API_KEY);
+  }
+
   useLocal(): void {
     this.draftUrl.set(LOCAL_SERVER_URL);
+    this.draftKey.set('');
   }
 
   save(): void {
@@ -399,7 +438,7 @@ export class ServerSettingsComponent {
       // generic String(error) below renders it as "[object Object]" and hides the
       // one thing worth knowing. status 0 is the browser refusing to hand over a
       // reason - unreachable, DNS, TLS or a CORS block all look identical here.
-      this.error.set(describeRequestFailure(error));
+      this.error.set(describeRequestFailure(error, this.serverConfig.serverUrl()));
       // Cleared rather than left on screen: counts from a server that just failed to
       // answer are of unknown age, and reading them as current is the whole risk.
       this.status.set(null);
