@@ -1,6 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
 
 /*
+ * The surface a group of related controls sits on. Every workflow step puts its
+ * buttons in one of these, and Settings puts each of its sections in one.
+ *
+ * It carries no heading: the view header above already prints the step's name
+ * and blurb, so a title in here would say the same thing twice. What the card is
+ * for is the edge - it says where the step's controls stop and the record table
+ * below starts, which on Import and Scan was previously left to whitespace.
+ *
+ * Global because these same four declarations had been written out separately in
+ * three components. Combine it with `.actions-column` on one element where the
+ * card holds nothing but a stack of actions.
+ */
+.card {
+  background: var(--mat-sys-surface-container);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 12px;
+  padding: 20px 24px;
+}
+
+/*
  * Shared layout for the action buttons at the top of a page.
  *
  * Global rather than repeated per component: every workflow step renders a row
@@ -9,12 +29,20 @@
  * that did not follow the theme. One rule keeps them in step.
  *
  * The convention the pages follow:
+ *   - Each step's controls live in one `.card`, stacked one action per row. The
+ *     card carries no heading; the view header above already names the step.
+ *   - Every action button carries a leading `<mat-icon>`. Stacked in a column
+ *     the icons line up into their own edge, which is most of what makes a group
+ *     of buttons read as a list rather than a pile of boxes.
  *   - `mat-raised-button color="primary"` is the single action that advances
  *     the workflow on that page. A page with several equal choices has none.
  *   - `mat-stroked-button` is everything else: alternatives, and auxiliary
  *     actions like Save or Check status.
  *   - `color="accent"` is not used. It had been applied to some buttons and not
  *     others with no rule behind it, which read as meaning rather than noise.
+ *   - A status line belonging to one action sits beside that action, inside its
+ *     `.actions` row. A status several actions share sits on its own line at the
+ *     foot of the card - beside any one button it would describe the wrong run.
  */
 .actions {
   display: flex;
@@ -33,9 +61,15 @@
 }
 
 /* Stacked actions read as a list, so a common button width lines up both their
-   edges and the status text beside them. */
+   edges and the status text beside them. The floor is set above the longest label
+   the app has ("Import From: Youtube Content", icon included) - a button that
+   overruns it pushes its own status line out of the column, which is the one
+   thing this rule exists to prevent. Content is left-aligned rather than
+   Material's default centre so the icons stack into a single edge instead of
+   drifting inward with each label's length. */
 .actions-column .actions > button {
-  min-width: 220px;
+  min-width: 300px;
+  justify-content: flex-start;
 }
 
 /* Progress and outcome text sitting beside or beneath an action. */
@@ -45,7 +79,8 @@
   margin: 0;
 }
 
-/* Explanatory text under a group of actions. */
+/* Explanatory text about a group of actions: what they will act on, what they
+   require, what they cost. */
 .action-hint {
   font: var(--mat-sys-body-small);
   color: var(--mat-sys-on-surface-variant);

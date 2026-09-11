@@ -9,6 +9,7 @@ import {
   viewChildren,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 import {
   BarController,
   BarElement,
@@ -84,29 +85,39 @@ const FEATURE_KEYS = Object.keys(FEATURE_LABELS) as FeatureKey[];
 @Component({
   selector: 'analysis',
   standalone: true,
-  imports: [MatButtonModule],
+  imports: [MatButtonModule, MatIcon],
   template: `
     <div class="analysis-page">
-      <div class="actions">
-        <button mat-raised-button color="primary" (click)="runAnalysis()" [disabled]="loading()">
-          Run Analysis
-        </button>
-        <button
-          mat-stroked-button
-          (click)="exportAnalysis()"
-          [disabled]="!hasResult() || exporting()"
-        >
-          Export Analysis
-        </button>
+      <section class="card actions-column">
+        <p class="action-hint">{{ scopeLabel() }}</p>
+
+        <div class="actions">
+          <button mat-raised-button color="primary" (click)="runAnalysis()" [disabled]="loading()">
+            <mat-icon>play_arrow</mat-icon>
+            Run Analysis
+          </button>
+        </div>
+
+        <div class="actions">
+          <button
+            mat-stroked-button
+            (click)="exportAnalysis()"
+            [disabled]="!hasResult() || exporting()"
+          >
+            <mat-icon>download</mat-icon>
+            Export Analysis
+          </button>
+        </div>
+
+        <!-- At the foot rather than beside Run Analysis: both actions write this, so a
+             failed export would otherwise report itself against the wrong button. -->
         @if (statusMessage()) {
           <p class="action-status">{{ statusMessage() }}</p>
         }
-      </div>
-
-      <p class="action-hint">{{ scopeLabel() }}</p>
+      </section>
 
       @if (!hasResult()) {
-        <div class="empty-state">
+        <div class="card empty-state">
           <p>Run the analysis to see correlations and distributions across the dataset.</p>
         </div>
       }
@@ -148,12 +159,6 @@ const FEATURE_KEYS = Object.keys(FEATURE_LABELS) as FeatureKey[];
         display: flex;
         flex-direction: column;
         gap: 24px;
-      }
-      .empty-state {
-        background: var(--mat-sys-surface-container);
-        border: 1px solid var(--mat-sys-outline-variant);
-        border-radius: 12px;
-        padding: 24px;
       }
       .empty-state p {
         margin: 0;
@@ -230,7 +235,8 @@ export class AnalysisComponent implements AfterViewInit {
   protected readonly featureKeys = FEATURE_KEYS;
   protected readonly featureLabels = FEATURE_LABELS;
 
-  private correlationCanvas = viewChild.required<ElementRef<HTMLCanvasElement>>('correlationCanvas');
+  private correlationCanvas =
+    viewChild.required<ElementRef<HTMLCanvasElement>>('correlationCanvas');
   private histCanvases = viewChildren<ElementRef<HTMLCanvasElement>>('histCanvas');
   private loessCanvases = viewChildren<ElementRef<HTMLCanvasElement>>('loessCanvas');
 
@@ -382,7 +388,11 @@ export class AnalysisComponent implements AfterViewInit {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            title: { display: true, text: `Distribution of ${FEATURE_LABELS[key]}`, color: CHART_INK },
+            title: {
+              display: true,
+              text: `Distribution of ${FEATURE_LABELS[key]}`,
+              color: CHART_INK,
+            },
             legend: { display: false },
           },
         },
@@ -413,7 +423,11 @@ export class AnalysisComponent implements AfterViewInit {
           maintainAspectRatio: false,
           plugins: {
             // The legend inherits Chart.defaults.color, which the theme swap sets.
-            title: { display: true, text: `Engagement vs ${FEATURE_LABELS[key]}`, color: CHART_INK },
+            title: {
+              display: true,
+              text: `Engagement vs ${FEATURE_LABELS[key]}`,
+              color: CHART_INK,
+            },
           },
         },
       });

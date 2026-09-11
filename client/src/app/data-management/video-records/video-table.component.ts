@@ -55,6 +55,14 @@ const TABLE_COLUMN_STYLES = `
   }
 `;
 
+/** The one thing the global `.actions` rule does not carry: this row sits above the
+    table and has to clear it. */
+const BULK_ACTIONS_STYLES = `
+  .bulk-actions {
+    margin-bottom: 12px;
+  }
+`;
+
 @Component({
   selector: 'video-table',
   standalone: true,
@@ -68,7 +76,7 @@ const TABLE_COLUMN_STYLES = `
     MatIcon,
   ],
   templateUrl: './video-table.component.html',
-  styles: [STATUS_ICON_STYLES, TABLE_COLUMN_STYLES],
+  styles: [STATUS_ICON_STYLES, TABLE_COLUMN_STYLES, BULK_ACTIONS_STYLES],
 })
 export class VideoTableComponent {
   private dialog = inject(MatDialog);

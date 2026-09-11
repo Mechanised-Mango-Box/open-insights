@@ -26,7 +26,7 @@ const formatBytes = (bytes: number): string => {
 @Component({
   selector: 'export-records',
   template: `
-    <div class="actions-column">
+    <section class="card actions-column">
       <mat-slide-toggle
         [checked]="includeVideoFiles()"
         (change)="includeVideoFiles.set($event.checked)"
@@ -41,24 +41,28 @@ const formatBytes = (bytes: number): string => {
         </p>
       }
 
-      <button
-        mat-raised-button
-        color="primary"
-        [disabled]="selectionService.isEmpty() || pending()"
-        (click)="exportSelected()"
-      >
-        <mat-icon>download</mat-icon>
-        Export Selected
-      </button>
+      <div class="actions">
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="selectionService.isEmpty() || pending()"
+          (click)="exportSelected()"
+        >
+          <mat-icon>download</mat-icon>
+          Export Selected
+        </button>
+        @if (status()) {
+          <p class="action-status">{{ status() }}</p>
+        }
+      </div>
 
+      <!-- After the button, not before: this explains why it is greyed out, which is
+           read having already found it greyed out. The toggle and its size hint go
+           above because they change what the button will do. -->
       @if (selectionService.isEmpty()) {
         <p class="action-hint">Tick the records you want in the table below.</p>
       }
-
-      @if (status()) {
-        <p class="action-status">{{ status() }}</p>
-      }
-    </div>
+    </section>
   `,
   imports: [MatButtonModule, MatIcon, MatSlideToggleModule],
 })
