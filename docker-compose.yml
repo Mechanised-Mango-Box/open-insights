@@ -70,7 +70,7 @@ services:
       # still reclaimed, on the GET/POST paths - see start_upload_reaper().
       BACKFILL_ENABLED: "0"
 
-      # Sized for the 2 OCPU Always Free box. The defaults assume a 16-core
+      # Sized for a 2 vCPU host. The defaults assume a 16-core
       # machine and deliberately oversubscribe it; config.py's comment measures
       # the result at 93 threads and 850% CPU. OMP_/OPENCV_ are honoured by
       # OpenBLAS and OpenCV, which nothing in the code sets.

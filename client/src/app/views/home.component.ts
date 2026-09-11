@@ -1,30 +1,21 @@
 import { Component, output } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { ViewId, WORKFLOW } from './views';
+import { ServerChoiceCardComponent } from '../data-management/server-choice-card.component';
 
 /**
- * The landing view, reached by clicking the app name in the sidebar. Says what the tool is,
- * where the data and the compute each live, and lays the steps out in the order the sidebar
- * lists them - each card jumping straight to its step. The step icons and one-line blurbs
- * come from WORKFLOW, so the cards can't drift from the sidebar and the view headers.
+ * The landing view, reached by clicking the app name in the sidebar. Opens on where the
+ * compute happens - the one choice that has to be made before Scan does anything - then
+ * lays the steps out in the order the sidebar lists them, each card jumping straight to
+ * its step. The step icons and one-line blurbs come from WORKFLOW, so the cards can't
+ * drift from the sidebar and the view headers.
  */
 @Component({
   selector: 'home-overview',
-  imports: [MatIcon],
+  imports: [MatIcon, ServerChoiceCardComponent],
   template: `
     <div class="home">
-      <section class="setup">
-        <div class="fact"></div>
-        <div class="fact">
-          <mat-icon>dns</mat-icon>
-          <p>
-            <strong>A dataset server does the compute.</strong> Scanning uses the shared public
-            server by default, which is rate limited - point
-            <button class="jump" (click)="navigate.emit('settings')">Settings</button> at your own
-            to lift that. Only Scan needs it; Import, Analysis and Export all run in this browser.
-          </p>
-        </div>
-      </section>
+      <server-choice-card (navigate)="navigate.emit($event)" />
 
       <section>
         <h2>The workflow</h2>
@@ -62,12 +53,8 @@ import { ViewId, WORKFLOW } from './views';
         /* Wide enough for the four step cards; the prose blocks keep their own measure. */
         max-width: 760px;
       }
-      .lead {
-        font: var(--mat-sys-body-large);
-        max-width: 62ch;
-        margin: 0 0 20px;
-      }
-      section {
+      section,
+      server-choice-card {
         margin: 0 0 20px;
       }
       h2 {
@@ -78,16 +65,12 @@ import { ViewId, WORKFLOW } from './views';
         margin: 0;
         max-width: 62ch;
       }
-      /* An icon in a fixed column, so the text beside each one lines up. */
-      .fact,
+      /* An icon in a fixed column, so the text beside it lines up. */
       .callout {
         display: grid;
         grid-template-columns: 20px 1fr;
         gap: 10px;
         align-items: start;
-      }
-      .fact {
-        margin-bottom: 8px;
       }
       .steps {
         display: grid;
@@ -149,23 +132,6 @@ import { ViewId, WORKFLOW } from './views';
         width: 28px;
         height: 28px;
         color: var(--mat-sys-primary);
-      }
-      code {
-        font-family: monospace;
-        background: var(--mat-sys-surface-container-high);
-        border-radius: 4px;
-        padding: 1px 5px;
-      }
-      /* A step name that reads as part of the sentence but jumps to that step. */
-      .jump {
-        appearance: none;
-        background: none;
-        border: 0;
-        padding: 0;
-        font: inherit;
-        color: var(--mat-sys-primary);
-        text-decoration: underline;
-        cursor: pointer;
       }
       .callout {
         background: var(--mat-sys-surface-container);
