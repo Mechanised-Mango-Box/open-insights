@@ -1,5 +1,6 @@
 import { Component, computed, inject, output } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { ViewId } from '../views/views';
 import { DEFAULT_SERVER_URL, ServerConfigService } from './server-config.service';
 import {
@@ -19,7 +20,7 @@ import {
 @Component({
   selector: 'server-choice-card',
   standalone: true,
-  imports: [MatIcon],
+  imports: [MatIcon, MatButtonModule],
   template: `
     <section class="choice">
       <div class="intro">
@@ -49,6 +50,9 @@ import {
             and new jobs are refused once {{ queueDepth }} are already waiting.
           </p>
           <p class="verdict">Fine for a few videos; slow for a dataset.</p>
+          @if (!onPublic()) {
+            <button mat-stroked-button type="button" (click)="usePublic()">Use this server</button>
+          }
         </div>
 
         <div class="option" [class.in-use]="!onPublic()">
@@ -65,10 +69,15 @@ import {
             behind anyone else, and none of the caps above apply.
           </p>
           <p class="verdict">It goes as fast as that machine does.</p>
-          <a class="download" [href]="releasesUrl" target="_blank" rel="noopener">
-            <mat-icon>download</mat-icon>
-            Download a release
-          </a>
+          <div class="option-actions">
+            <a class="download" [href]="releasesUrl" target="_blank" rel="noopener">
+              <mat-icon>download</mat-icon>
+              Download a release
+            </a>
+            @if (onPublic()) {
+              <button mat-stroked-button type="button" (click)="useLocal()">Use this server</button>
+            }
+          </div>
         </div>
       </div>
     </section>
@@ -143,6 +152,14 @@ import {
       .verdict {
         color: var(--mat-sys-on-surface);
       }
+      /* The download link and the switch sit on one row where both are shown,
+         and wrap rather than squeeze when the panels narrow. */
+      .option-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
       .download {
         display: inline-flex;
         align-items: center;
@@ -196,4 +213,20 @@ export class ServerChoiceCardComponent {
   );
 
   navigate = output<ViewId>();
+
+  /**
+   * Only the panel that is *not* in use offers a button, so there is never a
+   * disabled control or one whose guard would quietly no-op behind it.
+   */
+  protected usePublic(): void {
+    this.serverConfig.usePublicServer();
+  }
+
+  /** Switches, then goes where it can be checked - the same reason the dialog
+   * lands on Settings, since a local server nobody has started yet is the
+   * likeliest next problem. */
+  protected useLocal(): void {
+    this.serverConfig.useLocalServer();
+    this.navigate.emit('settings');
+  }
 }

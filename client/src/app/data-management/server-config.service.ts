@@ -36,7 +36,7 @@ export class ServerConfigService {
     const trimmed = url.trim().replace(/\/+$/, '');
     if (!trimmed) return;
     this.serverUrl.set(trimmed);
-    this.write(STORAGE_KEY, trimmed);
+    this.remember(STORAGE_KEY, trimmed, DEFAULT_SERVER_URL);
   }
 
   /** Unlike the URL, an empty key is a legitimate value - it is what you want
@@ -44,16 +44,12 @@ export class ServerConfigService {
   setApiKey(key: string): void {
     const trimmed = key.trim();
     this.apiKey.set(trimmed);
-    this.write(API_KEY_STORAGE_KEY, trimmed);
+    this.remember(API_KEY_STORAGE_KEY, trimmed, DEFAULT_API_KEY);
   }
 
   /**
-   * Back to the server this build ships with.
-   *
-   * Clears the stored values rather than writing the current constants into
-   * them: an absent setting means "follow whatever the bundle points at", which
-   * is how a change of host reaches everyone who never chose anything. Writing
-   * DEFAULT_SERVER_URL in would pin this browser to today's address forever.
+   * Back to the server this build ships with. The setters take care of not
+   * storing the defaults, so this browser keeps following the bundle.
    *
    * Guarded, because this runs from a dialog that opens on every load: someone
    * who pasted a private key - the rate-limit-exempt one - against the shared
@@ -61,10 +57,8 @@ export class ServerConfigService {
    */
   usePublicServer(): void {
     if (this.serverUrl() === DEFAULT_SERVER_URL) return;
-    this.serverUrl.set(DEFAULT_SERVER_URL);
-    this.apiKey.set(DEFAULT_API_KEY);
-    this.clear(STORAGE_KEY);
-    this.clear(API_KEY_STORAGE_KEY);
+    this.setServerUrl(DEFAULT_SERVER_URL);
+    this.setApiKey(DEFAULT_API_KEY);
   }
 
   /**
@@ -87,6 +81,22 @@ export class ServerConfigService {
     } catch {
       return null;
     }
+  }
+
+  /**
+   * Stores a setting, except when it matches what this build already ships -
+   * then it removes it instead.
+   *
+   * Absence is meaningful here: it means "follow whatever the bundle points
+   * at", which is how a change of host or a rotated public key reaches everyone
+   * who never chose otherwise. Writing today's default in would pin this browser
+   * to today's value forever, and it would do so through whichever surface the
+   * user happened to use - hence the rule living down here rather than in the
+   * one method that first needed it.
+   */
+  private remember(key: string, value: string, shipped: string): void {
+    if (value === shipped) this.clear(key);
+    else this.write(key, value);
   }
 
   private write(key: string, value: string): void {

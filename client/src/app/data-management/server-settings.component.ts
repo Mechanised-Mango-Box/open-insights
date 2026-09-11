@@ -3,7 +3,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { ServerConfigService, LOCAL_SERVER_URL, DEFAULT_API_KEY } from './server-config.service';
+import {
+  ServerConfigService,
+  LOCAL_SERVER_URL,
+  DEFAULT_SERVER_URL,
+  DEFAULT_API_KEY,
+} from './server-config.service';
 import { ComputeConfigService, ComputeTarget } from './compute-config.service';
 import { ComputeQueueService } from './local-compute/compute-queue.service';
 import {
@@ -82,6 +87,7 @@ function describeRequestFailure(error: unknown, url: string): string {
               placeholder="http://localhost:5000"
             />
           </mat-form-field>
+          <button mat-stroked-button type="button" (click)="usePublic()">Use public</button>
           <button mat-stroked-button type="button" (click)="useLocal()">Use local</button>
           <button mat-raised-button color="primary" type="button" (click)="save()">Save</button>
         </div>
@@ -383,8 +389,24 @@ export class ServerSettingsComponent {
     this.draftUrl.set((event.target as HTMLInputElement).value);
   }
 
+  /**
+   * Both of these stage the URL *and* the key, because the two belong together:
+   * a server started with no keys wants no X-API-Key header at all, and the
+   * shared key is meaningless anywhere but the public box. Leaving the key
+   * behind was how "Use local" used to hand a self-run server a credential its
+   * owner never set - harmless against a keyless server, a 403 against one with
+   * keys configured.
+   *
+   * Drafts only, like everything else in this card: Save is what commits.
+   */
+  usePublic(): void {
+    this.draftUrl.set(DEFAULT_SERVER_URL);
+    this.draftKey.set(DEFAULT_API_KEY);
+  }
+
   useLocal(): void {
     this.draftUrl.set(LOCAL_SERVER_URL);
+    this.draftKey.set('');
   }
 
   save(): void {

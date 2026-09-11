@@ -73,6 +73,35 @@ describe('ServerConfigService', () => {
     expect(localStorage.getItem('openInsights.serverApiKey')).toBeNull();
   });
 
+  it('never stores a value the build already ships, whichever setter wrote it', () => {
+    // Settings commits through the plain setters, so the property has to hold
+    // there too - otherwise pressing "Use public" and Save pins this browser to
+    // today's address, which is exactly what usePublicServer avoids.
+    server.setServerUrl(DEFAULT_SERVER_URL);
+    server.setApiKey(DEFAULT_API_KEY);
+
+    expect(server.serverUrl()).toBe(DEFAULT_SERVER_URL);
+    expect(server.apiKey()).toBe(DEFAULT_API_KEY);
+    expect(localStorage.getItem('openInsights.serverUrl')).toBeNull();
+    expect(localStorage.getItem('openInsights.serverApiKey')).toBeNull();
+  });
+
+  it('still stores anything that is not the default', () => {
+    server.setServerUrl('http://box.lan:5000');
+    server.setApiKey('a-private-key');
+
+    expect(localStorage.getItem('openInsights.serverUrl')).toBe('http://box.lan:5000');
+    expect(localStorage.getItem('openInsights.serverApiKey')).toBe('a-private-key');
+  });
+
+  it('stores an emptied key, which is not the same as never having set one', () => {
+    // '' is a real choice - no X-API-Key header - and has to survive a reload,
+    // so it must be written rather than treated as "nothing stored".
+    server.setApiKey('');
+
+    expect(localStorage.getItem('openInsights.serverApiKey')).toBe('');
+  });
+
   it('leaves a server the user brought themselves alone', () => {
     const theirs = 'http://box.lan:5000';
     server.setServerUrl(theirs);
