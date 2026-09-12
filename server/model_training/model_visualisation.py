@@ -10,13 +10,13 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from model_training.data_preparation import (
+from server.model_training.data_preparation import (
     FEATURE_COLUMNS,
     TARGET_COLUMN,
     prepare_training_data,
 )
-from model_training.train import load_model_artifacts
-from model_training.regression import predict_engagement
+from server.model_training.train import load_model_artifacts
+from server.model_training.regression import predict_engagement
 
 # Display names for human-readable plotting
 FEATURE_DISPLAY_NAMES: Dict[str, str] = {
@@ -25,6 +25,8 @@ FEATURE_DISPLAY_NAMES: Dict[str, str] = {
     "wpm": "Average speaking speed (wpm)",
     "scene_count": "Total number of scenes",
     "scene_change_rate": "Average scenes change rate (spm)",
+    "speech_pace_variation": "Speech pace variation (WPM SD)",
+    "speaking_ratio": "Speaking ratio",
 }
 
 

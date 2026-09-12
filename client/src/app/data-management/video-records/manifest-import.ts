@@ -127,7 +127,8 @@ export async function parseExportZip(
   file: File | Blob,
   onProgress?: (done: number, total: number) => void,
 ): Promise<ImportedRecord[]> {
-  const zip = await JSZip.loadAsync(file);
+  const zipInput = typeof file.arrayBuffer === 'function' ? await file.arrayBuffer() : file;
+  const zip = await JSZip.loadAsync(zipInput);
 
   const manifestEntry = zip.file('manifest.json');
   if (!manifestEntry) {

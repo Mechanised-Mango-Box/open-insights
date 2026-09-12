@@ -19,6 +19,8 @@ FEATURE_COLUMNS: List[str] = [
     "wpm",
     "scene_change_rate",
     "word_count",
+    "speech_pace_variation",
+    "speaking_ratio",
 ]
 
 TARGET_COLUMN: str = "average_percentage_viewed"
@@ -42,7 +44,7 @@ def prepare_training_data(raw_df: Optional[pd.DataFrame] = None):
     Prepares training dataset. If raw_df is None, generates synthetic mock data.
     """
     if raw_df is None:
-        from model_training.mock_data import generate_mock_training_data
+        from server.model_training.mock_data import generate_mock_training_data
         raw_df = generate_mock_training_data(num_samples=200, random_state=42)
     # Validate required columns
     required_cols = FEATURE_COLUMNS + [TARGET_COLUMN]

@@ -62,3 +62,82 @@ def get_coefficient_summary(
         "intercept (b0)": float(model.intercept_),
         "coefficients": coef_dict,
     }
+
+
+def classify_feature_relationship(coef: float, threshold: float = 1.0) -> str:
+    """
+    Classifies a standardized regression coefficient into 'positive', 'negative', or 'weak'.
+
+    Note: The default threshold of 1.0 is a project-specific practical-effect threshold
+    (representing less than 1.0 percentage point change in Average Percentage Viewed
+    per 1 standard deviation change in feature value), not a universal statistical
+    definition of a weak relationship.
+
+    Parameters:
+        coef: The standardized regression coefficient.
+        threshold: Practical-effect threshold magnitude (default 1.0).
+
+    Returns:
+        String: 'positive', 'negative', or 'weak'.
+    """
+    if coef >= threshold:
+        return "positive"
+    elif coef <= -threshold:
+        return "negative"
+    else:
+        return "weak"
+
+
+FEATURE_DISPLAY_NAMES: Dict[str, str] = {
+    "duration": "duration",
+    "wpm": "speaking speed (WPM)",
+    "scene_change_rate": "scene change rate",
+    "word_count": "word count",
+    "speech_pace_variation": "speech pace variation",
+    "speaking_ratio": "speaking ratio",
+}
+
+
+def generate_feature_recommendations(
+    model: LinearRegression,
+    feature_names: list,
+    threshold: float = 1.0,
+) -> Dict[str, Any]:
+    """
+    Evaluates multiple linear regression coefficients and generates structured relationship
+    classifications and non-causal recommendation text for each feature.
+
+    Parameters:
+        model: Fitted LinearRegression model.
+        feature_names: List of feature names.
+        threshold: Practical-effect threshold magnitude (default 1.0).
+
+    Returns:
+        Dict containing threshold and feature recommendation dictionaries.
+    """
+    recommendations: Dict[str, Any] = {
+        "threshold": threshold,
+        "features": {},
+    }
+
+    for feature_name, coef in zip(feature_names, model.coef_):
+        coef_val = float(coef)
+        relationship = classify_feature_relationship(coef_val, threshold=threshold)
+        feature_label = FEATURE_DISPLAY_NAMES.get(
+            feature_name, feature_name.replace("_", " ")
+        )
+
+        if relationship == "positive":
+            msg = f"In this dataset, higher {feature_label} is associated with higher average percentage viewed."
+        elif relationship == "negative":
+            msg = f"In this dataset, higher {feature_label} is associated with lower average percentage viewed."
+        else:
+            msg = f"In this dataset, {feature_label} has little to no measurable relationship with average percentage viewed."
+
+        recommendations["features"][feature_name] = {
+            "coefficient": coef_val,
+            "relationship": relationship,
+            "recommendation": msg,
+        }
+
+    return recommendations
