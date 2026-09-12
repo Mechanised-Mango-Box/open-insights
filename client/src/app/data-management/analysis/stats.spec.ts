@@ -40,26 +40,34 @@ describe('stats, against the Python it was ported from', () => {
 });
 
 describe('computeAnalysis', () => {
+  // Every feature varies across the three rows: a constant column would take the
+  // zero-width histogram and rank-deficient loess paths instead of the ordinary ones.
   const rows: AnalysisFeatureRow[] = [
     {
-      duration_mins: 10,
+      duration: 10,
       wpm: 120,
       scene_change_rate: 2,
       word_count: 1200,
+      speech_pace_variation: 15,
+      speaking_ratio: 0.8,
       average_percentage_viewed: 50,
     },
     {
-      duration_mins: 20,
+      duration: 20,
       wpm: 150,
       scene_change_rate: 4,
       word_count: 3000,
+      speech_pace_variation: 22,
+      speaking_ratio: 0.65,
       average_percentage_viewed: 30,
     },
     {
-      duration_mins: 15,
+      duration: 15,
       wpm: 130,
       scene_change_rate: 3,
       word_count: 1950,
+      speech_pace_variation: 18,
+      speaking_ratio: 0.72,
       average_percentage_viewed: 41,
     },
   ];
@@ -77,10 +85,10 @@ describe('computeAnalysis', () => {
   });
 
   it('correlates the target against itself as +1 when a feature tracks it', () => {
-    // word_count is duration_mins * wpm here, so it moves with neither target
+    // word_count is duration * wpm here, so it moves with neither target
     // direction by construction - this asserts the sign is real, not that a
     // constant is being returned.
     const result = computeAnalysis(rows);
-    expect(result.correlations['duration_mins']).toBeLessThan(0);
+    expect(result.correlations['duration']).toBeLessThan(0);
   });
 });

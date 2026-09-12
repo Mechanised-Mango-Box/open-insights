@@ -24,7 +24,7 @@ import {
 import { calculateSha256, VideoRecord } from './VideoRecord';
 import { DatasetActionsService } from './dataset-actions.service';
 import { parseYoutubeAudienceRetentionCsv, parseYoutubeContentCsv } from './youtube-csv-import';
-import { readFileDurationSecs } from './video-duration';
+import { readFileDurationSecs, recordDurationSecs } from './video-duration';
 import { parseTranscriptFile } from './transcript-import';
 import {
   STATUS_ICON_STYLES,
@@ -277,7 +277,7 @@ export class EditVideoDialogComponent {
     };
     this.localData.ds_transcriptStats = {
       state: 'ready',
-      data: computeTranscriptStats(transcript),
+      data: computeTranscriptStats(transcript, recordDurationSecs(this.localData)),
       producer: LOCAL_IMPORT,
     };
   }

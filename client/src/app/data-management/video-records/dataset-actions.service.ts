@@ -12,7 +12,14 @@ import { DatasetKind, DatasetProvider, SourceResolver } from '../providers/datas
 import { ComputeConfigService } from '../compute-config.service';
 import { ServerConfigService } from '../server-config.service';
 import { VideoRecord } from './VideoRecord';
-import { DatasetState, LOCAL_RECOMPUTE, computeTranscriptStats, isReady } from './Dataset';
+import {
+  DatasetState,
+  LOCAL_RECOMPUTE,
+  computeSpeechFeatures,
+  computeTranscriptStats,
+  isReady,
+} from './Dataset';
+import { recordDurationSecs } from './video-duration';
 import { DatasetPeekResult, ServerStatus } from './dataset-status';
 
 /** How often a hash still in a non-terminal state gets re-peeked in the background. */
@@ -214,7 +221,17 @@ export class DatasetActionsService {
         this.sourceFor(record),
       );
       record.ds_transcript = { state: 'ready', data: { segments }, producer };
-      record.ds_transcriptStats = { state: 'ready', data: { count_chars, count_words }, producer };
+      // The counts come from the producer; the speech features do not, and are
+      // computed here against whatever duration is known. Null until one is.
+      record.ds_transcriptStats = {
+        state: 'ready',
+        data: {
+          count_chars,
+          count_words,
+          ...computeSpeechFeatures({ segments }, recordDurationSecs(record)),
+        },
+        producer,
+      };
       outcome = `${count_words} words, ${segments.length} segments`;
     } catch (error) {
       // A failed refresh over a good value keeps the value and records why -
@@ -290,7 +307,7 @@ export class DatasetActionsService {
   }
 
   /**
-   * Recomputes count_chars/count_words from an already-fetched transcript, locally - no server
+   * Recomputes the transcript stats from an already-fetched transcript, locally - no server
    * round-trip. Useful after a transcript's text was edited/imported without its stats being
    * refreshed. Requires a transcript to already be set.
    */
@@ -300,7 +317,7 @@ export class DatasetActionsService {
     }
     record.ds_transcriptStats = {
       state: 'ready',
-      data: computeTranscriptStats(record.ds_transcript.data),
+      data: computeTranscriptStats(record.ds_transcript.data, recordDurationSecs(record)),
       producer: LOCAL_RECOMPUTE,
     };
   }

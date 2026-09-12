@@ -1,3 +1,5 @@
+import { calculateSpeakingRatio, calculateSpeechPaceVariation } from './speech-features';
+
 /**
  * Where a locally-held dataset value came from, when it does not come from a
  * server run. `producer` is stamped by whatever made the data, so it doubles as
@@ -155,21 +157,64 @@ export const formatDuration = (seconds: number): string => {
 export const transcriptFullText = (transcript: Transcript): string =>
   transcript.segments.map((segment) => segment.text).join(' ');
 
-export const computeTranscriptStats = (transcript: Transcript): TranscriptStats => {
+/**
+ * `durationSecs` is what the two speech features are measured against, and it
+ * comes from a different dataset than the transcript does - so it is passed in
+ * rather than read here, and is nullable because a transcript can land before
+ * any duration source exists.
+ */
+export type SpeechFeatures = Pick<TranscriptStats, 'speech_pace_variation' | 'speaking_ratio'>;
+
+/**
+ * The duration-dependent half of the transcript stats, split out because the
+ * server supplies the two counts but not these - so the path that takes a
+ * server transcript computes only this part, and both paths agree on when the
+ * answer is null.
+ */
+export const computeSpeechFeatures = (
+  transcript: Transcript,
+  durationSecs: number | null,
+): SpeechFeatures =>
+  durationSecs != null && durationSecs > 0
+    ? {
+        speech_pace_variation: calculateSpeechPaceVariation(transcript, durationSecs),
+        speaking_ratio: calculateSpeakingRatio(transcript, durationSecs),
+      }
+    : { speech_pace_variation: null, speaking_ratio: null };
+
+export const computeTranscriptStats = (
+  transcript: Transcript,
+  durationSecs: number | null,
+): TranscriptStats => {
   const text = transcriptFullText(transcript);
   const words = text.trim().length ? text.trim().split(/\s+/) : [];
-  return { count_chars: text.length, count_words: words.length };
+  return {
+    count_chars: text.length,
+    count_words: words.length,
+    ...computeSpeechFeatures(transcript, durationSecs),
+  };
 };
 
 export interface TranscriptStats {
   count_chars: number;
   count_words: number;
+  /**
+   * Both need the video's duration, which a transcript can arrive without - so
+   * null means "not computable yet", kept distinct from a real 0. A 0 is a
+   * legitimate measurement here (silence, or a single speech window), and the
+   * speech-features functions return one for missing input too, which is why
+   * the decision is made from the inputs rather than from their result.
+   */
+  speech_pace_variation: number | null;
+  speaking_ratio: number | null;
 }
 
 export const TranscriptStats: CanCreateEmpty<TranscriptStats> = {
   createEmpty: () => ({
     count_chars: 0,
     count_words: 0,
+    speech_pace_variation: null,
+    speaking_ratio: null,
   }),
 };
 

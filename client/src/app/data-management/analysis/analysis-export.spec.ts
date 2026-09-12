@@ -4,8 +4,24 @@ import { AnalysisFeatureRow, AnalysisResult } from './stats';
 import { buildAnalysisExportZip } from './analysis-export';
 
 const rows: AnalysisFeatureRow[] = [
-  { duration: 10, wpm: 120, scene_change_rate: 2, word_count: 1200, speech_pace_variation: 15, speaking_ratio: 0.8, average_percentage_viewed: 50 },
-  { duration: 20, wpm: 150, scene_change_rate: 4, word_count: 3000, speech_pace_variation: 20, speaking_ratio: 0.7, average_percentage_viewed: 30 },
+  {
+    duration: 10,
+    wpm: 120,
+    scene_change_rate: 2,
+    word_count: 1200,
+    speech_pace_variation: 15,
+    speaking_ratio: 0.8,
+    average_percentage_viewed: 50,
+  },
+  {
+    duration: 20,
+    wpm: 150,
+    scene_change_rate: 4,
+    word_count: 3000,
+    speech_pace_variation: 20,
+    speaking_ratio: 0.7,
+    average_percentage_viewed: 30,
+  },
 ];
 
 const result: AnalysisResult = {
@@ -38,6 +54,40 @@ describe('buildAnalysisExportZip figures', () => {
       '0,10,1',
       '10,20,1',
     ]);
+  });
+
+  it('writes recommendations, quoting the sentences that contain commas', async () => {
+    const zip = await JSZip.loadAsync(
+      await (
+        await buildAnalysisExportZip({
+          result,
+          rows,
+          featureKeys: ['duration'],
+          images: [],
+          recommendations: {
+            threshold: 1,
+            features: {
+              duration: {
+                coefficient: 2.5,
+                relationship: 'positive',
+                recommendation:
+                  'In this dataset, higher duration is associated with higher average percentage viewed.',
+              },
+            },
+          },
+        })
+      ).arrayBuffer(),
+    );
+
+    expect(await readCsv(zip, 'figures/recommendations.csv')).toEqual([
+      'feature,coefficient,relationship,recommendation',
+      'duration,2.5,positive,"In this dataset, higher duration is associated with higher average percentage viewed."',
+    ]);
+  });
+
+  it('omits the recommendations csv when there are none to write', async () => {
+    const zip = await JSZip.loadAsync(await (await buildZip()).arrayBuffer());
+    expect(zip.file('figures/recommendations.csv')).toBeNull();
   });
 
   it('writes correlations, scatter points and the loess curve', async () => {
@@ -90,6 +140,9 @@ describe('buildAnalysisExportZip figures', () => {
     });
     const zip = await JSZip.loadAsync(await blob.arrayBuffer());
 
-    expect(await readCsv(zip, 'figures/correlations.csv')).toEqual(['feature,correlation', 'wpm,0']);
+    expect(await readCsv(zip, 'figures/correlations.csv')).toEqual([
+      'feature,correlation',
+      'wpm,0',
+    ]);
   });
 });

@@ -32,7 +32,12 @@ const record = (overrides: Partial<VideoRecord> = {}): VideoRecord => ({
   ds_youtubeContent: { ...YoutubeContent.createEmpty(), content: 'yt-id-1', views: 900 },
   ds_youtubeAudienceRetention: { video_position: [0, 0.5], absolute_audience_retention: [1, 0.4] },
   ds_transcript: ready(transcript),
-  ds_transcriptStats: ready({ count_chars: 56, count_words: 11 }),
+  ds_transcriptStats: ready({
+    count_chars: 56,
+    count_words: 11,
+    speech_pace_variation: 12.5,
+    speaking_ratio: 0.8,
+  }),
   ds_sceneStats: ready<SceneStats>({ duration_secs: 3700, scenes: 42 }),
   ...overrides,
 });

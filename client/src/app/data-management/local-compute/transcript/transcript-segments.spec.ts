@@ -68,7 +68,15 @@ describe('toTranscriptSegments', () => {
       ]),
     );
 
-    expect(computeTranscriptStats({ segments })).toEqual({ count_chars: 15, count_words: 3 });
+    // A 2-second duration is one 30s window, which is the numWindows < 2 case -
+    // hence a 0 pace variation rather than a null: it was measurable, and the
+    // answer is that there is no variation across a single window.
+    expect(computeTranscriptStats({ segments }, 2)).toEqual({
+      count_chars: 15,
+      count_words: 3,
+      speech_pace_variation: 0,
+      speaking_ratio: 1,
+    });
   });
 });
 

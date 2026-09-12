@@ -1,9 +1,9 @@
 import { Injectable, signal } from '@angular/core';
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { VideoRecord } from './VideoRecord';
-import { DatasetState, LOCAL_IMPORT } from './Dataset';
+import { DatasetState, LOCAL_IMPORT, computeSpeechFeatures, isReady } from './Dataset';
 import { DatasetKind } from '../providers/dataset-provider';
-import { readFileDurationSecs } from './video-duration';
+import { readFileDurationSecs, recordDurationSecs } from './video-duration';
 
 /** The pre-v3 stored shape, kept only so the upgrade can read it. */
 type LegacyCacheable = {
@@ -141,6 +141,7 @@ export class VideoDatabaseService {
       const records = await this.getAllVideos();
       this.videoRecords.set(records);
       await this.backfillFileDurations(records);
+      await this.backfillSpeechFeatures(records);
     } catch (error) {
       console.error('Failed to load initial videos into signal:', error);
     }
@@ -173,6 +174,39 @@ export class VideoDatabaseService {
         await this.updateVideo(record);
       } catch (error) {
         console.error('Failed to read duration for', file.name, error);
+      }
+    }
+  };
+
+  /**
+   * Fills in the two speech features for transcript stats computed before those
+   * fields existed, and for any left null because no duration was known at the
+   * time. Runs after backfillFileDurations above, so a duration that pass just
+   * recovered is already available to this one.
+   *
+   * Additive like that pass, so no schema version bump: absent reads back as
+   * undefined, which means the same thing here as the null it becomes.
+   *
+   * Unlike the duration backfill this decodes nothing - it reads a transcript
+   * already in the record - so there is no reason to space the work out, but it
+   * keeps the same one-shot-from-the-constructor shape for the same reason: it
+   * writes records back, and an effect over videoRecords() would re-trigger
+   * itself on every write.
+   */
+  private backfillSpeechFeatures = async (records: VideoRecord[]): Promise<void> => {
+    for (const record of records) {
+      const stats = record.ds_transcriptStats;
+      if (!isReady(stats) || stats.data.speech_pace_variation != null) continue;
+      if (!isReady(record.ds_transcript)) continue;
+
+      const features = computeSpeechFeatures(record.ds_transcript.data, recordDurationSecs(record));
+      if (features.speech_pace_variation == null) continue;
+
+      stats.data = { ...stats.data, ...features };
+      try {
+        await this.updateVideo(record);
+      } catch (error) {
+        console.error('Failed to backfill speech features for', record.sort_name, error);
       }
     }
   };

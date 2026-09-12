@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { readyData } from '../video-records/Dataset';
 import { VideoRecord } from '../video-records/VideoRecord';
-import { calculateSpeakingRatio, calculateSpeechPaceVariation } from './speech-features';
 import { AnalysisFeatureRow } from './stats';
 
 export type FeatureRowResult = {
@@ -22,11 +21,16 @@ export class AnalysisService {
       // failed dataset drops out of the analysis exactly as a missing one does.
       const sceneStats = readyData(record.ds_sceneStats);
       const transcriptStats = readyData(record.ds_transcriptStats);
-      const transcript = readyData(record.ds_transcript);
       const avgViewDurationSecs = record.ds_youtubeContent?.average_view_duration_secs;
 
       if (!sceneStats || !transcriptStats || avgViewDurationSecs == null) continue;
       if (sceneStats.duration_secs <= 0) continue;
+      // Scan computes these; null means it had no duration to measure against.
+      // Dropping the record is the point of the null - feeding the 0 the speech
+      // functions return for missing input would read as a real measurement,
+      // and these numbers now drive written recommendations.
+      if (transcriptStats.speech_pace_variation == null || transcriptStats.speaking_ratio == null)
+        continue;
 
       const duration_mins = sceneStats.duration_secs / 60;
       rows.push({
@@ -34,8 +38,8 @@ export class AnalysisService {
         wpm: transcriptStats.count_words / duration_mins,
         scene_change_rate: sceneStats.scenes / duration_mins,
         word_count: transcriptStats.count_words,
-        speech_pace_variation: calculateSpeechPaceVariation(transcript, sceneStats.duration_secs),
-        speaking_ratio: calculateSpeakingRatio(transcript, sceneStats.duration_secs),
+        speech_pace_variation: transcriptStats.speech_pace_variation,
+        speaking_ratio: transcriptStats.speaking_ratio,
         average_percentage_viewed: (avgViewDurationSecs / sceneStats.duration_secs) * 100,
       });
     }

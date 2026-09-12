@@ -7,7 +7,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { VideoDatabaseService } from './video-database.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SceneStats, Transcript, TranscriptStats, formatDuration, readyData } from './Dataset';
-import { readFileDurationSecs } from './video-duration';
+import { readFileDurationSecs, recordDurationSecs, recordDurationSource } from './video-duration';
 import { EditVideoDialogComponent } from './edit-video-dialog.component';
 import { MergeVideosDialogComponent } from './merge-videos-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -52,6 +52,10 @@ const TABLE_COLUMN_STYLES = `
   }
   .truncate-hash {
     max-width: 132px;
+  }
+  .speech-features {
+    font-size: 0.85em;
+    color: var(--mat-sys-on-surface-variant);
   }
 `;
 
@@ -215,36 +219,29 @@ export class VideoTableComponent {
     return readyData(record.ds_sceneStats);
   }
 
+  /**
+   * The two speech features as one line, or null when they were not measurable
+   * at scan time - which is a missing duration, not a zero. Rendered as a dash
+   * rather than "0.0", since 0 is a value these can genuinely take.
+   */
+  speechFeaturesLabel(record: VideoRecord): string | null {
+    const stats = this.transcriptStatsData(record);
+    if (stats?.speech_pace_variation == null || stats.speaking_ratio == null) return null;
+    const pace = stats.speech_pace_variation.toFixed(1);
+    const speaking = Math.round(stats.speaking_ratio * 100);
+    return `${pace} WPM SD \u00b7 ${speaking}% speaking`;
+  }
+
   protected readonly formatDuration = formatDuration;
 
-  /**
-   * How long the video is, from whichever source has an answer: the YouTube
-   * export first, then the server's scene stats (OpenCV over the uploaded
-   * file), then the file sitting in the browser. Null when none of them do.
-   *
-   * Each tier is gated on > 0, not merely on being present, so a zero from a
-   * probe that opened a file but got nothing useful out of it falls through to
-   * the next source instead of winning and rendering as "0:00". This mirrors
-   * the `duration_secs <= 0` guard the analysis pipeline already applies.
-   */
-  private durationTiers(record: VideoRecord): { secs: number; source: string }[] {
-    const candidates = [
-      { secs: record.ds_youtubeContent?.duration_secs, source: 'From YouTube content report' },
-      { secs: this.sceneStatsData(record)?.duration_secs, source: 'From video file (scene stats)' },
-      { secs: record.video_file.duration_secs, source: 'From local video file' },
-    ];
-    return candidates.filter(
-      (tier): tier is { secs: number; source: string } => (tier.secs ?? 0) > 0,
-    );
-  }
-
+  /** Both live in video-duration.ts: Scan computes the stored speech features
+   * against the same answer, and two definitions could disagree. */
   durationSecs(record: VideoRecord): number | null {
-    return this.durationTiers(record)[0]?.secs ?? null;
+    return recordDurationSecs(record);
   }
 
-  /** Provenance of the value above, shown as the cell's tooltip. */
   durationSource(record: VideoRecord): string | null {
-    return this.durationTiers(record)[0]?.source ?? null;
+    return recordDurationSource(record);
   }
 
   getTranscriptStatusIcon(record: VideoRecord): StatusIcon | null {

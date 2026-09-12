@@ -1,6 +1,7 @@
 import JSZip from 'jszip';
 import { Chart } from 'chart.js';
 import { AnalysisFeatureRow, AnalysisResult } from './stats';
+import { Recommendations } from './recommendations';
 
 /** A chart already encoded as base64 PNG, destined for the export's images/ folder. */
 export interface ChartImage {
@@ -13,9 +14,13 @@ export interface AnalysisExportInput {
   rows: AnalysisFeatureRow[];
   featureKeys: readonly (keyof AnalysisFeatureRow)[];
   images: ChartImage[];
+  /** Omitted when the dataset was too small or too collinear to fit. */
+  recommendations?: Recommendations | null;
 }
 
-/** Every value here is numeric or a known feature key, so nothing needs quoting. */
+/** Values are numeric or known feature keys, so this does no quoting of its own.
+ * The one column that needs it - the recommendation sentences - is quoted by its
+ * caller before it gets here. */
 const toCsv = (header: string[], rows: (string | number)[][]): string =>
   [header.join(','), ...rows.map((row) => row.join(','))].join('\n');
 
@@ -52,8 +57,27 @@ export async function buildAnalysisExportZip({
   rows,
   featureKeys,
   images,
+  recommendations,
 }: AnalysisExportInput): Promise<Blob> {
   const zip = new JSZip();
+
+  // The sentences carry commas, so this is the one place in the export that has
+  // to quote - toCsv() deliberately does not, every other column being numeric.
+  if (recommendations) {
+    const quoted = (text: string) => `"${text.replace(/"/g, '""')}"`;
+    zip.file(
+      'figures/recommendations.csv',
+      toCsv(
+        ['feature', 'coefficient', 'relationship', 'recommendation'],
+        Object.entries(recommendations.features).map(([feature, entry]) => [
+          feature,
+          entry.coefficient,
+          entry.relationship,
+          quoted(entry.recommendation),
+        ]),
+      ),
+    );
+  }
 
   for (const { filename, base64 } of images) {
     zip.file(`images/${filename}`, base64, { base64: true });

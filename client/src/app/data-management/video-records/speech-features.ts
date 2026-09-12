@@ -1,4 +1,4 @@
-import { Transcript } from '../video-records/Dataset';
+import type { Transcript } from './Dataset';
 
 /**
  * Calculates speech pace variation (sample standard deviation of WPM across fixed 30-second time windows).

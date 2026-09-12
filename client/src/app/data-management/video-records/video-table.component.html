@@ -159,6 +159,7 @@
           <mat-icon>{{ getTranscriptUploadIcon(element)?.icon }}</mat-icon>
         </button>
         {{ transcriptStatsData(element)?.count_words }} words
+        <div class="speech-features">{{ speechFeaturesLabel(element) ?? '—' }}</div>
         }
       </td>
     </ng-container>

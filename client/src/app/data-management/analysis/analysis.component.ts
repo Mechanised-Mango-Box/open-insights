@@ -26,6 +26,11 @@ import {
   Tooltip,
 } from 'chart.js';
 import { AnalysisFeatureRow, AnalysisResult, computeAnalysis } from './stats';
+import {
+  MIN_ROWS_FOR_RECOMMENDATIONS,
+  RecommendationOutcome,
+  computeRecommendations,
+} from './recommendations';
 import { AnalysisService } from './analysis.service';
 import { VideoDatabaseService } from '../video-records/video-database.service';
 import { SelectionService } from '../video-records/selection.service';
@@ -137,6 +142,42 @@ const FEATURE_KEYS = Object.keys(FEATURE_LABELS) as FeatureKey[];
           </div>
         </section>
 
+        @if (recommendations(); as outcome) {
+          <section class="card recommendations-card">
+            <h2 class="feature-heading">What this dataset suggests</h2>
+            @if (outcome.ok) {
+              <!-- Associations, not advice: the wording comes from the training
+                   pipeline, which is careful not to claim a cause. -->
+              <p class="recommendations-note">
+                Associations within your own records, not causes - and not predictions about videos
+                you have not made yet.
+              </p>
+              <ul class="recommendation-list">
+                @for (row of recommendationRows(); track row.key) {
+                  <li class="recommendation">
+                    <span class="relationship" [class]="'relationship-' + row.relationship">
+                      {{ row.relationship }}
+                    </span>
+                    <span class="recommendation-text">
+                      <strong>{{ row.label }}</strong>
+                      - {{ row.recommendation }}
+                    </span>
+                  </li>
+                }
+              </ul>
+            } @else if (outcome.reason === 'not-enough-rows') {
+              <p class="recommendations-note">
+                Needs at least {{ outcome.rowsNeeded }} eligible records before the relationships
+                mean anything - there are six features to weigh against each other.
+              </p>
+            } @else {
+              <p class="recommendations-note">
+                These records do not vary independently enough to separate the features apart.
+              </p>
+            }
+          </section>
+        }
+
         @for (key of featureKeys; track key) {
           <section class="feature-section">
             <h2 class="feature-heading">
@@ -170,6 +211,43 @@ const FEATURE_KEYS = Object.keys(FEATURE_LABELS) as FeatureKey[];
       }
       .empty-state p {
         margin: 0;
+        color: var(--mat-sys-on-surface-variant);
+      }
+      .recommendations-note {
+        margin: 0 0 12px;
+        color: var(--mat-sys-on-surface-variant);
+      }
+      .recommendation-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .recommendation {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+      }
+      .relationship {
+        flex: none;
+        min-width: 64px;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 0.7em;
+        letter-spacing: 0.06em;
+        padding: 2px 8px;
+        border-radius: 999px;
+        border: 1px solid currentColor;
+      }
+      .relationship-positive {
+        color: #2a78d6;
+      }
+      .relationship-negative {
+        color: #e34948;
+      }
+      .relationship-weak {
         color: var(--mat-sys-on-surface-variant);
       }
       .results {
@@ -254,6 +332,20 @@ export class AnalysisComponent implements AfterViewInit {
 
   private lastResult = signal<AnalysisResult | null>(null);
   private lastRows: AnalysisFeatureRow[] = [];
+  protected recommendations = signal<RecommendationOutcome | null>(null);
+  protected readonly minRowsForRecommendations = MIN_ROWS_FOR_RECOMMENDATIONS;
+
+  /** The features in the order the panel lists them, worst-to-best being no
+   * more meaningful than the declared order - so the declared order it is. */
+  protected recommendationRows = computed(() => {
+    const outcome = this.recommendations();
+    if (!outcome?.ok) return [];
+    return Object.entries(outcome.recommendations.features).map(([key, value]) => ({
+      key,
+      label: FEATURE_LABELS[key as FeatureKey] ?? key,
+      ...value,
+    }));
+  });
   hasResult = computed(() => this.lastResult() !== null);
 
   private correlationChart?: Chart;
@@ -295,6 +387,7 @@ export class AnalysisComponent implements AfterViewInit {
       this.renderResult(rows, result);
       this.lastRows = rows;
       this.lastResult.set(result);
+      this.recommendations.set(computeRecommendations(rows));
       this.statusMessage.set(`Analysis run on ${eligibleCount} of ${totalCount} record(s).`);
     } catch (error) {
       console.error('Analysis failed:', error);
@@ -311,11 +404,13 @@ export class AnalysisComponent implements AfterViewInit {
     this.exporting.set(true);
     try {
       const images = this.snapshotCharts();
+      const outcome = this.recommendations();
       const blob = await buildAnalysisExportZip({
         result,
         rows: this.lastRows,
         featureKeys: FEATURE_KEYS,
         images,
+        recommendations: outcome?.ok ? outcome.recommendations : null,
       });
       downloadBlob(blob, `open-insights-analysis-${new Date().toISOString()}.zip`);
     } catch (error) {
