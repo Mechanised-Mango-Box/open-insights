@@ -40,6 +40,25 @@ export const ANALYSIS_FEATURE_COLUMNS = [
   'speaking_ratio',
 ] as const satisfies readonly (keyof AnalysisFeatureRow)[];
 
+/** The feature columns as a union - the one place that spelling is derived, so a
+ * column added above reaches every consumer without a second list to update. */
+export type AnalysisFeatureColumn = (typeof ANALYSIS_FEATURE_COLUMNS)[number];
+
+/** The feature this column names, as a person reads it. Lives here with the
+ * column list rather than in a component: two pages show these now, and a second
+ * copy is how they start disagreeing.
+ *
+ * Distinct from FEATURE_DISPLAY_NAMES in recommendations.ts, which is lower case
+ * because those strings sit mid-sentence. These are headings. */
+export const FEATURE_LABELS: Record<AnalysisFeatureColumn, string> = {
+  duration: 'Duration (minutes)',
+  wpm: 'Speaking Speed (WPM)',
+  scene_change_rate: 'Scene Change Rate (per min)',
+  word_count: 'Word Count',
+  speech_pace_variation: 'Speech Pace Variation (WPM SD)',
+  speaking_ratio: 'Speaking Ratio',
+};
+
 export const ANALYSIS_TARGET_COLUMN =
   'average_percentage_viewed' satisfies keyof AnalysisFeatureRow;
 

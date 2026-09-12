@@ -25,7 +25,15 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
-import { AnalysisFeatureRow, AnalysisResult, computeAnalysis } from './stats';
+import {
+  ANALYSIS_FEATURE_COLUMNS,
+  AnalysisFeatureColumn,
+  AnalysisFeatureRow,
+  AnalysisResult,
+  FEATURE_LABELS,
+  computeAnalysis,
+} from './stats';
+import { RecommendationListComponent, RecommendationRow } from './recommendation-list.component';
 import {
   MIN_ROWS_FOR_RECOMMENDATIONS,
   RecommendationOutcome,
@@ -76,29 +84,16 @@ const PALETTE = {
   trend: '#eb6834',
 } as const;
 
-type FeatureKey =
-  | 'duration'
-  | 'wpm'
-  | 'scene_change_rate'
-  | 'word_count'
-  | 'speech_pace_variation'
-  | 'speaking_ratio';
+type FeatureKey = AnalysisFeatureColumn;
 
-const FEATURE_LABELS: Record<FeatureKey, string> = {
-  duration: 'Duration (minutes)',
-  wpm: 'Speaking Speed (WPM)',
-  scene_change_rate: 'Scene Change Rate (per min)',
-  word_count: 'Word Count',
-  speech_pace_variation: 'Speech Pace Variation (WPM SD)',
-  speaking_ratio: 'Speaking Ratio',
-};
-
-const FEATURE_KEYS = Object.keys(FEATURE_LABELS) as FeatureKey[];
+/** ANALYSIS_FEATURE_COLUMNS rather than the label map's key order: the columns
+ * are the declared order, and the charts are built by index against them. */
+const FEATURE_KEYS: readonly FeatureKey[] = ANALYSIS_FEATURE_COLUMNS;
 
 @Component({
   selector: 'analysis',
   standalone: true,
-  imports: [MatButtonModule, MatIcon],
+  imports: [MatButtonModule, MatIcon, RecommendationListComponent],
   template: `
     <div class="analysis-page">
       <section class="card actions-column">
@@ -152,19 +147,7 @@ const FEATURE_KEYS = Object.keys(FEATURE_LABELS) as FeatureKey[];
                 Associations within your own records, not causes - and not predictions about videos
                 you have not made yet.
               </p>
-              <ul class="recommendation-list">
-                @for (row of recommendationRows(); track row.key) {
-                  <li class="recommendation">
-                    <span class="relationship" [class]="'relationship-' + row.relationship">
-                      {{ row.relationship }}
-                    </span>
-                    <span class="recommendation-text">
-                      <strong>{{ row.label }}</strong>
-                      - {{ row.recommendation }}
-                    </span>
-                  </li>
-                }
-              </ul>
+              <recommendation-list [rows]="recommendationRows()" />
             } @else if (outcome.reason === 'not-enough-rows') {
               <p class="recommendations-note">
                 Needs at least {{ outcome.rowsNeeded }} eligible records before the relationships
@@ -215,39 +198,6 @@ const FEATURE_KEYS = Object.keys(FEATURE_LABELS) as FeatureKey[];
       }
       .recommendations-note {
         margin: 0 0 12px;
-        color: var(--mat-sys-on-surface-variant);
-      }
-      .recommendation-list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      .recommendation {
-        display: flex;
-        align-items: baseline;
-        gap: 10px;
-      }
-      .relationship {
-        flex: none;
-        min-width: 64px;
-        text-align: center;
-        text-transform: uppercase;
-        font-size: 0.7em;
-        letter-spacing: 0.06em;
-        padding: 2px 8px;
-        border-radius: 999px;
-        border: 1px solid currentColor;
-      }
-      .relationship-positive {
-        color: #2a78d6;
-      }
-      .relationship-negative {
-        color: #e34948;
-      }
-      .relationship-weak {
         color: var(--mat-sys-on-surface-variant);
       }
       .results {
@@ -337,7 +287,7 @@ export class AnalysisComponent implements AfterViewInit {
 
   /** The features in the order the panel lists them, worst-to-best being no
    * more meaningful than the declared order - so the declared order it is. */
-  protected recommendationRows = computed(() => {
+  protected recommendationRows = computed<RecommendationRow[]>(() => {
     const outcome = this.recommendations();
     if (!outcome?.ok) return [];
     return Object.entries(outcome.recommendations.features).map(([key, value]) => ({

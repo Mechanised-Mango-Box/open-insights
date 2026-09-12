@@ -3,7 +3,7 @@
  * and HomeComponent (whose instructions link straight to a step). Kept out of both
  * components so neither has to import the other.
  */
-export type ViewId = 'home' | 'import' | 'scan' | 'export' | 'analysis' | 'settings';
+export type ViewId = 'home' | 'import' | 'scan' | 'export' | 'analysis' | 'recommend' | 'settings';
 
 export type View = { id: ViewId; label: string; icon: string; blurb: string };
 
@@ -44,6 +44,12 @@ export const WORKFLOW: View[] = [
     icon: 'insert_chart',
     blurb: 'Correlations and distributions across the whole dataset.',
   },
+  {
+    id: 'recommend',
+    label: 'Recommend',
+    icon: 'online_prediction',
+    blurb: "Ask the server's model what it makes of a single video.",
+  },
 ];
 
 export const SETTINGS: View = {
@@ -62,4 +68,5 @@ export const VIEWS_WITH_RECORDS: ReadonlySet<ViewId> = new Set<ViewId>([
   'import',
   'scan',
   'export',
+  'recommend',
 ]);

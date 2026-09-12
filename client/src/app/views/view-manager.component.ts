@@ -7,6 +7,7 @@ import { VideoRecordsImport } from '../data-management/video-records/video-recor
 import { ExportRecordsComponent } from '../data-management/video-records/export-records.component';
 import { ScanActionsComponent } from '../data-management/video-records/scan-actions.component';
 import { AnalysisComponent } from '../data-management/analysis/analysis.component';
+import { RecommendationEngineComponent } from '../data-management/recommendation/recommendation-engine.component';
 import { ServerSettingsComponent } from '../data-management/server-settings.component';
 import { ProcessingModeBadgeComponent } from '../data-management/processing-mode-badge.component';
 import { ServerChoiceDialogComponent } from '../data-management/server-choice-dialog.component';
@@ -80,6 +81,9 @@ import { HOME, SETTINGS, VIEWS_WITH_RECORDS, ViewId, WORKFLOW } from './views';
             } @placeholder {
               <p>Loading analysis…</p>
             }
+          }
+          @case ('recommend') {
+            <recommendation-engine />
           }
           @case ('settings') {
             <server-settings />
@@ -216,6 +220,7 @@ import { HOME, SETTINGS, VIEWS_WITH_RECORDS, ViewId, WORKFLOW } from './views';
     ExportRecordsComponent,
     ScanActionsComponent,
     AnalysisComponent,
+    RecommendationEngineComponent,
     ServerSettingsComponent,
     ProcessingModeBadgeComponent,
   ],

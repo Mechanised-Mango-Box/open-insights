@@ -119,6 +119,25 @@ def __route_get_dataset(file_hash: str, kind_name: str):
     return jsonify(_serialized(kind, file_hash)), 200
 
 
+@bp.post("/api/videos/<file_hash>/recommendation")
+def __route_recommendation(file_hash: str):
+    """Runs the trained model over one video and returns what it says about each
+    feature.
+
+    Declared before the <kind_name> route below, and more specific than it:
+    "recommendation" is not a DatasetKind, so without this the wildcard would
+    take the request and _resolve() would 404 it as an unknown kind. Werkzeug
+    prefers the static segment regardless of declaration order, but the two
+    being adjacent is what makes the overlap visible to the next reader.
+
+    Unimplemented, so it answers 501 rather than an empty 200 - the client shows
+    the message, and "not implemented" is more use to it than a blank result
+    that looks like a model with no opinion.
+    """
+    # TODO: Implement
+    return jsonify({"err": "Recommendations are not implemented yet."}), 501
+
+
 @bp.post("/api/videos/<file_hash>/<kind_name>")
 @limiter.limit(PUBLIC_COMPUTE_RATE_LIMIT, exempt_when=is_private)
 def __route_start_dataset(file_hash: str, kind_name: str):
