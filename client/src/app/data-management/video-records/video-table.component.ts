@@ -53,10 +53,6 @@ const TABLE_COLUMN_STYLES = `
   .truncate-hash {
     max-width: 132px;
   }
-  .speech-features {
-    font-size: 0.85em;
-    color: var(--mat-sys-on-surface-variant);
-  }
 `;
 
 /** The one thing the global `.actions` rule does not carry: this row sits above the
@@ -66,6 +62,40 @@ const BULK_ACTIONS_STYLES = `
     margin-bottom: 12px;
   }
 `;
+
+/** One value per badge, so the stats columns stay scannable down the table rather
+ * than each cell being a sentence to read. They wrap instead of widening the
+ * column, which matters because these cells sit beside two already-unbounded ones.
+ *
+ * System tokens rather than literal colours: these sit in table rows, and a badge
+ * that ignored the theme would be the one thing in the cell that did. */
+const STAT_BADGE_STYLES = `
+  .stat-badges {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    vertical-align: middle;
+  }
+  .stat-badge {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--mat-sys-surface-container-highest);
+    color: var(--mat-sys-on-surface);
+    font: var(--mat-sys-label-small);
+    white-space: nowrap;
+  }
+  .stat-badge-muted {
+    color: var(--mat-sys-on-surface-variant);
+    background: transparent;
+    border: 1px dashed var(--mat-sys-outline-variant);
+  }
+`;
+
+/** A single value as it is shown in a stats cell. `muted` is for the placeholder
+ * that stands in for a stat which could not be measured, so it does not read as
+ * a value in its own right. */
+type StatBadge = { text: string; title?: string; muted?: boolean };
 
 @Component({
   selector: 'video-table',
@@ -80,7 +110,7 @@ const BULK_ACTIONS_STYLES = `
     MatIcon,
   ],
   templateUrl: './video-table.component.html',
-  styles: [STATUS_ICON_STYLES, TABLE_COLUMN_STYLES, BULK_ACTIONS_STYLES],
+  styles: [STATUS_ICON_STYLES, TABLE_COLUMN_STYLES, BULK_ACTIONS_STYLES, STAT_BADGE_STYLES],
 })
 export class VideoTableComponent {
   private dialog = inject(MatDialog);
@@ -220,16 +250,46 @@ export class VideoTableComponent {
   }
 
   /**
-   * The two speech features as one line, or null when they were not measurable
-   * at scan time - which is a missing duration, not a zero. Rendered as a dash
-   * rather than "0.0", since 0 is a value these can genuinely take.
+   * Every stat a cell shows gets its own badge, so the two stats columns read
+   * the same way and a cell can gain a stat without re-running its text
+   * together. Built here rather than in the template because the count and the
+   * speech features come from one object but not on the same terms - the counts
+   * are always present, the features only once a duration was known.
    */
-  speechFeaturesLabel(record: VideoRecord): string | null {
+  transcriptStatBadges(record: VideoRecord): StatBadge[] {
     const stats = this.transcriptStatsData(record);
-    if (stats?.speech_pace_variation == null || stats.speaking_ratio == null) return null;
-    const pace = stats.speech_pace_variation.toFixed(1);
-    const speaking = Math.round(stats.speaking_ratio * 100);
-    return `${pace} WPM SD \u00b7 ${speaking}% speaking`;
+    if (!stats) return [];
+
+    const badges: StatBadge[] = [{ text: `${stats.count_words.toLocaleString()} words` }];
+
+    // A dash rather than "0.0": 0 is a value both features genuinely take (a
+    // silent video, or one short enough to be a single pace window), so it
+    // cannot double as "no answer".
+    if (stats.speech_pace_variation == null || stats.speaking_ratio == null) {
+      badges.push({
+        text: '\u2014',
+        muted: true,
+        title: 'Speech stats need the video duration, which was not known when this was scanned',
+      });
+      return badges;
+    }
+
+    badges.push({
+      text: `${stats.speech_pace_variation.toFixed(1)} WPM SD`,
+      title: 'Speech pace variation - how much the speaking speed moves across the video',
+    });
+    badges.push({
+      text: `${Math.round(stats.speaking_ratio * 100)}% speaking`,
+      title: 'Speaking ratio - the share of the video covered by detected speech',
+    });
+    return badges;
+  }
+
+  sceneStatBadges(record: VideoRecord): StatBadge[] {
+    const stats = this.sceneStatsData(record);
+    // Not the duration as well: it has its own column, formatted, and this cell
+    // would only repeat it in raw seconds.
+    return stats ? [{ text: `${stats.scenes.toLocaleString()} scenes` }] : [];
   }
 
   protected readonly formatDuration = formatDuration;

@@ -158,8 +158,13 @@
         >
           <mat-icon>{{ getTranscriptUploadIcon(element)?.icon }}</mat-icon>
         </button>
-        {{ transcriptStatsData(element)?.count_words }} words
-        <div class="speech-features">{{ speechFeaturesLabel(element) ?? '—' }}</div>
+        <span class="stat-badges">
+          @for (badge of transcriptStatBadges(element); track badge.text) {
+          <span class="stat-badge" [class.stat-badge-muted]="badge.muted" [title]="badge.title">{{
+            badge.text
+          }}</span>
+          }
+        </span>
         }
       </td>
     </ng-container>
@@ -177,6 +182,11 @@
         >
           <mat-icon>{{ getSceneStatsUploadIcon(element)?.icon }}</mat-icon>
         </button>
+        <span class="stat-badges">
+          @for (badge of sceneStatBadges(element); track badge.text) {
+          <span class="stat-badge" [title]="badge.title">{{ badge.text }}</span>
+          }
+        </span>
         } @else if (element.video_file.hash) {
         <button
           mat-icon-button
