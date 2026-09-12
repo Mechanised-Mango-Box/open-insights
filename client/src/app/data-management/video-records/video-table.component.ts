@@ -94,8 +94,13 @@ const STAT_BADGE_STYLES = `
 
 /** A single value as it is shown in a stats cell. `muted` is for the placeholder
  * that stands in for a stat which could not be measured, so it does not read as
- * a value in its own right. */
-type StatBadge = { text: string; title?: string; muted?: boolean };
+ * a value in its own right.
+ *
+ * `title` is required rather than optional: these badges are terse by design
+ * ("18.4 WPM SD" says little on its own), so every one of them owes the reader
+ * an explanation on hover, and making it optional is how one quietly ends up
+ * without. */
+type StatBadge = { text: string; title: string; muted?: boolean };
 
 @Component({
   selector: 'video-table',
@@ -260,7 +265,12 @@ export class VideoTableComponent {
     const stats = this.transcriptStatsData(record);
     if (!stats) return [];
 
-    const badges: StatBadge[] = [{ text: `${stats.count_words.toLocaleString()} words` }];
+    const badges: StatBadge[] = [
+      {
+        text: `${stats.count_words.toLocaleString()} words`,
+        title: 'Words in the transcript',
+      },
+    ];
 
     // A dash rather than "0.0": 0 is a value both features genuinely take (a
     // silent video, or one short enough to be a single pace window), so it
@@ -289,7 +299,16 @@ export class VideoTableComponent {
     const stats = this.sceneStatsData(record);
     // Not the duration as well: it has its own column, formatted, and this cell
     // would only repeat it in raw seconds.
-    return stats ? [{ text: `${stats.scenes.toLocaleString()} scenes` }] : [];
+    return stats
+      ? [
+          {
+            text: `${stats.scenes.toLocaleString()} scenes`,
+            // "Scene changes", not "scenes": the value is a count of detected
+            // transitions, which is one fewer than the number of scenes.
+            title: 'Scene changes detected in the video',
+          },
+        ]
+      : [];
   }
 
   protected readonly formatDuration = formatDuration;
