@@ -26,7 +26,8 @@ import { HOME, SETTINGS, VIEWS_WITH_RECORDS, ViewId, WORKFLOW } from './views';
           (click)="view.set(home.id)"
           title="Overview and instructions"
         >
-          Open Insights
+          <mat-icon>{{ home.icon }}</mat-icon>
+          <span>Open Insights</span>
         </button>
 
         <mat-action-list class="steps">
@@ -113,29 +114,56 @@ import { HOME, SETTINGS, VIEWS_WITH_RECORDS, ViewId, WORKFLOW } from './views';
         border-right: 1px solid var(--mat-sys-outline-variant);
       }
       /* The app name doubles as the Home nav item, so it's a real button - styled as a
-         title, but focusable and keyboard-activatable like the steps below it. */
+         title, but focusable and keyboard-activatable like the steps below it.
+         It carries a surface and a border of its own because as bare text it lost to
+         the steps underneath: they each have an icon, a ripple and an active indicator,
+         and nothing up here said the app name could be clicked at all. */
       .brand {
         appearance: none;
-        background: none;
-        border: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: var(--mat-sys-surface-container-high);
+        border: 1px solid var(--mat-sys-outline-variant);
         color: inherit;
         font: var(--mat-sys-title-medium);
         text-align: left;
         cursor: pointer;
         padding: 12px 16px;
-        margin: 12px 8px 4px;
+        margin: 12px 8px;
         border-radius: 8px;
+        transition:
+          background 120ms ease,
+          color 120ms ease;
+      }
+      .brand mat-icon {
+        flex: 0 0 auto;
+        color: var(--mat-sys-primary);
       }
       .brand:hover {
-        background: var(--mat-sys-surface-container-high);
+        background: var(--mat-sys-surface-container-highest);
       }
+      /* Material gives the list items a focus affordance; a bare <button> has none. */
+      .brand:focus-visible {
+        outline: 2px solid var(--mat-sys-primary);
+        outline-offset: 2px;
+      }
+      /* Primary rather than the steps' secondary-container: painting it the same colour
+         as an activated step is what made Home read as just another step. */
       .brand-active {
-        background: var(--mat-sys-secondary-container);
-        color: var(--mat-sys-on-secondary-container);
+        background: var(--mat-sys-primary-container);
+        color: var(--mat-sys-on-primary-container);
+        border-color: transparent;
       }
-      /* Takes up the slack, which is what pins Settings to the bottom of the sidebar. */
+      .brand-active mat-icon {
+        color: var(--mat-sys-on-primary-container);
+      }
+      /* Takes up the slack, which is what pins Settings to the bottom of the sidebar.
+         The rule on top separates the app name from the workflow, mirroring the one
+         above the footer. */
       .steps {
         flex: 1 1 auto;
+        border-top: 1px solid var(--mat-sys-outline-variant);
       }
       /* The badge and Settings are one block: the badge says where work goes,
          and the item under it is what changes that, so the rule goes round both
