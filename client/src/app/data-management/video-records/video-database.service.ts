@@ -2,13 +2,13 @@ import { Injectable, signal } from '@angular/core';
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { VideoRecord } from './VideoRecord';
 import { DatasetState, LOCAL_IMPORT } from './Dataset';
+import { DatasetKind } from '../providers/dataset-provider';
 import { readFileDurationSecs } from './video-duration';
 
 /** The pre-v3 stored shape, kept only so the upgrade can read it. */
 type LegacyCacheable = {
   upload_state:
-    | { is_local: false }
-    | { is_local: true; server_side_state: 'ready' | 'failed' | 'in_progress' };
+    { is_local: false } | { is_local: true; server_side_state: 'ready' | 'failed' | 'in_progress' };
   data: unknown;
 };
 
@@ -42,11 +42,34 @@ function migrateCacheable(stored: unknown): DatasetState<unknown> {
   }
 }
 
+/**
+ * One computed dataset, keyed by kind and content hash.
+ *
+ * `producer` stamps what made it - the model, the threshold, whatever else
+ * could move the numbers - so a row produced under different parameters reads
+ * as absent and gets recomputed, rather than mixing into a corpus made by
+ * something else. Same rule the server applies in db.py's dataset_state().
+ *
+ * Kept as one store rather than the server's two tables: those differ only in
+ * their columns, which a payload of its own kind does not need.
+ */
+export type StoredDatasetResult = {
+  kind: DatasetKind;
+  file_hash: string;
+  producer: string;
+  produced_at: string;
+  payload: unknown;
+};
+
 interface VideoDBSchema extends DBSchema {
   videos: {
     key: number;
     value: VideoRecord;
     indexes: { by_file_hash: string };
+  };
+  dataset_results: {
+    key: [DatasetKind, string];
+    value: StoredDatasetResult;
   };
 }
 
@@ -62,8 +85,19 @@ export class VideoDatabaseService {
     this.loadInitialVideos();
   }
 
+  /**
+   * The shared database handle.
+   *
+   * ResultCacheService writes to a store in this same database rather than
+   * opening one of its own: two `openDB` calls means two upgrade functions, and
+   * the version they disagree on is the one that corrupts a library.
+   */
+  database(): Promise<IDBPDatabase<VideoDBSchema>> {
+    return this.dbPromise;
+  }
+
   private initDB = async () => {
-    return openDB<VideoDBSchema>('video-library-db', 3, {
+    return openDB<VideoDBSchema>('video-library-db', 4, {
       upgrade(db, oldVersion, _newVersion, tx) {
         // `upgrade` runs on every version increase, not just on first creation, so the
         // initial schema is gated on the version that introduced it - re-running
@@ -92,6 +126,12 @@ export class VideoDatabaseService {
             }
             return cursor.update(record as VideoRecord).then(() => cursor.continue().then(migrate));
           });
+        }
+        // v4 adds the cache for datasets computed in this browser. Nothing to
+        // migrate: before this there was nowhere for a local result to live, so
+        // an existing library simply has none yet.
+        if (oldVersion < 4) {
+          db.createObjectStore('dataset_results', { keyPath: ['kind', 'file_hash'] });
         }
       },
     });
@@ -179,7 +219,9 @@ export class VideoDatabaseService {
     const updatedId = (await db.put('videos', record)) as number;
 
     // Update the signal reactively so components re-render automatically
-    this.videoRecords.update((records) => records.map((v) => (v.__id === record.__id ? record : v)));
+    this.videoRecords.update((records) =>
+      records.map((v) => (v.__id === record.__id ? record : v)),
+    );
 
     return updatedId;
   };

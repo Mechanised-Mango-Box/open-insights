@@ -1,0 +1,38 @@
+# TLS terminator and the only thing on the box facing the internet.
+#
+# Caddy gets and renews the certificate itself over HTTP-01, which is why
+# SITE_ADDRESS has to be a real hostname (a free DuckDNS subdomain pointed at the
+# VM's public IP) rather than the IP: a certificate cannot be issued for a bare
+# address.
+{$SITE_ADDRESS} {
+	# Uploads are the whole point of this API and they are large. Caddy's own
+	# default would reject them long before the server's per-tier cap in
+	# auth.py ever got a say, so this is the outer bound and the server decides
+	# the rest: keep it at or above PUBLIC_MAX_UPLOAD_BYTES.
+	request_body {
+		max_size {$MAX_BODY_SIZE}
+	}
+
+	reverse_proxy server:5000 {
+		# A multi-gigabyte upload on a domestic connection is a normal request
+		# here, not a hung one. Caddy's defaults would time it out mid-stream,
+		# and they have to agree with gunicorn's --timeout 900 in the Dockerfile
+		# or whichever is shorter silently becomes the real limit.
+		transport http {
+			read_timeout 900s
+			write_timeout 900s
+		}
+	}
+
+	# X-Forwarded-For is set by reverse_proxy automatically, and app.py's
+	# ProxyFix(x_for=1) reads exactly the one hop this represents. Adding
+	# another proxy in front without raising that number would key every
+	# rate limit to a single address.
+
+	encode gzip
+
+	log {
+		output stderr
+		format console
+	}
+}

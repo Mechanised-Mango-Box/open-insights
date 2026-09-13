@@ -89,11 +89,16 @@ export class EditVideoDialogComponent {
     return serverStatusIcon(status, {
       hasLocalFile: !!this.localData.video_file.file,
       uploading: this.uploadPending(),
+      where: this.datasetActions.providerLabel(),
     });
   }
 
   get transcriptUploadIcon(): StatusIcon | null {
-    return datasetStateIcon(this.localData.ds_transcript, this.transcriptPending());
+    return datasetStateIcon(
+      this.localData.ds_transcript,
+      this.transcriptPending(),
+      this.datasetActions.providerLabel(),
+    );
   }
 
   get transcriptPeekIcon(): StatusIcon {
@@ -101,11 +106,16 @@ export class EditVideoDialogComponent {
       this.datasetActions.transcriptStatusByHash().get(this.localData.video_file.hash) ?? {
         status: 'checking',
       },
+      this.datasetActions.providerLabel(),
     );
   }
 
   get sceneStatsUploadIcon(): StatusIcon | null {
-    return datasetStateIcon(this.localData.ds_sceneStats, this.sceneStatsPending());
+    return datasetStateIcon(
+      this.localData.ds_sceneStats,
+      this.sceneStatsPending(),
+      this.datasetActions.providerLabel(),
+    );
   }
 
   get sceneStatsPeekIcon(): StatusIcon {
@@ -113,6 +123,7 @@ export class EditVideoDialogComponent {
       this.datasetActions.sceneStatsStatusByHash().get(this.localData.video_file.hash) ?? {
         status: 'checking',
       },
+      this.datasetActions.providerLabel(),
     );
   }
 

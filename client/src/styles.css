@@ -1,1 +1,54 @@
 /* You can add global styles to this file, and also import other style files */
+
+/*
+ * Shared layout for the action buttons at the top of a page.
+ *
+ * Global rather than repeated per component: every workflow step renders a row
+ * of buttons and a line of status text, and they had each grown their own
+ * spacing, their own wrapping behaviour and - in one case - a hardcoded grey
+ * that did not follow the theme. One rule keeps them in step.
+ *
+ * The convention the pages follow:
+ *   - `mat-raised-button color="primary"` is the single action that advances
+ *     the workflow on that page. A page with several equal choices has none.
+ *   - `mat-stroked-button` is everything else: alternatives, and auxiliary
+ *     actions like Save or Check status.
+ *   - `color="accent"` is not used. It had been applied to some buttons and not
+ *     others with no rule behind it, which read as meaning rather than noise.
+ */
+.actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* A column of actions, each with its own progress line - used where actions run
+   independently and report separately, rather than one at a time. */
+.actions-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/* Stacked actions read as a list, so a common button width lines up both their
+   edges and the status text beside them. */
+.actions-column .actions > button {
+  min-width: 220px;
+}
+
+/* Progress and outcome text sitting beside or beneath an action. */
+.action-status {
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+  margin: 0;
+}
+
+/* Explanatory text under a group of actions. */
+.action-hint {
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+  margin: 0;
+  max-width: 60ch;
+}

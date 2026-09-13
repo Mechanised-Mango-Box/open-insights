@@ -24,9 +24,10 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
-import { AnalysisFeatureRow, AnalysisResult } from '../dataset-server.service';
+import { AnalysisFeatureRow, AnalysisResult, computeAnalysis } from './stats';
 import { AnalysisService } from './analysis.service';
 import { VideoDatabaseService } from '../video-records/video-database.service';
+import { SelectionService } from '../video-records/selection.service';
 import { downloadBlob } from '../video-records/manifest-export';
 import { ChartImage, buildAnalysisExportZip, snapshotChartToBase64 } from './analysis-export';
 
@@ -86,21 +87,23 @@ const FEATURE_KEYS = Object.keys(FEATURE_LABELS) as FeatureKey[];
   imports: [MatButtonModule],
   template: `
     <div class="analysis-page">
-      <div class="toolbar">
+      <div class="actions">
         <button mat-raised-button color="primary" (click)="runAnalysis()" [disabled]="loading()">
           Run Analysis
         </button>
         <button
-          mat-raised-button
+          mat-stroked-button
           (click)="exportAnalysis()"
           [disabled]="!hasResult() || exporting()"
         >
           Export Analysis
         </button>
         @if (statusMessage()) {
-          <p class="status">{{ statusMessage() }}</p>
+          <p class="action-status">{{ statusMessage() }}</p>
         }
       </div>
+
+      <p class="action-hint">{{ scopeLabel() }}</p>
 
       @if (!hasResult()) {
         <div class="empty-state">
@@ -145,16 +148,6 @@ const FEATURE_KEYS = Object.keys(FEATURE_LABELS) as FeatureKey[];
         display: flex;
         flex-direction: column;
         gap: 24px;
-      }
-      .toolbar {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 16px;
-      }
-      .status {
-        margin: 0;
-        color: var(--mat-sys-on-surface-variant);
       }
       .empty-state {
         background: var(--mat-sys-surface-container);
@@ -223,6 +216,16 @@ const FEATURE_KEYS = Object.keys(FEATURE_LABELS) as FeatureKey[];
 export class AnalysisComponent implements AfterViewInit {
   private dbService = inject(VideoDatabaseService);
   private analysisService = inject(AnalysisService);
+  private selectionService = inject(SelectionService);
+
+  /** What the next run will cover, so narrowing the analysis to a selection is
+   * visible before pressing the button rather than inferred from the result. */
+  protected readonly scopeLabel = computed(() => {
+    const selected = this.selectionService.selectedCount();
+    return selected > 0
+      ? `Analysing ${selected} selected record(s).`
+      : 'Analysing every record. Select rows in the table to narrow it.';
+  });
 
   protected readonly featureKeys = FEATURE_KEYS;
   protected readonly featureLabels = FEATURE_LABELS;
@@ -259,7 +262,12 @@ export class AnalysisComponent implements AfterViewInit {
     this.loading.set(true);
     this.statusMessage.set(null);
     try {
-      const records = await this.dbService.getAllVideos();
+      // Selection first, whole library otherwise. Opt-in rather than required:
+      // running over everything is the common case, and a stray click in the
+      // table should not silently narrow what gets analysed without saying so -
+      // which is what the scope line above the button is for.
+      const selected = this.selectionService.selection.selected;
+      const records = selected.length > 0 ? selected : await this.dbService.getAllVideos();
       const { rows, eligibleCount, totalCount } = this.analysisService.buildFeatureRows(records);
 
       if (eligibleCount < 2) {
@@ -269,7 +277,7 @@ export class AnalysisComponent implements AfterViewInit {
         return;
       }
 
-      const result = await this.analysisService.runAnalysis(rows);
+      const result = computeAnalysis(rows);
       this.renderResult(rows, result);
       this.lastRows = rows;
       this.lastResult.set(result);

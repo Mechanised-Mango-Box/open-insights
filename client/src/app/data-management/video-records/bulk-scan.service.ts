@@ -4,13 +4,19 @@ import { VideoDatabaseService } from './video-database.service';
 import { DatasetActionsService } from './dataset-actions.service';
 import { VideoRecord } from './VideoRecord';
 
-export type ScanAction = 'transcript' | 'transcriptStats' | 'sceneStats';
+export type ScanAction = 'upload' | 'transcript' | 'transcriptStats' | 'sceneStats';
 
 const SCAN_LABELS: Record<ScanAction, string> = {
-  transcript: 'transcript',
-  transcriptStats: 'transcript stats',
-  sceneStats: 'scene stats',
+  upload: 'Uploading',
+  transcript: 'Extracting transcript',
+  transcriptStats: 'Extracting transcript stats',
+  sceneStats: 'Extracting scene stats',
 };
+
+/** A record with no file attached this session cannot be uploaded, and that is
+ * neither a success nor a failure - reporting it as either would misdescribe a
+ * run over a library that was imported without its videos. */
+type ScanOutcome = void | 'skipped';
 
 /**
  * Runs a DatasetActionsService action across the current selection - the Scan tab's buttons, and
@@ -35,7 +41,12 @@ export class BulkScanService {
   private running = signal<Set<ScanAction>>(new Set());
   private progress = signal<Map<ScanAction, string>>(new Map());
 
-  private readonly actions: Record<ScanAction, (record: VideoRecord) => Promise<void>> = {
+  private readonly actions: Record<ScanAction, (record: VideoRecord) => Promise<ScanOutcome>> = {
+    // Uploading ahead of a scan is worth doing on its own: otherwise every
+    // upload happens lazily on the first dataset request that 404s, which puts
+    // them in amongst the compute rather than before it.
+    upload: async (record) =>
+      (await this.datasetActions.uploadFile(record)) === 'no-local-file' ? 'skipped' : undefined,
     transcript: (record) => this.datasetActions.fetchTranscript(record),
     transcriptStats: async (record) => this.datasetActions.recomputeTranscriptStats(record),
     sceneStats: (record) => this.datasetActions.fetchSceneStats(record),
@@ -56,24 +67,26 @@ export class BulkScanService {
     this.setRunning(action, true);
     let succeeded = 0;
     let failed = 0;
+    let skipped = 0;
 
     try {
       for (let i = 0; i < records.length; i++) {
         const record = records[i];
-        this.setStatus(action, `Extracting ${label}: ${i + 1} of ${records.length}...`);
+        this.setStatus(action, `${label}: ${i + 1} of ${records.length}...`);
         try {
-          await this.actions[action](record);
+          if ((await this.actions[action](record)) === 'skipped') skipped++;
+          else succeeded++;
           await this.dbService.updateVideo(record);
-          succeeded++;
         } catch (error) {
-          console.error(`Failed to extract ${label} for record ${record.__id}:`, error);
+          console.error(`${label} failed for record ${record.__id}:`, error);
           failed++;
           // A failed action still leaves the record marked 'failed', exactly as a row click
           // does - worth keeping. Best-effort: a write failure must not abort the whole run.
           await this.dbService.updateVideo(record).catch(() => undefined);
         }
       }
-      this.setStatus(action, `Done: ${succeeded} succeeded, ${failed} failed.`);
+      const skippedNote = skipped > 0 ? `, ${skipped} skipped (no file attached)` : '';
+      this.setStatus(action, `Done: ${succeeded} succeeded, ${failed} failed${skippedNote}.`);
     } finally {
       this.setRunning(action, false);
     }

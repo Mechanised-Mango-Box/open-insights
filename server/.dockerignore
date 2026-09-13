@@ -1,0 +1,29 @@
+# The build context is this directory, not the repo root - data/local is 8GB and
+# has no business in an image layer. These are what is left to exclude.
+
+# Offline-only, and drags in sklearn/matplotlib which the runtime set omits.
+model_training/
+
+tests/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Weights are baked in by fetch_whisper_model.py during the build (see
+# Dockerfile), so a developer's local cache must not be copied over the top.
+models/
+requirements-training.txt
+run.sh
+
+# The portable build's output and its staging area - a staged model plus a
+# ~430MB executable, which would otherwise be uploaded to the daemon as build
+# context on every `docker compose build` and land in a layer.
+build/
+dist/
+
+# Its build definition and entry point, which the image has no use for: it runs
+# gunicorn against app:app, not the frozen launcher.
+open-insights.spec
+entry.py
+scripts/build_portable.py

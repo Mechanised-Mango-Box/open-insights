@@ -126,6 +126,7 @@ export class VideoTableComponent {
     return serverStatusIcon(status, {
       hasLocalFile: !!record.video_file.file,
       uploading: this.uploadingFile().has(record.video_file.hash),
+      where: this.datasetActions.providerLabel(),
     });
   }
 
@@ -167,7 +168,7 @@ export class VideoTableComponent {
   ): StatusIcon | null {
     if (!record.video_file.hash) return null;
     const result = statusMap.get(record.video_file.hash) ?? { status: 'checking' };
-    return datasetPeekStatusIcon(result);
+    return datasetPeekStatusIcon(result, this.datasetActions.providerLabel());
   }
 
   /**
@@ -178,10 +179,7 @@ export class VideoTableComponent {
    * so a dataset sitting ready on the server could be looked at and never collected. The badge
    * even said so ("Ready on server - not fetched yet") with no way to act on it.
    */
-  private isReadyOnServer(
-    record: VideoRecord,
-    statusMap: Map<string, DatasetPeekResult>,
-  ): boolean {
+  private isReadyOnServer(record: VideoRecord, statusMap: Map<string, DatasetPeekResult>): boolean {
     const hash = record.video_file.hash;
     return !!hash && statusMap.get(hash)?.status === 'ready';
   }
@@ -253,6 +251,7 @@ export class VideoTableComponent {
     return datasetStateIcon(
       record.ds_transcript,
       this.sendingTranscript().has(record.video_file.hash),
+      this.datasetActions.providerLabel(),
     );
   }
 
@@ -260,6 +259,7 @@ export class VideoTableComponent {
     return datasetStateIcon(
       record.ds_sceneStats,
       this.sendingSceneStats().has(record.video_file.hash),
+      this.datasetActions.providerLabel(),
     );
   }
 

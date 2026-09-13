@@ -31,6 +31,10 @@ MANIFEST
 #   before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
+#   ...except this project's own, which is a checked-in build definition rather
+#   than a generated artifact: it names the bundled model directory and the
+#   packages whose native libraries PyInstaller cannot find by itself.
+!open-insights.spec
 
 # Installer logs
 pip-log.txt

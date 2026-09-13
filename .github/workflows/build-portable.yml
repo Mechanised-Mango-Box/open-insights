@@ -1,0 +1,39 @@
+name: Build portable server
+
+# PyInstaller cannot cross-compile (see server/scripts/build_portable.py), so each
+# platform's binary has to be produced on that platform. This runs the existing
+# build script once per OS and hands back the three binaries as workflow artifacts.
+#
+# Manual only: click "Run workflow" in the Actions tab when you want a build.
+on:
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"
+          cache-dependency-path: server/requirements.txt
+
+      # --install-deps installs requirements.txt + pyinstaller itself, downloads the
+      # transcription model, and runs PyInstaller - see build_portable.py.
+      - name: Build
+        run: python scripts/build_portable.py --install-deps
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: open-insights-server-${{ matrix.os }}
+          path: server/dist/open-insights-server-*
+          retention-days: 14

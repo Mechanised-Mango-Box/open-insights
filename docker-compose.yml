@@ -1,0 +1,106 @@
+# The public deployment: the API server, and Caddy in front of it for TLS.
+#
+#   cp .env.example .env    # then fill it in
+#   docker compose up -d --build
+#
+# Everything the server needs to be a *public* service rather than a desktop one
+# is set here, not defaulted in the code. config.py ships with all of it off, so
+# a self-hoster who ignores this file gets the original behaviour: no key, no
+# limits, nothing deleted.
+
+services:
+  server:
+    build:
+      # This directory, not the repo root - see server/.dockerignore. The repo
+      # root carries data/local, which is GB-scale.
+      context: ./server
+      args:
+        # Baked into the image, so it must be rebuilt (not just restarted) to
+        # change models. config.py's comment has the sizes: ~75MB for tiny.en,
+        # ~1.6GB for turbo.
+        WHISPER_MODEL: ${WHISPER_MODEL:-tiny.en}
+    restart: unless-stopped
+    expose:
+      - "5000"
+    volumes:
+      # A bind mount on the host's own filesystem, deliberately: db.py sets
+      # PRAGMA journal_mode = WAL, and WAL needs a real local filesystem rather
+      # than a network mount.
+      - ${DATA_DIR:-/opt/open-insights/data}:/data
+    environment:
+      # The defaults for these sit beside the source tree, wherever that landed
+      # in the image. They have to point at the bind mount instead, or the data
+      # lives inside the container and dies with it.
+      UPLOAD_FOLDER: /data/uploads
+      DB_PATH: /data/db.sqlite
+
+      # The Dockerfile already sets this to 0; repeated here so it is visible
+      # alongside the rest of the public-deployment settings and can be turned
+      # back on from .env for a private box. / redirects to /status while it is
+      # off - see config.py's comment for why this one defaults the other way.
+      SHOW_INSTRUCTIONS: ${SHOW_INSTRUCTIONS:-0}
+
+      WHISPER_MODEL: ${WHISPER_MODEL:-tiny.en}
+
+      # The two keys. Both come from .env; neither has a default, because a
+      # default key is the same as no key.
+      PUBLIC_API_KEY: ${PUBLIC_API_KEY:?set PUBLIC_API_KEY in .env}
+      PRIVATE_API_KEY: ${PRIVATE_API_KEY:?set PRIVATE_API_KEY in .env}
+
+      # Where the client is served from. Must be set: the built-in default only
+      # covers localhost and the old GitHub Pages origin, and deliberately does
+      # not guess a *.pages.dev subdomain that might not be yours.
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:?set ALLOWED_ORIGINS in .env}
+
+      # Public tier caps. The private key is exempt from all of them.
+      PUBLIC_MAX_UPLOAD_BYTES: ${PUBLIC_MAX_UPLOAD_BYTES:-536870912}   # 512MB
+      PUBLIC_MAX_QUEUE_DEPTH: ${PUBLIC_MAX_QUEUE_DEPTH:-8}
+      PUBLIC_RATE_LIMIT: ${PUBLIC_RATE_LIMIT:-600 per minute}
+      PUBLIC_UPLOAD_RATE_LIMIT: ${PUBLIC_UPLOAD_RATE_LIMIT:-20 per hour}
+      PUBLIC_COMPUTE_RATE_LIMIT: ${PUBLIC_COMPUTE_RATE_LIMIT:-120 per hour}
+
+      # Nothing else in the server has ever deleted an upload, so on a shared
+      # box this is the only thing between a public endpoint and a full volume.
+      # Results are kept when a video is reaped - see db.delete_upload().
+      UPLOAD_DIR_MAX_BYTES: ${UPLOAD_DIR_MAX_BYTES:-21474836480}       # 20GB
+
+      # Off. The idle sweep is the one thing here that starts work nobody asked
+      # for; on a shared server that means transcribing every stranger's upload
+      # unprompted, and a restart re-kicking the whole backlog. Dead leases are
+      # still reclaimed, on the GET/POST paths - see start_upload_reaper().
+      BACKFILL_ENABLED: "0"
+
+      # Sized for the 2 OCPU Always Free box. The defaults assume a 16-core
+      # machine and deliberately oversubscribe it; config.py's comment measures
+      # the result at 93 threads and 850% CPU. OMP_/OPENCV_ are honoured by
+      # OpenBLAS and OpenCV, which nothing in the code sets.
+      WHISPER_NUM_WORKERS: ${WHISPER_NUM_WORKERS:-1}
+      SCENE_STATS_WORKERS: ${SCENE_STATS_WORKERS:-1}
+      WHISPER_CPU_THREADS: ${WHISPER_CPU_THREADS:-2}
+      OMP_NUM_THREADS: ${OMP_NUM_THREADS:-2}
+      OPENCV_NUM_THREADS: ${OPENCV_NUM_THREADS:-2}
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # Certificates live here. Losing this volume means re-issuing them, and
+      # Let's Encrypt rate-limits that, so it is a named volume rather than
+      # anything tied to a container's lifetime.
+      - caddy_data:/data
+      - caddy_config:/config
+    environment:
+      # The hostname Caddy will get a certificate for. A bare IP cannot have
+      # one, which is why this is a DuckDNS name rather than the VM's address.
+      SITE_ADDRESS: ${SITE_ADDRESS:?set SITE_ADDRESS in .env}
+      MAX_BODY_SIZE: ${MAX_BODY_SIZE:-512MB}
+    depends_on:
+      - server
+
+volumes:
+  caddy_data:
+  caddy_config:
