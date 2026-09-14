@@ -63,10 +63,12 @@ export const SETTINGS: View = {
  * The record table is the working set the first three steps all act on - Scan in particular
  * reads the table's selection - so it stays on screen for each of them, exactly as it did
  * beneath the old Data Management tab group.
+ *
+ * Recommend is deliberately absent: it acts on exactly one video, which it picks from its own
+ * single-choice list rather than from this multi-select table.
  */
 export const VIEWS_WITH_RECORDS: ReadonlySet<ViewId> = new Set<ViewId>([
   'import',
   'scan',
   'export',
-  'recommend',
 ]);

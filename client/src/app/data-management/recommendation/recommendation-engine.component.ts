@@ -1,14 +1,24 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
-import { SelectionService } from '../video-records/selection.service';
+import { MatInputModule } from '@angular/material/input';
+import { firstValueFrom } from 'rxjs';
+import { DatasetActionsService } from '../video-records/dataset-actions.service';
+import { VideoDatabaseService } from '../video-records/video-database.service';
+import { VideoRecord } from '../video-records/VideoRecord';
 import { buildVideoFeatures } from '../analysis/analysis.service';
 import { AnalysisFeatureColumn, FEATURE_LABELS } from '../analysis/stats';
 import {
   RecommendationListComponent,
   RecommendationRow,
 } from '../analysis/recommendation-list.component';
+import { HighlightSegment, highlight, rankFuzzy } from './fuzzy';
 import { RecommendationService, Suggestion, VideoRecommendation } from './recommendation.service';
+import { SCAN_STEP_LABELS, ScanStep, missingScanSteps } from './scan-first';
+import { ScanFirstDialogComponent, ScanFirstDialogData } from './scan-first-dialog.component';
 
 /** One feature the model thinks is holding this video back, ready to render. */
 type Improvement = {
@@ -21,25 +31,87 @@ type Improvement = {
   contribution: number;
 };
 
+/** One entry in the video picker. Every record is choosable; the note only says
+ * what submitting it will run into. */
+type VideoOption = {
+  id: number;
+  name: string;
+  note: string | null;
+};
+
 /**
  * The Recommend step: hands one video to the model the server holds, and shows
  * its predicted performance and where it could improve.
  *
- * One record, not a selection, unlike Scan and Export: the model speaks about a
- * single video, so acting on three of them would have to mean three answers or
- * a silently ignored two.
+ * Picks its video from its own single-choice search box rather than the shared
+ * record table. That table is a multi-select working set for Scan and Export,
+ * and borrowing it meant explaining why two ticked rows were wrong; a picker
+ * makes "exactly one" the only thing that can be expressed. It fuzzy-matches as
+ * you type, because a library of lecture recordings is long and named alike.
+ *
+ * An unscanned video can still be chosen and submitted. Submitting it opens a
+ * dialog offering to run the missing Scan work first, and the request is only
+ * sent once that work has produced the features the model needs.
  */
 @Component({
   selector: 'recommendation-engine',
   standalone: true,
-  imports: [MatButtonModule, MatIcon, RecommendationListComponent],
+  imports: [
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatIcon,
+    MatInputModule,
+    RecommendationListComponent,
+  ],
   template: `
     <section class="card actions-column">
+      <mat-form-field class="video-picker" appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Video</mat-label>
+        <input
+          matInput
+          type="text"
+          placeholder="Type to search your videos"
+          [matAutocomplete]="videoPicker"
+          [value]="query()"
+          [disabled]="pending()"
+          (input)="query.set($any($event.target).value)"
+          (focus)="$any($event.target).select()"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+        <mat-autocomplete
+          #videoPicker="matAutocomplete"
+          autoActiveFirstOption
+          [displayWith]="nameOf"
+          (optionSelected)="choose($event.option.value)"
+          (closed)="restoreQuery()"
+        >
+          @for (option of matches(); track option.id) {
+            <mat-option [value]="option.id">
+              @for (segment of option.segments; track $index) {
+                @if (segment.match) {
+                  <mark>{{ segment.text }}</mark>
+                } @else {
+                  {{ segment.text }}
+                }
+              }
+              @if (option.note) {
+                <span class="option-note">- {{ option.note }}</span>
+              }
+            </mat-option>
+          } @empty {
+            <mat-option disabled>
+              {{ options().length === 0 ? 'No records yet' : 'No videos match' }}
+            </mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+
       <div class="actions">
         <button
           mat-raised-button
           color="primary"
-          [disabled]="!submittable() || pending()"
+          [disabled]="!chosen() || pending()"
           (click)="submit()"
         >
           <mat-icon>online_prediction</mat-icon>
@@ -49,7 +121,7 @@ type Improvement = {
 
       <!-- After the button, as on the Export step: this is read having already
            found the button greyed out, so it explains rather than instructs. -->
-      <p class="action-hint">{{ selectionHint() }}</p>
+      <p class="action-hint">{{ hint() }}</p>
 
       @if (status()) {
         <p class="action-status">{{ status() }}</p>
@@ -107,6 +179,21 @@ type Improvement = {
   `,
   styles: [
     `
+      .video-picker {
+        width: 100%;
+        max-width: 480px;
+      }
+      .option-note {
+        margin-left: 4px;
+        color: var(--mat-sys-on-surface-variant);
+      }
+      /* The matched characters, marked by weight and colour rather than the
+         browser's yellow <mark> background, which fights the panel's theme. */
+      mark {
+        background: none;
+        color: var(--mat-sys-primary);
+        font-weight: 600;
+      }
       .model-note {
         margin: 0 0 12px;
         color: var(--mat-sys-on-surface-variant);
@@ -158,39 +245,66 @@ type Improvement = {
   ],
 })
 export class RecommendationEngineComponent {
-  private selectionService = inject(SelectionService);
+  private videoDatabase = inject(VideoDatabaseService);
+  private datasetActions = inject(DatasetActionsService);
   private recommendationService = inject(RecommendationService);
+  private dialog = inject(MatDialog);
 
+  /** True for the whole submit, scan included, so the picker and button stay
+   * locked while a scan is writing to the chosen record. */
   protected pending = signal(false);
   protected status = signal<string | null>(null);
   protected result = signal<VideoRecommendation | null>(null);
 
-  /** The one selected record, or null when the selection is not exactly one. */
-  private chosen = computed(() => {
-    if (this.selectionService.selectedCount() !== 1) return null;
-    return this.selectionService.selection.selected[0] ?? null;
+  /** Held by id rather than as the record, so the record is always read fresh
+   * from the database signal: a Scan finishing updates it in place, and a
+   * deleted record drops the choice instead of lingering. */
+  protected chosenId = signal<number | null>(null);
+
+  /** What is in the search box. Holds the chosen video's name when nobody is
+   * typing, so the box doubles as the display of the current choice. */
+  protected query = signal('');
+
+  protected options = computed<VideoOption[]>(() =>
+    this.videoDatabase
+      .videoRecords()
+      .filter((record) => record.__id != null)
+      .map((record) => ({
+        id: record.__id!,
+        name: record.sort_name || '(untitled)',
+        note: scanNote(record),
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
+  );
+
+  /** The options that match the query, best first, with the matched characters
+   * split out for highlighting. */
+  protected matches = computed<(VideoOption & { segments: HighlightSegment[] })[]>(() => {
+    const query = this.query();
+    // The box showing the current choice's own name is not a search: opening it
+    // again should offer every video, not just the one already picked.
+    const search = query === this.nameOf(this.chosenId()) ? '' : query;
+    return rankFuzzy(this.options(), search, (option) => option.name).map(({ item, match }) => ({
+      ...item,
+      segments: highlight(item.name, match.indices),
+    }));
   });
 
-  /** Recomputed from the record rather than cached, so a Scan finishing while
-   * the record is selected makes it submittable without reselecting it. */
-  private features = computed(() => {
+  protected chosen = computed(() => {
+    const id = this.chosenId();
+    if (id == null) return null;
+    return this.videoDatabase.videoRecords().find((record) => record.__id === id) ?? null;
+  });
+
+  protected hint = computed(() => {
+    if (this.options().length === 0) return 'No records yet - add some on the Import step.';
     const record = this.chosen();
-    return record ? buildVideoFeatures(record) : null;
-  });
-
-  protected submittable = computed(() => !!this.chosen()?.video_file.hash && !!this.features());
-
-  /** Says which way the selection is wrong, rather than only that it is. */
-  protected selectionHint = computed(() => {
-    const count = this.selectionService.selectedCount();
-    if (count === 0) return 'Select one record in the table below to submit it.';
-    if (count > 1)
-      return `Select just one record - ${count} are selected, and the model reports on a single video.`;
-    if (!this.chosen()?.video_file.hash)
-      return 'The selected record has no video file attached, so there is nothing to submit.';
-    if (!this.features())
-      return 'The selected record has not been fully scanned - run Scan first, since the model needs its scene and transcript stats.';
-    return "Sends the selected video's scanned features to the server's model.";
+    if (!record) return 'Choose a video to submit.';
+    if (buildVideoFeatures(record))
+      return "Sends this video's scanned features to the server's model.";
+    return record.video_file.hash
+      ? 'This video has not been fully scanned yet - submitting it will offer to scan it first.'
+      : 'This video has not been scanned and has no video file attached, so it cannot be submitted yet.';
   });
 
   protected improvements = computed<Improvement[]>(() => {
@@ -227,24 +341,118 @@ export class RecommendationEngineComponent {
   protected number = (value: number): string =>
     value.toLocaleString(undefined, { maximumFractionDigits: 2 });
 
-  async submit(): Promise<void> {
-    const hash = this.chosen()?.video_file.hash;
-    const features = this.features();
-    if (!hash || !features) return;
+  /** An arrow so the autocomplete can call it detached, as [displayWith] does:
+   * without it the panel writes the option's numeric id into the box. */
+  protected nameOf = (id: number | null): string =>
+    this.options().find((option) => option.id === id)?.name ?? '';
 
-    this.pending.set(true);
+  /** A result belongs to the video it was asked about, so choosing another
+   * clears it rather than leaving one video's numbers under another's name. */
+  protected choose(id: number): void {
+    this.chosenId.set(id);
+    this.query.set(this.nameOf(id));
+    this.result.set(null);
+    this.status.set(null);
+  }
+
+  /** Closing the panel without choosing puts the box back to the current
+   * choice, so half-typed text never reads as the video about to be sent. */
+  protected restoreQuery(): void {
+    this.query.set(this.nameOf(this.chosenId()));
+  }
+
+  async submit(): Promise<void> {
+    const id = this.chosenId();
+    const record = this.chosen();
+    if (id == null || !record || this.pending()) return;
+
     this.status.set(null);
     this.result.set(null);
+
+    const steps = missingScanSteps(record);
+    if (!buildVideoFeatures(record) && !(await this.confirmScan(record, steps))) return;
+
+    this.pending.set(true);
+    let stage: 'scan' | 'request' = 'scan';
     try {
-      this.result.set(await this.recommendationService.request(hash, features));
+      if (!buildVideoFeatures(record)) await this.scan(record, steps);
+
+      const features = buildVideoFeatures(record);
+      if (!features) {
+        this.status.set(
+          'Scanning finished, but the video still lacks the scene and transcript stats the model needs - check its row on the Scan step.',
+        );
+        return;
+      }
+      if (!record.video_file.hash) {
+        this.status.set('This video has no video file attached, so it cannot be submitted.');
+        return;
+      }
+
+      stage = 'request';
+      this.status.set(null);
+      const result = await this.recommendationService.request(record.video_file.hash, features);
+      // Dropped if the user chose another video while this was in flight.
+      if (this.chosenId() === id) this.result.set(result);
     } catch (error) {
-      console.error('Recommendation request failed:', error);
-      this.status.set(`Could not get recommendations: ${describe(error)}`);
+      console.error(`Recommendation ${stage} failed:`, error);
+      const what = stage === 'scan' ? 'Could not scan this video' : 'Could not get recommendations';
+      this.status.set(`${what}: ${describe(error)}`);
     } finally {
       this.pending.set(false);
     }
   }
+
+  /** Opens the scan-first dialog; true only if the user chose to scan. */
+  private async confirmScan(record: VideoRecord, steps: ScanStep[]): Promise<boolean> {
+    const ref = this.dialog.open<ScanFirstDialogComponent, ScanFirstDialogData, boolean>(
+      ScanFirstDialogComponent,
+      {
+        data: {
+          name: record.sort_name || '(untitled)',
+          steps,
+          canScan: !!record.video_file.hash,
+        },
+      },
+    );
+    return (await firstValueFrom(ref.afterClosed())) === true;
+  }
+
+  /**
+   * Runs the missing steps against the record in order, saving after each, as
+   * the Scan step's bulk run does - so a scan that fails half way still keeps
+   * what it finished, and the failure is recorded on the record too.
+   */
+  private async scan(record: VideoRecord, steps: ScanStep[]): Promise<void> {
+    for (const [index, step] of steps.entries()) {
+      this.status.set(`Scanning: ${SCAN_STEP_LABELS[step]} (${index + 1} of ${steps.length})...`);
+      try {
+        await this.runStep(record, step);
+      } catch (error) {
+        await this.videoDatabase.updateVideo(record).catch(() => undefined);
+        throw error;
+      }
+      await this.videoDatabase.updateVideo(record);
+    }
+  }
+
+  private async runStep(record: VideoRecord, step: ScanStep): Promise<void> {
+    switch (step) {
+      case 'sceneStats':
+        return this.datasetActions.fetchSceneStats(record);
+      case 'transcript':
+        return this.datasetActions.fetchTranscript(record);
+      case 'transcriptStats':
+        return this.datasetActions.recomputeTranscriptStats(record);
+    }
+  }
 }
+
+/** What submitting this record will run into, shown beside it in the picker. */
+const scanNote = (record: VideoRecord): string | null => {
+  if (buildVideoFeatures(record)) return null;
+  return record.video_file.hash ? 'not scanned' : 'not scanned, no video file';
+};
 
 const labelFor = (key: string): string => FEATURE_LABELS[key as AnalysisFeatureColumn] ?? key;
 
