@@ -21,7 +21,7 @@ from db import (
     insert_file,
     requeue_expired,
 )
-from flask import Blueprint, jsonify, make_response, redirect, request
+from flask import Blueprint, current_app, jsonify, make_response, redirect, request
 from instructions import page_html
 from werkzeug.exceptions import NotFound
 from processing import SUBMIT, queue_status

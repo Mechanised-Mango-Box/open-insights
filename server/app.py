@@ -10,8 +10,13 @@ from processing import resubmit_orphaned_jobs, start_backfill, start_upload_reap
 from routes import bp
 from werkzeug.exceptions import HTTPException
 from werkzeug.middleware.proxy_fix import ProxyFix
+from inference import EngagementPredictor
 
 app = Flask(__name__)
+
+
+# Creating the Engagement Predictor when the server starts
+app.extensions["engagement_predictor"] = EngagementPredictor()
 
 # Behind Caddy in the deployed setup, so the peer address on every request is the
 # proxy's. Without this the whole public tier shares one rate-limit bucket keyed
