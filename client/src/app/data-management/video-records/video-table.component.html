@@ -4,14 +4,15 @@
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input />
   </mat-form-field>
 
-  <div class="bulk-actions" style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-    <span>{{ selectedCount }} selected</span>
+  <div class="bulk-actions actions">
+    <p class="action-hint">{{ selectedCount }} selected</p>
     <button
       mat-stroked-button
       color="warn"
       [disabled]="isSelectionEmpty || bulkActionPending()"
       (click)="deleteSelected()"
     >
+      <mat-icon>delete</mat-icon>
       Delete Selected
     </button>
     <button
@@ -19,6 +20,7 @@
       [disabled]="selectedCount < 2 || bulkActionPending()"
       (click)="mergeSelected()"
     >
+      <mat-icon>merge_type</mat-icon>
       Merge Selected
     </button>
   </div>

@@ -76,12 +76,9 @@ A single file with the transcription weights inside. No Python, no pip, no netwo
 cd ./server
 python scripts/build_portable.py    # --install fetches what is missing
 ```
-
-Also needs `pyinstaller` and `pandas`, neither of which is in `requirements.txt`.
-
-Builds `dist/open-insights-server-<platform>-<arch>`. It stores its
-database and uploads in a `data` directory beside itself, and prints how to point a
-client at it. Set `SHOW_INSTRUCTIONS=0` to silence that.
+Leaves `dist/open-insights-server-<platform>-x86_64`. Run it anywhere: it keeps
+its database and uploads in a `data` directory beside itself, and prints how to
+point a client at it. Set `SHOW_INSTRUCTIONS=0` to silence that.
 
 - Build it on the platform you will run it on. PyInstaller cannot cross-compile,
   and a Linux build will not run on an older distribution than the one that built it.

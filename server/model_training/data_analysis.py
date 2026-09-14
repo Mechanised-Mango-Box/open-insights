@@ -14,7 +14,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from model_training.data_preparation import FEATURE_COLUMNS, TARGET_COLUMN
+from server.model_training.data_preparation import FEATURE_COLUMNS, TARGET_COLUMN
 
 
 def compute_loess(
@@ -150,6 +150,8 @@ FEATURE_DISPLAY_NAMES: Dict[str, str] = {
     "wpm": "Average speaking speed (wpm)",
     "scene_count": "Total number of scenes",
     "scene_change_rate": "Average scenes change rate (spm)",
+    "speech_pace_variation": "Speech pace variation (WPM SD)",
+    "speaking_ratio": "Speaking ratio",
 }
 
 
@@ -172,7 +174,15 @@ def plot_pearson_correlation(
     Returns:
         Matplotlib Figure object.
     """
-    preferred_order = ["duration", "word_count", "wpm", "scene_count", "scene_change_rate"]
+    preferred_order = [
+        "duration",
+        "word_count",
+        "wpm",
+        "scene_count",
+        "scene_change_rate",
+        "speech_pace_variation",
+        "speaking_ratio",
+    ]
     
     if features is None:
         # Use preferred order if available in df, followed by any remaining columns in FEATURE_COLUMNS
@@ -323,7 +333,7 @@ def generate_full_analysis_report(
 
 
 if __name__ == "__main__":
-    from model_training.mock_data import generate_mock_training_data
+    from server.model_training.mock_data import generate_mock_training_data
 
     print("[ Analysis Test ] Generating mock data for visualization test...")
     df_test = generate_mock_training_data(num_samples=200, random_state=42)

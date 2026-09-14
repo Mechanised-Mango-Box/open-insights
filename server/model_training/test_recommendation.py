@@ -44,8 +44,15 @@ class TestRecommendationLogic(unittest.TestCase):
 
     def test_generate_feature_recommendations_wording_and_structure(self):
         model = LinearRegression()
-        model.coef_ = np.array([2.5, -3.0, 0.5, -0.99])
-        feature_names = ["duration", "wpm", "scene_change_rate", "word_count"]
+        model.coef_ = np.array([2.5, -3.0, 0.5, -0.99, 1.2, -0.5])
+        feature_names = [
+            "duration",
+            "wpm",
+            "scene_change_rate",
+            "word_count",
+            "speech_pace_variation",
+            "speaking_ratio",
+        ]
 
         recs = generate_feature_recommendations(model, feature_names, threshold=1.0)
 
@@ -53,7 +60,7 @@ class TestRecommendationLogic(unittest.TestCase):
         self.assertIn("features", recs)
 
         feats = recs["features"]
-        self.assertEqual(len(feats), 4)
+        self.assertEqual(len(feats), 6)
 
         # Duration: positive
         self.assertEqual(feats["duration"]["relationship"], "positive")
@@ -83,13 +90,27 @@ class TestRecommendationLogic(unittest.TestCase):
             "In this dataset, word count has little to no measurable relationship with average percentage viewed.",
         )
 
+        # Speech pace variation: positive
+        self.assertEqual(feats["speech_pace_variation"]["relationship"], "positive")
+        self.assertEqual(
+            feats["speech_pace_variation"]["recommendation"],
+            "In this dataset, higher speech pace variation is associated with higher average percentage viewed.",
+        )
+
+        # Speaking ratio: weak
+        self.assertEqual(feats["speaking_ratio"]["relationship"], "weak")
+        self.assertEqual(
+            feats["speaking_ratio"]["recommendation"],
+            "In this dataset, speaking ratio has little to no measurable relationship with average percentage viewed.",
+        )
+
     def test_pipeline_integration(self):
         mock_df = generate_mock_training_data(num_samples=50, random_state=42)
         results = run_training_pipeline(raw_df=mock_df, save_dir=None, recommendation_threshold=1.0)
 
         self.assertIn("recommendations", results)
         self.assertEqual(results["recommendations"]["threshold"], 1.0)
-        self.assertEqual(len(results["recommendations"]["features"]), 4)
+        self.assertEqual(len(results["recommendations"]["features"]), 6)
 
 
 if __name__ == "__main__":

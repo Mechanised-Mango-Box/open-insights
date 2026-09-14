@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 import { SelectionService } from './selection.service';
 import { BulkScanService } from './bulk-scan.service';
 
@@ -13,10 +14,10 @@ import { BulkScanService } from './bulk-scan.service';
 @Component({
   selector: 'scan-actions',
   standalone: true,
-  imports: [MatButtonModule],
+  imports: [MatButtonModule, MatIcon],
   template: `
-    <div class="actions-column">
-      <p class="action-status">{{ selectionService.selectedCount() }} record(s) selected.</p>
+    <section class="card actions-column">
+      <p class="action-hint">{{ selectionService.selectedCount() }} record(s) selected.</p>
 
       <div class="actions">
         <button
@@ -24,10 +25,11 @@ import { BulkScanService } from './bulk-scan.service';
           [disabled]="selectionService.isEmpty() || scans.isRunning('upload')"
           (click)="scans.run('upload')"
         >
+          <mat-icon>cloud_upload</mat-icon>
           Upload to Server
         </button>
         @if (scans.statusFor('upload')) {
-          <span class="action-status">{{ scans.statusFor('upload') }}</span>
+          <p class="action-status">{{ scans.statusFor('upload') }}</p>
         }
       </div>
       <p class="action-hint">
@@ -41,10 +43,11 @@ import { BulkScanService } from './bulk-scan.service';
           [disabled]="selectionService.isEmpty() || scans.isRunning('transcript')"
           (click)="scans.run('transcript')"
         >
+          <mat-icon>subtitles</mat-icon>
           Extract Transcript
         </button>
         @if (scans.statusFor('transcript')) {
-          <span class="action-status">{{ scans.statusFor('transcript') }}</span>
+          <p class="action-status">{{ scans.statusFor('transcript') }}</p>
         }
       </div>
 
@@ -54,10 +57,11 @@ import { BulkScanService } from './bulk-scan.service';
           [disabled]="selectionService.isEmpty() || scans.isRunning('transcriptStats')"
           (click)="scans.run('transcriptStats')"
         >
+          <mat-icon>speed</mat-icon>
           Extract Transcript Stats
         </button>
         @if (scans.statusFor('transcriptStats')) {
-          <span class="action-status">{{ scans.statusFor('transcriptStats') }}</span>
+          <p class="action-status">{{ scans.statusFor('transcriptStats') }}</p>
         }
       </div>
 
@@ -67,13 +71,14 @@ import { BulkScanService } from './bulk-scan.service';
           [disabled]="selectionService.isEmpty() || scans.isRunning('sceneStats')"
           (click)="scans.run('sceneStats')"
         >
+          <mat-icon>movie_filter</mat-icon>
           Extract Scene Stats
         </button>
         @if (scans.statusFor('sceneStats')) {
-          <span class="action-status">{{ scans.statusFor('sceneStats') }}</span>
+          <p class="action-status">{{ scans.statusFor('sceneStats') }}</p>
         }
       </div>
-    </div>
+    </section>
   `,
 })
 export class ScanActionsComponent {

@@ -17,10 +17,12 @@ mock_data = mock_data.dropna(subset=["average_percentage_viewed"])
 
 # X contains the video features/predictors that the model learns from.
 feature_columns = [
-    "duration_mins",
+    "duration",
     "wpm",
     "scene_change_rate",
     "word_count",
+    "speech_pace_variation",
+    "speaking_ratio",
 ]
 X = mock_data[feature_columns]
 
@@ -91,7 +93,7 @@ else:
 
 print("\nVIDEO ENGAGEMENT ANALYSIS")
 print("-" * 48)
-print(f"Duration:       {video_features['duration_mins']:.1f} minutes")
+print(f"Duration:       {video_features['duration']:.1f} minutes")
 print(f"Speaking pace:  {video_features['wpm']:.0f} WPM")
 print(
     f"Visual changes: "

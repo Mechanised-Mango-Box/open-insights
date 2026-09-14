@@ -47,7 +47,12 @@
   #
   # connect-src also has to name your API server. Update it when SITE_ADDRESS
   # changes, or the browser blocks every call with the CSP as the only clue.
-  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; worker-src 'self' blob:; connect-src 'self' blob: https://open-insights.duckdns.org https://cdn.jsdelivr.net https://huggingface.co https://*.huggingface.co https://*.hf.co; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'
+  #
+  # localhost:5000 is listed because running your own server is an offered path
+  # here, not just an operator's - the Overview card and the prompt on load both
+  # point at it. A self-hoster on any other host or port has to add theirs, one
+  # more reason this policy stays Report-Only until every path has been walked.
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; worker-src 'self' blob:; connect-src 'self' blob: https://open-insights.duckdns.org http://localhost:5000 http://127.0.0.1:5000 https://cdn.jsdelivr.net https://huggingface.co https://*.huggingface.co https://*.hf.co; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'
 
 # Content-hashed by the build (outputHashing: "all"), so the name changes
 # whenever the bytes do and these can never go stale.

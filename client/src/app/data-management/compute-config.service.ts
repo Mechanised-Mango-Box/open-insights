@@ -1,5 +1,5 @@
-import { Injectable, signal } from '@angular/core';
-import { DatasetKind } from './providers/dataset-provider';
+import { Injectable, computed, signal } from '@angular/core';
+import { DATASET_KINDS, DatasetKind } from './providers/dataset-provider';
 
 export type ComputeTarget = 'local' | 'server';
 
@@ -41,6 +41,19 @@ export class ComputeConfigService {
   targetFor(kind: DatasetKind): ComputeTarget {
     return this.experimental() ? this.targets()[kind] : 'server';
   }
+
+  /**
+   * Whether any kind still goes to a server, and so whether *which* server this
+   * browser talks to is a live question at all.
+   *
+   * Goes through targetFor rather than reading targets() directly, inheriting
+   * its guard: a per-kind preference left in localStorage from an earlier
+   * session cannot make this claim the server is unused while the experiment is
+   * switched off.
+   */
+  readonly usesServer = computed(() =>
+    DATASET_KINDS.some((kind) => this.targetFor(kind) === 'server'),
+  );
 
   setExperimental(enabled: boolean): void {
     this.experimental.set(enabled);

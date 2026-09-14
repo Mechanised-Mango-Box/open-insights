@@ -22,15 +22,46 @@ const newRecordDefaults = (): Omit<VideoRecord, '__id' | 'sort_name'> => ({
 @Component({
   selector: 'video-records-import',
   template: `
-    <div class="actions">
-      <button mat-stroked-button [disabled]="pending()" (click)="insertNewEmpty()">
-        <mat-icon>add</mat-icon>
-        Create Empty
-      </button>
-      <button mat-stroked-button [disabled]="pending()" (click)="csvInput.click()">
-        <mat-icon>add</mat-icon>
-        Import From: Youtube Content
-      </button>
+    <section class="card actions-column">
+      <div class="actions">
+        <button mat-stroked-button [disabled]="pending()" (click)="insertNewEmpty()">
+          <mat-icon>add</mat-icon>
+          Create Empty
+        </button>
+      </div>
+
+      <div class="actions">
+        <button mat-stroked-button [disabled]="pending()" (click)="csvInput.click()">
+          <mat-icon>add</mat-icon>
+          Import From: Youtube Content
+        </button>
+      </div>
+
+      <div class="actions">
+        <button mat-stroked-button [disabled]="pending()" (click)="videoInput.click()">
+          <mat-icon>add</mat-icon>
+          Create From: Video Files
+        </button>
+      </div>
+
+      <div class="actions">
+        <button mat-stroked-button [disabled]="pending()" (click)="zipInput.click()">
+          <mat-icon>upload</mat-icon>
+          Import From: Export Zip
+        </button>
+      </div>
+
+      <!-- One line at the foot rather than one per button: this is a single shared
+           signal, written by whichever import last ran, and Create Empty never writes
+           it at all. Beside any one button it would report the wrong run. -->
+      @if (importSummary()) {
+        <p class="action-status">{{ importSummary() }}</p>
+      }
+
+      <!-- The pickers the three buttons above open. A hidden input generates no box, so
+           it is never a flex item and takes no part in the column wherever it sits -
+           collected here rather than one per row, which left each action a different
+           shape and made the four rows hard to read as a list. -->
       <input
         type="file"
         #csvInput
@@ -38,10 +69,6 @@ const newRecordDefaults = (): Omit<VideoRecord, '__id' | 'sort_name'> => ({
         accept=".csv"
         (change)="insertFromYoutubeContent($event)"
       />
-      <button mat-stroked-button [disabled]="pending()" (click)="videoInput.click()">
-        <mat-icon>add</mat-icon>
-        Create From: Video Files
-      </button>
       <input
         type="file"
         #videoInput
@@ -50,10 +77,6 @@ const newRecordDefaults = (): Omit<VideoRecord, '__id' | 'sort_name'> => ({
         multiple
         (change)="insertFromVideoFiles($event)"
       />
-      <button mat-stroked-button [disabled]="pending()" (click)="zipInput.click()">
-        <mat-icon>upload</mat-icon>
-        Import From: Export Zip
-      </button>
       <input
         type="file"
         #zipInput
@@ -61,10 +84,7 @@ const newRecordDefaults = (): Omit<VideoRecord, '__id' | 'sort_name'> => ({
         accept=".zip"
         (change)="insertFromExportZip($event)"
       />
-      @if (importSummary()) {
-        <span class="action-status">{{ importSummary() }}</span>
-      }
-    </div>
+    </section>
   `,
   imports: [MatIcon, MatButtonModule],
 })
