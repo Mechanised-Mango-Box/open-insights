@@ -2,7 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { ServerConfigService } from '../server-config.service';
-import { Recommendations } from '../analysis/recommendations';
+import { VideoFeatures } from '../analysis/analysis.service';
+import { FeatureRecommendation } from '../analysis/recommendations';
 
 /**
  * Built as a plain function so it can be tested without standing up HttpClient -
@@ -12,6 +13,36 @@ import { Recommendations } from '../analysis/recommendations';
 export const recommendationUrl = (serverUrl: string, hash: string): string =>
   `${serverUrl}/api/videos/${hash}/recommendation`;
 
+/** Which way a feature would have to move to sit where the training data sees
+ * higher viewing. "keep" means it already does; "none" means the relationship
+ * is too weak for the model to say. */
+export type Suggestion = 'increase' | 'decrease' | 'keep' | 'none';
+
+/**
+ * One feature of one video, as the server's model sees it. Mirrors the
+ * per-feature dict EngagementPredictor.predict() builds in server/inference.py.
+ *
+ * The FeatureRecommendation half is the dataset-level relationship, identical
+ * for every video; the rest is what makes it about this one.
+ */
+export type VideoFeatureAssessment = FeatureRecommendation & {
+  value: number;
+  training_mean: number;
+  z_score: number;
+  /** Points of average percentage viewed this value moves the linear estimate
+   * away from an average training video. Negative is costing views. */
+  contribution: number;
+  suggestion: Suggestion;
+  advice: string;
+};
+
+export type VideoRecommendation = {
+  /** The random forest's prediction, in percent. Not clipped to 0-100. */
+  average_percentage_viewed: number;
+  threshold: number;
+  features: Record<string, VideoFeatureAssessment>;
+};
+
 /**
  * Asks the server's trained model what it makes of one video.
  *
@@ -19,10 +50,10 @@ export const recommendationUrl = (serverUrl: string, hash: string): string =>
  * regression in the browser across the user's whole dataset, whereas this hands
  * a single video to a model the server already holds.
  *
- * One request and wait, rather than the POST -> 202 -> poll the dataset kinds
- * use. The route is not implemented yet, so a polling state machine would be
- * built against a contract nobody has written; if inference turns out to need
- * queueing, this becomes a poll then.
+ * The features travel in the body rather than being read back on the server:
+ * two of them are only ever computed in the browser, and a Scan may have run on
+ * local compute. One request and wait, rather than the POST -> 202 -> poll the
+ * dataset kinds use - inference is a single forest evaluation, not a job.
  */
 @Injectable({ providedIn: 'root' })
 export class RecommendationService {
@@ -37,16 +68,11 @@ export class RecommendationService {
     return key ? { 'X-API-Key': key } : {};
   }
 
-  /**
-   * The response is typed as the same Recommendations the Analysis page already
-   * renders. That is an assumption, not a contract - the route is a stub, so
-   * this is the shape to confirm (or change) when it is implemented.
-   */
-  async request(hash: string): Promise<Recommendations> {
+  async request(hash: string, features: VideoFeatures): Promise<VideoRecommendation> {
     return await firstValueFrom(
-      this.http.post<Recommendations>(
+      this.http.post<VideoRecommendation>(
         recommendationUrl(this.serverConfig.serverUrl(), hash),
-        {},
+        features,
         { headers: this.authHeaders() },
       ),
     );

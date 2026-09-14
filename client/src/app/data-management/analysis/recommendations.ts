@@ -8,11 +8,11 @@
  * and string for string, so the wording a user reads here is the wording the
  * training pipeline prints.
  *
- * It runs here rather than behind an endpoint because the server deliberately
- * does not carry sklearn - see the PyInstaller `excludes` in
- * server/open-insights.spec and the note in requirements-training.txt, which
- * record that the request path imports none of the training dependencies. This
- * follows stats.ts, which ports the analysis from the same package.
+ * It runs here rather than behind an endpoint because it fits the user's own
+ * records, which never leave the browser. The server's model is a different
+ * thing - trained once on its own data and asked about a single video by the
+ * Recommend page (recommendation/recommendation.service.ts). This follows
+ * stats.ts, which ports the analysis from the same package.
  */
 import { ANALYSIS_FEATURE_COLUMNS, ANALYSIS_TARGET_COLUMN, AnalysisFeatureRow } from './stats';
 
