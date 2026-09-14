@@ -1,8 +1,14 @@
 # The build context is this directory, not the repo root - data/local is 8GB and
 # has no business in an image layer. These are what is left to exclude.
 
-# Offline-only, and drags in sklearn/matplotlib which the runtime set omits.
-model_training/
+# model_training/ itself is needed: inference.py imports it and the build trains
+# the engagement model from it. Its sample spreadsheets are not.
+model_training/*.csv
+model_training/*.xlsx
+
+# Trained during the build (see Dockerfile), so a developer's local bundle -
+# possibly pickled by a different scikit-learn - must not be copied over it.
+engagement_model/
 
 tests/
 __pycache__/

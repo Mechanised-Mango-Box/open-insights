@@ -257,6 +257,23 @@ WHISPER_MODEL_PATH = (
     else WHISPER_MODEL
 )
 
+# The engagement model bundle inference.py loads at startup: the random forest
+# that predicts average percentage viewed, and the linear regression and scaler
+# that explain it. Written by scripts/train_engagement_model.py, which the
+# Dockerfile and build_portable.py both run, so the pickle is always made by the
+# same scikit-learn the server imports.
+#
+# Its own directory rather than a subfolder of "models": a frozen build already
+# unpacks the Whisper weights to sys._MEIPASS/models, and models/ is ignored as a
+# Whisper cache by .dockerignore. Required - like the Whisper weights, a server
+# started without it fails at boot rather than on its first request.
+_bundled_engagement = bundled("engagement_model") if FROZEN else None
+ENGAGEMENT_MODEL_DIR = os.environ.get("ENGAGEMENT_MODEL_DIR") or str(
+    _bundled_engagement
+    if _bundled_engagement is not None
+    else os.path.join(os.path.dirname(os.path.abspath(__file__)), "engagement_model")
+)
+
 # How different a frame must be from its predecessor to count as a scene change.
 # Lifted out of processing.py, where it sat as a default argument that nothing
 # ever passed: as config it becomes a real input to SCENE_STATS_PRODUCER, so

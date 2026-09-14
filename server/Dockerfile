@@ -39,6 +39,12 @@ RUN useradd --create-home --uid 1000 app
 ENV WHISPER_MODEL_DIR=/opt/models
 RUN mkdir -p "$WHISPER_MODEL_DIR" && chown app:app "$WHISPER_MODEL_DIR"
 
+# The same for the engagement model bundle, read by config.py and written by
+# scripts/train_engagement_model.py. Outside /app because WORKDIR creates that as
+# root, so the app user could not make a directory in it at build time.
+ENV ENGAGEMENT_MODEL_DIR=/opt/engagement_model
+RUN mkdir -p "$ENGAGEMENT_MODEL_DIR" && chown app:app "$ENGAGEMENT_MODEL_DIR"
+
 WORKDIR /app
 
 # Dependencies first, so editing source does not reinstall them.
@@ -63,6 +69,13 @@ ENV WHISPER_MODEL=${WHISPER_MODEL}
 COPY --chown=app:app models.py config.py paths.py ./
 COPY --chown=app:app scripts/ ./scripts/
 RUN python scripts/fetch_whisper_model.py
+
+# Train the engagement model here too, for the same reason: app.py loads it at
+# import. Trained rather than copied in so the pickle is made by the very
+# scikit-learn this image runs. model_training/ is all it adds to the fetch's
+# imports, so an edit elsewhere does not retrain.
+COPY --chown=app:app model_training/ ./model_training/
+RUN python scripts/train_engagement_model.py
 
 COPY --chown=app:app . .
 

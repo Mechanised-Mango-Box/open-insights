@@ -52,12 +52,27 @@ class TestInference(unittest.TestCase):
                 result[TARGET_COLUMN], trained['random_forest'].predict(frame)[0]
             )
 
-            # Check that feedback comes from the linear regression model.
-            # The training results call this model 'model'. assertEqual checks
-            # that the returned feedback matches the expected feedback exactly.
-            self.assertEqual(result['recommendations'], generate_feature_recommendations(
-                trained['model'], FEATURE_COLUMNS
-            ))
+            # Check that each feature's relationship comes from the linear
+            # regression model. The training results call this model 'model'.
+            expected = generate_feature_recommendations(trained['model'], FEATURE_COLUMNS)
+            self.assertEqual(result['threshold'], expected['threshold'])
+            for index, name in enumerate(FEATURE_COLUMNS):
+                feature = result['features'][name]
+                for key in ('coefficient', 'relationship', 'recommendation'):
+                    self.assertEqual(feature[key], expected['features'][name][key])
+
+                # The video's own value, set against the average the scaler saw.
+                self.assertAlmostEqual(feature['value'], features[name])
+                self.assertAlmostEqual(feature['training_mean'], trained['scaler'].mean_[index])
+                self.assertAlmostEqual(
+                    feature['contribution'], feature['coefficient'] * feature['z_score']
+                )
+
+                # A suggestion to change a feature only ever points at something
+                # currently costing APV, and a weak relationship suggests nothing.
+                if feature['suggestion'] in ('increase', 'decrease'):
+                    self.assertLess(feature['contribution'], 0)
+                self.assertEqual(feature['suggestion'] == 'none', feature['relationship'] == 'weak')
 
             # Try missing features, the wrong input type, a boolean, NaN
             # ('not a number'), and a negative count. **features copies the

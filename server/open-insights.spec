@@ -2,7 +2,8 @@
 """PyInstaller build definition for the portable server.
 
 Built through scripts/build_portable.py, which stages the transcription weights
-into build/models first - this file assumes they are already there.
+into build/models and trains the engagement model into build/engagement_model
+first - this file assumes both are already there.
 
     python scripts/build_portable.py
 
@@ -19,7 +20,13 @@ from PyInstaller.utils.hooks import collect_all, collect_data_files
 # The weights, staged by the build script from the faster-whisper cache and
 # flattened. They land at sys._MEIPASS/models/<model name>, which is where
 # config.WHISPER_MODEL_PATH looks for them.
-datas = [(os.path.join(SPECPATH, "build", "models"), "models")]
+datas = [
+    (os.path.join(SPECPATH, "build", "models"), "models"),
+    # The engagement model bundle, trained into build/engagement_model by the
+    # same build script. config.ENGAGEMENT_MODEL_DIR looks for it at
+    # sys._MEIPASS/engagement_model.
+    (os.path.join(SPECPATH, "build", "engagement_model"), "engagement_model"),
+]
 binaries = []
 hiddenimports = []
 
@@ -48,6 +55,10 @@ for package in (
     "huggingface_hub",
     "limits",
     "flask_limiter",
+    # sklearn - a pickled estimator names private Cython submodules (the forest's
+    #     sklearn.tree._utils, for one) that nothing imports until joblib
+    #     unpickles the engagement model at startup, so analysis never sees them.
+    "sklearn",
 ):
     package_datas, package_binaries, package_hiddenimports = collect_all(package)
     datas += package_datas
@@ -74,17 +85,14 @@ a = Analysis(
     # here precisely to avoid it, and letting it into the bundle would undo that
     # in one step.
     #
-    # pandas joined the list when /api/analysis was removed - the client does
-    # that arithmetic in the browser now, and it was the server's only importer.
-    # numpy must NOT join it: cv2 and ctranslate2 load it at runtime, so a
-    # bundle without it does not start.
+    # pandas, scikit-learn (and scipy beneath it) and joblib left this list when
+    # the server began loading the engagement model at startup - inference.py is
+    # on the request path now. matplotlib stays: only model_training's plotting
+    # imports it. numpy must NOT join it: cv2 and ctranslate2 load it at
+    # runtime, so a bundle without it does not start.
     excludes=[
         "torch",
-        "pandas",
         "matplotlib",
-        "scipy",
-        "sklearn",
-        "joblib",
         "tkinter",
         "IPython",
         "pytest",

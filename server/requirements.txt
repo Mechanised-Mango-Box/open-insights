@@ -27,3 +27,13 @@ gunicorn==23.0.0
 # Scene stats. headless rather than opencv-python: the server never opens a
 # window, and it drops the GUI shared-library dependencies from the image.
 opencv-python-headless==5.0.0.93
+
+# The engagement model behind /api/videos/<hash>/recommendation (inference.py).
+# Runtime rather than training-only: the server loads the pickled random forest
+# and regression at startup. The Dockerfile and build_portable.py train that
+# bundle during the build against these same pins - a scikit-learn pickle does
+# not load reliably under another version, so the two must never drift apart.
+joblib==1.5.3
+numpy==2.5.1
+pandas==3.0.5
+scikit-learn==1.9.0

@@ -225,3 +225,5 @@ __marimo__/
 
 # Model related
 models/*
+# The engagement model bundle, trained by scripts/train_engagement_model.py
+engagement_model/

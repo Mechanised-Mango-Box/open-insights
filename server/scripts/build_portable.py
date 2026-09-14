@@ -28,6 +28,7 @@ BUILD_DIR = SERVER_DIR / "build"
 # does not take the other with it.
 WORK_DIR = BUILD_DIR / "pyinstaller"
 MODEL_STAGE_DIR = BUILD_DIR / "models"
+ENGAGEMENT_STAGE_DIR = BUILD_DIR / "engagement_model"
 HF_CACHE_DIR = BUILD_DIR / "hf-cache"
 DIST_DIR = SERVER_DIR / "dist"
 SPEC = SERVER_DIR / "open-insights.spec"
@@ -45,6 +46,9 @@ REQUIRED_PACKAGES = {
     "faster_whisper": "faster-whisper",
     "cv2": "opencv-python-headless",
     "flask": "flask",
+    "joblib": "joblib",
+    "pandas": "pandas",
+    "sklearn": "scikit-learn",
 }
 
 
@@ -134,6 +138,23 @@ def stage_model() -> None:
             raise SystemExit(f"Staged model is missing {required} - refusing to build.")
 
 
+def stage_engagement_model() -> None:
+    """Train the engagement model into build/engagement_model.
+
+    Trained here rather than copied from a development machine for the reason
+    the Dockerfile trains it: the pickle has to come from the scikit-learn that
+    PyInstaller is about to bundle. Always run, unlike the weights download - it
+    is seconds of work, and reusing a stale bundle is how the two would drift.
+    """
+    if ENGAGEMENT_STAGE_DIR.exists():
+        shutil.rmtree(ENGAGEMENT_STAGE_DIR)
+    run([sys.executable, "scripts/train_engagement_model.py", "--out", str(ENGAGEMENT_STAGE_DIR)])
+
+    bundle = ENGAGEMENT_STAGE_DIR / "engagement_model_inference.joblib"
+    if not bundle.is_file():
+        raise SystemExit(f"Training finished but {bundle} is not there - refusing to build.")
+
+
 def artifact_name() -> str:
     platform = {"win32": "windows", "darwin": "macos"}.get(sys.platform, "linux")
     machine = {"AMD64": "x86_64", "x86_64": "x86_64", "aarch64": "arm64"}.get(
@@ -169,6 +190,8 @@ def main() -> None:
         print(f"Reusing the model already staged in {MODEL_STAGE_DIR}")
     else:
         stage_model()
+
+    stage_engagement_model()
 
     command = [
         sys.executable,

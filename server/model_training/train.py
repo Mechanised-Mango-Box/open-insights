@@ -9,18 +9,18 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 import joblib
 
-from server.model_training.data_preparation import (
+from model_training.data_preparation import (
     prepare_training_data,
     FEATURE_COLUMNS,
     TARGET_COLUMN,
 )
-from server.model_training.regression import (
+from model_training.regression import (
     fit_scaler_and_train_model,
     predict_engagement,
     get_coefficient_summary,
     generate_feature_recommendations,
 )
-from server.model_training.evaluation import (
+from model_training.evaluation import (
     evaluate_model,
     format_evaluation_report,
 )
@@ -154,7 +154,7 @@ def run_training_pipeline(
 
 
 if __name__ == "__main__":
-    from server.model_training.mock_data import generate_mock_training_data
+    from model_training.mock_data import generate_mock_training_data
 
     print("[ Test ] Generating mock dataset (200 samples)...")
     mock_df = generate_mock_training_data(num_samples=200, random_state=42)
