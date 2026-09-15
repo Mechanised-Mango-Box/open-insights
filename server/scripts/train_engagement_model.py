@@ -1,14 +1,18 @@
-"""Trains the engagement model bundle the server loads at startup.
+"""Regenerates the committed engagement model bundle.
 
-The server never trains (see inference.py) and fails to boot without the bundle,
-so this has to run first: by hand after cloning, and as a build step in the
-Dockerfile and scripts/build_portable.py. Running it at build time rather than
-committing the pickle is what keeps the bundle's scikit-learn version the same
-as the one that loads it - sklearn pickles are not portable across versions.
+The server never trains (see inference.py): it loads
+engagement_model/engagement_model_inference.joblib at startup. That file is
+committed, and the Dockerfile and scripts/build_portable.py ship it as-is, so
+nothing runs this during a build.
+
+Run it, and commit the new bundle, whenever the committed one would go stale:
+  - scikit-learn, numpy, pandas or joblib change in requirements.txt - a
+    scikit-learn pickle does not load reliably under another version - or
+  - anything in model_training/ that shapes the models changes.
 
 Trains on generated mock data for now: extract_features_from_snapshot() in
-model_training/data_preparation.py is still unimplemented. Seeded, so every
-build produces the same model.
+model_training/data_preparation.py is still unimplemented. Seeded, so the same
+code and pins always produce the same model.
 
     python scripts/train_engagement_model.py [--out DIR]
 """

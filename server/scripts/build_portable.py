@@ -28,7 +28,8 @@ BUILD_DIR = SERVER_DIR / "build"
 # does not take the other with it.
 WORK_DIR = BUILD_DIR / "pyinstaller"
 MODEL_STAGE_DIR = BUILD_DIR / "models"
-ENGAGEMENT_STAGE_DIR = BUILD_DIR / "engagement_model"
+# Committed, not staged: packed into the bundle exactly as it is in the repo.
+ENGAGEMENT_MODEL_DIR = SERVER_DIR / "engagement_model"
 HF_CACHE_DIR = BUILD_DIR / "hf-cache"
 DIST_DIR = SERVER_DIR / "dist"
 SPEC = SERVER_DIR / "open-insights.spec"
@@ -138,21 +139,20 @@ def stage_model() -> None:
             raise SystemExit(f"Staged model is missing {required} - refusing to build.")
 
 
-def stage_engagement_model() -> None:
-    """Train the engagement model into build/engagement_model.
+def check_engagement_model() -> None:
+    """Refuse to build without the committed engagement model bundle.
 
-    Trained here rather than copied from a development machine for the reason
-    the Dockerfile trains it: the pickle has to come from the scikit-learn that
-    PyInstaller is about to bundle. Always run, unlike the weights download - it
-    is seconds of work, and reusing a stale bundle is how the two would drift.
+    Nothing trains it here: the bundle is committed, and the spec packs
+    engagement_model/ as it is. A checkout without it would build cleanly and
+    then die at startup on the user's machine, which is the failure stage_model()
+    guards against for the weights.
     """
-    if ENGAGEMENT_STAGE_DIR.exists():
-        shutil.rmtree(ENGAGEMENT_STAGE_DIR)
-    run([sys.executable, "scripts/train_engagement_model.py", "--out", str(ENGAGEMENT_STAGE_DIR)])
-
-    bundle = ENGAGEMENT_STAGE_DIR / "engagement_model_inference.joblib"
+    bundle = ENGAGEMENT_MODEL_DIR / "engagement_model_inference.joblib"
     if not bundle.is_file():
-        raise SystemExit(f"Training finished but {bundle} is not there - refusing to build.")
+        raise SystemExit(
+            f"{bundle} is missing - refusing to build.\n"
+            "Regenerate it with: python scripts/train_engagement_model.py"
+        )
 
 
 def artifact_name() -> str:
@@ -191,7 +191,7 @@ def main() -> None:
     else:
         stage_model()
 
-    stage_engagement_model()
+    check_engagement_model()
 
     command = [
         sys.executable,

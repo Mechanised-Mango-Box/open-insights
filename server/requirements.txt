@@ -30,9 +30,10 @@ opencv-python-headless==5.0.0.93
 
 # The engagement model behind /api/videos/<hash>/recommendation (inference.py).
 # Runtime rather than training-only: the server loads the pickled random forest
-# and regression at startup. The Dockerfile and build_portable.py train that
-# bundle during the build against these same pins - a scikit-learn pickle does
-# not load reliably under another version, so the two must never drift apart.
+# and regression at startup. That bundle is committed (engagement_model/) and was
+# made under these exact pins - a scikit-learn pickle does not load reliably under
+# another version, so changing any of them means rerunning
+# scripts/train_engagement_model.py and committing the new bundle.
 joblib==1.5.3
 numpy==2.5.1
 pandas==3.0.5

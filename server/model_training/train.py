@@ -26,26 +26,6 @@ from model_training.evaluation import (
 )
 
 
-def save_model_artifacts(
-    model: Any,
-    scaler: Any,
-    save_dir: str = "models",
-    filename_prefix: str = "engagement_model",
-) -> Tuple[str, str]:
-    """Saves fitted model and scaler to disk using joblib."""
-    os.makedirs(save_dir, exist_ok=True)
-
-    model_path = os.path.join(save_dir, f"{filename_prefix}.joblib")
-    scaler_path = os.path.join(save_dir, f"{filename_prefix}_scaler.joblib")
-
-    joblib.dump(model, model_path)
-    joblib.dump(scaler, scaler_path)
-
-    print(f"[ Model Training ] Saved model to: {model_path}")
-    print(f"[ Model Training ] Saved scaler to: {scaler_path}")
-    return model_path, scaler_path
-
-
 def load_model_artifacts(
     save_dir: str = "models",
     filename_prefix: str = "engagement_model",
@@ -76,16 +56,16 @@ def run_training_pipeline(
         raw_df: pandas DataFrame containing feature columns & target column.
         test_size: Ratio of test split (default 0.2).
         random_state: Random seed for train_test_split reproducibility.
-        save_dir: Directory path to persist trained model and scaler (Optional).
+        save_dir: Directory to write the inference bundle into (Optional).
         recommendation_threshold: Practical-effect threshold magnitude (default 1.0).
 
     Returns:
-        Dict containing trained model, scaler, evaluation metrics, coefficients, and recommendations.
+        Dict containing trained models, scaler, evaluation metrics, coefficients, and recommendations.
     """
     # 1 & 2 & 3. Clean and prepare data
     # Currently prepare_training_data is a placeholder function that returns a random DataFrame
     # TODO: Replace the placeholder function with the actual data preparation logic
-    df = prepare_training_data(raw_df=raw_df) 
+    df = prepare_training_data(raw_df=raw_df)
     X = df[FEATURE_COLUMNS]
     y = df[TARGET_COLUMN]
 
@@ -112,13 +92,12 @@ def run_training_pipeline(
         model, FEATURE_COLUMNS, threshold=recommendation_threshold
     )
 
-    # 10. Persist model artifacts if directory specified
-    model_path, scaler_path = None, None
-    if save_dir:
-        model_path, scaler_path = save_model_artifacts(model, scaler, save_dir=save_dir)
-
+    # 10. Persist the inference bundle if a directory is specified. It is the only
+    # file written: the server loads nothing else, and the scaler and regression
+    # it holds are no longer also saved as separate files.
     inference_path = None
     if save_dir:
+        os.makedirs(save_dir, exist_ok=True)
         inference_path = os.path.join(save_dir, "engagement_model_inference.joblib")
         # One bundle keeps the prediction and feedback models from the same run.
         joblib.dump({
@@ -138,8 +117,6 @@ def run_training_pipeline(
         "metrics": metrics,
         "coefficients": coef_summary,
         "recommendations": recommendations,
-        "model_path": model_path,
-        "scaler_path": scaler_path,
     }
 
     print(format_evaluation_report(metrics))
@@ -163,5 +140,4 @@ if __name__ == "__main__":
     results = run_training_pipeline(raw_df=mock_df, save_dir="models")
 
     print("\n[ Check Complete ] Model training executed successfully!")
-    print(f"  Model saved to:  {results['model_path']}")
-    print(f"  Scaler saved to: {results['scaler_path']}")
+    print(f"  Inference bundle saved to: {results['inference_path']}")

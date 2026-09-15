@@ -2,8 +2,8 @@
 """PyInstaller build definition for the portable server.
 
 Built through scripts/build_portable.py, which stages the transcription weights
-into build/models and trains the engagement model into build/engagement_model
-first - this file assumes both are already there.
+into build/models first and checks the committed engagement model bundle is in
+engagement_model/ - this file assumes both are there.
 
     python scripts/build_portable.py
 
@@ -22,10 +22,10 @@ from PyInstaller.utils.hooks import collect_all, collect_data_files
 # config.WHISPER_MODEL_PATH looks for them.
 datas = [
     (os.path.join(SPECPATH, "build", "models"), "models"),
-    # The engagement model bundle, trained into build/engagement_model by the
-    # same build script. config.ENGAGEMENT_MODEL_DIR looks for it at
+    # The engagement model bundle, packed straight from the committed
+    # engagement_model/ directory. config.ENGAGEMENT_MODEL_DIR looks for it at
     # sys._MEIPASS/engagement_model.
-    (os.path.join(SPECPATH, "build", "engagement_model"), "engagement_model"),
+    (os.path.join(SPECPATH, "engagement_model"), "engagement_model"),
 ]
 binaries = []
 hiddenimports = []
