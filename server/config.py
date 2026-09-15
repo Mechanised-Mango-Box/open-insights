@@ -131,17 +131,19 @@ UPLOAD_REAP_INTERVAL_SECONDS = int(os.environ.get("UPLOAD_REAP_INTERVAL_SECONDS"
 # it here, every such server would reject the public client until its operator
 # found this setting.
 #
-# Only the stable project URL. Cloudflare's per-deployment and branch aliases
-# (f05a2548.open-insights-ccx.pages.dev and the like) are separate origins that
-# change on every build, so they are deliberately not listed - a preview
-# deployment cannot talk to a server, by design.
+# Only stable URLs. Cloudflare's per-commit preview aliases
+# (f05a2548.open-insights-ccx.pages.dev and the like) change on every build, so
+# they are deliberately not listed - a preview deployment cannot talk to a
+# server, by design. release-nightly is a branch alias rather than a
+# per-commit one, so unlike those it keeps the same origin across builds and
+# is listed like any other stable URL.
 ALLOWED_ORIGINS = [
     origin.strip()
     for origin in os.environ.get(
         "ALLOWED_ORIGINS",
         "http://localhost:4200,"
-        "http://localhost,"
-        "https://open-insights-ccx.pages.dev",
+        "https://open-insights-ccx.pages.dev,"
+        "https://release-nightly.open-insights-ccx.pages.dev,"
     ).split(",")
     if origin.strip()
 ]
