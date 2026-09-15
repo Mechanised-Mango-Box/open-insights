@@ -111,8 +111,8 @@ def plot_actual_vs_predicted(
 
 if __name__ == "__main__":
     print("[ Visualization ] Loading saved model artifacts from disk...")
-    # Load model and scaler trained previously without training a new model
-    model, scaler = load_model_artifacts(save_dir="models")
+    # Load the regression and scaler from the committed inference bundle without training a new model
+    model, scaler = load_model_artifacts()
 
     # Load dataset
     df = prepare_training_data()
@@ -123,8 +123,10 @@ if __name__ == "__main__":
     X_scaled = scaler.transform(X)
     y_pred = predict_engagement(model, scaler, X)
 
-    # Plot actual vs predicted scatter plot
-    save_file = "models/analysis_plots/actual_vs_predicted.png"
+    # Plot actual vs predicted scatter plot. Under server/build/, which is gitignored,
+    # rather than beside the committed bundle.
+    server_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    save_file = os.path.join(server_dir, "build", "analysis_plots", "actual_vs_predicted.png")
     fig = plot_actual_vs_predicted(
         X_scaled=X_scaled,
         y_actual=y_actual,

@@ -55,7 +55,7 @@ npm start
 
 ### Server
 
-A REST API server. Runs video analysis, model training and inference, and caches results by video hash.
+A REST API server. Runs video analysis and engagement model inference, and caches results by video hash.
 
 Fetch the transcription model once before the first run, and again whenever `WHISPER_MODEL` changes:
 
@@ -65,6 +65,19 @@ pip install -r requirements.txt
 python scripts/fetch_whisper_model.py
 python main.py
 ```
+
+The engagement model needs no setup step: its trained bundle is committed at
+`server/engagement_model/`, and the Docker image and portable build ship it as-is.
+Regenerate it, and commit the result, whenever the scikit-learn, numpy, pandas or
+joblib pins in `requirements.txt` change (a scikit-learn pickle does not load under
+another version) or anything in `model_training/` that shapes the models changes:
+
+```sh
+cd ./server
+python scripts/train_engagement_model.py
+```
+
+It trains on seeded mock data for now, so the same code and pins produce the same model.
 
 ## Build and deploy your own
 

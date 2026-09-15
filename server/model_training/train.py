@@ -27,26 +27,30 @@ from model_training.evaluation import (
 
 
 def load_model_artifacts(
-    save_dir: str = "models",
+    save_dir: Optional[str] = None,
     filename_prefix: str = "engagement_model",
 ) -> Tuple[Any, Any]:
-    """Loads saved model and scaler from disk using joblib."""
-    model_path = os.path.join(save_dir, f"{filename_prefix}.joblib")
-    scaler_path = os.path.join(save_dir, f"{filename_prefix}_scaler.joblib")
+    """Loads the linear regression and scaler from the saved inference bundle.
 
-    if not os.path.exists(model_path) or not os.path.exists(scaler_path):
-        raise FileNotFoundError(f"Model artifacts not found in {save_dir}")
+    Defaults to the committed bundle the server loads (config.ENGAGEMENT_MODEL_DIR).
+    """
+    if save_dir is None:
+        from config import ENGAGEMENT_MODEL_DIR
+        save_dir = ENGAGEMENT_MODEL_DIR
 
-    model = joblib.load(model_path)
-    scaler = joblib.load(scaler_path)
-    return model, scaler
+    bundle_path = os.path.join(save_dir, f"{filename_prefix}_inference.joblib")
+    if not os.path.exists(bundle_path):
+        raise FileNotFoundError(f"Inference bundle not found at {bundle_path}")
+
+    bundle = joblib.load(bundle_path)
+    return bundle["linear_regression"], bundle["scaler"]
 
 
 def run_training_pipeline(
     raw_df: Optional[pd.DataFrame] = None,
     test_size: float = 0.2,
     random_state: int = 42,
-    save_dir: Optional[str] = "models",
+    save_dir: Optional[str] = None,
     recommendation_threshold: float = 1.0,
 ) -> Dict[str, Any]:
     """
@@ -56,7 +60,9 @@ def run_training_pipeline(
         raw_df: pandas DataFrame containing feature columns & target column.
         test_size: Ratio of test split (default 0.2).
         random_state: Random seed for train_test_split reproducibility.
-        save_dir: Directory to write the inference bundle into (Optional).
+        save_dir: Directory to write the inference bundle into. Nothing is written
+            when None (the default); scripts/train_engagement_model.py passes the
+            committed engagement_model/ directory.
         recommendation_threshold: Practical-effect threshold magnitude (default 1.0).
 
     Returns:
@@ -131,13 +137,15 @@ def run_training_pipeline(
 
 
 if __name__ == "__main__":
+    # A dry run: trains and prints metrics but writes nothing. To produce the
+    # bundle the server loads, run scripts/train_engagement_model.py and commit it.
     from model_training.mock_data import generate_mock_training_data
 
     print("[ Test ] Generating mock dataset (200 samples)...")
     mock_df = generate_mock_training_data(num_samples=200, random_state=42)
 
     print("[ Test ] Running training pipeline...")
-    results = run_training_pipeline(raw_df=mock_df, save_dir="models")
+    run_training_pipeline(raw_df=mock_df, save_dir=None)
 
     print("\n[ Check Complete ] Model training executed successfully!")
-    print(f"  Inference bundle saved to: {results['inference_path']}")
+    print("  Nothing was saved. Regenerate the bundle with: python scripts/train_engagement_model.py")
