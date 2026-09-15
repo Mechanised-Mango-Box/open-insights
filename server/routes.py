@@ -21,7 +21,7 @@ from db import (
     insert_file,
     requeue_expired,
 )
-from flask import Blueprint, jsonify, make_response, redirect, request
+from flask import Blueprint, current_app, jsonify, make_response, redirect, request
 from instructions import page_html
 from werkzeug.exceptions import NotFound
 from processing import SUBMIT, queue_status
@@ -117,6 +117,34 @@ def __route_get_dataset(file_hash: str, kind_name: str):
     # 'running' forever and the caller would poll to its timeout.
     requeue_expired()
     return jsonify(_serialized(kind, file_hash)), 200
+
+
+@bp.post("/api/videos/<file_hash>/recommendation")
+def __route_recommendation(file_hash: str):
+    """Runs the trained engagement model over one video: its predicted average
+    percentage viewed, and for each feature where the video sits against the
+    training data (see EngagementPredictor.predict).
+
+    The features arrive in the body, computed by the client from the video's
+    Scan results, rather than being read back from this server's datasets: two
+    of them - speech pace variation and speaking ratio - are only ever computed
+    in the browser, and a Scan may have run on local compute with nothing stored
+    here. So file_hash names the video the answer is about but is not looked up.
+
+    Declared before the <kind_name> route below, and more specific than it:
+    "recommendation" is not a DatasetKind, so without this the wildcard would
+    take the request and _resolve() would 404 it as an unknown kind. Werkzeug
+    prefers the static segment regardless of declaration order, but the two
+    being adjacent is what makes the overlap visible to the next reader.
+    """
+    features = request.get_json(silent=True)
+    try:
+        result = current_app.extensions["engagement_predictor"].predict(features)
+    except ValueError as e:
+        # predict() raises ValueError only for input it will not accept, so this
+        # is the caller's mistake and its message is safe to put on the wire.
+        return jsonify({"err": str(e)}), 400
+    return jsonify(result), 200
 
 
 @bp.post("/api/videos/<file_hash>/<kind_name>")

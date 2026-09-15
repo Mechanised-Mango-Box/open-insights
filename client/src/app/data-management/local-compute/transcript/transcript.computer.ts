@@ -144,6 +144,6 @@ export const transcriptComputer: Computer<'transcript'> = {
     const segments = await run({ pcm, duration_secs });
     // Reuses the same counting the rest of the app does, so a locally-made
     // transcript's stats cannot drift from an imported one's.
-    return { segments, ...computeTranscriptStats({ segments }) };
+    return { segments, ...computeTranscriptStats({ segments }, duration_secs) };
   },
 };
