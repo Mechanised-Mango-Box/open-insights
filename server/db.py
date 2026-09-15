@@ -148,26 +148,26 @@ def _migrate_from_status_rows(conn: sqlite3.Connection) -> None:
     """)
     conn.executescript(_SCHEMA)
 
-    # `engine` was itself a late addition, so a database can reach here from
-    # either side of that change: one that has the column carries a real
-    # producer per row, one that predates it has no column to read at all.
-    # Selecting a literal in the second case is what lets both migrate.
+    old_cols = _table_columns(conn, "_old_transcripts")
     producer_expr = (
         "COALESCE(engine, 'legacy/unknown')"
-        if "engine" in _table_columns(conn, "_old_transcripts")
+        if "engine" in old_cols
         else "'legacy/unknown'"
     )
+    segments_expr = "segments_json" if "segments_json" in old_cols else "NULL"
+    segments_where = "AND segments_json IS NOT NULL" if "segments_json" in old_cols else ""
+
     # Rows stamped legacy read as stale against the current producer and get
     # recomputed, rather than being trusted as something they may not be.
     conn.execute(f"""
         INSERT INTO transcripts
             (file_hash, count_chars, count_words, segments_json, producer)
-        SELECT file_hash, count_chars, count_words, segments_json, {producer_expr}
+        SELECT file_hash, count_chars, count_words, {segments_expr}, {producer_expr}
         FROM _old_transcripts
         WHERE status = 'complete'
           AND count_chars IS NOT NULL
           AND count_words IS NOT NULL
-          AND segments_json IS NOT NULL
+          {segments_where}
     """)
     # scene_stats never had a producer column, so nothing records how these were
     # computed. Marked legacy so they recompute once under a known threshold.

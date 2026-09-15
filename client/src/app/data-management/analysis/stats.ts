@@ -14,10 +14,12 @@
  */
 
 export type AnalysisFeatureRow = {
-  duration_mins: number;
+  duration: number;
   wpm: number;
   scene_change_rate: number;
   word_count: number;
+  speech_pace_variation: number;
+  speaking_ratio: number;
   average_percentage_viewed: number;
 };
 
@@ -28,10 +30,12 @@ export type AnalysisResult = {
 };
 
 export const ANALYSIS_FEATURE_COLUMNS = [
-  'duration_mins',
+  'duration',
   'wpm',
   'scene_change_rate',
   'word_count',
+  'speech_pace_variation',
+  'speaking_ratio',
 ] as const satisfies readonly (keyof AnalysisFeatureRow)[];
 
 export const ANALYSIS_TARGET_COLUMN =
