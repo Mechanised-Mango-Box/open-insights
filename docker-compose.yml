@@ -48,8 +48,9 @@ services:
       PRIVATE_API_KEY: ${PRIVATE_API_KEY:?set PRIVATE_API_KEY in .env}
 
       # Where the client is served from. Must be set: the built-in default only
-      # covers localhost and the old GitHub Pages origin, and deliberately does
-      # not guess a *.pages.dev subdomain that might not be yours.
+      # covers localhost and the project's own Cloudflare Pages origins, and
+      # deliberately does not guess a *.pages.dev subdomain that might not be
+      # yours.
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:?set ALLOWED_ORIGINS in .env}
 
       # Public tier caps. The private key is exempt from all of them.
