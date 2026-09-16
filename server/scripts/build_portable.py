@@ -28,6 +28,8 @@ BUILD_DIR = SERVER_DIR / "build"
 # does not take the other with it.
 WORK_DIR = BUILD_DIR / "pyinstaller"
 MODEL_STAGE_DIR = BUILD_DIR / "models"
+# Committed, not staged: packed into the bundle exactly as it is in the repo.
+ENGAGEMENT_MODEL_DIR = SERVER_DIR / "engagement_model"
 HF_CACHE_DIR = BUILD_DIR / "hf-cache"
 DIST_DIR = SERVER_DIR / "dist"
 SPEC = SERVER_DIR / "open-insights.spec"
@@ -45,6 +47,9 @@ REQUIRED_PACKAGES = {
     "faster_whisper": "faster-whisper",
     "cv2": "opencv-python-headless",
     "flask": "flask",
+    "joblib": "joblib",
+    "pandas": "pandas",
+    "sklearn": "scikit-learn",
 }
 
 
@@ -134,6 +139,22 @@ def stage_model() -> None:
             raise SystemExit(f"Staged model is missing {required} - refusing to build.")
 
 
+def check_engagement_model() -> None:
+    """Refuse to build without the committed engagement model bundle.
+
+    Nothing trains it here: the bundle is committed, and the spec packs
+    engagement_model/ as it is. A checkout without it would build cleanly and
+    then die at startup on the user's machine, which is the failure stage_model()
+    guards against for the weights.
+    """
+    bundle = ENGAGEMENT_MODEL_DIR / "engagement_model_inference.joblib"
+    if not bundle.is_file():
+        raise SystemExit(
+            f"{bundle} is missing - refusing to build.\n"
+            "Regenerate it with: python scripts/train_engagement_model.py"
+        )
+
+
 def artifact_name() -> str:
     platform = {"win32": "windows", "darwin": "macos"}.get(sys.platform, "linux")
     machine = {"AMD64": "x86_64", "x86_64": "x86_64", "aarch64": "arm64"}.get(
@@ -169,6 +190,8 @@ def main() -> None:
         print(f"Reusing the model already staged in {MODEL_STAGE_DIR}")
     else:
         stage_model()
+
+    check_engagement_model()
 
     command = [
         sys.executable,

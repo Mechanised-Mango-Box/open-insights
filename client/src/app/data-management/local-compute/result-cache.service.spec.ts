@@ -68,7 +68,13 @@ describe('ResultCacheService', () => {
 
   it('keeps kinds apart under the same hash', async () => {
     await cache.put('scene_stats', 'a', 'p', { duration_secs: 1, scenes: 2 });
-    await cache.put('transcript', 'a', 'p', { count_chars: 3, count_words: 1, segments: [] });
+    await cache.put('transcript', 'a', 'p', {
+      count_chars: 3,
+      count_words: 1,
+      speech_pace_variation: null,
+      speaking_ratio: null,
+      segments: [],
+    });
 
     expect(await cache.get('scene_stats', 'a', 'p')).toMatchObject({ scenes: 2 });
     expect(await cache.get('transcript', 'a', 'p')).toMatchObject({ count_words: 1 });

@@ -7,7 +7,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { VideoDatabaseService } from './video-database.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SceneStats, Transcript, TranscriptStats, formatDuration, readyData } from './Dataset';
-import { readFileDurationSecs } from './video-duration';
+import { readFileDurationSecs, recordDurationSecs, recordDurationSource } from './video-duration';
 import { EditVideoDialogComponent } from './edit-video-dialog.component';
 import { MergeVideosDialogComponent } from './merge-videos-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -63,6 +63,45 @@ const BULK_ACTIONS_STYLES = `
   }
 `;
 
+/** One value per badge, so the stats columns stay scannable down the table rather
+ * than each cell being a sentence to read. They wrap instead of widening the
+ * column, which matters because these cells sit beside two already-unbounded ones.
+ *
+ * System tokens rather than literal colours: these sit in table rows, and a badge
+ * that ignored the theme would be the one thing in the cell that did. */
+const STAT_BADGE_STYLES = `
+  .stat-badges {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    vertical-align: middle;
+  }
+  .stat-badge {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--mat-sys-surface-container-highest);
+    color: var(--mat-sys-on-surface);
+    font: var(--mat-sys-label-small);
+    white-space: nowrap;
+  }
+  .stat-badge-muted {
+    color: var(--mat-sys-on-surface-variant);
+    background: transparent;
+    border: 1px dashed var(--mat-sys-outline-variant);
+  }
+`;
+
+/** A single value as it is shown in a stats cell. `muted` is for the placeholder
+ * that stands in for a stat which could not be measured, so it does not read as
+ * a value in its own right.
+ *
+ * `title` is required rather than optional: these badges are terse by design
+ * ("18.4 WPM SD" says little on its own), so every one of them owes the reader
+ * an explanation on hover, and making it optional is how one quietly ends up
+ * without. */
+type StatBadge = { text: string; title: string; muted?: boolean };
+
 @Component({
   selector: 'video-table',
   standalone: true,
@@ -76,7 +115,7 @@ const BULK_ACTIONS_STYLES = `
     MatIcon,
   ],
   templateUrl: './video-table.component.html',
-  styles: [STATUS_ICON_STYLES, TABLE_COLUMN_STYLES, BULK_ACTIONS_STYLES],
+  styles: [STATUS_ICON_STYLES, TABLE_COLUMN_STYLES, BULK_ACTIONS_STYLES, STAT_BADGE_STYLES],
 })
 export class VideoTableComponent {
   private dialog = inject(MatDialog);
@@ -215,36 +254,73 @@ export class VideoTableComponent {
     return readyData(record.ds_sceneStats);
   }
 
+  /**
+   * Every stat a cell shows gets its own badge, so the two stats columns read
+   * the same way and a cell can gain a stat without re-running its text
+   * together. Built here rather than in the template because the count and the
+   * speech features come from one object but not on the same terms - the counts
+   * are always present, the features only once a duration was known.
+   */
+  transcriptStatBadges(record: VideoRecord): StatBadge[] {
+    const stats = this.transcriptStatsData(record);
+    if (!stats) return [];
+
+    const badges: StatBadge[] = [
+      {
+        text: `${stats.count_words.toLocaleString()} words`,
+        title: 'Words in the transcript',
+      },
+    ];
+
+    // A dash rather than "0.0": 0 is a value both features genuinely take (a
+    // silent video, or one short enough to be a single pace window), so it
+    // cannot double as "no answer".
+    if (stats.speech_pace_variation == null || stats.speaking_ratio == null) {
+      badges.push({
+        text: '\u2014',
+        muted: true,
+        title: 'Speech stats need the video duration, which was not known when this was scanned',
+      });
+      return badges;
+    }
+
+    badges.push({
+      text: `${stats.speech_pace_variation.toFixed(1)} WPM SD`,
+      title: 'Speech pace variation - how much the speaking speed moves across the video',
+    });
+    badges.push({
+      text: `${Math.round(stats.speaking_ratio * 100)}% speaking`,
+      title: 'Speaking ratio - the share of the video covered by detected speech',
+    });
+    return badges;
+  }
+
+  sceneStatBadges(record: VideoRecord): StatBadge[] {
+    const stats = this.sceneStatsData(record);
+    // Not the duration as well: it has its own column, formatted, and this cell
+    // would only repeat it in raw seconds.
+    return stats
+      ? [
+          {
+            text: `${stats.scenes.toLocaleString()} scenes`,
+            // "Scene changes", not "scenes": the value is a count of detected
+            // transitions, which is one fewer than the number of scenes.
+            title: 'Scene changes detected in the video',
+          },
+        ]
+      : [];
+  }
+
   protected readonly formatDuration = formatDuration;
 
-  /**
-   * How long the video is, from whichever source has an answer: the YouTube
-   * export first, then the server's scene stats (OpenCV over the uploaded
-   * file), then the file sitting in the browser. Null when none of them do.
-   *
-   * Each tier is gated on > 0, not merely on being present, so a zero from a
-   * probe that opened a file but got nothing useful out of it falls through to
-   * the next source instead of winning and rendering as "0:00". This mirrors
-   * the `duration_secs <= 0` guard the analysis pipeline already applies.
-   */
-  private durationTiers(record: VideoRecord): { secs: number; source: string }[] {
-    const candidates = [
-      { secs: record.ds_youtubeContent?.duration_secs, source: 'From YouTube content report' },
-      { secs: this.sceneStatsData(record)?.duration_secs, source: 'From video file (scene stats)' },
-      { secs: record.video_file.duration_secs, source: 'From local video file' },
-    ];
-    return candidates.filter(
-      (tier): tier is { secs: number; source: string } => (tier.secs ?? 0) > 0,
-    );
-  }
-
+  /** Both live in video-duration.ts: Scan computes the stored speech features
+   * against the same answer, and two definitions could disagree. */
   durationSecs(record: VideoRecord): number | null {
-    return this.durationTiers(record)[0]?.secs ?? null;
+    return recordDurationSecs(record);
   }
 
-  /** Provenance of the value above, shown as the cell's tooltip. */
   durationSource(record: VideoRecord): string | null {
-    return this.durationTiers(record)[0]?.source ?? null;
+    return recordDurationSource(record);
   }
 
   getTranscriptStatusIcon(record: VideoRecord): StatusIcon | null {

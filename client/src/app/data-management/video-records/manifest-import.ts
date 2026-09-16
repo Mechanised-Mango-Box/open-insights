@@ -165,7 +165,19 @@ export async function parseExportZip(
       ds_youtubeAudienceRetention: retention,
       ds_transcript: transcript ? restored(transcript, generated_at) : { state: 'absent' },
       ds_transcriptStats: entry.transcript_stats
-        ? restored(entry.transcript_stats, generated_at)
+        ? restored(
+            {
+              ...entry.transcript_stats,
+              // As with the video_file fields above: a manifest written before
+              // these existed reads them back undefined, and null is what
+              // "not measured" means here. A genuine 0 is kept. The backfill in
+              // VideoDatabaseService fills them in on the next load if the
+              // imported record turns out to have a duration after all.
+              speech_pace_variation: entry.transcript_stats.speech_pace_variation ?? null,
+              speaking_ratio: entry.transcript_stats.speaking_ratio ?? null,
+            },
+            generated_at,
+          )
         : { state: 'absent' },
       ds_sceneStats: entry.scene_stats
         ? restored(entry.scene_stats, generated_at)

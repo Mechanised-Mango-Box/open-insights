@@ -16,7 +16,14 @@ import {
 @Component({
   selector: 'app-merge-videos-dialog',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, MatButtonModule, MatRadioModule, MatDividerModule, MatDivider],
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatRadioModule,
+    MatDividerModule,
+    MatDivider,
+  ],
   templateUrl: './merge-videos-dialog.component.html',
 })
 export class MergeVideosDialogComponent {
@@ -26,7 +33,9 @@ export class MergeVideosDialogComponent {
   readonly preview: MergePreview = computeMergePreview(this.data);
 
   readonly choices = signal<Partial<Record<MergeFieldKey, unknown>>>(
-    Object.fromEntries(this.preview.conflicts.map((conflict) => [conflict.key, conflict.options[0].value])),
+    Object.fromEntries(
+      this.preview.conflicts.map((conflict) => [conflict.key, conflict.options[0].value]),
+    ),
   );
 
   isSelected(key: MergeFieldKey, option: MergeOption): boolean {
