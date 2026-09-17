@@ -6,12 +6,20 @@ from config import ALLOWED_ORIGINS, DB_PATH, MAX_UPLOAD_BYTES, UPLOAD_FOLDER
 from db import close_db, init_db
 from flask import Flask, jsonify
 from flask_cors import CORS
+from inference import EngagementPredictor
 from processing import resubmit_orphaned_jobs, start_backfill, start_upload_reaper
 from routes import bp
 from werkzeug.exceptions import HTTPException
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 app = Flask(__name__)
+
+# Loaded once, here, and shared by every request through app.extensions. At
+# import rather than on first use so a missing or stale bundle stops the server
+# at boot - where the Whisper weights fail too - instead of 500ing the first
+# person to ask for a recommendation. The bundle is committed; regenerate it with
+# scripts/train_engagement_model.py <export>.
+app.extensions["engagement_predictor"] = EngagementPredictor()
 
 # Behind Caddy in the deployed setup, so the peer address on every request is the
 # proxy's. Without this the whole public tier shares one rate-limit bucket keyed

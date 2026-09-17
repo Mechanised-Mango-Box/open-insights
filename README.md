@@ -28,6 +28,8 @@ audience_retention/
 - Simple data will be stored within the `manifest.json`
 - Complex/large data will be given a sub-directory, `manifest.json` will link to it instead
 
+An export is also what the engagement model is trained on - see [Server](#server).
+
 ### Import
 
 The output `.zip` can be similarly imported back into the app.
@@ -55,7 +57,7 @@ npm start
 
 ### Server
 
-A REST API server. Runs video analysis, model training and inference, and caches results by video hash.
+A REST API server. Runs video analysis and engagement model inference, and caches results by video hash.
 
 Fetch the transcription model once before the first run, and again whenever `WHISPER_MODEL` changes:
 
@@ -65,6 +67,40 @@ pip install -r requirements.txt
 python scripts/fetch_whisper_model.py
 python main.py
 ```
+
+The engagement model needs no setup step: its trained bundle is committed at
+`server/engagement_model/`, and the Docker image and portable build ship it as-is.
+Regenerate it, and commit the result, whenever there is a better export to learn from,
+the scikit-learn, numpy, pandas or joblib pins in `requirements.txt` change (a
+scikit-learn pickle does not load under another version) or anything in
+`model_training/` that shapes the models changes:
+
+```sh
+cd ./server
+python scripts/train_engagement_model.py path/to/open-insights-export-<timestamp>.zip
+```
+
+It trains on a client [export](#export) - the zip, or the zip unpacked into a folder.
+Only `manifest.json` is read, so exporting without video files is enough. A record
+becomes a training row when Scan has produced its transcript stats and scene stats
+and a YouTube content report supplied its average view duration; the script prints
+how many records it kept and why it skipped the rest. The six features are computed
+exactly as the Analysis page computes them, and the target is average view duration
+÷ duration × 100 (see `model_training/data_preparation.py`). There is no built-in
+dataset to fall back on: the script refuses to run without an export.
+
+Training is seeded, so the same export, code and pins produce the same model. The
+export itself is not committed, so the bundle records what it learned from:
+
+```sh
+python -c "import joblib; print(joblib.load('engagement_model/engagement_model_inference.joblib')['trained_on'])"
+```
+
+The exploration scripts in `model_training/` take an export the same way (install
+`requirements-training.txt` first for their plots), e.g.
+`python -m model_training.data_analysis <export>` for histograms, correlations and
+LOESS curves, or `python -m model_training.train <export>` for a dry run that saves
+nothing.
 
 ## Build and deploy your own
 

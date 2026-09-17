@@ -32,7 +32,12 @@ const record = (overrides: Partial<VideoRecord> = {}): VideoRecord => ({
   ds_youtubeContent: { ...YoutubeContent.createEmpty(), content: 'yt-id-1', views: 900 },
   ds_youtubeAudienceRetention: { video_position: [0, 0.5], absolute_audience_retention: [1, 0.4] },
   ds_transcript: ready(transcript),
-  ds_transcriptStats: ready({ count_chars: 56, count_words: 11 }),
+  ds_transcriptStats: ready({
+    count_chars: 56,
+    count_words: 11,
+    speech_pace_variation: 12.5,
+    speaking_ratio: 0.8,
+  }),
   ds_sceneStats: ready<SceneStats>({ duration_secs: 3700, scenes: 42 }),
   ...overrides,
 });
@@ -101,6 +106,55 @@ describe('parseExportZip', () => {
     expect(imported.video_file.duration_secs).toBeNull();
     expect(imported.ds_youtubeContent?.content).toBe('yt-id-1');
   });
+
+  it('restores a video file byte for byte', async () => {
+    const bytes = Uint8Array.from({ length: 70_000 }, (_, i) => (i * 31) % 251);
+    const blob = await buildExportZip(
+      [record({ video_file: { ...record().video_file, file: new File([bytes], 'clip.mp4') } })],
+      { includeVideoFiles: true },
+    );
+
+    const [imported] = await parseExportZip(new File([blob], 'export.zip'));
+
+    const file = imported.video_file.file!;
+    expect(file.name).toBe(`${HASH}.mp4`);
+    expect(file.type).toBe('video/mp4');
+    expect(new Uint8Array(await file.arrayBuffer())).toEqual(bytes);
+  });
+
+  // Exports made before the switch to zip.js: JSZip stored entries by default, which import
+  // slices in place, but a deflated one has to take the inflate path instead.
+  it.each(['STORE', 'DEFLATE'] as const)(
+    'restores a video from a JSZip-made export (%s)',
+    async (compression) => {
+      const bytes = Uint8Array.from({ length: 20_000 }, (_, i) => i % 7);
+      const manifest: ExportManifest = {
+        generated_at: '2025-01-01T00:00:00.000Z',
+        records: [
+          {
+            id: HASH,
+            sort_name: 'JSZip Export',
+            video_file: { hash: HASH, exists_on_server: false, duration_secs: 12 },
+            youtube_content: null,
+            transcript_stats: null,
+            scene_stats: null,
+            transcript_path: null,
+            video_file_path: `video_files/${HASH}.webm`,
+            audience_retention_path: null,
+          },
+        ],
+      };
+      const zip = new JSZip();
+      zip.file('manifest.json', JSON.stringify(manifest));
+      zip.file(`video_files/${HASH}.webm`, bytes, { compression });
+
+      const [imported] = await parseExportZip(await zip.generateAsync({ type: 'blob' }));
+
+      const file = imported.video_file.file!;
+      expect(file.type).toBe('video/webm');
+      expect(new Uint8Array(await file.arrayBuffer())).toEqual(bytes);
+    },
+  );
 
   it('rejects a zip that is not an export', async () => {
     const zip = new JSZip();

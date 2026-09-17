@@ -1,0 +1,37 @@
+<h1 mat-dialog-title>Auto-Merge</h1>
+<mat-divider /><br />
+<mat-dialog-content>
+  @if (progress(); as progress) {
+    <p>Merging {{ progress.done }} of {{ progress.total }} pair(s)…</p>
+    <mat-progress-bar mode="determinate" [value]="progressPercent()" />
+  } @else if (result.pairs.length === 0) {
+    <p>No matching pairs found among {{ data.length }} record(s).</p>
+  } @else {
+    <p>
+      Found {{ result.pairs.length }} pair(s) by title and duration.
+      {{ result.unmatched }} record(s) left unmatched.
+    </p>
+
+    @for (pair of result.pairs; track pair) {
+      <div style="margin-bottom: 8px">
+        <mat-checkbox [checked]="ticked().has(pair)" (change)="toggle(pair)">
+          <strong>{{ pair.youtube.sort_name }}</strong> ({{ youtubeDuration(pair) }}) ↔
+          {{ fileTitle(pair.file) }} ({{ fileDuration(pair) }})
+          <span class="action-hint">
+            — {{ pair.durationMatched ? 'duration matched' : 'title only' }}
+          </span>
+        </mat-checkbox>
+      </div>
+    }
+  }
+</mat-dialog-content>
+
+@if (!progress()) {
+  <mat-divider /><br />
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" [disabled]="tickedCount() === 0" (click)="onMerge()">
+      Merge {{ tickedCount() }}
+    </button>
+  </mat-dialog-actions>
+}

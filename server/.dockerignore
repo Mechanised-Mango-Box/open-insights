@@ -1,8 +1,10 @@
 # The build context is this directory, not the repo root - data/local is 8GB and
 # has no business in an image layer. These are what is left to exclude.
 
-# Offline-only, and drags in sklearn/matplotlib which the runtime set omits.
-model_training/
+# model_training/ itself is needed: inference.py imports it at runtime. Its sample
+# spreadsheets are not.
+model_training/*.csv
+model_training/*.xlsx
 
 tests/
 __pycache__/

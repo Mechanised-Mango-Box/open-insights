@@ -150,6 +150,8 @@ FEATURE_DISPLAY_NAMES: Dict[str, str] = {
     "wpm": "Average speaking speed (wpm)",
     "scene_count": "Total number of scenes",
     "scene_change_rate": "Average scenes change rate (spm)",
+    "speech_pace_variation": "Speech pace variation (WPM SD)",
+    "speaking_ratio": "Speaking ratio",
 }
 
 
@@ -172,7 +174,15 @@ def plot_pearson_correlation(
     Returns:
         Matplotlib Figure object.
     """
-    preferred_order = ["duration", "word_count", "wpm", "scene_count", "scene_change_rate"]
+    preferred_order = [
+        "duration",
+        "word_count",
+        "wpm",
+        "scene_count",
+        "scene_change_rate",
+        "speech_pace_variation",
+        "speaking_ratio",
+    ]
     
     if features is None:
         # Use preferred order if available in df, followed by any remaining columns in FEATURE_COLUMNS
@@ -323,10 +333,14 @@ def generate_full_analysis_report(
 
 
 if __name__ == "__main__":
-    from model_training.mock_data import generate_mock_training_data
+    import sys
+    from model_training.data_preparation import load_export_dataset
 
-    print("[ Analysis Test ] Generating mock data for visualization test...")
-    df_test = generate_mock_training_data(num_samples=200, random_state=42)
+    if len(sys.argv) != 2:
+        sys.exit("usage: python -m model_training.data_analysis <export folder or .zip>")
 
-    plots = generate_full_analysis_report(df_test, save_dir="models/analysis_plots")
+    print("[ Analysis ] Loading export for visualization...")
+    df_export = load_export_dataset(sys.argv[1])
+
+    plots = generate_full_analysis_report(df_export, save_dir="models/analysis_plots")
     print("[ Analysis Test ] All 3 analysis visualizations created successfully!")

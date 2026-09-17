@@ -131,17 +131,19 @@ UPLOAD_REAP_INTERVAL_SECONDS = int(os.environ.get("UPLOAD_REAP_INTERVAL_SECONDS"
 # it here, every such server would reject the public client until its operator
 # found this setting.
 #
-# Only the stable project URL. Cloudflare's per-deployment and branch aliases
-# (f05a2548.open-insights-ccx.pages.dev and the like) are separate origins that
-# change on every build, so they are deliberately not listed - a preview
-# deployment cannot talk to a server, by design.
+# Only stable URLs. Cloudflare's per-commit preview aliases
+# (f05a2548.open-insights-ccx.pages.dev and the like) change on every build, so
+# they are deliberately not listed - a preview deployment cannot talk to a
+# server, by design. release-nightly is a branch alias rather than a
+# per-commit one, so unlike those it keeps the same origin across builds and
+# is listed like any other stable URL.
 ALLOWED_ORIGINS = [
     origin.strip()
     for origin in os.environ.get(
         "ALLOWED_ORIGINS",
         "http://localhost:4200,"
-        "http://localhost,"
-        "https://open-insights-ccx.pages.dev",
+        "https://open-insights-ccx.pages.dev,"
+        "https://release-nightly.open-insights-ccx.pages.dev,"
     ).split(",")
     if origin.strip()
 ]
@@ -255,6 +257,26 @@ WHISPER_MODEL_PATH = (
     str(_bundled_model)
     if _bundled_model is not None and _bundled_model.is_dir()
     else WHISPER_MODEL
+)
+
+# The engagement model bundle inference.py loads at startup: the random forest
+# that predicts average percentage viewed, and the linear regression and scaler
+# that explain it. Committed at server/engagement_model/ and shipped as-is by
+# the Dockerfile and build_portable.py - nothing trains it during a build.
+# Regenerate it with scripts/train_engagement_model.py <export> (a client export,
+# see the README) whenever the scikit-learn pins in requirements.txt or
+# model_training/ change: a pickle made under another scikit-learn does not load
+# reliably.
+#
+# Its own directory rather than a subfolder of "models": a frozen build already
+# unpacks the Whisper weights to sys._MEIPASS/models, and models/ is ignored as a
+# Whisper cache by .dockerignore. Required - like the Whisper weights, a server
+# started without it fails at boot rather than on its first request.
+_bundled_engagement = bundled("engagement_model") if FROZEN else None
+ENGAGEMENT_MODEL_DIR = os.environ.get("ENGAGEMENT_MODEL_DIR") or str(
+    _bundled_engagement
+    if _bundled_engagement is not None
+    else os.path.join(os.path.dirname(os.path.abspath(__file__)), "engagement_model")
 )
 
 # How different a frame must be from its predecessor to count as a scene change.
