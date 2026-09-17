@@ -263,9 +263,10 @@ WHISPER_MODEL_PATH = (
 # that predicts average percentage viewed, and the linear regression and scaler
 # that explain it. Committed at server/engagement_model/ and shipped as-is by
 # the Dockerfile and build_portable.py - nothing trains it during a build.
-# Regenerate it with scripts/train_engagement_model.py whenever the scikit-learn
-# pins in requirements.txt or model_training/ change: a pickle made under another
-# scikit-learn does not load reliably.
+# Regenerate it with scripts/train_engagement_model.py <export> (a client export,
+# see the README) whenever the scikit-learn pins in requirements.txt or
+# model_training/ change: a pickle made under another scikit-learn does not load
+# reliably.
 #
 # Its own directory rather than a subfolder of "models": a frozen build already
 # unpacks the Whisper weights to sys._MEIPASS/models, and models/ is ignored as a

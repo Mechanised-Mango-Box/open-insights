@@ -151,7 +151,7 @@ def check_engagement_model() -> None:
     if not bundle.is_file():
         raise SystemExit(
             f"{bundle} is missing - refusing to build.\n"
-            "Regenerate it with: python scripts/train_engagement_model.py"
+            "Regenerate it with: python scripts/train_engagement_model.py <export>"
         )
 
 

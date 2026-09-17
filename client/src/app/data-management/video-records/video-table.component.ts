@@ -10,6 +10,7 @@ import { SceneStats, Transcript, TranscriptStats, formatDuration, readyData } fr
 import { readFileDurationSecs, recordDurationSecs, recordDurationSource } from './video-duration';
 import { EditVideoDialogComponent } from './edit-video-dialog.component';
 import { MergeVideosDialogComponent } from './merge-videos-dialog.component';
+import { AutoMergeDialogComponent, AutoMergeOutcome } from './auto-merge-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { calculateSha256, VideoRecord } from './VideoRecord';
@@ -464,6 +465,23 @@ export class VideoTableComponent {
       } finally {
         this.bulkActionPending.set(false);
       }
+    });
+  }
+
+  /** Pairs the two rows each video gets from importing both a YouTube content export and its
+   * files. Works on the selection when there is one, so a pair it gets wrong can be avoided by
+   * selecting around it; otherwise on the whole library. */
+  autoMerge(): void {
+    const records = this.isSelectionEmpty ? this.dataSource.data : this.selection.selected;
+
+    // The dialog does the merging itself, so it can stay open as the waiting screen.
+    const dialogRef = this.dialog.open(AutoMergeDialogComponent, { data: records });
+    dialogRef.afterClosed().subscribe((outcome: AutoMergeOutcome | undefined) => {
+      if (!outcome) return;
+      this.selection.clear();
+      console.log(
+        `Auto-merge: ${outcome.merged} merged, ${outcome.skipped} skipped (conflicting data).`,
+      );
     });
   }
 }

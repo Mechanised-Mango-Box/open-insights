@@ -1,4 +1,4 @@
-import JSZip from 'jszip';
+import { BlobReader, BlobWriter, FileEntry, TextWriter, ZipReader } from '@zip.js/zip.js';
 import { VideoFile, VideoRecord } from './VideoRecord';
 import {
   DatasetState,
@@ -88,8 +88,42 @@ const parseTranscript = (path: string, content: string): Transcript =>
     ? parseTimestampedText(content)
     : parseTranscriptFile(content);
 
+/** Size of a zip local file header before its variable-length name and extra field. */
+const LOCAL_HEADER_SIZE = 30;
+const LOCAL_HEADER_SIGNATURE = 0x04034b50;
+
+/**
+ * An entry's bytes as a slice of the zip itself, when it is stored uncompressed - which every
+ * video in an export is (see writeExportZip), as it was under JSZip's default before that.
+ *
+ * A slice of a File the user picked is a view onto the file on disk, not a copy, so a library
+ * of multi-gigabyte videos imports without any of it being read into memory here. Only the
+ * entry's local header has to be read, for the length of the name and extra field that sit
+ * between it and the data - the central directory's copy of those can differ.
+ *
+ * Null for anything that isn't a plain stored entry, which the caller inflates instead.
+ */
+async function sliceStoredEntry(zipFile: Blob, entry: FileEntry): Promise<Blob | null> {
+  if (entry.compressionMethod !== 0 || entry.encrypted) return null;
+
+  const header = new DataView(
+    await zipFile.slice(entry.offset, entry.offset + LOCAL_HEADER_SIZE).arrayBuffer(),
+  );
+  if (header.byteLength < LOCAL_HEADER_SIZE) return null;
+  if (header.getUint32(0, true) !== LOCAL_HEADER_SIGNATURE) return null;
+
+  const nameLength = header.getUint16(26, true);
+  const extraLength = header.getUint16(28, true);
+  const dataStart = entry.offset + LOCAL_HEADER_SIZE + nameLength + extraLength;
+  return zipFile.slice(dataStart, dataStart + entry.compressedSize);
+}
+
 /** Rebuilds one record's VideoFile, restoring the video itself when the zip carries it. */
-async function readVideoFile(zip: JSZip, record: ManifestRecord): Promise<VideoFile> {
+async function readVideoFile(
+  zipFile: Blob,
+  entries: Map<string, FileEntry>,
+  record: ManifestRecord,
+): Promise<VideoFile> {
   const restoredFile: VideoFile = {
     ...VideoFile.createEmpty(),
     hash: record.video_file?.hash ?? '',
@@ -99,12 +133,14 @@ async function readVideoFile(zip: JSZip, record: ManifestRecord): Promise<VideoF
     duration_secs: record.video_file?.duration_secs ?? null,
   };
 
-  const entry = record.video_file_path ? zip.file(record.video_file_path) : null;
+  const entry = record.video_file_path ? entries.get(record.video_file_path) : undefined;
   if (!entry) return restoredFile;
 
   const name = basename(record.video_file_path!);
-  const blob = await entry.async('blob');
-  restoredFile.file = new File([blob], name, { type: mimeTypeFor(name) });
+  const type = mimeTypeFor(name);
+  const blob =
+    (await sliceStoredEntry(zipFile, entry)) ?? (await entry.getData(new BlobWriter(type)));
+  restoredFile.file = new File([blob], name, { type });
 
   // The hash in the manifest is taken at face value rather than recomputed over the
   // restored bytes: export wrote the hash it had, and re-hashing a library of multi-gigabyte
@@ -116,77 +152,89 @@ async function readVideoFile(zip: JSZip, record: ManifestRecord): Promise<VideoF
 }
 
 /**
- * Reads an export zip back into records - the inverse of buildExportZip. Scalar fields come
+ * Reads an export zip back into records - the inverse of writeExportZip. Scalar fields come
  * straight out of manifest.json; the side-car files it links to are pulled out of the zip
  * and parsed back into the shapes they were serialized from.
+ *
+ * The zip is never read whole: zip.js reads only its central directory, text entries are
+ * inflated one at a time, and videos are sliced out of the file in place (sliceStoredEntry).
  *
  * Nothing here touches the database: the caller decides what to do with records that
  * already exist (see fillGaps).
  */
 export async function parseExportZip(
-  file: File | Blob,
+  file: Blob,
   onProgress?: (done: number, total: number) => void,
 ): Promise<ImportedRecord[]> {
-  const zipInput = typeof file.arrayBuffer === 'function' ? await file.arrayBuffer() : file;
-  const zip = await JSZip.loadAsync(zipInput);
+  const reader = new ZipReader(new BlobReader(file));
+  try {
+    const entries = new Map<string, FileEntry>();
+    for (const entry of await reader.getEntries()) {
+      if (!entry.directory) entries.set(entry.filename, entry);
+    }
+    const readText = (path: string | null): Promise<string> | null => {
+      const entry = path ? entries.get(path) : undefined;
+      return entry ? entry.getData(new TextWriter()) : null;
+    };
 
-  const manifestEntry = zip.file('manifest.json');
-  if (!manifestEntry) {
-    throw new Error('Not an Open Insights export: manifest.json is missing.');
+    const manifestText = readText('manifest.json');
+    if (!manifestText) {
+      throw new Error('Not an Open Insights export: manifest.json is missing.');
+    }
+
+    const manifest = JSON.parse(await manifestText) as ExportManifest;
+    if (!Array.isArray(manifest?.records)) {
+      throw new Error('This export’s manifest.json is malformed: no records array.');
+    }
+
+    const generated_at = manifest.generated_at;
+    const records: ImportedRecord[] = [];
+
+    // Sequential rather than Promise.all: an entry may still need inflating, and each video
+    // may have its header decoded for a duration, and a library of them at once is worth avoiding.
+    for (const [index, entry] of manifest.records.entries()) {
+      const transcriptText = readText(entry.transcript_path);
+      const transcript = transcriptText
+        ? parseTranscript(entry.transcript_path!, await transcriptText)
+        : null;
+
+      const retentionText = readText(entry.audience_retention_path);
+      const retention = retentionText
+        ? (JSON.parse(await retentionText) as YoutubeAudienceRetention)
+        : null;
+
+      records.push({
+        sort_name: entry.sort_name || 'Untitled Imported Record',
+        video_file: await readVideoFile(file, entries, entry),
+        ds_youtubeContent: entry.youtube_content ?? null,
+        ds_youtubeAudienceRetention: retention,
+        ds_transcript: transcript ? restored(transcript, generated_at) : { state: 'absent' },
+        ds_transcriptStats: entry.transcript_stats
+          ? restored(
+              {
+                ...entry.transcript_stats,
+                // As with the video_file fields above: a manifest written before
+                // these existed reads them back undefined, and null is what
+                // "not measured" means here. A genuine 0 is kept. The backfill in
+                // VideoDatabaseService fills them in on the next load if the
+                // imported record turns out to have a duration after all.
+                speech_pace_variation: entry.transcript_stats.speech_pace_variation ?? null,
+                speaking_ratio: entry.transcript_stats.speaking_ratio ?? null,
+              },
+              generated_at,
+            )
+          : { state: 'absent' },
+        ds_sceneStats: entry.scene_stats
+          ? restored(entry.scene_stats, generated_at)
+          : { state: 'absent' },
+      });
+      onProgress?.(index + 1, manifest.records.length);
+    }
+
+    return records;
+  } finally {
+    await reader.close();
   }
-
-  const manifest = JSON.parse(await manifestEntry.async('string')) as ExportManifest;
-  if (!Array.isArray(manifest?.records)) {
-    throw new Error('This export’s manifest.json is malformed: no records array.');
-  }
-
-  const generated_at = manifest.generated_at;
-  const records: ImportedRecord[] = [];
-
-  // Sequential rather than Promise.all: each iteration can inflate a whole video file out
-  // of the zip and then decode its header, and a library of them at once is worth avoiding.
-  for (const [index, entry] of manifest.records.entries()) {
-    const transcriptEntry = entry.transcript_path ? zip.file(entry.transcript_path) : null;
-    const transcript = transcriptEntry
-      ? parseTranscript(entry.transcript_path!, await transcriptEntry.async('string'))
-      : null;
-
-    const retentionEntry = entry.audience_retention_path
-      ? zip.file(entry.audience_retention_path)
-      : null;
-    const retention = retentionEntry
-      ? (JSON.parse(await retentionEntry.async('string')) as YoutubeAudienceRetention)
-      : null;
-
-    records.push({
-      sort_name: entry.sort_name || 'Untitled Imported Record',
-      video_file: await readVideoFile(zip, entry),
-      ds_youtubeContent: entry.youtube_content ?? null,
-      ds_youtubeAudienceRetention: retention,
-      ds_transcript: transcript ? restored(transcript, generated_at) : { state: 'absent' },
-      ds_transcriptStats: entry.transcript_stats
-        ? restored(
-            {
-              ...entry.transcript_stats,
-              // As with the video_file fields above: a manifest written before
-              // these existed reads them back undefined, and null is what
-              // "not measured" means here. A genuine 0 is kept. The backfill in
-              // VideoDatabaseService fills them in on the next load if the
-              // imported record turns out to have a duration after all.
-              speech_pace_variation: entry.transcript_stats.speech_pace_variation ?? null,
-              speaking_ratio: entry.transcript_stats.speaking_ratio ?? null,
-            },
-            generated_at,
-          )
-        : { state: 'absent' },
-      ds_sceneStats: entry.scene_stats
-        ? restored(entry.scene_stats, generated_at)
-        : { state: 'absent' },
-    });
-    onProgress?.(index + 1, manifest.records.length);
-  }
-
-  return records;
 }
 
 /**

@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { parseYoutubeContentCsv } from './youtube-csv-import';
 import { readFileDurationSecs } from './video-duration';
+import { isQuotaExceeded, requestPersistentStorage } from './storage-quota';
 import { fillGaps, ImportedRecord, parseExportZip } from './manifest-import';
 import { calculateSha256, VideoFile, VideoRecord } from './VideoRecord';
 
@@ -145,39 +146,90 @@ export class VideoRecordsImport {
 
   async insertFromVideoFiles(event: Event) {
     const input = event.target as HTMLInputElement;
-    const files = input.files;
-    if (!files || files.length === 0) return;
+    // Copied out before the input is cleared: `files` is live and empties with it.
+    const files = Array.from(input.files ?? []);
+    input.value = '';
+    if (files.length === 0) return;
 
-    const existing = await this.dbService.getAllVideos();
-    const existingHashes = new Set(existing.map((record) => record.video_file.hash));
+    this.pending.set(true);
+    try {
+      // Before any write, so the prompt comes while the user is still at the picker
+      // rather than partway through, after the quota has already been hit.
+      await requestPersistentStorage();
 
-    let created = 0;
-    let skipped = 0;
-    for (const file of Array.from(files)) {
-      const file_hash = await calculateSha256(file);
-      if (existingHashes.has(file_hash)) {
-        skipped++;
-        continue;
+      const existing = await this.dbService.getAllVideos();
+      const byHash = new Map(existing.map((record) => [record.video_file.hash, record]));
+
+      let created = 0;
+      let attached = 0;
+      let skipped = 0;
+      let withoutBytes = 0;
+      for (const [index, file] of files.entries()) {
+        this.importSummary.set(`Importing ${index + 1} of ${files.length} file(s)...`);
+        const file_hash = await calculateSha256(file);
+        const match = byHash.get(file_hash);
+
+        if (match?.video_file.file) {
+          skipped++;
+          continue;
+        }
+
+        // A record saved earlier without its bytes: picking the file again is how
+        // they get filled in, once there is room for them.
+        if (match) {
+          try {
+            await this.dbService.updateVideo({
+              ...match,
+              video_file: { ...match.video_file, file },
+            });
+            attached++;
+          } catch (error) {
+            if (!isQuotaExceeded(error)) throw error;
+            withoutBytes++;
+          }
+          continue;
+        }
+
+        // Read after the duplicate check, not before: a re-scan of a folder that
+        // is mostly already imported would otherwise decode every file again for
+        // a duration it is about to throw away.
+        const duration_secs = await readFileDurationSecs(file);
+        const record: Omit<VideoRecord, '__id'> = {
+          ...newRecordDefaults(),
+          sort_name: file.name,
+          video_file: { file, hash: file_hash, exists_on_server: false, duration_secs },
+        };
+
+        let __id: number;
+        try {
+          __id = await this.dbService.addVideo(record);
+        } catch (error) {
+          if (!isQuotaExceeded(error)) throw error;
+          // The name, hash and duration are a few bytes and still identify the video,
+          // which is all auto-merge and the server need; only upload needs the file.
+          record.video_file = { ...record.video_file, file: null };
+          __id = await this.dbService.addVideo(record);
+          withoutBytes++;
+        }
+        byHash.set(file_hash, { ...record, __id });
+        created++;
       }
 
-      // Read after the duplicate check, not before: a re-scan of a folder that
-      // is mostly already imported would otherwise decode every file again for
-      // a duration it is about to throw away.
-      const duration_secs = await readFileDurationSecs(file);
-
-      await this.dbService.addVideo({
-        ...newRecordDefaults(),
-        sort_name: file.name,
-        video_file: { file, hash: file_hash, exists_on_server: false, duration_secs },
-      });
-      existingHashes.add(file_hash);
-      created++;
+      this.importSummary.set(
+        `Processed ${files.length} file(s): ${created} created, ${attached} attached, ` +
+          `${skipped} skipped (already exist).` +
+          (withoutBytes > 0
+            ? ` ${withoutBytes} saved without the video (browser storage full) - pick them again to upload.`
+            : ''),
+      );
+    } catch (error) {
+      console.error('Failed to import video files:', error);
+      this.importSummary.set(
+        error instanceof Error ? error.message : 'Import failed - see console for details.',
+      );
+    } finally {
+      this.pending.set(false);
     }
-
-    this.importSummary.set(
-      `Processed ${files.length} file(s): ${created} created, ${skipped} skipped (already exist).`,
-    );
-    input.value = '';
   }
 
   /**

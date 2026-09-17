@@ -18,7 +18,7 @@ app = Flask(__name__)
 # import rather than on first use so a missing or stale bundle stops the server
 # at boot - where the Whisper weights fail too - instead of 500ing the first
 # person to ask for a recommendation. The bundle is committed; regenerate it with
-# scripts/train_engagement_model.py.
+# scripts/train_engagement_model.py <export>.
 app.extensions["engagement_predictor"] = EngagementPredictor()
 
 # Behind Caddy in the deployed setup, so the peer address on every request is the

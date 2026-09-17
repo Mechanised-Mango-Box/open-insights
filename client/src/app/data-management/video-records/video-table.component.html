@@ -23,6 +23,19 @@
       <mat-icon>merge_type</mat-icon>
       Merge Selected
     </button>
+    <button
+      mat-stroked-button
+      [disabled]="bulkActionPending()"
+      [title]="
+        isSelectionEmpty
+          ? 'Pair YouTube content rows with video file rows across the whole library'
+          : 'Pair YouTube content rows with video file rows among the selection'
+      "
+      (click)="autoMerge()"
+    >
+      <mat-icon>auto_fix_high</mat-icon>
+      Auto-Merge
+    </button>
   </div>
 
   <table mat-table [dataSource]="dataSource" class="mat-shadow-2">
