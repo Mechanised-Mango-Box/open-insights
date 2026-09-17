@@ -39,6 +39,10 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
 # only the simple headers, so the preflight would answer without it and the
 # browser would refuse to send the key - failing as an opaque CORS error rather
 # than the 401 it would have been.
+#
+# max_age lets the browser reuse a preflight instead of repeating it before every
+# poll of the same URL; 2h is Chrome's cap, and Firefox would otherwise keep one
+# for only 5s.
 CORS(
     app,
     resources={
@@ -46,6 +50,7 @@ CORS(
         r"/status": {"origins": ALLOWED_ORIGINS},
     },
     allow_headers=["Content-Type", auth.API_KEY_HEADER],
+    max_age=7200,
 )
 
 # Before the blueprint and before anything else that hangs off before_request:

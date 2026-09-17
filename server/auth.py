@@ -52,7 +52,14 @@ limiter = Limiter(
     # The private tier is exempt from every limit, including the per-endpoint
     # ones in routes.py. getattr rather than g.tier because a limiter check that
     # somehow ran before the tier hook should degrade to "limited", not explode.
-    default_limits_exempt_when=lambda: getattr(g, "tier", "public") == "private",
+    #
+    # CORS preflights are exempt too. They carry no key (see _authenticate), so
+    # they never get a tier and would otherwise all count as public - a private
+    # caller's included - roughly doubling a bulk scan's count, since each
+    # hash/kind URL needs its own. A 429 on one also surfaces in the browser as
+    # an opaque "CORS request did not succeed", and answering it costs nothing.
+    default_limits_exempt_when=lambda: request.method == "OPTIONS"
+    or getattr(g, "tier", "public") == "private",
     # Off by default; app.py turns it on only when a key is configured, so the
     # unconfigured local server has no limiter behaviour at all.
     enabled=False,
