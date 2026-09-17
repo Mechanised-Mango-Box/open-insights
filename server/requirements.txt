@@ -33,7 +33,7 @@ opencv-python-headless==5.0.0.93
 # and regression at startup. That bundle is committed (engagement_model/) and was
 # made under these exact pins - a scikit-learn pickle does not load reliably under
 # another version, so changing any of them means rerunning
-# scripts/train_engagement_model.py and committing the new bundle.
+# scripts/train_engagement_model.py <export> and committing the new bundle.
 joblib==1.5.3
 numpy==2.5.1
 pandas==3.0.5

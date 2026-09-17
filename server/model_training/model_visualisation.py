@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from model_training.data_preparation import (
     FEATURE_COLUMNS,
     TARGET_COLUMN,
-    prepare_training_data,
+    load_export_dataset,
 )
 from model_training.train import load_model_artifacts
 from model_training.regression import predict_engagement
@@ -110,12 +110,17 @@ def plot_actual_vs_predicted(
 
 
 if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) != 2:
+        sys.exit("usage: python -m model_training.model_visualisation <export folder or .zip>")
+
     print("[ Visualization ] Loading saved model artifacts from disk...")
     # Load the regression and scaler from the committed inference bundle without training a new model
     model, scaler = load_model_artifacts()
 
-    # Load dataset
-    df = prepare_training_data()
+    # Load the dataset to plot against - normally the export the bundle was trained on
+    df = load_export_dataset(sys.argv[1])
     X = df[FEATURE_COLUMNS]
     y_actual = df[TARGET_COLUMN]
 

@@ -47,30 +47,32 @@ def load_model_artifacts(
 
 
 def run_training_pipeline(
-    raw_df: Optional[pd.DataFrame] = None,
+    raw_df: pd.DataFrame,
     test_size: float = 0.2,
     random_state: int = 42,
     save_dir: Optional[str] = None,
     recommendation_threshold: float = 1.0,
+    dataset_name: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
     Main programmatic execution pipeline for training the model.
 
     Parameters:
-        raw_df: pandas DataFrame containing feature columns & target column.
+        raw_df: pandas DataFrame containing feature columns & target column, e.g. from
+            model_training.data_preparation.load_export_dataset().
         test_size: Ratio of test split (default 0.2).
         random_state: Random seed for train_test_split reproducibility.
         save_dir: Directory to write the inference bundle into. Nothing is written
             when None (the default); scripts/train_engagement_model.py passes the
             committed engagement_model/ directory.
         recommendation_threshold: Practical-effect threshold magnitude (default 1.0).
+        dataset_name: What the data came from (an export's name), recorded in the
+            bundle's "trained_on" so a committed bundle says what it was trained on.
 
     Returns:
         Dict containing trained models, scaler, evaluation metrics, coefficients, and recommendations.
     """
-    # 1 & 2 & 3. Clean and prepare data
-    # Currently prepare_training_data is a placeholder function that returns a random DataFrame
-    # TODO: Replace the placeholder function with the actual data preparation logic
+    # 1 & 2 & 3. Validate and narrow to the feature and target columns
     df = prepare_training_data(raw_df=raw_df)
     X = df[FEATURE_COLUMNS]
     y = df[TARGET_COLUMN]
@@ -112,6 +114,10 @@ def run_training_pipeline(
             "scaler": scaler,
             "feature_columns": list(FEATURE_COLUMNS),
             "recommendation_threshold": recommendation_threshold,
+            # Provenance only - inference.py reads none of it. The export itself
+            # lives outside the repo, so this is the one record of what the
+            # committed bundle learned from.
+            "trained_on": {"dataset": dataset_name, "rows": len(df)},
         }, inference_path)
 
     results = {
@@ -137,15 +143,19 @@ def run_training_pipeline(
 
 
 if __name__ == "__main__":
-    # A dry run: trains and prints metrics but writes nothing. To produce the
-    # bundle the server loads, run scripts/train_engagement_model.py and commit it.
-    from model_training.mock_data import generate_mock_training_data
+    # A dry run: trains on an export and prints metrics but writes nothing. To
+    # produce the bundle the server loads, run scripts/train_engagement_model.py
+    # and commit it.
+    import sys
+    from model_training.data_preparation import load_export_dataset
 
-    print("[ Test ] Generating mock dataset (200 samples)...")
-    mock_df = generate_mock_training_data(num_samples=200, random_state=42)
+    if len(sys.argv) != 2:
+        sys.exit("usage: python -m model_training.train <export folder or .zip>")
 
-    print("[ Test ] Running training pipeline...")
-    run_training_pipeline(raw_df=mock_df, save_dir=None)
+    run_training_pipeline(raw_df=load_export_dataset(sys.argv[1]), save_dir=None)
 
     print("\n[ Check Complete ] Model training executed successfully!")
-    print("  Nothing was saved. Regenerate the bundle with: python scripts/train_engagement_model.py")
+    print(
+        "  Nothing was saved. Regenerate the bundle with: "
+        "python scripts/train_engagement_model.py <export>"
+    )

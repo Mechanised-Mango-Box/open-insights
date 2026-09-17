@@ -1,4 +1,4 @@
-from pathlib import Path
+import sys
 
 import numpy as np
 import pandas as pd
@@ -6,14 +6,16 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 
+from model_training.data_preparation import load_export_dataset
 
-# Path(__file__) makes sure Python finds the CSV inside model_training,
-# regardless of which folder the terminal command is run from.
-csv_path = Path(__file__).with_name("fyp_mock_training_data.csv")
-mock_data = pd.read_csv(csv_path)
 
-# Dropping any video where we do not have the average percentage viewed.
-mock_data = mock_data.dropna(subset=["average_percentage_viewed"])
+# The dataset is a client export (folder or .zip), passed on the command line:
+#   python -m model_training.random_forest <export>
+# load_export_dataset() already leaves out any video without an average
+# percentage viewed.
+if len(sys.argv) != 2:
+    sys.exit("usage: python -m model_training.random_forest <export folder or .zip>")
+dataset = load_export_dataset(sys.argv[1])
 
 # X contains the video features/predictors that the model learns from.
 feature_columns = [
@@ -24,10 +26,10 @@ feature_columns = [
     "speech_pace_variation",
     "speaking_ratio",
 ]
-X = mock_data[feature_columns]
+X = dataset[feature_columns]
 
 # y contains the number that we are trying to predict.
-y = mock_data["average_percentage_viewed"]
+y = dataset["average_percentage_viewed"]
 
 # Train on 80% of the videos and reserve 20% for testing.
 X_train, X_test, y_train, y_test = train_test_split(
