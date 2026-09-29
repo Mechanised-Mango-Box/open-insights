@@ -13,7 +13,7 @@ export type FeatureRowResult = {
 export type VideoFeatures = Pick<AnalysisFeatureRow, AnalysisFeatureColumn>;
 
 /**
- * The six features the Analysis page fits and the server's engagement model
+ * The features the Analysis page fits and the server's engagement model
  * scores, or null when the record's Scan results cannot supply them.
  *
  * Kept apart from the target so the Recommend page can use it too: a video
@@ -26,8 +26,9 @@ export const buildVideoFeatures = (record: VideoRecord): VideoFeatures | null =>
   // failed dataset drops out exactly as a missing one does.
   const sceneStats = readyData(record.ds_sceneStats);
   const transcriptStats = readyData(record.ds_transcriptStats);
+  const textStats = readyData(record.ds_textStats);
 
-  if (!sceneStats || !transcriptStats) return null;
+  if (!sceneStats || !transcriptStats || !textStats) return null;
   if (sceneStats.duration_secs <= 0) return null;
   // Scan computes these; null means it had no duration to measure against.
   // Dropping the record is the point of the null - feeding the 0 the speech
@@ -44,6 +45,7 @@ export const buildVideoFeatures = (record: VideoRecord): VideoFeatures | null =>
     word_count: transcriptStats.count_words,
     speech_pace_variation: transcriptStats.speech_pace_variation,
     speaking_ratio: transcriptStats.speaking_ratio,
+    text_density: textStats.mean_words,
   };
 };
 

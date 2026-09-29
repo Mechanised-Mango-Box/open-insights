@@ -21,11 +21,12 @@ numbers would be scoring inputs it never saw.
     word_count             count_words
     speech_pace_variation  transcript_stats, as-is                (WPM std dev)
     speaking_ratio         transcript_stats, as-is                (0-1)
+    text_density           text_stats.mean_words                  (words on screen)
     average_percentage_viewed
                            average_view_duration_secs / scene_stats.duration_secs * 100
 
-A record is skipped, as the client skips it, when its scene or transcript stats
-are missing, its duration is not positive, its speech features are null (Scan had
+A record is skipped, as the client skips it, when its scene, transcript or text
+stats are missing, its duration is not positive, its speech features are null (Scan had
 no duration to measure them against), or it has no YouTube average view duration.
 """
 import json
@@ -44,11 +45,12 @@ FEATURE_COLUMNS: List[str] = [
     "word_count",
     "speech_pace_variation",
     "speaking_ratio",
+    "text_density",
 ]
 
 TARGET_COLUMN: str = "average_percentage_viewed"
 
-# Below this there is too little to split 80/20 and still fit six features.
+# Below this there is too little to split 80/20 and still fit seven features.
 MIN_TRAINING_ROWS = 10
 
 
@@ -82,6 +84,10 @@ def _record_to_row(record: Dict[str, Any]) -> Tuple[Optional[Dict[str, float]], 
     if duration_secs <= 0:
         return None, "no positive duration"
 
+    text_stats = record.get("text_stats")
+    if not text_stats:
+        return None, "missing text stats"
+
     speech_pace_variation = transcript_stats.get("speech_pace_variation")
     speaking_ratio = transcript_stats.get("speaking_ratio")
     if speech_pace_variation is None or speaking_ratio is None:
@@ -102,6 +108,7 @@ def _record_to_row(record: Dict[str, Any]) -> Tuple[Optional[Dict[str, float]], 
         "word_count": count_words,
         "speech_pace_variation": speech_pace_variation,
         "speaking_ratio": speaking_ratio,
+        "text_density": text_stats["mean_words"],
         TARGET_COLUMN: average_view_duration_secs / duration_secs * 100,
     }, None
 
@@ -136,7 +143,7 @@ def load_export_dataset(path: str | Path, verbose: bool = True) -> pd.DataFrame:
     if len(rows) < MIN_TRAINING_ROWS:
         raise ValueError(
             f"{path}: only {len(rows)} usable record(s), need at least {MIN_TRAINING_ROWS}. "
-            "Run Scan (transcript, transcript stats, scene stats) and import the YouTube "
+            "Run Scan (transcript, transcript stats, scene stats, screen text) and import the YouTube "
             "content report for more videos, then export again."
         )
 

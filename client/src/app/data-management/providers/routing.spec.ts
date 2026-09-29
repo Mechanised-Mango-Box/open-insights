@@ -151,7 +151,8 @@ describe('RoutingDatasetProvider', () => {
     config.setTarget('scene_stats', 'local');
     expect(routing.label()).toBe('http://s:5000 + this browser');
 
+    // Screen text has no browser implementation, so a server stays in the label.
     config.setTarget('transcript', 'local');
-    expect(routing.label()).toBe('this browser');
+    expect(routing.label()).toBe('this browser + http://s:5000');
   });
 });

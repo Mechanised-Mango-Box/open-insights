@@ -68,7 +68,7 @@ def __route_get_video(file_hash: str):
     return jsonify({"file_hash": file_hash, "file_ext": file_ext})
 
 
-# Both dataset kinds are served by one pair of handlers below rather than a
+# Every dataset kind is served by one pair of handlers below rather than a
 # copied block each. The two used to be near-identical and had already drifted -
 # only the transcript one ever learned about stale results - which is exactly
 # the divergence a shared implementation prevents.
@@ -97,11 +97,13 @@ def _resolve(file_hash: str, kind_name: str) -> tuple[DatasetKind, Path]:
 
 def _serialized(kind: DatasetKind, file_hash: str):
     """dataset_state() speaks the storage vocabulary; the wire adds only the one
-    transformation the client cannot do for itself - segments are stored as a
-    JSON string and belong on the wire as an array."""
+    transformation the client cannot do for itself - a list stored as a JSON
+    string (a transcript's segments, text stats' samples) belongs on the wire as
+    an array, under its name without the _json."""
     state = dataset_state(kind, file_hash)
-    if state["state"] == "ready" and "segments_json" in state:
-        state["segments"] = json.loads(state.pop("segments_json"))
+    if state["state"] == "ready":
+        for column in [column for column in state if column.endswith("_json")]:
+            state[column.removesuffix("_json")] = json.loads(state.pop(column))
     return state
 
 

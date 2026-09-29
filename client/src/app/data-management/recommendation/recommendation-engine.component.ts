@@ -444,6 +444,8 @@ export class RecommendationEngineComponent {
         return this.datasetActions.fetchTranscript(record);
       case 'transcriptStats':
         return this.datasetActions.recomputeTranscriptStats(record);
+      case 'textStats':
+        return this.datasetActions.fetchTextStats(record);
     }
   }
 }

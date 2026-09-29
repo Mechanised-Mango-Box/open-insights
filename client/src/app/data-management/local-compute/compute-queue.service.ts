@@ -33,6 +33,9 @@ const POOL_SIZES: Record<DatasetKind, () => number> = {
   // contends for the same hardware and the same VRAM - it buys no throughput
   // and risks running out of memory on a long video.
   transcript: () => 1,
+  // Never used: nothing computes text stats in the browser (see
+  // provide-local-compute.ts). Here because the record is keyed by every kind.
+  text_stats: () => 1,
 };
 
 /** Two tabs on the same library share IndexedDB, so both would compute every

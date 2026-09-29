@@ -24,7 +24,7 @@ from model_training.data_preparation import (
 
 def make_record(index, **overrides):
     """A record with everything a training row needs: 10 minutes, 1500 words, 20 scenes,
-    watched for 6 minutes on average."""
+    35 words on screen on average, watched for 6 minutes on average."""
     record = {
         "id": f"hash-{index}",
         "sort_name": f"Video {index}",
@@ -37,6 +37,13 @@ def make_record(index, **overrides):
             "speaking_ratio": 0.8,
         },
         "scene_stats": {"duration_secs": 600, "scenes": 20},
+        "text_stats": {
+            "sample_count": 120,
+            "mean_words": 35.0,
+            "max_words": 80,
+            "mean_coverage": 0.12,
+            "text_frames_ratio": 0.9,
+        },
         "transcript_path": None,
         "video_file_path": None,
         "audience_retention_path": None,
@@ -60,6 +67,7 @@ def make_manifest():
         make_record(101, youtube_content=None),
         make_record(102, scene_stats=None),
         make_record(103, scene_stats={"duration_secs": 0, "scenes": 3}),
+        make_record(104, text_stats=None),
     ]
     return {"generated_at": "2026-01-01T00:00:00.000Z", "records": usable + unusable}
 
@@ -91,6 +99,7 @@ class TestLoadExportDataset(unittest.TestCase):
         self.assertAlmostEqual(row["word_count"], 1500)
         self.assertAlmostEqual(row["speech_pace_variation"], 12.5)
         self.assertAlmostEqual(row["speaking_ratio"], 0.8)
+        self.assertAlmostEqual(row["text_density"], 35.0)  # text_stats.mean_words
         self.assertAlmostEqual(row[TARGET_COLUMN], 60.0)  # 360 s of 600 s
 
     def test_skips_records_the_client_would_skip(self):

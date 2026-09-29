@@ -4,13 +4,14 @@ import { VideoDatabaseService } from './video-database.service';
 import { DatasetActionsService } from './dataset-actions.service';
 import { VideoRecord } from './VideoRecord';
 
-export type ScanAction = 'upload' | 'transcript' | 'transcriptStats' | 'sceneStats';
+export type ScanAction = 'upload' | 'transcript' | 'transcriptStats' | 'sceneStats' | 'textStats';
 
 const SCAN_LABELS: Record<ScanAction, string> = {
   upload: 'Uploading',
   transcript: 'Extracting transcript',
   transcriptStats: 'Extracting transcript stats',
   sceneStats: 'Extracting scene stats',
+  textStats: 'Extracting screen text',
 };
 
 /** A record with no file attached this session cannot be uploaded, and that is
@@ -26,7 +27,7 @@ type ScanOutcome = void | 'skipped';
  * you switch inner tabs (Material detaches the tab body portal unless `preserveContent`), which
  * would otherwise re-enable the buttons and lose the progress text half way through a run.
  *
- * Progress is tracked per action, so a long transcript run leaves the other two buttons live: they
+ * Progress is tracked per action, so a long transcript run leaves the other buttons live: they
  * write different fields of the record, the server queues its jobs per video, and updateVideo puts
  * the whole record, so concurrent runs can't lose each other's writes.
  */
@@ -50,6 +51,7 @@ export class BulkScanService {
     transcript: (record) => this.datasetActions.fetchTranscript(record),
     transcriptStats: async (record) => this.datasetActions.recomputeTranscriptStats(record),
     sceneStats: (record) => this.datasetActions.fetchSceneStats(record),
+    textStats: (record) => this.datasetActions.fetchTextStats(record),
   };
 
   isRunning = (action: ScanAction): boolean => this.running().has(action);

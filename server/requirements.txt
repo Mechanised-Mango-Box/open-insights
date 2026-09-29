@@ -24,6 +24,19 @@ flask-limiter==4.1.1
 # meant to face the internet.
 gunicorn==23.0.0
 
+# On-screen text (text_stats.py). rapidocr itself is NOT here: it declares a
+# dependency on opencv-python, which would install beside the headless build
+# below, overwrite its cv2, and need libGL - which the slim image does not have.
+# It goes in with --no-deps from requirements-nodeps.txt, and these are the rest
+# of what it needs. onnxruntime, its inference engine, already comes with
+# faster-whisper, as do PyYAML, requests and tqdm.
+colorlog==6.12.0
+omegaconf==2.3.1
+pillow==12.3.0
+pyclipper==1.4.0
+shapely==2.1.2
+six==1.17.0
+
 # Scene stats. headless rather than opencv-python: the server never opens a
 # window, and it drops the GUI shared-library dependencies from the image.
 opencv-python-headless==5.0.0.93

@@ -62,6 +62,13 @@ UPSTREAM_COLUMNS: Dict[str, str] = {
 # The paper's five features, in the paper's order (Figures 4-7).
 PAPER_FEATURES: List[str] = ["duration", "word_count", "wpm", "scene_count", "scene_change_rate"]
 
+# What this project measures that the paper did not.
+PROJECT_EXTRA_FEATURES: List[str] = [f for f in FEATURE_COLUMNS if f not in PAPER_FEATURES]
+
+# The model's features before on-screen text joined them, kept so one set of
+# tables shows what text density adds on top.
+SIX_FEATURES: List[str] = [f for f in FEATURE_COLUMNS if f != "text_density"]
+
 # As printed in the paper: Figure 5 and the Stage 5 text. It reports no intercept.
 PAPER_CORRELATIONS: Dict[str, float] = {
     "duration": -0.23,
@@ -109,6 +116,12 @@ EXTRACTION_METHODS: List[Tuple[str, str, str]] = [
         "scene_change_rate",
         "scene_count / duration",
         "scene_count / duration",
+    ),
+    (
+        "text_density",
+        "Not measured",
+        "RapidOCR (PP-OCRv6 small) on one frame every 5 s; words from lines read with "
+        "confidence >= 0.8, averaged over the video",
     ),
     (
         TARGET_COLUMN,
@@ -273,7 +286,7 @@ def target_provenance(
 
 def correlation_table(upstream: pd.DataFrame, project: pd.DataFrame) -> pd.DataFrame:
     """Pearson r of each feature with the target: paper, upstream re-run, project."""
-    features = PAPER_FEATURES + ["speech_pace_variation", "speaking_ratio"]
+    features = PAPER_FEATURES + PROJECT_EXTRA_FEATURES
     return pd.DataFrame({
         "paper": [PAPER_CORRELATIONS.get(f, np.nan) for f in features],
         "upstream": [upstream[f].corr(upstream[TARGET_COLUMN]) if f in upstream else np.nan for f in features],
@@ -284,7 +297,7 @@ def correlation_table(upstream: pd.DataFrame, project: pd.DataFrame) -> pd.DataF
 def distribution_table(upstream: pd.DataFrame, project: pd.DataFrame) -> pd.DataFrame:
     """Median, interquartile range and extremes of each feature, per dataset."""
     rows = []
-    for column in PAPER_FEATURES + ["speech_pace_variation", "speaking_ratio", TARGET_COLUMN]:
+    for column in PAPER_FEATURES + PROJECT_EXTRA_FEATURES + [TARGET_COLUMN]:
         for name, df in (("upstream", upstream), ("project", project)):
             if column not in df:
                 continue
@@ -593,7 +606,7 @@ def build_report(results: Dict[str, Any]) -> str:
     paper_rows = results["paper_protocol"]
     split_rows = results["split_protocol"]
     cv_rows = results["cv_protocol"]
-    all_features = PAPER_FEATURES + ["speech_pace_variation", "speaking_ratio"]
+    all_features = PAPER_FEATURES + PROJECT_EXTRA_FEATURES
     sections = []
 
     sections.append("## Extraction methods\n\n" + _table(
@@ -637,7 +650,8 @@ def build_report(results: Dict[str, Any]) -> str:
         ("upstream_gd", "Upstream data, upstream's gradient descent"),
         ("upstream_ols", "Upstream data, closed-form OLS"),
         ("project_5", "Project data, paper's 5 features"),
-        ("project_6", "Project data, the model's 6 features"),
+        ("project_6", "Project data, the six features before text density"),
+        ("project_model", f"Project data, the model's {len(FEATURE_COLUMNS)} features"),
     ):
         row = paper_rows[key]
         paper_table.append([
@@ -658,7 +672,7 @@ def build_report(results: Dict[str, Any]) -> str:
             s["mean"]["rmse"], s["mean"]["r2"],
         ])
     sections.append(
-        f"## Project protocol: train.py's 80/20 split, same {len(split_rows['project_6']['test_videos'])} "
+        f"## Project protocol: train.py's 80/20 split, same {len(split_rows['project_model']['test_videos'])} "
         "held-out videos for every row\n\n"
         + _table(
             ["Run", "Linear RMSE", "Linear R²", "Forest RMSE", "Forest R²", "Mean-predictor RMSE", "Mean-predictor R²"],
@@ -707,12 +721,14 @@ def run_comparison(
     runs = {
         "upstream_5": "Upstream data, paper's 5 features",
         "project_5": "Project data, paper's 5 features",
-        "project_6": "Project data, the model's 6 features",
+        "project_6": "Project data, the six features before text density",
+        "project_model": f"Project data, the model's {len(FEATURE_COLUMNS)} features",
     }
     datasets = {
         "upstream_5": (upstream, PAPER_FEATURES),
         "project_5": (project, PAPER_FEATURES),
-        "project_6": (project, FEATURE_COLUMNS),
+        "project_6": (project, SIX_FEATURES),
+        "project_model": (project, FEATURE_COLUMNS),
     }
 
     print("[ Compare ] Fitting models (the cross-validation takes a minute)...")
@@ -733,7 +749,8 @@ def run_comparison(
             "upstream_gd": paper_protocol(upstream, PAPER_FEATURES, solver="gd"),
             "upstream_ols": paper_protocol(upstream, PAPER_FEATURES, solver="ols"),
             "project_5": paper_protocol(project, PAPER_FEATURES, solver="ols"),
-            "project_6": paper_protocol(project, FEATURE_COLUMNS, solver="ols"),
+            "project_6": paper_protocol(project, SIX_FEATURES, solver="ols"),
+            "project_model": paper_protocol(project, FEATURE_COLUMNS, solver="ols"),
         },
         "split_protocol": {key: split_protocol(df, features) for key, (df, features) in datasets.items()},
         "cv_protocol": {key: cv_protocol(df, features) for key, (df, features) in datasets.items()},

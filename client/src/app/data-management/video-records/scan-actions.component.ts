@@ -9,7 +9,7 @@ import { BulkScanService } from './bulk-scan.service';
  * (see DatasetActionsService) - the only difference is that it's applied across the selection.
  *
  * Each button is disabled only by its own run, so a long transcript scan doesn't lock up the
- * other two; BulkScanService holds that state so it survives leaving and re-entering the tab.
+ * others; BulkScanService holds that state so it survives leaving and re-entering the tab.
  */
 @Component({
   selector: 'scan-actions',
@@ -76,6 +76,20 @@ import { BulkScanService } from './bulk-scan.service';
         </button>
         @if (scans.statusFor('sceneStats')) {
           <p class="action-status">{{ scans.statusFor('sceneStats') }}</p>
+        }
+      </div>
+
+      <div class="actions">
+        <button
+          mat-stroked-button
+          [disabled]="selectionService.isEmpty() || scans.isRunning('textStats')"
+          (click)="scans.run('textStats')"
+        >
+          <mat-icon>text_fields</mat-icon>
+          Extract Screen Text
+        </button>
+        @if (scans.statusFor('textStats')) {
+          <p class="action-status">{{ scans.statusFor('textStats') }}</p>
         }
       </div>
     </section>

@@ -50,6 +50,7 @@ describe('computeAnalysis', () => {
       word_count: 1200,
       speech_pace_variation: 15,
       speaking_ratio: 0.8,
+      text_density: 20,
       average_percentage_viewed: 50,
     },
     {
@@ -59,6 +60,7 @@ describe('computeAnalysis', () => {
       word_count: 3000,
       speech_pace_variation: 22,
       speaking_ratio: 0.65,
+      text_density: 45,
       average_percentage_viewed: 30,
     },
     {
@@ -68,6 +70,7 @@ describe('computeAnalysis', () => {
       word_count: 1950,
       speech_pace_variation: 18,
       speaking_ratio: 0.72,
+      text_density: 32,
       average_percentage_viewed: 41,
     },
   ];

@@ -6,7 +6,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { VideoDatabaseService } from './video-database.service';
 import { MatDialog } from '@angular/material/dialog';
-import { SceneStats, Transcript, TranscriptStats, formatDuration, readyData } from './Dataset';
+import {
+  SceneStats,
+  TextStats,
+  Transcript,
+  TranscriptStats,
+  formatDuration,
+  readyData,
+} from './Dataset';
 import { readFileDurationSecs, recordDurationSecs, recordDurationSource } from './video-duration';
 import { EditVideoDialogComponent } from './edit-video-dialog.component';
 import { MergeVideosDialogComponent } from './merge-videos-dialog.component';
@@ -144,9 +151,11 @@ export class VideoTableComponent {
   uploadingFile = () => this.datasetActions.uploadingFile();
   sendingTranscript = () => this.datasetActions.sendingTranscript();
   sendingSceneStats = () => this.datasetActions.sendingSceneStats();
+  sendingTextStats = () => this.datasetActions.sendingTextStats();
 
   checkTranscriptStatus = (hash: string) => this.datasetActions.checkTranscriptStatus(hash);
   checkSceneStatsStatus = (hash: string) => this.datasetActions.checkSceneStatsStatus(hash);
+  checkTextStatsStatus = (hash: string) => this.datasetActions.checkTextStatsStatus(hash);
 
   constructor() {
     effect(() => {
@@ -240,6 +249,10 @@ export class VideoTableComponent {
     return this.isReadyOnServer(record, this.datasetActions.sceneStatsStatusByHash());
   }
 
+  textStatsReadyOnServer(record: VideoRecord): boolean {
+    return this.isReadyOnServer(record, this.datasetActions.textStatsStatusByHash());
+  }
+
   // The template used to test these fields for truthiness to mean "has data".
   // DatasetState is always truthy - 'absent' is a value, not a null - so the
   // question has to be asked explicitly now.
@@ -255,8 +268,12 @@ export class VideoTableComponent {
     return readyData(record.ds_sceneStats);
   }
 
+  textStatsData(record: VideoRecord): TextStats | null {
+    return readyData(record.ds_textStats);
+  }
+
   /**
-   * Every stat a cell shows gets its own badge, so the two stats columns read
+   * Every stat a cell shows gets its own badge, so the stats columns read
    * the same way and a cell can gain a stat without re-running its text
    * together. Built here rather than in the template because the count and the
    * speech features come from one object but not on the same terms - the counts
@@ -312,6 +329,22 @@ export class VideoTableComponent {
       : [];
   }
 
+  textStatBadges(record: VideoRecord): StatBadge[] {
+    const stats = this.textStatsData(record);
+    return stats
+      ? [
+          {
+            text: `${stats.mean_words.toFixed(1)} words on screen`,
+            title: 'Text density - words readable on screen, averaged over the video',
+          },
+          {
+            text: `${Math.round(stats.mean_coverage * 100)}% of frame`,
+            title: 'The share of the frame covered by text, averaged over the video',
+          },
+        ]
+      : [];
+  }
+
   protected readonly formatDuration = formatDuration;
 
   /** Both live in video-duration.ts: Scan computes the stored speech features
@@ -332,6 +365,10 @@ export class VideoTableComponent {
     return this.getDatasetStatusIcon(record, this.datasetActions.sceneStatsStatusByHash());
   }
 
+  getTextStatsStatusIcon(record: VideoRecord): StatusIcon | null {
+    return this.getDatasetStatusIcon(record, this.datasetActions.textStatsStatusByHash());
+  }
+
   getTranscriptUploadIcon(record: VideoRecord): StatusIcon | null {
     return datasetStateIcon(
       record.ds_transcript,
@@ -344,6 +381,14 @@ export class VideoTableComponent {
     return datasetStateIcon(
       record.ds_sceneStats,
       this.sendingSceneStats().has(record.video_file.hash),
+      this.datasetActions.providerLabel(),
+    );
+  }
+
+  getTextStatsUploadIcon(record: VideoRecord): StatusIcon | null {
+    return datasetStateIcon(
+      record.ds_textStats,
+      this.sendingTextStats().has(record.video_file.hash),
       this.datasetActions.providerLabel(),
     );
   }
@@ -364,6 +409,16 @@ export class VideoTableComponent {
       await this.datasetActions.fetchSceneStats(record);
     } catch (error) {
       console.error('Failed to send scene stats to server:', error);
+    } finally {
+      await this.videoDatabaseService.updateVideo(record);
+    }
+  }
+
+  async sendTextStatsToServer(record: VideoRecord): Promise<void> {
+    try {
+      await this.datasetActions.fetchTextStats(record);
+    } catch (error) {
+      console.error('Failed to read screen text on server:', error);
     } finally {
       await this.videoDatabaseService.updateVideo(record);
     }
@@ -397,6 +452,7 @@ export class VideoTableComponent {
     'transcript',
     'transcript-stats',
     'scene-stats',
+    'text-stats',
     'actions',
   ];
 

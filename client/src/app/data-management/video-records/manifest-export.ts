@@ -7,7 +7,14 @@ import {
   configure,
 } from '@zip.js/zip.js';
 import { VideoRecord } from './VideoRecord';
-import { Transcript, TranscriptStats, SceneStats, YoutubeContent, readyData } from './Dataset';
+import {
+  Transcript,
+  TranscriptStats,
+  SceneStats,
+  TextStats,
+  YoutubeContent,
+  readyData,
+} from './Dataset';
 
 export interface ManifestRecord {
   id: string;
@@ -16,6 +23,8 @@ export interface ManifestRecord {
   youtube_content: YoutubeContent | null;
   transcript_stats: TranscriptStats | null;
   scene_stats: SceneStats | null;
+  /** Optional because exports made before screen text existed do not carry it. */
+  text_stats?: TextStats | null;
   transcript_path: string | null;
   video_file_path: string | null;
   audience_retention_path: string | null;
@@ -128,6 +137,7 @@ export async function writeExportZip(
         youtube_content: record.ds_youtubeContent,
         transcript_stats: readyData(record.ds_transcriptStats),
         scene_stats: readyData(record.ds_sceneStats),
+        text_stats: readyData(record.ds_textStats),
         transcript_path: null,
         video_file_path: null,
         audience_retention_path: null,

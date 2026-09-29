@@ -11,6 +11,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import {
   LOCAL_IMPORT,
   SceneStats,
+  TextStats,
   TranscriptStats,
   computeTranscriptStats,
   isReady,
@@ -65,6 +66,7 @@ export class EditVideoDialogComponent {
   uploadError = signal<string | null>(null);
   transcriptError = signal<string | null>(null);
   sceneStatsError = signal<string | null>(null);
+  textStatsError = signal<string | null>(null);
 
   // Pending state and server statuses live in DatasetActionsService, keyed by file hash, so the
   // dialog and the table row behind it always agree about what's in flight.
@@ -73,10 +75,13 @@ export class EditVideoDialogComponent {
     this.datasetActions.sendingTranscript().has(this.localData.video_file.hash);
   sceneStatsPending = () =>
     this.datasetActions.sendingSceneStats().has(this.localData.video_file.hash);
+  textStatsPending = () =>
+    this.datasetActions.sendingTextStats().has(this.localData.video_file.hash);
 
   checkServerStatus = (hash: string) => this.datasetActions.checkServerStatus(hash);
   checkTranscriptStatus = (hash: string) => this.datasetActions.checkTranscriptStatus(hash);
   checkSceneStatsStatus = (hash: string) => this.datasetActions.checkSceneStatsStatus(hash);
+  checkTextStatsStatus = (hash: string) => this.datasetActions.checkTextStatsStatus(hash);
 
   constructor() {
     const hash = this.localData.video_file.hash;
@@ -127,10 +132,28 @@ export class EditVideoDialogComponent {
     );
   }
 
+  get textStatsUploadIcon(): StatusIcon | null {
+    return datasetStateIcon(
+      this.localData.ds_textStats,
+      this.textStatsPending(),
+      this.datasetActions.providerLabel(),
+    );
+  }
+
+  get textStatsPeekIcon(): StatusIcon {
+    return datasetPeekStatusIcon(
+      this.datasetActions.textStatsStatusByHash().get(this.localData.video_file.hash) ?? {
+        status: 'checking',
+      },
+      this.datasetActions.providerLabel(),
+    );
+  }
+
   private refreshStatuses(hash: string): void {
     this.checkServerStatus(hash);
     this.checkTranscriptStatus(hash);
     this.checkSceneStatsStatus(hash);
+    this.checkTextStatsStatus(hash);
   }
 
   onVideoFileSelected = (event: Event): void => {
@@ -224,6 +247,20 @@ export class EditVideoDialogComponent {
     }
   }
 
+  async computeTextStatsViaServer(): Promise<void> {
+    this.textStatsError.set(null);
+    if (!this.localData.video_file.hash) {
+      this.textStatsError.set('Select the video file first.');
+      return;
+    }
+    try {
+      await this.datasetActions.fetchTextStats(this.localData);
+    } catch (error) {
+      console.error('Screen text computation failed:', error);
+      this.textStatsError.set('Screen text computation failed. See console for details.');
+    }
+  }
+
   get hasLocalTranscript(): boolean {
     return isReady(this.localData.ds_transcript);
   }
@@ -238,6 +275,14 @@ export class EditVideoDialogComponent {
 
   clearLocalSceneStats(): void {
     this.localData.ds_sceneStats = { state: 'absent' };
+  }
+
+  get textStatsData(): TextStats | null {
+    return readyData(this.localData.ds_textStats);
+  }
+
+  clearLocalTextStats(): void {
+    this.localData.ds_textStats = { state: 'absent' };
   }
 
   get transcriptSegments(): TranscriptSegment[] {

@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { DatasetState, SceneStats, Transcript, TranscriptStats } from '../video-records/Dataset';
+import {
+  DatasetState,
+  SceneStats,
+  TextStats,
+  Transcript,
+  TranscriptStats,
+} from '../video-records/Dataset';
 import { VideoFile, VideoRecord } from '../video-records/VideoRecord';
 import { missingScanSteps } from './scan-first';
 
@@ -21,6 +27,13 @@ const record = (overrides: Partial<VideoRecord> = {}): VideoRecord => ({
   ds_transcript: ready<Transcript>({ segments: [] }),
   ds_transcriptStats: ready(completeStats),
   ds_sceneStats: ready<SceneStats>({ duration_secs: 600, scenes: 30 }),
+  ds_textStats: ready<TextStats>({
+    sample_count: 120,
+    mean_words: 35,
+    max_words: 80,
+    mean_coverage: 0.12,
+    text_frames_ratio: 0.9,
+  }),
   ...overrides,
 });
 
@@ -50,6 +63,17 @@ describe('missingScanSteps', () => {
     expect(missingScanSteps(record({ ds_transcriptStats: incomplete }))).toEqual([
       'transcriptStats',
     ]);
+  });
+
+  it('reads the screen text last, after the steps the speech features depend on', () => {
+    expect(
+      missingScanSteps(
+        record({
+          ds_sceneStats: { state: 'absent' },
+          ds_textStats: { state: 'failed', error: 'boom' },
+        }),
+      ),
+    ).toEqual(['sceneStats', 'textStats']);
   });
 
   it('treats a failed or zero-length scene scan as still missing', () => {

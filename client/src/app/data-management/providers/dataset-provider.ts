@@ -1,5 +1,10 @@
 import { Signal } from '@angular/core';
-import { SceneStats, TranscriptSegment, TranscriptStats } from '../video-records/Dataset';
+import {
+  SceneStats,
+  TextStats,
+  TranscriptSegment,
+  TranscriptStats,
+} from '../video-records/Dataset';
 
 /**
  * What computes a dataset for a video. One implementation talks to a server;
@@ -12,13 +17,14 @@ import { SceneStats, TranscriptSegment, TranscriptStats } from '../video-records
  * vocabulary the records and the badges are already written in.
  */
 
-export type DatasetKind = 'transcript' | 'scene_stats';
+export type DatasetKind = 'transcript' | 'scene_stats' | 'text_stats';
 
 /** Every kind, for the places that have to iterate them (routing settings, queue
  * bookkeeping). Kept beside the type so adding a kind is one edit, not a hunt. */
 export const DATASET_KINDS = [
   'transcript',
   'scene_stats',
+  'text_stats',
 ] as const satisfies readonly DatasetKind[];
 
 /** The 'complete' shape of a transcript dataset - segments and their stats
@@ -30,6 +36,7 @@ export type TranscriptPayload = TranscriptStats & { segments: TranscriptSegment[
 export type DatasetPayload = {
   transcript: TranscriptPayload;
   scene_stats: SceneStats;
+  text_stats: TextStats;
 };
 
 export type DatasetStatus = 'absent' | 'queued' | 'running' | 'ready' | 'failed';

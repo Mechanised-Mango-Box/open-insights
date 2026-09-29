@@ -160,6 +160,7 @@ describe('computeRecommendations', () => {
     word_count: 1200,
     speech_pace_variation: 15,
     speaking_ratio: 0.8,
+    text_density: 20,
     average_percentage_viewed: 50,
     ...overrides,
   });
@@ -185,6 +186,7 @@ describe('computeRecommendations', () => {
         word_count: 1200 + ((i * 11) % 17) * 30,
         speech_pace_variation: 15 + ((i * 5) % 9),
         speaking_ratio: 0.5 + (i % 5) * 0.1,
+        text_density: 20 + ((i * 13) % 11) * 3,
         average_percentage_viewed: 50 - i * 2,
       }),
     );
@@ -193,7 +195,9 @@ describe('computeRecommendations', () => {
 
     expect(outcome.ok).toBe(true);
     if (!outcome.ok) return;
-    expect(Object.keys(outcome.recommendations.features)).toHaveLength(6);
+    expect(Object.keys(outcome.recommendations.features)).toHaveLength(
+      ANALYSIS_FEATURE_COLUMNS.length,
+    );
     for (const feature of Object.values(outcome.recommendations.features)) {
       expect(Number.isFinite(feature.coefficient)).toBe(true);
       expect(feature.recommendation).toContain('In this dataset,');
@@ -239,8 +243,9 @@ describe('the fit, against the sklearn it was ported from', () => {
     const recs = generateFeatureRecommendations(coefficients, ANALYSIS_FEATURE_COLUMNS);
 
     // Straight from the golden values: |coef| >= 1 either way, under it weak.
-    expect(recs.features['word_count'].relationship).toBe('negative');
+    expect(recs.features['duration'].relationship).toBe('negative');
     expect(recs.features['scene_change_rate'].relationship).toBe('positive');
-    expect(recs.features['duration'].relationship).toBe('weak');
+    expect(recs.features['word_count'].relationship).toBe('weak');
+    expect(recs.features['text_density'].relationship).toBe('weak');
   });
 });

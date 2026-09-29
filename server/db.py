@@ -1,6 +1,6 @@
 import json
 import sqlite3
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from typing import Any
 
 from flask import g
@@ -11,9 +11,10 @@ from config import (
     JOB_LEASE_SECONDS,
     MAX_ATTEMPTS,
     SCENE_STATS_PRODUCER,
+    TEXT_STATS_PRODUCER,
     TRANSCRIPT_PRODUCER,
 )
-from models import FileExt, SceneStats, Transcript
+from models import FileExt, SceneStats, TextStats, Transcript
 
 # Transcript/scene_stats jobs write from executor threads while requests write
 # from the request thread, so contention is routine rather than exceptional. Two
@@ -65,12 +66,49 @@ SCENE_STATS = DatasetKind(
     producer=SCENE_STATS_PRODUCER,
 )
 
-KINDS: dict[str, DatasetKind] = {kind.name: kind for kind in (TRANSCRIPT, SCENE_STATS)}
+TEXT_STATS = DatasetKind(
+    name="text_stats",
+    table="text_stats",
+    columns=(
+        "sample_count",
+        "mean_words",
+        "max_words",
+        "mean_coverage",
+        "text_frames_ratio",
+        "samples_json",
+    ),
+    producer=TEXT_STATS_PRODUCER,
+)
+
+KINDS: dict[str, DatasetKind] = {
+    kind.name: kind for kind in (TRANSCRIPT, SCENE_STATS, TEXT_STATS)
+}
 
 
 # ---------------------------------------------------------------------------
 # Schema
 # ---------------------------------------------------------------------------
+# Lifecycle, one row per (kind, file_hash). Terminal success is the absence of a
+# job plus the presence of a result, so there is no 'complete' here.
+#
+# The kind CHECK is built from KINDS, so registering a kind extends it. SQLite
+# cannot alter a CHECK in place, which is what _migrate_jobs_kinds() is for: a
+# database created before a kind existed still carries the old list.
+_JOBS_TABLE = f"""
+    CREATE TABLE IF NOT EXISTS jobs (
+        kind             TEXT NOT NULL CHECK (kind IN ({", ".join(f"'{name}'" for name in KINDS)})),
+        file_hash        TEXT NOT NULL REFERENCES files(file_hash),
+        status           TEXT NOT NULL CHECK (status IN ('queued', 'running', 'failed')),
+        attempts         INTEGER NOT NULL DEFAULT 0,
+        error            TEXT,
+        lease_expires_at TEXT,
+        updated_at       TEXT NOT NULL DEFAULT (datetime('now')),
+        PRIMARY KEY (kind, file_hash),
+        -- A running job always holds a lease; a queued or failed one never does.
+        CHECK ((status = 'running') = (lease_expires_at IS NOT NULL))
+    );
+"""
+
 _SCHEMA = """
     CREATE TABLE IF NOT EXISTS files (
         file_hash   TEXT PRIMARY KEY,
@@ -97,21 +135,18 @@ _SCHEMA = """
         produced_at   TEXT NOT NULL DEFAULT (datetime('now'))
     );
 
-    -- Lifecycle, one row per (kind, file_hash). Terminal success is the absence
-    -- of a job plus the presence of a result, so there is no 'complete' here.
-    CREATE TABLE IF NOT EXISTS jobs (
-        kind             TEXT NOT NULL CHECK (kind IN ('transcript', 'scene_stats')),
-        file_hash        TEXT NOT NULL REFERENCES files(file_hash),
-        status           TEXT NOT NULL CHECK (status IN ('queued', 'running', 'failed')),
-        attempts         INTEGER NOT NULL DEFAULT 0,
-        error            TEXT,
-        lease_expires_at TEXT,
-        updated_at       TEXT NOT NULL DEFAULT (datetime('now')),
-        PRIMARY KEY (kind, file_hash),
-        -- A running job always holds a lease; a queued or failed one never does.
-        CHECK ((status = 'running') = (lease_expires_at IS NOT NULL))
+    CREATE TABLE IF NOT EXISTS text_stats (
+        file_hash         TEXT PRIMARY KEY REFERENCES files(file_hash),
+        sample_count      INTEGER NOT NULL,
+        mean_words        REAL    NOT NULL,
+        max_words         INTEGER NOT NULL,
+        mean_coverage     REAL    NOT NULL,
+        text_frames_ratio REAL    NOT NULL,
+        samples_json      TEXT    NOT NULL,
+        producer          TEXT    NOT NULL,
+        produced_at       TEXT    NOT NULL DEFAULT (datetime('now'))
     );
-"""
+""" + _JOBS_TABLE
 
 
 def _requeue(
@@ -196,6 +231,33 @@ def _migrate_from_status_rows(conn: sqlite3.Connection) -> None:
     """)
 
 
+def _migrate_jobs_kinds(conn: sqlite3.Connection) -> None:
+    """Rebuilds `jobs` when its kind CHECK predates a registered kind.
+
+    CREATE TABLE IF NOT EXISTS leaves an existing table as it was, so a database
+    made before text_stats existed would reject every text_stats job with a
+    constraint error. SQLite has no ALTER for a CHECK; copying into a table
+    created from the current _JOBS_TABLE is the documented way round it. The rows
+    come across unchanged, leases included - this changes what may be stored,
+    not anything that is."""
+    row = conn.execute(
+        "SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'jobs'"
+    ).fetchone()
+    if row is None or all(f"'{name}'" in row[0] for name in KINDS):
+        return
+
+    columns = "kind, file_hash, status, attempts, error, lease_expires_at, updated_at"
+    # One transaction, so a failure part way cannot leave jobs renamed away.
+    conn.executescript(f"""
+        BEGIN;
+        ALTER TABLE jobs RENAME TO _old_jobs;
+        {_JOBS_TABLE}
+        INSERT INTO jobs ({columns}) SELECT {columns} FROM _old_jobs;
+        DROP TABLE _old_jobs;
+        COMMIT;
+    """)
+
+
 def init_db() -> None:
     conn = _configure(sqlite3.connect(DB_PATH))
     conn.execute("PRAGMA journal_mode = WAL")
@@ -204,6 +266,8 @@ def init_db() -> None:
 
     _migrate_from_status_rows(conn)
     conn.commit()
+
+    _migrate_jobs_kinds(conn)
 
     # A running job's worker lived in the previous process's in-memory executor,
     # which no restart survives. Requeue rather than fail: nothing is wrong with
@@ -381,6 +445,17 @@ def transcript_values(transcript: Transcript) -> dict[str, Any]:
 
 def scene_stats_values(scene_stats: SceneStats) -> dict[str, Any]:
     return {"duration_secs": scene_stats.duration_secs, "scenes": scene_stats.scenes}
+
+
+def text_stats_values(text_stats: TextStats) -> dict[str, Any]:
+    return {
+        "sample_count": text_stats.sample_count,
+        "mean_words": text_stats.mean_words,
+        "max_words": text_stats.max_words,
+        "mean_coverage": text_stats.mean_coverage,
+        "text_frames_ratio": text_stats.text_frames_ratio,
+        "samples_json": json.dumps([asdict(sample) for sample in text_stats.samples]),
+    }
 
 
 # ---------------------------------------------------------------------------

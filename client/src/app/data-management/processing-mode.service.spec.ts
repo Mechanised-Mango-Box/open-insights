@@ -79,6 +79,11 @@ describe('ProcessingModeService', () => {
     expect(compute.usesServer()).toBe(true);
 
     compute.setTarget('transcript', 'local');
+    // Screen text has no browser implementation, so the settings never offer to
+    // move it and it keeps a server in use.
+    expect(compute.usesServer()).toBe(true);
+
+    compute.setTarget('text_stats', 'local');
     expect(compute.usesServer()).toBe(false);
   });
 

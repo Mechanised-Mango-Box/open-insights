@@ -240,6 +240,51 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="text-stats">
+      <th mat-header-cell *matHeaderCellDef>Screen Text</th>
+      <td mat-cell *matCellDef="let element">
+        @if (textStatsData(element)) {
+          <button
+            mat-icon-button
+            class="server-status"
+            [ngClass]="getTextStatsUploadIcon(element)?.cssClass"
+            [title]="getTextStatsUploadIcon(element)?.label"
+            [disabled]="!element.video_file.hash || sendingTextStats().has(element.video_file.hash)"
+            (click)="sendTextStatsToServer(element)"
+          >
+            <mat-icon>{{ getTextStatsUploadIcon(element)?.icon }}</mat-icon>
+          </button>
+          <span class="stat-badges">
+            @for (badge of textStatBadges(element); track badge.text) {
+              <span class="stat-badge" [title]="badge.title">{{ badge.text }}</span>
+            }
+          </span>
+        } @else if (element.video_file.hash) {
+          <button
+            mat-icon-button
+            class="server-status"
+            [ngClass]="getTextStatsStatusIcon(element)?.cssClass"
+            [title]="getTextStatsStatusIcon(element)?.label"
+            (click)="checkTextStatsStatus(element.video_file.hash)"
+          >
+            <mat-icon>{{ getTextStatsStatusIcon(element)?.icon }}</mat-icon>
+          </button>
+          <!-- As above: the peek badge reports, this collects. -->
+          @if (textStatsReadyOnServer(element)) {
+            <button
+              mat-icon-button
+              class="server-status status-exists"
+              title="Download from server"
+              [disabled]="sendingTextStats().has(element.video_file.hash)"
+              (click)="sendTextStatsToServer(element)"
+            >
+              <mat-icon>cloud_download</mat-icon>
+            </button>
+          }
+        }
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Actions</th>
       <td mat-cell *matCellDef="let element">

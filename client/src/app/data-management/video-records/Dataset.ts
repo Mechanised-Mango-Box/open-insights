@@ -229,3 +229,30 @@ export const SceneStats: CanCreateEmpty<SceneStats> = {
     scenes: 0,
   }),
 };
+
+/**
+ * On-screen text, read by OCR on the server from one frame every few seconds
+ * (server/text_stats.py). The server also returns what each sampled frame said;
+ * only this summary is kept here, since nothing in the app reads the samples and
+ * a lecture's worth of them would sit in IndexedDB for every record.
+ */
+export interface TextStats {
+  sample_count: number;
+  /** Words on screen, averaged over the video - the model's text_density. */
+  mean_words: number;
+  max_words: number;
+  /** The share of the frame covered by text, averaged over the video (0-1). */
+  mean_coverage: number;
+  /** The share of sampled frames with any text on them (0-1). */
+  text_frames_ratio: number;
+}
+
+export const TextStats: CanCreateEmpty<TextStats> = {
+  createEmpty: () => ({
+    sample_count: 0,
+    mean_words: 0,
+    max_words: 0,
+    mean_coverage: 0,
+    text_frames_ratio: 0,
+  }),
+};
