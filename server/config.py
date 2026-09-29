@@ -321,7 +321,11 @@ def _package_version(name: str) -> str:
 # gets recomputed rather than silently mixing with current results and skewing
 # the wpm/word_count/scene_change_rate features built off them.
 TRANSCRIPT_PRODUCER = f"faster-whisper/{WHISPER_MODEL}/{WHISPER_LANGUAGE}"
-SCENE_STATS_PRODUCER = f"opencv/threshold={SCENE_THRESHOLD}"
+# "+pyav" since scene stats fall back to PyAV for a video OpenCV cannot decode.
+# The counts for every video OpenCV can read are unchanged, but the old stamp
+# also covers the 0 scenes it recorded for every AV1 video it could not, and
+# the only way to reach those is to recompute everything the old stamp made.
+SCENE_STATS_PRODUCER = f"opencv+pyav/threshold={SCENE_THRESHOLD}"
 # The model is named because text_stats.py pins it rather than taking whatever
 # the package defaults to, so a rapidocr upgrade that changed its default would
 # not change what this stamp describes.

@@ -32,6 +32,7 @@
           type="file"
           #fileInput
           style="display: none"
+          [accept]="videoFileAccept"
           (change)="onVideoFileSelected($event)"
         />
       </div>

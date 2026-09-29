@@ -26,13 +26,14 @@ import threading
 from dataclasses import dataclass
 from math import ceil
 from pathlib import Path
-from typing import Callable, Sequence
+from typing import Callable, Iterator, Sequence
 
 import cv2
 import numpy as np
 
 from config import OCR_MIN_SCORE, OCR_REUSE_THRESHOLD, OCR_SAMPLE_SECS
 from models import TextSample, TextStats
+from video_files import codec_name, pyav_video
 
 
 @dataclass(frozen=True)
@@ -117,35 +118,32 @@ def _thumbnail(frame: np.ndarray) -> np.ndarray:
     return cv2.resize(gray, _THUMB_SIZE, interpolation=cv2.INTER_AREA)
 
 
-def calculate_text_stats(
-    file_path: Path,
-    ocr: OcrFn | None = None,
-    sample_secs: float = OCR_SAMPLE_SECS,
-    reuse_threshold: float = OCR_REUSE_THRESHOLD,
-    min_score: float = OCR_MIN_SCORE,
-) -> TextStats:
-    read = ocr or rapidocr_read
+def _sample_times(duration_secs: float, sample_secs: float) -> list[float]:
+    count = max(1, ceil(duration_secs / sample_secs))
+    return [(k + 0.5) * sample_secs for k in range(count)]
+
+
+def _opencv_frames(file_path: Path, sample_secs: float) -> Iterator[tuple[float, np.ndarray]]:
     video_capture = cv2.VideoCapture(str(file_path))
     try:
         if not video_capture.isOpened():
-            raise RuntimeError(f"Failed to open video file: {file_path}")
+            return
 
         fps = video_capture.get(cv2.CAP_PROP_FPS)
         total_frames = int(video_capture.get(cv2.CAP_PROP_FRAME_COUNT))
-        # As in processing.video_duration_mins: an opened container can still
-        # report no rate or no frame count, and dividing by it is not an answer.
+        # As in scene_stats.video_duration_mins: an opened container can still
+        # report no rate or no frame count (a variable-rate file, say), and
+        # dividing by it is not an answer. Yielding nothing hands over to PyAV,
+        # which reads timestamps rather than a frame rate.
         if fps <= 0 or total_frames <= 0:
-            raise RuntimeError(f"Unreadable video metadata (fps={fps}, frames={total_frames})")
+            return
 
-        duration_secs = total_frames / fps
-        count = max(1, ceil(duration_secs / sample_secs))
         targets = sorted(
-            {min(total_frames - 1, int((k + 0.5) * sample_secs * fps)) for k in range(count)}
+            {
+                min(total_frames - 1, int(t * fps))
+                for t in _sample_times(total_frames / fps, sample_secs)
+            }
         )
-
-        samples: list[TextSample] = []
-        last_thumb: np.ndarray | None = None
-        last_reading: tuple[int, float, str] = (0, 0.0, "")
         position = 0
         for target in targets:
             # grab() decodes without converting, so skipping ahead this way is
@@ -154,12 +152,49 @@ def calculate_text_stats(
             while position < target and video_capture.grab():
                 position += 1
             if position < target:
-                break  # The container promised more frames than it holds.
+                return  # The container promised more frames than it holds.
             ok, frame = video_capture.read()
             if not ok:
-                break
+                return
             position += 1
+            yield round(target / fps, 3), frame
+    finally:
+        video_capture.release()
 
+
+def _pyav_frames(file_path: Path, sample_secs: float) -> Iterator[tuple[float, np.ndarray]]:
+    """The same samples, decoded by PyAV - for a codec OpenCV opens and then
+    cannot decode (see video_files)."""
+    with pyav_video(file_path) as (duration_secs, frames):
+        if duration_secs is None:
+            return
+        targets = _sample_times(duration_secs, sample_secs)
+        index = 0
+        for frame in frames:
+            if frame.time is None or frame.time < targets[index]:
+                continue
+            yield round(frame.time, 3), frame.to_ndarray(format="bgr24")
+            # One frame per sample time, even where a frame straddles several.
+            while index < len(targets) and targets[index] <= frame.time:
+                index += 1
+            if index == len(targets):
+                return
+
+
+def calculate_text_stats(
+    file_path: Path,
+    ocr: OcrFn | None = None,
+    sample_secs: float = OCR_SAMPLE_SECS,
+    reuse_threshold: float = OCR_REUSE_THRESHOLD,
+    min_score: float = OCR_MIN_SCORE,
+) -> TextStats:
+    read = ocr or rapidocr_read
+
+    def read_samples(frames: Iterator[tuple[float, np.ndarray]]) -> list[TextSample]:
+        samples: list[TextSample] = []
+        last_thumb: np.ndarray | None = None
+        last_reading: tuple[int, float, str] = (0, 0.0, "")
+        for t, frame in frames:
             thumb = _thumbnail(frame)
             reused = (
                 last_thumb is not None
@@ -171,25 +206,30 @@ def calculate_text_stats(
                 last_thumb = thumb
             words, coverage, text = last_reading
             samples.append(
-                TextSample(
-                    t=round(target / fps, 3),
-                    words=words,
-                    coverage=round(coverage, 5),
-                    reused=reused,
-                    text=text,
-                )
+                TextSample(t=t, words=words, coverage=round(coverage, 5), reused=reused, text=text)
             )
+        return samples
 
-        if not samples:
-            raise RuntimeError("No frames could be read from the video.")
-
-        return TextStats(
-            sample_count=len(samples),
-            mean_words=sum(s.words for s in samples) / len(samples),
-            max_words=max(s.words for s in samples),
-            mean_coverage=sum(s.coverage for s in samples) / len(samples),
-            text_frames_ratio=sum(1 for s in samples if s.words > 0) / len(samples),
-            samples=samples,
+    # OpenCV first: it is what scene stats decode with, so the two agree on every
+    # video both can read. PyAV only when OpenCV produced nothing at all.
+    samples = read_samples(_opencv_frames(file_path, sample_secs))
+    if not samples:
+        try:
+            samples = read_samples(_pyav_frames(file_path, sample_secs))
+        except Exception as e:  # PyAV's own errors, named rather than swallowed
+            raise RuntimeError(
+                f"No frames could be read from the video (codec {codec_name(file_path)}): {e}"
+            ) from e
+    if not samples:
+        raise RuntimeError(
+            f"No frames could be read from the video (codec {codec_name(file_path)})."
         )
-    finally:
-        video_capture.release()
+
+    return TextStats(
+        sample_count=len(samples),
+        mean_words=sum(s.words for s in samples) / len(samples),
+        max_words=max(s.words for s in samples),
+        mean_coverage=sum(s.coverage for s in samples) / len(samples),
+        text_frames_ratio=sum(1 for s in samples if s.words > 0) / len(samples),
+        samples=samples,
+    )

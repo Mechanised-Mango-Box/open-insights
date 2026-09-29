@@ -75,6 +75,11 @@ declared dependencies because one of them is the full `opencv-python`, which wou
 replace the headless OpenCV the server uses; the rest are pinned in `requirements.txt`.
 Its OCR models ship inside the package, so there is nothing to fetch for it.
 
+Uploads must be `.mp4`, `.mov`, `.mkv`, `.webm` or `.avi`, and the server checks that the
+file really is a video in that container before storing it; anything else is refused with
+a 415 that says why. AV1 videos work too: the OpenCV wheels decode AV1 only with hardware
+support, so where they cannot, scene stats and screen text decode through PyAV instead.
+
 The engagement model needs no setup step: its trained bundle is committed at
 `server/engagement_model/`, and the Docker image and portable build ship it as-is.
 Regenerate it, and commit the result, whenever there is a better export to learn from,

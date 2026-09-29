@@ -41,6 +41,12 @@ six==1.17.0
 # window, and it drops the GUI shared-library dependencies from the image.
 opencv-python-headless==5.0.0.93
 
+# Checking an upload is a video, and decoding what OpenCV cannot (video_files.py).
+# faster-whisper brings it anyway; pinned here because the server now imports it
+# directly and relies on the software AV1 decoder (dav1d) its wheels carry - the
+# opencv-python wheels decode AV1 only through hardware.
+av==18.1.0
+
 # The engagement model behind /api/videos/<hash>/recommendation (inference.py).
 # Runtime rather than training-only: the server loads the pickled random forest
 # and regression at startup. That bundle is committed (engagement_model/) and was

@@ -8,14 +8,12 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
-import cv2
 from faster_whisper import WhisperModel
 
 from config import (
     BACKFILL_ENABLED,
     BACKFILL_INTERVAL_SECONDS,
     SCENE_STATS_WORKERS,
-    SCENE_THRESHOLD,
     TEXT_STATS_WORKERS,
     UPLOAD_DIR_MAX_BYTES,
     UPLOAD_FOLDER,
@@ -50,9 +48,9 @@ from db import (
     transcript_values,
     uncomputed_datasets,
 )
-from models import SceneStats, Transcript, TranscriptSegment
+from models import Transcript, TranscriptSegment
+from scene_stats import calculate_scene_stats
 from text_stats import calculate_text_stats
-from utils import Failure, Result, Success
 
 # Executor threads run with no Flask app context, so app.logger is not reachable
 # from them. A module logger is what makes a failure in a background job visible
@@ -253,78 +251,6 @@ def _submit[T](
 
 def submit_transcript_job(file_hash: str, file_path: Path) -> None:
     _submit(TRANSCRIPT, file_hash, file_path, calculate_transcript, transcript_values)
-
-
-# Ported from gui/feature_extraction.py (video_duration_mins, count_scene_transitions),
-# orchestrated the same way gui/tab_scenes_stats.py does. NOT based on
-# video_analysis/open_cv_functions.py, which opens its VideoCapture at module scope
-# against an undefined variable and crashes on import.
-def video_duration_mins(video_capture: cv2.VideoCapture) -> Result[float, str]:
-    if not video_capture.isOpened():
-        return Failure(f"Failed to open video file: {video_capture}")
-
-    fps = video_capture.get(cv2.CAP_PROP_FPS)
-    total_frames = video_capture.get(cv2.CAP_PROP_FRAME_COUNT)
-
-    # isOpened() does not cover this: OpenCV opens a container happily and still
-    # reports fps 0 for a variable-frame-rate file, and frame count 0 or -1 when
-    # the container carries no index. Dividing anyway raised ZeroDivisionError,
-    # which reached the user as the job error "float division by zero" - a
-    # server bug by appearance, when the real answer is that this file's
-    # metadata cannot be read.
-    if fps <= 0 or total_frames <= 0:
-        return Failure(f"Unreadable video metadata (fps={fps}, frames={total_frames})")
-
-    duration = (total_frames / fps) / 60  # in mins
-    return Success(duration)
-
-
-def count_scene_transitions(
-    video_capture: cv2.VideoCapture, threshold: float = SCENE_THRESHOLD
-) -> Result[int, str]:
-    if not video_capture.isOpened():
-        return Failure(f"Failed to open video file: {video_capture}")
-
-    transition_count = 0
-    previous_frame = None
-
-    while True:
-        success, frame = video_capture.read()
-        if not success:
-            break
-
-        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-        if previous_frame is not None:
-            difference = cv2.absdiff(previous_frame, gray_frame)
-            mean_difference = difference.mean()
-            if mean_difference > threshold:
-                transition_count += 1
-
-        previous_frame = gray_frame
-
-    return Success(transition_count)
-
-
-def calculate_scene_stats(file_path: Path) -> SceneStats:
-    video_capture = cv2.VideoCapture(str(file_path))
-    try:
-        # Threshold passed explicitly rather than left to the default, so the
-        # value that shaped this result is the same one SCENE_STATS_PRODUCER
-        # records - otherwise a changed config would not invalidate the cache.
-        match (
-            video_duration_mins(video_capture),
-            count_scene_transitions(video_capture, SCENE_THRESHOLD),
-        ):
-            case (Success(duration_mins), Success(transition_count)):
-                return SceneStats(
-                    duration_secs=duration_mins * 60,
-                    scenes=float(transition_count),
-                )
-            case errs:
-                raise RuntimeError(f"Scene stats calculation failed: {errs}")
-    finally:
-        video_capture.release()
 
 
 def submit_scene_stats_job(file_hash: str, file_path: Path) -> None:

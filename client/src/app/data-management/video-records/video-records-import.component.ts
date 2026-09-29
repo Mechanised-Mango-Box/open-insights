@@ -7,6 +7,7 @@ import { readFileDurationSecs } from './video-duration';
 import { isQuotaExceeded, requestPersistentStorage } from './storage-quota';
 import { fillGaps, ImportedRecord, parseExportZip } from './manifest-import';
 import { calculateSha256, VideoFile, VideoRecord } from './VideoRecord';
+import { isAcceptedVideoName, VIDEO_EXTENSIONS_LABEL, VIDEO_FILE_ACCEPT } from './video-file-types';
 
 /** Shared "blank slate" for every dataset field a freshly-created VideoRecord needs
  * beyond sort_name - kept in one place so each creation site only supplies what's
@@ -75,7 +76,7 @@ const newRecordDefaults = (): Omit<VideoRecord, '__id' | 'sort_name'> => ({
         type="file"
         #videoInput
         style="display: none"
-        accept="video/*"
+        [accept]="videoFileAccept"
         multiple
         (change)="insertFromVideoFiles($event)"
       />
@@ -96,6 +97,8 @@ export class VideoRecordsImport {
   importSummary = signal<string | null>(null);
   /** Unpacking a zip full of video files is slow enough to need the buttons held shut. */
   pending = signal(false);
+
+  protected readonly videoFileAccept = VIDEO_FILE_ACCEPT;
 
   async insertNewEmpty() {
     const sampleRecord: VideoRecord = {
@@ -148,9 +151,19 @@ export class VideoRecordsImport {
   async insertFromVideoFiles(event: Event) {
     const input = event.target as HTMLInputElement;
     // Copied out before the input is cleared: `files` is live and empties with it.
-    const files = Array.from(input.files ?? []);
+    const picked = Array.from(input.files ?? []);
     input.value = '';
-    if (files.length === 0) return;
+    if (picked.length === 0) return;
+
+    // `accept` only sets the picker's default filter; "All files" gets past it, and
+    // the server would refuse these at upload anyway.
+    const files = picked.filter((file) => isAcceptedVideoName(file.name));
+    const refused = picked.length - files.length;
+    const refusedNote = refused > 0 ? ` ${refused} refused (not ${VIDEO_EXTENSIONS_LABEL}).` : '';
+    if (files.length === 0) {
+      this.importSummary.set(`Nothing imported.${refusedNote}`);
+      return;
+    }
 
     this.pending.set(true);
     try {
@@ -219,6 +232,7 @@ export class VideoRecordsImport {
       this.importSummary.set(
         `Processed ${files.length} file(s): ${created} created, ${attached} attached, ` +
           `${skipped} skipped (already exist).` +
+          refusedNote +
           (withoutBytes > 0
             ? ` ${withoutBytes} saved without the video (browser storage full) - pick them again to upload.`
             : ''),

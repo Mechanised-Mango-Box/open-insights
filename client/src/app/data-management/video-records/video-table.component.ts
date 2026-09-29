@@ -21,6 +21,7 @@ import { AutoMergeDialogComponent, AutoMergeOutcome } from './auto-merge-dialog.
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { calculateSha256, VideoRecord } from './VideoRecord';
+import { isAcceptedVideoName, notAcceptedMessage, VIDEO_FILE_ACCEPT } from './video-file-types';
 import { SelectionService } from './selection.service';
 import { DatasetActionsService } from './dataset-actions.service';
 import {
@@ -192,7 +193,13 @@ export class VideoTableComponent {
   onFileSelected = (record: VideoRecord, event: Event): void => {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
+    input.value = '';
     if (!file) return;
+    // `accept` is only the picker's default filter; "All files" gets past it.
+    if (!isAcceptedVideoName(file.name)) {
+      alert(notAcceptedMessage(file.name));
+      return;
+    }
 
     record.video_file.file = file;
     // Both reads are over the same file and neither depends on the other, so
@@ -202,8 +209,6 @@ export class VideoTableComponent {
       record.video_file.duration_secs = duration;
       this.videoDatabaseService.updateVideo(record);
     });
-
-    input.value = '';
   };
 
   // The file-hash column's button doubles as an upload trigger: if a local file is
@@ -346,6 +351,7 @@ export class VideoTableComponent {
   }
 
   protected readonly formatDuration = formatDuration;
+  protected readonly videoFileAccept = VIDEO_FILE_ACCEPT;
 
   /** Both live in video-duration.ts: Scan computes the stored speech features
    * against the same answer, and two definitions could disagree. */

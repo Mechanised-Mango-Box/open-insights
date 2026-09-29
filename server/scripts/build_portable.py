@@ -45,6 +45,7 @@ TESTED_PYTHON = (3, 13)
 REQUIRED_PACKAGES = {
     "PyInstaller": "pyinstaller",
     "faster_whisper": "faster-whisper",
+    "av": "av",
     "cv2": "opencv-python-headless",
     "flask": "flask",
     "joblib": "joblib",

@@ -5,6 +5,7 @@ from uuid import uuid4
 
 from auth import is_private, limiter
 from config import (
+    ALLOWED_EXTENSIONS,
     PUBLIC_COMPUTE_RATE_LIMIT,
     PUBLIC_MAX_QUEUE_DEPTH,
     PUBLIC_UPLOAD_RATE_LIMIT,
@@ -25,7 +26,8 @@ from flask import Blueprint, current_app, jsonify, make_response, redirect, requ
 from instructions import page_html
 from werkzeug.exceptions import NotFound
 from processing import SUBMIT, queue_status
-from utils import hash_stream
+from utils import Failure, hash_stream
+from video_files import check_video
 
 bp = Blueprint("api", __name__)
 
@@ -211,7 +213,8 @@ def __route_create_video():
     # the same one that gets stored - see config.video_extension().
     file_ext = video_extension(file.filename)
     if file_ext is None:
-        return jsonify({"err": "Invalid file type"}), 400
+        accepted = ", ".join(f".{ext}" for ext in sorted(ALLOWED_EXTENSIONS))
+        return jsonify({"err": f"Not a video type this server accepts ({accepted})."}), 415
 
     # > Get hash (chunks at a time to reduce blocking load)
     file_hash = hash_stream(file.stream).lower()
@@ -237,6 +240,15 @@ def __route_create_video():
     tmp_path = f"{file_path}.{uuid4().hex}.part"
     try:
         file.save(tmp_path)
+        # > Check the content. The name alone let anything called .mp4 in, to
+        # be hashed, stored and queued, and then fail once per dataset kind when
+        # a worker came to decode it. Checked after the save because FFmpeg
+        # reads a file, and before the rename so a rejected one never takes the
+        # final name.
+        match check_video(Path(tmp_path), file_ext):
+            case Failure(error):
+                Path(tmp_path).unlink(missing_ok=True)
+                return jsonify({"err": error}), 415
         os.replace(tmp_path, file_path)
     except BaseException:
         Path(tmp_path).unlink(missing_ok=True)

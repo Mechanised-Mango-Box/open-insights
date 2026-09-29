@@ -11,6 +11,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import cv2
 import numpy as np
@@ -19,6 +20,7 @@ import numpy as np
 # this file is run directly.
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+import text_stats
 from db import KINDS, _migrate_jobs_kinds
 from text_stats import OcrLine, calculate_text_stats, count_words
 
@@ -99,6 +101,17 @@ class TestCalculateTextStats(unittest.TestCase):
         write_video(short, [(2, 40)])
         stats = calculate_text_stats(short, ocr=FakeOcr(), sample_secs=5.0)
         self.assertEqual(stats.sample_count, 1)
+
+    def test_pyav_samples_the_same_moments(self):
+        opencv = [t for t, _ in text_stats._opencv_frames(self.video, 5.0)]
+        pyav = [t for t, _ in text_stats._pyav_frames(self.video, 5.0)]
+        self.assertEqual(pyav, opencv)
+
+    def test_falls_back_to_pyav_when_opencv_reads_nothing(self):
+        # What an AV1 file does under an OpenCV that can only decode it in hardware.
+        with mock.patch.object(text_stats, "_opencv_frames", return_value=iter(())):
+            stats = calculate_text_stats(self.video, ocr=FakeOcr(), sample_secs=5.0)
+        self.assertEqual([s.words for s in stats.samples], [2, 2, 2, 4, 4, 4])
 
     def test_rejects_a_file_that_is_not_a_video(self):
         junk = Path(self.directory.name) / "junk.avi"

@@ -26,6 +26,7 @@ import { calculateSha256, VideoRecord } from './VideoRecord';
 import { DatasetActionsService } from './dataset-actions.service';
 import { parseYoutubeAudienceRetentionCsv, parseYoutubeContentCsv } from './youtube-csv-import';
 import { readFileDurationSecs, recordDurationSecs } from './video-duration';
+import { isAcceptedVideoName, notAcceptedMessage, VIDEO_FILE_ACCEPT } from './video-file-types';
 import { parseTranscriptFile } from './transcript-import';
 import {
   STATUS_ICON_STYLES,
@@ -62,6 +63,7 @@ export class EditVideoDialogComponent {
   readonly YoutubeContent = YoutubeContent;
   readonly YoutubeAudienceRetention = YoutubeAudienceRetention;
   readonly formatTimestamp = formatTimestamp;
+  readonly videoFileAccept = VIDEO_FILE_ACCEPT;
 
   uploadError = signal<string | null>(null);
   transcriptError = signal<string | null>(null);
@@ -160,6 +162,13 @@ export class EditVideoDialogComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
+      // `accept` is only the picker's default filter; "All files" gets past it.
+      if (!isAcceptedVideoName(file.name)) {
+        this.uploadError.set(notAcceptedMessage(file.name));
+        input.value = '';
+        return;
+      }
+      this.uploadError.set(null);
       this.localData.video_file.file = file;
       readFileDurationSecs(file).then((duration) => {
         this.localData.video_file.duration_secs = duration;
@@ -215,7 +224,11 @@ export class EditVideoDialogComponent {
       }
     } catch (error) {
       console.error('Upload failed:', error);
-      this.uploadError.set('Upload failed. See console for details.');
+      // The server's reason when it refused the file ("holds no video", ...); the
+      // console for anything else.
+      this.uploadError.set(
+        error instanceof Error ? error.message : 'Upload failed. See console for details.',
+      );
     }
   }
 

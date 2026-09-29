@@ -83,7 +83,7 @@
           type="file"
           #fileInput
           style="display: none"
-          accept="video/*"
+          [accept]="videoFileAccept"
           (change)="onFileSelected(element, $event)"
         />
       </td>
