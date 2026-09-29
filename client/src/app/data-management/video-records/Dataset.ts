@@ -10,6 +10,14 @@ export const LOCAL_IMPORT = 'local-import';
 export const LOCAL_RECOMPUTE = 'local-recompute';
 
 /**
+ * The thresholds and models a value was made with, by name - `{ threshold: 30 }` for scene
+ * stats, say. The server reports its own with every result (the *_SETTINGS in
+ * server/config.py), and each browser computer declares its own beside its producer.
+ * Absent on values made before results carried them.
+ */
+export type DatasetSettings = Record<string, string | number | boolean>;
+
+/**
  * One dataset value and what is known about it, mirroring the states the server
  * derives (see dataset_state() in server/db.py) so client and server share a
  * single vocabulary instead of translating between three.
@@ -28,6 +36,7 @@ export type DatasetState<T> =
       data: T;
       producer: string;
       produced_at?: string;
+      settings?: DatasetSettings;
       /** A regeneration is in flight; the data below is still the current one. */
       refreshing?: 'queued' | 'running';
       /**

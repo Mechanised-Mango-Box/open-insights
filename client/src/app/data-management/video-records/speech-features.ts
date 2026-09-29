@@ -1,5 +1,8 @@
 import type { Transcript } from './Dataset';
 
+/** The window speech pace variation measures WPM over. */
+export const SPEECH_PACE_WINDOW_SECS = 30;
+
 /**
  * Calculates speech pace variation (sample standard deviation of WPM across fixed 30-second time windows).
  *
@@ -11,7 +14,7 @@ import type { Transcript } from './Dataset';
 export function calculateSpeechPaceVariation(
   transcript: Transcript | null | undefined,
   durationSecs: number,
-  windowSizeSecs: number = 30,
+  windowSizeSecs: number = SPEECH_PACE_WINDOW_SECS,
 ): number {
   if (
     !transcript?.segments ||

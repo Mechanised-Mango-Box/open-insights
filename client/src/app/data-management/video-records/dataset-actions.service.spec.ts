@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DatasetActionsService } from './dataset-actions.service';
 import { DatasetKind, DatasetProvider } from '../providers/dataset-provider';
 import { ServerConfigService } from '../server-config.service';
+import { VideoRecord } from './VideoRecord';
 
 const REFRESH_MS = 5000;
 
@@ -161,5 +162,78 @@ describe('DatasetActionsService status freshness', () => {
 
     vi.advanceTimersByTime(REFRESH_MS);
     expect(peeks('transcript')).toHaveLength(0);
+  });
+});
+
+describe('DatasetActionsService records the settings a result was made with', () => {
+  let request: ReturnType<typeof vi.fn>;
+  let service: DatasetActionsService;
+
+  beforeEach(() => {
+    globalThis.localStorage?.clear();
+    request = vi.fn();
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: DatasetProvider,
+          useValue: {
+            label: signal('http://test-server:5000'),
+            sourceStatus: vi.fn().mockResolvedValue('exists'),
+            peek: vi.fn().mockResolvedValue({ state: 'absent' }),
+            request,
+            putSource: vi.fn(),
+            status: vi.fn(),
+          },
+        },
+      ],
+    });
+    service = TestBed.inject(DatasetActionsService);
+  });
+
+  const record = (): VideoRecord => ({
+    sort_name: 'Lecture 1',
+    video_file: { file: null, hash: 'abc', exists_on_server: true, duration_secs: 120 },
+    ds_youtubeContent: null,
+    ds_youtubeAudienceRetention: null,
+    ds_transcript: { state: 'absent' },
+    ds_transcriptStats: { state: 'absent' },
+    ds_sceneStats: { state: 'absent' },
+    ds_textStats: { state: 'absent' },
+  });
+
+  it('keeps the scene threshold the server reported', async () => {
+    request.mockResolvedValue({
+      state: 'ready',
+      producer: 'opencv+pyav/threshold=30.0',
+      settings: { threshold: 30 },
+      duration_secs: 120,
+      scenes: 4,
+    });
+    const target = record();
+
+    await service.fetchSceneStats(target);
+
+    expect(target.ds_sceneStats).toMatchObject({ state: 'ready', settings: { threshold: 30 } });
+  });
+
+  it("adds this browser's pace window to the transcript stats' settings", async () => {
+    request.mockResolvedValue({
+      state: 'ready',
+      producer: 'faster-whisper/tiny.en/en',
+      settings: { model: 'tiny.en', language: 'en', vad: false },
+      segments: [{ start: 0, end: 60, text: 'hello there' }],
+      count_chars: 11,
+      count_words: 2,
+    });
+    const target = record();
+
+    await service.fetchTranscript(target);
+
+    expect(target.ds_transcript).toMatchObject({
+      settings: { model: 'tiny.en', language: 'en', vad: false },
+    });
+    expect(target.ds_transcriptStats).toMatchObject({
+      settings: { model: 'tiny.en', language: 'en', vad: false, pace_window_secs: 30 },
+    });
   });
 });

@@ -68,6 +68,7 @@ export function measureSceneStats(
 
 export const sceneStatsComputer: Computer<'scene_stats'> = {
   producer: SCENE_STATS_PRODUCER_LOCAL,
+  settings: { threshold: SCENE_THRESHOLD },
 
   async compute(file: File): Promise<SceneStats> {
     const { result, timings } = await measureSceneStats(file);

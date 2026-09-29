@@ -320,7 +320,12 @@ def _package_version(name: str) -> str:
 # made by a different model or a different parameter, so it reads as absent and
 # gets recomputed rather than silently mixing with current results and skewing
 # the wpm/word_count/scene_change_rate features built off them.
-TRANSCRIPT_PRODUCER = f"faster-whisper/{WHISPER_MODEL}/{WHISPER_LANGUAGE}"
+# "/vad" only when the voice-activity filter is on, so the stamp the default
+# makes is the one it always made. Skipping silence changes the segments, so a
+# transcript made with it is not the same thing as one made without.
+TRANSCRIPT_PRODUCER = f"faster-whisper/{WHISPER_MODEL}/{WHISPER_LANGUAGE}" + (
+    "/vad" if WHISPER_VAD else ""
+)
 # "+pyav" since scene stats fall back to PyAV for a video OpenCV cannot decode.
 # The counts for every video OpenCV can read are unchanged, but the old stamp
 # also covers the 0 scenes it recorded for every AV1 video it could not, and
@@ -333,6 +338,27 @@ TEXT_STATS_PRODUCER = (
     f"rapidocr-{_package_version('rapidocr')}/PP-OCRv6-small"
     f"/every={OCR_SAMPLE_SECS}s/reuse={OCR_REUSE_THRESHOLD}/score={OCR_MIN_SCORE}"
 )
+
+# The same parameters, by name, for reporting: every ready result and /status
+# carry its kind's settings, so whoever runs a scan can see the thresholds it
+# used. Reporting the current ones is honest because every value here is also in
+# that kind's producer (tests/test_settings.py holds them to it), and a result
+# only reads as ready while its producer is the current one.
+TRANSCRIPT_SETTINGS = {
+    "model": WHISPER_MODEL,
+    "language": WHISPER_LANGUAGE,
+    "vad": WHISPER_VAD,
+}
+SCENE_STATS_SETTINGS = {
+    # Mean absolute difference between consecutive grayscale frames, 0-255.
+    "threshold": SCENE_THRESHOLD,
+}
+TEXT_STATS_SETTINGS = {
+    "model": "PP-OCRv6-small",
+    "sample_secs": OCR_SAMPLE_SECS,
+    "reuse_threshold": OCR_REUSE_THRESHOLD,
+    "min_score": OCR_MIN_SCORE,
+}
 
 # A job whose worker died is requeued rather than failed, so a genuinely broken
 # video would otherwise retry forever. Past this many attempts it stays failed

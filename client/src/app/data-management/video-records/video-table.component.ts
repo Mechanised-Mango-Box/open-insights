@@ -454,7 +454,8 @@ export class VideoTableComponent {
     'file',
     'file-hash',
     'youtube-content-report',
-    'youtube-audience-retention',
+    // 'youtube-audience-retention' is hidden: nothing reads retention yet. Its column is
+    // still defined in the template, so listing it here again brings it back.
     'transcript',
     'transcript-stats',
     'scene-stats',

@@ -13,6 +13,7 @@ import { ComputeConfigService } from '../compute-config.service';
 import { ServerConfigService } from '../server-config.service';
 import { VideoRecord } from './VideoRecord';
 import {
+  DatasetSettings,
   DatasetState,
   LOCAL_RECOMPUTE,
   computeSpeechFeatures,
@@ -21,6 +22,13 @@ import {
 } from './Dataset';
 import { recordDurationSecs } from './video-duration';
 import { DatasetPeekResult, ServerStatus } from './dataset-status';
+import { describeSettings, TRANSCRIPT_STATS_SETTINGS } from './dataset-settings';
+
+/** A scan's console line, with the settings it ran under when the result reported any. */
+const withSettings = (outcome: string, settings: DatasetSettings | undefined): string => {
+  const described = describeSettings(settings);
+  return described ? `${outcome}; ${described}` : outcome;
+};
 
 /** How often a hash still in a non-terminal state gets re-peeked in the background. */
 const STATUS_REFRESH_INTERVAL_MS = 5000;
@@ -221,12 +229,9 @@ export class DatasetActionsService {
     try {
       // Segments and their stats arrive in one payload; the record models them
       // as two separately cacheable fields, so split here.
-      const { segments, count_chars, count_words, producer } = await this.provider.request(
-        'transcript',
-        hash,
-        this.sourceFor(record),
-      );
-      record.ds_transcript = { state: 'ready', data: { segments }, producer };
+      const { segments, count_chars, count_words, producer, settings } =
+        await this.provider.request('transcript', hash, this.sourceFor(record));
+      record.ds_transcript = { state: 'ready', data: { segments }, producer, settings };
       // The counts come from the producer; the speech features do not, and are
       // computed here against whatever duration is known. Null until one is.
       record.ds_transcriptStats = {
@@ -237,8 +242,9 @@ export class DatasetActionsService {
           ...computeSpeechFeatures({ segments }, recordDurationSecs(record)),
         },
         producer,
+        settings: { ...settings, ...TRANSCRIPT_STATS_SETTINGS },
       };
-      outcome = `${count_words} words, ${segments.length} segments`;
+      outcome = withSettings(`${count_words} words, ${segments.length} segments`, settings);
     } catch (error) {
       // A failed refresh over a good value keeps the value and records why -
       // losing an eleven-minute transcript to a network blip would be worse
@@ -270,13 +276,18 @@ export class DatasetActionsService {
 
     this.sendingSceneStats.update((set) => new Set(set).add(hash));
     try {
-      const { duration_secs, scenes, producer } = await this.provider.request(
+      const { duration_secs, scenes, producer, settings } = await this.provider.request(
         'scene_stats',
         hash,
         this.sourceFor(record),
       );
-      record.ds_sceneStats = { state: 'ready', data: { duration_secs, scenes }, producer };
-      outcome = `${scenes} scenes over ${duration_secs.toFixed(1)}s`;
+      record.ds_sceneStats = {
+        state: 'ready',
+        data: { duration_secs, scenes },
+        producer,
+        settings,
+      };
+      outcome = withSettings(`${scenes} scenes over ${duration_secs.toFixed(1)}s`, settings);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       record.ds_sceneStats = this.markRefreshFailure(record.ds_sceneStats, message);
@@ -305,14 +316,25 @@ export class DatasetActionsService {
     try {
       // The server also sends every sampled frame's reading; only the summary is
       // kept (see TextStats in Dataset.ts).
-      const { sample_count, mean_words, max_words, mean_coverage, text_frames_ratio, producer } =
-        await this.provider.request('text_stats', hash, this.sourceFor(record));
+      const {
+        sample_count,
+        mean_words,
+        max_words,
+        mean_coverage,
+        text_frames_ratio,
+        producer,
+        settings,
+      } = await this.provider.request('text_stats', hash, this.sourceFor(record));
       record.ds_textStats = {
         state: 'ready',
         data: { sample_count, mean_words, max_words, mean_coverage, text_frames_ratio },
         producer,
+        settings,
       };
-      outcome = `${mean_words.toFixed(1)} words on screen over ${sample_count} samples`;
+      outcome = withSettings(
+        `${mean_words.toFixed(1)} words on screen over ${sample_count} samples`,
+        settings,
+      );
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       record.ds_textStats = this.markRefreshFailure(record.ds_textStats, message);
@@ -361,6 +383,7 @@ export class DatasetActionsService {
       state: 'ready',
       data: computeTranscriptStats(record.ds_transcript.data, recordDurationSecs(record)),
       producer: LOCAL_RECOMPUTE,
+      settings: TRANSCRIPT_STATS_SETTINGS,
     };
   }
 

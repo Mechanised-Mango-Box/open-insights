@@ -37,7 +37,7 @@ export class LocalDatasetProvider extends DatasetProvider {
     if (!computer) return { state: 'absent' };
 
     const cached = await this.cache.get(kind, hash, computer.producer);
-    if (cached) return cached;
+    if (cached) return { ...cached, settings: computer.settings };
 
     // Only after the cache, so a finished result is never reported as still
     // running by an entry that has not been cleaned up yet.
@@ -57,8 +57,10 @@ export class LocalDatasetProvider extends DatasetProvider {
 
     // Checked first for the same reason the server provider asks before
     // uploading: the common case in a re-scan is that the answer already exists.
+    // The settings are the computer's own: the cache hands back only what this
+    // producer made, and the producer encodes every one of them.
     const cached = await this.cache.get(kind, hash, computer.producer);
-    if (cached) return cached;
+    if (cached) return { ...cached, settings: computer.settings };
 
     const file = await source.read();
     if (!file) {
@@ -68,7 +70,8 @@ export class LocalDatasetProvider extends DatasetProvider {
     }
 
     const payload = await this.queue.run(kind, hash, file);
-    return this.cache.put(kind, hash, computer.producer, payload);
+    const stored = await this.cache.put(kind, hash, computer.producer, payload);
+    return { ...stored, settings: computer.settings };
   }
 
   /**

@@ -1,5 +1,6 @@
 import { Signal } from '@angular/core';
 import {
+  DatasetSettings,
   SceneStats,
   TextStats,
   TranscriptSegment,
@@ -48,6 +49,8 @@ export type DatasetReady<T> = {
   state: 'ready';
   producer: string;
   produced_at?: string;
+  /** What `producer` was run with, by name. */
+  settings?: DatasetSettings;
   refreshing?: 'queued' | 'running';
   refresh_error?: string;
 } & T;
@@ -82,7 +85,15 @@ export type ProviderStatus = {
   status: string;
   queue: ProviderJobCounts;
   workers: { total: number; busy: number; idle: number };
-  kinds: Record<string, { jobs: ProviderJobCounts; workers: ProviderWorkerCounts }>;
+  kinds: Record<
+    string,
+    {
+      jobs: ProviderJobCounts;
+      workers: ProviderWorkerCounts;
+      /** What a scan of this kind would use there. */
+      settings?: DatasetSettings;
+    }
+  >;
 };
 
 /**

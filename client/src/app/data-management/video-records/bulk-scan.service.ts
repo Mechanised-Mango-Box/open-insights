@@ -3,6 +3,8 @@ import { SelectionService } from './selection.service';
 import { VideoDatabaseService } from './video-database.service';
 import { DatasetActionsService } from './dataset-actions.service';
 import { VideoRecord } from './VideoRecord';
+import { DatasetState } from './Dataset';
+import { describeSettings } from './dataset-settings';
 
 export type ScanAction = 'upload' | 'transcript' | 'transcriptStats' | 'sceneStats' | 'textStats';
 
@@ -12,6 +14,15 @@ const SCAN_LABELS: Record<ScanAction, string> = {
   transcriptStats: 'Extracting transcript stats',
   sceneStats: 'Extracting scene stats',
   textStats: 'Extracting screen text',
+};
+
+/** The field each action fills, whose settings the run reports. Upload computes nothing. */
+const RESULT_OF: Record<ScanAction, ((record: VideoRecord) => DatasetState<unknown>) | null> = {
+  upload: null,
+  transcript: (record) => record.ds_transcript,
+  transcriptStats: (record) => record.ds_transcriptStats,
+  sceneStats: (record) => record.ds_sceneStats,
+  textStats: (record) => record.ds_textStats,
 };
 
 /** A record with no file attached this session cannot be uploaded, and that is
@@ -70,14 +81,24 @@ export class BulkScanService {
     let succeeded = 0;
     let failed = 0;
     let skipped = 0;
+    // Each distinct description of the settings the results were made with. One, normally;
+    // more would mean the configuration changed part way through the run, which is worth
+    // seeing rather than averaging away.
+    const settingsUsed = new Set<string>();
 
     try {
       for (let i = 0; i < records.length; i++) {
         const record = records[i];
         this.setStatus(action, `${label}: ${i + 1} of ${records.length}...`);
         try {
-          if ((await this.actions[action](record)) === 'skipped') skipped++;
-          else succeeded++;
+          if ((await this.actions[action](record)) === 'skipped') {
+            skipped++;
+          } else {
+            succeeded++;
+            const result = RESULT_OF[action]?.(record);
+            const described = result?.state === 'ready' ? describeSettings(result.settings) : null;
+            if (described) settingsUsed.add(described);
+          }
           await this.dbService.updateVideo(record);
         } catch (error) {
           console.error(`${label} failed for record ${record.__id}:`, error);
@@ -88,7 +109,12 @@ export class BulkScanService {
         }
       }
       const skippedNote = skipped > 0 ? `, ${skipped} skipped (no file attached)` : '';
-      this.setStatus(action, `Done: ${succeeded} succeeded, ${failed} failed${skippedNote}.`);
+      const settingsNote =
+        settingsUsed.size > 0 ? ` Settings: ${[...settingsUsed].join('; ')}.` : '';
+      this.setStatus(
+        action,
+        `Done: ${succeeded} succeeded, ${failed} failed${skippedNote}.${settingsNote}`,
+      );
     } finally {
       this.setRunning(action, false);
     }

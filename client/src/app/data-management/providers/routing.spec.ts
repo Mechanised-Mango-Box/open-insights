@@ -41,17 +41,18 @@ describe('LocalDatasetProvider', () => {
 
   it('serves a cached result without computing again', async () => {
     const compute = vi.fn();
-    queue.register('scene_stats', { producer: 'p', compute });
+    queue.register('scene_stats', { producer: 'p', settings: { threshold: 30 }, compute });
     cache.get.mockResolvedValue({ state: 'ready', producer: 'p', duration_secs: 9, scenes: 3 });
 
     const result = await provider.request('scene_stats', 'a', withFile);
 
-    expect(result).toMatchObject({ scenes: 3 });
+    // The settings are the computer's: a cached result is only served for its producer.
+    expect(result).toMatchObject({ scenes: 3, settings: { threshold: 30 } });
     expect(compute).not.toHaveBeenCalled();
   });
 
   it('asks for the bytes only on a cache miss, and says so when there are none', async () => {
-    queue.register('scene_stats', { producer: 'p', compute: vi.fn() });
+    queue.register('scene_stats', { producer: 'p', settings: {}, compute: vi.fn() });
 
     await expect(provider.request('scene_stats', 'a', noSource)).rejects.toBeInstanceOf(
       SourceMissingError,
@@ -61,6 +62,7 @@ describe('LocalDatasetProvider', () => {
   it('computes, caches, and returns the result on a miss', async () => {
     queue.register('scene_stats', {
       producer: 'webcodecs/threshold=30',
+      settings: { threshold: 30 },
       compute: async () => ({ duration_secs: 12, scenes: 5 }),
     });
 
@@ -69,6 +71,7 @@ describe('LocalDatasetProvider', () => {
     expect(result).toMatchObject({
       state: 'ready',
       producer: 'webcodecs/threshold=30',
+      settings: { threshold: 30 },
       scenes: 5,
     });
     expect(cache.put).toHaveBeenCalledWith('scene_stats', 'a', 'webcodecs/threshold=30', {

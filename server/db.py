@@ -1,6 +1,7 @@
 import json
 import sqlite3
-from dataclasses import asdict, dataclass
+from collections.abc import Mapping
+from dataclasses import asdict, dataclass, field
 from typing import Any
 
 from flask import g
@@ -11,8 +12,11 @@ from config import (
     JOB_LEASE_SECONDS,
     MAX_ATTEMPTS,
     SCENE_STATS_PRODUCER,
+    SCENE_STATS_SETTINGS,
     TEXT_STATS_PRODUCER,
+    TEXT_STATS_SETTINGS,
     TRANSCRIPT_PRODUCER,
+    TRANSCRIPT_SETTINGS,
 )
 from models import FileExt, SceneStats, TextStats, Transcript
 
@@ -50,6 +54,9 @@ class DatasetKind:
     table: str
     columns: tuple[str, ...]
     producer: str
+    # The thresholds and models behind `producer`, by name (see config.py).
+    # Left out of comparison and hashing: a dict has no hash.
+    settings: Mapping[str, Any] = field(compare=False)
 
 
 TRANSCRIPT = DatasetKind(
@@ -57,6 +64,7 @@ TRANSCRIPT = DatasetKind(
     table="transcripts",
     columns=("count_chars", "count_words", "segments_json"),
     producer=TRANSCRIPT_PRODUCER,
+    settings=TRANSCRIPT_SETTINGS,
 )
 
 SCENE_STATS = DatasetKind(
@@ -64,6 +72,7 @@ SCENE_STATS = DatasetKind(
     table="scene_stats",
     columns=("duration_secs", "scenes"),
     producer=SCENE_STATS_PRODUCER,
+    settings=SCENE_STATS_SETTINGS,
 )
 
 TEXT_STATS = DatasetKind(
@@ -78,6 +87,7 @@ TEXT_STATS = DatasetKind(
         "samples_json",
     ),
     producer=TEXT_STATS_PRODUCER,
+    settings=TEXT_STATS_SETTINGS,
 )
 
 KINDS: dict[str, DatasetKind] = {
@@ -685,6 +695,9 @@ def dataset_state(kind: DatasetKind, file_hash: str) -> dict[str, Any]:
             "state": "ready",
             "producer": result["producer"],
             "produced_at": result["produced_at"],
+            # The current settings are the ones this was made with: the
+            # producer, which encodes them all, has just been checked.
+            "settings": dict(kind.settings),
         }
         state.update({column: result[column] for column in kind.columns})
         # A regeneration requested over a result that is already good keeps

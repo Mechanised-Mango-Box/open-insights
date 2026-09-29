@@ -5,6 +5,7 @@ import {
   DatasetPayload,
   ProviderStatus,
 } from '../providers/dataset-provider';
+import { DatasetSettings } from '../video-records/Dataset';
 
 /**
  * One kind's implementation, paired with the stamp that describes it.
@@ -12,10 +13,12 @@ import {
  * `producer` and `compute` travel together on purpose: the string has to encode
  * every parameter that could move the numbers, and the only place that knows
  * them all is the implementation itself. Splitting them is how a threshold gets
- * changed without the cache noticing.
+ * changed without the cache noticing. `settings` names the same parameters, for
+ * reporting what a scan used.
  */
 export type Computer<K extends DatasetKind> = {
   readonly producer: string;
+  readonly settings: DatasetSettings;
   compute(file: File): Promise<DatasetPayload[K]>;
 };
 

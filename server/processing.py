@@ -356,6 +356,8 @@ def queue_status() -> dict[str, Any]:
             # is the same on an empty database as on a busy one - a client reading
             # counts should never have to distinguish 'zero' from 'absent'.
             "workers": {},
+            # What a scan of this kind would use here, before any is run.
+            "settings": dict(KINDS[kind].settings),
         }
         for kind in KINDS
     }

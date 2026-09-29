@@ -12,6 +12,7 @@ function controllable() {
     finish,
     computer: {
       producer: 'test/scene-stats',
+      settings: {},
       compute: (file: File) =>
         new Promise<SceneStats>((resolve) => {
           started.push(file.name);
@@ -55,6 +56,7 @@ describe('ComputeQueueService', () => {
     const harness = controllable();
     queue.register('transcript', {
       producer: 'test/transcript',
+      settings: {},
       compute: harness.computer.compute as never,
     });
 
@@ -88,6 +90,7 @@ describe('ComputeQueueService', () => {
     const harness = controllable();
     queue.register('transcript', {
       producer: 'test/transcript',
+      settings: {},
       compute: harness.computer.compute as never,
     });
 
@@ -114,6 +117,7 @@ describe('ComputeQueueService', () => {
     let calls = 0;
     queue.register('scene_stats', {
       producer: 'test/scene-stats',
+      settings: {},
       compute: async () => {
         calls += 1;
         if (calls === 1) throw new Error('undecodable');
@@ -134,6 +138,7 @@ describe('ComputeQueueService', () => {
     const harness = controllable();
     queue.register('transcript', {
       producer: 'test/transcript',
+      settings: {},
       compute: harness.computer.compute as never,
     });
 
