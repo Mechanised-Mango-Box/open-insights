@@ -13,6 +13,7 @@ import {
   SourceResolver,
   SourceStatus,
 } from './dataset-provider';
+import { isAcceptedVideoName, notAcceptedMessage } from '../video-records/video-file-types';
 
 export type VideoMeta = { file_hash: string; file_ext: string };
 export type UploadResult = { file_hash: string; filename: string };
@@ -25,6 +26,19 @@ const DATASET_POLL_TIMEOUT_MS = 10 * 60 * 1000;
  * seam: everything above it deals in SourceMissingError and 'absent'. */
 const isNotFound = (error: unknown): boolean =>
   error instanceof HttpErrorResponse && error.status === 404;
+
+/** An upload the server turned down, as an Error that says why in the server's own
+ * words ("The file holds no video..."). HttpErrorResponse is not an Error, so left as
+ * it is, the record's failure message reads "[object Object]". */
+const serverRefusal = (error: unknown, name: string): Error | null => {
+  if (!(error instanceof HttpErrorResponse) || error.status < 400 || error.status >= 500) {
+    return null;
+  }
+  const body: unknown = error.error;
+  const reason =
+    typeof body === 'object' && body !== null && 'err' in body ? String(body.err) : null;
+  return reason ? new Error(`The server refused '${name}': ${reason}`) : null;
+};
 
 /**
  * Computes datasets by asking the nominated server for them.
@@ -120,13 +134,22 @@ export class ServerDatasetProvider extends DatasetProvider {
   }
 
   async putSource(file: File): Promise<void> {
+    // The server refuses these too, but only after the whole file has been sent. A
+    // record can still hold one: imported before the pickers were narrowed, or from
+    // an export zip.
+    if (!isAcceptedVideoName(file.name)) throw new Error(notAcceptedMessage(file.name));
+
     const formData = new FormData();
     formData.append('file', file, file.name);
-    await firstValueFrom(
-      this.http.post<UploadResult>(`${this.serverConfig.serverUrl()}/api/videos`, formData, {
-        headers: this.authHeaders(),
-      }),
-    );
+    try {
+      await firstValueFrom(
+        this.http.post<UploadResult>(`${this.serverConfig.serverUrl()}/api/videos`, formData, {
+          headers: this.authHeaders(),
+        }),
+      );
+    } catch (error) {
+      throw serverRefusal(error, file.name) ?? error;
+    }
   }
 
   /** Queue depth and worker load on the *active* (saved) server - not whatever is

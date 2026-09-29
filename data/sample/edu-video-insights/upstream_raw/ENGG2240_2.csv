@@ -1,0 +1,269 @@
+Content,Video title,Video publish time,Duration,Engaged views,Average view duration,Average percentage viewed (%),Stayed to watch (%),Unique viewers,Average views per viewer,New viewers,Returning viewers,Subscribers gained,Subscribers lost,Likes,Dislikes,Comments added,Shares,Likes (vs dislikes) (%),Views,Watch time (hours),Subscribers,Impressions,Impressions click-through rate (%)
+Total,,,,229323,0:05:03,38.26,0,0,0,0,0,574,156,751,43,1232,438,94.58,229323,19346.4552,418,791441,8.34
+7Bqeq1NNYsY,Intro to Simulink - Lab 2 Prelab,"Aug 21, 2019",2147,4654,0:09:07,25.49,,,,,,11,0,21,1,0,22,95.45,4654,707.4583,11,1585,13.63
+1C1TLctbEhc,Simulating State-Space Models in MATLAB,"Aug 12, 2019",950,4256,0:04:27,28.11,,,,,,14,0,26,0,0,12,100,4256,315.6829,14,10262,9.38
+vBbK3dTG1eU,Pre-Lab4 Control design using pole placement,,1611,3150,0:06:03,22.57,,,,,,4,0,11,0,1,4,100,3150,318.1682,4,75,66.67
+cERfofYN9BE,Pre-Lab 4 - Symbolic calculations in MATLAB,,641,2946,0:02:46,25.95,,,,,,1,0,5,0,0,6,100,2946,136.1021,1,157,12.1
+ci_vg_e43ss,Intro to Simulink - Lab 2 Prelab II,,1638,2878,0:05:24,19.78,,,,,,2,0,6,1,0,11,85.71,2878,259.0279,2,92,91.3
+aeXeNABrYaw,Lab6 General Explanation,,1166,2759,0:04:52,25.04,,,,,,2,0,4,2,0,8,66.67,2759,223.7987,2,4,0
+HtKnyFAPPFY,Problem 2.5a - Road Train (Co-ordinate System 1),,2192,1953,0:13:13,36.35,,,,,,1,0,11,0,0,0,100,1953,430.3208,1,6059,9.11
+7S9rgOO72xQ,Problem 1.3 - Our First State-Space Model,,1565,1851,0:12:47,49.05,,,,,,2,0,11,0,0,0,100,1851,394.6608,2,487,94.25
+vWSJPcJ5e3o,Weeks 1-5 in ENGG2440,,249,1831,0:02:11,52.73,,,,,,3,0,9,0,0,3,100,1831,66.7815,3,5085,5.35
+ONm8njpD3Xw,Problem 6.6 - Equilibrium Point Stability,,255,1823,0:02:10,51.32,,,,,,0,0,2,0,0,0,100,1823,66.2726,0,5373,11.95
+eC8TxgSLVUE,Welcome to ENGG2440 - Modelling and Control!,,186,1808,0:01:41,54.55,,,,,,7,0,9,0,0,2,100,1808,50.9544,7,5200,6.08
+Sq3Kp2Se_GE,Linearisation about Equilibrium Points and NLS Stability,,287,1801,0:02:29,52.07,,,,,,1,0,5,0,0,0,100,1801,74.7578,1,5771,9.24
+QnwxcRkXdVc,PID - Ziegler-Nichols Tuning using Matlab,,975,1789,0:05:14,32.24,,,,,,1,0,2,1,0,7,66.67,1789,156.2304,1,3570,12.55
+jCktZRvnYYE,Problem 6.5 - Equilibrium Points,,416,1729,0:03:36,52.12,,,,,,0,0,3,0,1,0,100,1729,104.1315,0,6070,9.11
+2cOLDm1JAlo,PID - Ziegler-Nichols Tuning Methods,,1314,1715,0:06:22,29.1,,,,,,1,0,1,1,0,3,50,1715,182.163,1,5502,11.52
+YMq_P2jE684,Introduction/Choosing States for Rotating Mechanical Systems,,181,1705,0:01:45,58.2,,,,,,1,1,4,0,0,1,100,1705,49.8906,0,4075,7.61
+xgqltef3WW8,"Problem 2.3 - Springs, Deltas and FBDs",,1276,1659,0:09:28,44.57,,,,,,0,0,7,0,0,1,100,1659,262.0806,0,5885,8.28
+v7K80nahVuQ,Problem 1.1 - Inputs and Outputs,,1063,1630,0:09:09,51.71,,,,,,1,0,4,0,0,1,100,1630,248.8996,1,6221,7.38
+PDBK7QD2H8M,Intro/Choosing States for Fluid Power Systems,,277,1629,0:02:39,57.73,,,,,,0,0,5,0,0,1,100,1629,72.3661,0,3885,9.27
+ug6i7nZbe0I,Converting State-Space Models to Block Diagrams (Problem 2.6),,662,1625,0:06:05,55.26,,,,,,0,0,6,0,0,2,100,1625,165.1173,0,5397,9.91
+Ubk08ocfB4c,Problem 1.2 - Our First Mathematical Model,,1033,1609,0:10:03,58.39,,,,,,1,0,8,0,0,1,100,1609,269.5947,1,4550,9.63
+EPy5gLaZQjU,Linear State-Space (Matrix) Form,,516,1568,0:04:36,53.51,,,,,,0,0,7,0,1,0,100,1568,120.2548,0,4069,11.72
+utYSmAbhpuM,Nonlinear Systems Intro/Motivations,,194,1564,0:01:55,59.46,,,,,,1,0,2,0,0,1,100,1564,50.1154,1,4134,7.28
+UxNJZpYj_PA,Intro/Choosing States for Electrical Systems,,241,1560,0:02:29,61.86,,,,,,0,0,4,0,0,4,100,1560,64.6017,0,3606,9.35
+D6sqdKxi_Pw,"Problem 2.4 - Friction, Dampers and Vrel",,1080,1545,0:07:56,44.15,,,,,,1,0,5,0,0,0,100,1545,204.6374,1,6212,7.13
+IID2MoygLCE,"Problem 5.2a: Tanks, two ways (a)",,1491,1542,0:12:34,50.6,,,,,,0,0,5,1,0,0,83.33,1542,323.1228,0,5707,7.41
+32SoHr3odY0,Intro to Mathematical Modelling,,139,1527,0:01:47,77.21,,,,,,4,1,3,0,0,0,100,1527,45.5243,3,5953,7.48
+mzytJi-AY0Y,Problem 3.4 - A 'simple' rotating system.,,1232,1516,0:10:14,49.88,,,,,,4,1,4,0,0,0,100,1516,258.7685,3,4826,8.83
+apbYH2184JE,Effect of poles,,607,1501,0:04:39,46.06,,,,,,0,1,4,1,0,0,80,1501,116.575,-1,4232,9.29
+Zeqdfhu3kx0,Problem 5.4 - Piston-Cylinder Problem,,1521,1498,0:10:12,40.24,,,,,,0,0,3,0,2,1,100,1498,254.6665,0,3614,12.45
+xAH4KdZuA1Q,Intro to Transfer Functions,,265,1498,0:02:27,55.47,,,,,,1,0,5,0,0,0,100,1498,61.1717,1,4523,7.87
+7dSJVYxAf6s,Introduction/Choosing States for Translating Mechanical Systems,,223,1491,0:02:34,69.31,,,,,,1,0,2,0,0,0,100,1491,64.0178,1,5388,9.91
+Mp92xS_kuTo,Problem 2.1 - How many states to model these (translating mechanical) systems?,,407,1490,0:04:18,63.39,,,,,,1,0,3,0,0,0,100,1490,106.7841,1,5759,7.73
+au_7WUvKcSQ,Introduction to PID control,,934,1490,0:05:32,35.64,,,,,,0,0,3,1,0,0,75,1490,137.764,0,5110,6.11
+rccv1PLwlus,Problem 3.5 - Gearbox Problem,,1305,1485,0:09:45,44.9,,,,,,0,0,4,0,1,1,100,1485,241.7048,0,4818,8.86
+FkJg-PdAVZU,Intro to State-Space Modelling,,278,1463,0:03:19,71.78,,,,,,1,0,4,0,0,0,100,1463,81.092,1,4039,10.4
+NU_b_14rdL0,The ENGG2440 Modelling Procedure,,524,1462,0:05:47,66.35,,,,,,4,0,7,0,0,0,100,1462,141.1837,4,3664,11.03
+DUu5cpX44Rk,Problem 7.2 - State-Space to Transfer Function,,737,1461,0:06:13,50.71,,,,,,0,0,2,1,0,0,66.67,1461,151.6871,0,5696,8.2
+g9ynFGZa83Q,Problem 5.3 - Gas Accumulator System,,1048,1461,0:08:09,46.67,,,,,,0,0,4,0,0,1,100,1461,198.4814,0,4687,10.18
+BcERIyI7LvU,Problem 6.4 - Driven pendulum,,779,1458,0:05:50,45,,,,,,0,0,2,0,0,0,100,1458,141.9591,0,6027,7.98
+wCX86S1tlKU,"State Trajectories, Hartman and Grobman's Theorem",,134,1456,0:01:25,63.9,,,,,,0,0,4,0,0,3,100,1456,34.6335,0,4889,9.84
+8focJS557AE,Problem 6.3 - Undriven Pendulum,,1228,1442,0:10:22,50.73,,,,,,0,0,5,0,1,0,100,1442,249.5118,0,5448,7.67
+x4tQ-nIj3u0,System Representations and Intro to Block Diagrams,,181,1438,0:02:02,67.42,,,,,,0,0,3,0,0,3,100,1438,48.7476,0,5796,8.37
+kqLYifkNn0g,Linearisation (4/4): State-Space models with Inputs and Matrix Form,,194,1429,0:01:54,59.08,,,,,,0,0,2,0,0,0,100,1429,45.4949,0,5622,8.59
+_MAFUWCoHAs,Problem 5.1 - How many states to model these systems?,,358,1415,0:03:58,66.71,,,,,,0,0,1,0,0,1,100,1415,93.8634,0,4220,12.39
+-xQqWTK71YU,Problem 3.1 - How many states to model these systems?,,403,1408,0:04:01,59.81,,,,,,1,1,4,0,0,0,100,1408,94.2686,0,4386,11.7
+2I_dvbNQnNw,Model Classification,,284,1388,0:03:34,75.45,,,,,,3,0,6,0,0,1,100,1388,82.621,3,5468,7.22
+EsOgEfcFbv4,Problem 4.3 - RLC Circuit (3 ways),,900,1385,0:08:11,54.59,,,,,,1,0,4,0,1,1,100,1385,189.0341,1,4912,8.33
+2g2hBV6k1YQ,Problem 6.2 - 2D Linearisation,,402,1354,0:03:23,50.56,,,,,,0,1,0,0,0,0,,1354,76.4457,-1,5560,6.76
+WYeKwBYOL2s,Problem 4.6 - Shunt Connected DC Motor,,1127,1352,0:07:59,42.58,,,,,,1,1,7,0,0,1,100,1352,180.2108,0,2472,17.31
+PNHoSt5A_3k,"Problem 6.7 - State Trajectories, Hartman & Grobman's Theorem",,198,1346,0:01:47,54.52,,,,,,0,0,2,0,0,0,100,1346,40.3636,0,4412,10.02
+Ee5qC84s8oA,Problem 4.5 - Motorised Arm,,1141,1340,0:09:38,50.72,,,,,,0,0,3,0,0,1,100,1340,215.4105,0,3767,10.57
+sWp_FrTv9YI,Model Validation,,260,1327,0:03:09,73.07,,,,,,2,1,3,1,0,2,75,1327,70.0293,1,5851,6.89
+ox2zlqA2wQk,Basic Components in TMS (1/3): Point Masses,,265,1324,0:03:08,71.25,,,,,,0,0,5,0,0,0,100,1324,69.4367,0,6105,6.08
+nBI85aAg1gw,Problem 4.1 - How many states to model these systems?,,380,1312,0:03:59,62.99,,,,,,0,0,2,0,0,3,100,1312,87.2287,0,3859,12.9
+EUTrUgzpBDI,Pole Placement,,1115,1307,0:06:07,32.97,,,,,,1,0,2,2,0,2,50,1307,133.485,1,3609,7.07
+bvhlOOZsG98,Problem 10.1,,483,1302,0:03:31,43.87,,,,,,0,0,2,0,0,0,100,1302,76.6423,0,5765,8.26
+GvAul80sTko,Week 1 2020 Livestream,"Aug 6, 2020",7829,1294,0:11:04,8.48,,,,,,12,0,69,0,296,3,100,1294,238.7486,12,15300,1.92
+TBY2kPuLXgY,Linearity,,158,1294,0:02:04,78.49,,,,,,4,0,3,0,0,2,100,1294,44.5774,4,5043,7.24
+c5RBBKrdwwQ,Problem 3.2 - Rotational FBDs,,355,1292,0:04:02,68.28,,,,,,0,0,0,0,0,0,,1292,86.9987,0,4936,7.31
+e5b0dSvtnyQ,Problem 3.3 - Torsion Spring Sign Conventions,,1049,1280,0:09:20,53.4,,,,,,1,0,2,0,0,1,100,1280,199.1827,1,5188,6.63
+PBnAOXsika0,Linearisation (3/4): Input-less State-Space models,,156,1270,0:01:49,70.03,,,,,,0,0,1,0,0,0,100,1270,38.5371,0,5689,6.24
+-Rj6siMAaKo,Basic Components in TMS (2/3): Ideal Springs,,319,1266,0:03:38,68.51,,,,,,0,0,3,0,1,0,100,1266,76.8538,0,6448,5.6
+MNudiDMZl7U,Problem 2.2 - How to Free-Body-Diagram like a Pro,,526,1266,0:05:18,60.51,,,,,,1,0,5,1,0,0,83.33,1266,111.9237,1,6343,6.04
+OGQ4p3PM9Hc,Second-order systems,,1570,1255,0:10:31,40.21,,,,,,0,0,3,0,0,0,100,1255,220.063,0,4802,8.77
+d3T_bD5_c7U,Equilibrium Points,,137,1251,0:01:36,70.23,,,,,,0,0,2,0,0,0,100,1251,33.4365,0,6129,6.75
+Vvvjov1o4Ck,Converting Block Diagrams to State-Space Models (Problem 2.7a),,369,1250,0:03:35,58.47,,,,,,0,0,5,0,0,0,100,1250,74.9105,0,4947,7.62
+aQTzT96Cn7U,Problem 4.4 - Motor/Generator Sign Conventions,,291,1248,0:03:07,64.56,,,,,,0,0,4,0,0,0,100,1248,65.1297,0,4089,10.3
+g2l6ZvGCS-8,Problem 6.1 - 1D Linearisation,,255,1238,0:02:49,66.55,,,,,,0,0,0,0,0,0,,1238,58.3576,0,4816,7.48
+p7-ZduHd9pw,Converting State-Space Models to Transfer Functions,,418,1237,0:03:55,56.23,,,,,,0,0,4,0,0,0,100,1237,80.7631,0,5496,6.66
+Traiqe7NPfA,Problem 7.1 - ODE to Transfer Function,,299,1225,0:03:10,63.65,,,,,,0,0,1,0,0,0,100,1225,64.7545,0,5213,6.96
+gHjxPhhRIJk,Basic Components in TMS (3/3): Friction/Dampers,,159,1215,0:01:56,73.32,,,,,,1,0,5,0,0,0,100,1215,39.3462,1,6171,6.69
+nZbkxHWnjco,[Bonus Content] Problem 6.8 (Jacobian Linearisation + Offset Terms),,1020,1211,0:05:43,33.71,,,,,,0,0,2,0,0,11,100,1211,115.6599,0,351,98.29
+-2lWMIpLLOY,Basic Components in RMS (1/3): Inertias (AKA Rotating Masses),,264,1194,0:03:07,71.2,,,,,,1,0,2,0,0,0,100,1194,62.3443,1,4658,7.28
+MvQs_-4YXbI,Converting ODEs to State-Space Models (Problem 2.8),,466,1193,0:04:39,60.01,,,,,,0,0,4,0,0,0,100,1193,92.665,0,4109,8.83
+wK279dv2Yak,Problem 3.6 - Multi-Domain Translating/Rotating Mechanical System,,1996,1192,0:14:17,42.95,,,,,,0,0,6,0,0,1,100,1192,283.8865,0,4599,8.52
+jYC0ZWXZPOU,Basic Components in Fluid Power Systems (4/4): Gas Accumulators and Fluid Compressibility,,227,1189,0:02:37,69.22,,,,,,0,0,3,0,0,3,100,1189,51.8986,0,5009,8.17
+CRRtEvU0vig,Summary: Linearisation and Equilibrium Points,,284,1183,0:02:40,56.5,,,,,,0,0,4,0,0,0,100,1183,52.7308,0,3222,10.89
+tOK-3gow_fA,Basic Components in Electrical Systems (1/3): Inductors,,242,1182,0:02:54,72.28,,,,,,0,0,2,0,0,7,100,1182,57.435,0,4170,7.7
+VnW9pCNQGlM,Problem 4.2 - KVL (A Robust Approach),,574,1175,0:05:10,54.16,,,,,,1,0,3,0,0,1,100,1175,101.4717,1,5039,6.73
+P6_iWVh4rws,DC Motors and Generators,,209,1169,0:02:27,70.55,,,,,,1,0,5,0,0,0,100,1169,47.8769,1,4466,9.23
+v6azhmzj9ag,Prob 8.1,,188,1167,0:01:41,54.04,,,,,,0,0,1,1,0,0,50,1167,32.9308,0,5143,7.87
+mqCdqQg3dKU,Linearisation (2/4): Multivariable linearisation,,102,1166,0:01:13,72.2,,,,,,1,0,1,0,0,0,100,1166,23.8508,1,5265,6.08
+BZhE-wsrT_M,Converting ODEs to Transfer Functions,,118,1157,0:01:26,73.07,,,,,,0,0,3,0,0,0,100,1157,27.7125,0,4834,9.5
+JU7xZh_1kMA,Basic Components in Fluid Power Systems (2/4): Gravity Tanks,,175,1156,0:02:15,77.46,,,,,,0,0,1,0,0,0,100,1156,43.5285,0,5073,5.85
+EPrZOaESIXI,Basic Components in Fluid Power Systems (1/4): Long Pipes (Fluid Inertia),,199,1144,0:02:29,75.31,,,,,,0,0,1,0,0,3,100,1144,47.6231,0,4564,6.73
+3sTThSkTxMQ,Linearisation (1/4): 1D Analogue,,249,1142,0:03:05,74.63,,,,,,1,0,2,0,0,0,100,1142,58.9477,1,4476,10.34
+d-dzoc3j8Xk,Basic Components in Fluid Power Systems (3/4): Resistances/Valves,,164,1141,0:02:07,77.92,,,,,,1,0,2,0,0,3,100,1141,40.5006,1,5772,5.01
+MX1Wy7dUI9s,Basic Components in RMS (2/3): Torsion Springs,,136,1136,0:01:42,75.23,,,,,,0,0,3,0,0,0,100,1136,32.2864,0,5145,6.03
+vGWRqooWWWg,Feedback control system examples,,607,1134,0:04:49,47.73,,,,,,0,0,1,0,0,0,100,1134,91.2645,0,4979,7.97
+fJxdriXPDtI,Gearboxes,,259,1128,0:03:07,72.22,,,,,,0,0,1,0,0,0,100,1128,58.6129,0,4960,7
+vqbgCi6dm7A,SSRs for Electrical Systems: KVL and KCL,,219,1126,0:02:39,72.84,,,,,,0,0,1,0,0,0,100,1126,49.8959,0,5204,6.15
+huQeVkerS70,Problem 5.5 - Hydro-Pump System,,1567,1109,0:10:54,41.79,,,,,,0,0,3,0,0,1,100,1109,201.7368,0,338,93.2
+u2ZPwpfzutc,MATLAB Tools,,544,1105,0:03:41,40.79,,,,,,0,0,3,0,0,2,100,1105,68.1095,0,4519,7.99
+X95pgcvB-eI,Externally Excited DC Motors,,137,1104,0:01:33,67.91,,,,,,0,0,4,0,0,0,100,1104,28.5311,0,3436,11.03
+8OK6i0E9Mr8,Problem 8.5 - Pole Placement  (Solving simultaneous equations),,713,1103,0:04:38,39.11,,,,,,0,0,3,1,0,0,75,1103,85.4461,0,4179,9.55
+gz6rSkjpcE0,Design PID Controller using Pole Placement (with Problem 10.2),,1864,1103,0:09:16,29.86,,,,,,0,1,3,1,1,0,75,1103,170.5176,-1,6017,6.27
+lZWg1B8Ztj4,Frequency response,,1206,1095,0:07:18,36.38,,,,,,0,0,2,0,0,2,100,1095,133.4482,0,2987,9.24
+PWkr63T-gCY,Basic Components in RMS (3/3): Frictions,,193,1093,0:02:22,73.98,,,,,,0,0,3,0,0,0,100,1093,43.3479,0,4725,6.84
+IXug_xDPxdQ,Advanced Components in Fluid Power Systems (1/2): Pistons,,188,1090,0:02:17,73.26,,,,,,0,0,4,0,0,3,100,1090,41.7,0,3973,9.39
+sEE33_YIgys,Basic Components in Electrical Systems (2/3): Capacitors,,253,1078,0:03:06,73.65,,,,,,0,0,2,0,0,6,100,1078,55.7938,0,4476,6.86
+oVRJrSUWt3w,Block diagram reduction,,452,1062,0:03:26,45.79,,,,,,0,0,1,0,0,1,100,1062,61.0504,0,5234,6.8
+B8ORDn0T_C8,Prob 8.2,,376,1056,0:03:07,49.85,,,,,,0,0,2,0,0,0,100,1056,54.9789,0,4915,7.22
+74xH0aAdq_w,The Big Picture (1/3): Power and Energy Variables,,287,1055,0:03:13,67.56,,,,,,1,0,5,0,0,0,100,1055,56.8201,1,338,91.12
+dJrGo6rb5cM,Advanced Components in Fluid Power Systems (2/2): Hydraulic Pumps/Motors,,180,1048,0:01:58,66.1,,,,,,0,0,5,0,0,4,100,1048,34.6366,0,3250,10.89
+Y3CECBngjYQ,Control Block Diagram,,1187,1047,0:08:35,43.45,,,,,,0,0,2,0,0,1,100,1047,149.9847,0,5043,6.4
+IHdFmqPiNSA,Problem 8.6 - Pole Placement  (Force integration into the loop),,1028,1031,0:05:52,34.32,,,,,,1,0,1,1,0,0,50,1031,101.0299,1,1820,18.74
+xNi7e0uXBzY,Basic Components in Electrical Systems (3/3): Resistors,,121,996,0:01:32,76.47,,,,,,0,0,2,0,0,3,100,996,25.6008,0,4805,5.35
+U5W1T0-ifh8,Prob 7.12,,281,992,0:02:19,49.49,,,,,,0,0,1,0,0,1,100,992,38.3188,0,4623,7.29
+486CD0yhWXg,Problem 7.3 - Partial Fractions,,526,986,0:04:47,54.66,,,,,,0,0,6,0,0,0,100,986,78.7428,0,5311,6.57
+tN4MulE0EqQ,Prob 8.3,,390,984,0:03:34,55.02,,,,,,0,0,1,0,0,0,100,984,58.6525,0,4158,8.1
+mUalqYcpsco,Tuning PID in Simulink,,835,983,0:04:03,29.21,,,,,,0,0,0,1,0,3,0,983,66.5928,0,6072,5.83
+v9rC9E_9LHk,Prob 8.4 - Part (a),,283,973,0:02:17,48.43,,,,,,1,0,1,0,0,0,100,973,37.0401,1,3793,8.09
+QXSRuGMJ35A,System Arrangements (1/3): Series and Parallel Components,,172,969,0:02:02,70.96,,,,,,0,0,2,1,0,0,66.67,969,32.8536,0,4258,8.08
+Zs8H7sPylcA,Problem 3.8 - Equivalent Systems,,348,965,0:03:25,58.96,,,,,,1,0,2,0,0,0,100,965,54.9958,1,3251,9.35
+EMPtaXgf9fU,System Arrangements (2/3): Equivalent Systems,,142,964,0:01:43,72.61,,,,,,1,0,1,0,0,0,100,964,27.6096,1,3566,9.17
+DgsysCJK81o,Pole Placement - Matrix approach (General Formulation),,427,956,0:02:56,41.37,,,,,,0,1,1,1,0,0,50,956,46.9153,-1,4044,8.04
+9Eoor4RnTVE,Review: Partial Fractions Expansion,,215,940,0:02:27,68.64,,,,,,0,0,5,0,0,0,100,940,38.5365,0,5685,5.86
+EKavgjvCSh4,Problem 11.4 - Gain and Phase margin (MATLAB),,563,937,0:03:50,40.87,,,,,,0,0,3,0,1,0,100,937,59.8897,0,339,97.94
+X8XMgbWzhVU,Problem 3.7 - Series or Parallel?,,532,921,0:05:21,60.37,,,,,,0,0,1,0,0,1,100,921,82.1598,0,3890,8.07
+PI-qEcPzE7E,Prob 7.14,,377,915,0:04:45,47.79,,,,,,0,0,1,0,0,1,100,915,72.4831,0,3084,9.44
+QVlShh0pek8,The Big Picture (2/3): The Seven Fundamental Components,,425,899,0:04:16,60.26,,,,,,0,1,8,0,0,0,100,899,63.9527,-1,274,95.26
+g6IzManwQSA,Problem 7.13 - Derive transfer function from a block diagram,,335,894,0:02:49,50.72,,,,,,0,0,0,0,0,3,,894,42.1907,0,3413,7.27
+U6EX-1S4ouk,Prob 8.4 - Part (b),,492,889,0:04:28,54.57,,,,,,0,0,1,0,0,1,100,889,66.3061,0,3698,7.19
+2LwTkRZNoa0,Introduction to Control Systems,,1138,875,0:08:14,43.47,,,,,,0,0,4,0,0,0,100,875,120.2288,0,4511,8.67
+LNRyrzu_EwE,Pole Placement - Forcing integration,,986,862,0:06:05,37.03,,,,,,0,0,2,0,0,0,100,862,87.4173,0,3219,8.92
+exb3nxUCgHQ,Prob 8.4 - Part (c),,1012,854,0:07:03,41.89,,,,,,0,0,2,0,0,0,100,854,100.5579,0,2992,7.92
+gCZhqo2_MfU,"Signals and systems, Laplace Transform (in the context of control)",,1146,825,0:08:01,42.04,,,,,,1,0,2,0,0,0,100,825,110.3947,1,4256,7.8
+R8_aXkvLHSo,Routh-Hurwitz Stability Criterion,,831,824,0:06:21,45.89,,,,,,0,0,1,0,0,0,100,824,87.283,0,3871,7.03
+wNns9wybkPM,Problem 9.5 - Plot root locus in Matlab,,425,814,0:03:17,46.57,,,,,,0,0,2,0,0,0,100,814,44.7516,0,3910,7.14
+6Sh0aRMvc24,Integral Anti-Windup,,1358,808,0:07:14,31.99,,,,,,0,0,1,1,0,0,50,808,97.4893,0,4367,9.11
+2mvmxJj8u78,Problem 9.4 - Root-locus,,274,790,0:02:38,57.81,,,,,,0,0,1,0,0,0,100,790,34.7602,0,4083,7.03
+kBa-YZXUTuY,Closed loop stability --  BIBO stability,,860,777,0:06:42,46.79,,,,,,0,0,1,0,0,3,100,777,86.8452,0,3393,7.13
+uTvEJzxnckU,Bode plot - Part 1,,1613,772,0:10:20,38.44,,,,,,0,0,2,0,0,0,100,772,132.9682,0,3623,7.78
+0sflrzNHpF8,The basic Equations of Control,,1140,770,0:06:36,34.79,,,,,,0,0,1,1,0,0,50,770,84.8276,0,4890,5.69
+NmHyELvAcME,Root locus - using MATLAB,,370,742,0:02:51,46.37,,,,,,0,0,2,1,0,1,66.67,742,35.3656,0,3228,7.93
+qh0baMabUUk,Problem 11.5 (a) -Relation between closed-loop transient and frequency response,,331,742,0:02:41,48.81,,,,,,0,0,1,0,0,0,100,742,33.2971,0,2729,12.06
+r5o-HGzir0o,Problem 10.3 - Disturbance rejection,,382,739,0:02:58,46.75,,,,,,0,0,1,1,0,1,50,739,36.6571,0,3636,7.65
+9hkAJi9jM4U,Problem 11.2 (a) - Sketch Bode plot (1st order TF),,1188,730,0:08:29,42.88,,,,,,0,0,1,0,0,0,100,730,103.3002,0,3680,7.99
+0ZdmHiDxEgo,Routh-Hurwitz Stability Criterion (with example),,616,728,0:04:41,45.77,,,,,,0,0,2,0,0,0,100,728,57.0104,0,3661,6.17
+4-Rujkq1B5g,Time-domain Design Specifications,,770,728,0:05:28,42.69,,,,,,0,0,2,0,0,0,100,728,66.4757,0,4259,7.21
+KuRvKNzfn7Y,Problem 11.2 and 11.3 - MATLAB,,511,726,0:02:55,34.37,,,,,,0,0,2,0,0,0,100,726,35.4139,0,2666,10.39
+BTm2mDJbtRk,First-order systems,,739,707,0:06:30,52.91,,,,,,0,1,3,1,0,0,75,707,76.7819,-1,3657,8.48
+O73ogHils_8,Problem 9.6 - Plot root locus in Matlab,,538,706,0:04:12,47.02,,,,,,0,0,1,0,0,3,100,706,49.6082,0,3813,6.29
+NGucj5GBrVQ,Problem 9.1 - Routh-Hurwitz Criterion,,250,684,0:02:04,49.93,,,,,,0,0,1,0,0,0,100,684,23.7155,0,3462,6.33
+GtyCV6Yz_qs,Problem 8.5 - Pole Placement  (Matrix approach),,846,683,0:03:08,22.34,,,,,,0,0,3,0,0,0,100,683,35.8499,0,3386,8.98
+-uGmv6LhaLg,Problem 12.5 - Transient response via gain adjustment,,730,676,0:05:27,44.84,,,,,,0,0,3,0,0,0,100,676,61.4706,0,2708,9.86
+orVNfl7E5t0,Problem 9.3 - R-H Criterion and Stability,,470,664,0:03:29,44.62,,,,,,0,0,2,0,0,0,100,664,38.6849,0,3307,5.93
+jKsB_uTyZDk,Stability and Tracking,,808,651,0:05:38,41.95,,,,,,0,0,2,1,0,1,66.67,651,61.2911,0,4320,6.18
+-oO2xQ1123w,Root locus - with example 1,,1906,641,0:11:40,36.75,,,,,,1,1,1,1,0,0,50,641,124.7233,0,3705,7.29
+JfCjNSoRqJE,Relative Stability - Gain and Phase margin,,503,640,0:03:39,43.65,,,,,,0,0,1,0,0,0,100,640,39.0352,0,2427,9.52
+vtinogDio1M,Regulation - Disturbance rejection and Noise Attenuation,,661,631,0:04:28,40.63,,,,,,0,0,1,2,0,1,33.33,631,47.0783,0,3942,6.16
+HsXP9CO1MIE,Problem 12.2 and 12.3 - Time-delay system and Phase Margin,,1104,617,0:07:00,38.05,,,,,,0,0,2,1,0,0,66.67,617,71.9937,0,1928,13.07
+OSNRIwW0OcM,Problem 9.16 - Gain Design to Meet a Steady-state Error Specification,,176,614,0:02:34,51.52,,,,,,0,0,1,0,0,3,100,614,26.3284,0,3177,5.19
+y8b6ttMa6UQ,Problem 11.1,,617,614,0:04:55,47.92,,,,,,0,0,2,0,0,0,100,614,50.4282,0,2033,10.48
+w3Cdcg9nFB4,Prob 7.15,,315,608,0:02:36,49.54,,,,,,0,0,1,0,0,1,100,608,26.3561,0,1307,19.13
+e5qQjC2fDwI,Integral Anti-Windup - Simulink,,494,607,0:02:33,31.13,,,,,,0,0,1,1,0,0,50,607,25.9267,0,4359,6.63
+6s7zyQlaJNo,System response analysis,,657,606,0:04:43,43.13,,,,,,0,0,1,0,0,1,100,606,47.6984,0,3086,8.23
+6mqOwzn1k4k,2023 classes,,368,605,0:02:51,46.7,,,,,,17,0,3,0,0,2,100,605,28.8822,17,657,7.31
+g2iYWf17HxA,Problem 9.2 - Routh-Hurwitz Criterion,,314,605,0:02:37,50.04,,,,,,0,0,0,0,0,0,,605,26.4071,0,3290,5.44
+H0pzZpIQxao,Problem 9.7 - Routh-Hurwitz Stability,,394,602,0:02:39,39.13,,,,,,0,0,1,0,0,0,100,602,26.6532,0,197,90.36
+FHngOLXpd5Q,Problem 12.1 - Time-delay systems and Phase Margin,,807,595,0:05:49,43.33,,,,,,0,0,3,0,0,0,100,595,57.7907,0,2405,10.81
+QP6EAeQE3hk,Sensitivity,,692,587,0:04:25,38.44,,,,,,0,0,1,1,0,1,50,587,43.3719,0,2988,7.16
+_MSQK5yuPJQ,Problem 11.3 - Sketch Bode plot (Higher order TF),,1741,559,0:09:15,31.89,,,,,,0,0,0,1,0,0,0,559,86.2145,0,2932,7.61
+QXdaqrziDUw,Bode Plot - Part 2,,1072,554,0:07:22,41.29,,,,,,0,0,1,0,0,0,100,554,68.1135,0,3458,5.93
+7uhJvqG8fsQ,Problem 11.2 (b) - Sketch Bode plot (1st order TF),,1000,544,0:06:13,37.32,,,,,,0,0,2,0,0,0,100,544,56.3989,0,3654,5.45
+dmkVQgKg95U,Introduction - From Modelling to Control,,583,533,0:04:51,49.21,,,,,,0,0,0,0,0,2,,533,43.1591,0,700,10.29
+YzfZoJ-Rwfo,PID - ZN-Tuning using Matlab,,867,527,0:05:20,36.96,,,,,,0,0,1,1,1,0,50,527,46.9153,0,2457,12.29
+vXR2KLLOPFM,Control Systems with Time Delays,,444,521,0:03:55,53.03,,,,,,0,0,1,1,0,0,50,521,34.0776,0,2622,8.24
+ZHrqh76w3j0,Week 9 Intro,,166,502,0:01:48,65.49,,,,,,0,0,2,0,0,3,100,502,15.1594,0,2576,7.26
+VYlsnqcTkhA,Relation between Closed-loop Transient and Closed-loop Frequency Responses,,751,493,0:05:35,44.73,,,,,,0,0,2,0,0,5,100,493,46.0024,0,1295,10.42
+RhM9b_K2DCk,Problem 12.4 - Steady-state error and Time-delay,,1094,491,0:07:12,39.53,,,,,,0,0,2,1,0,0,66.67,491,58.98,0,190,95.79
+RBvues72S8E,Week 8 Introduction,,387,475,0:03:31,54.67,,,,,,0,0,1,0,0,4,100,475,27.918,0,2184,8.15
+Y0-ARKIAmUc,Integral Anti-windup,,1255,472,0:06:28,30.98,,,,,,0,0,0,0,0,2,,472,50.9705,0,881,8.06
+maJbROKXEkU,Practice Quiz 1 Solution and Walkthrough,"Sep 7, 2019",2333,453,0:11:35,29.79,,,,,,4,0,5,0,0,1,100,453,87.4552,4,737,14.52
+j5vKQA5FO9U,Control Systems,,520,452,0:04:46,54.52,,,,,,0,0,0,0,0,3,,452,36.0028,0,776,7.73
+r11IjkCwhbQ,Week 7 - Introduction,,413,446,0:03:48,55.39,,,,,,0,0,0,0,0,2,,446,28.342,0,734,8.17
+bMpp9ne56jM,"Problem 10.5 - Tracking, disturbance and sensitivity",,1321,445,0:05:57,27.1,,,,,,0,0,0,1,0,0,0,445,44.2461,0,90,95.56
+3S7gr9ae8ag,Problem 9.14,,762,441,0:05:48,45.8,,,,,,0,0,1,0,0,3,100,441,42.7495,0,2385,7.25
+yiInHyRDzOI,"[Bonus Content] Switching Variables, Boost Converter Problem",,1245,436,0:04:58,24.01,,,,,,0,0,2,0,0,0,100,436,36.2088,0,202,97.03
+67v4tUHv2us,Problem 11.5 (b) -Relation between closed-loop transient and frequency response,,353,428,0:02:41,45.81,,,,,,0,0,2,0,0,5,100,428,19.2266,0,1496,7.69
+WEcbeSg3umg,First-order systems,,828,420,0:07:29,54.34,,,,,,0,0,0,0,0,2,,420,52.4896,0,832,9.25
+g0APbdccR-I,Root locus - with example 2,,658,411,0:05:01,45.83,,,,,,0,0,2,0,0,0,100,411,34.4287,0,3501,5.23
+43jqjxqdg2o,First-order systems: Example and Matlab,,310,407,0:02:50,55.13,,,,,,0,0,0,0,0,2,,407,19.3212,0,873,8.13
+IlPYfC9xRUA,Steady-state Error,,478,405,0:04:08,51.98,,,,,,0,0,2,0,0,6,100,405,27.953,0,2136,9.46
+O1MASGw2VN8,Analysis and design objectives,,817,393,0:07:14,53.12,,,,,,0,0,0,0,0,2,,393,47.3784,0,805,7.2
+lCXSfBzCfiU,Week 2 2020 Livestream,"Aug 13, 2020",7995,393,0:25:11,18.91,,,,,,0,0,11,0,157,0,100,393,165.054,0,866,16.63
+r_RBZbvl6g8,Time-domain Design Specifications,,1151,393,0:06:57,36.3,,,,,,0,0,1,0,0,3,100,393,45.6175,0,848,7.78
+QFz3lZHsvBM,Steady-state gain and error,,616,384,0:05:23,52.53,,,,,,0,0,0,0,0,2,,384,34.5172,0,919,7.73
+zJCPtmBlKJM,Transfer Function Characteristics,,418,384,0:03:07,44.76,,,,,,0,0,0,0,0,6,,384,19.9548,0,697,8.18
+wt7FUyLpf7s,Integral Anti-windup - Simulink,,1056,380,0:03:42,21.11,,,,,,0,0,0,0,0,2,,380,23.5336,0,830,6.27
+rNYclyd07UE,Steady-state Error for Unity Negative Feedback Systems,,729,374,0:06:09,50.66,,,,,,0,0,1,0,0,3,100,374,38.3688,0,2235,7.29
+nMoMDRh8DcY,ENGG2440 - What's happening in 2020?,"Jul 7, 2020",343,368,0:03:08,54.9,,,,,,28,1,18,1,1,1,94.74,368,19.249,27,290,34.48
+lEaWfQ38Kro,Signals and Systems,,621,366,0:05:25,52.42,,,,,,0,0,0,0,0,2,,366,33.0941,0,892,5.94
+KYBLkw03sWw,Relation between Closed-loop Transient and Closed-loop Frequency Responses,,659,365,0:03:23,30.9,,,,,,0,0,1,1,0,0,50,365,20.649,0,1323,6.2
+GUqGaJlwGhk,Recap: Laplace Transform,,460,361,0:03:16,42.73,,,,,,0,0,0,0,0,2,,361,19.7099,0,760,6.05
+LIqzXYd20Ts,Design Analysis (System Responses and Test Signals),,485,361,0:04:09,51.51,,,,,,0,0,1,0,0,6,100,361,25.0501,0,868,6.91
+Cb3mbo0iMkM,2020 Classes,,195,358,0:02:16,70.25,,,,,,1,0,1,0,0,0,100,358,13.622,1,1846,12.08
+9iUzqyj0G8Q,Resource Overview (How to HD ENGG2440),,308,353,0:03:32,68.84,,,,,,1,0,4,0,1,0,100,353,20.7909,1,2345,6.87
+RwoVWlqQSLo,Effect of Zeros and Third Pole,,857,352,0:06:31,45.71,,,,,,0,0,0,0,0,2,,352,38.3011,0,757,6.87
+XiSYxJ7m2qk,Problem 9.15,,353,351,0:02:58,50.54,,,,,,0,0,1,0,0,3,100,351,17.393,0,2482,5.6
+Zgs7Dgif8f4,Prob 8.5 - Pole Placement (Matrix approach),,785,348,0:04:18,32.89,,,,,,0,0,0,0,0,2,,348,24.9576,0,554,8.3
+ddFpqZkI8v4,Steady State Error,,880,344,0:07:25,50.66,,,,,,0,0,0,1,0,2,0,344,42.6014,0,570,11.58
+SFqOSCAgRfc,Modelling an Electromechanical System -- Problem 4.8,"Aug 25, 2019",1574,343,0:03:43,14.19,,,,,,1,0,5,0,0,7,100,343,21.2798,1,1755,8.83
+ulFP6l5wQb0,Week 3 2020 Livestream,"Aug 20, 2020",6031,338,0:20:15,20.16,,,,,,0,0,6,0,134,4,100,338,114.1369,0,725,12.97
+oJI3kdlXNF4,Prob 9.14 - Steady state error for Type 0 systems (no integration),,394,337,0:03:33,54.15,,,,,,0,0,0,0,0,2,,337,19.9728,0,636,8.49
+p8i-3nyP6z0,Introduction to Root-locus Analysis,,724,328,0:06:15,51.88,,,,,,0,0,0,0,0,2,,328,34.221,0,591,7.95
+eEE_L9ES8ZE,Negative Feedback Control Example -  Mass spring damper,,533,326,0:04:03,45.68,,,,,,0,0,2,0,0,6,100,326,22.0468,0,1985,7.15
+zTA0K05WPeU,Assessments in 2020,,269,320,0:03:24,76.13,,,,,,1,0,4,0,0,0,100,320,18.2024,1,2212,7.46
+EFiDq6fyZbk,Static Error Constant and System Type,,966,307,0:07:00,43.56,,,,,,0,0,1,0,0,2,100,307,35.8801,0,605,5.79
+5sssCrx0NRI,Prob 9.15 - Steady-state error for Type 1 systems (one integration),,308,300,0:02:28,48.36,,,,,,0,0,0,0,0,2,,300,12.3913,0,644,7.45
+8CgMp96qHIs,Root-locus -  design example 1 (Matlab),,583,298,0:05:11,53.42,,,,,,0,0,0,0,0,2,,298,25.7791,0,555,7.75
+X85A600ljH4,Prob 10.6 - Tracking and noise attenuation,,1137,298,0:06:04,32.02,,,,,,0,0,0,0,0,2,,298,30.1332,0,11,9.09
+7SOcPIIV4YM,Prob 7.15:  Steady-state gain and error (MATLAB),,254,291,0:02:11,51.9,,,,,,0,0,0,0,0,2,,291,10.6567,0,654,7.49
+4fWFEnO93k4,Week 4 2020 Livestream,"Aug 27, 2020",8860,290,0:22:46,15.42,,,,,,0,0,10,0,84,0,100,290,110.0613,0,1165,11.85
+RRPvfy00Kao,How you can improve ENGG2440,,174,290,0:01:55,66.51,,,,,,0,0,2,0,0,2,100,290,9.3227,0,2422,6.69
+HOwewIhc4Jk,Prob 7.15 - Steady-state gain and error (Manual calculation),,377,288,0:03:17,52.5,,,,,,0,0,0,0,0,2,,288,15.8328,0,654,6.88
+5SUa-epsim8,Prob 7.13,,250,279,0:02:11,52.77,,,,,,0,0,1,0,0,0,100,279,10.2248,0,1645,7.48
+aZMJRvFVPMU,Problem 11.5 (b) -Relation between closed-loop transient and frequency response,,282,242,0:01:54,40.7,,,,,,0,0,0,0,0,0,,242,7.7163,0,1249,10.81
+t9CCMOqIfbI,2021 Classes,,495,239,0:04:12,51.1,,,,,,0,0,3,0,0,0,100,239,16.7932,0,883,8.49
+2kEN2BncqpY,Problem 11.1,,453,233,0:03:59,52.8,,,,,,0,0,0,0,0,0,,233,15.4803,0,1151,12.77
+eNDIQt7ug_s,Week 5 2020 Livestream,"Sep 2, 2020",6893,221,0:22:58,20.01,,,,,,0,0,9,0,108,0,100,221,84.6522,0,1190,9.92
+15Rute_W1qs,Converting ODEs to Transfer Functions,"Dec 9, 2018",355,217,0:02:13,37.47,,,,,,0,0,2,0,0,0,100,217,8.0183,0,1474,8.21
+Ix2b8uJmzRk,Week 6 2020 Livestream,"Sep 9, 2020",4524,215,0:14:09,18.78,,,,,,0,0,10,0,72,0,100,215,50.7499,0,1019,11.09
+Aahr-pogSLQ,Problem 10.19 - Sensitivity,,425,213,0:03:32,50.09,,,,,,0,0,4,0,0,4,100,213,12.5948,0,142,95.07
+Q4n-J8_AsKE,Week 7 Livestream,,6751,208,0:25:14,22.43,,,,,,1,1,6,0,131,2,100,208,87.5064,0,523,17.78
+InXnSHbCTD4,2023 Assessments,,276,202,0:02:38,57.47,,,,,,1,0,0,0,0,2,,202,8.8995,1,705,9.79
+D7P4oijnC_8,Problem 10.6 - Tracking and noise attenuation,,1230,197,0:06:28,31.57,,,,,,0,0,0,1,0,0,0,197,21.2497,0,1327,7.84
+gM4e3yZEc1Y,Problem 10.3 - Noise Attenuation,,362,197,0:02:52,47.77,,,,,,0,0,3,0,0,4,100,197,9.463,0,1951,6.15
+sgngfGuQgds,Modelling a Rotating Mechanical System - Problem 3.2,"Aug 14, 2019",1038,197,0:04:02,23.36,,,,,,1,0,2,0,0,0,100,197,13.2708,1,1612,4.4
+4hm5hluTm0M,Week 1 2021 Livestream,,4216,188,0:20:03,28.54,,,,,,5,0,3,0,0,0,100,188,62.8287,5,93,4.3
+C3P4o9f4qtM,2021 Assessments,,255,182,0:02:28,58.15,,,,,,0,0,0,0,0,1,,182,7.4964,0,950,10.32
+tyanhZ_YItQ,Assessing BIBO Stability using the Impulse Response,"Nov 30, 2018",466,176,0:01:58,25.42,,,,,,1,0,0,0,0,1,,176,5.7922,1,1331,8.26
+u6pmWiALfk0,Closed loop stability -  BIBO,,913,158,0:05:52,38.66,,,,,,0,0,0,0,0,7,,158,15.4923,0,703,6.97
+8WWv6Hp_9Ck,Week 8 Introduction,,117,150,0:01:24,72.02,,,,,,0,0,0,0,0,1,,150,3.5111,0,0,
+jpxMoCDvZg8,2021 Resources Overview,,647,145,0:05:56,55.15,,,,,,0,0,3,0,0,2,100,145,14.373,0,1027,7.01
+WJMdiGBEVaU,Week 13 Livestream,"Nov 11, 2020",4001,144,0:10:50,16.26,,,,,,0,0,0,0,66,0,,144,26.0135,0,637,10.52
+fmzzQdpwHp0,Week 8 2020 Livestream,"Sep 23, 2020",3031,140,0:13:13,26.19,,,,,,0,0,4,0,40,0,100,140,30.8708,0,359,14.48
+3ht2H5E7n1A,Additional problem - Routh array,,598,132,0:03:03,30.63,,,,,,0,0,1,0,0,5,100,132,6.7168,0,0,
+lqkHRDWFuMA,Week 9 Intro (2024),,109,127,0:01:17,71.34,,,,,,0,0,0,0,0,1,,127,2.7179,0,0,
+7-K-vbB11oo,Converting Block Diagrams to Transfer Functions,"Dec 9, 2018",825,121,0:03:27,25.11,,,,,,0,0,0,1,0,1,0,121,6.9631,0,1231,5.69
+YawoN5-HveQ,Assessing BIBO Stability using the Step Response,"Nov 26, 2018",648,120,0:02:21,21.77,,,,,,0,0,1,0,0,1,100,120,4.7021,0,749,4.94
+xXjkxKNypSI,Week 9 2020 Livestream,"Oct 14, 2020",4231,113,0:13:42,19.43,,,,,,0,0,1,0,40,0,100,113,25.8072,0,217,18.89
+RHobAPGP7N0,Week 2 2021 Livestream,,4181,107,0:18:35,26.67,,,,,,1,0,2,0,0,3,100,107,33.1472,1,92,3.26
+Kk1xuT27jDE,Week 11 Livestream,"Oct 28, 2020",3601,99,0:11:40,19.46,,,,,,0,0,0,0,14,0,,99,19.2674,0,170,27.65
+Ogjs8D-v3gk,Week 10 Livestream,"Oct 21, 2020",3786,91,0:14:56,23.68,,,,,,0,0,2,0,42,0,100,91,22.6586,0,191,21.47
+Kvz4CAj0DCY,Step Response Initial Behaviour for 2nd Order Transfer Functions,"Nov 9, 2018",1440,90,0:03:24,14.2,,,,,,0,0,0,0,0,5,,90,5.1135,0,487,4.31
+jDs_BAq7XY8,Pole Placement,,1281,89,0:08:55,41.82,,,,,,0,0,1,0,0,0,100,89,13.2447,0,669,8.07
+fDYY9651cvU,Week 12 Livestream,"Nov 4, 2020",3111,86,0:12:16,23.67,,,,,,0,0,3,0,20,0,100,86,17.5942,0,107,36.45
+VbjpLuzxHkQ,Week 6 Q&A Session,,5797,80,0:07:05,7.35,,,,,,0,0,0,0,0,5,,80,9.4666,0,46,17.39
+oNO0nDbEUqQ,Root locus  analysis - design example 2,,615,70,0:05:07,50.06,,,,,,0,0,0,0,0,0,,70,5.9862,0,576,7.12
+6nqRWf6v5U0,Pole Placement --  Forcing integration,,861,67,0:06:09,42.92,,,,,,0,0,0,0,0,0,,67,6.8779,0,511,9.2
+HYRw_njSsdI,Root locus analysis -  design example 3,,611,61,0:04:49,47.35,,,,,,0,0,0,0,0,0,,61,4.9019,0,584,5.65
+T_Sfu-JFOqs,Prob 8.14,,1102,60,0:03:56,21.45,,,,,,0,0,0,0,0,6,,60,3.9403,0,0,
+A5qz2agO7m4,Week 7 Q&A,,6295,52,0:05:25,5.16,,,,,,0,0,0,0,0,6,,52,4.6954,0,27,22.22
+xwtonmC-NGM,Week 5 Q&A Session,,3831,38,0:04:00,6.29,,,,,,0,0,0,0,0,8,,38,2.5422,0,63,9.52
+oJQPjvLY1-g,Week 12 Q&A,,2879,23,0:04:47,10,,,,,,0,0,0,0,0,3,,23,1.8387,0,0,
+UVQTW4yBJxU,Week 8 Q&A Session,,4658,22,0:02:10,2.81,,,,,,0,0,0,0,0,3,,22,0.7994,0,6,33.33
+vyDfv0GLnlo,PID and noise,,342,18,0:02:01,35.41,,,,,,0,0,0,0,0,3,,18,0.6055,0,0,
+g8NHwwaBH7g,Week 9 Q&A session,,4620,17,0:02:06,2.74,,,,,,0,0,1,0,0,3,100,17,0.5977,0,0,
+grFwa8nnoEw,Week 3 Q&A Session,,3231,15,0:04:18,8.02,,,,,,0,0,0,0,0,3,,15,1.0791,0,86,4.65
+cKLUWcHWe5U,Week 11 Q&A,,2797,14,0:02:34,5.53,,,,,,0,0,0,0,0,3,,14,0.6018,0,0,
+2jlXdZRYB-I,Week 10 Q&A,,3737,12,0:02:19,3.74,,,,,,0,0,0,0,0,3,,12,0.4661,0,1,100
+jUvUHqrJe54,Week 4 Q&A Session,,4363,9,0:02:11,3.02,,,,,,0,0,0,0,0,6,,9,0.3291,0,74,5.41
+G5vqqxL9Iiw,2024 Assessments,,238,8,0:02:40,67.39,,,,,,0,0,0,0,0,2,,8,0.3564,0,0,
+ZrrBWdoXOms,ENGG2440 Live Stream,,0,0,,,,,,,,0,0,0,0,13,0,,0,0,0,5,0
+kVZBQxfxJ2g,Week 3 LiveStream,"Jul 23, 2021",0,,,,,,,,,,,,,,,,,,,178,0

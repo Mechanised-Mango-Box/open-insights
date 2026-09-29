@@ -20,6 +20,7 @@ export type AnalysisFeatureRow = {
   word_count: number;
   speech_pace_variation: number;
   speaking_ratio: number;
+  text_density: number;
   average_percentage_viewed: number;
 };
 
@@ -38,6 +39,7 @@ export const ANALYSIS_FEATURE_COLUMNS = [
   'word_count',
   'speech_pace_variation',
   'speaking_ratio',
+  'text_density',
 ] as const satisfies readonly (keyof AnalysisFeatureRow)[];
 
 /** The feature columns as a union - the one place that spelling is derived, so a
@@ -57,6 +59,7 @@ export const FEATURE_LABELS: Record<AnalysisFeatureColumn, string> = {
   word_count: 'Word Count',
   speech_pace_variation: 'Speech Pace Variation (WPM SD)',
   speaking_ratio: 'Speaking Ratio',
+  text_density: 'Text Density (words on screen)',
 };
 
 export const ANALYSIS_TARGET_COLUMN =

@@ -8,14 +8,13 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
-import cv2
 from faster_whisper import WhisperModel
 
 from config import (
     BACKFILL_ENABLED,
     BACKFILL_INTERVAL_SECONDS,
     SCENE_STATS_WORKERS,
-    SCENE_THRESHOLD,
+    TEXT_STATS_WORKERS,
     UPLOAD_DIR_MAX_BYTES,
     UPLOAD_FOLDER,
     UPLOAD_REAP_INTERVAL_SECONDS,
@@ -31,6 +30,7 @@ from config import (
 from db import (
     KINDS,
     SCENE_STATS,
+    TEXT_STATS,
     TRANSCRIPT,
     DatasetKind,
     active_job_count,
@@ -44,11 +44,13 @@ from db import (
     reapable_uploads,
     requeue_expired,
     scene_stats_values,
+    text_stats_values,
     transcript_values,
     uncomputed_datasets,
 )
-from models import SceneStats, Transcript, TranscriptSegment
-from utils import Failure, Result, Success
+from models import Transcript, TranscriptSegment
+from scene_stats import calculate_scene_stats
+from text_stats import calculate_text_stats
 
 # Executor threads run with no Flask app context, so app.logger is not reachable
 # from them. A module logger is what makes a failure in a background job visible
@@ -97,6 +99,7 @@ _whisper_model = WhisperModel(
 _POOL_SIZES: dict[str, int] = {
     TRANSCRIPT.name: WHISPER_NUM_WORKERS,
     SCENE_STATS.name: SCENE_STATS_WORKERS,
+    TEXT_STATS.name: TEXT_STATS_WORKERS,
 }
 
 _EXECUTORS: dict[str, ThreadPoolExecutor] = {
@@ -105,6 +108,12 @@ _EXECUTORS: dict[str, ThreadPoolExecutor] = {
     ),
     SCENE_STATS.name: ThreadPoolExecutor(
         max_workers=_POOL_SIZES[SCENE_STATS.name], thread_name_prefix="scene-stats"
+    ),
+    # Its own pool for the same reason scene stats have one: an OCR pass takes
+    # from half a minute to a few minutes per video, and should queue behind
+    # neither of the others.
+    TEXT_STATS.name: ThreadPoolExecutor(
+        max_workers=_POOL_SIZES[TEXT_STATS.name], thread_name_prefix="text-stats"
     ),
 }
 
@@ -179,7 +188,7 @@ def _submit[T](
     to_values: Callable[[T], dict[str, Any]],
 ) -> None:
     """The one path from 'a job is queued' to 'a result exists or the job is
-    marked failed'. Both dataset kinds run through it, so the lifecycle is
+    marked failed'. Every dataset kind runs through it, so the lifecycle is
     written once and cannot drift between them.
 
     claim() is what makes this safe to call more than once for the same hash:
@@ -244,80 +253,12 @@ def submit_transcript_job(file_hash: str, file_path: Path) -> None:
     _submit(TRANSCRIPT, file_hash, file_path, calculate_transcript, transcript_values)
 
 
-# Ported from gui/feature_extraction.py (video_duration_mins, count_scene_transitions),
-# orchestrated the same way gui/tab_scenes_stats.py does. NOT based on
-# video_analysis/open_cv_functions.py, which opens its VideoCapture at module scope
-# against an undefined variable and crashes on import.
-def video_duration_mins(video_capture: cv2.VideoCapture) -> Result[float, str]:
-    if not video_capture.isOpened():
-        return Failure(f"Failed to open video file: {video_capture}")
-
-    fps = video_capture.get(cv2.CAP_PROP_FPS)
-    total_frames = video_capture.get(cv2.CAP_PROP_FRAME_COUNT)
-
-    # isOpened() does not cover this: OpenCV opens a container happily and still
-    # reports fps 0 for a variable-frame-rate file, and frame count 0 or -1 when
-    # the container carries no index. Dividing anyway raised ZeroDivisionError,
-    # which reached the user as the job error "float division by zero" - a
-    # server bug by appearance, when the real answer is that this file's
-    # metadata cannot be read.
-    if fps <= 0 or total_frames <= 0:
-        return Failure(f"Unreadable video metadata (fps={fps}, frames={total_frames})")
-
-    duration = (total_frames / fps) / 60  # in mins
-    return Success(duration)
-
-
-def count_scene_transitions(
-    video_capture: cv2.VideoCapture, threshold: float = SCENE_THRESHOLD
-) -> Result[int, str]:
-    if not video_capture.isOpened():
-        return Failure(f"Failed to open video file: {video_capture}")
-
-    transition_count = 0
-    previous_frame = None
-
-    while True:
-        success, frame = video_capture.read()
-        if not success:
-            break
-
-        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-        if previous_frame is not None:
-            difference = cv2.absdiff(previous_frame, gray_frame)
-            mean_difference = difference.mean()
-            if mean_difference > threshold:
-                transition_count += 1
-
-        previous_frame = gray_frame
-
-    return Success(transition_count)
-
-
-def calculate_scene_stats(file_path: Path) -> SceneStats:
-    video_capture = cv2.VideoCapture(str(file_path))
-    try:
-        # Threshold passed explicitly rather than left to the default, so the
-        # value that shaped this result is the same one SCENE_STATS_PRODUCER
-        # records - otherwise a changed config would not invalidate the cache.
-        match (
-            video_duration_mins(video_capture),
-            count_scene_transitions(video_capture, SCENE_THRESHOLD),
-        ):
-            case (Success(duration_mins), Success(transition_count)):
-                return SceneStats(
-                    duration_secs=duration_mins * 60,
-                    scenes=float(transition_count),
-                )
-            case errs:
-                raise RuntimeError(f"Scene stats calculation failed: {errs}")
-    finally:
-        video_capture.release()
-
-
 def submit_scene_stats_job(file_hash: str, file_path: Path) -> None:
     _submit(SCENE_STATS, file_hash, file_path, calculate_scene_stats, scene_stats_values)
+
+
+def submit_text_stats_job(file_hash: str, file_path: Path) -> None:
+    _submit(TEXT_STATS, file_hash, file_path, calculate_text_stats, text_stats_values)
 
 
 # Which submitter runs which kind. Lives here rather than in routes.py so the
@@ -325,6 +266,7 @@ def submit_scene_stats_job(file_hash: str, file_path: Path) -> None:
 SUBMIT: dict[str, Callable[[str, Path], None]] = {
     TRANSCRIPT.name: submit_transcript_job,
     SCENE_STATS.name: submit_scene_stats_job,
+    TEXT_STATS.name: submit_text_stats_job,
 }
 
 
@@ -414,6 +356,8 @@ def queue_status() -> dict[str, Any]:
             # is the same on an empty database as on a busy one - a client reading
             # counts should never have to distinguish 'zero' from 'absent'.
             "workers": {},
+            # What a scan of this kind would use here, before any is run.
+            "settings": dict(KINDS[kind].settings),
         }
         for kind in KINDS
     }

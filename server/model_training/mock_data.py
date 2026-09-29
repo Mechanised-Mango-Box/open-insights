@@ -36,6 +36,11 @@ def generate_mock_training_data(num_samples: int = 200, random_state: int = 42) 
         + rng.normal(0, 5, num_samples)
     )
 
+    # Words on screen, averaged over the video. Drawn after everything above, so
+    # adding it left the values of every earlier column unchanged.
+    text_density = np.clip(rng.normal(40, 25, num_samples), 0.0, None)
+    average_percentage_viewed = average_percentage_viewed - 0.05 * text_density
+
     # YouTube percentage viewed should stay between 0 and 100
     average_percentage_viewed = np.clip(
         average_percentage_viewed,
@@ -50,6 +55,7 @@ def generate_mock_training_data(num_samples: int = 200, random_state: int = 42) 
         "word_count": word_count,
         "speech_pace_variation": speech_pace_variation,
         "speaking_ratio": speaking_ratio,
+        "text_density": text_density,
         "average_percentage_viewed": average_percentage_viewed,
     }) 
 

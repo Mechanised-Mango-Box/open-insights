@@ -2,7 +2,7 @@ import { isReady, readyData } from '../video-records/Dataset';
 import { VideoRecord } from '../video-records/VideoRecord';
 
 /** One piece of Scan work the model's features depend on. */
-export type ScanStep = 'sceneStats' | 'transcript' | 'transcriptStats';
+export type ScanStep = 'sceneStats' | 'transcript' | 'transcriptStats' | 'textStats';
 
 /** Lower-case because they sit mid-sentence in the scan-first dialog and the
  * progress line. */
@@ -10,6 +10,7 @@ export const SCAN_STEP_LABELS: Record<ScanStep, string> = {
   sceneStats: 'scene stats',
   transcript: 'transcript and its stats',
   transcriptStats: 'transcript stats',
+  textStats: 'screen text',
 };
 
 /**
@@ -36,6 +37,10 @@ export const missingScanSteps = (record: VideoRecord): ScanStep[] => {
   if (!statsComplete) {
     steps.push(isReady(record.ds_transcript) ? 'transcriptStats' : 'transcript');
   }
+
+  // Independent of the steps above - OCR needs no duration or transcript - so it
+  // simply goes last.
+  if (!isReady(record.ds_textStats)) steps.push('textStats');
 
   return steps;
 };

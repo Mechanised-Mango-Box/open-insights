@@ -32,6 +32,7 @@
           type="file"
           #fileInput
           style="display: none"
+          [accept]="videoFileAccept"
           (change)="onVideoFileSelected($event)"
         />
       </div>
@@ -200,6 +201,67 @@
             <mat-icon>{{ sceneStatsPeekIcon.icon }}</mat-icon>
           </button>
           {{ sceneStatsPeekIcon.label }}
+        }
+      }
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Screen Text</mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <button
+        mat-stroked-button
+        color="primary"
+        [disabled]="textStatsPending()"
+        (click)="computeTextStatsViaServer()"
+      >
+        {{ textStatsPending() ? 'Computing...' : 'Compute via Server (OCR)' }}
+      </button>
+      @if (textStatsError()) {
+        <p class="error-text">{{ textStatsError() }}</p>
+      }
+      <br />
+
+      @if (textStatsData) {
+        @if (textStatsUploadIcon) {
+          <p class="server-status" [ngClass]="textStatsUploadIcon.cssClass">
+            <mat-icon>{{ textStatsUploadIcon.icon }}</mat-icon> {{ textStatsUploadIcon.label }}
+          </p>
+        }
+        <mat-form-field appearance="outline">
+          <mat-label>Words on Screen (mean)</mat-label>
+          <input matInput type="number" [value]="textStatsData?.mean_words" disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Words on Screen (max)</mat-label>
+          <input matInput type="number" [value]="textStatsData?.max_words" disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Frame Covered by Text (mean)</mat-label>
+          <input matInput type="number" [value]="textStatsData?.mean_coverage" disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Frames with Text</mat-label>
+          <input matInput type="number" [value]="textStatsData?.text_frames_ratio" disabled />
+        </mat-form-field>
+
+        <mat-divider /><button mat-button (click)="clearLocalTextStats()">Clear</button>
+      } @else {
+        <p>Not yet computed.</p>
+        @if (localData.video_file.hash) {
+          <button
+            mat-icon-button
+            class="server-status"
+            [ngClass]="textStatsPeekIcon.cssClass"
+            [title]="textStatsPeekIcon.label"
+            (click)="checkTextStatsStatus(localData.video_file.hash)"
+          >
+            <mat-icon>{{ textStatsPeekIcon.icon }}</mat-icon>
+          </button>
+          {{ textStatsPeekIcon.label }}
         }
       }
     </mat-expansion-panel>

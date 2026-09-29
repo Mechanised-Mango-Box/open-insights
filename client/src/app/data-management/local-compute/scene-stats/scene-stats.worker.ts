@@ -307,12 +307,13 @@ async function computeSceneStats(
 
   if (decodeError) throw decodeError;
 
-  // Fail rather than report zero. This is the bug the server has: its OpenCV
-  // build cannot decode AV1, so it opens the container, reads no frames, and
-  // returns a perfectly ordinary "0 scenes" - which is indistinguishable from a
-  // genuinely static video and is cached as though it were measured. Two rows
+  // Fail rather than report zero. This is the bug the server had: its OpenCV
+  // build cannot decode AV1, so it opened the container, read no frames, and
+  // returned a perfectly ordinary "0 scenes" - which is indistinguishable from a
+  // genuinely static video and was cached as though it were measured. Two rows
   // of the golden corpus are that failure. A count nothing was counted from is
-  // not a result.
+  // not a result. (The server now decodes those with PyAV instead, and fails
+  // the same way this does when that reads nothing either.)
   if (counter.frames === 0) {
     throw new Error(`Decoded no frames from this '${track.codec}' video.`);
   }

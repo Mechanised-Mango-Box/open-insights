@@ -59,6 +59,11 @@ for package in (
     #     sklearn.tree._utils, for one) that nothing imports until joblib
     #     unpickles the engagement model at startup, so analysis never sees them.
     "sklearn",
+    # rapidocr's OCR models and config.yaml are package data; shapely and
+    # pyclipper carry the native code its text detector post-processing needs.
+    "rapidocr",
+    "shapely",
+    "pyclipper",
 ):
     package_datas, package_binaries, package_hiddenimports = collect_all(package)
     datas += package_datas

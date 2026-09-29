@@ -11,6 +11,7 @@ const rows: AnalysisFeatureRow[] = [
     word_count: 1200,
     speech_pace_variation: 15,
     speaking_ratio: 0.8,
+    text_density: 20,
     average_percentage_viewed: 50,
   },
   {
@@ -20,6 +21,7 @@ const rows: AnalysisFeatureRow[] = [
     word_count: 3000,
     speech_pace_variation: 20,
     speaking_ratio: 0.7,
+    text_density: 45,
     average_percentage_viewed: 30,
   },
 ];

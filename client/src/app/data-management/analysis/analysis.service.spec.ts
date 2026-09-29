@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   DatasetState,
   SceneStats,
+  TextStats,
   TranscriptStats,
   YoutubeContent,
 } from '../video-records/Dataset';
@@ -10,8 +11,9 @@ import { AnalysisService, buildVideoFeatures } from './analysis.service';
 
 const ready = <T>(data: T): DatasetState<T> => ({ state: 'ready', data, producer: 'test' });
 
-/** Ten minutes, 1500 words, 30 scenes - round numbers so the per-minute rates
- * below are checkable by eye. No YouTube data, like a video not yet published. */
+/** Ten minutes, 1500 words, 30 scenes, 35 words on screen - round numbers so the
+ * per-minute rates below are checkable by eye. No YouTube data, like a video not
+ * yet published. */
 const record = (overrides: Partial<VideoRecord> = {}): VideoRecord => ({
   sort_name: 'A Video',
   video_file: { ...VideoFile.createEmpty(), hash: 'abcd1234', duration_secs: 600 },
@@ -25,6 +27,13 @@ const record = (overrides: Partial<VideoRecord> = {}): VideoRecord => ({
     speaking_ratio: 0.7,
   }),
   ds_sceneStats: ready<SceneStats>({ duration_secs: 600, scenes: 30 }),
+  ds_textStats: ready<TextStats>({
+    sample_count: 120,
+    mean_words: 35,
+    max_words: 80,
+    mean_coverage: 0.12,
+    text_frames_ratio: 0.9,
+  }),
   ...overrides,
 });
 
@@ -37,14 +46,16 @@ describe('buildVideoFeatures', () => {
       word_count: 1500,
       speech_pace_variation: 25,
       speaking_ratio: 0.7,
+      text_density: 35,
     });
   });
 
-  it('is null until both Scan datasets are ready', () => {
+  it('is null until every Scan dataset is ready', () => {
     expect(buildVideoFeatures(record({ ds_sceneStats: { state: 'running' } }))).toBeNull();
     expect(
       buildVideoFeatures(record({ ds_transcriptStats: { state: 'failed', error: 'boom' } })),
     ).toBeNull();
+    expect(buildVideoFeatures(record({ ds_textStats: { state: 'absent' } }))).toBeNull();
   });
 
   it('is null for a zero duration rather than dividing by it', () => {

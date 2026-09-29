@@ -40,6 +40,7 @@ Run certain jobs on the browser instead
 
 - Transcription needs WebGPU
 - Scene stats read MP4 and MOV only
+- Screen text (OCR) always runs on the server
 
 > It is unstable and may be slow. Off by default
 
@@ -64,9 +65,20 @@ Fetch the transcription model once before the first run, and again whenever `WHI
 ```sh
 cd ./server
 pip install -r requirements.txt
+pip install --no-deps -r requirements-nodeps.txt
 python scripts/fetch_whisper_model.py
 python main.py
 ```
+
+The second install is RapidOCR, which reads on-screen text. It goes in without its
+declared dependencies because one of them is the full `opencv-python`, which would
+replace the headless OpenCV the server uses; the rest are pinned in `requirements.txt`.
+Its OCR models ship inside the package, so there is nothing to fetch for it.
+
+Uploads must be `.mp4`, `.mov`, `.mkv`, `.webm` or `.avi`, and the server checks that the
+file really is a video in that container before storing it; anything else is refused with
+a 415 that says why. AV1 videos work too: the OpenCV wheels decode AV1 only with hardware
+support, so where they cannot, scene stats and screen text decode through PyAV instead.
 
 The engagement model needs no setup step: its trained bundle is committed at
 `server/engagement_model/`, and the Docker image and portable build ship it as-is.
@@ -82,12 +94,12 @@ python scripts/train_engagement_model.py path/to/open-insights-export-<timestamp
 
 It trains on a client [export](#export) - the zip, or the zip unpacked into a folder.
 Only `manifest.json` is read, so exporting without video files is enough. A record
-becomes a training row when Scan has produced its transcript stats and scene stats
-and a YouTube content report supplied its average view duration; the script prints
-how many records it kept and why it skipped the rest. The six features are computed
-exactly as the Analysis page computes them, and the target is average view duration
-÷ duration × 100 (see `model_training/data_preparation.py`). There is no built-in
-dataset to fall back on: the script refuses to run without an export.
+becomes a training row when Scan has produced its transcript stats, scene stats and
+screen text and a YouTube content report supplied its average view duration; the
+script prints how many records it kept and why it skipped the rest. The seven
+features are computed exactly as the Analysis page computes them, and the target is
+average view duration ÷ duration × 100 (see `model_training/data_preparation.py`).
+There is no built-in dataset to fall back on: the script refuses to run without an export.
 
 Training is seeded, so the same export, code and pins produce the same model. The
 export itself is not committed, so the bundle records what it learned from:
@@ -100,7 +112,9 @@ The exploration scripts in `model_training/` take an export the same way (instal
 `requirements-training.txt` first for their plots), e.g.
 `python -m model_training.data_analysis <export>` for histograms, correlations and
 LOESS curves, or `python -m model_training.train <export>` for a dry run that saves
-nothing.
+nothing. `python -m model_training.compare_upstream <export>` sets an export of the
+EduVideo Insights lecture set beside that project's paper and data; the results are
+written up in `data/sample/edu-video-insights/COMPARISON.md`.
 
 ## Build and deploy your own
 

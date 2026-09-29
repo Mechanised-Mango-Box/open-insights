@@ -1,3 +1,4 @@
+import importlib.metadata
 import os
 from typing import cast
 
@@ -290,12 +291,74 @@ SCENE_THRESHOLD = float(os.environ.get("SCENE_THRESHOLD", "30.0"))
 # here buy concurrent *videos*, not a faster single scan.
 SCENE_STATS_WORKERS = int(os.environ.get("SCENE_STATS_WORKERS", "2"))
 
+# On-screen text (text_stats.py). One frame is read every OCR_SAMPLE_SECS; a
+# sample that has barely changed since the last one read (mean abs-diff of a
+# small grayscale thumbnail under OCR_REUSE_THRESHOLD, out of 255) reuses that
+# reading instead of running OCR again, which is what makes a static slide cheap.
+# A line counts only when RapidOCR is at least OCR_MIN_SCORE sure of it: below
+# that, what it reads off logos and clothing is mostly noise.
+OCR_SAMPLE_SECS = float(os.environ.get("OCR_SAMPLE_SECS", "5.0"))
+OCR_REUSE_THRESHOLD = float(os.environ.get("OCR_REUSE_THRESHOLD", "3.0"))
+OCR_MIN_SCORE = float(os.environ.get("OCR_MIN_SCORE", "0.8"))
+
+# One by default: onnxruntime already spreads a single OCR call across cores, so
+# a second worker mostly competes with the first.
+TEXT_STATS_WORKERS = int(os.environ.get("TEXT_STATS_WORKERS", "1"))
+
+
+def _package_version(name: str) -> str:
+    # Read from the installed metadata rather than by importing the package, so
+    # loading config stays cheap - and a server missing the package still starts,
+    # failing only the jobs that need it, with an error that names it.
+    try:
+        return importlib.metadata.version(name)
+    except importlib.metadata.PackageNotFoundError:
+        return "missing"
+
+
 # Stamped onto every cached result. A row whose producer no longer matches was
 # made by a different model or a different parameter, so it reads as absent and
 # gets recomputed rather than silently mixing with current results and skewing
 # the wpm/word_count/scene_change_rate features built off them.
-TRANSCRIPT_PRODUCER = f"faster-whisper/{WHISPER_MODEL}/{WHISPER_LANGUAGE}"
-SCENE_STATS_PRODUCER = f"opencv/threshold={SCENE_THRESHOLD}"
+# "/vad" only when the voice-activity filter is on, so the stamp the default
+# makes is the one it always made. Skipping silence changes the segments, so a
+# transcript made with it is not the same thing as one made without.
+TRANSCRIPT_PRODUCER = f"faster-whisper/{WHISPER_MODEL}/{WHISPER_LANGUAGE}" + (
+    "/vad" if WHISPER_VAD else ""
+)
+# "+pyav" since scene stats fall back to PyAV for a video OpenCV cannot decode.
+# The counts for every video OpenCV can read are unchanged, but the old stamp
+# also covers the 0 scenes it recorded for every AV1 video it could not, and
+# the only way to reach those is to recompute everything the old stamp made.
+SCENE_STATS_PRODUCER = f"opencv+pyav/threshold={SCENE_THRESHOLD}"
+# The model is named because text_stats.py pins it rather than taking whatever
+# the package defaults to, so a rapidocr upgrade that changed its default would
+# not change what this stamp describes.
+TEXT_STATS_PRODUCER = (
+    f"rapidocr-{_package_version('rapidocr')}/PP-OCRv6-small"
+    f"/every={OCR_SAMPLE_SECS}s/reuse={OCR_REUSE_THRESHOLD}/score={OCR_MIN_SCORE}"
+)
+
+# The same parameters, by name, for reporting: every ready result and /status
+# carry its kind's settings, so whoever runs a scan can see the thresholds it
+# used. Reporting the current ones is honest because every value here is also in
+# that kind's producer (tests/test_settings.py holds them to it), and a result
+# only reads as ready while its producer is the current one.
+TRANSCRIPT_SETTINGS = {
+    "model": WHISPER_MODEL,
+    "language": WHISPER_LANGUAGE,
+    "vad": WHISPER_VAD,
+}
+SCENE_STATS_SETTINGS = {
+    # Mean absolute difference between consecutive grayscale frames, 0-255.
+    "threshold": SCENE_THRESHOLD,
+}
+TEXT_STATS_SETTINGS = {
+    "model": "PP-OCRv6-small",
+    "sample_secs": OCR_SAMPLE_SECS,
+    "reuse_threshold": OCR_REUSE_THRESHOLD,
+    "min_score": OCR_MIN_SCORE,
+}
 
 # A job whose worker died is requeued rather than failed, so a genuinely broken
 # video would otherwise retry forever. Past this many attempts it stays failed

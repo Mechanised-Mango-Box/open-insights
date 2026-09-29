@@ -138,6 +138,7 @@ function run(request: TranscriptRequest): Promise<TranscriptSegment[]> {
 
 export const transcriptComputer: Computer<'transcript'> = {
   producer: TRANSCRIPT_PRODUCER_LOCAL,
+  settings: { model: 'whisper-tiny.en (q8)', language: 'en' },
 
   async compute(file: File): Promise<TranscriptStats & { segments: TranscriptSegment[] }> {
     const { pcm, duration_secs } = await extractAudio(file);

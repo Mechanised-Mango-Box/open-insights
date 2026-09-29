@@ -45,11 +45,15 @@ TESTED_PYTHON = (3, 13)
 REQUIRED_PACKAGES = {
     "PyInstaller": "pyinstaller",
     "faster_whisper": "faster-whisper",
+    "av": "av",
     "cv2": "opencv-python-headless",
     "flask": "flask",
     "joblib": "joblib",
     "pandas": "pandas",
     "sklearn": "scikit-learn",
+    "rapidocr": "rapidocr",
+    "shapely": "shapely",
+    "pyclipper": "pyclipper",
 }
 
 
@@ -81,12 +85,14 @@ def check_environment(install: bool) -> None:
             "Missing build dependencies: "
             + ", ".join(missing)
             + "\n\nInstall them with:\n"
-            "    pip install -r requirements.txt pyinstaller\n\n"
+            "    pip install -r requirements.txt pyinstaller\n"
+            "    pip install --no-deps -r requirements-nodeps.txt\n\n"
             "or re-run this script with --install-deps."
         )
 
     print(f"Installing build dependencies: {', '.join(missing)}")
     run([sys.executable, "-m", "pip", "install", "-r", "requirements.txt", "pyinstaller"])
+    run([sys.executable, "-m", "pip", "install", "--no-deps", "-r", "requirements-nodeps.txt"])
 
 
 def run(command: list[str]) -> None:

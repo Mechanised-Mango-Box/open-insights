@@ -13,6 +13,7 @@ from model_training.regression import (
     classify_feature_relationship,
     generate_feature_recommendations,
 )
+from model_training.data_preparation import FEATURE_COLUMNS
 from model_training.train import run_training_pipeline
 from model_training.mock_data import generate_mock_training_data
 
@@ -110,7 +111,7 @@ class TestRecommendationLogic(unittest.TestCase):
 
         self.assertIn("recommendations", results)
         self.assertEqual(results["recommendations"]["threshold"], 1.0)
-        self.assertEqual(len(results["recommendations"]["features"]), 6)
+        self.assertEqual(len(results["recommendations"]["features"]), len(FEATURE_COLUMNS))
 
 
 if __name__ == "__main__":

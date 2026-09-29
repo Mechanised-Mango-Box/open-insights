@@ -151,7 +151,7 @@ const FEATURE_KEYS: readonly FeatureKey[] = ANALYSIS_FEATURE_COLUMNS;
             } @else if (outcome.reason === 'not-enough-rows') {
               <p class="recommendations-note">
                 Needs at least {{ outcome.rowsNeeded }} eligible records before the relationships
-                mean anything - there are six features to weigh against each other.
+                mean anything - there are {{ featureCount }} features to weigh against each other.
               </p>
             } @else {
               <p class="recommendations-note">
@@ -284,6 +284,7 @@ export class AnalysisComponent implements AfterViewInit {
   private lastRows: AnalysisFeatureRow[] = [];
   protected recommendations = signal<RecommendationOutcome | null>(null);
   protected readonly minRowsForRecommendations = MIN_ROWS_FOR_RECOMMENDATIONS;
+  protected readonly featureCount = ANALYSIS_FEATURE_COLUMNS.length;
 
   /** The features in the order the panel lists them, worst-to-best being no
    * more meaningful than the declared order - so the declared order it is. */

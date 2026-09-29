@@ -52,6 +52,7 @@ const FEATURE_DISPLAY_NAMES: Record<string, string> = {
   word_count: 'word count',
   speech_pace_variation: 'speech pace variation',
   speaking_ratio: 'speaking ratio',
+  text_density: 'text density (words on screen)',
 };
 
 /**

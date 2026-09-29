@@ -10,8 +10,8 @@ nothing runs this during a build.
 EXPORT is an `open-insights-export-<timestamp>` zip from the client's Export
 step, or that zip unpacked into a folder. Only its manifest.json is read, so an
 export with or without video files works the same. Each record needs Scan's
-transcript stats and scene stats plus an imported YouTube content report (for
-the average view duration); records missing any of those are skipped and
+transcript stats, scene stats and screen text plus an imported YouTube content
+report (for the average view duration); records missing any of those are skipped and
 counted in the output. See model_training/data_preparation.py for exactly how
 the features and target are computed.
 

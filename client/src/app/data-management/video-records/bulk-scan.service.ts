@@ -3,14 +3,26 @@ import { SelectionService } from './selection.service';
 import { VideoDatabaseService } from './video-database.service';
 import { DatasetActionsService } from './dataset-actions.service';
 import { VideoRecord } from './VideoRecord';
+import { DatasetState } from './Dataset';
+import { describeSettings } from './dataset-settings';
 
-export type ScanAction = 'upload' | 'transcript' | 'transcriptStats' | 'sceneStats';
+export type ScanAction = 'upload' | 'transcript' | 'transcriptStats' | 'sceneStats' | 'textStats';
 
 const SCAN_LABELS: Record<ScanAction, string> = {
   upload: 'Uploading',
   transcript: 'Extracting transcript',
   transcriptStats: 'Extracting transcript stats',
   sceneStats: 'Extracting scene stats',
+  textStats: 'Extracting screen text',
+};
+
+/** The field each action fills, whose settings the run reports. Upload computes nothing. */
+const RESULT_OF: Record<ScanAction, ((record: VideoRecord) => DatasetState<unknown>) | null> = {
+  upload: null,
+  transcript: (record) => record.ds_transcript,
+  transcriptStats: (record) => record.ds_transcriptStats,
+  sceneStats: (record) => record.ds_sceneStats,
+  textStats: (record) => record.ds_textStats,
 };
 
 /** A record with no file attached this session cannot be uploaded, and that is
@@ -26,7 +38,7 @@ type ScanOutcome = void | 'skipped';
  * you switch inner tabs (Material detaches the tab body portal unless `preserveContent`), which
  * would otherwise re-enable the buttons and lose the progress text half way through a run.
  *
- * Progress is tracked per action, so a long transcript run leaves the other two buttons live: they
+ * Progress is tracked per action, so a long transcript run leaves the other buttons live: they
  * write different fields of the record, the server queues its jobs per video, and updateVideo puts
  * the whole record, so concurrent runs can't lose each other's writes.
  */
@@ -50,6 +62,7 @@ export class BulkScanService {
     transcript: (record) => this.datasetActions.fetchTranscript(record),
     transcriptStats: async (record) => this.datasetActions.recomputeTranscriptStats(record),
     sceneStats: (record) => this.datasetActions.fetchSceneStats(record),
+    textStats: (record) => this.datasetActions.fetchTextStats(record),
   };
 
   isRunning = (action: ScanAction): boolean => this.running().has(action);
@@ -68,14 +81,24 @@ export class BulkScanService {
     let succeeded = 0;
     let failed = 0;
     let skipped = 0;
+    // Each distinct description of the settings the results were made with. One, normally;
+    // more would mean the configuration changed part way through the run, which is worth
+    // seeing rather than averaging away.
+    const settingsUsed = new Set<string>();
 
     try {
       for (let i = 0; i < records.length; i++) {
         const record = records[i];
         this.setStatus(action, `${label}: ${i + 1} of ${records.length}...`);
         try {
-          if ((await this.actions[action](record)) === 'skipped') skipped++;
-          else succeeded++;
+          if ((await this.actions[action](record)) === 'skipped') {
+            skipped++;
+          } else {
+            succeeded++;
+            const result = RESULT_OF[action]?.(record);
+            const described = result?.state === 'ready' ? describeSettings(result.settings) : null;
+            if (described) settingsUsed.add(described);
+          }
           await this.dbService.updateVideo(record);
         } catch (error) {
           console.error(`${label} failed for record ${record.__id}:`, error);
@@ -86,7 +109,12 @@ export class BulkScanService {
         }
       }
       const skippedNote = skipped > 0 ? `, ${skipped} skipped (no file attached)` : '';
-      this.setStatus(action, `Done: ${succeeded} succeeded, ${failed} failed${skippedNote}.`);
+      const settingsNote =
+        settingsUsed.size > 0 ? ` Settings: ${[...settingsUsed].join('; ')}.` : '';
+      this.setStatus(
+        action,
+        `Done: ${succeeded} succeeded, ${failed} failed${skippedNote}.${settingsNote}`,
+      );
     } finally {
       this.setRunning(action, false);
     }

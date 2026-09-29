@@ -227,6 +227,11 @@ export async function parseExportZip(
         ds_sceneStats: entry.scene_stats
           ? restored(entry.scene_stats, generated_at)
           : { state: 'absent' },
+        // A manifest written before screen text existed has no text_stats key at
+        // all, which reads as absent exactly as a null does.
+        ds_textStats: entry.text_stats
+          ? restored(entry.text_stats, generated_at)
+          : { state: 'absent' },
       });
       onProgress?.(index + 1, manifest.records.length);
     }
@@ -283,9 +288,9 @@ export function fillGaps(existing: VideoRecord, incoming: ImportedRecord): Video
 
   // 'ready' is the test rather than 'absent': a record whose transcript is queued, running
   // or failed has no usable value there either, and real imported data beats all three.
-  // Spelled out one field at a time rather than looped over the three keys: a loop makes
-  // both sides of the assignment the union of all three payload types, which does not
-  // type-check even though every iteration is sound.
+  // Spelled out one field at a time rather than looped over the keys: a loop makes both
+  // sides of the assignment the union of every payload type, which does not type-check
+  // even though every iteration is sound.
   const fillDataset = <T>(current: DatasetState<T>, incomingState: DatasetState<T>) => {
     if (isReady(current) || !isReady(incomingState)) return current;
     changed = true;
@@ -295,6 +300,7 @@ export function fillGaps(existing: VideoRecord, incoming: ImportedRecord): Video
   merged.ds_transcript = fillDataset(merged.ds_transcript, incoming.ds_transcript);
   merged.ds_transcriptStats = fillDataset(merged.ds_transcriptStats, incoming.ds_transcriptStats);
   merged.ds_sceneStats = fillDataset(merged.ds_sceneStats, incoming.ds_sceneStats);
+  merged.ds_textStats = fillDataset(merged.ds_textStats, incoming.ds_textStats);
 
   return changed ? merged : null;
 }

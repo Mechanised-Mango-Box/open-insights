@@ -44,6 +44,9 @@ WORKDIR /app
 # Dependencies first, so editing source does not reinstall them.
 COPY --chown=app:app requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
+# rapidocr without its declared dependencies - see requirements-nodeps.txt.
+COPY --chown=app:app requirements-nodeps.txt ./
+RUN pip install --no-cache-dir --no-deps -r requirements-nodeps.txt
 
 USER app
 

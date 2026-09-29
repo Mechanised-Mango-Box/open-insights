@@ -343,6 +343,7 @@ export class ServerSettingsComponent {
   protected readonly kindLabels: Record<DatasetKind, string> = {
     transcript: 'Transcript',
     scene_stats: 'Scene stats',
+    text_stats: 'Screen text',
   };
 
   /** What changes by moving a kind into the browser. Both of these alter the
@@ -358,6 +359,8 @@ export class ServerSettingsComponent {
       'In this browser: WebCodecs, MP4 and MOV only (not .mkv or .webm). Same threshold as the ' +
       'server, but frames come through a different decoder, so counts may differ slightly. ' +
       'Scene stats already held from a server will read as not started.',
+    text_stats:
+      'Server only: OCR (RapidOCR) has no browser implementation, so this always runs on the server.',
   };
 
   /** A kind can only be sent to this browser once something here knows how to

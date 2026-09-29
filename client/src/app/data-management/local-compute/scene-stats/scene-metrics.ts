@@ -2,7 +2,7 @@
  * The arithmetic behind scene stats, kept apart from the decoding so it can be
  * tested without a video.
  *
- * Ported from count_scene_transitions() in server/processing.py. The definition
+ * Ported from count_scene_transitions() in server/scene_stats.py. The definition
  * being reproduced is: convert each frame to greyscale, take the mean absolute
  * difference against the frame before it, and count the frames where that mean
  * is strictly greater than the threshold.

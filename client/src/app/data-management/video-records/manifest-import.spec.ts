@@ -1,6 +1,13 @@
 import JSZip from 'jszip';
 import { describe, expect, it } from 'vitest';
-import { DatasetState, LOCAL_IMPORT, SceneStats, Transcript, YoutubeContent } from './Dataset';
+import {
+  DatasetState,
+  LOCAL_IMPORT,
+  SceneStats,
+  TextStats,
+  Transcript,
+  YoutubeContent,
+} from './Dataset';
 import { VideoFile, VideoRecord } from './VideoRecord';
 import { buildExportZip, ExportManifest } from './manifest-export';
 import { fillGaps, parseExportZip } from './manifest-import';
@@ -39,6 +46,13 @@ const record = (overrides: Partial<VideoRecord> = {}): VideoRecord => ({
     speaking_ratio: 0.8,
   }),
   ds_sceneStats: ready<SceneStats>({ duration_secs: 3700, scenes: 42 }),
+  ds_textStats: ready<TextStats>({
+    sample_count: 740,
+    mean_words: 35,
+    max_words: 80,
+    mean_coverage: 0.12,
+    text_frames_ratio: 0.9,
+  }),
   ...overrides,
 });
 
@@ -68,6 +82,10 @@ describe('parseExportZip', () => {
       state: 'ready',
       data: { duration_secs: 3700, scenes: 42 },
     });
+    expect(imported.ds_textStats).toMatchObject({
+      state: 'ready',
+      data: { sample_count: 740, mean_words: 35, max_words: 80 },
+    });
   });
 
   it('stamps restored data as a local import, dated by the export', async () => {
@@ -87,6 +105,7 @@ describe('parseExportZip', () => {
         ds_transcript: { state: 'failed', error: 'whisper fell over' },
         ds_transcriptStats: { state: 'absent' },
         ds_sceneStats: { state: 'queued' },
+        ds_textStats: { state: 'failed', error: 'no frames' },
       }),
     ]);
 
@@ -95,6 +114,7 @@ describe('parseExportZip', () => {
     expect(imported.ds_transcript).toEqual({ state: 'absent' });
     expect(imported.ds_transcriptStats).toEqual({ state: 'absent' });
     expect(imported.ds_sceneStats).toEqual({ state: 'absent' });
+    expect(imported.ds_textStats).toEqual({ state: 'absent' });
   });
 
   it('imports a record that never had a video file', async () => {

@@ -97,7 +97,7 @@ export class VideoDatabaseService {
   }
 
   private initDB = async () => {
-    return openDB<VideoDBSchema>('video-library-db', 4, {
+    return openDB<VideoDBSchema>('video-library-db', 5, {
       upgrade(db, oldVersion, _newVersion, tx) {
         // `upgrade` runs on every version increase, not just on first creation, so the
         // initial schema is gated on the version that introduced it - re-running
@@ -124,6 +124,9 @@ export class VideoDatabaseService {
             for (const field of ['ds_transcript', 'ds_transcriptStats', 'ds_sceneStats']) {
               record[field] = migrateCacheable(record[field]);
             }
+            // v5's field as well: this cursor is already rewriting every record,
+            // and a second one over the same store could race it (see below).
+            record['ds_textStats'] ??= { state: 'absent' };
             return cursor.update(record as VideoRecord).then(() => cursor.continue().then(migrate));
           });
         }
@@ -132,6 +135,22 @@ export class VideoDatabaseService {
         // an existing library simply has none yet.
         if (oldVersion < 4) {
           db.createObjectStore('dataset_results', { keyPath: ['kind', 'file_hash'] });
+        }
+        // v5 adds ds_textStats. A stored record has no such field, and every
+        // reader of a dataset field expects a DatasetState there - 'absent' is
+        // the honest value for a record nobody has read the screen text of yet.
+        // A library older than v3 gets it from the v3 pass above instead, so no
+        // record is ever under two cursors at once.
+        if (oldVersion >= 3 && oldVersion < 5) {
+          const store = tx.objectStore('videos');
+          store.openCursor().then(function addTextStats(cursor): unknown {
+            if (!cursor) return undefined;
+            const record = cursor.value as Partial<VideoRecord>;
+            if (record.ds_textStats) return cursor.continue().then(addTextStats);
+            return cursor
+              .update({ ...record, ds_textStats: { state: 'absent' } } as VideoRecord)
+              .then(() => cursor.continue().then(addTextStats));
+          });
         }
       },
     });
