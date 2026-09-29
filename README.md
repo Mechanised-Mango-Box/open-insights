@@ -100,7 +100,9 @@ The exploration scripts in `model_training/` take an export the same way (instal
 `requirements-training.txt` first for their plots), e.g.
 `python -m model_training.data_analysis <export>` for histograms, correlations and
 LOESS curves, or `python -m model_training.train <export>` for a dry run that saves
-nothing.
+nothing. `python -m model_training.compare_upstream <export>` sets an export of the
+EduVideo Insights lecture set beside that project's paper and data; the results are
+written up in `data/sample/edu-video-insights/COMPARISON.md`.
 
 ## Build and deploy your own
 

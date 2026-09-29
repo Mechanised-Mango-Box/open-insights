@@ -2,9 +2,14 @@
 """Rebuild the upstream YouTube Studio export this dataset was distilled from.
 
 The four all_*.csv files here were imported from an earlier iteration of the
-project; the YouTube-side export they came from is gone. This reconstructs it into
+project. This reconstructs the YouTube-side export behind them into
 ../edu-video-insights-recreated_raw/ so the dataset can go back through the app's
-normal YouTube import path.
+normal YouTube import path, working from the all_*.csv files alone.
+
+The original exports did survive upstream after all, and are now vendored in
+upstream_raw/. This script predates finding them and is kept because its output
+is what the 144-video export the engagement model was trained on was built from;
+server/model_training/compare_upstream.py checks that target against the originals.
 
 Nothing here is invented. Every value is either copied from the source CSVs or is
 arithmetic over them, so the export carries exactly the information the dataset
@@ -25,15 +30,15 @@ columns the source data determines are present:
 
 Studio's Advanced mode lets you choose which metrics an export carries, so a
 six-column export is a shape it really produces. Views, watch time, subscribers,
-impressions and click-through rate are absent because the source CSVs do not
+impressions and click-through rate are absent because the all_*.csv files do not
 contain them and there is no way to derive them - they are left out rather than
-blanked or filled in.
+blanked or filled in. (upstream_raw/ does hold them; this script does not read it.)
 
 There are no audience-retention reports for the same reason. Retention is a
-per-segment measurement; the source data holds one scalar per video
+per-segment measurement; all_*.csv hold one scalar per video
 (average_percentage_viewed) and nothing about the shape of the curve behind it.
 Any curve consistent with that scalar would be a fabrication with twenty invented
-degrees of freedom, so none is written.
+degrees of freedom, so none is written. The real curves are in upstream_raw/*_1.csv.
 
 Two notes on the arithmetic, neither of which adds information:
 
