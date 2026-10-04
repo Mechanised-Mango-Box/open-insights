@@ -94,8 +94,9 @@ FEATURE_DISPLAY_NAMES: Dict[str, str] = {
     "scene_change_rate": "scene change rate",
     "word_count": "word count",
     "speech_pace_variation": "speech pace variation",
-    "speaking_ratio": "speaking ratio",
+    "speech_ratio": "speech ratio",
     "text_density": "text density (words on screen)",
+    "mean_pause_secs": "mean pause length",
 }
 
 

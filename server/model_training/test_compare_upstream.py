@@ -26,6 +26,7 @@ from model_training.compare_upstream import (
     load_project,
     load_studio_reports,
     load_upstream,
+    model_rows,
     paper_protocol,
 )
 from model_training.data_preparation import TARGET_COLUMN
@@ -70,6 +71,17 @@ class TestJoin(unittest.TestCase):
         self.assertEqual(list(project.index), ["yt-1", "yt-0"])
         self.assertEqual(project.loc["yt-0", "scene_count"], 20)
         self.assertEqual(skipped["no YouTube average view duration"], 1)
+
+    def test_a_video_with_no_pause_is_kept_for_the_paper_comparisons(self):
+        record = make_record(3)
+        record["audio_stats"] = {**record["audio_stats"], "mean_pause_secs": None}
+        manifest = {"records": [make_record(0), record]}
+        (self.export / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+        project, skipped = load_project(self.export)
+        self.assertEqual(list(project.index), ["yt-0", "yt-3"])
+        self.assertTrue(pd.isna(project.loc["yt-3", "mean_pause_secs"]))
+        self.assertEqual(list(model_rows(project).index), ["yt-0"])
+        self.assertEqual(sum(skipped.values()), 0)
 
     def test_upstream_is_put_in_export_order(self):
         project, _ = load_project(self.export)

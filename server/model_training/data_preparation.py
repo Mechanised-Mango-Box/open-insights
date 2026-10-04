@@ -20,14 +20,22 @@ numbers would be scoring inputs it never saw.
     scene_change_rate      scenes / duration                      (per minute)
     word_count             count_words
     speech_pace_variation  transcript_stats, as-is                (WPM std dev)
-    speaking_ratio         transcript_stats, as-is                (0-1)
+    speech_ratio           audio_stats, as-is                     (0-1)
     text_density           text_stats.mean_words                  (words on screen)
+    mean_pause_secs        audio_stats, as-is                     (seconds)
     average_percentage_viewed
                            average_view_duration_secs / scene_stats.duration_secs * 100
 
-A record is skipped, as the client skips it, when its scene, transcript or text
-stats are missing, its duration is not positive, its speech features are null (Scan had
-no duration to measure them against), or it has no YouTube average view duration.
+speech_ratio replaced the transcript's speaking_ratio, which measured how much of
+the video Whisper's segments covered - and they run across pauses, so it sat at
+0.99 or above for 126 of the 144 lecture videos. speech_ratio is speech heard in
+the audio by voice activity detection.
+
+A record is skipped, as the client skips it, when its scene, transcript, text or
+audio stats are missing, its duration is not positive, its speech features are null
+(Scan had no duration to measure them against, or the audio was scanned before
+speech and pauses were measured), it has fewer than two stretches of speech (so no
+pause to average), or it has no YouTube average view duration.
 """
 import json
 import zipfile
@@ -44,13 +52,14 @@ FEATURE_COLUMNS: List[str] = [
     "scene_change_rate",
     "word_count",
     "speech_pace_variation",
-    "speaking_ratio",
+    "speech_ratio",
     "text_density",
+    "mean_pause_secs",
 ]
 
 TARGET_COLUMN: str = "average_percentage_viewed"
 
-# Below this there is too little to split 80/20 and still fit seven features.
+# Below this there is too little to split 80/20 and still fit eight features.
 MIN_TRAINING_ROWS = 10
 
 
@@ -88,10 +97,18 @@ def _record_to_row(record: Dict[str, Any]) -> Tuple[Optional[Dict[str, float]], 
     if not text_stats:
         return None, "missing text stats"
 
+    audio_stats = record.get("audio_stats")
+    if not audio_stats:
+        return None, "missing audio stats"
+
     speech_pace_variation = transcript_stats.get("speech_pace_variation")
-    speaking_ratio = transcript_stats.get("speaking_ratio")
-    if speech_pace_variation is None or speaking_ratio is None:
+    speech_ratio = audio_stats.get("speech_ratio")
+    if speech_pace_variation is None or speech_ratio is None:
         return None, "speech features not measured"
+
+    mean_pause_secs = audio_stats.get("mean_pause_secs")
+    if mean_pause_secs is None:
+        return None, "no pause to measure"
 
     average_view_duration_secs = (record.get("youtube_content") or {}).get(
         "average_view_duration_secs"
@@ -107,8 +124,9 @@ def _record_to_row(record: Dict[str, Any]) -> Tuple[Optional[Dict[str, float]], 
         "scene_change_rate": scene_stats["scenes"] / duration_mins,
         "word_count": count_words,
         "speech_pace_variation": speech_pace_variation,
-        "speaking_ratio": speaking_ratio,
+        "speech_ratio": speech_ratio,
         "text_density": text_stats["mean_words"],
+        "mean_pause_secs": mean_pause_secs,
         TARGET_COLUMN: average_view_duration_secs / duration_secs * 100,
     }, None
 
@@ -143,7 +161,8 @@ def load_export_dataset(path: str | Path, verbose: bool = True) -> pd.DataFrame:
     if len(rows) < MIN_TRAINING_ROWS:
         raise ValueError(
             f"{path}: only {len(rows)} usable record(s), need at least {MIN_TRAINING_ROWS}. "
-            "Run Scan (transcript, transcript stats, scene stats, screen text) and import the YouTube "
+            "Run Scan (transcript, transcript stats, scene stats, screen text, audio stats) and "
+            "import the YouTube "
             "content report for more videos, then export again."
         )
 

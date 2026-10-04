@@ -24,7 +24,8 @@ from model_training.data_preparation import (
 
 def make_record(index, **overrides):
     """A record with everything a training row needs: 10 minutes, 1500 words, 20 scenes,
-    35 words on screen on average, watched for 6 minutes on average."""
+    35 words on screen on average, speech 90% of the time with 0.35 s pauses, watched
+    for 6 minutes on average."""
     record = {
         "id": f"hash-{index}",
         "sort_name": f"Video {index}",
@@ -37,6 +38,17 @@ def make_record(index, **overrides):
             "speaking_ratio": 0.8,
         },
         "scene_stats": {"duration_secs": 600, "scenes": 20},
+        "audio_stats": {
+            "duration_secs": 600,
+            "speech_secs": 560,
+            "speech_level_db": -24.0,
+            "background_sound_ratio": 0.01,
+            "median_pitch_hz": 150.0,
+            "pitch_variation_st": 3.5,
+            "speech_ratio": 0.9,
+            "pause_rate_per_min": 4.0,
+            "mean_pause_secs": 0.35,
+        },
         "text_stats": {
             "sample_count": 120,
             "mean_words": 35.0,
@@ -60,14 +72,19 @@ def make_manifest():
             transcript_stats={
                 "count_chars": 1,
                 "count_words": 1,
-                "speech_pace_variation": 1.0,
-                "speaking_ratio": None,
+                "speech_pace_variation": None,
+                "speaking_ratio": 1.0,
             },
         ),
         make_record(101, youtube_content=None),
         make_record(102, scene_stats=None),
         make_record(103, scene_stats={"duration_secs": 0, "scenes": 3}),
         make_record(104, text_stats=None),
+        make_record(105, audio_stats=None),
+        # Scanned before speech and pauses were measured.
+        make_record(106, audio_stats={**make_record(0)["audio_stats"], "speech_ratio": None}),
+        # Fewer than two stretches of speech: no pause to average.
+        make_record(107, audio_stats={**make_record(0)["audio_stats"], "mean_pause_secs": None}),
     ]
     return {"generated_at": "2026-01-01T00:00:00.000Z", "records": usable + unusable}
 
@@ -98,8 +115,9 @@ class TestLoadExportDataset(unittest.TestCase):
         self.assertAlmostEqual(row["scene_change_rate"], 2.0)  # 20 scenes / 10 min
         self.assertAlmostEqual(row["word_count"], 1500)
         self.assertAlmostEqual(row["speech_pace_variation"], 12.5)
-        self.assertAlmostEqual(row["speaking_ratio"], 0.8)
+        self.assertAlmostEqual(row["speech_ratio"], 0.9)  # audio_stats, not transcript_stats
         self.assertAlmostEqual(row["text_density"], 35.0)  # text_stats.mean_words
+        self.assertAlmostEqual(row["mean_pause_secs"], 0.35)
         self.assertAlmostEqual(row[TARGET_COLUMN], 60.0)  # 360 s of 600 s
 
     def test_skips_records_the_client_would_skip(self):

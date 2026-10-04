@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  AudioStats,
   DatasetState,
   SceneStats,
   TextStats,
@@ -34,7 +35,17 @@ const record = (overrides: Partial<VideoRecord> = {}): VideoRecord => ({
     mean_coverage: 0.12,
     text_frames_ratio: 0.9,
   }),
-  ds_audioStats: { state: 'absent' },
+  ds_audioStats: ready<AudioStats>({
+    duration_secs: 600,
+    speech_secs: 560,
+    speech_level_db: -24,
+    background_sound_ratio: 0.01,
+    median_pitch_hz: 150,
+    pitch_variation_st: 3.5,
+    speech_ratio: 0.9,
+    pause_rate_per_min: 4,
+    mean_pause_secs: 0.35,
+  }),
   ...overrides,
 });
 
@@ -59,7 +70,6 @@ describe('missingScanSteps', () => {
     const incomplete = ready<TranscriptStats>({
       ...completeStats,
       speech_pace_variation: null,
-      speaking_ratio: null,
     });
     expect(missingScanSteps(record({ ds_transcriptStats: incomplete }))).toEqual([
       'transcriptStats',
@@ -75,6 +85,16 @@ describe('missingScanSteps', () => {
         }),
       ),
     ).toEqual(['sceneStats', 'textStats']);
+  });
+
+  it('scans the audio again when it was scanned before speech and pauses were measured', () => {
+    const { speech_ratio, pause_rate_per_min, mean_pause_secs, ...old } = AudioStats.createEmpty();
+    expect(missingScanSteps(record({ ds_audioStats: ready<AudioStats>(old) }))).toEqual([
+      'audioStats',
+    ]);
+    expect(missingScanSteps(record({ ds_audioStats: { state: 'absent' } }))).toEqual([
+      'audioStats',
+    ]);
   });
 
   it('treats a failed or zero-length scene scan as still missing', () => {

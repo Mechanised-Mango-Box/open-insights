@@ -27,15 +27,19 @@ export const buildVideoFeatures = (record: VideoRecord): VideoFeatures | null =>
   const sceneStats = readyData(record.ds_sceneStats);
   const transcriptStats = readyData(record.ds_transcriptStats);
   const textStats = readyData(record.ds_textStats);
+  const audioStats = readyData(record.ds_audioStats);
 
-  if (!sceneStats || !transcriptStats || !textStats) return null;
+  if (!sceneStats || !transcriptStats || !textStats || !audioStats) return null;
   if (sceneStats.duration_secs <= 0) return null;
   // Scan computes these; null means it had no duration to measure against.
   // Dropping the record is the point of the null - feeding the 0 the speech
   // functions return for missing input would read as a real measurement, and
   // these numbers drive written recommendations.
-  if (transcriptStats.speech_pace_variation == null || transcriptStats.speaking_ratio == null)
-    return null;
+  if (transcriptStats.speech_pace_variation == null) return null;
+  // Missing from audio scanned before speech and pauses were measured, and
+  // mean_pause_secs is null for a video with fewer than two stretches of speech
+  // - no pause to average, which is no reason to invent one.
+  if (audioStats.speech_ratio == null || audioStats.mean_pause_secs == null) return null;
 
   const duration_mins = sceneStats.duration_secs / 60;
   return {
@@ -44,8 +48,11 @@ export const buildVideoFeatures = (record: VideoRecord): VideoFeatures | null =>
     scene_change_rate: sceneStats.scenes / duration_mins,
     word_count: transcriptStats.count_words,
     speech_pace_variation: transcriptStats.speech_pace_variation,
-    speaking_ratio: transcriptStats.speaking_ratio,
+    // From the audio, not the transcript's speaking_ratio: Whisper's segments
+    // run across pauses, so that one sat near 1 for nearly every video.
+    speech_ratio: audioStats.speech_ratio,
     text_density: textStats.mean_words,
+    mean_pause_secs: audioStats.mean_pause_secs,
   };
 };
 

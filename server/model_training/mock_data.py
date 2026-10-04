@@ -22,8 +22,8 @@ def generate_mock_training_data(num_samples: int = 200, random_state: int = 42) 
     # Speech pace variation (standard deviation of WPM across 30s windows, non-negative)
     speech_pace_variation = np.clip(rng.normal(25, 10, num_samples), 0.0, None)
 
-    # Speaking ratio (portion of video duration with speech, between 0.0 and 1.0)
-    speaking_ratio = np.clip(rng.normal(0.75, 0.15, num_samples), 0.0, 1.0)
+    # Speech ratio (portion of video duration with speech, between 0.0 and 1.0)
+    speech_ratio = np.clip(rng.normal(0.75, 0.15, num_samples), 0.0, 1.0)
 
     # Simulated relationship between video properties and engagement
     average_percentage_viewed = (
@@ -32,7 +32,7 @@ def generate_mock_training_data(num_samples: int = 200, random_state: int = 42) 
         - 0.08 * np.abs(wpm - 150)
         + 1.5 * scene_change_rate
         - 0.3 * speech_pace_variation
-        + 5.0 * speaking_ratio
+        + 5.0 * speech_ratio
         + rng.normal(0, 5, num_samples)
     )
 
@@ -40,6 +40,10 @@ def generate_mock_training_data(num_samples: int = 200, random_state: int = 42) 
     # adding it left the values of every earlier column unchanged.
     text_density = np.clip(rng.normal(40, 25, num_samples), 0.0, None)
     average_percentage_viewed = average_percentage_viewed - 0.05 * text_density
+
+    # Mean pause length in seconds. Drawn last for the same reason.
+    mean_pause_secs = np.clip(rng.normal(0.35, 0.1, num_samples), 0.2, None)
+    average_percentage_viewed = average_percentage_viewed - 10.0 * mean_pause_secs
 
     # YouTube percentage viewed should stay between 0 and 100
     average_percentage_viewed = np.clip(
@@ -54,8 +58,9 @@ def generate_mock_training_data(num_samples: int = 200, random_state: int = 42) 
         "scene_change_rate": scene_change_rate,
         "word_count": word_count,
         "speech_pace_variation": speech_pace_variation,
-        "speaking_ratio": speaking_ratio,
+        "speech_ratio": speech_ratio,
         "text_density": text_density,
+        "mean_pause_secs": mean_pause_secs,
         "average_percentage_viewed": average_percentage_viewed,
     }) 
 

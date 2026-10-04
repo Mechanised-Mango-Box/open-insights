@@ -52,7 +52,7 @@ class TestRecommendationLogic(unittest.TestCase):
             "scene_change_rate",
             "word_count",
             "speech_pace_variation",
-            "speaking_ratio",
+            "speech_ratio",
         ]
 
         recs = generate_feature_recommendations(model, feature_names, threshold=1.0)
@@ -98,11 +98,11 @@ class TestRecommendationLogic(unittest.TestCase):
             "In this dataset, higher speech pace variation is associated with higher average percentage viewed.",
         )
 
-        # Speaking ratio: weak
-        self.assertEqual(feats["speaking_ratio"]["relationship"], "weak")
+        # Speech ratio: weak
+        self.assertEqual(feats["speech_ratio"]["relationship"], "weak")
         self.assertEqual(
-            feats["speaking_ratio"]["recommendation"],
-            "In this dataset, speaking ratio has little to no measurable relationship with average percentage viewed.",
+            feats["speech_ratio"]["recommendation"],
+            "In this dataset, speech ratio has little to no measurable relationship with average percentage viewed.",
         )
 
     def test_pipeline_integration(self):

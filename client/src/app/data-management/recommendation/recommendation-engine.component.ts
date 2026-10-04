@@ -380,7 +380,7 @@ export class RecommendationEngineComponent {
       const features = buildVideoFeatures(record);
       if (!features) {
         this.status.set(
-          'Scanning finished, but the video still lacks the scene and transcript stats the model needs - check its row on the Scan step.',
+          'Scanning finished, but the video still lacks stats the model needs - check its row on the Scan step. A video with almost no pauses in its speech has no mean pause length to score.',
         );
         return;
       }
@@ -446,6 +446,8 @@ export class RecommendationEngineComponent {
         return this.datasetActions.recomputeTranscriptStats(record);
       case 'textStats':
         return this.datasetActions.fetchTextStats(record);
+      case 'audioStats':
+        return this.datasetActions.fetchAudioStats(record);
     }
   }
 }

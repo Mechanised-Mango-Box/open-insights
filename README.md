@@ -100,10 +100,10 @@ python scripts/train_engagement_model.py path/to/open-insights-export-<timestamp
 
 It trains on a client [export](#export) - the zip, or the zip unpacked into a folder.
 Only `manifest.json` is read, so exporting without video files is enough. A record
-becomes a training row when Scan has produced its transcript stats, scene stats and
-screen text and a YouTube content report supplied its average view duration; the
-script prints how many records it kept and why it skipped the rest. The seven
-features are computed exactly as the Analysis page computes them, and the target is
+becomes a training row when Scan has produced its transcript stats, scene stats,
+screen text and audio stats and a YouTube content report supplied its average view
+duration; the script prints how many records it kept and why it skipped the rest. The
+eight features are computed exactly as the Analysis page computes them, and the target is
 average view duration ÷ duration × 100 (see `model_training/data_preparation.py`).
 There is no built-in dataset to fall back on: the script refuses to run without an export.
 
