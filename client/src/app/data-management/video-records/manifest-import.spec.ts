@@ -61,6 +61,9 @@ const record = (overrides: Partial<VideoRecord> = {}): VideoRecord => ({
     background_sound_ratio: 0.02,
     median_pitch_hz: null,
     pitch_variation_st: 3.9,
+    speech_ratio: 0.91,
+    pause_rate_per_min: 8.5,
+    mean_pause_secs: null,
   }),
   ...overrides,
 });
@@ -98,7 +101,13 @@ describe('parseExportZip', () => {
     // null included: a video with no speech has no pitch, and that has to survive.
     expect(imported.ds_audioStats).toMatchObject({
       state: 'ready',
-      data: { background_sound_ratio: 0.02, median_pitch_hz: null, pitch_variation_st: 3.9 },
+      data: {
+        background_sound_ratio: 0.02,
+        median_pitch_hz: null,
+        pitch_variation_st: 3.9,
+        speech_ratio: 0.91,
+        mean_pause_secs: null,
+      },
     });
   });
 

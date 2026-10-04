@@ -382,6 +382,26 @@ export class VideoTableComponent {
                 : "Voice (Mayer) - how much the speaker's pitch varies, as a standard " +
                   `deviation in semitones around ${Math.round(stats.median_pitch_hz)} Hz`,
           },
+          // Missing from results scanned before they existed - see AudioStats.
+          ...(stats.speech_ratio === undefined
+            ? []
+            : [
+                {
+                  text: `${Math.round(stats.speech_ratio * 100)}% speech`,
+                  title:
+                    'Speech heard in the audio (voice activity detection), as a share of the ' +
+                    'video. Unlike the speaking ratio, pauses of 250 ms or more are not speech.',
+                },
+                {
+                  text: `${(stats.pause_rate_per_min ?? 0).toFixed(1)} pauses/min`,
+                  title:
+                    'Segmenting (Mayer) - pauses of 250 ms or more per minute, from the first ' +
+                    'speech to the last' +
+                    (stats.mean_pause_secs == null
+                      ? ''
+                      : `, averaging ${stats.mean_pause_secs.toFixed(2)} s`),
+                },
+              ]),
         ]
       : [];
   }

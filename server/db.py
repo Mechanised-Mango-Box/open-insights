@@ -102,6 +102,9 @@ AUDIO_STATS = DatasetKind(
         "background_sound_ratio",
         "median_pitch_hz",
         "pitch_variation_st",
+        "speech_ratio",
+        "pause_rate_per_min",
+        "mean_pause_secs",
     ),
     producer=AUDIO_STATS_PRODUCER,
     settings=AUDIO_STATS_SETTINGS,
@@ -133,6 +136,29 @@ _JOBS_TABLE = f"""
         PRIMARY KEY (kind, file_hash),
         -- A running job always holds a lease; a queued or failed one never does.
         CHECK ((status = 'running') = (lease_expires_at IS NOT NULL))
+    );
+"""
+
+# Named apart from _SCHEMA for the same reason as _JOBS_TABLE: a column added
+# here does not reach a table that already exists, which is what
+# _migrate_audio_stats_columns() is for.
+#
+# The nullable columns are not a result still to come: a video with no speech in
+# it has no speech level, no pitch and no pauses.
+_AUDIO_STATS_TABLE = """
+    CREATE TABLE IF NOT EXISTS audio_stats (
+        file_hash              TEXT PRIMARY KEY REFERENCES files(file_hash),
+        duration_secs          REAL NOT NULL,
+        speech_secs            REAL NOT NULL,
+        speech_level_db        REAL,
+        background_sound_ratio REAL NOT NULL,
+        median_pitch_hz        REAL,
+        pitch_variation_st     REAL NOT NULL,
+        speech_ratio           REAL NOT NULL,
+        pause_rate_per_min     REAL NOT NULL,
+        mean_pause_secs        REAL,
+        producer               TEXT NOT NULL,
+        produced_at            TEXT NOT NULL DEFAULT (datetime('now'))
     );
 """
 
@@ -173,21 +199,7 @@ _SCHEMA = """
         producer          TEXT    NOT NULL,
         produced_at       TEXT    NOT NULL DEFAULT (datetime('now'))
     );
-
-    -- The two nullable columns are not a result still to come: a video with no
-    -- speech in it has no speech level and no pitch.
-    CREATE TABLE IF NOT EXISTS audio_stats (
-        file_hash              TEXT PRIMARY KEY REFERENCES files(file_hash),
-        duration_secs          REAL NOT NULL,
-        speech_secs            REAL NOT NULL,
-        speech_level_db        REAL,
-        background_sound_ratio REAL NOT NULL,
-        median_pitch_hz        REAL,
-        pitch_variation_st     REAL NOT NULL,
-        producer               TEXT NOT NULL,
-        produced_at            TEXT NOT NULL DEFAULT (datetime('now'))
-    );
-""" + _JOBS_TABLE
+""" + _AUDIO_STATS_TABLE + _JOBS_TABLE
 
 
 def _requeue(
@@ -299,6 +311,25 @@ def _migrate_jobs_kinds(conn: sqlite3.Connection) -> None:
     """)
 
 
+def _migrate_audio_stats_columns(conn: sqlite3.Connection) -> None:
+    """Rebuilds `audio_stats` when it predates a column AUDIO_STATS stores.
+
+    Dropped rather than copied: a table missing a column was filled under an
+    earlier producer - the producer names every setting, and a new measure means
+    new settings - so each of its rows already reads as absent and would be
+    recomputed anyway. Copying them would only carry stale rows forward with
+    NULLs in NOT NULL columns."""
+    existing = _table_columns(conn, AUDIO_STATS.table)
+    if not existing or set(AUDIO_STATS.columns) <= existing:
+        return
+    conn.executescript(f"""
+        BEGIN;
+        DROP TABLE audio_stats;
+        {_AUDIO_STATS_TABLE}
+        COMMIT;
+    """)
+
+
 def init_db() -> None:
     conn = _configure(sqlite3.connect(DB_PATH))
     conn.execute("PRAGMA journal_mode = WAL")
@@ -309,6 +340,7 @@ def init_db() -> None:
     conn.commit()
 
     _migrate_jobs_kinds(conn)
+    _migrate_audio_stats_columns(conn)
 
     # A running job's worker lived in the previous process's in-memory executor,
     # which no restart survives. Requeue rather than fail: nothing is wrong with

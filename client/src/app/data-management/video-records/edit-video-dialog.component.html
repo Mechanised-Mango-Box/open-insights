@@ -314,6 +314,21 @@
           <input matInput type="number" [value]="audioStatsData?.speech_level_db" disabled />
         </mat-form-field>
 
+        <mat-form-field appearance="outline">
+          <mat-label>Speech Ratio (share of video)</mat-label>
+          <input matInput type="number" [value]="audioStatsData?.speech_ratio" disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Pauses per Minute</mat-label>
+          <input matInput type="number" [value]="audioStatsData?.pause_rate_per_min" disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Mean Pause (seconds)</mat-label>
+          <input matInput type="number" [value]="audioStatsData?.mean_pause_secs" disabled />
+        </mat-form-field>
+
         <mat-divider /><button mat-button (click)="clearLocalAudioStats()">Clear</button>
       } @else {
         <p>Not yet computed.</p>

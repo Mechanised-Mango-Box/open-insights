@@ -317,6 +317,14 @@ AUDIO_BACKGROUND_MARGIN_DB = float(os.environ.get("AUDIO_BACKGROUND_MARGIN_DB", 
 AUDIO_SILENCE_DBFS = float(os.environ.get("AUDIO_SILENCE_DBFS", "-50.0"))
 PITCH_FLOOR_HZ = float(os.environ.get("PITCH_FLOOR_HZ", "75.0"))
 PITCH_CEILING_HZ = float(os.environ.get("PITCH_CEILING_HZ", "500.0"))
+# Speech and pauses come from a second VAD pass that ends speech at a silence of
+# SPEECH_MIN_SILENCE_MS: 250 ms is the usual cut-off for a pause in speech
+# research (Goldman-Eisler), long enough to skip the gaps inside and between
+# words. Speech is padded by SPEECH_PAD_MS on each side, which shortens every
+# measured pause by twice that - so it is kept at Silero's own 30 ms rather than
+# the 400 ms faster-whisper uses to avoid clipping words for transcription.
+SPEECH_MIN_SILENCE_MS = float(os.environ.get("SPEECH_MIN_SILENCE_MS", "250.0"))
+SPEECH_PAD_MS = float(os.environ.get("SPEECH_PAD_MS", "30.0"))
 
 # Decoding and Praat's pitch tracker are both single-threaded, so two workers
 # buy two videos at once.
@@ -363,6 +371,7 @@ AUDIO_STATS_PRODUCER = (
     f"/frame={AUDIO_FRAME_SECS}s/margin={AUDIO_BACKGROUND_MARGIN_DB}dB"
     f"/floor={AUDIO_SILENCE_DBFS}dBFS/pitch_floor={PITCH_FLOOR_HZ}Hz"
     f"/pitch_ceiling={PITCH_CEILING_HZ}Hz"
+    f"/pause_silence={SPEECH_MIN_SILENCE_MS}ms/pause_pad={SPEECH_PAD_MS}ms"
 )
 
 # The same parameters, by name, for reporting: every ready result and /status
@@ -393,6 +402,8 @@ AUDIO_STATS_SETTINGS = {
     "silence_dbfs": AUDIO_SILENCE_DBFS,
     "pitch_floor_hz": PITCH_FLOOR_HZ,
     "pitch_ceiling_hz": PITCH_CEILING_HZ,
+    "pause_min_silence_ms": SPEECH_MIN_SILENCE_MS,
+    "pause_pad_ms": SPEECH_PAD_MS,
 }
 
 # A job whose worker died is requeued rather than failed, so a genuinely broken

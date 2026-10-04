@@ -20,6 +20,20 @@ dropped as octave errors (the tracker's commonest mistake), and:
 
 Semitones rather than Hz so a high voice and a low one are on the same scale.
 
+Speech and pauses (segmenting). The VAD pass above treats any silence under 2 s
+as part of the speech around it, which suits coherence but hides every ordinary
+pause. A second pass, set to end speech at a SPEECH_MIN_SILENCE_MS silence and
+pad it by only SPEECH_PAD_MS, gives:
+
+    speech_ratio        seconds of speech / duration
+    pause_rate_per_min  gaps between speech / minutes from first word to last
+    mean_pause_secs     the mean length of those gaps
+
+Measured on the audio, unlike the transcript's speaking ratio: Whisper's
+segments run straight across pauses, so that one sits near 1 for nearly every
+video. Silence before the first word and after the last is an intro or an
+outro, not a pause, so neither counts.
+
 A video with no audio track, or no speech in it, is measured as it is - no
 background sound it cannot hear, no pitch it cannot track - rather than failed.
 
@@ -40,6 +54,8 @@ from config import (
     AUDIO_SILENCE_DBFS,
     PITCH_CEILING_HZ,
     PITCH_FLOOR_HZ,
+    SPEECH_MIN_SILENCE_MS,
+    SPEECH_PAD_MS,
 )
 from models import AudioStats
 
@@ -71,13 +87,23 @@ VadFn = Callable[[np.ndarray], list[tuple[float, float]]]
 PitchFn = Callable[[np.ndarray, float, float], tuple[np.ndarray, np.ndarray]]
 
 
-def silero_vad(audio: np.ndarray) -> list[tuple[float, float]]:
+def silero_vad(audio: np.ndarray, **options: float) -> list[tuple[float, float]]:
+    """Silero's speech intervals, with VadOptions' defaults unless overridden."""
     from faster_whisper.vad import VadOptions, get_speech_timestamps
 
     return [
         (chunk["start"] / SAMPLE_RATE, chunk["end"] / SAMPLE_RATE)
-        for chunk in get_speech_timestamps(audio, VadOptions(), sampling_rate=SAMPLE_RATE)
+        for chunk in get_speech_timestamps(
+            audio, VadOptions(**options), sampling_rate=SAMPLE_RATE
+        )
     ]
+
+
+def silero_pauses(audio: np.ndarray) -> list[tuple[float, float]]:
+    """Speech intervals that end at a short pause rather than a 2 s one."""
+    return silero_vad(
+        audio, min_silence_duration_ms=SPEECH_MIN_SILENCE_MS, speech_pad_ms=SPEECH_PAD_MS
+    )
 
 
 def praat_pitch(
@@ -137,6 +163,39 @@ def _speech_mask(
     return mask
 
 
+def _merged(intervals: list[tuple[float, float]], duration_secs: float) -> list[list[float]]:
+    """Intervals clamped to the audio, sorted, with overlapping ones joined."""
+    clamped = sorted(
+        (max(0.0, start), min(duration_secs, end))
+        for start, end in intervals
+        if min(duration_secs, end) > max(0.0, start)
+    )
+    merged: list[list[float]] = []
+    for start, end in clamped:
+        if merged and start <= merged[-1][1]:
+            merged[-1][1] = max(merged[-1][1], end)
+        else:
+            merged.append([start, end])
+    return merged
+
+
+def _speech_and_pauses(
+    intervals: list[tuple[float, float]], duration_secs: float
+) -> tuple[float, float, float | None]:
+    """speech_ratio, pause_rate_per_min and mean_pause_secs."""
+    merged = _merged(intervals, duration_secs)
+    if not merged or duration_secs <= 0:
+        return 0.0, 0.0, None
+    speech_secs = sum(end - start for start, end in merged)
+    gaps = [later[0] - earlier[1] for earlier, later in zip(merged, merged[1:])]
+    span_mins = (merged[-1][1] - merged[0][0]) / 60
+    return (
+        round(min(1.0, speech_secs / duration_secs), 5),
+        round(len(gaps) / span_mins, 3) if span_mins > 0 else 0.0,
+        round(sum(gaps) / len(gaps), 3) if gaps else None,
+    )
+
+
 def _pitch_in_speech(
     audio: np.ndarray,
     speech: np.ndarray,
@@ -176,6 +235,7 @@ def calculate_audio_stats(
     silence_dbfs: float = AUDIO_SILENCE_DBFS,
     floor_hz: float = PITCH_FLOOR_HZ,
     ceiling_hz: float = PITCH_CEILING_HZ,
+    pause_vad: VadFn | None = None,
 ) -> AudioStats:
     audio, duration_secs = _decode(file_path)
     if audio is None:
@@ -186,7 +246,11 @@ def calculate_audio_stats(
             background_sound_ratio=0.0,
             median_pitch_hz=None,
             pitch_variation_st=0.0,
+            speech_ratio=0.0,
+            pause_rate_per_min=0.0,
+            mean_pause_secs=None,
         )
+    # An injected VAD stands in for both passes unless a second one is given.
     return measure_audio(
         audio,
         vad or silero_vad,
@@ -196,6 +260,7 @@ def calculate_audio_stats(
         silence_dbfs,
         floor_hz,
         ceiling_hz,
+        pause_vad or (vad if vad else silero_pauses),
     )
 
 
@@ -208,8 +273,10 @@ def measure_audio(
     silence_dbfs: float = AUDIO_SILENCE_DBFS,
     floor_hz: float = PITCH_FLOOR_HZ,
     ceiling_hz: float = PITCH_CEILING_HZ,
+    pause_vad: VadFn | None = None,
 ) -> AudioStats:
-    """The measuring itself, on 16 kHz mono already decoded."""
+    """The measuring itself, on 16 kHz mono already decoded. `pause_vad` is the
+    short-pause pass; left out, `vad` serves for both."""
     duration_secs = len(audio) / SAMPLE_RATE
     levels = _frame_levels(audio, frame_secs)
     speech = _speech_mask(vad(audio) if len(levels) else [], len(levels), frame_secs)
@@ -231,6 +298,10 @@ def measure_audio(
             median_pitch_hz = round(median, 2)
             pitch_variation_st = round(float(np.std(kept, ddof=1)), 4)
 
+    speech_ratio, pause_rate_per_min, mean_pause_secs = _speech_and_pauses(
+        (pause_vad or vad)(audio) if len(levels) else [], duration_secs
+    )
+
     return AudioStats(
         duration_secs=round(duration_secs, 3),
         speech_secs=round(float(np.count_nonzero(speech)) * frame_secs, 3),
@@ -240,4 +311,7 @@ def measure_audio(
         else 0.0,
         median_pitch_hz=median_pitch_hz,
         pitch_variation_st=pitch_variation_st,
+        speech_ratio=speech_ratio,
+        pause_rate_per_min=pause_rate_per_min,
+        mean_pause_secs=mean_pause_secs,
     )

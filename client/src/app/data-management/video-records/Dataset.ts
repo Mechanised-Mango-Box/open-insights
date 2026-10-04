@@ -283,6 +283,20 @@ export interface AudioStats {
   median_pitch_hz: number | null;
   /** Voice: the standard deviation of the speaker's pitch, in semitones. */
   pitch_variation_st: number;
+  /**
+   * Segmenting: speech and pauses, from a voice-activity pass that ends speech
+   * at a 250 ms silence. Unlike the transcript's speaking ratio, which counts
+   * the time Whisper's segments cover (and they run across pauses), this is
+   * speech heard in the audio.
+   *
+   * Optional because results scanned before these existed lack them; such a
+   * result is stale on the server and gains them when scanned again.
+   */
+  speech_ratio?: number;
+  /** Pauses per minute, between the first speech and the last. */
+  pause_rate_per_min?: number;
+  /** Null with fewer than two stretches of speech. */
+  mean_pause_secs?: number | null;
 }
 
 export const AudioStats: CanCreateEmpty<AudioStats> = {
@@ -293,5 +307,8 @@ export const AudioStats: CanCreateEmpty<AudioStats> = {
     background_sound_ratio: 0,
     median_pitch_hz: null,
     pitch_variation_st: 0,
+    speech_ratio: 0,
+    pause_rate_per_min: 0,
+    mean_pause_secs: null,
   }),
 };

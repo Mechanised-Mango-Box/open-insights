@@ -8,6 +8,7 @@ the tracker to make a mistake. Run from the repository root:
 
     python -m unittest server.tests.test_audio_stats
 """
+import sqlite3
 import sys
 import tempfile
 import unittest
@@ -21,7 +22,14 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import audio_stats
-from audio_stats import SAMPLE_RATE, calculate_audio_stats, measure_audio, praat_pitch
+from audio_stats import (
+    SAMPLE_RATE,
+    calculate_audio_stats,
+    measure_audio,
+    praat_pitch,
+    silero_pauses,
+)
+from db import AUDIO_STATS, _migrate_audio_stats_columns, _table_columns
 from tests.video_fixtures import write_audio, write_mjpeg
 
 
@@ -158,6 +166,103 @@ class TestPitchVariation(unittest.TestCase):
         self.assertEqual(stats.pitch_variation_st, 0.0)
 
 
+class TestSpeechAndPauses(unittest.TestCase):
+    """The short-pause VAD pass, supplied as `pause_vad` so the coarse pass the
+    other measures use is left as it was."""
+
+    def measure(self, seconds, *intervals):
+        return measure_audio(
+            silence(seconds), speech_at(), praat_pitch, pause_vad=speech_at(*intervals)
+        )
+
+    def test_speech_ratio_is_speech_over_duration(self):
+        stats = self.measure(10, (1, 3), (4, 7))
+        self.assertAlmostEqual(stats.speech_ratio, 0.5)
+
+    def test_overlapping_intervals_count_once(self):
+        stats = self.measure(10, (1, 4), (3, 6))
+        self.assertAlmostEqual(stats.speech_ratio, 0.5)
+        self.assertEqual(stats.pause_rate_per_min, 0.0)
+        self.assertIsNone(stats.mean_pause_secs)
+
+    def test_pauses_are_only_counted_between_speech(self):
+        # Speech 10-20, 21-30 and 33-40 s: two pauses, of 1 and 3 s, across a
+        # half-minute from first word to last. The silence before 10 s and after
+        # 40 s is an intro and an outro, not pausing.
+        stats = self.measure(60, (10, 20), (21, 30), (33, 40))
+        self.assertAlmostEqual(stats.pause_rate_per_min, 4.0)
+        self.assertAlmostEqual(stats.mean_pause_secs, 2.0)
+
+    def test_intervals_past_the_end_are_clamped(self):
+        stats = self.measure(10, (-1, 2), (8, 12))
+        self.assertAlmostEqual(stats.speech_ratio, 0.4)
+
+    def test_no_speech_has_no_pauses(self):
+        stats = self.measure(10)
+        self.assertEqual(stats.speech_ratio, 0.0)
+        self.assertEqual(stats.pause_rate_per_min, 0.0)
+        self.assertIsNone(stats.mean_pause_secs)
+
+    def test_coherence_and_voice_keep_the_coarse_pass(self):
+        audio = np.concatenate([tone(2, 200), silence(2), noise(2, -15)])
+        coarse = measure_audio(audio, speech_at((0, 2)), praat_pitch)
+        both = measure_audio(audio, speech_at((0, 2)), praat_pitch, pause_vad=speech_at((0, 1)))
+        self.assertEqual(both.background_sound_ratio, coarse.background_sound_ratio)
+        self.assertEqual(both.speech_secs, coarse.speech_secs)
+        self.assertAlmostEqual(both.speech_ratio, 1 / 6, places=4)
+
+    def test_real_silero_finds_short_pauses(self):
+        # Silero on synthetic audio is no promise of what it does on speech, so
+        # this asks only that the short-pause pass splits where the coarse
+        # default would not: noise bursts with 0.6 s of silence between them.
+        rng = np.random.default_rng(1)
+        burst = lambda: (0.3 * rng.standard_normal(SAMPLE_RATE)).astype(np.float32)
+        audio = np.concatenate([burst(), silence(0.6), burst(), silence(0.6), burst()])
+        intervals = silero_pauses(audio)
+        self.assertIsInstance(intervals, list)
+
+
+class TestMigrateAudioStatsColumns(unittest.TestCase):
+    OLD = """
+        CREATE TABLE audio_stats (
+            file_hash              TEXT PRIMARY KEY,
+            duration_secs          REAL NOT NULL,
+            speech_secs            REAL NOT NULL,
+            speech_level_db        REAL,
+            background_sound_ratio REAL NOT NULL,
+            median_pitch_hz        REAL,
+            pitch_variation_st     REAL NOT NULL,
+            producer               TEXT NOT NULL,
+            produced_at            TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+        INSERT INTO audio_stats VALUES ('abc', 60, 50, -20, 0, 150, 3, 'old', 't');
+    """
+
+    def setUp(self):
+        self.conn = sqlite3.connect(":memory:")
+        self.addCleanup(self.conn.close)
+
+    def test_rebuilds_an_old_table_with_every_column(self):
+        self.conn.executescript(self.OLD)
+        _migrate_audio_stats_columns(self.conn)
+        self.assertLessEqual(set(AUDIO_STATS.columns), _table_columns(self.conn, "audio_stats"))
+        # Its rows were made under an older producer, so they are not kept.
+        self.assertEqual(self.conn.execute("SELECT count(*) FROM audio_stats").fetchone(), (0,))
+
+    def test_leaves_a_current_table_and_its_rows_alone(self):
+        self.conn.executescript(self.OLD)
+        _migrate_audio_stats_columns(self.conn)
+        self.conn.execute(
+            "INSERT INTO audio_stats VALUES ('abc', 60, 50, -20, 0, 150, 3, 0.8, 9, 0.6, 'new', 't')"
+        )
+        _migrate_audio_stats_columns(self.conn)
+        self.assertEqual(self.conn.execute("SELECT count(*) FROM audio_stats").fetchone(), (1,))
+
+    def test_does_nothing_without_the_table(self):
+        _migrate_audio_stats_columns(self.conn)
+        self.assertEqual(_table_columns(self.conn, "audio_stats"), set())
+
+
 class TestCalculateAudioStats(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -182,6 +287,9 @@ class TestCalculateAudioStats(unittest.TestCase):
         self.assertEqual(stats.background_sound_ratio, 0.0)
         self.assertIsNone(stats.median_pitch_hz)
         self.assertEqual(stats.pitch_variation_st, 0.0)
+        self.assertEqual(stats.speech_ratio, 0.0)
+        self.assertEqual(stats.pause_rate_per_min, 0.0)
+        self.assertIsNone(stats.mean_pause_secs)
 
     def test_an_audio_track_that_decodes_to_nothing_fails(self):
         # A truncated download: the track is there, its samples are not.
