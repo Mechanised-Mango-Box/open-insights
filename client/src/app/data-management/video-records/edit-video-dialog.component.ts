@@ -9,6 +9,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatDivider } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import {
+  AudioStats,
   LOCAL_IMPORT,
   SceneStats,
   TextStats,
@@ -69,6 +70,7 @@ export class EditVideoDialogComponent {
   transcriptError = signal<string | null>(null);
   sceneStatsError = signal<string | null>(null);
   textStatsError = signal<string | null>(null);
+  audioStatsError = signal<string | null>(null);
 
   // Pending state and server statuses live in DatasetActionsService, keyed by file hash, so the
   // dialog and the table row behind it always agree about what's in flight.
@@ -79,11 +81,14 @@ export class EditVideoDialogComponent {
     this.datasetActions.sendingSceneStats().has(this.localData.video_file.hash);
   textStatsPending = () =>
     this.datasetActions.sendingTextStats().has(this.localData.video_file.hash);
+  audioStatsPending = () =>
+    this.datasetActions.sendingAudioStats().has(this.localData.video_file.hash);
 
   checkServerStatus = (hash: string) => this.datasetActions.checkServerStatus(hash);
   checkTranscriptStatus = (hash: string) => this.datasetActions.checkTranscriptStatus(hash);
   checkSceneStatsStatus = (hash: string) => this.datasetActions.checkSceneStatsStatus(hash);
   checkTextStatsStatus = (hash: string) => this.datasetActions.checkTextStatsStatus(hash);
+  checkAudioStatsStatus = (hash: string) => this.datasetActions.checkAudioStatsStatus(hash);
 
   constructor() {
     const hash = this.localData.video_file.hash;
@@ -151,11 +156,29 @@ export class EditVideoDialogComponent {
     );
   }
 
+  get audioStatsUploadIcon(): StatusIcon | null {
+    return datasetStateIcon(
+      this.localData.ds_audioStats,
+      this.audioStatsPending(),
+      this.datasetActions.providerLabel(),
+    );
+  }
+
+  get audioStatsPeekIcon(): StatusIcon {
+    return datasetPeekStatusIcon(
+      this.datasetActions.audioStatsStatusByHash().get(this.localData.video_file.hash) ?? {
+        status: 'checking',
+      },
+      this.datasetActions.providerLabel(),
+    );
+  }
+
   private refreshStatuses(hash: string): void {
     this.checkServerStatus(hash);
     this.checkTranscriptStatus(hash);
     this.checkSceneStatsStatus(hash);
     this.checkTextStatsStatus(hash);
+    this.checkAudioStatsStatus(hash);
   }
 
   onVideoFileSelected = (event: Event): void => {
@@ -274,6 +297,20 @@ export class EditVideoDialogComponent {
     }
   }
 
+  async computeAudioStatsViaServer(): Promise<void> {
+    this.audioStatsError.set(null);
+    if (!this.localData.video_file.hash) {
+      this.audioStatsError.set('Select the video file first.');
+      return;
+    }
+    try {
+      await this.datasetActions.fetchAudioStats(this.localData);
+    } catch (error) {
+      console.error('Audio stats computation failed:', error);
+      this.audioStatsError.set('Audio stats computation failed. See console for details.');
+    }
+  }
+
   get hasLocalTranscript(): boolean {
     return isReady(this.localData.ds_transcript);
   }
@@ -296,6 +333,14 @@ export class EditVideoDialogComponent {
 
   clearLocalTextStats(): void {
     this.localData.ds_textStats = { state: 'absent' };
+  }
+
+  get audioStatsData(): AudioStats | null {
+    return readyData(this.localData.ds_audioStats);
+  }
+
+  clearLocalAudioStats(): void {
+    this.localData.ds_audioStats = { state: 'absent' };
   }
 
   get transcriptSegments(): TranscriptSegment[] {

@@ -265,6 +265,72 @@
         }
       }
     </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Audio</mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <button
+        mat-stroked-button
+        color="primary"
+        [disabled]="audioStatsPending()"
+        (click)="computeAudioStatsViaServer()"
+      >
+        {{ audioStatsPending() ? 'Computing...' : 'Compute via Server' }}
+      </button>
+      @if (audioStatsError()) {
+        <p class="error-text">{{ audioStatsError() }}</p>
+      }
+      <br />
+
+      @if (audioStatsData) {
+        @if (audioStatsUploadIcon) {
+          <p class="server-status" [ngClass]="audioStatsUploadIcon.cssClass">
+            <mat-icon>{{ audioStatsUploadIcon.icon }}</mat-icon> {{ audioStatsUploadIcon.label }}
+          </p>
+        }
+        <mat-form-field appearance="outline">
+          <mat-label>Background Sound (share of video)</mat-label>
+          <input matInput type="number" [value]="audioStatsData?.background_sound_ratio" disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Pitch Variation (semitones SD)</mat-label>
+          <input matInput type="number" [value]="audioStatsData?.pitch_variation_st" disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Median Pitch (Hz)</mat-label>
+          <input matInput type="number" [value]="audioStatsData?.median_pitch_hz" disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Speech (seconds)</mat-label>
+          <input matInput type="number" [value]="audioStatsData?.speech_secs" disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Speech Level (dBFS)</mat-label>
+          <input matInput type="number" [value]="audioStatsData?.speech_level_db" disabled />
+        </mat-form-field>
+
+        <mat-divider /><button mat-button (click)="clearLocalAudioStats()">Clear</button>
+      } @else {
+        <p>Not yet computed.</p>
+        @if (localData.video_file.hash) {
+          <button
+            mat-icon-button
+            class="server-status"
+            [ngClass]="audioStatsPeekIcon.cssClass"
+            [title]="audioStatsPeekIcon.label"
+            (click)="checkAudioStatsStatus(localData.video_file.hash)"
+          >
+            <mat-icon>{{ audioStatsPeekIcon.icon }}</mat-icon>
+          </button>
+          {{ audioStatsPeekIcon.label }}
+        }
+      }
+    </mat-expansion-panel>
   </mat-accordion>
 
   <mat-accordion>

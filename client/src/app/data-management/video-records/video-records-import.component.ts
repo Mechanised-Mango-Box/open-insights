@@ -20,6 +20,7 @@ const newRecordDefaults = (): Omit<VideoRecord, '__id' | 'sort_name'> => ({
   ds_transcriptStats: { state: 'absent' },
   ds_sceneStats: { state: 'absent' },
   ds_textStats: { state: 'absent' },
+  ds_audioStats: { state: 'absent' },
 });
 
 @Component({

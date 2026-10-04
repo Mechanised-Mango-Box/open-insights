@@ -7,6 +7,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { VideoDatabaseService } from './video-database.service';
 import { MatDialog } from '@angular/material/dialog';
 import {
+  AudioStats,
   SceneStats,
   TextStats,
   Transcript,
@@ -153,10 +154,12 @@ export class VideoTableComponent {
   sendingTranscript = () => this.datasetActions.sendingTranscript();
   sendingSceneStats = () => this.datasetActions.sendingSceneStats();
   sendingTextStats = () => this.datasetActions.sendingTextStats();
+  sendingAudioStats = () => this.datasetActions.sendingAudioStats();
 
   checkTranscriptStatus = (hash: string) => this.datasetActions.checkTranscriptStatus(hash);
   checkSceneStatsStatus = (hash: string) => this.datasetActions.checkSceneStatsStatus(hash);
   checkTextStatsStatus = (hash: string) => this.datasetActions.checkTextStatsStatus(hash);
+  checkAudioStatsStatus = (hash: string) => this.datasetActions.checkAudioStatsStatus(hash);
 
   constructor() {
     effect(() => {
@@ -258,6 +261,10 @@ export class VideoTableComponent {
     return this.isReadyOnServer(record, this.datasetActions.textStatsStatusByHash());
   }
 
+  audioStatsReadyOnServer(record: VideoRecord): boolean {
+    return this.isReadyOnServer(record, this.datasetActions.audioStatsStatusByHash());
+  }
+
   // The template used to test these fields for truthiness to mean "has data".
   // DatasetState is always truthy - 'absent' is a value, not a null - so the
   // question has to be asked explicitly now.
@@ -275,6 +282,10 @@ export class VideoTableComponent {
 
   textStatsData(record: VideoRecord): TextStats | null {
     return readyData(record.ds_textStats);
+  }
+
+  audioStatsData(record: VideoRecord): AudioStats | null {
+    return readyData(record.ds_audioStats);
   }
 
   /**
@@ -350,6 +361,31 @@ export class VideoTableComponent {
       : [];
   }
 
+  audioStatBadges(record: VideoRecord): StatBadge[] {
+    const stats = this.audioStatsData(record);
+    return stats
+      ? [
+          {
+            text: `${(stats.background_sound_ratio * 100).toFixed(1)}% background sound`,
+            title:
+              'Coherence (Mayer) - the share of the video that is music or other sound, ' +
+              'not speech, within 20 dB of the speaker',
+          },
+          {
+            text:
+              stats.median_pitch_hz === null
+                ? 'No pitch'
+                : `±${stats.pitch_variation_st.toFixed(1)} st pitch`,
+            title:
+              stats.median_pitch_hz === null
+                ? 'Voice (Mayer) - too little speech to track the pitch of'
+                : "Voice (Mayer) - how much the speaker's pitch varies, as a standard " +
+                  `deviation in semitones around ${Math.round(stats.median_pitch_hz)} Hz`,
+          },
+        ]
+      : [];
+  }
+
   protected readonly formatDuration = formatDuration;
   protected readonly videoFileAccept = VIDEO_FILE_ACCEPT;
 
@@ -375,6 +411,10 @@ export class VideoTableComponent {
     return this.getDatasetStatusIcon(record, this.datasetActions.textStatsStatusByHash());
   }
 
+  getAudioStatsStatusIcon(record: VideoRecord): StatusIcon | null {
+    return this.getDatasetStatusIcon(record, this.datasetActions.audioStatsStatusByHash());
+  }
+
   getTranscriptUploadIcon(record: VideoRecord): StatusIcon | null {
     return datasetStateIcon(
       record.ds_transcript,
@@ -395,6 +435,14 @@ export class VideoTableComponent {
     return datasetStateIcon(
       record.ds_textStats,
       this.sendingTextStats().has(record.video_file.hash),
+      this.datasetActions.providerLabel(),
+    );
+  }
+
+  getAudioStatsUploadIcon(record: VideoRecord): StatusIcon | null {
+    return datasetStateIcon(
+      record.ds_audioStats,
+      this.sendingAudioStats().has(record.video_file.hash),
       this.datasetActions.providerLabel(),
     );
   }
@@ -430,6 +478,16 @@ export class VideoTableComponent {
     }
   }
 
+  async sendAudioStatsToServer(record: VideoRecord): Promise<void> {
+    try {
+      await this.datasetActions.fetchAudioStats(record);
+    } catch (error) {
+      console.error('Failed to measure audio on server:', error);
+    } finally {
+      await this.videoDatabaseService.updateVideo(record);
+    }
+  }
+
   openEditMenu = (videoRecord: VideoRecord) => {
     const dialogRef = this.dialog.open(EditVideoDialogComponent, {
       data: videoRecord, // Pass the record data to the popup
@@ -460,6 +518,7 @@ export class VideoTableComponent {
     'transcript-stats',
     'scene-stats',
     'text-stats',
+    'audio-stats',
     'actions',
   ];
 

@@ -53,12 +53,16 @@ def write_av1(path: Path, segments) -> None:
 
 def write_audio_only(path: Path, seconds: float = 1.0) -> None:
     """Silence in Matroska: a real media file with no video in it."""
-    rate = 8000
+    write_audio(path, np.zeros(int(8000 * seconds)), rate=8000)
+
+
+def write_audio(path: Path, samples: np.ndarray, rate: int = 16000) -> None:
+    """Mono samples in -1..1, as lossless FLAC in Matroska, so what is read back
+    is what was written."""
+    pcm = np.round(np.clip(samples, -1, 1) * 32767).astype(np.int16)
     with av.open(str(path), "w", format="matroska") as container:
         stream = container.add_stream("flac", rate=rate, layout="mono")
-        frame = av.AudioFrame.from_ndarray(
-            np.zeros((1, int(rate * seconds)), dtype=np.int16), format="s16", layout="mono"
-        )
+        frame = av.AudioFrame.from_ndarray(pcm.reshape(1, -1), format="s16", layout="mono")
         frame.rate, frame.pts, frame.time_base = rate, 0, Fraction(1, rate)
         for packet in stream.encode(frame):
             container.mux(packet)

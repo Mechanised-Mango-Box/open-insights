@@ -1,4 +1,5 @@
 import {
+  AudioStats,
   CanCreateEmpty,
   DatasetState,
   SceneStats,
@@ -26,6 +27,8 @@ export type VideoRecord = {
   ds_sceneStats: DatasetState<SceneStats>;
 
   ds_textStats: DatasetState<TextStats>;
+
+  ds_audioStats: DatasetState<AudioStats>;
 };
 
 export const calculateSha256 = async (file: File): Promise<string> => {

@@ -8,6 +8,7 @@ import {
 } from '@zip.js/zip.js';
 import { VideoRecord } from './VideoRecord';
 import {
+  AudioStats,
   Transcript,
   TranscriptStats,
   SceneStats,
@@ -25,6 +26,8 @@ export interface ManifestRecord {
   scene_stats: SceneStats | null;
   /** Optional because exports made before screen text existed do not carry it. */
   text_stats?: TextStats | null;
+  /** Optional for the same reason, from before audio stats existed. */
+  audio_stats?: AudioStats | null;
   transcript_path: string | null;
   video_file_path: string | null;
   audience_retention_path: string | null;
@@ -138,6 +141,7 @@ export async function writeExportZip(
         transcript_stats: readyData(record.ds_transcriptStats),
         scene_stats: readyData(record.ds_sceneStats),
         text_stats: readyData(record.ds_textStats),
+        audio_stats: readyData(record.ds_audioStats),
         transcript_path: null,
         video_file_path: null,
         audience_retention_path: null,

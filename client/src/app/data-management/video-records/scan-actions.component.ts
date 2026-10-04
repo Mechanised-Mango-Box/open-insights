@@ -92,6 +92,20 @@ import { BulkScanService } from './bulk-scan.service';
           <p class="action-status">{{ scans.statusFor('textStats') }}</p>
         }
       </div>
+
+      <div class="actions">
+        <button
+          mat-stroked-button
+          [disabled]="selectionService.isEmpty() || scans.isRunning('audioStats')"
+          (click)="scans.run('audioStats')"
+        >
+          <mat-icon>graphic_eq</mat-icon>
+          Extract Audio Stats
+        </button>
+        @if (scans.statusFor('audioStats')) {
+          <p class="action-status">{{ scans.statusFor('audioStats') }}</p>
+        }
+      </div>
     </section>
   `,
 })

@@ -39,6 +39,8 @@ const POOL_SIZES: Record<DatasetKind, () => number> = {
   // Never used: nothing computes text stats in the browser (see
   // provide-local-compute.ts). Here because the record is keyed by every kind.
   text_stats: () => 1,
+  // Never used either, for the same reason.
+  audio_stats: () => 1,
 };
 
 /** Two tabs on the same library share IndexedDB, so both would compute every

@@ -6,7 +6,8 @@ import { VideoRecord } from './VideoRecord';
 import { DatasetState } from './Dataset';
 import { describeSettings } from './dataset-settings';
 
-export type ScanAction = 'upload' | 'transcript' | 'transcriptStats' | 'sceneStats' | 'textStats';
+export type ScanAction =
+  'upload' | 'transcript' | 'transcriptStats' | 'sceneStats' | 'textStats' | 'audioStats';
 
 const SCAN_LABELS: Record<ScanAction, string> = {
   upload: 'Uploading',
@@ -14,6 +15,7 @@ const SCAN_LABELS: Record<ScanAction, string> = {
   transcriptStats: 'Extracting transcript stats',
   sceneStats: 'Extracting scene stats',
   textStats: 'Extracting screen text',
+  audioStats: 'Extracting audio stats',
 };
 
 /** The field each action fills, whose settings the run reports. Upload computes nothing. */
@@ -23,6 +25,7 @@ const RESULT_OF: Record<ScanAction, ((record: VideoRecord) => DatasetState<unkno
   transcriptStats: (record) => record.ds_transcriptStats,
   sceneStats: (record) => record.ds_sceneStats,
   textStats: (record) => record.ds_textStats,
+  audioStats: (record) => record.ds_audioStats,
 };
 
 /** A record with no file attached this session cannot be uploaded, and that is
@@ -63,6 +66,7 @@ export class BulkScanService {
     transcriptStats: async (record) => this.datasetActions.recomputeTranscriptStats(record),
     sceneStats: (record) => this.datasetActions.fetchSceneStats(record),
     textStats: (record) => this.datasetActions.fetchTextStats(record),
+    audioStats: (record) => this.datasetActions.fetchAudioStats(record),
   };
 
   isRunning = (action: ScanAction): boolean => this.running().has(action);

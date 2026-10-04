@@ -11,6 +11,8 @@ from config import (
     DB_PATH,
     JOB_LEASE_SECONDS,
     MAX_ATTEMPTS,
+    AUDIO_STATS_PRODUCER,
+    AUDIO_STATS_SETTINGS,
     SCENE_STATS_PRODUCER,
     SCENE_STATS_SETTINGS,
     TEXT_STATS_PRODUCER,
@@ -18,7 +20,7 @@ from config import (
     TRANSCRIPT_PRODUCER,
     TRANSCRIPT_SETTINGS,
 )
-from models import FileExt, SceneStats, TextStats, Transcript
+from models import AudioStats, FileExt, SceneStats, TextStats, Transcript
 
 # Transcript/scene_stats jobs write from executor threads while requests write
 # from the request thread, so contention is routine rather than exceptional. Two
@@ -90,8 +92,23 @@ TEXT_STATS = DatasetKind(
     settings=TEXT_STATS_SETTINGS,
 )
 
+AUDIO_STATS = DatasetKind(
+    name="audio_stats",
+    table="audio_stats",
+    columns=(
+        "duration_secs",
+        "speech_secs",
+        "speech_level_db",
+        "background_sound_ratio",
+        "median_pitch_hz",
+        "pitch_variation_st",
+    ),
+    producer=AUDIO_STATS_PRODUCER,
+    settings=AUDIO_STATS_SETTINGS,
+)
+
 KINDS: dict[str, DatasetKind] = {
-    kind.name: kind for kind in (TRANSCRIPT, SCENE_STATS, TEXT_STATS)
+    kind.name: kind for kind in (TRANSCRIPT, SCENE_STATS, TEXT_STATS, AUDIO_STATS)
 }
 
 
@@ -155,6 +172,20 @@ _SCHEMA = """
         samples_json      TEXT    NOT NULL,
         producer          TEXT    NOT NULL,
         produced_at       TEXT    NOT NULL DEFAULT (datetime('now'))
+    );
+
+    -- The two nullable columns are not a result still to come: a video with no
+    -- speech in it has no speech level and no pitch.
+    CREATE TABLE IF NOT EXISTS audio_stats (
+        file_hash              TEXT PRIMARY KEY REFERENCES files(file_hash),
+        duration_secs          REAL NOT NULL,
+        speech_secs            REAL NOT NULL,
+        speech_level_db        REAL,
+        background_sound_ratio REAL NOT NULL,
+        median_pitch_hz        REAL,
+        pitch_variation_st     REAL NOT NULL,
+        producer               TEXT NOT NULL,
+        produced_at            TEXT NOT NULL DEFAULT (datetime('now'))
     );
 """ + _JOBS_TABLE
 
@@ -466,6 +497,10 @@ def text_stats_values(text_stats: TextStats) -> dict[str, Any]:
         "text_frames_ratio": text_stats.text_frames_ratio,
         "samples_json": json.dumps([asdict(sample) for sample in text_stats.samples]),
     }
+
+
+def audio_stats_values(audio_stats: AudioStats) -> dict[str, Any]:
+    return asdict(audio_stats)
 
 
 # ---------------------------------------------------------------------------

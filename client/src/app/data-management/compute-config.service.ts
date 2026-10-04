@@ -20,6 +20,8 @@ const DEFAULT_TARGETS: Record<DatasetKind, ComputeTarget> = {
   // Server only: there is no browser OCR, so nothing registers a local computer
   // for it and the settings never offer the switch.
   text_stats: 'server',
+  // Server only too: Silero VAD and Praat have no browser build here.
+  audio_stats: 'server',
 };
 
 @Injectable({ providedIn: 'root' })

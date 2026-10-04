@@ -64,15 +64,16 @@ for package in (
     "rapidocr",
     "shapely",
     "pyclipper",
+    # parselmouth is a compiled extension with Praat linked into it.
+    "parselmouth",
 ):
     package_datas, package_binaries, package_hiddenimports = collect_all(package)
     datas += package_datas
     binaries += package_binaries
     hiddenimports += package_hiddenimports
 
-# faster-whisper ships the silero VAD model as package data. Only needed when
-# WHISPER_VAD=1, but it is a few megabytes and a bundle that cannot honour its
-# own environment variable is worse than a slightly larger one.
+# faster-whisper ships the silero VAD model as package data. Transcription uses
+# it only when WHISPER_VAD=1, but audio stats find speech with it on every scan.
 datas += collect_data_files("faster_whisper")
 
 a = Analysis(

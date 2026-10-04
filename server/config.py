@@ -305,6 +305,23 @@ OCR_MIN_SCORE = float(os.environ.get("OCR_MIN_SCORE", "0.8"))
 # a second worker mostly competes with the first.
 TEXT_STATS_WORKERS = int(os.environ.get("TEXT_STATS_WORKERS", "1"))
 
+# Audio (audio_stats.py), for Mayer's coherence and voice principles. Loudness is
+# measured over AUDIO_FRAME_SECS frames. A stretch with no speech in it counts as
+# background sound (music, effects) when it is at least AUDIO_SILENCE_DBFS and no
+# more than AUDIO_BACKGROUND_MARGIN_DB quieter than the speaker's median level -
+# relative to the speaker, so recording gain does not decide it and room tone
+# falls below it. Pitch is tracked between PITCH_FLOOR_HZ and PITCH_CEILING_HZ,
+# which spans adult speaking voices with room either side.
+AUDIO_FRAME_SECS = float(os.environ.get("AUDIO_FRAME_SECS", "0.05"))
+AUDIO_BACKGROUND_MARGIN_DB = float(os.environ.get("AUDIO_BACKGROUND_MARGIN_DB", "20.0"))
+AUDIO_SILENCE_DBFS = float(os.environ.get("AUDIO_SILENCE_DBFS", "-50.0"))
+PITCH_FLOOR_HZ = float(os.environ.get("PITCH_FLOOR_HZ", "75.0"))
+PITCH_CEILING_HZ = float(os.environ.get("PITCH_CEILING_HZ", "500.0"))
+
+# Decoding and Praat's pitch tracker are both single-threaded, so two workers
+# buy two videos at once.
+AUDIO_STATS_WORKERS = int(os.environ.get("AUDIO_STATS_WORKERS", "2"))
+
 
 def _package_version(name: str) -> str:
     # Read from the installed metadata rather than by importing the package, so
@@ -338,6 +355,15 @@ TEXT_STATS_PRODUCER = (
     f"rapidocr-{_package_version('rapidocr')}/PP-OCRv6-small"
     f"/every={OCR_SAMPLE_SECS}s/reuse={OCR_REUSE_THRESHOLD}/score={OCR_MIN_SCORE}"
 )
+# Silero VAD is versioned by faster-whisper, which ships its model; Praat's pitch
+# tracker by parselmouth, which ships Praat.
+AUDIO_STATS_PRODUCER = (
+    f"faster-whisper-{_package_version('faster-whisper')}/silero-vad"
+    f"/parselmouth-{_package_version('praat-parselmouth')}/praat-ac"
+    f"/frame={AUDIO_FRAME_SECS}s/margin={AUDIO_BACKGROUND_MARGIN_DB}dB"
+    f"/floor={AUDIO_SILENCE_DBFS}dBFS/pitch_floor={PITCH_FLOOR_HZ}Hz"
+    f"/pitch_ceiling={PITCH_CEILING_HZ}Hz"
+)
 
 # The same parameters, by name, for reporting: every ready result and /status
 # carry its kind's settings, so whoever runs a scan can see the thresholds it
@@ -358,6 +384,15 @@ TEXT_STATS_SETTINGS = {
     "sample_secs": OCR_SAMPLE_SECS,
     "reuse_threshold": OCR_REUSE_THRESHOLD,
     "min_score": OCR_MIN_SCORE,
+}
+AUDIO_STATS_SETTINGS = {
+    "vad": "silero-vad",
+    "pitch": "praat-ac",
+    "frame_secs": AUDIO_FRAME_SECS,
+    "background_margin_db": AUDIO_BACKGROUND_MARGIN_DB,
+    "silence_dbfs": AUDIO_SILENCE_DBFS,
+    "pitch_floor_hz": PITCH_FLOOR_HZ,
+    "pitch_ceiling_hz": PITCH_CEILING_HZ,
 }
 
 # A job whose worker died is requeued rather than failed, so a genuinely broken

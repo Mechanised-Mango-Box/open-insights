@@ -265,3 +265,33 @@ export const TextStats: CanCreateEmpty<TextStats> = {
     text_frames_ratio: 0,
   }),
 };
+
+/**
+ * How a video sounds, measured on the server (server/audio_stats.py) for two of
+ * Mayer's multimedia principles. The nullable fields are null for a video with
+ * no speech in it, which has no speech level or pitch to report.
+ */
+export interface AudioStats {
+  duration_secs: number;
+  /** Seconds the voice-activity detector found speech in. */
+  speech_secs: number;
+  /** The speech's median loudness, in dBFS. */
+  speech_level_db: number | null;
+  /** Coherence: the share of the video that is sound other than speech -
+   * music or effects no more than 20 dB quieter than the speaker (0-1). */
+  background_sound_ratio: number;
+  median_pitch_hz: number | null;
+  /** Voice: the standard deviation of the speaker's pitch, in semitones. */
+  pitch_variation_st: number;
+}
+
+export const AudioStats: CanCreateEmpty<AudioStats> = {
+  createEmpty: () => ({
+    duration_secs: 0,
+    speech_secs: 0,
+    speech_level_db: null,
+    background_sound_ratio: 0,
+    median_pitch_hz: null,
+    pitch_variation_st: 0,
+  }),
+};

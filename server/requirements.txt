@@ -37,6 +37,10 @@ pyclipper==1.4.0
 shapely==2.1.2
 six==1.17.0
 
+# Audio stats (audio_stats.py): Praat's pitch tracker, for pitch variation. Its
+# only dependency is numpy. Silero VAD, the other half, ships with faster-whisper.
+praat-parselmouth==0.4.7
+
 # Scene stats. headless rather than opencv-python: the server never opens a
 # window, and it drops the GUI shared-library dependencies from the image.
 opencv-python-headless==5.0.0.93

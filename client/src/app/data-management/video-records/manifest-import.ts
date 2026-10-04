@@ -232,6 +232,10 @@ export async function parseExportZip(
         ds_textStats: entry.text_stats
           ? restored(entry.text_stats, generated_at)
           : { state: 'absent' },
+        // Likewise audio_stats, from before audio stats existed.
+        ds_audioStats: entry.audio_stats
+          ? restored(entry.audio_stats, generated_at)
+          : { state: 'absent' },
       });
       onProgress?.(index + 1, manifest.records.length);
     }
@@ -301,6 +305,7 @@ export function fillGaps(existing: VideoRecord, incoming: ImportedRecord): Video
   merged.ds_transcriptStats = fillDataset(merged.ds_transcriptStats, incoming.ds_transcriptStats);
   merged.ds_sceneStats = fillDataset(merged.ds_sceneStats, incoming.ds_sceneStats);
   merged.ds_textStats = fillDataset(merged.ds_textStats, incoming.ds_textStats);
+  merged.ds_audioStats = fillDataset(merged.ds_audioStats, incoming.ds_audioStats);
 
   return changed ? merged : null;
 }

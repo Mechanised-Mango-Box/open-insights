@@ -344,6 +344,7 @@ export class ServerSettingsComponent {
     transcript: 'Transcript',
     scene_stats: 'Scene stats',
     text_stats: 'Screen text',
+    audio_stats: 'Audio stats',
   };
 
   /** What changes by moving a kind into the browser. Both of these alter the
@@ -361,6 +362,9 @@ export class ServerSettingsComponent {
       'Scene stats already held from a server will read as not started.',
     text_stats:
       'Server only: OCR (RapidOCR) has no browser implementation, so this always runs on the server.',
+    audio_stats:
+      'Server only: speech detection (Silero VAD) and pitch tracking (Praat) have no browser ' +
+      'implementation, so this always runs on the server.',
   };
 
   /** A kind can only be sent to this browser once something here knows how to

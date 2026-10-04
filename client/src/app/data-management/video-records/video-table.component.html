@@ -285,6 +285,53 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="audio-stats">
+      <th mat-header-cell *matHeaderCellDef>Audio</th>
+      <td mat-cell *matCellDef="let element">
+        @if (audioStatsData(element)) {
+          <button
+            mat-icon-button
+            class="server-status"
+            [ngClass]="getAudioStatsUploadIcon(element)?.cssClass"
+            [title]="getAudioStatsUploadIcon(element)?.label"
+            [disabled]="
+              !element.video_file.hash || sendingAudioStats().has(element.video_file.hash)
+            "
+            (click)="sendAudioStatsToServer(element)"
+          >
+            <mat-icon>{{ getAudioStatsUploadIcon(element)?.icon }}</mat-icon>
+          </button>
+          <span class="stat-badges">
+            @for (badge of audioStatBadges(element); track badge.text) {
+              <span class="stat-badge" [title]="badge.title">{{ badge.text }}</span>
+            }
+          </span>
+        } @else if (element.video_file.hash) {
+          <button
+            mat-icon-button
+            class="server-status"
+            [ngClass]="getAudioStatsStatusIcon(element)?.cssClass"
+            [title]="getAudioStatsStatusIcon(element)?.label"
+            (click)="checkAudioStatsStatus(element.video_file.hash)"
+          >
+            <mat-icon>{{ getAudioStatsStatusIcon(element)?.icon }}</mat-icon>
+          </button>
+          <!-- As above: the peek badge reports, this collects. -->
+          @if (audioStatsReadyOnServer(element)) {
+            <button
+              mat-icon-button
+              class="server-status status-exists"
+              title="Download from server"
+              [disabled]="sendingAudioStats().has(element.video_file.hash)"
+              (click)="sendAudioStatsToServer(element)"
+            >
+              <mat-icon>cloud_download</mat-icon>
+            </button>
+          }
+        }
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Actions</th>
       <td mat-cell *matCellDef="let element">

@@ -40,7 +40,7 @@ Run certain jobs on the browser instead
 
 - Transcription needs WebGPU
 - Scene stats read MP4 and MOV only
-- Screen text (OCR) always runs on the server
+- Screen text (OCR) and audio stats always run on the server
 
 > It is unstable and may be slow. Off by default
 
@@ -74,6 +74,12 @@ The second install is RapidOCR, which reads on-screen text. It goes in without i
 declared dependencies because one of them is the full `opencv-python`, which would
 replace the headless OpenCV the server uses; the rest are pinned in `requirements.txt`.
 Its OCR models ship inside the package, so there is nothing to fetch for it.
+
+Audio stats measure two of Mayer's multimedia principles. Coherence is the share of the
+video that is sound other than speech (music, effects) no more than 20 dB quieter than the
+speaker. Voice is how much the speaker's pitch varies, in semitones. Speech is found by the
+Silero VAD model that ships with faster-whisper, and pitch by Praat (`praat-parselmouth`),
+so there is nothing to fetch for these either.
 
 Uploads must be `.mp4`, `.mov`, `.mkv`, `.webm` or `.avi`, and the server checks that the
 file really is a video in that container before storing it; anything else is refused with

@@ -34,6 +34,7 @@ const record = (overrides: Partial<VideoRecord> = {}): VideoRecord => ({
     mean_coverage: 0.12,
     text_frames_ratio: 0.9,
   }),
+  ds_audioStats: { state: 'absent' },
   ...overrides,
 });
 

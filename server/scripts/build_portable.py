@@ -54,6 +54,7 @@ REQUIRED_PACKAGES = {
     "rapidocr": "rapidocr",
     "shapely": "shapely",
     "pyclipper": "pyclipper",
+    "parselmouth": "praat-parselmouth",
 }
 
 
