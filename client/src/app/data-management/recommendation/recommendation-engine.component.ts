@@ -530,7 +530,7 @@ export class RecommendationEngineComponent {
       const features = buildFeaturesFor(record, columns);
       if (!features) {
         this.status.set(
-          'Scanning finished, but the video still lacks stats the model needs - check its row on the Scan step. A video with almost no pauses in its speech has no mean pause length to score.',
+          'Scanning finished, but the video still lacks a stat this model needs - check its row on the Scan step. If its speech never paused (one unbroken stretch, or music under the voice), it has no mean pause, so only a model that leaves mean pause out can score it.',
         );
         return;
       }

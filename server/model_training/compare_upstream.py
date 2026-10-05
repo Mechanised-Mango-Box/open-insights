@@ -65,13 +65,6 @@ PAPER_FEATURES: List[str] = ["duration", "word_count", "wpm", "scene_count", "sc
 # What this project measures that the paper did not.
 PROJECT_EXTRA_FEATURES: List[str] = [f for f in FEATURE_COLUMNS if f not in PAPER_FEATURES]
 
-# Earlier models' features, kept so one set of tables shows what each change
-# added: the six before on-screen text, and the seven before speech_ratio (from
-# the audio) replaced the transcript's speaking_ratio and mean_pause_secs joined.
-SIX_FEATURES: List[str] = [
-    "duration", "wpm", "scene_change_rate", "word_count", "speech_pace_variation", "speaking_ratio",
-]
-SEVEN_FEATURES: List[str] = SIX_FEATURES + ["text_density"]
 
 # As printed in the paper: Figure 5 and the Stage 5 text. It reports no intercept.
 PAPER_CORRELATIONS: Dict[str, float] = {
@@ -176,7 +169,7 @@ def load_project(export_path: Path) -> Tuple[pd.DataFrame, Counter]:
     skipped: Counter = Counter()
     for record in manifest.get("records") or []:
         row, reason = _record_to_row(record)
-        if reason == "no pause to measure":
+        if reason == "speech never paused, so no mean pause":
             # Kept, with the one feature it lacks as NaN: every comparison but the
             # current model's needs all 144 videos to be the paper's 144, and that
             # model's rows drop it themselves (see model_rows()).
@@ -187,8 +180,6 @@ def load_project(export_path: Path) -> Tuple[pd.DataFrame, Counter]:
             continue
         row["video_id"] = record["youtube_content"].get("content")
         row["scene_count"] = record["scene_stats"]["scenes"]
-        # Not a model feature any more; kept for the earlier models' rows.
-        row["speaking_ratio"] = record["transcript_stats"]["speaking_ratio"]
         rows.append(row)
 
     df = pd.DataFrame(rows).set_index("video_id")
@@ -680,8 +671,6 @@ def build_report(results: Dict[str, Any]) -> str:
         ("upstream_gd", "Upstream data, upstream's gradient descent"),
         ("upstream_ols", "Upstream data, closed-form OLS"),
         ("project_5", "Project data, paper's 5 features"),
-        ("project_6", "Project data, the six features before text density"),
-        ("project_7", "Project data, the seven before speech ratio and mean pause"),
         ("project_model", f"Project data, the model's {len(FEATURE_COLUMNS)} features"),
     ):
         row = paper_rows[key]
@@ -753,8 +742,6 @@ def run_comparison(
     runs = {
         "upstream_5": "Upstream data, paper's 5 features",
         "project_5": "Project data, paper's 5 features",
-        "project_6": "Project data, the six features before text density",
-        "project_7": "Project data, the seven before speech ratio and mean pause",
         "project_model": f"Project data, the model's {len(FEATURE_COLUMNS)} features",
     }
     model_df = model_rows(project)
@@ -764,8 +751,6 @@ def run_comparison(
     datasets = {
         "upstream_5": (upstream, PAPER_FEATURES),
         "project_5": (project, PAPER_FEATURES),
-        "project_6": (project, SIX_FEATURES),
-        "project_7": (project, SEVEN_FEATURES),
         "project_model": (model_df, FEATURE_COLUMNS),
     }
 
@@ -787,8 +772,6 @@ def run_comparison(
             "upstream_gd": paper_protocol(upstream, PAPER_FEATURES, solver="gd"),
             "upstream_ols": paper_protocol(upstream, PAPER_FEATURES, solver="ols"),
             "project_5": paper_protocol(project, PAPER_FEATURES, solver="ols"),
-            "project_6": paper_protocol(project, SIX_FEATURES, solver="ols"),
-            "project_7": paper_protocol(project, SEVEN_FEATURES, solver="ols"),
             "project_model": paper_protocol(model_df, FEATURE_COLUMNS, solver="ols"),
         },
         "split_protocol": {key: split_protocol(df, features) for key, (df, features) in datasets.items()},

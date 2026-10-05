@@ -26,10 +26,9 @@ numbers would be scoring inputs it never saw.
     average_percentage_viewed
                            average_view_duration_secs / scene_stats.duration_secs * 100
 
-speech_ratio replaced the transcript's speaking_ratio, which measured how much of
-the video Whisper's segments covered - and they run across pauses, so it sat at
-0.99 or above for 126 of the 144 lecture videos. speech_ratio is speech heard in
-the audio by voice activity detection.
+speech_ratio is speech heard in the audio by voice activity detection, not the
+share of the video Whisper's segments cover - those run across pauses, so that
+share sits near 1 for nearly every video.
 
 A record is skipped, as the client skips it, when its scene, transcript, text or
 audio stats are missing, its duration is not positive, its speech features are null
@@ -191,7 +190,7 @@ def _record_to_row(
     if "speech_ratio" in features and audio_stats.get("speech_ratio") is None:
         return None, "speech features not measured"
     if "mean_pause_secs" in features and audio_stats.get("mean_pause_secs") is None:
-        return None, "no pause to measure"
+        return None, "speech never paused, so no mean pause"
 
     average_view_duration_secs = (record.get("youtube_content") or {}).get(
         "average_view_duration_secs"

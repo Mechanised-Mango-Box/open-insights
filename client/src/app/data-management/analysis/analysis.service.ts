@@ -71,7 +71,7 @@ const computeFeatures = (
   if (needs('speech_ratio') && audioStats!.speech_ratio == null)
     return { ok: false, reason: 'audio scanned before speech was measured' };
   if (needs('mean_pause_secs') && audioStats!.mean_pause_secs == null)
-    return { ok: false, reason: 'no pause to measure' };
+    return { ok: false, reason: 'speech never paused, so no mean pause' };
 
   const durationMins = durationSecs / 60;
   const compute: Record<AnalysisFeatureColumn, () => number> = {
@@ -80,8 +80,8 @@ const computeFeatures = (
     scene_change_rate: () => sceneStats!.scenes / durationMins,
     word_count: () => transcriptStats!.count_words,
     speech_pace_variation: () => transcriptStats!.speech_pace_variation!,
-    // From the audio, not the transcript's speaking_ratio: Whisper's segments
-    // run across pauses, so that one sat near 1 for nearly every video.
+    // From the audio, not the transcript: Whisper's segments run across
+    // pauses, so a ratio built from them sits near 1 for nearly every video.
     speech_ratio: () => audioStats!.speech_ratio!,
     text_density: () => textStats!.mean_words,
     mean_pause_secs: () => audioStats!.mean_pause_secs!,
