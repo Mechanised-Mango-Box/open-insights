@@ -8,6 +8,7 @@ import {
   TranscriptStats,
 } from '../video-records/Dataset';
 import { VideoFile, VideoRecord } from '../video-records/VideoRecord';
+import { AnalysisFeatureColumn } from '../analysis/stats';
 import { missingScanSteps } from './scan-first';
 
 const ready = <T>(data: T): DatasetState<T> => ({ state: 'ready', data, producer: 'test' });
@@ -104,5 +105,39 @@ describe('missingScanSteps', () => {
     expect(
       missingScanSteps(record({ ds_sceneStats: ready({ duration_secs: 0, scenes: 0 }) })),
     ).toEqual(['sceneStats']);
+  });
+});
+
+describe('missingScanSteps for a model that uses fewer features', () => {
+  const audioOnly: AnalysisFeatureColumn[] = [
+    'duration',
+    'wpm',
+    'word_count',
+    'speech_pace_variation',
+    'speech_ratio',
+    'mean_pause_secs',
+  ];
+  const bare = record({
+    ds_transcript: { state: 'absent' },
+    ds_transcriptStats: { state: 'absent' },
+    ds_sceneStats: { state: 'absent' },
+    ds_textStats: { state: 'absent' },
+    ds_audioStats: { state: 'absent' },
+  });
+
+  it('asks only for the scans its features come from', () => {
+    expect(missingScanSteps(bare, ['duration', 'scene_change_rate', 'text_density'])).toEqual([
+      'sceneStats',
+      'textStats',
+    ]);
+  });
+
+  it('runs audio stats first when they carry the duration, and never scene stats', () => {
+    expect(missingScanSteps(bare, audioOnly)).toEqual(['audioStats', 'transcript']);
+  });
+
+  it('leaves out on-screen text for the fast set', () => {
+    const fast = audioOnly.concat('scene_change_rate');
+    expect(missingScanSteps(bare, fast)).toEqual(['sceneStats', 'transcript', 'audioStats']);
   });
 });

@@ -1,7 +1,8 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, output, signal, untracked } from '@angular/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -9,8 +10,9 @@ import { firstValueFrom } from 'rxjs';
 import { DatasetActionsService } from '../video-records/dataset-actions.service';
 import { VideoDatabaseService } from '../video-records/video-database.service';
 import { VideoRecord } from '../video-records/VideoRecord';
-import { buildVideoFeatures } from '../analysis/analysis.service';
-import { AnalysisFeatureColumn, FEATURE_LABELS } from '../analysis/stats';
+import { buildFeaturesFor } from '../analysis/analysis.service';
+import { AnalysisFeatureColumn, FEATURE_LABELS, isFeatureColumn } from '../analysis/stats';
+import { ModelSelectionService, neededScansLabel } from './model-selection.service';
 import {
   RecommendationListComponent,
   RecommendationRow,
@@ -40,8 +42,9 @@ type VideoOption = {
 };
 
 /**
- * The Recommend step: hands one video to the model the server holds, and shows
- * its predicted performance and where it could improve.
+ * Recommend's second subpage: hands one video to the model chosen on the first
+ * (ModelPageComponent), and shows its predicted performance and where it could
+ * improve.
  *
  * Picks its video from its own single-choice search box rather than the shared
  * record table. That table is a multi-select working set for Scan and Export,
@@ -59,6 +62,7 @@ type VideoOption = {
   imports: [
     MatAutocompleteModule,
     MatButtonModule,
+    MatExpansionModule,
     MatFormFieldModule,
     MatIcon,
     MatInputModule,
@@ -66,6 +70,24 @@ type VideoOption = {
   ],
   template: `
     <section class="card actions-column">
+      <div class="actions model-summary">
+        <span>
+          Model: <strong>{{ modelName() }}</strong>
+          @if (selectedModel()?.card; as card) {
+            <span class="option-note">
+              - {{ card.features.length }} features; needs {{ neededScans() }}
+            </span>
+          }
+        </span>
+        <button mat-stroked-button [disabled]="pending()" (click)="changeModel.emit()">
+          <mat-icon>swap_horiz</mat-icon>
+          Change Model
+        </button>
+      </div>
+      @if (modelError()) {
+        <p class="action-hint">{{ modelError() }}</p>
+      }
+
       <mat-form-field class="video-picker" appearance="outline" subscriptSizing="dynamic">
         <mat-label>Video</mat-label>
         <input
@@ -136,9 +158,13 @@ type VideoOption = {
           average percentage viewed
         </p>
         <p class="model-note">
-          From the model held on the dataset server, not from your own records - the Analysis step
-          is the one that reports on those. The model is currently trained on generated sample data,
-          so read this as a demonstration of the method rather than advice.
+          From {{ answeredBy() }} on the dataset server, not from your own records - the Analysis
+          step is the one that reports on those.
+          @if (selectedModel()?.card; as card) {
+            It learned from {{ card.training.rows }} videos, and on the ones held out from its
+            training it was typically {{ number(card.metrics.random_forest?.rmse ?? 0) }} points
+            out. The Model tab has its full card.
+          }
         </p>
       </section>
 
@@ -175,13 +201,80 @@ type VideoOption = {
         <h2>What the model learned across its training data</h2>
         <recommendation-list [rows]="rows()" />
       </section>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>How this result is calculated</mat-panel-title>
+        </mat-expansion-panel-header>
+        <dl class="method-list">
+          <dt>Prediction</dt>
+          <dd>
+            The model's random forest
+            @if (trees(); as trees) {
+              ({{ trees }} decision trees)
+            }
+            predicts average percentage viewed from this video's raw feature values; the result is
+            the mean of its trees' predictions, not clipped to 0-100.
+          </dd>
+          <dt>Relationships</dt>
+          <dd>
+            A linear regression fitted to the same training videos, after standardising each feature
+            to a z-score. A coefficient is the change in average percentage viewed per standard
+            deviation of that feature. At or above +{{ result.threshold }} it reads as positive, at
+            or below -{{ result.threshold }} as negative, and in between as weak - a
+            practical-effect threshold set by the model, not a significance test.
+          </dd>
+          <dt>Where this video sits</dt>
+          <dd>
+            z = (value - training mean) / training SD. Contribution = coefficient x z: how many
+            points this value moves the linear estimate away from an average training video.
+          </dd>
+          <dt>Suggestions</dt>
+          <dd>
+            Increase when the relationship is positive and z is below 0; decrease when it is
+            negative and z is above 0; keep when the value is already on the better side; none when
+            the relationship is weak. Listed by contribution, most negative first.
+          </dd>
+        </dl>
+        <table class="method-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Value</th>
+              <th>Training mean</th>
+              <th>Training SD</th>
+              <th>z</th>
+              <th>Coefficient</th>
+              <th>Contribution</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of workings(); track row.key) {
+              <tr>
+                <td>{{ row.label }}</td>
+                <td>{{ number(row.value) }}</td>
+                <td>{{ number(row.training_mean) }}</td>
+                <td>{{ row.training_sd == null ? '-' : number(row.training_sd) }}</td>
+                <td>{{ number(row.z_score) }}</td>
+                <td>{{ number(row.coefficient) }}</td>
+                <td>{{ number(row.contribution) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </mat-expansion-panel>
     }
   `,
   styles: [
     `
+      :host {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
       .video-picker {
         width: 100%;
-        max-width: 480px;
+        max-width: 640px;
       }
       .option-note {
         margin-left: 4px;
@@ -248,7 +341,57 @@ export class RecommendationEngineComponent {
   private videoDatabase = inject(VideoDatabaseService);
   private datasetActions = inject(DatasetActionsService);
   private recommendationService = inject(RecommendationService);
+  private modelSelection = inject(ModelSelectionService);
   private dialog = inject(MatDialog);
+
+  /** Asked to go back to the model subpage. */
+  changeModel = output<void>();
+
+  protected modelError = this.modelSelection.error;
+  protected selectedModel = this.modelSelection.selected;
+  /** The features the chosen model scores, which decide what Scan has to supply. */
+  private modelFeatures = this.modelSelection.features;
+
+  protected modelName = computed(() => {
+    const model = this.selectedModel();
+    if (model) return model.card?.name ?? model.id;
+    return this.modelError() ? "the server's built-in model" : 'loading…';
+  });
+
+  protected neededScans = computed(() => neededScansLabel(this.modelFeatures()));
+
+  /** By id, so a refreshed model list (new objects, same models) clears nothing. */
+  private selectedModelId = computed(() => this.selectedModel()?.id);
+
+  constructor() {
+    // A result belongs to the model that produced it, as it does to the video, so
+    // choosing another model on the other subpage clears it.
+    effect(() => {
+      this.selectedModelId();
+      untracked(() => {
+        this.result.set(null);
+        this.status.set(null);
+      });
+    });
+  }
+
+  protected answeredBy = computed(() => {
+    const model = this.result()?.model;
+    return model?.name ? `the ${model.name} model` : 'the model held';
+  });
+
+  protected trees = computed(() => {
+    const value = this.selectedModel()?.card?.hyperparameters['n_estimators'];
+    return typeof value === 'number' ? value : null;
+  });
+
+  protected workings = computed(() =>
+    Object.entries(this.result()?.features ?? {}).map(([key, f]) => ({
+      key,
+      label: labelFor(key),
+      ...f,
+    })),
+  );
 
   /** True for the whole submit, scan included, so the picker and button stay
    * locked while a scan is writing to the chosen record. */
@@ -272,7 +415,7 @@ export class RecommendationEngineComponent {
       .map((record) => ({
         id: record.__id!,
         name: record.sort_name || '(untitled)',
-        note: scanNote(record),
+        note: scanNote(record, this.modelFeatures()),
       }))
       .sort((a, b) => a.name.localeCompare(b.name)),
   );
@@ -300,7 +443,7 @@ export class RecommendationEngineComponent {
     if (this.options().length === 0) return 'No records yet - add some on the Import step.';
     const record = this.chosen();
     if (!record) return 'Choose a video to submit.';
-    if (buildVideoFeatures(record))
+    if (buildFeaturesFor(record, this.modelFeatures()))
       return "Sends this video's scanned features to the server's model.";
     return record.video_file.hash
       ? 'This video has not been fully scanned yet - submitting it will offer to scan it first.'
@@ -332,6 +475,7 @@ export class RecommendationEngineComponent {
       label: labelFor(key),
       relationship: f.relationship,
       recommendation: f.recommendation,
+      coefficient: f.coefficient,
     }));
   });
 
@@ -369,15 +513,19 @@ export class RecommendationEngineComponent {
     this.status.set(null);
     this.result.set(null);
 
-    const steps = missingScanSteps(record);
-    if (!buildVideoFeatures(record) && !(await this.confirmScan(record, steps))) return;
+    // Fixed for the whole submit, so a model changed mid-scan cannot be sent
+    // features computed for another one.
+    const columns = this.modelFeatures();
+    const modelId = this.selectedModel()?.id;
+    const steps = missingScanSteps(record, columns);
+    if (!buildFeaturesFor(record, columns) && !(await this.confirmScan(record, steps))) return;
 
     this.pending.set(true);
     let stage: 'scan' | 'request' = 'scan';
     try {
-      if (!buildVideoFeatures(record)) await this.scan(record, steps);
+      if (!buildFeaturesFor(record, columns)) await this.scan(record, steps);
 
-      const features = buildVideoFeatures(record);
+      const features = buildFeaturesFor(record, columns);
       if (!features) {
         this.status.set(
           'Scanning finished, but the video still lacks stats the model needs - check its row on the Scan step. A video with almost no pauses in its speech has no mean pause length to score.',
@@ -391,9 +539,13 @@ export class RecommendationEngineComponent {
 
       stage = 'request';
       this.status.set(null);
-      const result = await this.recommendationService.request(record.video_file.hash, features);
-      // Dropped if the user chose another video while this was in flight.
-      if (this.chosenId() === id) this.result.set(result);
+      const result = await this.recommendationService.request(
+        record.video_file.hash,
+        features,
+        modelId,
+      );
+      // Dropped if the user chose another video or model while this was in flight.
+      if (this.chosenId() === id && this.selectedModelId() === modelId) this.result.set(result);
     } catch (error) {
       console.error(`Recommendation ${stage} failed:`, error);
       const what = stage === 'scan' ? 'Could not scan this video' : 'Could not get recommendations';
@@ -453,12 +605,12 @@ export class RecommendationEngineComponent {
 }
 
 /** What submitting this record will run into, shown beside it in the picker. */
-const scanNote = (record: VideoRecord): string | null => {
-  if (buildVideoFeatures(record)) return null;
+const scanNote = (record: VideoRecord, columns: AnalysisFeatureColumn[]): string | null => {
+  if (buildFeaturesFor(record, columns)) return null;
   return record.video_file.hash ? 'not scanned' : 'not scanned, no video file';
 };
 
-const labelFor = (key: string): string => FEATURE_LABELS[key as AnalysisFeatureColumn] ?? key;
+const labelFor = (key: string): string => (isFeatureColumn(key) ? FEATURE_LABELS[key] : key);
 
 /** HttpErrorResponse carries the useful part in different places depending on
  * whether the server answered at all. The server's own words come first when

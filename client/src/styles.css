@@ -87,3 +87,65 @@
   margin: 0;
   max-width: 60ch;
 }
+
+/*
+ * "How this is calculated" panels, and the model card on Recommend.
+ *
+ * Global because Scan, Analysis and Recommend each have one, and they should read
+ * as the same kind of thing: a list of labelled facts, the label muted, the value
+ * in body text. A `<dl>` with a two-column grid, collapsing to one column on a
+ * narrow screen.
+ */
+.method-list {
+  display: grid;
+  grid-template-columns: minmax(120px, max-content) 1fr;
+  gap: 6px 16px;
+  margin: 0 0 12px;
+}
+.method-list dt {
+  color: var(--mat-sys-on-surface-variant);
+}
+.method-list dd {
+  margin: 0;
+}
+.method-list code,
+.method-table code {
+  font-size: 0.9em;
+}
+.method-heading {
+  font: var(--mat-sys-title-small);
+  margin: 16px 0 8px;
+}
+.method-note {
+  color: var(--mat-sys-on-surface-variant);
+  margin: 0 0 12px;
+  max-width: 80ch;
+}
+.method-table {
+  border-collapse: collapse;
+  margin: 0 0 12px;
+}
+.method-table th,
+.method-table td {
+  text-align: left;
+  padding: 4px 12px 4px 0;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  vertical-align: top;
+}
+.method-table th {
+  color: var(--mat-sys-on-surface-variant);
+  font-weight: 500;
+}
+.method-warning {
+  border-left: 3px solid var(--mat-sys-error);
+  padding: 4px 12px;
+  margin: 0 0 12px;
+}
+@media (max-width: 600px) {
+  .method-list {
+    grid-template-columns: 1fr;
+  }
+  .method-list dd {
+    margin-bottom: 6px;
+  }
+}
