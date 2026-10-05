@@ -1,6 +1,8 @@
-"""Load the saved engagement model and predict from one video's features.
+"""Load a saved engagement model and predict from one video's features.
 
-Create one EngagementPredictor during server startup and reuse it for requests.
+One EngagementPredictor per model directory (model.joblib + model.json, see
+model_training/model_card.py), created once and reused for requests -
+model_registry.py holds them.
 """
 
 from collections.abc import Mapping
@@ -11,8 +13,8 @@ from pathlib import Path
 import joblib
 import pandas as pd
 
-from config import ENGAGEMENT_MODEL_DIR
 from model_training.data_preparation import FEATURE_COLUMNS, TARGET_COLUMN
+from model_training.model_card import BUNDLE_FILENAME
 from model_training.regression import FEATURE_DISPLAY_NAMES, generate_feature_recommendations
 
 
@@ -22,24 +24,28 @@ SERVER_DIR = Path(__file__).resolve().parent
 class EngagementPredictor:
     """Use random forest for APV and linear regression for feature feedback."""
 
-    def __init__(
-        self,
-        model_dir: str | Path = ENGAGEMENT_MODEL_DIR,
-        filename_prefix: str = "engagement_model",
-    ) -> None:
+    def __init__(self, model_dir: str | Path) -> None:
         # Resolve relative paths against server/, independently of the launch directory.
         model_dir = Path(model_dir)
         if not model_dir.is_absolute():
             model_dir = SERVER_DIR / model_dir
 
         # Missing artifacts raise FileNotFoundError; inference never trains a replacement.
-        bundle = joblib.load(model_dir / f"{filename_prefix}_inference.joblib")
-        if bundle["feature_columns"] != list(FEATURE_COLUMNS):
-            raise ValueError("Saved model features do not match the inference feature schema.")
+        bundle = joblib.load(model_dir / BUNDLE_FILENAME)
+        # A model may learn from any subset of the features the client can
+        # compute, in its own order - but nothing the client cannot send.
+        columns = list(bundle["feature_columns"])
+        unknown = [name for name in columns if name not in FEATURE_COLUMNS]
+        if not columns or unknown or len(set(columns)) != len(columns):
+            raise ValueError(
+                f"Saved model features {columns} are not a subset of the inference feature schema."
+            )
+        self.feature_columns = columns
         self.model = bundle["random_forest"]
         self.linear_regression = bundle["linear_regression"]
         self.scaler = bundle["scaler"]
         self.recommendation_threshold = bundle["recommendation_threshold"]
+        self.card = bundle.get("card")
 
     def predict(self, features: Mapping[str, object]) -> dict[str, object]:
         """Return forest-predicted APV and, per feature, where this video sits.
@@ -52,21 +58,23 @@ class EngagementPredictor:
         too weak to say. These are associations in the training data, not a
         causal explanation of the forest's prediction or a guaranteed improvement.
 
-        Requires all FEATURE_COLUMNS as finite, nonnegative numbers, in the units
+        Requires every one of this model's feature_columns (any others are
+        ignored) as finite, nonnegative numbers, in the units
         the model was trained on: duration in minutes, scene_change_rate per
-        minute, speech_pace_variation as a WPM standard deviation, speaking_ratio
-        as a 0-1 fraction. Nothing is converted here. Invalid input raises
+        minute, speech_pace_variation as a WPM standard deviation, speech_ratio
+        as a 0-1 fraction, mean_pause_secs in seconds. Nothing is converted here. Invalid input raises
         ValueError for the API layer to handle as a 400.
         """
         if not isinstance(features, Mapping):
             raise ValueError("Features must be an object containing video feature values.")
 
-        missing = [name for name in FEATURE_COLUMNS if name not in features]
+        columns = self.feature_columns
+        missing = [name for name in columns if name not in features]
         if missing:
             raise ValueError(f"Missing required feature(s): {', '.join(missing)}")
 
         row = {}
-        for name in FEATURE_COLUMNS:
+        for name in columns:
             value = features[name]
             if isinstance(value, bool) or not isinstance(value, Real):
                 raise ValueError(f"{name} must be a finite, nonnegative number.")
@@ -78,14 +86,14 @@ class EngagementPredictor:
                 raise ValueError(f"{name} must be a finite, nonnegative number.")
             row[name] = number
 
-        frame = pd.DataFrame([row], columns=FEATURE_COLUMNS)
+        frame = pd.DataFrame([row], columns=columns)
         prediction = float(self.model.predict(frame)[0])
         if not isfinite(prediction):
             raise RuntimeError("The engagement model returned a non-finite prediction.")
 
         relationships = generate_feature_recommendations(
             self.linear_regression,
-            FEATURE_COLUMNS,
+            columns,
             threshold=self.recommendation_threshold,
         )["features"]
         # The regression was fitted on standardised features, so a coefficient is
@@ -94,7 +102,7 @@ class EngagementPredictor:
         standardised = self.scaler.transform(frame)[0]
 
         per_feature = {}
-        for index, name in enumerate(FEATURE_COLUMNS):
+        for index, name in enumerate(columns):
             relationship = relationships[name]
             z = float(standardised[index])
             suggestion = _suggestion(relationship["relationship"], z)
@@ -102,6 +110,9 @@ class EngagementPredictor:
                 **relationship,
                 "value": row[name],
                 "training_mean": float(self.scaler.mean_[index]),
+                # Population standard deviation of the training rows: z_score is
+                # (value - training_mean) / training_sd.
+                "training_sd": float(self.scaler.scale_[index]),
                 "z_score": z,
                 "contribution": relationship["coefficient"] * z,
                 "suggestion": suggestion,

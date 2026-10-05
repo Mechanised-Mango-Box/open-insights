@@ -118,6 +118,14 @@ def install(app: Flask) -> None:
             g.tier = "public"
             return None
 
+        # The page's model forms, which cannot send a key header. They are
+        # guarded by model_portal.py instead - this machine only, and a token
+        # only that page carries - which is stricter than any key. Public tier,
+        # so the rate limits still apply to anyone hammering them.
+        if request.path.startswith("/models/") and request.method == "POST":
+            g.tier = "public"
+            return None
+
         tier = _resolve_tier()
         if tier is None:
             return jsonify({"err": "Missing or invalid API key."}), 401

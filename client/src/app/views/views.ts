@@ -24,13 +24,15 @@ export const WORKFLOW: View[] = [
     id: 'import',
     label: 'Import',
     icon: 'add',
-    blurb: 'Create records, or bring them in from a YouTube content export or video files.',
+    blurb:
+      'Bring in YouTube reports, video files or an earlier export, with a guide to getting each.',
   },
   {
     id: 'scan',
     label: 'Scan',
     icon: 'search',
-    blurb: 'Extract transcripts and scene stats across the selected records.',
+    blurb:
+      'Extract transcripts, scene stats, screen text and audio stats across the selected records.',
   },
   {
     id: 'export',
@@ -42,13 +44,13 @@ export const WORKFLOW: View[] = [
     id: 'analysis',
     label: 'Analysis',
     icon: 'insert_chart',
-    blurb: 'Correlations and distributions across the whole dataset.',
+    blurb: 'Correlations and distributions across your records, or just the selected ones.',
   },
   {
     id: 'recommend',
     label: 'Recommend',
     icon: 'online_prediction',
-    blurb: "Ask the server's model what it makes of a single video.",
+    blurb: "Choose one of the server's models and ask what it makes of a single video.",
   },
 ];
 
@@ -56,7 +58,7 @@ export const SETTINGS: View = {
   id: 'settings',
   label: 'Settings',
   icon: 'settings',
-  blurb: 'Choose which dataset server this browser talks to.',
+  blurb: 'Choose which server this browser talks to, and where each kind of scan runs.',
 };
 
 /**

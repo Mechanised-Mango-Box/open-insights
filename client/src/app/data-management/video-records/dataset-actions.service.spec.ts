@@ -199,6 +199,7 @@ describe('DatasetActionsService records the settings a result was made with', ()
     ds_transcriptStats: { state: 'absent' },
     ds_sceneStats: { state: 'absent' },
     ds_textStats: { state: 'absent' },
+    ds_audioStats: { state: 'absent' },
   });
 
   it('keeps the scene threshold the server reported', async () => {

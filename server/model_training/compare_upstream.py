@@ -65,9 +65,6 @@ PAPER_FEATURES: List[str] = ["duration", "word_count", "wpm", "scene_count", "sc
 # What this project measures that the paper did not.
 PROJECT_EXTRA_FEATURES: List[str] = [f for f in FEATURE_COLUMNS if f not in PAPER_FEATURES]
 
-# The model's features before on-screen text joined them, kept so one set of
-# tables shows what text density adds on top.
-SIX_FEATURES: List[str] = [f for f in FEATURE_COLUMNS if f != "text_density"]
 
 # As printed in the paper: Figure 5 and the Stage 5 text. It reports no intercept.
 PAPER_CORRELATIONS: Dict[str, float] = {
@@ -124,6 +121,17 @@ EXTRACTION_METHODS: List[Tuple[str, str, str]] = [
         "confidence >= 0.8, averaged over the video",
     ),
     (
+        "speech_ratio",
+        "Not measured",
+        "Silero VAD (ending speech at a 250 ms silence, padded 30 ms) on the 16 kHz audio; "
+        "seconds of speech / duration",
+    ),
+    (
+        "mean_pause_secs",
+        "Not measured",
+        "The same VAD pass; mean gap between consecutive stretches of speech",
+    ),
+    (
         TARGET_COLUMN,
         "YouTube Analytics average percentage viewed, copied by hand",
         "average view duration / duration x 100, from the Studio content report "
@@ -161,6 +169,12 @@ def load_project(export_path: Path) -> Tuple[pd.DataFrame, Counter]:
     skipped: Counter = Counter()
     for record in manifest.get("records") or []:
         row, reason = _record_to_row(record)
+        if reason == "speech never paused, so no mean pause":
+            # Kept, with the one feature it lacks as NaN: every comparison but the
+            # current model's needs all 144 videos to be the paper's 144, and that
+            # model's rows drop it themselves (see model_rows()).
+            patched = {**record, "audio_stats": {**record["audio_stats"], "mean_pause_secs": np.nan}}
+            row, reason = _record_to_row(patched)
         if row is None:
             skipped[reason] += 1
             continue
@@ -173,6 +187,13 @@ def load_project(export_path: Path) -> Tuple[pd.DataFrame, Counter]:
         duplicates = sorted(set(df.index[df.index.duplicated()]))
         raise ValueError(f"The export has more than one record for: {', '.join(duplicates)}")
     return df, skipped
+
+
+def model_rows(project: pd.DataFrame) -> pd.DataFrame:
+    """The project rows the current model can use: those with every feature. A
+    video with fewer than two stretches of speech has no mean pause, and train.py
+    skips it."""
+    return project.dropna(subset=FEATURE_COLUMNS)
 
 
 def align(upstream: pd.DataFrame, project: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
@@ -650,7 +671,6 @@ def build_report(results: Dict[str, Any]) -> str:
         ("upstream_gd", "Upstream data, upstream's gradient descent"),
         ("upstream_ols", "Upstream data, closed-form OLS"),
         ("project_5", "Project data, paper's 5 features"),
-        ("project_6", "Project data, the six features before text density"),
         ("project_model", f"Project data, the model's {len(FEATURE_COLUMNS)} features"),
     ):
         row = paper_rows[key]
@@ -672,8 +692,9 @@ def build_report(results: Dict[str, Any]) -> str:
             s["mean"]["rmse"], s["mean"]["r2"],
         ])
     sections.append(
-        f"## Project protocol: train.py's 80/20 split, same {len(split_rows['project_model']['test_videos'])} "
-        "held-out videos for every row\n\n"
+        f"## Project protocol: train.py's 80/20 split, same {len(split_rows['project_5']['test_videos'])} "
+        "held-out videos for every row but the model's, which splits its own "
+        f"{len(split_rows['project_model']['test_videos'])} from the videos it can use\n\n"
         + _table(
             ["Run", "Linear RMSE", "Linear R²", "Forest RMSE", "Forest R²", "Mean-predictor RMSE", "Mean-predictor R²"],
             split_table, digits=4,
@@ -721,14 +742,16 @@ def run_comparison(
     runs = {
         "upstream_5": "Upstream data, paper's 5 features",
         "project_5": "Project data, paper's 5 features",
-        "project_6": "Project data, the six features before text density",
         "project_model": f"Project data, the model's {len(FEATURE_COLUMNS)} features",
     }
+    model_df = model_rows(project)
+    if len(model_df) < len(project):
+        dropped = ", ".join(project.index.difference(model_df.index))
+        print(f"  the model's rows leave out {len(project) - len(model_df)} with no pause: {dropped}")
     datasets = {
         "upstream_5": (upstream, PAPER_FEATURES),
         "project_5": (project, PAPER_FEATURES),
-        "project_6": (project, SIX_FEATURES),
-        "project_model": (project, FEATURE_COLUMNS),
+        "project_model": (model_df, FEATURE_COLUMNS),
     }
 
     print("[ Compare ] Fitting models (the cross-validation takes a minute)...")
@@ -749,8 +772,7 @@ def run_comparison(
             "upstream_gd": paper_protocol(upstream, PAPER_FEATURES, solver="gd"),
             "upstream_ols": paper_protocol(upstream, PAPER_FEATURES, solver="ols"),
             "project_5": paper_protocol(project, PAPER_FEATURES, solver="ols"),
-            "project_6": paper_protocol(project, SIX_FEATURES, solver="ols"),
-            "project_model": paper_protocol(project, FEATURE_COLUMNS, solver="ols"),
+            "project_model": paper_protocol(model_df, FEATURE_COLUMNS, solver="ols"),
         },
         "split_protocol": {key: split_protocol(df, features) for key, (df, features) in datasets.items()},
         "cv_protocol": {key: cv_protocol(df, features) for key, (df, features) in datasets.items()},

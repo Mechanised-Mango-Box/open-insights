@@ -16,6 +16,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from model_training.data_preparation import (
     FEATURE_COLUMNS,
+    FEATURE_SETS,
     MIN_TRAINING_ROWS,
     TARGET_COLUMN,
     load_export_dataset,
@@ -24,7 +25,8 @@ from model_training.data_preparation import (
 
 def make_record(index, **overrides):
     """A record with everything a training row needs: 10 minutes, 1500 words, 20 scenes,
-    35 words on screen on average, watched for 6 minutes on average."""
+    35 words on screen on average, speech 90% of the time with 0.35 s pauses, watched
+    for 6 minutes on average."""
     record = {
         "id": f"hash-{index}",
         "sort_name": f"Video {index}",
@@ -34,9 +36,19 @@ def make_record(index, **overrides):
             "count_chars": 9000,
             "count_words": 1500,
             "speech_pace_variation": 12.5,
-            "speaking_ratio": 0.8,
         },
         "scene_stats": {"duration_secs": 600, "scenes": 20},
+        "audio_stats": {
+            "duration_secs": 600,
+            "speech_secs": 560,
+            "speech_level_db": -24.0,
+            "background_sound_ratio": 0.01,
+            "median_pitch_hz": 150.0,
+            "pitch_variation_st": 3.5,
+            "speech_ratio": 0.9,
+            "pause_rate_per_min": 4.0,
+            "mean_pause_secs": 0.35,
+        },
         "text_stats": {
             "sample_count": 120,
             "mean_words": 35.0,
@@ -60,14 +72,18 @@ def make_manifest():
             transcript_stats={
                 "count_chars": 1,
                 "count_words": 1,
-                "speech_pace_variation": 1.0,
-                "speaking_ratio": None,
+                "speech_pace_variation": None,
             },
         ),
         make_record(101, youtube_content=None),
         make_record(102, scene_stats=None),
         make_record(103, scene_stats={"duration_secs": 0, "scenes": 3}),
         make_record(104, text_stats=None),
+        make_record(105, audio_stats=None),
+        # Scanned before speech and pauses were measured.
+        make_record(106, audio_stats={**make_record(0)["audio_stats"], "speech_ratio": None}),
+        # Fewer than two stretches of speech: no pause to average.
+        make_record(107, audio_stats={**make_record(0)["audio_stats"], "mean_pause_secs": None}),
     ]
     return {"generated_at": "2026-01-01T00:00:00.000Z", "records": usable + unusable}
 
@@ -98,8 +114,9 @@ class TestLoadExportDataset(unittest.TestCase):
         self.assertAlmostEqual(row["scene_change_rate"], 2.0)  # 20 scenes / 10 min
         self.assertAlmostEqual(row["word_count"], 1500)
         self.assertAlmostEqual(row["speech_pace_variation"], 12.5)
-        self.assertAlmostEqual(row["speaking_ratio"], 0.8)
+        self.assertAlmostEqual(row["speech_ratio"], 0.9)  # audio_stats, not transcript_stats
         self.assertAlmostEqual(row["text_density"], 35.0)  # text_stats.mean_words
+        self.assertAlmostEqual(row["mean_pause_secs"], 0.35)
         self.assertAlmostEqual(row[TARGET_COLUMN], 60.0)  # 360 s of 600 s
 
     def test_skips_records_the_client_would_skip(self):
@@ -110,6 +127,28 @@ class TestLoadExportDataset(unittest.TestCase):
         from_folder = load_export_dataset(self.folder, verbose=False)
         from_zip = load_export_dataset(self.zip, verbose=False)
         self.assertTrue(from_folder.equals(from_zip))
+
+    def test_feature_subset_needs_only_its_own_scans(self):
+        # The audio-only set needs no scene or text stats, and reads its duration
+        # from the audio: records 102-104 (scene/text problems) now count, and the
+        # 480 s audio duration (not scene stats' 600 s) is what rates divide by.
+        manifest = make_manifest()
+        for record in manifest["records"]:
+            if record.get("audio_stats"):
+                record["audio_stats"] = {**record["audio_stats"], "duration_secs": 480}
+        (self.folder / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+
+        df = load_export_dataset(self.folder, verbose=False, features=FEATURE_SETS["audio"])
+        self.assertEqual(list(df.columns), FEATURE_SETS["audio"] + [TARGET_COLUMN])
+        self.assertEqual(len(df), MIN_TRAINING_ROWS + 3)
+        row = df.iloc[0]
+        self.assertAlmostEqual(row["duration"], 8.0)
+        self.assertAlmostEqual(row["wpm"], 187.5)  # 1500 words / 8 min
+        self.assertAlmostEqual(row[TARGET_COLUMN], 75.0)  # 360 s of 480 s
+
+    def test_rejects_unknown_features(self):
+        with self.assertRaisesRegex(ValueError, "Unknown"):
+            load_export_dataset(self.folder, verbose=False, features=["duration", "nope"])
 
     def test_rejects_too_few_usable_records(self):
         manifest = {"records": [make_record(0)]}

@@ -10,7 +10,9 @@ from typing import Any
 
 from faster_whisper import WhisperModel
 
+from audio_stats import calculate_audio_stats
 from config import (
+    AUDIO_STATS_WORKERS,
     BACKFILL_ENABLED,
     BACKFILL_INTERVAL_SECONDS,
     SCENE_STATS_WORKERS,
@@ -28,12 +30,14 @@ from config import (
     WHISPER_VAD,
 )
 from db import (
+    AUDIO_STATS,
     KINDS,
     SCENE_STATS,
     TEXT_STATS,
     TRANSCRIPT,
     DatasetKind,
     active_job_count,
+    audio_stats_values,
     claim,
     delete_upload,
     enqueue,
@@ -100,6 +104,7 @@ _POOL_SIZES: dict[str, int] = {
     TRANSCRIPT.name: WHISPER_NUM_WORKERS,
     SCENE_STATS.name: SCENE_STATS_WORKERS,
     TEXT_STATS.name: TEXT_STATS_WORKERS,
+    AUDIO_STATS.name: AUDIO_STATS_WORKERS,
 }
 
 _EXECUTORS: dict[str, ThreadPoolExecutor] = {
@@ -114,6 +119,11 @@ _EXECUTORS: dict[str, ThreadPoolExecutor] = {
     # neither of the others.
     TEXT_STATS.name: ThreadPoolExecutor(
         max_workers=_POOL_SIZES[TEXT_STATS.name], thread_name_prefix="text-stats"
+    ),
+    # And for audio: decoding and pitch-tracking a lecture takes about a minute,
+    # which should not wait behind an hour of transcription either.
+    AUDIO_STATS.name: ThreadPoolExecutor(
+        max_workers=_POOL_SIZES[AUDIO_STATS.name], thread_name_prefix="audio-stats"
     ),
 }
 
@@ -261,12 +271,17 @@ def submit_text_stats_job(file_hash: str, file_path: Path) -> None:
     _submit(TEXT_STATS, file_hash, file_path, calculate_text_stats, text_stats_values)
 
 
+def submit_audio_stats_job(file_hash: str, file_path: Path) -> None:
+    _submit(AUDIO_STATS, file_hash, file_path, calculate_audio_stats, audio_stats_values)
+
+
 # Which submitter runs which kind. Lives here rather than in routes.py so the
 # startup resume below and the request path cannot disagree about it.
 SUBMIT: dict[str, Callable[[str, Path], None]] = {
     TRANSCRIPT.name: submit_transcript_job,
     SCENE_STATS.name: submit_scene_stats_job,
     TEXT_STATS.name: submit_text_stats_job,
+    AUDIO_STATS.name: submit_audio_stats_job,
 }
 
 
@@ -356,8 +371,10 @@ def queue_status() -> dict[str, Any]:
             # is the same on an empty database as on a busy one - a client reading
             # counts should never have to distinguish 'zero' from 'absent'.
             "workers": {},
-            # What a scan of this kind would use here, before any is run.
+            # What a scan of this kind would use here, before any is run, and
+            # how it calculates its result.
             "settings": dict(KINDS[kind].settings),
+            "method": KINDS[kind].method,
         }
         for kind in KINDS
     }

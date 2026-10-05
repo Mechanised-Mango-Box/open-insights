@@ -1,5 +1,6 @@
 import { Signal } from '@angular/core';
 import {
+  AudioStats,
   DatasetSettings,
   SceneStats,
   TextStats,
@@ -18,7 +19,7 @@ import {
  * vocabulary the records and the badges are already written in.
  */
 
-export type DatasetKind = 'transcript' | 'scene_stats' | 'text_stats';
+export type DatasetKind = 'transcript' | 'scene_stats' | 'text_stats' | 'audio_stats';
 
 /** Every kind, for the places that have to iterate them (routing settings, queue
  * bookkeeping). Kept beside the type so adding a kind is one edit, not a hunt. */
@@ -26,6 +27,7 @@ export const DATASET_KINDS = [
   'transcript',
   'scene_stats',
   'text_stats',
+  'audio_stats',
 ] as const satisfies readonly DatasetKind[];
 
 /** The 'complete' shape of a transcript dataset - segments and their stats
@@ -38,6 +40,7 @@ export type DatasetPayload = {
   transcript: TranscriptPayload;
   scene_stats: SceneStats;
   text_stats: TextStats;
+  audio_stats: AudioStats;
 };
 
 export type DatasetStatus = 'absent' | 'queued' | 'running' | 'ready' | 'failed';
@@ -92,6 +95,8 @@ export type ProviderStatus = {
       workers: ProviderWorkerCounts;
       /** What a scan of this kind would use there. */
       settings?: DatasetSettings;
+      /** How that scan calculates its result, in words. */
+      method?: string;
     }
   >;
 };

@@ -78,12 +78,14 @@ export class DatasetActionsService {
   sendingTranscript = signal<Set<string>>(new Set());
   sendingSceneStats = signal<Set<string>>(new Set());
   sendingTextStats = signal<Set<string>>(new Set());
+  sendingAudioStats = signal<Set<string>>(new Set());
 
   // Last-known server state, keyed by file hash.
   serverStatusByHash = signal<Map<string, ServerStatus>>(new Map());
   transcriptStatusByHash = signal<Map<string, DatasetPeekResult>>(new Map());
   sceneStatsStatusByHash = signal<Map<string, DatasetPeekResult>>(new Map());
   textStatsStatusByHash = signal<Map<string, DatasetPeekResult>>(new Map());
+  audioStatsStatusByHash = signal<Map<string, DatasetPeekResult>>(new Map());
 
   // Hashes currently on screen. Only these are kept fresh - a record that leaves the table
   // stops being polled and drops its cached status.
@@ -143,6 +145,10 @@ export class DatasetActionsService {
 
   checkTextStatsStatus(hash: string, options: CheckOptions = {}): Promise<void> {
     return this.checkDatasetStatus('text_stats', this.textStatsStatusByHash, hash, options);
+  }
+
+  checkAudioStatsStatus(hash: string, options: CheckOptions = {}): Promise<void> {
+    return this.checkDatasetStatus('audio_stats', this.audioStatsStatusByHash, hash, options);
   }
 
   /** One body for every kind: they differ only in which signal they write to.
@@ -351,6 +357,66 @@ export class DatasetActionsService {
     }
   }
 
+  /** Measures background sound and pitch variation. Server only - see ComputeConfigService. */
+  async fetchAudioStats(record: VideoRecord): Promise<void> {
+    const hash = record.video_file.hash;
+    if (!hash) throw new Error('No file hash for this record.');
+
+    const finished = this.logScan('audio_stats', record);
+    let outcome = 'failed';
+
+    this.sendingAudioStats.update((set) => new Set(set).add(hash));
+    try {
+      const {
+        duration_secs,
+        speech_secs,
+        speech_level_db,
+        background_sound_ratio,
+        median_pitch_hz,
+        pitch_variation_st,
+        speech_ratio,
+        pause_rate_per_min,
+        mean_pause_secs,
+        producer,
+        settings,
+      } = await this.provider.request('audio_stats', hash, this.sourceFor(record));
+      record.ds_audioStats = {
+        state: 'ready',
+        data: {
+          duration_secs,
+          speech_secs,
+          speech_level_db,
+          background_sound_ratio,
+          median_pitch_hz,
+          pitch_variation_st,
+          speech_ratio,
+          pause_rate_per_min,
+          mean_pause_secs,
+        },
+        producer,
+        settings,
+      };
+      outcome = withSettings(
+        `${(background_sound_ratio * 100).toFixed(1)}% background sound, ` +
+          `pitch varies ${pitch_variation_st.toFixed(2)} st`,
+        settings,
+      );
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      record.ds_audioStats = this.markRefreshFailure(record.ds_audioStats, message);
+      outcome = `failed - ${message}`;
+      throw error;
+    } finally {
+      this.sendingAudioStats.update((set) => {
+        const next = new Set(set);
+        next.delete(hash);
+        return next;
+      });
+      void this.checkAudioStatsStatus(hash);
+      finished(outcome);
+    }
+  }
+
   /**
    * Announces the start of a scan and hands back the call that ends it.
    *
@@ -393,6 +459,7 @@ export class DatasetActionsService {
       this.checkTranscriptStatus(hash, options),
       this.checkSceneStatsStatus(hash, options),
       this.checkTextStatsStatus(hash, options),
+      this.checkAudioStatsStatus(hash, options),
     ]);
   }
 
@@ -402,6 +469,7 @@ export class DatasetActionsService {
     this.transcriptStatusByHash.set(new Map());
     this.sceneStatsStatusByHash.set(new Map());
     this.textStatsStatusByHash.set(new Map());
+    this.audioStatsStatusByHash.set(new Map());
     this.refreshing.clear();
     for (const hash of this.trackedHashes) this.checkAll(hash);
   }
@@ -416,6 +484,7 @@ export class DatasetActionsService {
     this.transcriptStatusByHash.update(without);
     this.sceneStatsStatusByHash.update(without);
     this.textStatsStatusByHash.update(without);
+    this.audioStatsStatusByHash.update(without);
     for (const hash of hashes) this.refreshing.delete(hash);
   }
 
@@ -442,11 +511,13 @@ export class DatasetActionsService {
     const transcriptStatuses = this.transcriptStatusByHash();
     const sceneStatsStatuses = this.sceneStatsStatusByHash();
     const textStatsStatuses = this.textStatsStatusByHash();
+    const audioStatsStatuses = this.audioStatsStatusByHash();
     const busy = [
       this.uploadingFile(),
       this.sendingTranscript(),
       this.sendingSceneStats(),
       this.sendingTextStats(),
+      this.sendingAudioStats(),
     ];
 
     for (const hash of this.trackedHashes) {
@@ -467,7 +538,8 @@ export class DatasetActionsService {
       const transcript = isStale(transcriptStatuses.get(hash));
       const sceneStats = isStale(sceneStatsStatuses.get(hash));
       const textStats = isStale(textStatsStatuses.get(hash));
-      if (!server && !transcript && !sceneStats && !textStats) continue;
+      const audioStats = isStale(audioStatsStatuses.get(hash));
+      if (!server && !transcript && !sceneStats && !textStats && !audioStats) continue;
 
       this.refreshing.add(hash);
       Promise.all([
@@ -475,6 +547,7 @@ export class DatasetActionsService {
         transcript ? this.checkTranscriptStatus(hash, { quiet: true }) : null,
         sceneStats ? this.checkSceneStatsStatus(hash, { quiet: true }) : null,
         textStats ? this.checkTextStatsStatus(hash, { quiet: true }) : null,
+        audioStats ? this.checkAudioStatsStatus(hash, { quiet: true }) : null,
       ]).finally(() => this.refreshing.delete(hash));
     }
   }

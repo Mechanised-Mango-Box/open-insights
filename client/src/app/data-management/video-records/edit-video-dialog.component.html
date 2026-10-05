@@ -1,7 +1,6 @@
 <h1 mat-dialog-title>Edit Video Record</h1>
-<mat-divider /><br />
 <mat-dialog-content>
-  <mat-form-field appearance="outline">
+  <mat-form-field class="name-field" appearance="outline">
     <mat-label>Sorting Name</mat-label>
     <input matInput [(ngModel)]="localData.sort_name" />
   </mat-form-field>
@@ -13,17 +12,14 @@
       <mat-expansion-panel-header>
         <mat-panel-title>Video File</mat-panel-title>
       </mat-expansion-panel-header>
-      <div
-        class="file-upload-container"
-        style="margin-bottom: 16px; display: flex; align-items: center; gap: 12px"
-      >
-        <button mat-stroked-button color="primary" (click)="fileInput.click()">
+      <div class="file-row">
+        <button mat-stroked-button (click)="fileInput.click()">
           <mat-icon>upload</mat-icon>Upload
         </button>
         <span class="file-name">{{ localData.video_file.file?.name || 'No file chosen' }}</span>
 
         @if (localData.video_file.file) {
-          <button mat-icon-button color="warn" (click)="clearFile()" title="Clear file">
+          <button mat-icon-button (click)="clearFile()" title="Clear file">
             <mat-icon>close</mat-icon>
           </button>
         }
@@ -60,12 +56,7 @@
       }
 
       <br />
-      <button
-        mat-stroked-button
-        color="primary"
-        [disabled]="uploadPending()"
-        (click)="uploadToServer()"
-      >
+      <button mat-stroked-button [disabled]="uploadPending()" (click)="uploadToServer()">
         {{ uploadPending() ? 'Uploading...' : 'Upload to Server' }}
       </button>
       @if (uploadError()) {
@@ -75,12 +66,11 @@
 
     <mat-expansion-panel>
       <mat-expansion-panel-header>
-        <mat-panel-title>Transcript Analysis</mat-panel-title>
+        <mat-panel-title>Transcript</mat-panel-title>
       </mat-expansion-panel-header>
 
       <button
         mat-stroked-button
-        color="primary"
         [disabled]="transcriptPending()"
         (click)="computeTranscriptViaServer()"
       >
@@ -98,10 +88,7 @@
           </p>
         }
         @if (transcriptSegments.length) {
-          <div
-            class="transcript-segments"
-            style="max-height: 240px; overflow-y: auto; margin-bottom: 8px"
-          >
+          <div class="transcript-segments">
             @for (segment of transcriptSegments; track $index) {
               <p>
                 <strong
@@ -128,7 +115,7 @@
 
         <mat-divider /><button mat-button (click)="clearLocalTranscript()">Clear</button>
       } @else {
-        <button mat-stroked-button color="primary" (click)="transcriptFileInput.click()">
+        <button mat-stroked-button (click)="transcriptFileInput.click()">
           <mat-icon>upload</mat-icon>Upload SRT/VTT
         </button>
         <input
@@ -155,12 +142,11 @@
     </mat-expansion-panel>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
-        <mat-panel-title>Scene Analysis</mat-panel-title>
+        <mat-panel-title>Scene Stats</mat-panel-title>
       </mat-expansion-panel-header>
 
       <button
         mat-stroked-button
-        color="primary"
         [disabled]="sceneStatsPending()"
         (click)="computeSceneStatsViaServer()"
       >
@@ -211,7 +197,6 @@
 
       <button
         mat-stroked-button
-        color="primary"
         [disabled]="textStatsPending()"
         (click)="computeTextStatsViaServer()"
       >
@@ -265,172 +250,260 @@
         }
       }
     </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Audio Stats</mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <button
+        mat-stroked-button
+        [disabled]="audioStatsPending()"
+        (click)="computeAudioStatsViaServer()"
+      >
+        {{ audioStatsPending() ? 'Computing...' : 'Compute via Server' }}
+      </button>
+      @if (audioStatsError()) {
+        <p class="error-text">{{ audioStatsError() }}</p>
+      }
+      <br />
+
+      @if (audioStatsData) {
+        @if (audioStatsUploadIcon) {
+          <p class="server-status" [ngClass]="audioStatsUploadIcon.cssClass">
+            <mat-icon>{{ audioStatsUploadIcon.icon }}</mat-icon> {{ audioStatsUploadIcon.label }}
+          </p>
+        }
+        <mat-form-field appearance="outline">
+          <mat-label>Background Sound (share of video)</mat-label>
+          <input matInput type="number" [value]="audioStatsData?.background_sound_ratio" disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Pitch Variation (semitones SD)</mat-label>
+          <input matInput type="number" [value]="audioStatsData?.pitch_variation_st" disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Median Pitch (Hz)</mat-label>
+          <input matInput type="number" [value]="audioStatsData?.median_pitch_hz" disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Speech (seconds)</mat-label>
+          <input matInput type="number" [value]="audioStatsData?.speech_secs" disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Speech Level (dBFS)</mat-label>
+          <input matInput type="number" [value]="audioStatsData?.speech_level_db" disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Speech Ratio (share of video)</mat-label>
+          <input matInput type="number" [value]="audioStatsData?.speech_ratio" disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Pauses per Minute</mat-label>
+          <input matInput type="number" [value]="audioStatsData?.pause_rate_per_min" disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Mean Pause (seconds)</mat-label>
+          <input matInput type="number" [value]="audioStatsData?.mean_pause_secs" disabled />
+        </mat-form-field>
+
+        <mat-divider /><button mat-button (click)="clearLocalAudioStats()">Clear</button>
+      } @else {
+        <p>Not yet computed.</p>
+        @if (localData.video_file.hash) {
+          <button
+            mat-icon-button
+            class="server-status"
+            [ngClass]="audioStatsPeekIcon.cssClass"
+            [title]="audioStatsPeekIcon.label"
+            (click)="checkAudioStatsStatus(localData.video_file.hash)"
+          >
+            <mat-icon>{{ audioStatsPeekIcon.icon }}</mat-icon>
+          </button>
+          {{ audioStatsPeekIcon.label }}
+        }
+      }
+    </mat-expansion-panel>
   </mat-accordion>
 
   <mat-accordion>
     <mat-expansion-panel>
-      <mat-expansion-panel-header
-        ><mat-panel-title>Youtube Content Report</mat-panel-title></mat-expansion-panel-header
-      >
+      <mat-expansion-panel-header>
+        <mat-panel-title>YouTube Content Report</mat-panel-title>
+      </mat-expansion-panel-header>
       @if (localData.ds_youtubeContent) {
-        <!-- Content ID -->
-        <mat-form-field appearance="outline">
-          <mat-label>Content ID</mat-label>
-          <input matInput [(ngModel)]="localData.ds_youtubeContent.content" />
-        </mat-form-field>
-        <br />
+        <div class="field-grid">
+          <!-- Content ID -->
+          <mat-form-field appearance="outline">
+            <mat-label>Content ID</mat-label>
+            <input matInput [(ngModel)]="localData.ds_youtubeContent.content" />
+          </mat-form-field>
 
-        <!-- Engaged Views -->
-        <mat-form-field appearance="outline">
-          <mat-label>Engaged Views</mat-label>
-          <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.engaged_views" />
-        </mat-form-field>
-        <br />
+          <!-- Engaged Views -->
+          <mat-form-field appearance="outline">
+            <mat-label>Engaged Views</mat-label>
+            <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.engaged_views" />
+          </mat-form-field>
 
-        <!-- Average % Viewed -->
-        <mat-form-field appearance="outline">
-          <mat-label>Average % Viewed</mat-label>
-          <input
-            matInput
-            type="number"
-            [(ngModel)]="localData.ds_youtubeContent.average_percentage_viewed"
-          />
-        </mat-form-field>
-        <br />
+          <!-- Average % Viewed -->
+          <mat-form-field appearance="outline">
+            <mat-label>Average % Viewed</mat-label>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="localData.ds_youtubeContent.average_percentage_viewed"
+            />
+          </mat-form-field>
 
-        <!-- Stayed to Watch -->
-        <mat-form-field appearance="outline">
-          <mat-label>Stayed to Watch</mat-label>
-          <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.stayed_to_watch" />
-        </mat-form-field>
-        <br />
+          <!-- Stayed to Watch -->
+          <mat-form-field appearance="outline">
+            <mat-label>Stayed to Watch</mat-label>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="localData.ds_youtubeContent.stayed_to_watch"
+            />
+          </mat-form-field>
 
-        <!-- Unique Viewers -->
-        <mat-form-field appearance="outline">
-          <mat-label>Unique Viewers</mat-label>
-          <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.unique_viewers" />
-        </mat-form-field>
-        <br />
+          <!-- Unique Viewers -->
+          <mat-form-field appearance="outline">
+            <mat-label>Unique Viewers</mat-label>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="localData.ds_youtubeContent.unique_viewers"
+            />
+          </mat-form-field>
 
-        <!-- Unique Reach -->
-        <mat-form-field appearance="outline">
-          <mat-label>Unique Reach</mat-label>
-          <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.unique_reach" />
-        </mat-form-field>
-        <br />
+          <!-- Unique Reach -->
+          <mat-form-field appearance="outline">
+            <mat-label>Unique Reach</mat-label>
+            <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.unique_reach" />
+          </mat-form-field>
 
-        <!-- Average Views Per Viewer -->
-        <mat-form-field appearance="outline">
-          <mat-label>Average Views Per Viewer</mat-label>
-          <input
-            matInput
-            type="number"
-            [(ngModel)]="localData.ds_youtubeContent.average_views_per_viewer"
-          />
-        </mat-form-field>
-        <br />
+          <!-- Average Views Per Viewer -->
+          <mat-form-field appearance="outline">
+            <mat-label>Average Views Per Viewer</mat-label>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="localData.ds_youtubeContent.average_views_per_viewer"
+            />
+          </mat-form-field>
 
-        <!-- New Viewers -->
-        <mat-form-field appearance="outline">
-          <mat-label>New Viewers</mat-label>
-          <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.new_viewers" />
-        </mat-form-field>
-        <br />
+          <!-- New Viewers -->
+          <mat-form-field appearance="outline">
+            <mat-label>New Viewers</mat-label>
+            <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.new_viewers" />
+          </mat-form-field>
 
-        <!-- Regular Viewers -->
-        <mat-form-field appearance="outline">
-          <mat-label>Regular Viewers</mat-label>
-          <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.regular_viewers" />
-        </mat-form-field>
-        <br />
+          <!-- Regular Viewers -->
+          <mat-form-field appearance="outline">
+            <mat-label>Regular Viewers</mat-label>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="localData.ds_youtubeContent.regular_viewers"
+            />
+          </mat-form-field>
 
-        <!-- Casual Viewers -->
-        <mat-form-field appearance="outline">
-          <mat-label>Casual Viewers</mat-label>
-          <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.casual_viewers" />
-        </mat-form-field>
-        <br />
+          <!-- Casual Viewers -->
+          <mat-form-field appearance="outline">
+            <mat-label>Casual Viewers</mat-label>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="localData.ds_youtubeContent.casual_viewers"
+            />
+          </mat-form-field>
 
-        <!-- Returning Viewers -->
-        <mat-form-field appearance="outline">
-          <mat-label>Returning Viewers</mat-label>
-          <input
-            matInput
-            type="number"
-            [(ngModel)]="localData.ds_youtubeContent.returning_viewers"
-          />
-        </mat-form-field>
-        <br />
+          <!-- Returning Viewers -->
+          <mat-form-field appearance="outline">
+            <mat-label>Returning Viewers</mat-label>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="localData.ds_youtubeContent.returning_viewers"
+            />
+          </mat-form-field>
 
-        <!-- Views -->
-        <mat-form-field appearance="outline">
-          <mat-label>Views</mat-label>
-          <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.views" />
-        </mat-form-field>
-        <br />
+          <!-- Views -->
+          <mat-form-field appearance="outline">
+            <mat-label>Views</mat-label>
+            <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.views" />
+          </mat-form-field>
 
-        <!-- Watch Time Hours -->
-        <mat-form-field appearance="outline">
-          <mat-label>Watch Time (Hours)</mat-label>
-          <input
-            matInput
-            type="number"
-            [(ngModel)]="localData.ds_youtubeContent.watch_time_hours"
-          />
-        </mat-form-field>
-        <br />
+          <!-- Watch Time Hours -->
+          <mat-form-field appearance="outline">
+            <mat-label>Watch Time (Hours)</mat-label>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="localData.ds_youtubeContent.watch_time_hours"
+            />
+          </mat-form-field>
 
-        <!-- Subscribers -->
-        <mat-form-field appearance="outline">
-          <mat-label>Subscribers Gained/Lost</mat-label>
-          <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.subscribers" />
-        </mat-form-field>
-        <br />
+          <!-- Subscribers -->
+          <mat-form-field appearance="outline">
+            <mat-label>Subscribers Gained/Lost</mat-label>
+            <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.subscribers" />
+          </mat-form-field>
 
-        <!-- Average View Duration (Secs) -->
-        <mat-form-field appearance="outline">
-          <mat-label>Avg View Duration (Secs)</mat-label>
-          <input
-            matInput
-            type="number"
-            [(ngModel)]="localData.ds_youtubeContent.average_view_duration_secs"
-          />
-        </mat-form-field>
-        <br />
+          <!-- Average View Duration (Secs) -->
+          <mat-form-field appearance="outline">
+            <mat-label>Avg View Duration (Secs)</mat-label>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="localData.ds_youtubeContent.average_view_duration_secs"
+            />
+          </mat-form-field>
 
-        <!-- Video Duration (Secs) - "Video" is load-bearing: the Scene Stats section
-           above has its own read-only "Duration (Secs)" for the file-derived value. -->
-        <mat-form-field appearance="outline">
-          <mat-label>Video Duration (Secs)</mat-label>
-          <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.duration_secs" />
-        </mat-form-field>
-        <br />
+          <!-- Video Duration (Secs) - "Video" is load-bearing: the Scene Stats section
+             above has its own read-only "Duration (Secs)" for the file-derived value. -->
+          <mat-form-field appearance="outline">
+            <mat-label>Video Duration (Secs)</mat-label>
+            <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.duration_secs" />
+          </mat-form-field>
 
-        <!-- Impressions -->
-        <mat-form-field appearance="outline">
-          <mat-label>Impressions</mat-label>
-          <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.impressions" />
-        </mat-form-field>
-        <br />
+          <!-- Impressions -->
+          <mat-form-field appearance="outline">
+            <mat-label>Impressions</mat-label>
+            <input matInput type="number" [(ngModel)]="localData.ds_youtubeContent.impressions" />
+          </mat-form-field>
 
-        <!-- Impressions Click-Through Rate -->
-        <mat-form-field appearance="outline">
-          <mat-label>Impressions CTR</mat-label>
-          <input
-            matInput
-            type="number"
-            [(ngModel)]="localData.ds_youtubeContent.impressions_click_through_rate"
-          />
-        </mat-form-field>
+          <!-- Impressions Click-Through Rate -->
+          <mat-form-field appearance="outline">
+            <mat-label>Impressions CTR</mat-label>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="localData.ds_youtubeContent.impressions_click_through_rate"
+            />
+          </mat-form-field>
+        </div>
 
         <mat-divider /><button mat-button (click)="localData.ds_youtubeContent = null">
           Clear
         </button>
       } @else {
+        <p class="panel-hint">
+          A content report (<code>Table data.csv</code>) - the Import step's guide shows how to
+          export it. Only its first row is read, so export it for this one video; for a whole
+          channel, import it on the Import step instead.
+        </p>
+        <button mat-stroked-button (click)="contentCsvInput.click()">
+          <mat-icon>upload_file</mat-icon>From CSV
+        </button>
         <button mat-button (click)="localData.ds_youtubeContent = YoutubeContent.createEmpty()">
           Create Empty
         </button>
-        <button mat-button (click)="contentCsvInput.click()">From CSV</button>
         <input
           type="file"
           #contentCsvInput
@@ -442,7 +515,7 @@
     </mat-expansion-panel>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
-        <mat-panel-title>Youtube Audience Retention Report</mat-panel-title>
+        <mat-panel-title>YouTube Audience Retention</mat-panel-title>
       </mat-expansion-panel-header>
       @if (localData.ds_youtubeAudienceRetention) {
         <p>{{ localData.ds_youtubeAudienceRetention.video_position.length }} data point(s).</p>
@@ -450,14 +523,19 @@
           Clear
         </button>
       } @else {
+        <p class="panel-hint">
+          This video's retention export, with <code>Video position (%)</code> and
+          <code>Absolute audience retention (%)</code> columns - the Import step's guide shows how
+          to export it.
+        </p>
+        <button mat-stroked-button (click)="retentionCsvInput.click()">
+          <mat-icon>upload_file</mat-icon>Upload CSV
+        </button>
         <button
           mat-button
           (click)="localData.ds_youtubeAudienceRetention = YoutubeAudienceRetention.createEmpty()"
         >
           Create Empty
-        </button>
-        <button mat-stroked-button color="primary" (click)="retentionCsvInput.click()">
-          <mat-icon>upload</mat-icon>Upload CSV
         </button>
         <input
           type="file"
@@ -471,7 +549,6 @@
   </mat-accordion>
 </mat-dialog-content>
 
-<mat-divider /><br />
 <mat-dialog-actions align="end">
   <button mat-button (click)="onCancel()">Cancel</button>
   <button mat-raised-button color="primary" (click)="onSave()">Save</button>

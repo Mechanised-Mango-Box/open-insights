@@ -260,24 +260,62 @@ WHISPER_MODEL_PATH = (
     else WHISPER_MODEL
 )
 
-# The engagement model bundle inference.py loads at startup: the random forest
-# that predicts average percentage viewed, and the linear regression and scaler
-# that explain it. Committed at server/engagement_model/ and shipped as-is by
-# the Dockerfile and build_portable.py - nothing trains it during a build.
-# Regenerate it with scripts/train_engagement_model.py <export> (a client export,
-# see the README) whenever the scikit-learn pins in requirements.txt or
-# model_training/ change: a pickle made under another scikit-learn does not load
-# reliably.
+# The trained engagement models, one directory each (model.joblib + model.json,
+# see model_training/model_card.py): the random forest that predicts average
+# percentage viewed, and the linear regression and scaler that explain it. All of
+# them are committed in the repository's top-level models/ directory, and
+# BUILTIN_MODELS names the ones this server serves - the portable build packs
+# only those, and the Docker image copies the directory in whole. Nothing trains
+# them during a build. Regenerate them with scripts/train_engagement_model.py
+# <export> (a client export, see the README) whenever the scikit-learn pins in
+# requirements.txt or model_training/ change: a pickle made under another
+# scikit-learn does not load reliably.
 #
-# Its own directory rather than a subfolder of "models": a frozen build already
-# unpacks the Whisper weights to sys._MEIPASS/models, and models/ is ignored as a
-# Whisper cache by .dockerignore. Required - like the Whisper weights, a server
-# started without it fails at boot rather than on its first request.
-_bundled_engagement = bundled("engagement_model") if FROZEN else None
+# Frozen, they unpack to sys._MEIPASS/engagement_models rather than .../models,
+# which is where the Whisper weights already are. Required - like the Whisper
+# weights, a server started without its built-ins fails at boot rather than on
+# its first request.
+_bundled_engagement = bundled("engagement_models") if FROZEN else None
 ENGAGEMENT_MODEL_DIR = os.environ.get("ENGAGEMENT_MODEL_DIR") or str(
-    _bundled_engagement
-    if _bundled_engagement is not None
-    else os.path.join(os.path.dirname(os.path.abspath(__file__)), "engagement_model")
+    _bundled_engagement if _bundled_engagement is not None else base_dir() / "models"
+)
+
+# The models in ENGAGEMENT_MODEL_DIR this server serves as built in. The others
+# there are for sharing: package one with scripts/package_model.py and add it on
+# the page at /. A portable build packs only these, so frozen the default is
+# simply whatever it packed - set at build time, not guessed again at runtime.
+_DEFAULT_BUILTINS = (
+    ",".join(sorted(d.name for d in _bundled_engagement.iterdir() if d.is_dir()))
+    if _bundled_engagement is not None and _bundled_engagement.is_dir()
+    else "full,fast"
+)
+BUILTIN_MODELS = [
+    name.strip()
+    for name in os.environ.get("BUILTIN_MODELS", _DEFAULT_BUILTINS).split(",")
+    if name.strip()
+]
+
+# Which built-in model answers a recommendation that names none.
+ENGAGEMENT_MODEL_DEFAULT = os.environ.get("ENGAGEMENT_MODEL_DEFAULT", "full")
+
+# Models added from the server's page (model_registry.py), in a models/ directory
+# beside the data directory: <exe>/data and <exe>/models for a portable build,
+# data/local and data/models in a checkout (clear of the committed models/).
+MODELS_DIR = os.environ.get("MODELS_DIR", str(_DATA_DIR.parent / "models"))
+
+# Whether the page at / may add and delete models. Even when on, only a browser on
+# this machine can (see model_portal.py): a model file is a pickle, and loading one
+# runs whatever code its author put in it. docker-compose.yml turns it off.
+MODEL_MANAGEMENT = os.environ.get("MODEL_MANAGEMENT", "1") == "1"
+
+# The largest model package accepted, compressed or not. The built-in models are
+# about 1 MB each.
+MODEL_MAX_BYTES = int(os.environ.get("MODEL_MAX_BYTES", str(200 * 1024**2)))
+
+# Where to send someone looking for more models: shown on the page at / and on
+# the client's Model tab.
+MORE_MODELS_URL = os.environ.get(
+    "MORE_MODELS_URL", "https://github.com/Mechanised-Mango-Box/open-insights/releases"
 )
 
 # How different a frame must be from its predecessor to count as a scene change.
@@ -304,6 +342,38 @@ OCR_MIN_SCORE = float(os.environ.get("OCR_MIN_SCORE", "0.8"))
 # One by default: onnxruntime already spreads a single OCR call across cores, so
 # a second worker mostly competes with the first.
 TEXT_STATS_WORKERS = int(os.environ.get("TEXT_STATS_WORKERS", "1"))
+
+# Audio (audio_stats.py), for Mayer's coherence and voice principles. Loudness is
+# measured over AUDIO_FRAME_SECS frames. A stretch with no speech in it counts as
+# background sound (music, effects) when it is at least AUDIO_SILENCE_DBFS and no
+# more than AUDIO_BACKGROUND_MARGIN_DB quieter than the speaker's median level -
+# relative to the speaker, so recording gain does not decide it and room tone
+# falls below it. Pitch is tracked between PITCH_FLOOR_HZ and PITCH_CEILING_HZ,
+# which spans adult speaking voices with room either side.
+AUDIO_FRAME_SECS = float(os.environ.get("AUDIO_FRAME_SECS", "0.05"))
+AUDIO_BACKGROUND_MARGIN_DB = float(os.environ.get("AUDIO_BACKGROUND_MARGIN_DB", "20.0"))
+AUDIO_SILENCE_DBFS = float(os.environ.get("AUDIO_SILENCE_DBFS", "-50.0"))
+PITCH_FLOOR_HZ = float(os.environ.get("PITCH_FLOOR_HZ", "75.0"))
+PITCH_CEILING_HZ = float(os.environ.get("PITCH_CEILING_HZ", "500.0"))
+# Speech and pauses come from a second VAD pass that ends speech at a silence of
+# SPEECH_MIN_SILENCE_MS: 250 ms is the usual cut-off for a pause in speech
+# research (Goldman-Eisler), long enough to skip the gaps inside and between
+# words. Speech is padded by SPEECH_PAD_MS on each side, which shortens every
+# measured pause by twice that - so it is kept at Silero's own 30 ms rather than
+# the 400 ms faster-whisper uses to avoid clipping words for transcription.
+SPEECH_MIN_SILENCE_MS = float(os.environ.get("SPEECH_MIN_SILENCE_MS", "250.0"))
+SPEECH_PAD_MS = float(os.environ.get("SPEECH_PAD_MS", "30.0"))
+# Praat's pitch frames are PITCH_TIME_STEP_SECS apart (its own default for the
+# limits above). Pitch variation needs at least PITCH_MIN_VOICED_SECS of voiced
+# speech to mean anything, and frames more than OCTAVE_ERROR_ST semitones from the
+# median are dropped as octave errors, the tracker's commonest mistake.
+PITCH_TIME_STEP_SECS = float(os.environ.get("PITCH_TIME_STEP_SECS", "0.01"))
+PITCH_MIN_VOICED_SECS = float(os.environ.get("PITCH_MIN_VOICED_SECS", "1.0"))
+OCTAVE_ERROR_ST = float(os.environ.get("OCTAVE_ERROR_ST", "12.0"))
+
+# Decoding and Praat's pitch tracker are both single-threaded, so two workers
+# buy two videos at once.
+AUDIO_STATS_WORKERS = int(os.environ.get("AUDIO_STATS_WORKERS", "2"))
 
 
 def _package_version(name: str) -> str:
@@ -338,6 +408,18 @@ TEXT_STATS_PRODUCER = (
     f"rapidocr-{_package_version('rapidocr')}/PP-OCRv6-small"
     f"/every={OCR_SAMPLE_SECS}s/reuse={OCR_REUSE_THRESHOLD}/score={OCR_MIN_SCORE}"
 )
+# Silero VAD is versioned by faster-whisper, which ships its model; Praat's pitch
+# tracker by parselmouth, which ships Praat.
+AUDIO_STATS_PRODUCER = (
+    f"faster-whisper-{_package_version('faster-whisper')}/silero-vad"
+    f"/parselmouth-{_package_version('praat-parselmouth')}/praat-ac"
+    f"/frame={AUDIO_FRAME_SECS}s/margin={AUDIO_BACKGROUND_MARGIN_DB}dB"
+    f"/floor={AUDIO_SILENCE_DBFS}dBFS/pitch_floor={PITCH_FLOOR_HZ}Hz"
+    f"/pitch_ceiling={PITCH_CEILING_HZ}Hz"
+    f"/pause_silence={SPEECH_MIN_SILENCE_MS}ms/pause_pad={SPEECH_PAD_MS}ms"
+    f"/pitch_step={PITCH_TIME_STEP_SECS}s/min_voiced={PITCH_MIN_VOICED_SECS}s"
+    f"/octave_error={OCTAVE_ERROR_ST}st"
+)
 
 # The same parameters, by name, for reporting: every ready result and /status
 # carry its kind's settings, so whoever runs a scan can see the thresholds it
@@ -359,6 +441,57 @@ TEXT_STATS_SETTINGS = {
     "reuse_threshold": OCR_REUSE_THRESHOLD,
     "min_score": OCR_MIN_SCORE,
 }
+AUDIO_STATS_SETTINGS = {
+    "vad": "silero-vad",
+    "pitch": "praat-ac",
+    "frame_secs": AUDIO_FRAME_SECS,
+    "background_margin_db": AUDIO_BACKGROUND_MARGIN_DB,
+    "silence_dbfs": AUDIO_SILENCE_DBFS,
+    "pitch_floor_hz": PITCH_FLOOR_HZ,
+    "pitch_ceiling_hz": PITCH_CEILING_HZ,
+    "pause_min_silence_ms": SPEECH_MIN_SILENCE_MS,
+    "pause_pad_ms": SPEECH_PAD_MS,
+    "pitch_time_step_secs": PITCH_TIME_STEP_SECS,
+    "pitch_min_voiced_secs": PITCH_MIN_VOICED_SECS,
+    "octave_error_st": OCTAVE_ERROR_ST,
+}
+
+# How each kind is calculated, in words, for whoever runs a scan: reported beside
+# its settings on /status. The values themselves are in the settings above, so
+# these describe the method and name the settings rather than repeating numbers
+# that could drift from them.
+TRANSCRIPT_METHOD = (
+    "Speech is transcribed by faster-whisper (OpenAI's Whisper model, run through "
+    "CTranslate2) in the configured language, optionally skipping silence with its "
+    "voice-activity filter. Word count is the transcript split on whitespace."
+)
+SCENE_STATS_METHOD = (
+    "Every frame is decoded (OpenCV, or PyAV for videos OpenCV cannot read such as "
+    "AV1) and converted to greyscale. A scene cut is counted whenever the mean "
+    "absolute difference from the previous frame, on a 0-255 scale, is above the "
+    "threshold. Duration is frame count / frame rate."
+)
+TEXT_STATS_METHOD = (
+    "One frame is sampled from the middle of every sampling interval and read by "
+    "RapidOCR (PP-OCRv6 small detection and recognition models). A sample whose "
+    "160x90 greyscale thumbnail differs from the last one read by less than the "
+    "reuse threshold (mean absolute difference, 0-255) reuses that reading. Only "
+    "lines recognised with at least the minimum confidence count; a word is a "
+    "token of two or more letters or digits. Mean words on screen is the mean "
+    "over samples, and coverage is text-box area / frame area."
+)
+AUDIO_STATS_METHOD = (
+    "Audio is decoded to 16 kHz mono. Speech is found by Silero VAD (faster-whisper's "
+    "default options, which merge silences under 2 s) and loudness is measured as RMS "
+    "in dBFS per frame. A frame outside speech counts as background sound when it is "
+    "at or above the silence floor and within the background margin of the speech's "
+    "median level. Pitch is tracked by Praat's autocorrelation method between the pitch "
+    "floor and ceiling; voiced frames in speech are put in semitones from the median, "
+    "octave errors dropped, and pitch variation is the standard deviation of the rest. "
+    "A second Silero pass ending speech at the pause silence length (padded by the "
+    "pause padding) gives speech ratio (speech seconds / duration) and the mean length "
+    "of the gaps between stretches of speech."
+)
 
 # A job whose worker died is requeued rather than failed, so a genuinely broken
 # video would otherwise retry forever. Past this many attempts it stays failed

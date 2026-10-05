@@ -29,7 +29,7 @@ BUILD_DIR = SERVER_DIR / "build"
 WORK_DIR = BUILD_DIR / "pyinstaller"
 MODEL_STAGE_DIR = BUILD_DIR / "models"
 # Committed, not staged: packed into the bundle exactly as it is in the repo.
-ENGAGEMENT_MODEL_DIR = SERVER_DIR / "engagement_model"
+ENGAGEMENT_MODEL_DIR = SERVER_DIR.parent / "models"
 HF_CACHE_DIR = BUILD_DIR / "hf-cache"
 DIST_DIR = SERVER_DIR / "dist"
 SPEC = SERVER_DIR / "open-insights.spec"
@@ -54,6 +54,7 @@ REQUIRED_PACKAGES = {
     "rapidocr": "rapidocr",
     "shapely": "shapely",
     "pyclipper": "pyclipper",
+    "parselmouth": "praat-parselmouth",
 }
 
 
@@ -146,19 +147,24 @@ def stage_model() -> None:
 
 
 def check_engagement_model() -> None:
-    """Refuse to build without the committed engagement model bundle.
+    """Refuse to build without the committed built-in engagement models.
 
-    Nothing trains it here: the bundle is committed, and the spec packs
-    engagement_model/ as it is. A checkout without it would build cleanly and
-    then die at startup on the user's machine, which is the failure stage_model()
-    guards against for the weights.
+    Nothing trains them here: they are committed in the repository's models/,
+    and the spec packs the BUILTIN_MODELS ones as they are. A checkout without
+    them would build cleanly and then die at startup on the user's machine, which
+    is the failure stage_model() guards against for the weights.
     """
-    bundle = ENGAGEMENT_MODEL_DIR / "engagement_model_inference.joblib"
-    if not bundle.is_file():
-        raise SystemExit(
-            f"{bundle} is missing - refusing to build.\n"
-            "Regenerate it with: python scripts/train_engagement_model.py <export>"
-        )
+    builtins = [m.strip() for m in os.environ.get("BUILTIN_MODELS", "full,fast").split(",") if m.strip()]
+    default = os.environ.get("ENGAGEMENT_MODEL_DEFAULT", "full")
+    if default not in builtins:
+        raise SystemExit(f"The default model '{default}' is not in BUILTIN_MODELS ({', '.join(builtins)}).")
+    for model in builtins:
+        for required in ("model.joblib", "model.json"):
+            if not (ENGAGEMENT_MODEL_DIR / model / required).is_file():
+                raise SystemExit(
+                    f"{ENGAGEMENT_MODEL_DIR / model / required} is missing - refusing to build.\n"
+                    "Regenerate it with: python scripts/train_engagement_model.py <export>"
+                )
 
 
 def artifact_name() -> str:

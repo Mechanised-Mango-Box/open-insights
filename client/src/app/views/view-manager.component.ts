@@ -7,7 +7,7 @@ import { VideoRecordsImport } from '../data-management/video-records/video-recor
 import { ExportRecordsComponent } from '../data-management/video-records/export-records.component';
 import { ScanActionsComponent } from '../data-management/video-records/scan-actions.component';
 import { AnalysisComponent } from '../data-management/analysis/analysis.component';
-import { RecommendationEngineComponent } from '../data-management/recommendation/recommendation-engine.component';
+import { RecommendPageComponent } from '../data-management/recommendation/recommend-page.component';
 import { ServerSettingsComponent } from '../data-management/server-settings.component';
 import { ProcessingModeBadgeComponent } from '../data-management/processing-mode-badge.component';
 import { ServerChoiceDialogComponent } from '../data-management/server-choice-dialog.component';
@@ -83,7 +83,13 @@ import { HOME, SETTINGS, VIEWS_WITH_RECORDS, ViewId, WORKFLOW } from './views';
             }
           }
           @case ('recommend') {
-            <recommendation-engine />
+            <!-- Deferred like Analysis: its tabs, model picker and card pull in
+                 Material modules only this step uses. -->
+            @defer (on idle) {
+              <recommend-page />
+            } @placeholder {
+              <p>Loading recommendations…</p>
+            }
           }
           @case ('settings') {
             <server-settings />
@@ -220,7 +226,7 @@ import { HOME, SETTINGS, VIEWS_WITH_RECORDS, ViewId, WORKFLOW } from './views';
     ExportRecordsComponent,
     ScanActionsComponent,
     AnalysisComponent,
-    RecommendationEngineComponent,
+    RecommendPageComponent,
     ServerSettingsComponent,
     ProcessingModeBadgeComponent,
   ],

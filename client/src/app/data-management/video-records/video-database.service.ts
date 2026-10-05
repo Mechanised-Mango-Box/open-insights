@@ -97,7 +97,7 @@ export class VideoDatabaseService {
   }
 
   private initDB = async () => {
-    return openDB<VideoDBSchema>('video-library-db', 5, {
+    return openDB<VideoDBSchema>('video-library-db', 6, {
       upgrade(db, oldVersion, _newVersion, tx) {
         // `upgrade` runs on every version increase, not just on first creation, so the
         // initial schema is gated on the version that introduced it - re-running
@@ -124,9 +124,10 @@ export class VideoDatabaseService {
             for (const field of ['ds_transcript', 'ds_transcriptStats', 'ds_sceneStats']) {
               record[field] = migrateCacheable(record[field]);
             }
-            // v5's field as well: this cursor is already rewriting every record,
-            // and a second one over the same store could race it (see below).
+            // v5's and v6's fields as well: this cursor is already rewriting every
+            // record, and a second one over the same store could race it (see below).
             record['ds_textStats'] ??= { state: 'absent' };
+            record['ds_audioStats'] ??= { state: 'absent' };
             return cursor.update(record as VideoRecord).then(() => cursor.continue().then(migrate));
           });
         }
@@ -136,20 +137,27 @@ export class VideoDatabaseService {
         if (oldVersion < 4) {
           db.createObjectStore('dataset_results', { keyPath: ['kind', 'file_hash'] });
         }
-        // v5 adds ds_textStats. A stored record has no such field, and every
-        // reader of a dataset field expects a DatasetState there - 'absent' is
-        // the honest value for a record nobody has read the screen text of yet.
-        // A library older than v3 gets it from the v3 pass above instead, so no
-        // record is ever under two cursors at once.
-        if (oldVersion >= 3 && oldVersion < 5) {
+        // v5 adds ds_textStats and v6 ds_audioStats. A stored record has no such
+        // field, and every reader of a dataset field expects a DatasetState there -
+        // 'absent' is the honest value for a record nobody has scanned for it yet.
+        // One cursor for both, so a v3 or v4 library does not have two over the
+        // same store; a library older than v3 gets both from the v3 pass above
+        // instead, for the same reason.
+        if (oldVersion >= 3 && oldVersion < 6) {
           const store = tx.objectStore('videos');
-          store.openCursor().then(function addTextStats(cursor): unknown {
+          store.openCursor().then(function addDatasets(cursor): unknown {
             if (!cursor) return undefined;
             const record = cursor.value as Partial<VideoRecord>;
-            if (record.ds_textStats) return cursor.continue().then(addTextStats);
+            if (record.ds_textStats && record.ds_audioStats) {
+              return cursor.continue().then(addDatasets);
+            }
             return cursor
-              .update({ ...record, ds_textStats: { state: 'absent' } } as VideoRecord)
-              .then(() => cursor.continue().then(addTextStats));
+              .update({
+                ...record,
+                ds_textStats: record.ds_textStats ?? { state: 'absent' },
+                ds_audioStats: record.ds_audioStats ?? { state: 'absent' },
+              } as VideoRecord)
+              .then(() => cursor.continue().then(addDatasets));
           });
         }
       },
@@ -161,6 +169,7 @@ export class VideoDatabaseService {
       this.videoRecords.set(records);
       await this.backfillFileDurations(records);
       await this.backfillSpeechFeatures(records);
+      await this.dropSpeakingRatio(records);
     } catch (error) {
       console.error('Failed to load initial videos into signal:', error);
     }
@@ -229,6 +238,26 @@ export class VideoDatabaseService {
       }
     }
   };
+  /**
+   * Removes the transcript's speaking_ratio from records stored while it was
+   * still computed. It was replaced by audio stats' speech_ratio, and left in
+   * place it would keep riding along into every export. Same one-shot shape as
+   * the backfills above, and like them no schema bump: nothing reads the field.
+   */
+  private dropSpeakingRatio = async (records: VideoRecord[]): Promise<void> => {
+    for (const record of records) {
+      const stats = record.ds_transcriptStats;
+      if (!isReady(stats) || !('speaking_ratio' in stats.data)) continue;
+
+      delete (stats.data as Partial<Record<'speaking_ratio', unknown>>).speaking_ratio;
+      try {
+        await this.updateVideo(record);
+      } catch (error) {
+        console.error('Failed to drop speaking ratio for', record.sort_name, error);
+      }
+    }
+  };
+
   async addVideo(record: Omit<VideoRecord, '__id'>): Promise<number> {
     const db = await this.dbPromise;
     // Insert into IndexedDB

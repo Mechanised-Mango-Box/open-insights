@@ -9,6 +9,7 @@ import {
   viewChildren,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import {
   BarController,
@@ -40,6 +41,7 @@ import {
   computeRecommendations,
 } from './recommendations';
 import { AnalysisService } from './analysis.service';
+import { AnalysisMethods, buildAnalysisMethods } from './analysis-methods';
 import { VideoDatabaseService } from '../video-records/video-database.service';
 import { SelectionService } from '../video-records/selection.service';
 import { downloadBlob } from '../video-records/manifest-export';
@@ -93,9 +95,9 @@ const FEATURE_KEYS: readonly FeatureKey[] = ANALYSIS_FEATURE_COLUMNS;
 @Component({
   selector: 'analysis',
   standalone: true,
-  imports: [MatButtonModule, MatIcon, RecommendationListComponent],
+  imports: [MatButtonModule, MatExpansionModule, MatIcon, RecommendationListComponent],
   template: `
-    <div class="analysis-page">
+    <div class="view-stack">
       <section class="card actions-column">
         <p class="action-hint">{{ scopeLabel() }}</p>
 
@@ -125,12 +127,65 @@ const FEATURE_KEYS: readonly FeatureKey[] = ANALYSIS_FEATURE_COLUMNS;
       </section>
 
       @if (!hasResult()) {
-        <div class="card empty-state">
-          <p>Run the analysis to see correlations and distributions across the dataset.</p>
+        <div class="card">
+          <p class="card-lead empty">
+            Run the analysis to see correlations and distributions across your records.
+          </p>
         </div>
       }
 
       <div class="results" [hidden]="!hasResult()">
+        @if (methods(); as m) {
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>How these numbers are calculated</mat-panel-title>
+              <mat-panel-description>
+                {{ m.records.used }} of {{ m.records.total }} records used
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <dl class="method-list">
+              <dt>Records</dt>
+              <dd>
+                {{ m.records.used }} of {{ m.records.total }} used. A record needs scene stats, a
+                transcript, screen text, audio stats and a YouTube content report.
+                @for (s of m.records.skipped; track s.reason) {
+                  <br />Left out {{ s.count }}: {{ s.reason }}
+                }
+              </dd>
+              <dt>Engagement</dt>
+              <dd>{{ m.target }}</dd>
+              @for (t of m.techniques; track t.label) {
+                <dt>{{ t.label }}</dt>
+                <dd>{{ t.text }}</dd>
+              }
+            </dl>
+            <h3 class="method-heading">Features</h3>
+            <table class="method-table">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>How it is computed</th>
+                  <th>From</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (f of m.features; track f.key) {
+                  <tr>
+                    <td>{{ f.label }}</td>
+                    <td>{{ f.definition }}</td>
+                    <td>{{ f.scans.join(', ') }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+            <p class="method-note">
+              How each Scan result is itself measured, and with which thresholds, is under "How Scan
+              calculates its data" on the Scan step. The export includes all of this as
+              methods.json.
+            </p>
+          </mat-expansion-panel>
+        }
+
         <section class="chart-card correlation-card">
           <div class="chart-container correlation-container">
             <canvas #correlationCanvas></canvas>
@@ -139,22 +194,22 @@ const FEATURE_KEYS: readonly FeatureKey[] = ANALYSIS_FEATURE_COLUMNS;
 
         @if (recommendations(); as outcome) {
           <section class="card recommendations-card">
-            <h2 class="feature-heading">What this dataset suggests</h2>
+            <h2>What this dataset suggests</h2>
             @if (outcome.ok) {
               <!-- Associations, not advice: the wording comes from the training
                    pipeline, which is careful not to claim a cause. -->
-              <p class="recommendations-note">
+              <p class="card-lead">
                 Associations within your own records, not causes - and not predictions about videos
                 you have not made yet.
               </p>
               <recommendation-list [rows]="recommendationRows()" />
             } @else if (outcome.reason === 'not-enough-rows') {
-              <p class="recommendations-note">
+              <p class="card-lead">
                 Needs at least {{ outcome.rowsNeeded }} eligible records before the relationships
                 mean anything - there are {{ featureCount }} features to weigh against each other.
               </p>
             } @else {
-              <p class="recommendations-note">
+              <p class="card-lead">
                 These records do not vary independently enough to separate the features apart.
               </p>
             }
@@ -187,23 +242,18 @@ const FEATURE_KEYS: readonly FeatureKey[] = ANALYSIS_FEATURE_COLUMNS;
   `,
   styles: [
     `
-      .analysis-page {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-      }
-      .empty-state p {
+      .empty {
         margin: 0;
-        color: var(--mat-sys-on-surface-variant);
-      }
-      .recommendations-note {
-        margin: 0 0 12px;
-        color: var(--mat-sys-on-surface-variant);
       }
       .results {
         display: flex;
         flex-direction: column;
         gap: 24px;
+      }
+      /* The display above outranks the browser's own [hidden] rule, which left the
+         empty charts on screen before the first run. */
+      .results[hidden] {
+        display: none;
       }
       /* The charts render light-on-white, so their card carries that surface rather than
          the page's dark one. Must stay in step with CHART_SURFACE, which is the ground the
@@ -265,7 +315,7 @@ export class AnalysisComponent implements AfterViewInit {
     const selected = this.selectionService.selectedCount();
     return selected > 0
       ? `Analysing ${selected} selected record(s).`
-      : 'Analysing every record. Select rows in the table to narrow it.';
+      : 'Analysing every record. Tick rows in the record table on Import, Scan or Export to narrow it.';
   });
 
   protected readonly featureKeys = FEATURE_KEYS;
@@ -282,6 +332,7 @@ export class AnalysisComponent implements AfterViewInit {
 
   private lastResult = signal<AnalysisResult | null>(null);
   private lastRows: AnalysisFeatureRow[] = [];
+  protected methods = signal<AnalysisMethods | null>(null);
   protected recommendations = signal<RecommendationOutcome | null>(null);
   protected readonly minRowsForRecommendations = MIN_ROWS_FOR_RECOMMENDATIONS;
   protected readonly featureCount = ANALYSIS_FEATURE_COLUMNS.length;
@@ -325,16 +376,20 @@ export class AnalysisComponent implements AfterViewInit {
       // which is what the scope line above the button is for.
       const selected = this.selectionService.selection.selected;
       const records = selected.length > 0 ? selected : await this.dbService.getAllVideos();
-      const { rows, eligibleCount, totalCount } = this.analysisService.buildFeatureRows(records);
+      const rowResult = this.analysisService.buildFeatureRows(records);
+      const { rows, eligibleCount, totalCount } = rowResult;
 
       if (eligibleCount < 2) {
+        const reasons = rowResult.skipped.map((s) => `${s.count} ${s.reason}`).join(', ');
         this.statusMessage.set(
-          `Only ${eligibleCount} of ${totalCount} record(s) have transcript + scene stats + YouTube content data. Need at least 2 to run analysis.`,
+          `Only ${eligibleCount} of ${totalCount} record(s) have scene stats, a transcript, screen text, audio stats and a YouTube content report. Need at least 2 to run analysis.` +
+            (reasons ? ` Left out: ${reasons}.` : ''),
         );
         return;
       }
 
       const result = computeAnalysis(rows);
+      this.methods.set(buildAnalysisMethods(rowResult));
       this.renderResult(rows, result);
       this.lastRows = rows;
       this.lastResult.set(result);
@@ -362,6 +417,7 @@ export class AnalysisComponent implements AfterViewInit {
         featureKeys: FEATURE_KEYS,
         images,
         recommendations: outcome?.ok ? outcome.recommendations : null,
+        methods: this.methods(),
       });
       downloadBlob(blob, `open-insights-analysis-${new Date().toISOString()}.zip`);
     } catch (error) {
@@ -401,7 +457,7 @@ export class AnalysisComponent implements AfterViewInit {
         labels: FEATURE_KEYS.map((key) => FEATURE_LABELS[key]),
         datasets: [
           {
-            label: 'Correlation with Engagement',
+            label: 'Pearson r with engagement',
             data: [],
             backgroundColor: (ctx: ScriptableContext<'bar'>) =>
               (typeof ctx.raw === 'number' ? ctx.raw : 0) >= 0
@@ -416,7 +472,11 @@ export class AnalysisComponent implements AfterViewInit {
         maintainAspectRatio: false,
         scales: { x: { min: -1, max: 1 } },
         plugins: {
-          title: { display: true, text: 'Correlation with Engagement', color: CHART_INK },
+          title: {
+            display: true,
+            text: 'Correlation with Engagement (Pearson r)',
+            color: CHART_INK,
+          },
           legend: { display: false },
         },
       },
@@ -490,6 +550,8 @@ export class AnalysisComponent implements AfterViewInit {
 
   private renderResult(rows: AnalysisFeatureRow[], result: AnalysisResult): void {
     if (this.correlationChart) {
+      const title = this.correlationChart.options.plugins?.title;
+      if (title) title.text = `Correlation with Engagement (Pearson r, n = ${rows.length})`;
       this.correlationChart.data.datasets[0].data = FEATURE_KEYS.map(
         (key) => result.correlations[key] ?? 0,
       );

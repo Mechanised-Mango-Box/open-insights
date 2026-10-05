@@ -26,8 +26,9 @@ FEATURE_DISPLAY_NAMES: Dict[str, str] = {
     "scene_count": "Total number of scenes",
     "scene_change_rate": "Average scenes change rate (spm)",
     "speech_pace_variation": "Speech pace variation (WPM SD)",
-    "speaking_ratio": "Speaking ratio",
+    "speech_ratio": "Speech ratio",
     "text_density": "Text density (words on screen)",
+    "mean_pause_secs": "Mean pause (s)",
 }
 
 

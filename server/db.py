@@ -11,14 +11,20 @@ from config import (
     DB_PATH,
     JOB_LEASE_SECONDS,
     MAX_ATTEMPTS,
+    AUDIO_STATS_METHOD,
+    AUDIO_STATS_PRODUCER,
+    AUDIO_STATS_SETTINGS,
+    SCENE_STATS_METHOD,
     SCENE_STATS_PRODUCER,
     SCENE_STATS_SETTINGS,
+    TEXT_STATS_METHOD,
     TEXT_STATS_PRODUCER,
     TEXT_STATS_SETTINGS,
+    TRANSCRIPT_METHOD,
     TRANSCRIPT_PRODUCER,
     TRANSCRIPT_SETTINGS,
 )
-from models import FileExt, SceneStats, TextStats, Transcript
+from models import AudioStats, FileExt, SceneStats, TextStats, Transcript
 
 # Transcript/scene_stats jobs write from executor threads while requests write
 # from the request thread, so contention is routine rather than exceptional. Two
@@ -57,6 +63,8 @@ class DatasetKind:
     # The thresholds and models behind `producer`, by name (see config.py).
     # Left out of comparison and hashing: a dict has no hash.
     settings: Mapping[str, Any] = field(compare=False)
+    # How the kind is calculated, in words (see config.py's *_METHOD).
+    method: str = field(default="", compare=False)
 
 
 TRANSCRIPT = DatasetKind(
@@ -65,6 +73,7 @@ TRANSCRIPT = DatasetKind(
     columns=("count_chars", "count_words", "segments_json"),
     producer=TRANSCRIPT_PRODUCER,
     settings=TRANSCRIPT_SETTINGS,
+    method=TRANSCRIPT_METHOD,
 )
 
 SCENE_STATS = DatasetKind(
@@ -73,6 +82,7 @@ SCENE_STATS = DatasetKind(
     columns=("duration_secs", "scenes"),
     producer=SCENE_STATS_PRODUCER,
     settings=SCENE_STATS_SETTINGS,
+    method=SCENE_STATS_METHOD,
 )
 
 TEXT_STATS = DatasetKind(
@@ -88,10 +98,30 @@ TEXT_STATS = DatasetKind(
     ),
     producer=TEXT_STATS_PRODUCER,
     settings=TEXT_STATS_SETTINGS,
+    method=TEXT_STATS_METHOD,
+)
+
+AUDIO_STATS = DatasetKind(
+    name="audio_stats",
+    table="audio_stats",
+    columns=(
+        "duration_secs",
+        "speech_secs",
+        "speech_level_db",
+        "background_sound_ratio",
+        "median_pitch_hz",
+        "pitch_variation_st",
+        "speech_ratio",
+        "pause_rate_per_min",
+        "mean_pause_secs",
+    ),
+    producer=AUDIO_STATS_PRODUCER,
+    settings=AUDIO_STATS_SETTINGS,
+    method=AUDIO_STATS_METHOD,
 )
 
 KINDS: dict[str, DatasetKind] = {
-    kind.name: kind for kind in (TRANSCRIPT, SCENE_STATS, TEXT_STATS)
+    kind.name: kind for kind in (TRANSCRIPT, SCENE_STATS, TEXT_STATS, AUDIO_STATS)
 }
 
 
@@ -116,6 +146,29 @@ _JOBS_TABLE = f"""
         PRIMARY KEY (kind, file_hash),
         -- A running job always holds a lease; a queued or failed one never does.
         CHECK ((status = 'running') = (lease_expires_at IS NOT NULL))
+    );
+"""
+
+# Named apart from _SCHEMA for the same reason as _JOBS_TABLE: a column added
+# here does not reach a table that already exists, which is what
+# _migrate_audio_stats_columns() is for.
+#
+# The nullable columns are not a result still to come: a video with no speech in
+# it has no speech level, no pitch and no pauses.
+_AUDIO_STATS_TABLE = """
+    CREATE TABLE IF NOT EXISTS audio_stats (
+        file_hash              TEXT PRIMARY KEY REFERENCES files(file_hash),
+        duration_secs          REAL NOT NULL,
+        speech_secs            REAL NOT NULL,
+        speech_level_db        REAL,
+        background_sound_ratio REAL NOT NULL,
+        median_pitch_hz        REAL,
+        pitch_variation_st     REAL NOT NULL,
+        speech_ratio           REAL NOT NULL,
+        pause_rate_per_min     REAL NOT NULL,
+        mean_pause_secs        REAL,
+        producer               TEXT NOT NULL,
+        produced_at            TEXT NOT NULL DEFAULT (datetime('now'))
     );
 """
 
@@ -156,7 +209,7 @@ _SCHEMA = """
         producer          TEXT    NOT NULL,
         produced_at       TEXT    NOT NULL DEFAULT (datetime('now'))
     );
-""" + _JOBS_TABLE
+""" + _AUDIO_STATS_TABLE + _JOBS_TABLE
 
 
 def _requeue(
@@ -268,6 +321,25 @@ def _migrate_jobs_kinds(conn: sqlite3.Connection) -> None:
     """)
 
 
+def _migrate_audio_stats_columns(conn: sqlite3.Connection) -> None:
+    """Rebuilds `audio_stats` when it predates a column AUDIO_STATS stores.
+
+    Dropped rather than copied: a table missing a column was filled under an
+    earlier producer - the producer names every setting, and a new measure means
+    new settings - so each of its rows already reads as absent and would be
+    recomputed anyway. Copying them would only carry stale rows forward with
+    NULLs in NOT NULL columns."""
+    existing = _table_columns(conn, AUDIO_STATS.table)
+    if not existing or set(AUDIO_STATS.columns) <= existing:
+        return
+    conn.executescript(f"""
+        BEGIN;
+        DROP TABLE audio_stats;
+        {_AUDIO_STATS_TABLE}
+        COMMIT;
+    """)
+
+
 def init_db() -> None:
     conn = _configure(sqlite3.connect(DB_PATH))
     conn.execute("PRAGMA journal_mode = WAL")
@@ -278,6 +350,7 @@ def init_db() -> None:
     conn.commit()
 
     _migrate_jobs_kinds(conn)
+    _migrate_audio_stats_columns(conn)
 
     # A running job's worker lived in the previous process's in-memory executor,
     # which no restart survives. Requeue rather than fail: nothing is wrong with
@@ -466,6 +539,10 @@ def text_stats_values(text_stats: TextStats) -> dict[str, Any]:
         "text_frames_ratio": text_stats.text_frames_ratio,
         "samples_json": json.dumps([asdict(sample) for sample in text_stats.samples]),
     }
+
+
+def audio_stats_values(audio_stats: AudioStats) -> dict[str, Any]:
+    return asdict(audio_stats)
 
 
 # ---------------------------------------------------------------------------

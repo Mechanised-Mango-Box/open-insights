@@ -1,0 +1,78 @@
+{
+  "format_version": 1,
+  "id": "video",
+  "name": "Video only",
+  "version": "1",
+  "created_at": "2026-10-04T16:20:44+00:00",
+  "description": "Duration, scene change rate and on-screen text - what can be seen, not heard.",
+  "provider": {
+    "name": "Open Insights",
+    "url": ""
+  },
+  "notes": "Trained on 144 engineering lecture recordings from two University of Newcastle courses (MECH1750 and ENGG2440 - the EduVideo Insights set, see data/sample/edu-video-insights/COMPARISON.md). Predictions for other kinds of video are extrapolation. The per-feature suggestions are associations in that data, not causes.",
+  "model_type": {
+    "predictor": "RandomForestRegressor",
+    "predictor_role": "Predicts average percentage viewed from the raw feature values.",
+    "feedback": "LinearRegression on standardised features",
+    "feedback_role": "Gives each feature's direction and strength of association with average percentage viewed, used for the per-feature suggestions."
+  },
+  "hyperparameters": {
+    "n_estimators": 100,
+    "max_depth": null,
+    "min_samples_split": 2,
+    "min_samples_leaf": 1,
+    "max_features": 1.0,
+    "bootstrap": true,
+    "random_state": 42
+  },
+  "features": [
+    "duration",
+    "scene_change_rate",
+    "text_density"
+  ],
+  "feature_definitions": {
+    "duration": "Video length in minutes (scene stats, or audio stats when the model uses no scene feature).",
+    "scene_change_rate": "Scene cuts per minute: scene stats' cut count / duration in minutes.",
+    "text_density": "Mean number of words on screen per sampled frame (RapidOCR)."
+  },
+  "target": "average_percentage_viewed",
+  "target_definition": "Average percentage viewed: YouTube's average view duration / video duration x 100.",
+  "training": {
+    "dataset": "open-insights-export-2026-09-17T10_51_24.250Z-text-audio",
+    "rows": 144,
+    "train_rows": 115,
+    "test_rows": 29,
+    "test_size": 0.2,
+    "random_state": 42,
+    "split": "Random train/test split; metrics are on the held-out test rows."
+  },
+  "metrics": {
+    "random_forest": {
+      "rmse": 8.625023170227177,
+      "r2": -0.35005102202524707
+    },
+    "linear_regression": {
+      "rmse": 7.151515264102566,
+      "r2": 0.07183373205499499
+    }
+  },
+  "feature_importances": {
+    "duration": 0.39543343355365507,
+    "scene_change_rate": 0.31416659214992027,
+    "text_density": 0.2903999742964247
+  },
+  "coefficients": {
+    "duration": -2.1356851803402592,
+    "scene_change_rate": 0.44486105028685563,
+    "text_density": -0.47914771089897523
+  },
+  "intercept": 69.0625388692932,
+  "recommendation_threshold": 1.0,
+  "framework": {
+    "python": "3.14.7",
+    "scikit-learn": "1.9.0",
+    "numpy": "2.5.1",
+    "pandas": "3.0.5",
+    "joblib": "1.5.3"
+  }
+}

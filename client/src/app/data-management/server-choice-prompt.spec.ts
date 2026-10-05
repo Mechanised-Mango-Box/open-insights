@@ -106,9 +106,10 @@ describe('the server-choice prompt on load', () => {
     compute.setExperimental(true);
     compute.setTarget('transcript', 'local');
     compute.setTarget('scene_stats', 'local');
-    // Not reachable from the settings, which never offer screen text locally,
-    // but it is what "nothing goes to a server" takes now.
+    // Not reachable from the settings, which never offer screen text or audio
+    // stats locally, but it is what "nothing goes to a server" takes now.
     compute.setTarget('text_stats', 'local');
+    compute.setTarget('audio_stats', 'local');
 
     await render();
 

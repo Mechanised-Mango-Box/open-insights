@@ -139,6 +139,10 @@ function run(request: TranscriptRequest): Promise<TranscriptSegment[]> {
 export const transcriptComputer: Computer<'transcript'> = {
   producer: TRANSCRIPT_PRODUCER_LOCAL,
   settings: { model: 'whisper-tiny.en (q8)', language: 'en' },
+  method:
+    'Speech is transcribed in this browser by Whisper tiny.en (8-bit quantised, through ' +
+    'transformers.js on WebGPU), in 30 s chunks overlapping by 5 s, from the audio decoded ' +
+    'to 16 kHz mono. A smaller model than most servers run, so word counts can differ.',
 
   async compute(file: File): Promise<TranscriptStats & { segments: TranscriptSegment[] }> {
     const { pcm, duration_secs } = await extractAudio(file);

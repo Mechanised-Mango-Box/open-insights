@@ -7,7 +7,7 @@ ENGG2440, 54):
 |---|---|
 | **Paper** | Tolba, Kendall, Tudball Smith, Gregg, Vo & Wordley, *An Open Workflow Model for Improving Educational Video Design: Tools, Data, and Insights*, AAEE 2025 (arXiv 2512.16254). Numbers as printed in Figure 5 and the Stage 5 text. |
 | **Upstream** | The paper's code and data, [github.com/Mohamed-Tolba/edu-video-insights](https://github.com/Mohamed-Tolba/edu-video-insights). Its `data/all_*.csv` are copied into this folder, and its original YouTube Studio exports are in [`upstream_raw/`](upstream_raw/README.md). Everything is re-run here. |
-| **This project** | The same videos scanned by Open Insights and exported as `open-insights-export-2026-09-17T10_51_24.250Z`. Screen text was added afterwards by running the server's OCR (`server/text_stats.py`) over the same video files, and the one AV1 video's scene count, which that export has as 0, was recomputed once scene stats could decode it (see [Scene count](#do-the-two-pipelines-measure-the-same-thing)). That gives the `…-text` copy of the export. The committed engagement model was trained on the `…-text` copy. |
+| **This project** | The same videos scanned by Open Insights and exported as `open-insights-export-2026-09-17T10_51_24.250Z`. Screen text was added afterwards by running the server's OCR (`server/text_stats.py`) over the same video files, and the one AV1 video's scene count, which that export has as 0, was recomputed once scene stats could decode it (see [Scene count](#do-the-two-pipelines-measure-the-same-thing)). That gives the `…-text` copy of the export. Audio stats were then added the same way, by running the server's `calculate_audio_stats` (`server/audio_stats.py`) over the same files, giving the `…-text-audio` copy. The committed engagement model was trained on the `…-text-audio` copy. |
 
 All numbers below come from
 [`server/model_training/compare_upstream.py`](../../../server/model_training/compare_upstream.py).
@@ -29,15 +29,18 @@ See [Reproducing](#reproducing) for how to run it.
 - **The paper's "unexpected" positive word-count weight also shows up here (+14.2).** Duration and
   word count correlate at 0.987 (variance inflation factor ~180 each). The two weights are
   offsetting each other, not showing a real effect.
-- **This project's two extra speech features add signal in-sample.** Speech pace variation has
-  r = −0.21 and speaking ratio r = +0.15. With them, R² on the training data goes from 0.078 to 0.16.
+- **This project's extra speech features add signal in-sample.** Speech pace variation has
+  r = −0.21, speech ratio r = +0.17 and mean pause length r = −0.30, the strongest of any speech
+  feature. With them, R² on the training data goes from 0.078 to 0.21. See
+  [Speech ratio and pauses](#speech-ratio-and-pauses).
 - **Text density (words on screen, by OCR) adds almost nothing.** More text goes with slightly
-  less watching (r = −0.10; rank correlation −0.21). But adding it as a 7th feature moves the
-  cross-validated linear RMSE only from 8.67 to 8.66, and the random forest's from 8.88 to 8.97.
-- **No model predicts engagement on videos it hasn't seen.** Under repeated 5-fold
-  cross-validation, the best model scores RMSE 8.66 ± 1.76, against 8.98 ± 1.44 for simply
-  predicting the average. The shipped model's reported score (RMSE 7.14, R² 0.076) comes from one
-  fairly easy 29-video test set. It can't be compared with the paper's in-sample 8.6 / 0.085.
+  less watching (r = −0.10; rank correlation −0.21), but its in-sample weight in the 8-feature
+  model is −0.02.
+- **Still, no model predicts engagement on videos it hasn't seen with any confidence.** Under
+  repeated 5-fold cross-validation the best model scores RMSE 8.37 ± 1.82, against 9.00 ± 1.42 for
+  simply predicting the average, a gain well inside the fold-to-fold SD. The shipped model's
+  reported score (RMSE 6.68, R² 0.20) comes from one 29-video test set. It can't be compared with
+  the paper's in-sample 8.6 / 0.085.
 
 ## How each feature is measured
 
@@ -49,6 +52,8 @@ See [Reproducing](#reproducing) for how to run it.
 | Scene count | PySceneDetect `ContentDetector(threshold=30)`, counting *scenes* and dropping any that start in the first 1 s or end in the last 2 s | Counts every frame whose grayscale mean absolute difference from the previous frame exceeds 30 |
 | Scene change rate | scenes ÷ minutes | scenes ÷ minutes |
 | Text density | Not measured | RapidOCR (PP-OCRv6 small) on one frame every 5 s. Counts words (tokens with at least two letters or digits) from lines read with confidence ≥ 0.8, averaged over the video |
+| Speech ratio | Not measured | Silero VAD on the 16 kHz audio, ending speech at a 250 ms silence and padding it by 30 ms. Seconds of speech ÷ duration |
+| Mean pause | Not measured | The same VAD pass. Mean gap between consecutive stretches of speech, in seconds |
 | Average percentage viewed | YouTube Analytics average percentage viewed, copied by hand | Average view duration ÷ duration × 100, taken from the Studio report that [`gen_youtube_exports.py`](gen_youtube_exports.py) rebuilt from upstream's data |
 
 ## Do the two pipelines measure the same thing?
@@ -120,8 +125,9 @@ b − a.
 | Scene count | −0.01 | −0.014 | +0.043 |
 | Scene change rate | +0.09 | +0.094 | +0.123 |
 | Speech pace variation | — | — | −0.206 |
-| Speaking ratio | — | — | +0.148 |
 | Text density | — | — | −0.104 |
+| Speech ratio | — | — | +0.174 |
+| Mean pause | — | — | −0.302 |
 
 - **Duration, word count and speaking speed** are the same within 0.015.
 - **Scene count changes sign**, but it was around zero in both, so neither reading says anything.
@@ -166,7 +172,7 @@ same one:
   and it is scored on the same 144 videos (in-sample). This is what the paper's 8.6 / 0.0853
   measures.
 - **Project protocol.** `train.py` makes one 80/20 split with `random_state=42` and scores on the
-  29 held-out videos. The shipped 7.14 / 0.076 comes from this.
+  29 held-out videos. The shipped 6.68 / 0.20 comes from this.
 - **Cross-validation.** Repeated 5-fold cross-validation, 10 repeats and 50 folds, scored on
   held-out folds. Of the three, this is the only one that estimates how the model does on new
   videos.
@@ -175,14 +181,13 @@ same one:
 
 Weights are percentage points of APV per standard deviation of each feature.
 
-| Run | Duration | Words | wpm | Scenes | Scene rate | Pace var. | Speak ratio | Text density | RMSE | R² |
-|---|---|---|---|---|---|---|---|---|---|---|
-| Paper, as printed | −21.81 | 20.52 | −3.04 | −1.02 | 1.15 | — | — | — | 8.6 | 0.0853 |
-| Upstream data, upstream's gradient descent | −21.81 | 20.52 | −3.04 | −1.02 | 1.15 | — | — | — | 8.603 | 0.0853 |
-| Upstream data, exact least squares | −22.01 | 20.73 | −3.07 | −1.03 | 1.15 | — | — | — | 8.603 | 0.0854 |
-| This project, paper's 5 features | −16.05 | 14.20 | −2.24 | 0.31 | 0.34 | — | — | — | 8.651 | 0.0780 |
-| This project, six features before text density | −18.73 | 16.70 | −3.20 | — | 0.48 | −2.20 | 1.29 | — | 8.256 | 0.1602 |
-| This project, model's 7 features | −19.30 | 17.35 | −3.18 | — | 0.45 | −2.16 | 1.29 | −0.55 | 8.239 | 0.1637 |
+| Run | Duration | Words | wpm | Scenes | Scene rate | Pace var. | Text density | Speech ratio | Mean pause | RMSE | R² |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Paper, as printed | −21.81 | 20.52 | −3.04 | −1.02 | 1.15 | — | — | — | — | 8.6 | 0.0853 |
+| Upstream data, upstream's gradient descent | −21.81 | 20.52 | −3.04 | −1.02 | 1.15 | — | — | — | — | 8.603 | 0.0853 |
+| Upstream data, exact least squares | −22.01 | 20.73 | −3.07 | −1.03 | 1.15 | — | — | — | — | 8.603 | 0.0854 |
+| This project, paper's 5 features | −16.05 | 14.20 | −2.24 | 0.31 | 0.34 | — | — | — | — | 8.651 | 0.0780 |
+| This project, model's 8 features (143 videos) | −14.86 | 13.21 | −3.67 | — | 0.61 | −1.65 | −0.02 | −0.92 | −3.61 | 7.994 | 0.2136 |
 
 - **The paper's weights come from upstream's gradient descent, not exact least squares.** They
   are reproduced by upstream's `gradient_descent` in
@@ -204,8 +209,7 @@ correlation with engagement is negative. The cause is collinearity:
 |---|---|---|---|
 | Upstream, paper's 5 features | 187 | 199 | 4.7–5.7 |
 | This project, paper's 5 features | 179 | 189 | 3.7–4.7 |
-| This project, six features before text density | 169 | 173 | 1.1–4.7 |
-| This project, model's 7 features | 170 | 175 | 1.1–4.7 |
+| This project, model's 8 features | 177 | 180 | 1.1–4.9 |
 
 - **Duration and word count carry almost the same information.** Words ≈ wpm × duration, and the
   two correlate at r = 0.987. A variance inflation factor near 180 means the data barely
@@ -217,21 +221,22 @@ correlation with engagement is negative. The cause is collinearity:
   means anything on its own.
 
 **This matters for the app.** `inference.py` turns each linear weight above ±1 into advice. The
-shipped model's word-count weight is +14.6, so it tells a short video to *add words*, while telling
+shipped model's word-count weight is +11.4, so it tells a short video to *add words*, while telling
 long videos to cut duration. That advice is an artefact of the collinearity. The fix is to
 drop one of the pair or combine them, for example by keeping duration and wpm, since word count is
 their product. That is a modelling change, and this comparison doesn't make it.
 
-### Project protocol (train.py's split, the same 29 held-out videos for every row)
+### Project protocol (train.py's split, the same 29 held-out videos for every row but the last)
 
 | Run | Linear RMSE | Linear R² | Forest RMSE | Forest R² | Mean-predictor RMSE |
 |---|---|---|---|---|---|
 | Upstream data, paper's 5 features | 6.99 | 0.108 | 7.81 | −0.111 | 7.41 |
 | This project, paper's 5 features | 7.07 | 0.094 | 7.32 | 0.027 | 7.42 |
-| This project, six features before text density | 7.19 | 0.063 | 7.24 | 0.049 | 7.42 |
-| This project, model's 7 features (shipped) | 7.14 | 0.076 | 7.42 | 0.001 | 7.42 |
+| This project, model's 8 features (shipped) | 6.68 | 0.202 | 6.84 | 0.164 | 7.62 |
 
-- **The last row is what `python -m model_training.train` reports for the committed model.**
+- **The last row is what `python -m model_training.train` reports for the committed model.** It
+  trains on 143 videos (one has no pause to measure; see below), so its 80/20 split holds out a
+  different 29, on which the average scores 7.62 rather than 7.42.
 - **These RMSEs are lower than the paper's 8.6 because the test set is easier, not because the
   model is better.** Predicting the average scores 7.4 on these 29 videos, against 9.0 across all
   144.
@@ -244,18 +249,16 @@ their product. That is a modelling change, and this comparison doesn't make it.
 |---|---|---|---|---|---|
 | Upstream data, paper's 5 features | 8.94 ± 1.51 | 9.88 ± 1.54 | 8.96 ± 1.43 | −0.058 ± 0.176 | −0.301 ± 0.232 |
 | This project, paper's 5 features | 9.09 ± 1.49 | 9.57 ± 1.66 | 8.98 ± 1.44 | −0.100 ± 0.237 | −0.210 ± 0.221 |
-| This project, six features before text density | 8.67 ± 1.74 | 8.88 ± 1.67 | 8.98 ± 1.44 | +0.017 ± 0.173 | −0.040 ± 0.191 |
-| This project, model's 7 features | 8.66 ± 1.76 | 8.97 ± 1.71 | 8.98 ± 1.44 | +0.021 ± 0.173 | −0.060 ± 0.208 |
+| This project, model's 8 features (143 videos) | 8.37 ± 1.82 | 8.84 ± 1.68 | 9.00 ± 1.42 | +0.087 ± 0.169 | −0.031 ± 0.200 |
 
 The mean predictor's own R² averages −0.057 over these folds. It uses the training fold's mean, so
 it scores a little below zero on each test fold.
 
 - **The paper's five features predict engagement no better than the average, with either
   project's data.** The random forest does worse than the average.
-- **Only this project's speech features give a model that beats the average, and only just.**
-  Its RMSE is 0.3 pp lower (3%), well inside the fold-to-fold SD.
-- **Text density does not change that.** The linear model gains 0.01 of RMSE and the forest loses
-  0.09, both far inside the fold-to-fold SD. See [Text density](#text-density-on-screen-text).
+- **Only the model's 8 features beat the average, and only just.** Its linear RMSE is 8.37
+  against 9.00, 0.6 pp (7%) lower, still inside the fold-to-fold SD of 1.8. The forest beats the
+  average by less (8.84).
 - **The paper's in-sample R² of 0.085 does not carry over to new videos.** This matches its own
   closing caution that "these results should serve primarily as exploratory indicators."
 
@@ -274,12 +277,35 @@ Words on screen, read by OCR from one frame every 5 seconds and averaged over th
 - **The association is weak and negative.** Pearson r = −0.10 and rank correlation −0.21. Taking
   the log to tame the screen recordings (r = −0.13) changes nothing under cross-validation.
 - **It is not duration in disguise.** Its variance inflation factor is 1.1, so unlike word count
-  its weight can be read on its own. That weight is −0.55 in-sample and −0.41 in the shipped
-  model, under the 1.0 threshold `inference.py` treats as a relationship worth advice. So the app
-  reports text density as having "little to no measurable relationship" with engagement.
+  its weight can be read on its own. That weight is −0.02 in-sample and −0.10 in the shipped
+  model, both under the 1.0 threshold `inference.py` treats as a relationship worth advice. So
+  the app reports text density as having "little to no measurable relationship" with engagement.
 - **As a predictor it adds nothing measurable here.** One lecturer's slides vary too little for
   144 videos to show an effect. The feature is still worth keeping for a pooled, multi-lecturer
   dataset, where slide styles differ far more.
+
+### Speech ratio and pauses
+
+Both are measured from the sound, not the transcript: Whisper's segments run straight across
+pauses, so they show how much of the video Whisper skipped rather than how much was speech. The
+audio stats scan uses a Silero VAD pass that ends speech at a 250 ms silence, the usual cut-off
+for a pause in speech research.
+
+| | Min | Q1 | Median | Q3 | Max | ≥ 0.99 | r with APV |
+|---|---|---|---|---|---|---|---|
+| Speech ratio | 0.778 | 0.963 | 0.982 | 0.987 | 0.996 | 19 of 144 | +0.17 |
+| Mean pause (s) | 0.24 | 0.29 | 0.32 | 0.36 | 0.99 | — | −0.30 |
+
+- **Longer pauses go with less watching.** Mean pause length has the strongest correlation with
+  APV of any speech feature (r = −0.30, rank correlation −0.22), stronger than speech pace
+  variation (−0.21). Pauses per minute is weaker (r = −0.09) and is not a model feature.
+- **In the model the two partly overlap.** More speech means fewer and shorter pauses, so with
+  both in, speech ratio's weight turns slightly negative (−0.92 in-sample) despite its positive
+  correlation. Their variance inflation factors are 3.5 and 3.8: related, but each still readable.
+- **One video is left out of the model.** `yytmPfR8Hr8` (Thermoforming, 1.6 min) has music under
+  the narration the whole way through, so the VAD finds one unbroken stretch of speech and there is
+  no pause to average. The model trains on the other 143. Every comparison that does not use mean
+  pause still covers all 144.
 
 ## Caveats
 
@@ -290,6 +316,8 @@ Words on screen, read by OCR from one frame every 5 seconds and averaged over th
   and APV is concentrated between 65% and 75%. Any conclusion here is about this dataset.
 - **Scene features aren't comparable across the projects.** Results that depend on scene features
   can't be carried from one project's detector to the other's.
+- **Speech ratio and pauses were tuned once, by this project only.** The 250 ms pause cut-off
+  and 30 ms padding were not varied, and the VAD was not checked against hand-marked pauses.
 - **Text density was measured once, by this project only.** Upstream has nothing to compare it
   against, and the OCR itself was not checked against a hand count beyond spot checks of a few
   frames.
@@ -306,9 +334,9 @@ From `server/`, with the training requirements installed:
 python -m model_training.compare_upstream path/to/open-insights-export-<timestamp>
 ```
 
-The export must carry screen text (`text_stats`), which an export made after a Scan's "Extract
-Screen Text" does. The numbers here are from
-`open-insights-export-2026-09-17T10_51_24.250Z-text`.
+The export must carry screen text (`text_stats`) and audio stats (`audio_stats`), which an export
+made after a Scan's "Extract Screen Text" and "Extract Audio Stats" does. The numbers here are
+from `open-insights-export-2026-09-17T10_51_24.250Z-text-audio`.
 
 This prints every table above and writes them to `server/build/comparison/`, which is gitignored:
 

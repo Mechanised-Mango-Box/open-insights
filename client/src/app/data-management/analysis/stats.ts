@@ -19,8 +19,9 @@ export type AnalysisFeatureRow = {
   scene_change_rate: number;
   word_count: number;
   speech_pace_variation: number;
-  speaking_ratio: number;
+  speech_ratio: number;
   text_density: number;
+  mean_pause_secs: number;
   average_percentage_viewed: number;
 };
 
@@ -38,8 +39,9 @@ export const ANALYSIS_FEATURE_COLUMNS = [
   'scene_change_rate',
   'word_count',
   'speech_pace_variation',
-  'speaking_ratio',
+  'speech_ratio',
   'text_density',
+  'mean_pause_secs',
 ] as const satisfies readonly (keyof AnalysisFeatureRow)[];
 
 /** The feature columns as a union - the one place that spelling is derived, so a
@@ -58,12 +60,75 @@ export const FEATURE_LABELS: Record<AnalysisFeatureColumn, string> = {
   scene_change_rate: 'Scene Change Rate (per min)',
   word_count: 'Word Count',
   speech_pace_variation: 'Speech Pace Variation (WPM SD)',
-  speaking_ratio: 'Speaking Ratio',
+  speech_ratio: 'Speech Ratio',
   text_density: 'Text Density (words on screen)',
+  mean_pause_secs: 'Mean Pause (seconds)',
 };
 
 export const ANALYSIS_TARGET_COLUMN =
   'average_percentage_viewed' satisfies keyof AnalysisFeatureRow;
+
+/** How each feature is computed, in words - word for word FEATURE_DEFINITIONS in
+ * server/model_training/data_preparation.py, which copies them into every model card. */
+export const FEATURE_DEFINITIONS: Record<AnalysisFeatureColumn, string> = {
+  duration:
+    'Video length in minutes (scene stats, or audio stats when the model uses no scene feature).',
+  wpm: 'Transcript word count / duration in minutes (Whisper transcript).',
+  scene_change_rate: "Scene cuts per minute: scene stats' cut count / duration in minutes.",
+  word_count: 'Words in the Whisper transcript.',
+  speech_pace_variation:
+    'Standard deviation of words per minute across 30 s windows of the transcript.',
+  speech_ratio: 'Seconds of speech heard by Silero VAD / video length (0-1).',
+  text_density: 'Mean number of words on screen per sampled frame (RapidOCR).',
+  mean_pause_secs: 'Mean length in seconds of the gaps between stretches of speech (Silero VAD).',
+};
+
+export const TARGET_DEFINITION =
+  "Average percentage viewed: YouTube's average view duration / video duration x 100.";
+
+/** A Scan result a feature is read from, named as the record field it lives in
+ * without the ds_ prefix. */
+export type FeatureSource = 'sceneStats' | 'transcriptStats' | 'textStats' | 'audioStats';
+
+/** Which Scan results each feature comes from, besides the duration every rate is
+ * divided by (see durationSourceFor). Mirrors FEATURE_SOURCES in data_preparation.py. */
+export const FEATURE_SOURCES: Record<AnalysisFeatureColumn, readonly FeatureSource[]> = {
+  duration: [],
+  wpm: ['transcriptStats'],
+  scene_change_rate: ['sceneStats'],
+  word_count: ['transcriptStats'],
+  speech_pace_variation: ['transcriptStats'],
+  speech_ratio: ['audioStats'],
+  text_density: ['textStats'],
+  mean_pause_secs: ['audioStats'],
+};
+
+/** Where a feature set reads its duration: scene stats when it has a scene feature
+ * to divide by it, audio stats otherwise - so a model without scene features never
+ * needs the scene scan. Mirrors duration_source() in data_preparation.py. */
+export const durationSourceFor = (
+  features: readonly AnalysisFeatureColumn[],
+): 'sceneStats' | 'audioStats' =>
+  features.includes('scene_change_rate') ? 'sceneStats' : 'audioStats';
+
+/** Every Scan result a feature set needs, its duration's included, in Scan order. */
+export const requiredSourcesFor = (features: readonly AnalysisFeatureColumn[]): FeatureSource[] => {
+  const needed = new Set<FeatureSource>([durationSourceFor(features)]);
+  for (const feature of features) FEATURE_SOURCES[feature].forEach((s) => needed.add(s));
+  return (['sceneStats', 'transcriptStats', 'textStats', 'audioStats'] as const).filter((s) =>
+    needed.has(s),
+  );
+};
+
+/** The constants behind computeAnalysis, named so the page and the export can say
+ * what produced the numbers rather than repeat them by hand. */
+export const HISTOGRAM_BINS = 15;
+export const LOESS_FRAC = 0.66;
+export const LOESS_POINTS = 100;
+
+/** Narrows an arbitrary list of names (a model card's) to the ones this client computes. */
+export const isFeatureColumn = (name: string): name is AnalysisFeatureColumn =>
+  (ANALYSIS_FEATURE_COLUMNS as readonly string[]).includes(name);
 
 /** np.linspace: `num` points from start to stop inclusive. The endpoint is
  * assigned rather than accumulated, as numpy does, so it lands exactly on
@@ -89,8 +154,8 @@ const linspace = (start: number, stop: number, num: number): number[] => {
 export function computeLoess(
   xIn: readonly number[],
   yIn: readonly number[],
-  frac = 0.66,
-  nPoints = 100,
+  frac = LOESS_FRAC,
+  nPoints = LOESS_POINTS,
 ): { x: number[]; y: number[] } {
   const order = xIn.map((_, i) => i).sort((a, b) => xIn[a] - xIn[b]);
   const x = order.map((i) => xIn[i]);
@@ -152,7 +217,7 @@ export function computeLoess(
 /** np.histogram(values, bins) - returns the bin edges and the counts. */
 export function computeHistogram(
   values: readonly number[],
-  bins = 15,
+  bins = HISTOGRAM_BINS,
 ): { bins: number[]; counts: number[] } {
   let lo = Infinity;
   let hi = -Infinity;

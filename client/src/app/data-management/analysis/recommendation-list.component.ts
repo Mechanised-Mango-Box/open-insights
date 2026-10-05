@@ -8,6 +8,9 @@ export type RecommendationRow = {
   label: string;
   relationship: Relationship;
   recommendation: string;
+  /** Points of average percentage viewed per standard deviation of the feature -
+   * the number the relationship was read from. */
+  coefficient?: number;
 };
 
 /**
@@ -34,6 +37,9 @@ export type RecommendationRow = {
           <span class="recommendation-text">
             <strong>{{ row.label }}</strong>
             - {{ row.recommendation }}
+            @if (row.coefficient != null) {
+              <span class="coefficient">({{ signed(row.coefficient) }} points per SD)</span>
+            }
           </span>
         </li>
       }
@@ -71,7 +77,8 @@ export type RecommendationRow = {
       .relationship-negative {
         color: #e34948;
       }
-      .relationship-weak {
+      .relationship-weak,
+      .coefficient {
         color: var(--mat-sys-on-surface-variant);
       }
     `,
@@ -79,4 +86,6 @@ export type RecommendationRow = {
 })
 export class RecommendationListComponent {
   rows = input.required<RecommendationRow[]>();
+
+  protected signed = (value: number): string => `${value >= 0 ? '+' : ''}${value.toFixed(2)}`;
 }

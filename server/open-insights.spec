@@ -2,8 +2,8 @@
 """PyInstaller build definition for the portable server.
 
 Built through scripts/build_portable.py, which stages the transcription weights
-into build/models first and checks the committed engagement model bundle is in
-engagement_model/ - this file assumes both are there.
+into build/models first and checks the built-in engagement models are committed
+in the repository's models/ - this file assumes both are there.
 
     python scripts/build_portable.py
 
@@ -22,11 +22,21 @@ from PyInstaller.utils.hooks import collect_all, collect_data_files
 # config.WHISPER_MODEL_PATH looks for them.
 datas = [
     (os.path.join(SPECPATH, "build", "models"), "models"),
-    # The engagement model bundle, packed straight from the committed
-    # engagement_model/ directory. config.ENGAGEMENT_MODEL_DIR looks for it at
-    # sys._MEIPASS/engagement_model.
-    (os.path.join(SPECPATH, "engagement_model"), "engagement_model"),
 ]
+
+# The built-in engagement models, packed straight from the repository's models/:
+# only the ones BUILTIN_MODELS names (full and fast unless it is set), so the
+# others stay download-only. They land at sys._MEIPASS/engagement_models/<id>,
+# where config.ENGAGEMENT_MODEL_DIR looks, and config takes the packed set as the
+# frozen build's built-ins.
+for _model in os.environ.get("BUILTIN_MODELS", "full,fast").split(","):
+    if _model.strip():
+        datas.append(
+            (
+                os.path.join(SPECPATH, "..", "models", _model.strip()),
+                os.path.join("engagement_models", _model.strip()),
+            )
+        )
 binaries = []
 hiddenimports = []
 
@@ -64,15 +74,16 @@ for package in (
     "rapidocr",
     "shapely",
     "pyclipper",
+    # parselmouth is a compiled extension with Praat linked into it.
+    "parselmouth",
 ):
     package_datas, package_binaries, package_hiddenimports = collect_all(package)
     datas += package_datas
     binaries += package_binaries
     hiddenimports += package_hiddenimports
 
-# faster-whisper ships the silero VAD model as package data. Only needed when
-# WHISPER_VAD=1, but it is a few megabytes and a bundle that cannot honour its
-# own environment variable is worse than a slightly larger one.
+# faster-whisper ships the silero VAD model as package data. Transcription uses
+# it only when WHISPER_VAD=1, but audio stats find speech with it on every scan.
 datas += collect_data_files("faster_whisper")
 
 a = Analysis(

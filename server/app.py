@@ -2,11 +2,21 @@ import os
 from pathlib import Path
 
 import auth
-from config import ALLOWED_ORIGINS, DB_PATH, MAX_UPLOAD_BYTES, UPLOAD_FOLDER
+from config import (
+    ALLOWED_ORIGINS,
+    BUILTIN_MODELS,
+    DB_PATH,
+    ENGAGEMENT_MODEL_DEFAULT,
+    ENGAGEMENT_MODEL_DIR,
+    MAX_UPLOAD_BYTES,
+    MODELS_DIR,
+    UPLOAD_FOLDER,
+)
 from db import close_db, init_db
 from flask import Flask, jsonify
 from flask_cors import CORS
-from inference import EngagementPredictor
+from model_portal import bp as model_portal_bp
+from model_registry import ModelRegistry
 from processing import resubmit_orphaned_jobs, start_backfill, start_upload_reaper
 from routes import bp
 from werkzeug.exceptions import HTTPException
@@ -14,12 +24,16 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 
 app = Flask(__name__)
 
-# Loaded once, here, and shared by every request through app.extensions. At
-# import rather than on first use so a missing or stale bundle stops the server
-# at boot - where the Whisper weights fail too - instead of 500ing the first
-# person to ask for a recommendation. The bundle is committed; regenerate it with
-# scripts/train_engagement_model.py <export>.
-app.extensions["engagement_predictor"] = EngagementPredictor()
+# Shared by every request through app.extensions. The built-in models are loaded
+# here, at import rather than on first use, so a missing or stale one stops the
+# server at boot - where the Whisper weights fail too - instead of 500ing the
+# first person to ask for a recommendation. They are committed; regenerate them
+# with scripts/train_engagement_model.py <export>. Models added from the page at
+# / load on first use.
+app.extensions["model_registry"] = ModelRegistry(
+    ENGAGEMENT_MODEL_DIR, BUILTIN_MODELS, MODELS_DIR, ENGAGEMENT_MODEL_DEFAULT
+)
+app.extensions["model_registry"].load_builtins()
 
 # Behind Caddy in the deployed setup, so the peer address on every request is the
 # proxy's. Without this the whole public tier shares one rate-limit bucket keyed
@@ -113,3 +127,4 @@ start_upload_reaper()
 app.teardown_appcontext(close_db)
 
 app.register_blueprint(bp)
+app.register_blueprint(model_portal_bp)

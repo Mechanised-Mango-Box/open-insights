@@ -11,6 +11,7 @@ const base = (): Omit<VideoRecord, 'sort_name'> => ({
   ds_transcriptStats: { state: 'absent' },
   ds_sceneStats: { state: 'absent' },
   ds_textStats: { state: 'absent' },
+  ds_audioStats: { state: 'absent' },
 });
 
 const youtubeRow = (title: string, duration_secs: number | null, id = title): VideoRecord => ({

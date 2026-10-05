@@ -1,6 +1,7 @@
 import JSZip from 'jszip';
 import { describe, expect, it } from 'vitest';
 import {
+  AudioStats,
   DatasetState,
   LOCAL_IMPORT,
   SceneStats,
@@ -43,7 +44,6 @@ const record = (overrides: Partial<VideoRecord> = {}): VideoRecord => ({
     count_chars: 56,
     count_words: 11,
     speech_pace_variation: 12.5,
-    speaking_ratio: 0.8,
   }),
   ds_sceneStats: ready<SceneStats>({ duration_secs: 3700, scenes: 42 }),
   ds_textStats: ready<TextStats>({
@@ -52,6 +52,17 @@ const record = (overrides: Partial<VideoRecord> = {}): VideoRecord => ({
     max_words: 80,
     mean_coverage: 0.12,
     text_frames_ratio: 0.9,
+  }),
+  ds_audioStats: ready<AudioStats>({
+    duration_secs: 3700,
+    speech_secs: 3500,
+    speech_level_db: -23.5,
+    background_sound_ratio: 0.02,
+    median_pitch_hz: null,
+    pitch_variation_st: 3.9,
+    speech_ratio: 0.91,
+    pause_rate_per_min: 8.5,
+    mean_pause_secs: null,
   }),
   ...overrides,
 });
@@ -86,6 +97,17 @@ describe('parseExportZip', () => {
       state: 'ready',
       data: { sample_count: 740, mean_words: 35, max_words: 80 },
     });
+    // null included: a video with no speech has no pitch, and that has to survive.
+    expect(imported.ds_audioStats).toMatchObject({
+      state: 'ready',
+      data: {
+        background_sound_ratio: 0.02,
+        median_pitch_hz: null,
+        pitch_variation_st: 3.9,
+        speech_ratio: 0.91,
+        mean_pause_secs: null,
+      },
+    });
   });
 
   it('stamps restored data as a local import, dated by the export', async () => {
@@ -97,6 +119,37 @@ describe('parseExportZip', () => {
     );
   });
 
+  it("carries each result's settings through the export, and records its producer", async () => {
+    const withSettings = record({
+      ds_sceneStats: {
+        state: 'ready',
+        data: { duration_secs: 3700, scenes: 42 },
+        producer: 'test',
+        produced_at: '2026-01-01T00:00:00.000Z',
+        settings: { threshold: 30 },
+      },
+    });
+    const blob = await buildExportZip([withSettings], { includeVideoFiles: false });
+    const zip = await JSZip.loadAsync(blob);
+    const manifest = JSON.parse(await zip.file('manifest.json')!.async('string')) as ExportManifest;
+    expect(manifest.records[0].scan_provenance?.scene_stats).toEqual({
+      producer: 'test',
+      produced_at: '2026-01-01T00:00:00.000Z',
+      settings: { threshold: 30 },
+    });
+    expect(manifest.records[0].scan_provenance?.transcript).toEqual({
+      producer: 'test',
+      produced_at: '2026-01-01T00:00:00.000Z',
+    });
+
+    const [imported] = await parseExportZip(new File([blob], 'export.zip'));
+    expect(imported.ds_sceneStats).toMatchObject({
+      producer: LOCAL_IMPORT,
+      settings: { threshold: 30 },
+    });
+    expect(imported.ds_transcript).not.toHaveProperty('settings');
+  });
+
   it('leaves datasets the export had nothing for absent', async () => {
     const [imported] = await roundTrip([
       record({
@@ -106,6 +159,7 @@ describe('parseExportZip', () => {
         ds_transcriptStats: { state: 'absent' },
         ds_sceneStats: { state: 'queued' },
         ds_textStats: { state: 'failed', error: 'no frames' },
+        ds_audioStats: { state: 'running' },
       }),
     ]);
 
@@ -115,6 +169,7 @@ describe('parseExportZip', () => {
     expect(imported.ds_transcriptStats).toEqual({ state: 'absent' });
     expect(imported.ds_sceneStats).toEqual({ state: 'absent' });
     expect(imported.ds_textStats).toEqual({ state: 'absent' });
+    expect(imported.ds_audioStats).toEqual({ state: 'absent' });
   });
 
   it('imports a record that never had a video file', async () => {
@@ -175,6 +230,40 @@ describe('parseExportZip', () => {
       expect(new Uint8Array(await file.arrayBuffer())).toEqual(bytes);
     },
   );
+
+  it("drops an older export's speaking_ratio, which the app no longer keeps", async () => {
+    const manifest: ExportManifest = {
+      generated_at: '2025-01-01T00:00:00.000Z',
+      records: [
+        {
+          id: HASH,
+          sort_name: 'Older Export',
+          video_file: { hash: HASH, exists_on_server: false, duration_secs: 60 },
+          youtube_content: null,
+          transcript_stats: {
+            count_chars: 56,
+            count_words: 11,
+            speech_pace_variation: 12.5,
+            speaking_ratio: 0.8,
+          } as ExportManifest['records'][number]['transcript_stats'],
+          scene_stats: null,
+          transcript_path: null,
+          video_file_path: null,
+          audience_retention_path: null,
+        },
+      ],
+    };
+    const zip = new JSZip();
+    zip.file('manifest.json', JSON.stringify(manifest));
+
+    const [imported] = await parseExportZip(await zip.generateAsync({ type: 'blob' }));
+
+    expect((imported.ds_transcriptStats as { data: object }).data).toEqual({
+      count_chars: 56,
+      count_words: 11,
+      speech_pace_variation: 12.5,
+    });
+  });
 
   it('rejects a zip that is not an export', async () => {
     const zip = new JSZip();
