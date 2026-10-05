@@ -260,14 +260,14 @@ WHISPER_MODEL_PATH = (
     else WHISPER_MODEL
 )
 
-# The engagement model bundle inference.py loads at startup: the random forest
-# that predicts average percentage viewed, and the linear regression and scaler
-# that explain it. Committed at server/engagement_model/ and shipped as-is by
-# the Dockerfile and build_portable.py - nothing trains it during a build.
-# Regenerate it with scripts/train_engagement_model.py <export> (a client export,
-# see the README) whenever the scikit-learn pins in requirements.txt or
-# model_training/ change: a pickle made under another scikit-learn does not load
-# reliably.
+# The built-in engagement models, one directory each (model.joblib + model.json,
+# see model_training/model_card.py): the random forest that predicts average
+# percentage viewed, and the linear regression and scaler that explain it.
+# Committed at server/engagement_model/<id>/ and shipped as-is by the Dockerfile
+# and build_portable.py - nothing trains them during a build. Regenerate them with
+# scripts/train_engagement_model.py <export> (a client export, see the README)
+# whenever the scikit-learn pins in requirements.txt or model_training/ change: a
+# pickle made under another scikit-learn does not load reliably.
 #
 # Its own directory rather than a subfolder of "models": a frozen build already
 # unpacks the Whisper weights to sys._MEIPASS/models, and models/ is ignored as a
@@ -279,6 +279,43 @@ ENGAGEMENT_MODEL_DIR = os.environ.get("ENGAGEMENT_MODEL_DIR") or str(
     if _bundled_engagement is not None
     else os.path.join(os.path.dirname(os.path.abspath(__file__)), "engagement_model")
 )
+
+# Which built-in model answers a recommendation that names none.
+ENGAGEMENT_MODEL_DEFAULT = os.environ.get("ENGAGEMENT_MODEL_DEFAULT", "full")
+
+# Models added from the server's page (model_registry.py), beside the database
+# and uploads so a portable build's models follow it like the rest of its data.
+MODELS_DIR = os.environ.get("MODELS_DIR", str(_DATA_DIR / "models"))
+
+# Whether the page at / may add and delete models. Even when on, only a browser on
+# this machine can (see model_portal.py): a model file is a pickle, and loading one
+# runs whatever code its author put in it. docker-compose.yml turns it off.
+MODEL_MANAGEMENT = os.environ.get("MODEL_MANAGEMENT", "1") == "1"
+
+# The largest model package accepted, compressed or not. The built-in models are
+# about 1 MB each.
+MODEL_MAX_BYTES = int(os.environ.get("MODEL_MAX_BYTES", str(200 * 1024**2)))
+
+# The published models that are not built in, offered as one-click downloads on
+# the page at /. Each is pinned by SHA-256, so a download that is not exactly
+# the published package is refused rather than unpickled.
+_MODELS_RELEASE = "https://github.com/Mechanised-Mango-Box/open-insights/releases/download/models-v1"
+SUGGESTED_MODELS = [
+    {
+        "id": "video",
+        "name": "Video only",
+        "description": "Duration, scene change rate and on-screen text.",
+        "url": f"{_MODELS_RELEASE}/video.zip",
+        "sha256": "4fac7174d63abb2c5d111cf9d2a893e62d30f2306b5d83b19679614b38e4479f",
+    },
+    {
+        "id": "audio",
+        "name": "Audio only",
+        "description": "Duration plus the transcript and audio features.",
+        "url": f"{_MODELS_RELEASE}/audio.zip",
+        "sha256": "1628d61619ffb6a8e32e7eaadebadf2c9f49ba865dd3abae64a30f1e9cb915db",
+    },
+]
 
 # How different a frame must be from its predecessor to count as a scene change.
 # Lifted out of processing.py, where it sat as a default argument that nothing

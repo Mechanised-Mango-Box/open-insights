@@ -225,8 +225,11 @@ __marimo__/
 
 # Model related
 models/*
-# The engagement model bundle is committed; anything else that lands beside it
-# (a stray local training run) is not. Regenerate with
-# scripts/train_engagement_model.py.
+# The built-in engagement models are committed (model.joblib + model.json in each
+# engagement_model/<id>/); anything else that lands beside them (a stray local
+# training run) is not. Regenerate with scripts/train_engagement_model.py.
 engagement_model/*
-!engagement_model/engagement_model_inference.joblib
+!engagement_model/*/
+engagement_model/*/*
+!engagement_model/*/model.joblib
+!engagement_model/*/model.json

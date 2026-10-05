@@ -24,6 +24,8 @@ from db import (
 )
 from flask import Blueprint, current_app, jsonify, make_response, redirect, request
 from instructions import page_html
+from model_portal import PORTAL_CSS, models_card_html
+from model_registry import ModelError
 from werkzeug.exceptions import NotFound
 from processing import SUBMIT, queue_status
 from utils import Failure, hash_stream
@@ -48,7 +50,7 @@ def __route_root():
     """
     if not SHOW_INSTRUCTIONS:
         return redirect("/status")
-    return make_response(page_html(request.host_url))
+    return make_response(page_html(request.host_url, models_card_html(), PORTAL_CSS))
 
 
 @bp.get("/status")
@@ -123,11 +125,22 @@ def __route_get_dataset(file_hash: str, kind_name: str):
     return jsonify(_serialized(kind, file_hash)), 200
 
 
+@bp.get("/api/models")
+def __route_models():
+    """Every engagement model this server holds, with its card, and which one a
+    recommendation that names none is answered by. Reads only the cards (see
+    model_registry.py); adding and deleting models is the page at /'s job."""
+    registry = current_app.extensions["model_registry"]
+    return jsonify({"default": registry.default_id, "models": registry.entries()})
+
+
 @bp.post("/api/videos/<file_hash>/recommendation")
 def __route_recommendation(file_hash: str):
-    """Runs the trained engagement model over one video: its predicted average
-    percentage viewed, and for each feature where the video sits against the
-    training data (see EngagementPredictor.predict).
+    """Runs an engagement model over one video: its predicted average percentage
+    viewed, and for each feature where the video sits against the training data
+    (see EngagementPredictor.predict). ?model=<id> picks the model (see
+    /api/models); without it the server's default answers. The response names
+    the model that produced it.
 
     The features arrive in the body, computed by the client from the video's
     Scan results, rather than being read back from this server's datasets: two
@@ -142,12 +155,23 @@ def __route_recommendation(file_hash: str):
     being adjacent is what makes the overlap visible to the next reader.
     """
     features = request.get_json(silent=True)
+    registry = current_app.extensions["model_registry"]
     try:
-        result = current_app.extensions["engagement_predictor"].predict(features)
+        predictor = registry.predictor(request.args.get("model"))
+    except ModelError as e:
+        return jsonify({"err": str(e)}), 404
+    try:
+        result = predictor.predict(features)
     except ValueError as e:
         # predict() raises ValueError only for input it will not accept, so this
         # is the caller's mistake and its message is safe to put on the wire.
         return jsonify({"err": str(e)}), 400
+    card = predictor.card or {}
+    result["model"] = {
+        "id": card.get("id") or request.args.get("model") or registry.default_id,
+        "name": card.get("name"),
+        "version": card.get("version"),
+    }
     return jsonify(result), 200
 
 

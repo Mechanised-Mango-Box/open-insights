@@ -28,7 +28,7 @@ audience_retention/
 - Simple data will be stored within the `manifest.json`
 - Complex/large data will be given a sub-directory, `manifest.json` will link to it instead
 
-An export is also what the engagement model is trained on - see [Server](#server).
+An export is also what the engagement models are trained on - see [Engagement models](#engagement-models).
 
 ### Import
 
@@ -86,32 +86,88 @@ file really is a video in that container before storing it; anything else is ref
 a 415 that says why. AV1 videos work too: the OpenCV wheels decode AV1 only with hardware
 support, so where they cannot, scene stats and screen text decode through PyAV instead.
 
-The engagement model needs no setup step: its trained bundle is committed at
-`server/engagement_model/`, and the Docker image and portable build ship it as-is.
-Regenerate it, and commit the result, whenever there is a better export to learn from,
+#### Engagement models
+
+The Recommend step asks one of the server's engagement models about a single video. Each
+model is a random forest that predicts average percentage viewed, plus a linear regression
+on standardised features that explains which way each feature leans. There are four,
+trained on different feature sets:
+
+| Model | Features | Scans it needs | Where it is |
+|---|---|---|---|
+| `full` (default) | all eight | scene, transcript, screen text, audio | built in |
+| `fast` | all but on-screen text | scene, transcript, audio | built in |
+| `video` | duration, scene change rate, text density | scene, screen text | [release](https://github.com/Mechanised-Mango-Box/open-insights/releases/tag/models-v1) download |
+| `audio` | duration, transcript and audio features | transcript, audio | [release](https://github.com/Mechanised-Mango-Box/open-insights/releases/tag/models-v1) download |
+
+`fast` leaves out screen text because OCR is the slowest scan. On 1080p lecture video, on a
+16-core CPU, the scans took about 7 s per minute of video for OCR, 4.3 s for scene stats,
+1.3 s for transcription and 0.3 s for audio stats.
+
+Each model is a directory with `model.joblib` (the pickled models) and `model.json` (its
+**model card**). The card records the provider, notes, when it was trained, the
+hyperparameters, the feature definitions, the training export and split, held-out RMSE and
+R², feature importances and the package versions. The server lists the cards at
+`GET /api/models` without unpickling anything, and the Recommend step shows the selected
+one on its Model tab. `?model=<id>` on the recommendation request picks a model;
+the response names the model that answered.
+
+**Adding a model.** Open the server's own page (`http://localhost:5000/`) in a browser on
+the same machine. Under *Engagement models* you can:
+
+- download a published model in one click (checked against its pinned SHA-256),
+- download a package from any `https://` URL, with an optional SHA-256, or
+- upload a package.
+
+A **model package** is a `.zip` holding exactly `model.json` and `model.joblib`. The server
+reads the card, checks that this server can compute its features and has the same
+scikit-learn version, loads the model once to make sure it works, and only then keeps it,
+under `MODELS_DIR` (default `data/models` beside the database). Added models can be deleted
+from the same page; built-in ones cannot.
+
+> A model file is a pickle, and loading one runs whatever code its author put in it. Only
+> add models from providers you trust. Because of that, the page's forms answer only a
+> browser on the server's own machine: the connection must come from loopback, with a
+> loopback `Host`, no forwarding header, a same-origin `Origin` and the page's per-process
+> token. `MODEL_MANAGEMENT=0` turns adding models off entirely, and `docker-compose.yml`
+> sets it, so a public server answers with its built-in models only. `MODEL_MAX_BYTES`
+> caps a package (default 200 MB).
+
+**Training a model.** The built-in models are committed under
+`server/engagement_model/<id>/`, and the Docker image and portable build ship them as-is.
+Regenerate them, and commit the result, whenever there is a better export to learn from,
 the scikit-learn, numpy, pandas or joblib pins in `requirements.txt` change (a
 scikit-learn pickle does not load under another version) or anything in
 `model_training/` that shapes the models changes:
 
 ```sh
 cd ./server
-python scripts/train_engagement_model.py path/to/open-insights-export-<timestamp>.zip
+python scripts/train_engagement_model.py path/to/export.zip --feature-set full
+python scripts/train_engagement_model.py path/to/export.zip --feature-set fast
+# The downloadable ones, as packages for a release:
+python scripts/train_engagement_model.py path/to/export.zip --feature-set video --no-save --package dist/models/video.zip
+python scripts/train_engagement_model.py path/to/export.zip --feature-set audio --no-save --package dist/models/audio.zip
 ```
+
+`--name`, `--version`, `--description`, `--provider`, `--provider-url` and `--notes` fill in
+the card. After publishing new packages, update their SHA-256s in `SUGGESTED_MODELS` in
+`server/config.py`.
 
 It trains on a client [export](#export) - the zip, or the zip unpacked into a folder.
 Only `manifest.json` is read, so exporting without video files is enough. A record
-becomes a training row when Scan has produced its transcript stats, scene stats,
-screen text and audio stats and a YouTube content report supplied its average view
-duration; the script prints how many records it kept and why it skipped the rest. The
-eight features are computed exactly as the Analysis page computes them, and the target is
-average view duration ÷ duration × 100 (see `model_training/data_preparation.py`).
-There is no built-in dataset to fall back on: the script refuses to run without an export.
+becomes a training row when Scan has produced the results its feature set comes from and
+a YouTube content report supplied its average view duration; the script prints how many
+records it kept and why it skipped the rest. The features are computed exactly as the
+client computes them, and the target is average view duration ÷ duration × 100. Duration
+comes from scene stats, or from audio stats for a feature set with no scene feature (see
+`model_training/data_preparation.py`). There is no built-in dataset to fall back on: the
+script refuses to run without an export.
 
 Training is seeded, so the same export, code and pins produce the same model. The
-export itself is not committed, so the bundle records what it learned from:
+export itself is not committed, so the card records what it learned from:
 
 ```sh
-python -c "import joblib; print(joblib.load('engagement_model/engagement_model_inference.joblib')['trained_on'])"
+python -c "import json; print(json.load(open('engagement_model/full/model.json'))['training'])"
 ```
 
 The exploration scripts in `model_training/` take an export the same way (install

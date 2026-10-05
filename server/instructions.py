@@ -163,13 +163,16 @@ footer { color: var(--muted); font-size: .875rem; margin-top: 2rem; }
 """
 
 
-def page_html(server_url: str) -> str:
+def page_html(server_url: str, models_html: str = "", extra_css: str = "") -> str:
     """The page served at /.
 
     Takes the URL rather than computing one, because the request knows something
     this process does not: which of its addresses the user actually reached it
     on. Echoing that back means the copyable URL is right whether they came in
     over loopback, a LAN address, or a tunnel.
+
+    models_html is the engagement models card (model_portal.py), rendered by the
+    caller because it depends on who is asking.
     """
     server_url = server_url.rstrip("/")
     client = client_origin()
@@ -194,7 +197,7 @@ def page_html(server_url: str) -> str:
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Open Insights server</title>
-<style>{_PAGE_CSS}</style>
+<style>{_PAGE_CSS}{extra_css}</style>
 </head>
 <body>
 <main>
@@ -214,12 +217,14 @@ def page_html(server_url: str) -> str:
 
   <div class="card">
     <dl>
-      <dt>Model</dt><dd>{e(WHISPER_MODEL)}</dd>
+      <dt>Transcription model</dt><dd>{e(WHISPER_MODEL)}</dd>
       <dt>Database</dt><dd>{e(str(DB_PATH))}</dd>
       <dt>Uploads</dt><dd>{e(str(UPLOAD_FOLDER))}</dd>
       <dt>API key</dt><dd>{"required" if AUTH_ENABLED else "not required"}</dd>
     </dl>
   </div>
+
+  {models_html}
 
   <div class="card">
     <p style="margin-top:0">

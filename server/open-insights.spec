@@ -22,8 +22,8 @@ from PyInstaller.utils.hooks import collect_all, collect_data_files
 # config.WHISPER_MODEL_PATH looks for them.
 datas = [
     (os.path.join(SPECPATH, "build", "models"), "models"),
-    # The engagement model bundle, packed straight from the committed
-    # engagement_model/ directory. config.ENGAGEMENT_MODEL_DIR looks for it at
+    # The built-in engagement models (engagement_model/<id>/), packed straight
+    # from the committed directory. config.ENGAGEMENT_MODEL_DIR looks for them at
     # sys._MEIPASS/engagement_model.
     (os.path.join(SPECPATH, "engagement_model"), "engagement_model"),
 ]

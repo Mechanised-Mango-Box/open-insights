@@ -147,17 +147,22 @@ def stage_model() -> None:
 
 
 def check_engagement_model() -> None:
-    """Refuse to build without the committed engagement model bundle.
+    """Refuse to build without the committed built-in engagement models.
 
-    Nothing trains it here: the bundle is committed, and the spec packs
-    engagement_model/ as it is. A checkout without it would build cleanly and
+    Nothing trains them here: they are committed, and the spec packs
+    engagement_model/ as it is. A checkout without them would build cleanly and
     then die at startup on the user's machine, which is the failure stage_model()
     guards against for the weights.
     """
-    bundle = ENGAGEMENT_MODEL_DIR / "engagement_model_inference.joblib"
-    if not bundle.is_file():
+    default = os.environ.get("ENGAGEMENT_MODEL_DEFAULT", "full")
+    models = [d for d in ENGAGEMENT_MODEL_DIR.iterdir() if d.is_dir()] if ENGAGEMENT_MODEL_DIR.is_dir() else []
+    for directory in models:
+        for required in ("model.joblib", "model.json"):
+            if not (directory / required).is_file():
+                raise SystemExit(f"{directory / required} is missing - refusing to build.")
+    if not (ENGAGEMENT_MODEL_DIR / default).is_dir():
         raise SystemExit(
-            f"{bundle} is missing - refusing to build.\n"
+            f"{ENGAGEMENT_MODEL_DIR / default} (the default model) is missing - refusing to build.\n"
             "Regenerate it with: python scripts/train_engagement_model.py <export>"
         )
 

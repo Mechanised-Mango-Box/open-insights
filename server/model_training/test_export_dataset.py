@@ -16,6 +16,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from model_training.data_preparation import (
     FEATURE_COLUMNS,
+    FEATURE_SETS,
     MIN_TRAINING_ROWS,
     TARGET_COLUMN,
     load_export_dataset,
@@ -128,6 +129,28 @@ class TestLoadExportDataset(unittest.TestCase):
         from_folder = load_export_dataset(self.folder, verbose=False)
         from_zip = load_export_dataset(self.zip, verbose=False)
         self.assertTrue(from_folder.equals(from_zip))
+
+    def test_feature_subset_needs_only_its_own_scans(self):
+        # The audio-only set needs no scene or text stats, and reads its duration
+        # from the audio: records 102-104 (scene/text problems) now count, and the
+        # 480 s audio duration (not scene stats' 600 s) is what rates divide by.
+        manifest = make_manifest()
+        for record in manifest["records"]:
+            if record.get("audio_stats"):
+                record["audio_stats"] = {**record["audio_stats"], "duration_secs": 480}
+        (self.folder / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+
+        df = load_export_dataset(self.folder, verbose=False, features=FEATURE_SETS["audio"])
+        self.assertEqual(list(df.columns), FEATURE_SETS["audio"] + [TARGET_COLUMN])
+        self.assertEqual(len(df), MIN_TRAINING_ROWS + 3)
+        row = df.iloc[0]
+        self.assertAlmostEqual(row["duration"], 8.0)
+        self.assertAlmostEqual(row["wpm"], 187.5)  # 1500 words / 8 min
+        self.assertAlmostEqual(row[TARGET_COLUMN], 75.0)  # 360 s of 480 s
+
+    def test_rejects_unknown_features(self):
+        with self.assertRaisesRegex(ValueError, "Unknown"):
+            load_export_dataset(self.folder, verbose=False, features=["duration", "nope"])
 
     def test_rejects_too_few_usable_records(self):
         manifest = {"records": [make_record(0)]}

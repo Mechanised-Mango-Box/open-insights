@@ -1,0 +1,94 @@
+{
+  "format_version": 1,
+  "id": "fast",
+  "name": "Fast features",
+  "version": "1",
+  "created_at": "2026-10-04T16:20:43+00:00",
+  "description": "Every feature except on-screen text, so the slow OCR scan is never needed. Transcript, scene and audio stats only.",
+  "provider": {
+    "name": "Open Insights",
+    "url": ""
+  },
+  "notes": "Trained on 144 engineering lecture recordings from two University of Newcastle courses (MECH1750 and ENGG2440 - the EduVideo Insights set, see data/sample/edu-video-insights/COMPARISON.md). Predictions for other kinds of video are extrapolation. The per-feature suggestions are associations in that data, not causes.",
+  "model_type": {
+    "predictor": "RandomForestRegressor",
+    "predictor_role": "Predicts average percentage viewed from the raw feature values.",
+    "feedback": "LinearRegression on standardised features",
+    "feedback_role": "Gives each feature's direction and strength of association with average percentage viewed, used for the per-feature suggestions."
+  },
+  "hyperparameters": {
+    "n_estimators": 100,
+    "max_depth": null,
+    "min_samples_split": 2,
+    "min_samples_leaf": 1,
+    "max_features": 1.0,
+    "bootstrap": true,
+    "random_state": 42
+  },
+  "features": [
+    "duration",
+    "wpm",
+    "scene_change_rate",
+    "word_count",
+    "speech_pace_variation",
+    "speech_ratio",
+    "mean_pause_secs"
+  ],
+  "feature_definitions": {
+    "duration": "Video length in minutes (scene stats, or audio stats when the model uses no scene feature).",
+    "wpm": "Transcript word count / duration in minutes (Whisper transcript).",
+    "scene_change_rate": "Scene cuts per minute: scene stats' cut count / duration in minutes.",
+    "word_count": "Words in the Whisper transcript.",
+    "speech_pace_variation": "Standard deviation of words per minute across 30 s windows of the transcript.",
+    "speech_ratio": "Seconds of speech heard by Silero VAD / video length (0-1).",
+    "mean_pause_secs": "Mean length in seconds of the gaps between stretches of speech (Silero VAD)."
+  },
+  "target": "average_percentage_viewed",
+  "target_definition": "Average percentage viewed: YouTube's average view duration / video duration x 100.",
+  "training": {
+    "dataset": "open-insights-export-2026-09-17T10_51_24.250Z-text-audio",
+    "rows": 143,
+    "train_rows": 114,
+    "test_rows": 29,
+    "test_size": 0.2,
+    "random_state": 42,
+    "split": "Random train/test split; metrics are on the held-out test rows."
+  },
+  "metrics": {
+    "random_forest": {
+      "rmse": 6.740241083267627,
+      "r2": 0.18793957005797968
+    },
+    "linear_regression": {
+      "rmse": 6.6729195074844,
+      "r2": 0.2040802893542566
+    }
+  },
+  "feature_importances": {
+    "duration": 0.12300928398063966,
+    "wpm": 0.10107033647945618,
+    "scene_change_rate": 0.09928854668180208,
+    "word_count": 0.12294752597127619,
+    "speech_pace_variation": 0.2099426172439042,
+    "speech_ratio": 0.08975192399742965,
+    "mean_pause_secs": 0.2539897656454921
+  },
+  "coefficients": {
+    "duration": -12.628999386245887,
+    "wpm": -3.1299066496728445,
+    "scene_change_rate": -0.05433986991176151,
+    "word_count": 11.264086407011424,
+    "speech_pace_variation": -2.0473207383274814,
+    "speech_ratio": -1.2024974053345596,
+    "mean_pause_secs": -3.762812557003695
+  },
+  "intercept": 69.29514132705037,
+  "recommendation_threshold": 1.0,
+  "framework": {
+    "python": "3.14.7",
+    "scikit-learn": "1.9.0",
+    "numpy": "2.5.1",
+    "pandas": "3.0.5",
+    "joblib": "1.5.3"
+  }
+}

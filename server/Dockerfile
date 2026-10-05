@@ -67,9 +67,9 @@ COPY --chown=app:app models.py config.py paths.py ./
 COPY --chown=app:app scripts/ ./scripts/
 RUN python scripts/fetch_whisper_model.py
 
-# The engagement model is not built here: its bundle is committed
-# (engagement_model/) and arrives with the source below, where config.py finds it
-# beside itself at /app/engagement_model.
+# The engagement models are not built here: they are committed
+# (engagement_model/<id>/) and arrive with the source below, where config.py finds
+# them beside itself at /app/engagement_model.
 
 COPY --chown=app:app . .
 
