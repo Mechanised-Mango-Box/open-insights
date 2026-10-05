@@ -18,66 +18,70 @@ import { ModelSelectionService, neededScansLabel } from './model-selection.servi
   standalone: true,
   imports: [MatButtonModule, MatFormFieldModule, MatIcon, MatSelectModule, ModelDetailsComponent],
   template: `
-    <section class="card actions-column">
-      <mat-form-field class="model-picker" appearance="outline" subscriptSizing="dynamic">
-        <mat-label>Model</mat-label>
-        <mat-select
-          [value]="selected()?.id"
-          [disabled]="!models()"
-          (selectionChange)="selection.choose($event.value)"
-        >
-          @for (model of models()?.models ?? []; track model.id) {
-            <mat-option [value]="model.id" [disabled]="!model.compatible">
-              {{ model.card?.name ?? model.id }}
-              <span class="option-note">
-                - {{ model.card?.features?.length ?? '?' }} features{{
-                  model.default ? ', default' : ''
-                }}{{ model.compatible ? '' : ', cannot be used: ' + model.problems[0] }}
-              </span>
-            </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+    <div class="view-stack">
+      <section class="card actions-column">
+        <mat-form-field class="model-picker" appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Model</mat-label>
+          <mat-select
+            [value]="selected()?.id"
+            [disabled]="!models()"
+            (selectionChange)="selection.choose($event.value)"
+          >
+            @for (model of models()?.models ?? []; track model.id) {
+              <mat-option [value]="model.id" [disabled]="!model.compatible">
+                {{ model.card?.name ?? model.id }}
+                <span class="option-note">
+                  - {{ model.card?.features?.length ?? '?' }} features{{
+                    model.default ? ', default' : ''
+                  }}{{ model.compatible ? '' : ', cannot be used: ' + model.problems[0] }}
+                </span>
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
-      @if (error()) {
-        <p class="action-hint">{{ error() }}</p>
-      } @else if (loading() && !models()) {
-        <p class="action-hint">Asking the server which models it has…</p>
-      }
-      @if (selected()) {
-        <p class="action-hint">Scans it needs: {{ neededScans() }}.</p>
-      }
+        @if (error()) {
+          <p class="action-hint">{{ error() }}</p>
+        } @else if (unusable()) {
+          <p class="method-warning">{{ unusable() }}</p>
+        } @else if (loading() && !models()) {
+          <p class="action-hint">Asking the server which models it has…</p>
+        }
+        @if (selected()) {
+          <p class="action-hint">Scans it needs: {{ neededScans() }}.</p>
+        }
 
-      <div class="actions">
-        <button
-          mat-raised-button
-          color="primary"
-          [disabled]="!selected() && !error()"
-          (click)="next.emit()"
-        >
-          <mat-icon>arrow_forward</mat-icon>
-          Choose a Video
-        </button>
-        <button mat-stroked-button [disabled]="loading()" (click)="selection.refresh()">
-          <mat-icon>refresh</mat-icon>
-          Refresh Model List
-        </button>
-      </div>
+        <div class="actions">
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="!selected() && !error()"
+            (click)="next.emit()"
+          >
+            <mat-icon>arrow_forward</mat-icon>
+            Choose a Video
+          </button>
+          <button mat-stroked-button [disabled]="loading()" (click)="selection.refresh()">
+            <mat-icon>refresh</mat-icon>
+            Refresh Model List
+          </button>
+        </div>
 
-      @if (isLocalServer()) {
-        <p class="action-hint">
-          Models are added on your server's own page:
-          <a [href]="serverPage()" target="_blank" rel="noreferrer">{{ serverPage() }}</a>
-        </p>
-      }
-    </section>
-
-    @if (selected(); as model) {
-      <section class="card">
-        <h2>{{ model.card?.name ?? model.id }}</h2>
-        <model-details [entry]="model" />
+        @if (isLocalServer()) {
+          <p class="action-hint">
+            Models are added on your server's own page:
+            <a [href]="serverPage()" target="_blank" rel="noreferrer">{{ serverPage() }}</a>
+          </p>
+        }
       </section>
-    }
+
+      @if (selected(); as model) {
+        <section class="card">
+          <h2>{{ model.card?.name ?? model.id }}</h2>
+          <model-details [entry]="model" />
+        </section>
+      }
+    </div>
   `,
   styles: [
     `
@@ -88,14 +92,6 @@ import { ModelSelectionService, neededScansLabel } from './model-selection.servi
       .option-note {
         margin-left: 4px;
         color: var(--mat-sys-on-surface-variant);
-      }
-      h2 {
-        margin-top: 0;
-      }
-      :host {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
       }
     `,
   ],
@@ -112,6 +108,7 @@ export class ModelPageComponent {
   protected loading = this.selection.loading;
   protected error = this.selection.error;
   protected selected = this.selection.selected;
+  protected unusable = this.selection.unusable;
 
   protected neededScans = computed(() => neededScansLabel(this.selection.features()));
   protected isLocalServer = computed(() => this.processingMode.mode() === 'local');

@@ -24,7 +24,8 @@ export const WORKFLOW: View[] = [
     id: 'import',
     label: 'Import',
     icon: 'add',
-    blurb: 'Create records, or bring them in from a YouTube content export or video files.',
+    blurb:
+      'Bring in YouTube reports, video files or an earlier export, with a guide to getting each.',
   },
   {
     id: 'scan',
@@ -43,7 +44,7 @@ export const WORKFLOW: View[] = [
     id: 'analysis',
     label: 'Analysis',
     icon: 'insert_chart',
-    blurb: 'Correlations and distributions across the whole dataset.',
+    blurb: 'Correlations and distributions across your records, or just the selected ones.',
   },
   {
     id: 'recommend',
@@ -57,7 +58,7 @@ export const SETTINGS: View = {
   id: 'settings',
   label: 'Settings',
   icon: 'settings',
-  blurb: 'Choose which dataset server this browser talks to.',
+  blurb: 'Choose which server this browser talks to, and where each kind of scan runs.',
 };
 
 /**

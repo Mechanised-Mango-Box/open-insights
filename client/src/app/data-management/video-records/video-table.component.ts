@@ -71,6 +71,10 @@ const BULK_ACTIONS_STYLES = `
   .bulk-actions {
     margin-bottom: 12px;
   }
+  .no-data {
+    padding: 16px;
+    color: var(--mat-sys-on-surface-variant);
+  }
 `;
 
 /** One value per badge, so the stats columns stay scannable down the table rather

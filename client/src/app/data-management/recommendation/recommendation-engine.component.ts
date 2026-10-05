@@ -69,209 +69,208 @@ type VideoOption = {
     RecommendationListComponent,
   ],
   template: `
-    <section class="card actions-column">
-      <div class="actions model-summary">
-        <span>
-          Model: <strong>{{ modelName() }}</strong>
-          @if (selectedModel()?.card; as card) {
-            <span class="option-note">
-              - {{ card.features.length }} features; needs {{ neededScans() }}
-            </span>
-          }
-        </span>
-        <button mat-stroked-button [disabled]="pending()" (click)="changeModel.emit()">
-          <mat-icon>swap_horiz</mat-icon>
-          Change Model
-        </button>
-      </div>
-      @if (modelError()) {
-        <p class="action-hint">{{ modelError() }}</p>
-      }
-
-      <mat-form-field class="video-picker" appearance="outline" subscriptSizing="dynamic">
-        <mat-label>Video</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Type to search your videos"
-          [matAutocomplete]="videoPicker"
-          [value]="query()"
-          [disabled]="pending()"
-          (input)="query.set($any($event.target).value)"
-          (focus)="$any($event.target).select()"
-        />
-        <mat-icon matSuffix>search</mat-icon>
-        <mat-autocomplete
-          #videoPicker="matAutocomplete"
-          autoActiveFirstOption
-          [displayWith]="nameOf"
-          (optionSelected)="choose($event.option.value)"
-          (closed)="restoreQuery()"
-        >
-          @for (option of matches(); track option.id) {
-            <mat-option [value]="option.id">
-              @for (segment of option.segments; track $index) {
-                @if (segment.match) {
-                  <mark>{{ segment.text }}</mark>
-                } @else {
-                  {{ segment.text }}
-                }
-              }
-              @if (option.note) {
-                <span class="option-note">- {{ option.note }}</span>
-              }
-            </mat-option>
-          } @empty {
-            <mat-option disabled>
-              {{ options().length === 0 ? 'No records yet' : 'No videos match' }}
-            </mat-option>
-          }
-        </mat-autocomplete>
-      </mat-form-field>
-
-      <div class="actions">
-        <button
-          mat-raised-button
-          color="primary"
-          [disabled]="!chosen() || pending()"
-          (click)="submit()"
-        >
-          <mat-icon>online_prediction</mat-icon>
-          Submit for Recommendations
-        </button>
-      </div>
-
-      <!-- After the button, as on the Export step: this is read having already
-           found the button greyed out, so it explains rather than instructs. -->
-      <p class="action-hint">{{ hint() }}</p>
-
-      @if (status()) {
-        <p class="action-status">{{ status() }}</p>
-      }
-    </section>
-
-    @if (result(); as result) {
-      <section class="card">
-        <h2>Predicted performance</h2>
-        <p class="prediction">
-          <span class="prediction-value">{{ percent(result.average_percentage_viewed) }}</span>
-          average percentage viewed
-        </p>
-        <p class="model-note">
-          From {{ answeredBy() }} on the dataset server, not from your own records - the Analysis
-          step is the one that reports on those.
-          @if (selectedModel()?.card; as card) {
-            It learned from {{ card.training.rows }} videos, and on the ones held out from its
-            training it was typically {{ number(card.metrics.random_forest?.rmse ?? 0) }} points
-            out. The Model tab has its full card.
-          }
-        </p>
-      </section>
-
-      <section class="card">
-        <h2>Where this video could improve</h2>
-        @if (improvements().length === 0) {
-          <p class="model-note">
-            Nothing stands out: wherever the model sees a meaningful relationship, this video
-            already sits on the side of the training average associated with higher viewing.
-          </p>
-        } @else {
-          <p class="model-note">
-            Largest estimated cost first. These are associations in the training data, not a promise
-            that changing one will raise viewing.
-          </p>
-          <ul class="improvement-list">
-            @for (item of improvements(); track item.key) {
-              <li class="improvement">
-                <span class="direction">{{ item.suggestion }}</span>
-                <div>
-                  <strong>{{ item.label }}</strong>
-                  - {{ number(item.value) }} in this video, against a training average of
-                  {{ number(item.trainingMean) }}
-                  <span class="cost">({{ number(item.contribution) }} points)</span>
-                  <div class="advice">{{ item.advice }}</div>
-                </div>
-              </li>
+    <div class="view-stack">
+      <section class="card actions-column">
+        <div class="actions model-summary">
+          <span>
+            Model: <strong>{{ modelName() }}</strong>
+            @if (selectedModel()?.card; as card) {
+              <span class="option-note">
+                - {{ card.features.length }} features; needs {{ neededScans() }}
+              </span>
             }
-          </ul>
+          </span>
+          <button mat-stroked-button [disabled]="pending()" (click)="changeModel.emit()">
+            <mat-icon>swap_horiz</mat-icon>
+            Change Model
+          </button>
+        </div>
+        @if (modelError()) {
+          <p class="action-hint">{{ modelError() }}</p>
+        } @else if (modelSelection.unusable(); as reason) {
+          <p class="method-warning">{{ reason }}</p>
+        }
+
+        <mat-form-field class="video-picker" appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Video</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Type to search your videos"
+            [matAutocomplete]="videoPicker"
+            [value]="query()"
+            [disabled]="pending()"
+            (input)="query.set($any($event.target).value)"
+            (focus)="$any($event.target).select()"
+          />
+          <mat-icon matSuffix>search</mat-icon>
+          <mat-autocomplete
+            #videoPicker="matAutocomplete"
+            autoActiveFirstOption
+            [displayWith]="nameOf"
+            (optionSelected)="choose($event.option.value)"
+            (closed)="restoreQuery()"
+          >
+            @for (option of matches(); track option.id) {
+              <mat-option [value]="option.id">
+                @for (segment of option.segments; track $index) {
+                  @if (segment.match) {
+                    <mark>{{ segment.text }}</mark>
+                  } @else {
+                    {{ segment.text }}
+                  }
+                }
+                @if (option.note) {
+                  <span class="option-note">- {{ option.note }}</span>
+                }
+              </mat-option>
+            } @empty {
+              <mat-option disabled>
+                {{ options().length === 0 ? 'No records yet' : 'No videos match' }}
+              </mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <div class="actions">
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="!chosen() || pending()"
+            (click)="submit()"
+          >
+            <mat-icon>online_prediction</mat-icon>
+            Submit for Recommendations
+          </button>
+        </div>
+
+        <!-- After the button, as on the Export step: this is read having already
+           found the button greyed out, so it explains rather than instructs. -->
+        <p class="action-hint">{{ hint() }}</p>
+
+        @if (status()) {
+          <p class="action-status">{{ status() }}</p>
         }
       </section>
 
-      <section class="card">
-        <h2>What the model learned across its training data</h2>
-        <recommendation-list [rows]="rows()" />
-      </section>
+      @if (result(); as result) {
+        <section class="card">
+          <h2>Predicted performance</h2>
+          <p class="prediction">
+            <span class="prediction-value">{{ percent(result.average_percentage_viewed) }}</span>
+            average percentage viewed
+          </p>
+          <p class="card-lead">
+            From {{ answeredBy() }} on the dataset server, not from your own records - the Analysis
+            step is the one that reports on those.
+            @if (selectedModel()?.card; as card) {
+              It learned from {{ card.training.rows }} videos, and on the ones held out from its
+              training it was typically {{ number(card.metrics.random_forest?.rmse ?? 0) }} points
+              out. The Model tab has its full card.
+            }
+          </p>
+        </section>
 
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>How this result is calculated</mat-panel-title>
-        </mat-expansion-panel-header>
-        <dl class="method-list">
-          <dt>Prediction</dt>
-          <dd>
-            The model's random forest
-            @if (trees(); as trees) {
-              ({{ trees }} decision trees)
-            }
-            predicts average percentage viewed from this video's raw feature values; the result is
-            the mean of its trees' predictions, not clipped to 0-100.
-          </dd>
-          <dt>Relationships</dt>
-          <dd>
-            A linear regression fitted to the same training videos, after standardising each feature
-            to a z-score. A coefficient is the change in average percentage viewed per standard
-            deviation of that feature. At or above +{{ result.threshold }} it reads as positive, at
-            or below -{{ result.threshold }} as negative, and in between as weak - a
-            practical-effect threshold set by the model, not a significance test.
-          </dd>
-          <dt>Where this video sits</dt>
-          <dd>
-            z = (value - training mean) / training SD. Contribution = coefficient x z: how many
-            points this value moves the linear estimate away from an average training video.
-          </dd>
-          <dt>Suggestions</dt>
-          <dd>
-            Increase when the relationship is positive and z is below 0; decrease when it is
-            negative and z is above 0; keep when the value is already on the better side; none when
-            the relationship is weak. Listed by contribution, most negative first.
-          </dd>
-        </dl>
-        <table class="method-table">
-          <thead>
-            <tr>
-              <th>Feature</th>
-              <th>Value</th>
-              <th>Training mean</th>
-              <th>Training SD</th>
-              <th>z</th>
-              <th>Coefficient</th>
-              <th>Contribution</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (row of workings(); track row.key) {
+        <section class="card">
+          <h2>Where this video could improve</h2>
+          @if (improvements().length === 0) {
+            <p class="card-lead">
+              Nothing stands out: wherever the model sees a meaningful relationship, this video
+              already sits on the side of the training average associated with higher viewing.
+            </p>
+          } @else {
+            <p class="card-lead">
+              Largest estimated cost first. These are associations in the training data, not a
+              promise that changing one will raise viewing.
+            </p>
+            <ul class="improvement-list">
+              @for (item of improvements(); track item.key) {
+                <li class="improvement">
+                  <span class="direction">{{ item.suggestion }}</span>
+                  <div>
+                    <strong>{{ item.label }}</strong>
+                    - {{ number(item.value) }} in this video, against a training average of
+                    {{ number(item.trainingMean) }}
+                    <span class="cost">({{ number(item.contribution) }} points)</span>
+                    <div class="advice">{{ item.advice }}</div>
+                  </div>
+                </li>
+              }
+            </ul>
+          }
+        </section>
+
+        <section class="card">
+          <h2>What the model learned across its training data</h2>
+          <recommendation-list [rows]="rows()" />
+        </section>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>How this result is calculated</mat-panel-title>
+          </mat-expansion-panel-header>
+          <dl class="method-list">
+            <dt>Prediction</dt>
+            <dd>
+              The model's random forest
+              @if (trees(); as trees) {
+                ({{ trees }} decision trees)
+              }
+              predicts average percentage viewed from this video's raw feature values; the result is
+              the mean of its trees' predictions, not clipped to 0-100.
+            </dd>
+            <dt>Relationships</dt>
+            <dd>
+              A linear regression fitted to the same training videos, after standardising each
+              feature to a z-score. A coefficient is the change in average percentage viewed per
+              standard deviation of that feature. At or above +{{ result.threshold }} it reads as
+              positive, at or below -{{ result.threshold }} as negative, and in between as weak - a
+              practical-effect threshold set by the model, not a significance test.
+            </dd>
+            <dt>Where this video sits</dt>
+            <dd>
+              z = (value - training mean) / training SD. Contribution = coefficient x z: how many
+              points this value moves the linear estimate away from an average training video.
+            </dd>
+            <dt>Suggestions</dt>
+            <dd>
+              Increase when the relationship is positive and z is below 0; decrease when it is
+              negative and z is above 0; keep when the value is already on the better side; none
+              when the relationship is weak. Listed by contribution, most negative first.
+            </dd>
+          </dl>
+          <table class="method-table">
+            <thead>
               <tr>
-                <td>{{ row.label }}</td>
-                <td>{{ number(row.value) }}</td>
-                <td>{{ number(row.training_mean) }}</td>
-                <td>{{ row.training_sd == null ? '-' : number(row.training_sd) }}</td>
-                <td>{{ number(row.z_score) }}</td>
-                <td>{{ number(row.coefficient) }}</td>
-                <td>{{ number(row.contribution) }}</td>
+                <th>Feature</th>
+                <th>Value</th>
+                <th>Training mean</th>
+                <th>Training SD</th>
+                <th>z</th>
+                <th>Coefficient</th>
+                <th>Contribution</th>
               </tr>
-            }
-          </tbody>
-        </table>
-      </mat-expansion-panel>
-    }
+            </thead>
+            <tbody>
+              @for (row of workings(); track row.key) {
+                <tr>
+                  <td>{{ row.label }}</td>
+                  <td>{{ number(row.value) }}</td>
+                  <td>{{ number(row.training_mean) }}</td>
+                  <td>{{ row.training_sd == null ? '-' : number(row.training_sd) }}</td>
+                  <td>{{ number(row.z_score) }}</td>
+                  <td>{{ number(row.coefficient) }}</td>
+                  <td>{{ number(row.contribution) }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </mat-expansion-panel>
+      }
+    </div>
   `,
   styles: [
     `
-      :host {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-      }
       .video-picker {
         width: 100%;
         max-width: 640px;
@@ -286,13 +285,6 @@ type VideoOption = {
         background: none;
         color: var(--mat-sys-primary);
         font-weight: 600;
-      }
-      .model-note {
-        margin: 0 0 12px;
-        color: var(--mat-sys-on-surface-variant);
-      }
-      h2 {
-        margin-top: 0;
       }
       .prediction {
         margin: 0 0 8px;
@@ -341,7 +333,7 @@ export class RecommendationEngineComponent {
   private videoDatabase = inject(VideoDatabaseService);
   private datasetActions = inject(DatasetActionsService);
   private recommendationService = inject(RecommendationService);
-  private modelSelection = inject(ModelSelectionService);
+  protected modelSelection = inject(ModelSelectionService);
   private dialog = inject(MatDialog);
 
   /** Asked to go back to the model subpage. */
@@ -355,6 +347,7 @@ export class RecommendationEngineComponent {
   protected modelName = computed(() => {
     const model = this.selectedModel();
     if (model) return model.card?.name ?? model.id;
+    if (this.modelSelection.unusable()) return 'none usable';
     return this.modelError() ? "the server's built-in model" : 'loading…';
   });
 

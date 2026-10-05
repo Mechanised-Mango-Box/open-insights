@@ -2,12 +2,14 @@ import { Component, inject, signal } from '@angular/core';
 import { VideoDatabaseService } from './video-database.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { parseYoutubeContentCsv } from './youtube-csv-import';
 import { readFileDurationSecs } from './video-duration';
 import { isQuotaExceeded, requestPersistentStorage } from './storage-quota';
 import { fillGaps, ImportedRecord, parseExportZip } from './manifest-import';
 import { calculateSha256, VideoFile, VideoRecord } from './VideoRecord';
 import { isAcceptedVideoName, VIDEO_EXTENSIONS_LABEL, VIDEO_FILE_ACCEPT } from './video-file-types';
+import { DURATION_TOLERANCE_SECS } from './auto-merge';
 
 /** Shared "blank slate" for every dataset field a freshly-created VideoRecord needs
  * beyond sort_name - kept in one place so each creation site only supplies what's
@@ -23,83 +25,325 @@ const newRecordDefaults = (): Omit<VideoRecord, '__id' | 'sort_name'> => ({
   ds_audioStats: { state: 'absent' },
 });
 
+/** Which picker the shared summary line belongs to, so it shows in that card only. */
+type ImportSource = 'youtube' | 'videos' | 'zip';
+
+/**
+ * The Import step: one card per place records come from, each with the button that
+ * reads it and a collapsed guide to getting the file in the first place - the YouTube
+ * exports in particular have to be pulled out of Studio in a specific shape, and
+ * nothing in the picker says which file of the three in its zip is the right one.
+ *
+ * The cards sit in the order a dataset is usually built: the YouTube report, then the
+ * videos, then the follow-up card on pairing the two and adding per-video extras.
+ */
 @Component({
   selector: 'video-records-import',
   template: `
-    <section class="card actions-column">
-      <div class="actions">
-        <button mat-stroked-button [disabled]="pending()" (click)="insertNewEmpty()">
-          <mat-icon>add</mat-icon>
-          Create Empty
-        </button>
+    <div class="view-stack">
+      <div class="view-block sources">
+        <section class="card">
+          <h2 class="card-title"><mat-icon>table_chart</mat-icon> YouTube content report</h2>
+          <p class="card-lead">
+            One row per video: title, length and average view duration - the engagement Analysis and
+            the models measure against. Creates a record per video; a newer report updates the same
+            records.
+          </p>
+          <div class="actions">
+            <button mat-stroked-button [disabled]="pending()" (click)="csvInput.click()">
+              <mat-icon>upload_file</mat-icon>
+              Import Content Report (.csv)
+            </button>
+            @if (summaryFor('youtube'); as summary) {
+              <p class="action-status">{{ summary }}</p>
+            }
+          </div>
+          <mat-expansion-panel class="guide">
+            <mat-expansion-panel-header>
+              <mat-panel-title>How to get this file</mat-panel-title>
+            </mat-expansion-panel-header>
+            <ol>
+              <li>
+                In YouTube Studio, open <strong>Analytics</strong> and choose
+                <strong>Advanced mode</strong>.
+              </li>
+              <li>
+                On the <strong>Content</strong> tab, set the date range to cover your videos (<em
+                  >Lifetime</em
+                >
+                is simplest).
+              </li>
+              <li>
+                Make sure the table shows <strong>Duration</strong> and
+                <strong>Average view duration</strong>; add either from the column picker if it is
+                missing.
+              </li>
+              <li>
+                Choose <strong>Export current view</strong> →
+                <strong>Comma-separated values (.csv)</strong>.
+              </li>
+              <li>
+                Unzip the download and pick <code>Table data.csv</code>. The
+                <code>Chart data</code> and <code>Totals</code> files beside it are not used.
+              </li>
+            </ol>
+            <p class="guide-note">
+              Columns read: <code>Content</code> (the video ID), <code>Video title</code>,
+              <code>Duration</code> and <code>Average view duration</code>; views, watch time,
+              subscribers and impressions are kept when present.
+            </p>
+          </mat-expansion-panel>
+        </section>
+
+        <section class="card">
+          <h2 class="card-title"><mat-icon>movie</mat-icon> Video files</h2>
+          <p class="card-lead">
+            What Scan measures. Creates a record per file; a file already in the library is skipped.
+            The files stay in this browser until a scan sends them to the server.
+          </p>
+          <div class="actions">
+            <button mat-stroked-button [disabled]="pending()" (click)="videoInput.click()">
+              <mat-icon>video_file</mat-icon>
+              Add Video Files
+            </button>
+            @if (summaryFor('videos'); as summary) {
+              <p class="action-status">{{ summary }}</p>
+            }
+          </div>
+          <mat-expansion-panel class="guide">
+            <mat-expansion-panel-header>
+              <mat-panel-title>How to get these files</mat-panel-title>
+            </mat-expansion-panel-header>
+            <ul>
+              <li>
+                <strong>The originals</strong> - the files you uploaded, or the recordings from your
+                lecture-capture system - are best: full resolution makes on-screen text easier to
+                read.
+              </li>
+              <li>
+                <strong>From YouTube Studio</strong>: <strong>Content</strong> → hover a video →
+                <strong>⋮ Options</strong> → <strong>Download</strong>. YouTube hands back an MP4 at
+                720p or 360p, one video at a time, at most five times a day per video.
+              </li>
+            </ul>
+            <p class="guide-note">
+              Accepted: {{ videoExtensions }}. Pick as many as you like at once. Keep the video's
+              title as its file name (Studio's download already does) so Auto-Merge can pair it with
+              its row from the content report.
+            </p>
+          </mat-expansion-panel>
+        </section>
+
+        <section class="card no-guide">
+          <h2 class="card-title"><mat-icon>folder_zip</mat-icon> Open Insights export</h2>
+          <p class="card-lead">
+            A zip from the Export step, from this browser or another. Fills in what is missing and
+            never overwrites newer work here, so importing the same zip twice changes nothing.
+          </p>
+          <div class="actions">
+            <button mat-stroked-button [disabled]="pending()" (click)="zipInput.click()">
+              <mat-icon>unarchive</mat-icon>
+              Import Export Zip
+            </button>
+            @if (summaryFor('zip'); as summary) {
+              <p class="action-status">{{ summary }}</p>
+            }
+          </div>
+        </section>
+
+        <section class="card no-guide">
+          <h2 class="card-title"><mat-icon>note_add</mat-icon> Blank record</h2>
+          <p class="card-lead">
+            An empty record to fill in by hand with its <strong>Edit</strong> button in the table
+            below.
+          </p>
+          <div class="actions">
+            <button mat-stroked-button [disabled]="pending()" (click)="insertNewEmpty()">
+              <mat-icon>add</mat-icon>
+              Create Empty Record
+            </button>
+          </div>
+        </section>
       </div>
 
-      <div class="actions">
-        <button mat-stroked-button [disabled]="pending()" (click)="csvInput.click()">
-          <mat-icon>add</mat-icon>
-          Import From: Youtube Content
-        </button>
-      </div>
+      <section class="card">
+        <h2 class="card-title"><mat-icon>checklist</mat-icon> After importing</h2>
+        <h3>Pair reports with videos</h3>
+        <p class="card-lead">
+          The content report and the video files each create records of their own. Press
+          <strong>Auto-Merge</strong> above the table to pair them by name and length (within
+          {{ durationTolerance }} s); <strong>Merge Selected</strong> joins any it misses. Analysis
+          needs both halves in one record.
+        </p>
+        <h3>Add per-video extras</h3>
+        <p class="card-lead">
+          A record's <strong>Edit</strong> button takes two more files, each for one video:
+        </p>
+        <mat-expansion-panel class="guide">
+          <mat-expansion-panel-header>
+            <mat-panel-title>Audience retention (.csv)</mat-panel-title>
+          </mat-expansion-panel-header>
+          <ol>
+            <li>
+              In YouTube Studio, open the video's <strong>Analytics</strong> and its
+              <strong>Engagement</strong> tab.
+            </li>
+            <li>Under <strong>Audience retention</strong>, choose <strong>See more</strong>.</li>
+            <li>
+              Choose <strong>Export current view</strong> →
+              <strong>Comma-separated values (.csv)</strong> and unzip it.
+            </li>
+          </ol>
+          <p class="guide-note">
+            Pick the file with the columns <code>Video position (%)</code> and
+            <code>Absolute audience retention (%)</code>. It is kept and exported with the record;
+            Analysis does not use it yet.
+          </p>
+        </mat-expansion-panel>
+        <mat-expansion-panel class="guide">
+          <mat-expansion-panel-header>
+            <mat-panel-title>Transcript (.srt or .vtt)</mat-panel-title>
+          </mat-expansion-panel-header>
+          <ol>
+            <li>In YouTube Studio, open the video and choose <strong>Subtitles</strong>.</li>
+            <li>
+              On the language's row, choose <strong>⋮</strong> → <strong>Download</strong> →
+              <strong>.srt</strong>.
+            </li>
+          </ol>
+          <p class="guide-note">
+            Optional: Scan's <strong>Extract Transcript</strong> makes one from the video itself.
+            Use your captions instead when they are more accurate - but running Extract Transcript
+            on the record afterwards replaces them.
+          </p>
+        </mat-expansion-panel>
+      </section>
+    </div>
 
-      <div class="actions">
-        <button mat-stroked-button [disabled]="pending()" (click)="videoInput.click()">
-          <mat-icon>add</mat-icon>
-          Create From: Video Files
-        </button>
-      </div>
-
-      <div class="actions">
-        <button mat-stroked-button [disabled]="pending()" (click)="zipInput.click()">
-          <mat-icon>upload</mat-icon>
-          Import From: Export Zip
-        </button>
-      </div>
-
-      <!-- One line at the foot rather than one per button: this is a single shared
-           signal, written by whichever import last ran, and Create Empty never writes
-           it at all. Beside any one button it would report the wrong run. -->
-      @if (importSummary()) {
-        <p class="action-status">{{ importSummary() }}</p>
-      }
-
-      <!-- The pickers the three buttons above open. A hidden input generates no box, so
-           it is never a flex item and takes no part in the column wherever it sits -
-           collected here rather than one per row, which left each action a different
-           shape and made the four rows hard to read as a list. -->
-      <input
-        type="file"
-        #csvInput
-        style="display: none"
-        accept=".csv"
-        (change)="insertFromYoutubeContent($event)"
-      />
-      <input
-        type="file"
-        #videoInput
-        style="display: none"
-        [accept]="videoFileAccept"
-        multiple
-        (change)="insertFromVideoFiles($event)"
-      />
-      <input
-        type="file"
-        #zipInput
-        style="display: none"
-        accept=".zip"
-        (change)="insertFromExportZip($event)"
-      />
-    </section>
+    <!-- The pickers the buttons above open. Hidden inputs generate no box, so they
+         take no part in the layout wherever they sit - collected here rather than
+         one per card. -->
+    <input
+      type="file"
+      #csvInput
+      style="display: none"
+      accept=".csv"
+      (change)="insertFromYoutubeContent($event)"
+    />
+    <input
+      type="file"
+      #videoInput
+      style="display: none"
+      [accept]="videoFileAccept"
+      multiple
+      (change)="insertFromVideoFiles($event)"
+    />
+    <input
+      type="file"
+      #zipInput
+      style="display: none"
+      accept=".zip"
+      (change)="insertFromExportZip($event)"
+    />
   `,
-  imports: [MatIcon, MatButtonModule],
+  styles: [
+    `
+      /* Two columns of sources where there is room, so the four fit above the record
+         table without a long scroll.
+
+         Each card spans four rows of the outer grid - title, description, button,
+         guide - and lays its own children on those rows through subgrid. So the two
+         cards in a row share each row's height: their buttons line up however long
+         either description is, and opening one guide grows only the guide row, not
+         the space above its neighbour's button. */
+      .sources {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
+        column-gap: 16px;
+        row-gap: 16px;
+      }
+      .sources .card {
+        display: grid;
+        grid-row: span 4;
+        grid-template-rows: subgrid;
+        row-gap: 8px;
+        align-content: start;
+      }
+      /* No guide, so no fourth row - spanning one anyway would leave a gap's worth
+         of empty card at the bottom. */
+      .sources .card.no-guide {
+        grid-row: span 3;
+      }
+      .sources .card-lead {
+        margin: 0;
+      }
+      /* Its own height, not the row's: a closed guide beside an open one stays a
+         closed header rather than an empty box. */
+      .sources .guide {
+        align-self: start;
+      }
+      .card-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .card-title mat-icon {
+        color: var(--mat-sys-primary);
+      }
+      /* A flat panel: it sits inside a card, so it borrows the card's surface
+         and keeps only a rule to say where it starts. */
+      .guide {
+        --mat-expansion-header-collapsed-state-height: 40px;
+        --mat-expansion-header-expanded-state-height: 48px;
+        --mat-expansion-header-text-size: var(--mat-sys-label-large-size);
+        /* Body text the size of the card's own, not Material's larger default. */
+        --mat-expansion-container-text-size: var(--mat-sys-body-medium-size);
+        --mat-expansion-container-text-line-height: var(--mat-sys-body-medium-line-height);
+        box-shadow: none;
+        background: transparent;
+        border: 1px solid var(--mat-sys-outline-variant);
+        margin-top: 4px;
+      }
+      .guide + .guide {
+        margin-top: 8px;
+      }
+      .guide ol,
+      .guide ul {
+        margin: 0 0 8px;
+        padding-left: 20px;
+      }
+      .guide li {
+        margin-bottom: 4px;
+      }
+      .guide-note {
+        font: var(--mat-sys-body-small);
+        color: var(--mat-sys-on-surface-variant);
+        margin: 0;
+      }
+      code {
+        font-size: 0.9em;
+      }
+    `,
+  ],
+  imports: [MatIcon, MatButtonModule, MatExpansionModule],
 })
 export class VideoRecordsImport {
   private dbService = inject(VideoDatabaseService);
 
   importSummary = signal<string | null>(null);
+  /** Which import wrote importSummary. One shared line, shown only in the card of
+   * the run it describes - beside any other button it would report the wrong one. */
+  private summarySource = signal<ImportSource | null>(null);
   /** Unpacking a zip full of video files is slow enough to need the buttons held shut. */
   pending = signal(false);
 
   protected readonly videoFileAccept = VIDEO_FILE_ACCEPT;
+  protected readonly videoExtensions = VIDEO_EXTENSIONS_LABEL;
+  protected readonly durationTolerance = DURATION_TOLERANCE_SECS;
+
+  protected summaryFor(source: ImportSource): string | null {
+    return this.summarySource() === source ? this.importSummary() : null;
+  }
 
   async insertNewEmpty() {
     const sampleRecord: VideoRecord = {
@@ -120,6 +364,8 @@ export class VideoRecordsImport {
     const file = input.files?.[0];
     if (!file) return;
 
+    this.summarySource.set('youtube');
+    this.importSummary.set(null);
     const csvText = await file.text();
     const rows = parseYoutubeContentCsv(csvText);
     const existing = await this.dbService.getAllVideos();
@@ -155,6 +401,8 @@ export class VideoRecordsImport {
     const picked = Array.from(input.files ?? []);
     input.value = '';
     if (picked.length === 0) return;
+    this.summarySource.set('videos');
+    this.importSummary.set(null);
 
     // `accept` only sets the picker's default filter; "All files" gets past it, and
     // the server would refuse these at upload anyway.
@@ -260,6 +508,7 @@ export class VideoRecordsImport {
     if (!file) return;
 
     this.pending.set(true);
+    this.summarySource.set('zip');
     this.importSummary.set('Reading export...');
     try {
       const imported = await parseExportZip(file, (done, total) =>

@@ -4,10 +4,11 @@
  * The surface a group of related controls sits on. Every workflow step puts its
  * buttons in one of these, and Settings puts each of its sections in one.
  *
- * It carries no heading: the view header above already prints the step's name
- * and blurb, so a title in here would say the same thing twice. What the card is
- * for is the edge - it says where the step's controls stop and the record table
- * below starts, which on Import and Scan was previously left to whitespace.
+ * A step with one card leaves it untitled: the view header above already prints
+ * the step's name and blurb, so a title in here would say the same thing twice.
+ * A page with several cards titles each one (see `.card > h2` below). Either way
+ * the card's job is the edge - it says where one group of controls stops and the
+ * next, or the record table below, starts.
  *
  * Global because these same four declarations had been written out separately in
  * three components. Combine it with `.actions-column` on one element where the
@@ -21,6 +22,51 @@
 }
 
 /*
+ * Headings inside a card. Every card that needs a title uses these rather than
+ * styling its own: they had been a mix of title-medium and the browser's default
+ * h2, which on one page read as a section and on the next as a page heading.
+ */
+/* Inside :where() so they weigh no more than a bare element selector, letting a
+   component's own rule (`.method-heading`, say) win without an !important. */
+:where(.card > h2, .card-title) {
+  font: var(--mat-sys-title-medium);
+  margin: 0 0 4px;
+}
+:where(.card h3) {
+  font: var(--mat-sys-title-small);
+  margin: 20px 0 4px;
+}
+
+/* The muted line under a card's heading saying what the card is for. */
+.card-lead {
+  color: var(--mat-sys-on-surface-variant);
+  margin: 0 0 12px;
+  max-width: 80ch;
+}
+
+/*
+ * The root of every view: its cards and panels stacked with one gap between
+ * them. Each view used to space its own blocks, with gaps from 16 to 24px and
+ * one built from margins instead.
+ *
+ * The cap applies to the controls and prose only. The record table below a step
+ * and the charts on Analysis are not direct children, so they keep the full
+ * width they need.
+ */
+.view-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.view-stack > .card,
+.view-stack > mat-expansion-panel,
+.view-stack > .view-block {
+  max-width: 960px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/*
  * Shared layout for the action buttons at the top of a page.
  *
  * Global rather than repeated per component: every workflow step renders a row
@@ -29,8 +75,8 @@
  * that did not follow the theme. One rule keeps them in step.
  *
  * The convention the pages follow:
- *   - Each step's controls live in one `.card`, stacked one action per row. The
- *     card carries no heading; the view header above already names the step.
+ *   - A step's controls live in `.card`s inside a `.view-stack`, one action per
+ *     row. A lone card carries no heading; the view header already names the step.
  *   - Every action button carries a leading `<mat-icon>`. Stacked in a column
  *     the icons line up into their own edge, which is most of what makes a group
  *     of buttons read as a list rather than a pile of boxes.
@@ -62,7 +108,7 @@
 
 /* Stacked actions read as a list, so a common button width lines up both their
    edges and the status text beside them. The floor is set above the longest label
-   the app has ("Import From: Youtube Content", icon included) - a button that
+   the app has ("Import Content Report (.csv)", icon included) - a button that
    overruns it pushes its own status line out of the column, which is the one
    thing this rule exists to prevent. Content is left-aligned rather than
    Material's default centre so the icons stack into a single edge instead of

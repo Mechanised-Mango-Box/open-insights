@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ANALYSIS_FEATURE_COLUMNS } from '../analysis/stats';
-import { featuresFor, resolveSelection } from './model-selection.service';
+import { featuresFor, resolveSelection, unusableReason } from './model-selection.service';
 import {
   ModelCard,
   ModelEntry,
@@ -40,6 +40,43 @@ describe('resolveSelection', () => {
 
   it('is nothing until the list has loaded', () => {
     expect(resolveSelection(null, 'video')).toBeNull();
+  });
+
+  it('falls back to a usable model when the default is missing or broken', () => {
+    expect(resolveSelection({ ...list, default: 'missing' }, null)?.id).toBe('full');
+    const brokenDefault: ModelList = {
+      ...list,
+      models: [entry('full', ['duration'], false), ...list.models.slice(1)],
+    };
+    expect(resolveSelection(brokenDefault, null)?.id).toBe('video');
+  });
+
+  it('is nothing when no model can be used', () => {
+    const none: ModelList = { default: 'full', models: [entry('broken', ['duration'], false)] };
+    expect(resolveSelection(none, 'broken')).toBeNull();
+  });
+});
+
+describe('unusableReason', () => {
+  it('is null while any model can be used', () => {
+    expect(unusableReason(list)).toBeNull();
+    expect(unusableReason(null)).toBeNull();
+  });
+
+  it("names each model's problem and a default the server does not list", () => {
+    const stale: ModelList = {
+      default: 'full',
+      models: [
+        {
+          ...entry('audio', [], false),
+          card: null,
+          problems: ['model.json is missing or unreadable.'],
+        },
+      ],
+    };
+    const reason = unusableReason(stale)!;
+    expect(reason).toContain('audio: model.json is missing or unreadable.');
+    expect(reason).toContain("default model, 'full', is not among them");
   });
 });
 

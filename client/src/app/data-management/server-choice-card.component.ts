@@ -22,14 +22,14 @@ import {
   standalone: true,
   imports: [MatIcon, MatButtonModule],
   template: `
-    <section class="choice">
+    <section class="card">
       <div class="intro">
         <mat-icon>dns</mat-icon>
         <div>
           <h2>Where the scanning happens</h2>
           <p>
-            Scan is the only step that needs a server. Import, Analysis and Export run in this
-            browser, on files that never leave it.
+            Scan and Recommend need a server. Import, Export and Analysis run in this browser, on
+            files that never leave it.
           </p>
         </div>
       </div>
@@ -43,11 +43,11 @@ import {
             }
           </div>
           <p>
-            Nothing to install, and it is what this browser uses unless you change it. It is one box
-            shared with everyone else on this site: one transcription worker and one scene-stats
-            worker, so your videos wait behind theirs. Each video is uploaded over your connection
-            before any work starts — {{ maxUpload }} per file, {{ uploadsPerHour }} uploads an hour,
-            and new jobs are refused once {{ queueDepth }} are already waiting.
+            Nothing to install, and it is what this browser uses unless you change it. It is one
+            small box shared with everyone else on this site, with a worker or two per kind of scan,
+            so your videos wait behind theirs. Each video is uploaded over your connection before
+            any work starts — {{ maxUpload }} per file, {{ uploadsPerHour }} uploads an hour, and
+            new jobs are refused once {{ queueDepth }} are already waiting.
           </p>
           <p class="verdict">Fine for a few videos; slow for a dataset.</p>
           @if (!onPublic()) {
@@ -87,11 +87,6 @@ import {
       :host {
         display: block;
       }
-      .choice {
-        border: 1px solid var(--mat-sys-outline-variant);
-        border-radius: 12px;
-        padding: 16px;
-      }
       /* Same icon-in-a-fixed-column shape as the callout below it, so the two
          blocks on this page line their text up with each other. */
       .intro {
@@ -124,7 +119,7 @@ import {
       .option {
         padding: 12px;
         border-radius: 12px;
-        background: var(--mat-sys-surface-container);
+        background: var(--mat-sys-surface-container-high);
         border: 1px solid var(--mat-sys-outline-variant);
       }
       /* Which one is live is the first thing to read off this card, so it is
