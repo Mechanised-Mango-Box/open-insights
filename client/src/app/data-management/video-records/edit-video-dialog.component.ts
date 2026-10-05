@@ -52,7 +52,43 @@ import {
     MatExpansionModule,
   ],
   templateUrl: './edit-video-dialog.component.html',
-  styles: [STATUS_ICON_STYLES],
+  styles: [
+    STATUS_ICON_STYLES,
+    `
+      /* The outline label sits above the field's box, and the scrolling content
+         would otherwise clip it - the divider and <br /> that used to sit above
+         this were doing that job by accident. */
+      .name-field {
+        margin-top: 8px;
+      }
+      .file-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .transcript-segments {
+        max-height: 240px;
+        overflow-y: auto;
+        margin-bottom: 8px;
+      }
+      /* Two columns of the report's numbers rather than one long column of them. */
+      .field-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 0 12px;
+      }
+      .panel-hint {
+        font: var(--mat-sys-body-small);
+        color: var(--mat-sys-on-surface-variant);
+        margin: 0 0 12px;
+        max-width: 60ch;
+      }
+      .panel-hint + button + button {
+        margin-left: 8px;
+      }
+    `,
+  ],
 })
 export class EditVideoDialogComponent {
   readonly dialogRef = inject(MatDialogRef<EditVideoDialogComponent>);

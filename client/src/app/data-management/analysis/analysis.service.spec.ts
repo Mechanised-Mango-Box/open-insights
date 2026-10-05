@@ -32,7 +32,6 @@ const record = (overrides: Partial<VideoRecord> = {}): VideoRecord => ({
     count_chars: 9000,
     count_words: 1500,
     speech_pace_variation: 25,
-    speaking_ratio: 0.7,
   }),
   ds_sceneStats: ready<SceneStats>({ duration_secs: 600, scenes: 30 }),
   ds_textStats: ready<TextStats>({
@@ -64,7 +63,6 @@ describe('buildVideoFeatures', () => {
       scene_change_rate: 3,
       word_count: 1500,
       speech_pace_variation: 25,
-      // The audio's speech_ratio, not the transcript's speaking_ratio (0.7).
       speech_ratio: 0.9,
       text_density: 35,
       mean_pause_secs: 0.35,
@@ -101,7 +99,6 @@ describe('buildVideoFeatures', () => {
       count_chars: 9000,
       count_words: 1500,
       speech_pace_variation: null,
-      speaking_ratio: 0.7,
     });
     expect(buildVideoFeatures(record({ ds_transcriptStats: stats }))).toBeNull();
   });

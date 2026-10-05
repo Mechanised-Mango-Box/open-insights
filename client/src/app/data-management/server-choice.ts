@@ -17,11 +17,12 @@ export const RELEASES_URL = 'https://github.com/Mechanised-Mango-Box/open-insigh
 /**
  * What the public tier actually allows, mirroring the environment the public
  * box is brought up with in `docker-compose.yml` - PUBLIC_MAX_UPLOAD_BYTES,
- * PUBLIC_UPLOAD_RATE_LIMIT and PUBLIC_MAX_QUEUE_DEPTH, alongside the single
- * WHISPER_NUM_WORKERS / SCENE_STATS_WORKERS the compose file sets.
+ * PUBLIC_UPLOAD_RATE_LIMIT and PUBLIC_MAX_QUEUE_DEPTH. The worker pools there
+ * are small too: one each for WHISPER_NUM_WORKERS, SCENE_STATS_WORKERS and
+ * TEXT_STATS_WORKERS, and AUDIO_STATS_WORKERS at its default of two.
  *
  * These are the honest reason the shared server is slow: not weak hardware, but
- * one worker per task shared with everyone else, reached over the network.
+ * a worker or two per task shared with everyone else, reached over the network.
  * Change them here whenever the compose file changes.
  */
 export const PUBLIC_MAX_UPLOAD = '512MB';

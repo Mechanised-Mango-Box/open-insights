@@ -71,6 +71,10 @@ const BULK_ACTIONS_STYLES = `
   .bulk-actions {
     margin-bottom: 12px;
   }
+  .no-data {
+    padding: 16px;
+    color: var(--mat-sys-on-surface-variant);
+  }
 `;
 
 /** One value per badge, so the stats columns stay scannable down the table rather
@@ -306,10 +310,10 @@ export class VideoTableComponent {
       },
     ];
 
-    // A dash rather than "0.0": 0 is a value both features genuinely take (a
+    // A dash rather than "0.0": 0 is a value the feature genuinely takes (a
     // silent video, or one short enough to be a single pace window), so it
     // cannot double as "no answer".
-    if (stats.speech_pace_variation == null || stats.speaking_ratio == null) {
+    if (stats.speech_pace_variation == null) {
       badges.push({
         text: '\u2014',
         muted: true,
@@ -321,10 +325,6 @@ export class VideoTableComponent {
     badges.push({
       text: `${stats.speech_pace_variation.toFixed(1)} WPM SD`,
       title: 'Speech pace variation - how much the speaking speed moves across the video',
-    });
-    badges.push({
-      text: `${Math.round(stats.speaking_ratio * 100)}% speaking`,
-      title: 'Speaking ratio - the share of the video covered by detected speech',
     });
     return badges;
   }
@@ -390,7 +390,7 @@ export class VideoTableComponent {
                   text: `${Math.round(stats.speech_ratio * 100)}% speech`,
                   title:
                     'Speech heard in the audio (voice activity detection), as a share of the ' +
-                    'video. Unlike the speaking ratio, pauses of 250 ms or more are not speech.',
+                    'video. Pauses of 250 ms or more are not speech.',
                 },
                 {
                   text: `${(stats.pause_rate_per_min ?? 0).toFixed(1)} pauses/min`,

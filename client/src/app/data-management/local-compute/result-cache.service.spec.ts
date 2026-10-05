@@ -72,7 +72,6 @@ describe('ResultCacheService', () => {
       count_chars: 3,
       count_words: 1,
       speech_pace_variation: null,
-      speaking_ratio: null,
       segments: [],
     });
 
