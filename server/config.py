@@ -298,9 +298,10 @@ BUILTIN_MODELS = [
 # Which built-in model answers a recommendation that names none.
 ENGAGEMENT_MODEL_DEFAULT = os.environ.get("ENGAGEMENT_MODEL_DEFAULT", "full")
 
-# Models added from the server's page (model_registry.py), beside the database
-# and uploads so a portable build's models follow it like the rest of its data.
-MODELS_DIR = os.environ.get("MODELS_DIR", str(_DATA_DIR / "models"))
+# Models added from the server's page (model_registry.py), in a models/ directory
+# beside the data directory: <exe>/data and <exe>/models for a portable build,
+# data/local and data/models in a checkout (clear of the committed models/).
+MODELS_DIR = os.environ.get("MODELS_DIR", str(_DATA_DIR.parent / "models"))
 
 # Whether the page at / may add and delete models. Even when on, only a browser on
 # this machine can (see model_portal.py): a model file is a pickle, and loading one
@@ -311,26 +312,11 @@ MODEL_MANAGEMENT = os.environ.get("MODEL_MANAGEMENT", "1") == "1"
 # about 1 MB each.
 MODEL_MAX_BYTES = int(os.environ.get("MODEL_MAX_BYTES", str(200 * 1024**2)))
 
-# The published models that are not built in, offered as one-click downloads on
-# the page at /. Each is pinned by SHA-256, so a download that is not exactly
-# the published package is refused rather than unpickled.
-_MODELS_RELEASE = "https://github.com/Mechanised-Mango-Box/open-insights/releases/download/models-v1"
-SUGGESTED_MODELS = [
-    {
-        "id": "video",
-        "name": "Video only",
-        "description": "Duration, scene change rate and on-screen text.",
-        "url": f"{_MODELS_RELEASE}/video.zip",
-        "sha256": "4fac7174d63abb2c5d111cf9d2a893e62d30f2306b5d83b19679614b38e4479f",
-    },
-    {
-        "id": "audio",
-        "name": "Audio only",
-        "description": "Duration plus the transcript and audio features.",
-        "url": f"{_MODELS_RELEASE}/audio.zip",
-        "sha256": "1628d61619ffb6a8e32e7eaadebadf2c9f49ba865dd3abae64a30f1e9cb915db",
-    },
-]
+# Where to send someone looking for more models: shown on the page at / and on
+# the client's Model tab.
+MORE_MODELS_URL = os.environ.get(
+    "MORE_MODELS_URL", "https://github.com/Mechanised-Mango-Box/open-insights/releases"
+)
 
 # How different a frame must be from its predecessor to count as a scene change.
 # Lifted out of processing.py, where it sat as a default argument that nothing

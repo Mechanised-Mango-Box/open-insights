@@ -1,8 +1,8 @@
 """The "Engagement models" section of the page at /, and the forms behind it.
 
-Lists every model the server holds with its full card, and - for a browser on
-this machine only - adds models (an uploaded package, a package downloaded from
-an https URL, or one of the published ones) and deletes added ones.
+Lists every model the server holds with its full card, links to where more can
+be found, and - for a browser on this machine only - adds models (an uploaded
+package, or a package downloaded from an https URL) and deletes added ones.
 
 Why so guarded: a model is a pickle, and unpickling runs whatever code its
 author put in it. The page at / needs no API key (see auth.py), and a plain HTML
@@ -29,7 +29,7 @@ from urllib.parse import urlsplit
 
 from flask import Blueprint, abort, current_app, redirect, request
 
-from config import MODEL_MANAGEMENT, SUGGESTED_MODELS
+from config import MODEL_MANAGEMENT, MORE_MODELS_URL
 from model_registry import ModelError, ModelRegistry
 
 bp = Blueprint("model_portal", __name__)
@@ -121,11 +121,6 @@ def download():
     _check_post()
     url = request.form.get("url", "").strip()
     sha256 = request.form.get("sha256", "").strip()
-    suggested = next((m for m in SUGGESTED_MODELS if m["id"] == request.form.get("suggested")), None)
-    if suggested:
-        # The URL and hash come from config, not the form, so the one-click
-        # button can only ever fetch exactly the published package.
-        url, sha256 = suggested["url"], suggested["sha256"]
     if not url:
         return _done(False, "Enter the https:// URL of a model package.")
     try:
@@ -310,23 +305,19 @@ def models_card_html() -> str:
         + "</tbody></table>"
     )
 
+    more = (
+        f'<p>Find more models at <a href="{e(MORE_MODELS_URL)}" rel="noreferrer">'
+        f"{e(MORE_MODELS_URL)}</a>. A model is shared as a .zip package; add one "
+        "with the forms below.</p>"
+    )
+
     if manage:
-        installed = {entry["id"] for entry in entries}
-        suggestions = "".join(
-            f'<li><form method="post" action="/models/download">'
-            f'<input type="hidden" name="csrf" value="{_CSRF_TOKEN}">'
-            f'<input type="hidden" name="suggested" value="{e(m["id"])}">'
-            f"<strong>{e(m['name'])}</strong> - {e(m['description'])} "
-            f'<button type="submit">Download</button></form></li>'
-            for m in SUGGESTED_MODELS
-            if m["id"] not in installed
-        )
         manage_html = f"""
   <h3>Add a model</h3>
+  {more}
   <p class="warn">A model file can run code on this computer when it is loaded.
-  Only add models from providers you trust. Published models below are checked
-  against their SHA-256 before they are opened.</p>
-  {"<p>Published models:</p><ul>" + suggestions + "</ul>" if suggestions else ""}
+  Only add models from providers you trust, and give the SHA-256 they publish
+  when you have one.</p>
   <form method="post" action="/models/upload" enctype="multipart/form-data">
     <input type="hidden" name="csrf" value="{_CSRF_TOKEN}">
     <label>Upload a model package (.zip of model.json and model.joblib)<br>
@@ -342,9 +333,13 @@ def models_card_html() -> str:
     <button type="submit">Download</button>
   </form>"""
     elif MODEL_MANAGEMENT:
-        manage_html = "<p>Models can be added from a browser on this server's own machine.</p>"
+        manage_html = (
+            more + "<p>Models can be added from a browser on this server's own machine.</p>"
+        )
     else:
-        manage_html = "<p>Adding models is turned off on this server (<code>MODEL_MANAGEMENT=0</code>).</p>"
+        manage_html = (
+            more + "<p>Adding models is turned off on this server (<code>MODEL_MANAGEMENT=0</code>).</p>"
+        )
 
     return f"""
   <div class="card models" id="models">

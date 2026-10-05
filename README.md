@@ -120,25 +120,17 @@ one on its Model tab. `?model=<id>` on the recommendation request picks a model;
 the response names the model that answered.
 
 **Adding a model.** Open the server's own page (`http://localhost:5000/`) in a browser on
-the same machine. Under *Engagement models* you can:
-
-- download a published model in one click (checked against its pinned SHA-256),
-- download a package from any `https://` URL, with an optional SHA-256, or
-- upload a package.
+the same machine. Under *Engagement models* you can upload a package, or download one from
+an `https://` URL with an optional SHA-256. The page and the client's Model tab both link to
+where more models can be found (`MORE_MODELS_URL`, by default this repository's Releases
+page).
 
 A **model package** is a `.zip` holding exactly `model.json` and `model.joblib`. The server
 reads the card, checks that this server can compute its features and has the same
-scikit-learn version, loads the model once to make sure it works, and only then keeps it,
-under `MODELS_DIR` (default `data/models` beside the database). Added models can be deleted
-from the same page; built-in ones cannot.
-
-> A model file is a pickle, and loading one runs whatever code its author put in it. Only
-> add models from providers you trust. Because of that, the page's forms answer only a
-> browser on the server's own machine: the connection must come from loopback, with a
-> loopback `Host`, no forwarding header, a same-origin `Origin` and the page's per-process
-> token. `MODEL_MANAGEMENT=0` turns adding models off entirely, and `docker-compose.yml`
-> sets it, so a public server answers with its built-in models only. `MODEL_MAX_BYTES`
-> caps a package (default 200 MB).
+scikit-learn version, loads the model once to make sure it works, and only then keeps it.
+Added models live in a `models` directory beside the data directory: `models/` next to
+`data/` beside a portable executable, `data/models/` in a checkout (`MODELS_DIR` overrides
+it). They can be deleted from the same page; built-in ones cannot.
 
 **Sharing a model.** Package a committed model without retraining, and publish the zip
 (on a release, say) with the SHA-256 it prints:
@@ -147,6 +139,14 @@ from the same page; built-in ones cannot.
 cd ./server
 python scripts/package_model.py ../models/video    # writes dist/models/video.zip
 ```
+
+> A model file is a pickle, and loading one runs whatever code its author put in it. Only
+> add models from providers you trust. Because of that, the page's forms answer only a
+> browser on the server's own machine: the connection must come from loopback, with a
+> loopback `Host`, no forwarding header, a same-origin `Origin` and the page's per-process
+> token. `MODEL_MANAGEMENT=0` turns adding models off entirely, and `docker-compose.yml`
+> sets it, so a public server answers with its built-in models only. `MODEL_MAX_BYTES`
+> caps a package (default 200 MB).
 
 **Training a model.** The models are committed under `models/<id>/`, and the Docker
 image and portable build ship them as-is. Regenerate them, and commit the result,
@@ -211,7 +211,8 @@ cd ./server
 python scripts/build_portable.py    # --install fetches what is missing
 ```
 Leaves `dist/open-insights-server-<platform>-x86_64`. Run it anywhere: it keeps
-its database and uploads in a `data` directory beside itself, and prints how to
+its database and uploads in a `data` directory and added models in a `models` directory
+beside itself, and prints how to
 point a client at it. Set `SHOW_INSTRUCTIONS=0` to silence that.
 
 - Build it on the platform you will run it on. PyInstaller cannot cross-compile,

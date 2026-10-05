@@ -74,7 +74,12 @@ export type ModelEntry = {
   problems: string[];
 };
 
-export type ModelList = { default: string; models: ModelEntry[] };
+export type ModelList = {
+  default: string;
+  models: ModelEntry[];
+  /** Where to find more models to add. Absent from servers before it was added. */
+  more_models_url?: string;
+};
 
 /** Which way a feature would have to move to sit where the training data sees
  * higher viewing. "keep" means it already does; "none" means the relationship

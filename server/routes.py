@@ -6,6 +6,7 @@ from uuid import uuid4
 from auth import is_private, limiter
 from config import (
     ALLOWED_EXTENSIONS,
+    MORE_MODELS_URL,
     PUBLIC_COMPUTE_RATE_LIMIT,
     PUBLIC_MAX_QUEUE_DEPTH,
     PUBLIC_UPLOAD_RATE_LIMIT,
@@ -131,7 +132,13 @@ def __route_models():
     recommendation that names none is answered by. Reads only the cards (see
     model_registry.py); adding and deleting models is the page at /'s job."""
     registry = current_app.extensions["model_registry"]
-    return jsonify({"default": registry.default_id, "models": registry.entries()})
+    return jsonify(
+        {
+            "default": registry.default_id,
+            "models": registry.entries(),
+            "more_models_url": MORE_MODELS_URL,
+        }
+    )
 
 
 @bp.post("/api/videos/<file_hash>/recommendation")

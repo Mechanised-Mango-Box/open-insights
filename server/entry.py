@@ -40,27 +40,27 @@ def _prepare_data_dirs() -> None:
     read-only location is reported as a stack trace from deep inside startup,
     after a wait, rather than as the one sentence it is.
     """
-    from config import DB_PATH, UPLOAD_FOLDER
+    from config import DB_PATH, MODELS_DIR, UPLOAD_FOLDER
 
-    for directory in (Path(UPLOAD_FOLDER), Path(DB_PATH).parent):
+    for directory in (Path(UPLOAD_FOLDER), Path(DB_PATH).parent, Path(MODELS_DIR)):
         try:
             directory.mkdir(parents=True, exist_ok=True)
         except OSError as err:
             raise SystemExit(
                 f"Cannot create the data directory:\n\n    {directory}\n\n"
                 f"    {err}\n\n"
-                "The server keeps its database and uploaded videos beside the\n"
-                "executable, so it needs somewhere it may write. Move the\n"
-                "executable out of a read-only or protected location (Program\n"
-                "Files, for instance), or set UPLOAD_FOLDER and DB_PATH to\n"
-                "somewhere it can write."
+                "The server keeps its database, uploaded videos and added models\n"
+                "beside the executable, so it needs somewhere it may write. Move\n"
+                "the executable out of a read-only or protected location (Program\n"
+                "Files, for instance), or set UPLOAD_FOLDER, DB_PATH and MODELS_DIR\n"
+                "to somewhere it can write."
             ) from err
 
         if not os.access(directory, os.W_OK):
             raise SystemExit(
                 f"The data directory is not writable:\n\n    {directory}\n\n"
-                "Move the executable somewhere you own, or set UPLOAD_FOLDER\n"
-                "and DB_PATH."
+                "Move the executable somewhere you own, or set UPLOAD_FOLDER,\n"
+                "DB_PATH and MODELS_DIR."
             )
 
 
