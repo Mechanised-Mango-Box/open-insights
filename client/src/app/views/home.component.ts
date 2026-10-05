@@ -14,10 +14,10 @@ import { ServerChoiceCardComponent } from '../data-management/server-choice-card
   selector: 'home-overview',
   imports: [MatIcon, ServerChoiceCardComponent],
   template: `
-    <div class="home">
-      <server-choice-card (navigate)="navigate.emit($event)" />
+    <div class="view-stack">
+      <server-choice-card class="view-block" (navigate)="navigate.emit($event)" />
 
-      <section>
+      <section class="card">
         <h2>The workflow</h2>
         <ol class="steps">
           @for (step of workflow; track step.id) {
@@ -35,14 +35,15 @@ import { ServerChoiceCardComponent } from '../data-management/server-choice-card
         </ol>
       </section>
 
-      <section class="callout">
+      <section class="card callout">
         <mat-icon>warning</mat-icon>
         <div>
           <h2>Analysis looking thin?</h2>
           <p>
-            A record only counts toward it with <strong>all five</strong> of: scene stats,
-            transcript stats, screen text, audio stats, and a YouTube average view duration. The
-            Analysis page lists how many records were left out and why.
+            A record only counts toward it with <strong>all five</strong> of: scene stats, a
+            transcript, screen text, audio stats, and a YouTube content report with its average view
+            duration. The Analysis page lists how many records were left out and why. Recommend can
+            ask for less - each model lists the scans it needs.
           </p>
         </div>
       </section>
@@ -50,17 +51,12 @@ import { ServerChoiceCardComponent } from '../data-management/server-choice-card
   `,
   styles: [
     `
-      .home {
-        /* Wide enough for the four step cards; the prose blocks keep their own measure. */
-        max-width: 760px;
-      }
-      section,
-      server-choice-card {
-        margin: 0 0 20px;
-      }
-      h2 {
+      .callout h2 {
         font: var(--mat-sys-title-medium);
-        margin: 0 0 8px;
+        margin: 0 0 4px;
+      }
+      .card > h2 {
+        margin-bottom: 12px;
       }
       p {
         margin: 0;
@@ -81,20 +77,27 @@ import { ServerChoiceCardComponent } from '../data-management/server-choice-card
         padding: 0;
         margin: 0;
       }
+      /* The grid's rows already stretch; these carry that height down to the
+         button, so a step with a shorter blurb is not a shorter card. */
+      .steps > li {
+        display: flex;
+      }
       .step {
+        flex: 1;
         display: grid;
+        align-content: start;
         gap: 4px;
         width: 100%;
         text-align: left;
         padding: 12px;
         border-radius: 12px;
-        background: var(--mat-sys-surface-container);
+        background: var(--mat-sys-surface-container-high);
         border: 1px solid var(--mat-sys-outline-variant);
         color: inherit;
         cursor: pointer;
       }
       .step:hover {
-        background: var(--mat-sys-surface-container-high);
+        background: var(--mat-sys-surface-container-highest);
       }
       /* The icon leads, with the step's position in the run held to the far corner - the
          cards reflow onto one column on a narrow window, where the order stops being
@@ -134,11 +137,10 @@ import { ServerChoiceCardComponent } from '../data-management/server-choice-card
         height: 28px;
         color: var(--mat-sys-primary);
       }
+      /* The card's own surface, with the left edge in the primary colour to mark it
+         as an aside rather than a step. */
       .callout {
-        background: var(--mat-sys-surface-container);
         border-left: 3px solid var(--mat-sys-primary);
-        border-radius: 4px;
-        padding: 16px;
       }
     `,
   ],

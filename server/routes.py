@@ -150,9 +150,8 @@ def __route_recommendation(file_hash: str):
     the model that produced it.
 
     The features arrive in the body, computed by the client from the video's
-    Scan results, rather than being read back from this server's datasets: two
-    of them - speech pace variation and speaking ratio - are only ever computed
-    in the browser, and a Scan may have run on local compute with nothing stored
+    Scan results, rather than being read back from this server's datasets: one
+    of them - speech pace variation - is only ever computed in the browser, and a Scan may have run on local compute with nothing stored
     here. So file_hash names the video the answer is about but is not looked up.
 
     Declared before the <kind_name> route below, and more specific than it:

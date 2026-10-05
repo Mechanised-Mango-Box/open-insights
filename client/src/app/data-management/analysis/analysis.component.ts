@@ -97,7 +97,7 @@ const FEATURE_KEYS: readonly FeatureKey[] = ANALYSIS_FEATURE_COLUMNS;
   standalone: true,
   imports: [MatButtonModule, MatExpansionModule, MatIcon, RecommendationListComponent],
   template: `
-    <div class="analysis-page">
+    <div class="view-stack">
       <section class="card actions-column">
         <p class="action-hint">{{ scopeLabel() }}</p>
 
@@ -127,8 +127,10 @@ const FEATURE_KEYS: readonly FeatureKey[] = ANALYSIS_FEATURE_COLUMNS;
       </section>
 
       @if (!hasResult()) {
-        <div class="card empty-state">
-          <p>Run the analysis to see correlations and distributions across the dataset.</p>
+        <div class="card">
+          <p class="card-lead empty">
+            Run the analysis to see correlations and distributions across your records.
+          </p>
         </div>
       }
 
@@ -192,22 +194,22 @@ const FEATURE_KEYS: readonly FeatureKey[] = ANALYSIS_FEATURE_COLUMNS;
 
         @if (recommendations(); as outcome) {
           <section class="card recommendations-card">
-            <h2 class="feature-heading">What this dataset suggests</h2>
+            <h2>What this dataset suggests</h2>
             @if (outcome.ok) {
               <!-- Associations, not advice: the wording comes from the training
                    pipeline, which is careful not to claim a cause. -->
-              <p class="recommendations-note">
+              <p class="card-lead">
                 Associations within your own records, not causes - and not predictions about videos
                 you have not made yet.
               </p>
               <recommendation-list [rows]="recommendationRows()" />
             } @else if (outcome.reason === 'not-enough-rows') {
-              <p class="recommendations-note">
+              <p class="card-lead">
                 Needs at least {{ outcome.rowsNeeded }} eligible records before the relationships
                 mean anything - there are {{ featureCount }} features to weigh against each other.
               </p>
             } @else {
-              <p class="recommendations-note">
+              <p class="card-lead">
                 These records do not vary independently enough to separate the features apart.
               </p>
             }
@@ -240,23 +242,18 @@ const FEATURE_KEYS: readonly FeatureKey[] = ANALYSIS_FEATURE_COLUMNS;
   `,
   styles: [
     `
-      .analysis-page {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-      }
-      .empty-state p {
+      .empty {
         margin: 0;
-        color: var(--mat-sys-on-surface-variant);
-      }
-      .recommendations-note {
-        margin: 0 0 12px;
-        color: var(--mat-sys-on-surface-variant);
       }
       .results {
         display: flex;
         flex-direction: column;
         gap: 24px;
+      }
+      /* The display above outranks the browser's own [hidden] rule, which left the
+         empty charts on screen before the first run. */
+      .results[hidden] {
+        display: none;
       }
       /* The charts render light-on-white, so their card carries that surface rather than
          the page's dark one. Must stay in step with CHART_SURFACE, which is the ground the
@@ -318,7 +315,7 @@ export class AnalysisComponent implements AfterViewInit {
     const selected = this.selectionService.selectedCount();
     return selected > 0
       ? `Analysing ${selected} selected record(s).`
-      : 'Analysing every record. Select rows in the table to narrow it.';
+      : 'Analysing every record. Tick rows in the record table on Import, Scan or Export to narrow it.';
   });
 
   protected readonly featureKeys = FEATURE_KEYS;

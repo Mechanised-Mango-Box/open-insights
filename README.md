@@ -5,7 +5,14 @@ A video analysis tool for audio/video features and audience engagement.
 ## Quickstart
 
 1. Go to https://open-insights-ccx.pages.dev/
-2. Download the server and run it locally.
+2. Choose where scanning runs. The shared public server needs nothing installed but is
+   rate limited; for a whole dataset, download a server from
+   [Releases](https://github.com/Mechanised-Mango-Box/open-insights/releases), run it, and
+   point Settings at `http://localhost:5000`.
+3. Work down the sidebar: **Import** your videos and YouTube reports (see [Import](#import)),
+   **Scan** them, then **Export**, **Analysis** or **Recommend**.
+
+Your records stay in your browser. Only Scan and Recommend talk to the server.
 
 ### Export
 
@@ -32,7 +39,32 @@ An export is also what the engagement models are trained on - see [Engagement mo
 
 ### Import
 
-The output `.zip` can be similarly imported back into the app.
+The Import step takes four kinds of file, and has a guide to getting each one:
+
+| Source | Creates | Gives |
+|---|---|---|
+| YouTube content report (`Table data.csv`) | a record per video | title, duration, average view duration (the engagement measure) |
+| Video files (`.mp4`, `.mov`, `.mkv`, `.webm`, `.avi`) | a record per file | what Scan measures |
+| An export `.zip` | missing records, and missing results on existing ones | everything it was exported with |
+| Nothing | an empty record | for filling in by hand |
+
+The report and the videos create separate records. **Auto-Merge**, above the record
+table, pairs them by name and length; **Merge Selected** joins any it misses. A record's
+**Edit** button also takes a per-video audience retention CSV and an SRT/VTT transcript.
+
+Getting the files from YouTube Studio:
+
+- **Content report:** Analytics → Advanced mode → Content tab → set the date range → make
+  sure *Duration* and *Average view duration* are shown → Export current view → CSV.
+  Unzip it and import `Table data.csv`.
+- **Videos:** Content → ⋮ on a video → Download (an MP4, at most 720p). The original
+  files are better if you have them, because on-screen text is easier to read at full
+  resolution.
+- **Audience retention:** the video's Analytics → Engagement → Audience retention → See
+  more → Export current view → CSV.
+- **Captions:** the video's Subtitles → ⋮ beside the language → Download → `.srt`.
+
+Sample reports are in `data/sample/`.
 
 ### Browser compute (experimental)
 
@@ -77,9 +109,11 @@ Its OCR models ship inside the package, so there is nothing to fetch for it.
 
 Audio stats measure two of Mayer's multimedia principles. Coherence is the share of the
 video that is sound other than speech (music, effects) no more than 20 dB quieter than the
-speaker. Voice is how much the speaker's pitch varies, in semitones. Speech is found by the
-Silero VAD model that ships with faster-whisper, and pitch by Praat (`praat-parselmouth`),
-so there is nothing to fetch for these either.
+speaker. Voice is how much the speaker's pitch varies, in semitones. A second, finer
+speech pass gives the two the engagement models use: speech ratio (seconds of speech ÷
+duration) and mean pause (the average gap between stretches of speech). Speech is found
+by the Silero VAD model that ships with faster-whisper, and pitch by Praat
+(`praat-parselmouth`), so there is nothing to fetch for these either.
 
 Uploads must be `.mp4`, `.mov`, `.mkv`, `.webm` or `.avi`, and the server checks that the
 file really is a video in that container before storing it; anything else is refused with

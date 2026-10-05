@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { calculateSpeakingRatio, calculateSpeechPaceVariation } from './speech-features';
+import { calculateSpeechPaceVariation } from './speech-features';
 import { Transcript } from '../video-records/Dataset';
 
 describe('speech-features', () => {
@@ -100,94 +100,6 @@ describe('speech-features', () => {
         ],
       };
       expect(calculateSpeechPaceVariation(transcript, 60)).toBe(0);
-    });
-  });
-
-  describe('calculateSpeakingRatio', () => {
-    it('1. returns 0 when there are no transcript segments', () => {
-      expect(calculateSpeakingRatio(null, 60)).toBe(0);
-      expect(calculateSpeakingRatio({ segments: [] }, 60)).toBe(0);
-    });
-
-    it('2. returns approximately 1.0 for full-video speech', () => {
-      const transcript: Transcript = {
-        segments: [{ start: 0, end: 60, text: 'full video speech' }],
-      };
-      expect(calculateSpeakingRatio(transcript, 60)).toBeCloseTo(1.0, 5);
-    });
-
-    it('3. returns approximately 0.5 for half-video speech', () => {
-      const transcript: Transcript = {
-        segments: [{ start: 0, end: 30, text: 'half video speech' }],
-      };
-      expect(calculateSpeakingRatio(transcript, 60)).toBeCloseTo(0.5, 5);
-    });
-
-    it('4. handles multiple non-overlapping segments correctly', () => {
-      const transcript: Transcript = {
-        segments: [
-          { start: 0, end: 15, text: 'first' },
-          { start: 30, end: 45, text: 'second' },
-        ],
-      };
-      // (15 + 15) / 60 = 0.5
-      expect(calculateSpeakingRatio(transcript, 60)).toBeCloseTo(0.5, 5);
-    });
-
-    it('5. merges overlapping segments so speech is not double-counted', () => {
-      const transcript: Transcript = {
-        segments: [
-          { start: 0, end: 30, text: 'first' },
-          { start: 15, end: 45, text: 'overlapping' },
-        ],
-      };
-      // Merged: 0 to 45 -> 45 / 60 = 0.75
-      expect(calculateSpeakingRatio(transcript, 60)).toBeCloseTo(0.75, 5);
-    });
-
-    it('6. merges adjacent segments', () => {
-      const transcript: Transcript = {
-        segments: [
-          { start: 0, end: 30, text: 'first' },
-          { start: 30, end: 60, text: 'adjacent' },
-        ],
-      };
-      // Merged: 0 to 60 -> 60 / 60 = 1.0
-      expect(calculateSpeakingRatio(transcript, 60)).toBeCloseTo(1.0, 5);
-    });
-
-    it('7. clamps segment extending beyond video duration', () => {
-      const transcript: Transcript = {
-        segments: [{ start: 0, end: 90, text: 'extends past end' }],
-      };
-      expect(calculateSpeakingRatio(transcript, 60)).toBeCloseTo(1.0, 5);
-    });
-
-    it('8. clamps segment starting before 0', () => {
-      const transcript: Transcript = {
-        segments: [{ start: -10, end: 30, text: 'starts before zero' }],
-      };
-      // Clamped: 0 to 30 -> 30 / 60 = 0.5
-      expect(calculateSpeakingRatio(transcript, 60)).toBeCloseTo(0.5, 5);
-    });
-
-    it('9. ignores invalid intervals (end <= start or NaN)', () => {
-      const transcript: Transcript = {
-        segments: [
-          { start: NaN, end: 30, text: 'invalid start' },
-          { start: 30, end: 20, text: 'end before start' },
-          { start: 0, end: 30, text: 'valid' },
-        ],
-      };
-      expect(calculateSpeakingRatio(transcript, 60)).toBeCloseTo(0.5, 5);
-    });
-
-    it('10. returns 0 for zero video duration', () => {
-      const transcript: Transcript = {
-        segments: [{ start: 0, end: 30, text: 'valid segment' }],
-      };
-      expect(calculateSpeakingRatio(transcript, 0)).toBe(0);
-      expect(calculateSpeakingRatio(transcript, -10)).toBe(0);
     });
   });
 });

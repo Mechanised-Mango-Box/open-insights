@@ -169,6 +169,7 @@ export class VideoDatabaseService {
       this.videoRecords.set(records);
       await this.backfillFileDurations(records);
       await this.backfillSpeechFeatures(records);
+      await this.dropSpeakingRatio(records);
     } catch (error) {
       console.error('Failed to load initial videos into signal:', error);
     }
@@ -237,6 +238,26 @@ export class VideoDatabaseService {
       }
     }
   };
+  /**
+   * Removes the transcript's speaking_ratio from records stored while it was
+   * still computed. It was replaced by audio stats' speech_ratio, and left in
+   * place it would keep riding along into every export. Same one-shot shape as
+   * the backfills above, and like them no schema bump: nothing reads the field.
+   */
+  private dropSpeakingRatio = async (records: VideoRecord[]): Promise<void> => {
+    for (const record of records) {
+      const stats = record.ds_transcriptStats;
+      if (!isReady(stats) || !('speaking_ratio' in stats.data)) continue;
+
+      delete (stats.data as Partial<Record<'speaking_ratio', unknown>>).speaking_ratio;
+      try {
+        await this.updateVideo(record);
+      } catch (error) {
+        console.error('Failed to drop speaking ratio for', record.sort_name, error);
+      }
+    }
+  };
+
   async addVideo(record: Omit<VideoRecord, '__id'>): Promise<number> {
     const db = await this.dbPromise;
     // Insert into IndexedDB

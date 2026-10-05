@@ -29,7 +29,8 @@ import {
 
     <mat-dialog-content>
       <p class="lead">
-        Only Scan needs a server. Import, Analysis and Export run in this browser either way.
+        Only Scan and Recommend need a server. Import, Export and Analysis run in this browser
+        either way.
       </p>
 
       <mat-radio-group [value]="selected()" (change)="selected.set($event.value)">
@@ -37,8 +38,8 @@ import {
           <mat-radio-button value="public">The shared public server</mat-radio-button>
           <p>
             Nothing to install. It is shared and rate limited: your video uploads over the network,
-            then queues behind everyone else's, with one worker per task. {{ maxUpload }} per file,
-            {{ uploadsPerHour }} uploads an hour, and the queue turns work away past
+            then queues behind everyone else's, with a worker or two per task. {{ maxUpload }} per
+            file, {{ uploadsPerHour }} uploads an hour, and the queue turns work away past
             {{ queueDepth }} waiting jobs. Fine for trying this out; slow for a dataset.
           </p>
         </div>

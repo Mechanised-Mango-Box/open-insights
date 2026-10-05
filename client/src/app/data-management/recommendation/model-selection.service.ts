@@ -13,16 +13,41 @@ const STORAGE_PREFIX = 'openInsights.engagementModel:';
 
 /**
  * The model a stored choice resolves to: the stored one while the server still
- * has it and can run it, the server's default otherwise. A plain function so the
- * fallback can be tested without an injector.
+ * has it and can run it, the server's default otherwise, and failing that the
+ * first model it can run - a server whose default is missing or broken still
+ * has the others to offer, and choosing nothing left the page with no way on.
+ * A plain function so the fallback can be tested without an injector.
  */
 export const resolveSelection = (
   list: ModelList | null,
   storedId: string | null,
 ): ModelEntry | null => {
   if (!list) return null;
-  const stored = list.models.find((m) => m.id === storedId && m.compatible);
-  return stored ?? list.models.find((m) => m.id === list.default) ?? null;
+  const usable = list.models.filter((m) => m.compatible);
+  return (
+    usable.find((m) => m.id === storedId) ??
+    usable.find((m) => m.id === list.default) ??
+    usable[0] ??
+    null
+  );
+};
+
+/**
+ * Why a loaded list offers nothing to choose, or null when it does. Names each
+ * model's first problem, and a default the server says it has but does not list -
+ * the usual sign of a server running other code than the files beside it.
+ */
+export const unusableReason = (list: ModelList | null): string | null => {
+  if (!list || list.models.some((m) => m.compatible)) return null;
+  if (list.models.length === 0) return 'This server lists no engagement models.';
+  const reasons = list.models.map((m) => `${m.card?.name ?? m.id}: ${m.problems[0] ?? 'unusable'}`);
+  const missingDefault = list.models.some((m) => m.id === list.default)
+    ? ''
+    : ` Its default model, '${list.default}', is not among them.`;
+  return (
+    `None of this server's models can be used (${reasons.join('; ')}).${missingDefault} ` +
+    'Restart or update the server, or add a model on its own page.'
+  );
 };
 
 /** The features a model asks for, in its order - every feature when there is no
@@ -62,6 +87,8 @@ export class ModelSelectionService {
   private storedId = signal<string | null>(null);
 
   readonly selected = computed(() => resolveSelection(this.models(), this.storedId()));
+  /** Set when the server answered but offers no model that can be used. */
+  readonly unusable = computed(() => unusableReason(this.models()));
   readonly features = computed(() => featuresFor(this.selected()));
 
   constructor() {

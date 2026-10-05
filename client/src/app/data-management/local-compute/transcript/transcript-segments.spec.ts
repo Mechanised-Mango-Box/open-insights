@@ -75,7 +75,6 @@ describe('toTranscriptSegments', () => {
       count_chars: 15,
       count_words: 3,
       speech_pace_variation: 0,
-      speaking_ratio: 1,
     });
   });
 });

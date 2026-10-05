@@ -17,7 +17,6 @@ const completeStats: TranscriptStats = {
   count_chars: 9000,
   count_words: 1500,
   speech_pace_variation: 25,
-  speaking_ratio: 0.7,
 };
 
 /** Fully scanned by default; each spec takes away what it is about. */

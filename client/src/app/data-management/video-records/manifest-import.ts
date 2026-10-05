@@ -222,14 +222,16 @@ export async function parseExportZip(
         ds_transcriptStats: entry.transcript_stats
           ? restored(
               {
-                ...entry.transcript_stats,
+                // Field by field rather than spread, so a field the app no longer
+                // keeps (an older export's speaking_ratio) is not carried in.
+                count_chars: entry.transcript_stats.count_chars,
+                count_words: entry.transcript_stats.count_words,
                 // As with the video_file fields above: a manifest written before
-                // these existed reads them back undefined, and null is what
-                // "not measured" means here. A genuine 0 is kept. The backfill in
-                // VideoDatabaseService fills them in on the next load if the
+                // this existed reads it back undefined, and null is what "not
+                // measured" means here. A genuine 0 is kept. The backfill in
+                // VideoDatabaseService fills it in on the next load if the
                 // imported record turns out to have a duration after all.
                 speech_pace_variation: entry.transcript_stats.speech_pace_variation ?? null,
-                speaking_ratio: entry.transcript_stats.speaking_ratio ?? null,
               },
               generated_at,
               provenance?.transcript_stats,

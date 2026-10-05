@@ -65,9 +65,10 @@ def client_origin() -> str | None:
 def _key_line() -> str:
     return (
         "This server requires an API key. Paste the key you configured into the "
-        "client's settings alongside the URL."
+        "API key box below the URL, then press Save."
         if AUTH_ENABLED
-        else "Leave the API key field blank - this server does not require one."
+        else "Leave the API key box blank - this server does not require one - "
+        "then press Save."
     )
 
 
@@ -208,7 +209,7 @@ def page_html(server_url: str, models_html: str = "", extra_css: str = "") -> st
     <ol>
       <li>{first_step}</li>
       <li>
-        Go to <strong>Settings</strong> and set the server URL to:
+        Go to <strong>Settings</strong> and set <strong>Server URL</strong> to:
         <br><span class="url">{e(server_url)}</span>
       </li>
       <li>{e(_key_line())}</li>

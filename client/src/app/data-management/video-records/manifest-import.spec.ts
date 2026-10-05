@@ -44,7 +44,6 @@ const record = (overrides: Partial<VideoRecord> = {}): VideoRecord => ({
     count_chars: 56,
     count_words: 11,
     speech_pace_variation: 12.5,
-    speaking_ratio: 0.8,
   }),
   ds_sceneStats: ready<SceneStats>({ duration_secs: 3700, scenes: 42 }),
   ds_textStats: ready<TextStats>({
@@ -231,6 +230,40 @@ describe('parseExportZip', () => {
       expect(new Uint8Array(await file.arrayBuffer())).toEqual(bytes);
     },
   );
+
+  it("drops an older export's speaking_ratio, which the app no longer keeps", async () => {
+    const manifest: ExportManifest = {
+      generated_at: '2025-01-01T00:00:00.000Z',
+      records: [
+        {
+          id: HASH,
+          sort_name: 'Older Export',
+          video_file: { hash: HASH, exists_on_server: false, duration_secs: 60 },
+          youtube_content: null,
+          transcript_stats: {
+            count_chars: 56,
+            count_words: 11,
+            speech_pace_variation: 12.5,
+            speaking_ratio: 0.8,
+          } as ExportManifest['records'][number]['transcript_stats'],
+          scene_stats: null,
+          transcript_path: null,
+          video_file_path: null,
+          audience_retention_path: null,
+        },
+      ],
+    };
+    const zip = new JSZip();
+    zip.file('manifest.json', JSON.stringify(manifest));
+
+    const [imported] = await parseExportZip(await zip.generateAsync({ type: 'blob' }));
+
+    expect((imported.ds_transcriptStats as { data: object }).data).toEqual({
+      count_chars: 56,
+      count_words: 11,
+      speech_pace_variation: 12.5,
+    });
+  });
 
   it('rejects a zip that is not an export', async () => {
     const zip = new JSZip();

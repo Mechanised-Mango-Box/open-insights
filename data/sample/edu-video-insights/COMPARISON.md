@@ -29,16 +29,13 @@ See [Reproducing](#reproducing) for how to run it.
 - **The paper's "unexpected" positive word-count weight also shows up here (+14.2).** Duration and
   word count correlate at 0.987 (variance inflation factor ~180 each). The two weights are
   offsetting each other, not showing a real effect.
-- **This project's two extra speech features add signal in-sample.** Speech pace variation has
-  r = −0.21 and speaking ratio r = +0.15. With them, R² on the training data goes from 0.078 to 0.16.
-- **Text density (words on screen, by OCR) adds almost nothing.** More text goes with slightly
-  less watching (r = −0.10; rank correlation −0.21). But adding it as a 7th feature moves the
-  cross-validated linear RMSE only from 8.67 to 8.66, and the random forest's from 8.88 to 8.97.
-- **Measuring speech from the audio helps a little; pause length is the strongest speech
-  feature.** The transcript's speaking ratio sat at 0.99 or above for 126 of the 144 videos, so
-  the model now uses speech ratio from voice activity detection instead, and adds mean pause
-  length (r = −0.30). Cross-validated linear RMSE goes from 8.66 to 8.37. See
+- **This project's extra speech features add signal in-sample.** Speech pace variation has
+  r = −0.21, speech ratio r = +0.17 and mean pause length r = −0.30, the strongest of any speech
+  feature. With them, R² on the training data goes from 0.078 to 0.21. See
   [Speech ratio and pauses](#speech-ratio-and-pauses).
+- **Text density (words on screen, by OCR) adds almost nothing.** More text goes with slightly
+  less watching (r = −0.10; rank correlation −0.21), but its in-sample weight in the 8-feature
+  model is −0.02.
 - **Still, no model predicts engagement on videos it hasn't seen with any confidence.** Under
   repeated 5-fold cross-validation the best model scores RMSE 8.37 ± 1.82, against 9.00 ± 1.42 for
   simply predicting the average, a gain well inside the fold-to-fold SD. The shipped model's
@@ -128,7 +125,6 @@ b − a.
 | Scene count | −0.01 | −0.014 | +0.043 |
 | Scene change rate | +0.09 | +0.094 | +0.123 |
 | Speech pace variation | — | — | −0.206 |
-| Speaking ratio (transcript; no longer a feature) | — | — | +0.148 |
 | Text density | — | — | −0.104 |
 | Speech ratio | — | — | +0.174 |
 | Mean pause | — | — | −0.302 |
@@ -185,15 +181,13 @@ same one:
 
 Weights are percentage points of APV per standard deviation of each feature.
 
-| Run | Duration | Words | wpm | Scenes | Scene rate | Pace var. | Speak ratio | Text density | Speech ratio | Mean pause | RMSE | R² |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Paper, as printed | −21.81 | 20.52 | −3.04 | −1.02 | 1.15 | — | — | — | — | — | 8.6 | 0.0853 |
-| Upstream data, upstream's gradient descent | −21.81 | 20.52 | −3.04 | −1.02 | 1.15 | — | — | — | — | — | 8.603 | 0.0853 |
-| Upstream data, exact least squares | −22.01 | 20.73 | −3.07 | −1.03 | 1.15 | — | — | — | — | — | 8.603 | 0.0854 |
-| This project, paper's 5 features | −16.05 | 14.20 | −2.24 | 0.31 | 0.34 | — | — | — | — | — | 8.651 | 0.0780 |
-| This project, six features before text density | −18.73 | 16.70 | −3.20 | — | 0.48 | −2.20 | 1.29 | — | — | — | 8.256 | 0.1602 |
-| This project, the seven before speech ratio and mean pause | −19.30 | 17.35 | −3.18 | — | 0.45 | −2.16 | 1.29 | −0.55 | — | — | 8.239 | 0.1637 |
-| This project, model's 8 features (143 videos) | −14.86 | 13.21 | −3.67 | — | 0.61 | −1.65 | — | −0.02 | −0.92 | −3.61 | 7.994 | 0.2136 |
+| Run | Duration | Words | wpm | Scenes | Scene rate | Pace var. | Text density | Speech ratio | Mean pause | RMSE | R² |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Paper, as printed | −21.81 | 20.52 | −3.04 | −1.02 | 1.15 | — | — | — | — | 8.6 | 0.0853 |
+| Upstream data, upstream's gradient descent | −21.81 | 20.52 | −3.04 | −1.02 | 1.15 | — | — | — | — | 8.603 | 0.0853 |
+| Upstream data, exact least squares | −22.01 | 20.73 | −3.07 | −1.03 | 1.15 | — | — | — | — | 8.603 | 0.0854 |
+| This project, paper's 5 features | −16.05 | 14.20 | −2.24 | 0.31 | 0.34 | — | — | — | — | 8.651 | 0.0780 |
+| This project, model's 8 features (143 videos) | −14.86 | 13.21 | −3.67 | — | 0.61 | −1.65 | −0.02 | −0.92 | −3.61 | 7.994 | 0.2136 |
 
 - **The paper's weights come from upstream's gradient descent, not exact least squares.** They
   are reproduced by upstream's `gradient_descent` in
@@ -215,8 +209,6 @@ correlation with engagement is negative. The cause is collinearity:
 |---|---|---|---|
 | Upstream, paper's 5 features | 187 | 199 | 4.7–5.7 |
 | This project, paper's 5 features | 179 | 189 | 3.7–4.7 |
-| This project, six features before text density | 169 | 173 | 1.1–4.7 |
-| This project, the seven before speech ratio and mean pause | 170 | 175 | 1.1–4.7 |
 | This project, model's 8 features | 177 | 180 | 1.1–4.9 |
 
 - **Duration and word count carry almost the same information.** Words ≈ wpm × duration, and the
@@ -240,8 +232,6 @@ their product. That is a modelling change, and this comparison doesn't make it.
 |---|---|---|---|---|---|
 | Upstream data, paper's 5 features | 6.99 | 0.108 | 7.81 | −0.111 | 7.41 |
 | This project, paper's 5 features | 7.07 | 0.094 | 7.32 | 0.027 | 7.42 |
-| This project, six features before text density | 7.19 | 0.063 | 7.24 | 0.049 | 7.42 |
-| This project, the seven before speech ratio and mean pause | 7.14 | 0.076 | 7.42 | 0.001 | 7.42 |
 | This project, model's 8 features (shipped) | 6.68 | 0.202 | 6.84 | 0.164 | 7.62 |
 
 - **The last row is what `python -m model_training.train` reports for the committed model.** It
@@ -259,8 +249,6 @@ their product. That is a modelling change, and this comparison doesn't make it.
 |---|---|---|---|---|---|
 | Upstream data, paper's 5 features | 8.94 ± 1.51 | 9.88 ± 1.54 | 8.96 ± 1.43 | −0.058 ± 0.176 | −0.301 ± 0.232 |
 | This project, paper's 5 features | 9.09 ± 1.49 | 9.57 ± 1.66 | 8.98 ± 1.44 | −0.100 ± 0.237 | −0.210 ± 0.221 |
-| This project, six features before text density | 8.67 ± 1.74 | 8.88 ± 1.67 | 8.98 ± 1.44 | +0.017 ± 0.173 | −0.040 ± 0.191 |
-| This project, the seven before speech ratio and mean pause | 8.66 ± 1.76 | 8.97 ± 1.71 | 8.98 ± 1.44 | +0.021 ± 0.173 | −0.060 ± 0.208 |
 | This project, model's 8 features (143 videos) | 8.37 ± 1.82 | 8.84 ± 1.68 | 9.00 ± 1.42 | +0.087 ± 0.169 | −0.031 ± 0.200 |
 
 The mean predictor's own R² averages −0.057 over these folds. It uses the training fold's mean, so
@@ -268,13 +256,9 @@ it scores a little below zero on each test fold.
 
 - **The paper's five features predict engagement no better than the average, with either
   project's data.** The random forest does worse than the average.
-- **Only this project's speech features give a model that beats the average, and only just.**
-  Its RMSE is 0.3 pp lower (3%), well inside the fold-to-fold SD.
-- **Text density does not change that.** The linear model gains 0.01 of RMSE and the forest loses
-  0.09, both far inside the fold-to-fold SD. See [Text density](#text-density-on-screen-text).
-- **Speech ratio and mean pause do, a little.** They take the linear RMSE from 8.66 to 8.37 and
-  the forest's from 8.97 to 8.84. That is the largest gain any feature change here has made, and it
-  is still inside the fold-to-fold SD.
+- **Only the model's 8 features beat the average, and only just.** Its linear RMSE is 8.37
+  against 9.00, 0.6 pp (7%) lower, still inside the fold-to-fold SD of 1.8. The forest beats the
+  average by less (8.84).
 - **The paper's in-sample R² of 0.085 does not carry over to new videos.** This matches its own
   closing caution that "these results should serve primarily as exploratory indicators."
 
@@ -293,28 +277,25 @@ Words on screen, read by OCR from one frame every 5 seconds and averaged over th
 - **The association is weak and negative.** Pearson r = −0.10 and rank correlation −0.21. Taking
   the log to tame the screen recordings (r = −0.13) changes nothing under cross-validation.
 - **It is not duration in disguise.** Its variance inflation factor is 1.1, so unlike word count
-  its weight can be read on its own. That weight was −0.55 in-sample and −0.41 in the 7-feature
-  model, and is −0.10 in the shipped 8-feature one, all under the 1.0 threshold `inference.py` treats as a relationship worth advice. So the app
-  reports text density as having "little to no measurable relationship" with engagement.
+  its weight can be read on its own. That weight is −0.02 in-sample and −0.10 in the shipped
+  model, both under the 1.0 threshold `inference.py` treats as a relationship worth advice. So
+  the app reports text density as having "little to no measurable relationship" with engagement.
 - **As a predictor it adds nothing measurable here.** One lecturer's slides vary too little for
   144 videos to show an effect. The feature is still worth keeping for a pooled, multi-lecturer
   dataset, where slide styles differ far more.
 
 ### Speech ratio and pauses
 
-The 7-feature model's speaking ratio came from the transcript: the share of the video covered by
-Whisper's segments. Without voice activity detection, Whisper's segments run straight across
-pauses, so it measured how much of the video Whisper skipped rather than how much was speech.
-The audio stats scan measures both from the sound instead, with a Silero VAD pass that ends speech
-at a 250 ms silence, the usual cut-off for a pause in speech research.
+Both are measured from the sound, not the transcript: Whisper's segments run straight across
+pauses, so they show how much of the video Whisper skipped rather than how much was speech. The
+audio stats scan uses a Silero VAD pass that ends speech at a 250 ms silence, the usual cut-off
+for a pause in speech research.
 
 | | Min | Q1 | Median | Q3 | Max | ≥ 0.99 | r with APV |
 |---|---|---|---|---|---|---|---|
-| Speaking ratio (transcript) | 0.933 | 0.995 | 0.997 | 0.999 | 1.0 | 126 of 144 | +0.15 |
-| Speech ratio (audio) | 0.778 | 0.963 | 0.982 | 0.987 | 0.996 | 19 of 144 | +0.17 |
+| Speech ratio | 0.778 | 0.963 | 0.982 | 0.987 | 0.996 | 19 of 144 | +0.17 |
 | Mean pause (s) | 0.24 | 0.29 | 0.32 | 0.36 | 0.99 | — | −0.30 |
 
-- **The two ratios measure different things.** They correlate at only r = 0.34.
 - **Longer pauses go with less watching.** Mean pause length has the strongest correlation with
   APV of any speech feature (r = −0.30, rank correlation −0.22), stronger than speech pace
   variation (−0.21). Pauses per minute is weaker (r = −0.09) and is not a model feature.

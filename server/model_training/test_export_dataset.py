@@ -36,7 +36,6 @@ def make_record(index, **overrides):
             "count_chars": 9000,
             "count_words": 1500,
             "speech_pace_variation": 12.5,
-            "speaking_ratio": 0.8,
         },
         "scene_stats": {"duration_secs": 600, "scenes": 20},
         "audio_stats": {
@@ -74,7 +73,6 @@ def make_manifest():
                 "count_chars": 1,
                 "count_words": 1,
                 "speech_pace_variation": None,
-                "speaking_ratio": 1.0,
             },
         ),
         make_record(101, youtube_content=None),

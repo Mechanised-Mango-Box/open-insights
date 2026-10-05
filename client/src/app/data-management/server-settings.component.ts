@@ -3,6 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 import {
   ServerConfigService,
   LOCAL_SERVER_URL,
@@ -70,12 +71,15 @@ function describeRequestFailure(error: unknown, url: string): string {
 @Component({
   selector: 'server-settings',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatButtonModule],
+  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, MatIcon],
   template: `
-    <div class="settings">
+    <div class="view-stack">
       <section class="card">
         <h2>Dataset Server</h2>
-        <p class="lead">Which server this browser sends its work to. Saved in this browser only.</p>
+        <p class="card-lead">
+          Which server this browser sends its work to, and the key it sends. Saved in this browser
+          only.
+        </p>
 
         <div class="actions">
           <mat-form-field subscriptSizing="dynamic">
@@ -87,41 +91,64 @@ function describeRequestFailure(error: unknown, url: string): string {
               placeholder="http://localhost:5000"
             />
           </mat-form-field>
-          <button mat-stroked-button type="button" (click)="usePublic()">Use public</button>
-          <button mat-stroked-button type="button" (click)="useLocal()">Use local</button>
-          <button mat-raised-button color="primary" type="button" (click)="save()">Save</button>
+          <button mat-stroked-button type="button" (click)="usePublic()">
+            <mat-icon>public</mat-icon>
+            Use Public
+          </button>
+          <button mat-stroked-button type="button" (click)="useLocal()">
+            <mat-icon>computer</mat-icon>
+            Use Local
+          </button>
         </div>
-        <p class="muted">Active: {{ serverConfig.serverUrl() }}</p>
 
         <h3>Access key</h3>
-        <p class="lead">
+        <p class="card-lead">
           Sent with every request to the server above. The shared key the app ships with is rate
           limited — it is published in this page, so it is friction against abuse rather than a
           secret. If you run the server yourself, paste its private key here to lift those limits,
-          or clear this box entirely for a server started with no keys configured.
+          or clear this box entirely for a server started with no keys configured. Use Public and
+          Use Local fill this in for you.
         </p>
         <div class="actions">
           <mat-form-field subscriptSizing="dynamic">
             <mat-label>API key</mat-label>
             <input matInput [value]="draftKey()" (input)="onKeyInput($event)" />
           </mat-form-field>
-          <button mat-stroked-button type="button" (click)="useSharedKey()">Use shared</button>
-          <button mat-raised-button color="primary" type="button" (click)="saveKey()">
-            Save key
+          <button mat-stroked-button type="button" (click)="useSharedKey()">
+            <mat-icon>key</mat-icon>
+            Use Shared Key
           </button>
         </div>
-        <p class="muted">
-          {{ serverConfig.apiKey() ? 'A key is set for this browser.' : 'No key set.' }}
-        </p>
+
+        <div class="actions save-row">
+          <button
+            mat-raised-button
+            color="primary"
+            type="button"
+            [disabled]="!dirty()"
+            (click)="save()"
+          >
+            <mat-icon>save</mat-icon>
+            Save
+          </button>
+          <p class="action-status">
+            Active: {{ serverConfig.serverUrl() }} ·
+            {{ serverConfig.apiKey() ? 'a key is set' : 'no key' }}
+            @if (dirty()) {
+              · unsaved changes
+            }
+          </p>
+        </div>
 
         <h3>Status</h3>
-        <p class="lead">
+        <p class="card-lead">
           How much work the active server has queued, and how many of its workers are on each task.
           Reads the saved URL above, so it doubles as a reachability check.
         </p>
         <div class="actions">
           <button mat-stroked-button type="button" [disabled]="checking()" (click)="checkStatus()">
-            {{ checking() ? 'Checking…' : 'Check status' }}
+            <mat-icon>monitor_heart</mat-icon>
+            {{ checking() ? 'Checking…' : 'Check Status' }}
           </button>
           @if (status(); as report) {
             <span class="status-summary">
@@ -161,7 +188,7 @@ function describeRequestFailure(error: unknown, url: string): string {
               }
             </tbody>
           </table>
-          <p class="muted">
+          <p class="action-hint">
             A task showing more running than busy is a job whose worker was lost; the server
             reclaims it once its lease expires.
           </p>
@@ -170,20 +197,20 @@ function describeRequestFailure(error: unknown, url: string): string {
 
       <section class="card">
         <h2>Where Work Runs</h2>
-        <p class="lead">
+        <p class="card-lead">
           Work runs on the dataset server above. Running it in this browser instead is experimental.
         </p>
 
         <div class="experimental">
           <h3>Experimental: run the work in this browser</h3>
-          <p class="muted">
+          <p class="action-hint">
             Keeps your video on this machine and needs no server. It is
             <strong>much slower</strong> — the server manages around 15× realtime for scene stats
             across all its cores, where a browser has one thread and no SIMD — so a full batch can
             take many hours. It also accepts less: MP4 and MOV only for scene stats, and
             transcription needs WebGPU.
           </p>
-          <p class="muted">
+          <p class="action-hint">
             Results are stamped as coming from a different producer, so anything already computed by
             the server reads as not started, and the two are never mixed into one analysis. None of
             it has been checked against known-good results yet, so treat what it produces as
@@ -192,12 +219,14 @@ function describeRequestFailure(error: unknown, url: string): string {
           <div class="actions">
             @if (computeConfig.experimental()) {
               <button mat-stroked-button type="button" (click)="setExperimental(false)">
-                Disable browser compute
+                <mat-icon>block</mat-icon>
+                Disable Browser Compute
               </button>
-              <span class="muted">Enabled — choose per task below.</span>
+              <span class="action-status">Enabled — choose per task below.</span>
             } @else {
               <button mat-stroked-button type="button" (click)="setExperimental(true)">
-                I understand — enable browser compute
+                <mat-icon>science</mat-icon>
+                I Understand — Enable Browser Compute
               </button>
             }
           </div>
@@ -217,7 +246,7 @@ function describeRequestFailure(error: unknown, url: string): string {
                 <td>{{ kindLabels[kind] }}</td>
                 <td>
                   @if (!computeConfig.experimental()) {
-                    <span class="muted">Enable above to use this</span>
+                    <span class="action-hint">Enable above to use this</span>
                   } @else if (localAvailable(kind)) {
                     <button
                       mat-stroked-button
@@ -228,7 +257,7 @@ function describeRequestFailure(error: unknown, url: string): string {
                       This browser
                     </button>
                   } @else {
-                    <span class="muted">Not available in this browser</span>
+                    <span class="action-hint">Not available in this browser</span>
                   }
                 </td>
                 <td>
@@ -243,7 +272,7 @@ function describeRequestFailure(error: unknown, url: string): string {
                 </td>
               </tr>
               <tr>
-                <td colspan="3" class="kind-note muted">{{ kindNotes[kind] }}</td>
+                <td colspan="3" class="kind-note action-hint">{{ kindNotes[kind] }}</td>
               </tr>
             }
           </tbody>
@@ -253,32 +282,14 @@ function describeRequestFailure(error: unknown, url: string): string {
   `,
   styles: [
     `
-      .settings {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-        max-width: 80ch;
-      }
-      h2 {
-        font: var(--mat-sys-title-medium);
-        margin: 0 0 4px;
-      }
-      h3 {
-        font: var(--mat-sys-title-small);
-        margin: 24px 0 4px;
-      }
       .experimental h3 {
         margin-top: 0;
       }
-      .lead {
-        color: var(--mat-sys-on-surface-variant);
-        margin: 0 0 16px;
+      .experimental .action-hint {
+        margin-bottom: 8px;
       }
-      /* One class for every piece of secondary text on the page - these were
-         four near-identical rules that had already started to drift apart. */
-      .muted {
-        font: var(--mat-sys-body-small);
-        color: var(--mat-sys-on-surface-variant);
+      .save-row {
+        margin-top: 16px;
       }
       .actions mat-form-field {
         width: 320px;
@@ -353,8 +364,8 @@ export class ServerSettingsComponent {
   protected readonly kindNotes: Record<DatasetKind, string> = {
     transcript:
       'In this browser: Whisper tiny.en, needing WebGPU and a one-time ~75MB model download. ' +
-      'It is a much smaller model than the server runs, so word counts - and the speaking-speed ' +
-      'feature built on them - will shift. Transcripts already held from a server were made by a ' +
+      'It is a much smaller model than the server runs, so word counts - and the word count, ' +
+      'speaking speed and pace variation features built on them - will shift. Transcripts already held from a server were made by a ' +
       'different model and will read as not started.',
     scene_stats:
       'In this browser: WebCodecs, MP4 and MOV only (not .mkv or .webm). Same threshold as the ' +
@@ -416,8 +427,20 @@ export class ServerSettingsComponent {
     this.draftKey.set('');
   }
 
+  /** Whether either box differs from what is saved, so Save says when it has
+   * something to do. */
+  dirty = computed(
+    () =>
+      this.draftUrl().trim().replace(/\/+$/, '') !== this.serverConfig.serverUrl() ||
+      this.draftKey().trim() !== this.serverConfig.apiKey(),
+  );
+
+  /** Commits the URL and the key together, for the reason above: Use Public and
+   * Use Local stage both, and saving one without the other is how a self-run
+   * server used to be sent the shared key. */
   save(): void {
     this.serverConfig.setServerUrl(this.draftUrl());
+    this.serverConfig.setApiKey(this.draftKey());
   }
 
   onKeyInput(event: Event): void {
@@ -426,10 +449,6 @@ export class ServerSettingsComponent {
 
   useSharedKey(): void {
     this.draftKey.set(DEFAULT_API_KEY);
-  }
-
-  saveKey(): void {
-    this.serverConfig.setApiKey(this.draftKey());
   }
 
   /** Manual refresh, one fetch per press. No polling, so there is no interval to tear

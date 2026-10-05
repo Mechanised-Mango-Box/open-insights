@@ -29,8 +29,8 @@ pad it by only SPEECH_PAD_MS, gives:
     pause_rate_per_min  gaps between speech / minutes from first word to last
     mean_pause_secs     the mean length of those gaps
 
-Measured on the audio, unlike the transcript's speaking ratio: Whisper's
-segments run straight across pauses, so that one sits near 1 for nearly every
+Measured on the audio, not from the transcript: Whisper's segments run
+straight across pauses, so a ratio built from them sits near 1 for nearly every
 video. Silence before the first word and after the last is an intro or an
 outro, not a pause, so neither counts.
 
