@@ -1,10 +1,10 @@
 """The engagement models this server can answer recommendations with.
 
 Two places hold them:
-  - built in: each directory under ENGAGEMENT_MODEL_DIR (server/engagement_model/,
-    or the frozen build's copy of it). Read-only, and loaded at startup so a
-    missing or stale one stops the server at boot rather than 500ing the first
-    person to ask.
+  - built in: the BUILTIN_MODELS directories under ENGAGEMENT_MODEL_DIR (the
+    repository's models/, or the frozen build's copy of them). Read-only, and
+    loaded at startup so a missing or stale one stops the server at boot rather
+    than 500ing the first person to ask. Other directories there are ignored.
   - added: each directory under MODELS_DIR, put there by the page at / (see
     model_portal.py). Loaded on first use.
 
@@ -72,8 +72,15 @@ def problems(card: dict[str, Any]) -> list[str]:
 
 
 class ModelRegistry:
-    def __init__(self, builtin_dir: str | Path, added_dir: str | Path, default_id: str) -> None:
+    def __init__(
+        self,
+        builtin_dir: str | Path,
+        builtin_ids: list[str],
+        added_dir: str | Path,
+        default_id: str,
+    ) -> None:
         self.builtin_dir = Path(builtin_dir)
+        self.builtin_ids = list(builtin_ids)
         self.added_dir = Path(added_dir)
         self.default_id = default_id
         self._predictors: dict[str, EngagementPredictor] = {}
@@ -86,26 +93,30 @@ class ModelRegistry:
         """Every model directory by id, with its source. A built-in id wins over
         an added one, though add() never lets the two collide."""
         found: dict[str, tuple[Path, str]] = {}
-        for source, root in (("added", self.added_dir), ("builtin", self.builtin_dir)):
-            if not root.is_dir():
-                continue
-            for directory in sorted(root.iterdir()):
+        if self.added_dir.is_dir():
+            for directory in sorted(self.added_dir.iterdir()):
                 if directory.is_dir() and not directory.name.startswith("."):
-                    found[directory.name] = (directory, source)
+                    found[directory.name] = (directory, "added")
+        for model_id in self.builtin_ids:
+            directory = self.builtin_dir / model_id
+            if directory.is_dir():
+                found[model_id] = (directory, "builtin")
         return found
 
     def load_builtins(self) -> None:
         """Unpickles every built-in model now. Raises if one is missing, broken,
         or the default is not among them."""
-        builtins = {
-            model_id: directory
-            for model_id, (directory, source) in self._directories().items()
-            if source == "builtin"
-        }
-        if self.default_id not in builtins:
+        missing = [m for m in self.builtin_ids if not (self.builtin_dir / m).is_dir()]
+        if missing:
             raise FileNotFoundError(
-                f"Default engagement model '{self.default_id}' not found in {self.builtin_dir}."
+                f"Built-in engagement model(s) {', '.join(missing)} not found in {self.builtin_dir}."
             )
+        if self.default_id not in self.builtin_ids:
+            raise ValueError(
+                f"Default engagement model '{self.default_id}' is not one of the built-in "
+                f"models ({', '.join(self.builtin_ids)})."
+            )
+        builtins = {m: self.builtin_dir / m for m in self.builtin_ids}
         with self._lock:
             for model_id, directory in builtins.items():
                 self._predictors[model_id] = EngagementPredictor(directory)

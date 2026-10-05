@@ -67,9 +67,13 @@ COPY --chown=app:app models.py config.py paths.py ./
 COPY --chown=app:app scripts/ ./scripts/
 RUN python scripts/fetch_whisper_model.py
 
-# The engagement models are not built here: they are committed
-# (engagement_model/<id>/) and arrive with the source below, where config.py finds
-# them beside itself at /app/engagement_model.
+# The engagement models are not built here: they are committed in the
+# repository's models/, outside this build context, and arrive through the
+# "models" build context docker-compose.yml names (a bare `docker build` needs
+# --build-context models=../models). All of them are copied; BUILTIN_MODELS
+# decides which the server serves.
+COPY --from=models --chown=app:app . /app/engagement_models/
+ENV ENGAGEMENT_MODEL_DIR=/app/engagement_models
 
 COPY --chown=app:app . .
 

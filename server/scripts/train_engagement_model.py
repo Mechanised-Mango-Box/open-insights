@@ -1,8 +1,9 @@
-"""Trains an engagement model from a client export, as a built-in model or a package.
+"""Trains an engagement model from a client export, into the repository's models/.
 
 The server never trains (see inference.py): it loads the models committed under
-engagement_model/<id>/ (model.joblib + model.json) at startup, and the Dockerfile
-and scripts/build_portable.py ship them as-is, so nothing runs this during a build.
+the repository's models/<id>/ (model.joblib + model.json) that BUILTIN_MODELS
+names, and the Dockerfile and scripts/build_portable.py ship them as-is, so
+nothing runs this during a build.
 
     python scripts/train_engagement_model.py EXPORT [--feature-set full|fast|video|audio]
         [--out DIR | --no-save] [--package FILE.zip] [--name ...] [--provider ...] [--notes ...]
@@ -15,10 +16,10 @@ FEATURE_SETS in model_training/data_preparation.py) plus an imported YouTube
 content report (for the average view duration); records missing any of those are
 skipped and counted in the output.
 
-By default the model is written to engagement_model/<feature set>/, where the
-server finds its built-in models. --package also writes a .zip that anyone can add
-to their own server from its page (http://localhost:5000/) - that is how the
-models that are not built in are published.
+By default the model is written to models/<id>/ (the id defaults to the feature
+set's name). --package also writes a .zip that anyone can add to their own server
+from its page (http://localhost:5000/); scripts/package_model.py makes the same
+.zip from a model already committed, without retraining.
 
 There is deliberately no fallback dataset: a model must come from real data.
 The split and both models are seeded, so the same export, code and pins always

@@ -46,7 +46,9 @@ class TestModelPortal(unittest.TestCase):
         self.addCleanup(self.directory.cleanup)
         app = Flask(__name__)
         app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
-        self.registry = ModelRegistry(self.builtin, Path(self.directory.name) / "added", "full")
+        self.registry = ModelRegistry(
+            self.builtin, ["full"], Path(self.directory.name) / "added", "full"
+        )
         app.extensions["model_registry"] = self.registry
         app.register_blueprint(model_portal.bp)
         app.add_url_rule("/", "root", lambda: model_portal.models_card_html())

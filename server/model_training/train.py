@@ -70,7 +70,7 @@ def run_training_pipeline(
         random_state: Random seed for train_test_split reproducibility.
         save_dir: Directory to write the inference bundle into. Nothing is written
             when None (the default); scripts/train_engagement_model.py passes the
-            committed engagement_model/ directory.
+            committed models/<id>/ directory.
         recommendation_threshold: Practical-effect threshold magnitude (default 1.0).
         dataset_name: What the data came from (an export's name), recorded in the
             model card so a committed model says what it was trained on.
@@ -212,6 +212,22 @@ def write_package(bundle: Dict[str, Any], card: Dict[str, Any], package_path: st
     with zipfile.ZipFile(package_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         archive.writestr(CARD_FILENAME, json.dumps(card, indent=2) + "\n")
         archive.writestr(BUNDLE_FILENAME, buffer.getvalue())
+
+
+def package_directory(model_dir: str, package_path: str) -> Dict[str, Any]:
+    """Zips an existing model directory into a package, byte for byte - no
+    retraining, so the package holds exactly the model that was tested. Returns
+    its card."""
+    with open(os.path.join(model_dir, CARD_FILENAME), encoding="utf-8") as f:
+        card = json.load(f)
+    for name in (CARD_FILENAME, BUNDLE_FILENAME):
+        if not os.path.isfile(os.path.join(model_dir, name)):
+            raise FileNotFoundError(f"{model_dir} has no {name}")
+    os.makedirs(os.path.dirname(os.path.abspath(package_path)), exist_ok=True)
+    with zipfile.ZipFile(package_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        for name in (CARD_FILENAME, BUNDLE_FILENAME):
+            archive.write(os.path.join(model_dir, name), arcname=name)
+    return card
 
 
 if __name__ == "__main__":
