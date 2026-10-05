@@ -4,6 +4,7 @@ from pathlib import Path
 import auth
 from config import (
     ALLOWED_ORIGINS,
+    BUILTIN_MODELS,
     DB_PATH,
     ENGAGEMENT_MODEL_DEFAULT,
     ENGAGEMENT_MODEL_DIR,
@@ -30,7 +31,7 @@ app = Flask(__name__)
 # with scripts/train_engagement_model.py <export>. Models added from the page at
 # / load on first use.
 app.extensions["model_registry"] = ModelRegistry(
-    ENGAGEMENT_MODEL_DIR, MODELS_DIR, ENGAGEMENT_MODEL_DEFAULT
+    ENGAGEMENT_MODEL_DIR, BUILTIN_MODELS, MODELS_DIR, ENGAGEMENT_MODEL_DEFAULT
 )
 app.extensions["model_registry"].load_builtins()
 

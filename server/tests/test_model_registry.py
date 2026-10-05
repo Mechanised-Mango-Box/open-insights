@@ -52,6 +52,8 @@ class TestModelRegistry(unittest.TestCase):
         root = Path(cls.shared.name)
         cls.builtin = root / "builtin"
         train(cls.builtin, "full")
+        # Committed beside the built-ins but not one of them, like models/video.
+        train(cls.builtin, "spare", FEATURE_SETS["video"])
         cls.video_package = root / "video.zip"
         train(None, "video", FEATURE_SETS["video"], cls.video_package)
 
@@ -63,7 +65,7 @@ class TestModelRegistry(unittest.TestCase):
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
         self.root = Path(self.directory.name)
-        self.registry = ModelRegistry(self.builtin, self.root / "added", "full")
+        self.registry = ModelRegistry(self.builtin, ["full"], self.root / "added", "full")
         self.registry.load_builtins()
 
     def package(self, **changes) -> Path:
@@ -179,9 +181,22 @@ class TestModelRegistry(unittest.TestCase):
         self.assertEqual(entry["sha256"], digest)
         self.assertFalse(list(self.root.joinpath("added").glob(".download-*")))
 
-    def test_missing_default_fails_at_boot(self):
-        registry = ModelRegistry(self.builtin, self.root / "added", "nope")
-        with self.assertRaises(FileNotFoundError):
+    def test_serves_only_the_listed_builtins(self):
+        self.assertNotIn("spare", [e["id"] for e in self.registry.entries()])
+        with self.assertRaisesRegex(ModelError, "No engagement model 'spare'"):
+            self.registry.predictor("spare")
+        both = ModelRegistry(self.builtin, ["full", "spare"], self.root / "added", "full")
+        both.load_builtins()
+        self.assertEqual([e["id"] for e in both.entries()], ["full", "spare"])
+
+    def test_missing_builtin_fails_at_boot(self):
+        registry = ModelRegistry(self.builtin, ["full", "nope"], self.root / "added", "full")
+        with self.assertRaisesRegex(FileNotFoundError, "nope"):
+            registry.load_builtins()
+
+    def test_default_must_be_a_builtin(self):
+        registry = ModelRegistry(self.builtin, ["full"], self.root / "added", "spare")
+        with self.assertRaisesRegex(ValueError, "not one of the built-in"):
             registry.load_builtins()
 
 

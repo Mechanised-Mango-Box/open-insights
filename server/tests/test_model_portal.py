@@ -46,7 +46,9 @@ class TestModelPortal(unittest.TestCase):
         self.addCleanup(self.directory.cleanup)
         app = Flask(__name__)
         app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
-        self.registry = ModelRegistry(self.builtin, Path(self.directory.name) / "added", "full")
+        self.registry = ModelRegistry(
+            self.builtin, ["full"], Path(self.directory.name) / "added", "full"
+        )
         app.extensions["model_registry"] = self.registry
         app.register_blueprint(model_portal.bp)
         app.add_url_rule("/", "root", lambda: model_portal.models_card_html())
@@ -108,6 +110,13 @@ class TestModelPortal(unittest.TestCase):
         page = self.page()
         self.assertIn("RandomForestRegressor", page)
         self.assertIn("Held-out accuracy", page)
+
+    def test_page_links_to_more_models_and_offers_no_catalog(self):
+        page = self.page()
+        self.assertIn(f'href="{model_portal.MORE_MODELS_URL}"', page)
+        self.assertNotIn('name="suggested"', page)
+        # The link is for everyone, not only a browser that may add models.
+        self.assertIn(model_portal.MORE_MODELS_URL, self.page(environ={"REMOTE_ADDR": "10.0.0.9"}))
 
     def test_message_ids_not_text_come_from_the_url(self):
         page = self.client.get(

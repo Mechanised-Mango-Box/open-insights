@@ -14,6 +14,10 @@ services:
       # This directory, not the repo root - see server/.dockerignore. The repo
       # root carries data/local, which is GB-scale.
       context: ./server
+      # The committed engagement models live at the repo root, outside the
+      # context above; the Dockerfile copies them from here. Needs Compose 2.17+.
+      additional_contexts:
+        models: ./models
       args:
         # Baked into the image, so it must be rebuilt (not just restarted) to
         # change models. config.py's comment has the sizes: ~75MB for tiny.en,

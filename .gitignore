@@ -219,5 +219,11 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# Model related
+# Model related. models/ holds the committed engagement models, one directory each;
+# only their model.json and model.joblib are tracked, so nothing else that lands
+# there (a stray training run, a cache) is.
 models/*
+!models/*/
+models/*/*
+!models/*/model.json
+!models/*/model.joblib

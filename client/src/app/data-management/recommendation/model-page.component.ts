@@ -67,6 +67,13 @@ import { ModelSelectionService, neededScansLabel } from './model-selection.servi
           </button>
         </div>
 
+        @if (moreModelsUrl(); as url) {
+          <p class="action-hint">
+            Find more models at
+            <a [href]="url" target="_blank" rel="noreferrer">{{ url }}</a
+            >.
+          </p>
+        }
         @if (isLocalServer()) {
           <p class="action-hint">
             Models are added on your server's own page:
@@ -113,4 +120,10 @@ export class ModelPageComponent {
   protected neededScans = computed(() => neededScansLabel(this.selection.features()));
   protected isLocalServer = computed(() => this.processingMode.mode() === 'local');
   protected serverPage = computed(() => `${this.serverConfig.serverUrl()}/#models`);
+
+  /** Only a plain web address from the server is turned into a link. */
+  protected moreModelsUrl = computed(() => {
+    const url = this.models()?.more_models_url ?? '';
+    return /^https?:\/\//.test(url) ? url : null;
+  });
 }

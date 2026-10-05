@@ -1,5 +1,8 @@
 # Local Datasets
 /local/*
 
+# Models added from a development server's page (MODELS_DIR)
+/models/
+
 # sqlite files
 *.sqlite

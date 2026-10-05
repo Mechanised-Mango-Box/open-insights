@@ -260,32 +260,48 @@ WHISPER_MODEL_PATH = (
     else WHISPER_MODEL
 )
 
-# The built-in engagement models, one directory each (model.joblib + model.json,
+# The trained engagement models, one directory each (model.joblib + model.json,
 # see model_training/model_card.py): the random forest that predicts average
-# percentage viewed, and the linear regression and scaler that explain it.
-# Committed at server/engagement_model/<id>/ and shipped as-is by the Dockerfile
-# and build_portable.py - nothing trains them during a build. Regenerate them with
-# scripts/train_engagement_model.py <export> (a client export, see the README)
-# whenever the scikit-learn pins in requirements.txt or model_training/ change: a
-# pickle made under another scikit-learn does not load reliably.
+# percentage viewed, and the linear regression and scaler that explain it. All of
+# them are committed in the repository's top-level models/ directory, and
+# BUILTIN_MODELS names the ones this server serves - the portable build packs
+# only those, and the Docker image copies the directory in whole. Nothing trains
+# them during a build. Regenerate them with scripts/train_engagement_model.py
+# <export> (a client export, see the README) whenever the scikit-learn pins in
+# requirements.txt or model_training/ change: a pickle made under another
+# scikit-learn does not load reliably.
 #
-# Its own directory rather than a subfolder of "models": a frozen build already
-# unpacks the Whisper weights to sys._MEIPASS/models, and models/ is ignored as a
-# Whisper cache by .dockerignore. Required - like the Whisper weights, a server
-# started without it fails at boot rather than on its first request.
-_bundled_engagement = bundled("engagement_model") if FROZEN else None
+# Frozen, they unpack to sys._MEIPASS/engagement_models rather than .../models,
+# which is where the Whisper weights already are. Required - like the Whisper
+# weights, a server started without its built-ins fails at boot rather than on
+# its first request.
+_bundled_engagement = bundled("engagement_models") if FROZEN else None
 ENGAGEMENT_MODEL_DIR = os.environ.get("ENGAGEMENT_MODEL_DIR") or str(
-    _bundled_engagement
-    if _bundled_engagement is not None
-    else os.path.join(os.path.dirname(os.path.abspath(__file__)), "engagement_model")
+    _bundled_engagement if _bundled_engagement is not None else base_dir() / "models"
 )
+
+# The models in ENGAGEMENT_MODEL_DIR this server serves as built in. The others
+# there are for sharing: package one with scripts/package_model.py and add it on
+# the page at /. A portable build packs only these, so frozen the default is
+# simply whatever it packed - set at build time, not guessed again at runtime.
+_DEFAULT_BUILTINS = (
+    ",".join(sorted(d.name for d in _bundled_engagement.iterdir() if d.is_dir()))
+    if _bundled_engagement is not None and _bundled_engagement.is_dir()
+    else "full,fast"
+)
+BUILTIN_MODELS = [
+    name.strip()
+    for name in os.environ.get("BUILTIN_MODELS", _DEFAULT_BUILTINS).split(",")
+    if name.strip()
+]
 
 # Which built-in model answers a recommendation that names none.
 ENGAGEMENT_MODEL_DEFAULT = os.environ.get("ENGAGEMENT_MODEL_DEFAULT", "full")
 
-# Models added from the server's page (model_registry.py), beside the database
-# and uploads so a portable build's models follow it like the rest of its data.
-MODELS_DIR = os.environ.get("MODELS_DIR", str(_DATA_DIR / "models"))
+# Models added from the server's page (model_registry.py), in a models/ directory
+# beside the data directory: <exe>/data and <exe>/models for a portable build,
+# data/local and data/models in a checkout (clear of the committed models/).
+MODELS_DIR = os.environ.get("MODELS_DIR", str(_DATA_DIR.parent / "models"))
 
 # Whether the page at / may add and delete models. Even when on, only a browser on
 # this machine can (see model_portal.py): a model file is a pickle, and loading one
@@ -296,26 +312,11 @@ MODEL_MANAGEMENT = os.environ.get("MODEL_MANAGEMENT", "1") == "1"
 # about 1 MB each.
 MODEL_MAX_BYTES = int(os.environ.get("MODEL_MAX_BYTES", str(200 * 1024**2)))
 
-# The published models that are not built in, offered as one-click downloads on
-# the page at /. Each is pinned by SHA-256, so a download that is not exactly
-# the published package is refused rather than unpickled.
-_MODELS_RELEASE = "https://github.com/Mechanised-Mango-Box/open-insights/releases/download/models-v1"
-SUGGESTED_MODELS = [
-    {
-        "id": "video",
-        "name": "Video only",
-        "description": "Duration, scene change rate and on-screen text.",
-        "url": f"{_MODELS_RELEASE}/video.zip",
-        "sha256": "4fac7174d63abb2c5d111cf9d2a893e62d30f2306b5d83b19679614b38e4479f",
-    },
-    {
-        "id": "audio",
-        "name": "Audio only",
-        "description": "Duration plus the transcript and audio features.",
-        "url": f"{_MODELS_RELEASE}/audio.zip",
-        "sha256": "1628d61619ffb6a8e32e7eaadebadf2c9f49ba865dd3abae64a30f1e9cb915db",
-    },
-]
+# Where to send someone looking for more models: shown on the page at / and on
+# the client's Model tab.
+MORE_MODELS_URL = os.environ.get(
+    "MORE_MODELS_URL", "https://github.com/Mechanised-Mango-Box/open-insights/releases"
+)
 
 # How different a frame must be from its predecessor to count as a scene change.
 # Lifted out of processing.py, where it sat as a default argument that nothing

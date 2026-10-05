@@ -124,15 +124,22 @@ support, so where they cannot, scene stats and screen text decode through PyAV i
 
 The Recommend step asks one of the server's engagement models about a single video. Each
 model is a random forest that predicts average percentage viewed, plus a linear regression
-on standardised features that explains which way each feature leans. There are four,
-trained on different feature sets:
+on standardised features that explains which way each feature leans. Four are committed
+in the repository's top-level `models/`, trained on different feature sets:
 
-| Model | Features | Scans it needs | Where it is |
+| Model | Features | Scans it needs | Ships in the server |
 |---|---|---|---|
-| `full` (default) | all eight | scene, transcript, screen text, audio | built in |
-| `fast` | all but on-screen text | scene, transcript, audio | built in |
-| `video` | duration, scene change rate, text density | scene, screen text | [release](https://github.com/Mechanised-Mango-Box/open-insights/releases/tag/models-v1) download |
-| `audio` | duration, transcript and audio features | transcript, audio | [release](https://github.com/Mechanised-Mango-Box/open-insights/releases/tag/models-v1) download |
+| `full` (default) | all eight | scene, transcript, screen text, audio | yes |
+| `fast` | all but on-screen text | scene, transcript, audio | yes |
+| `video` | duration, scene change rate, text density | scene, screen text | no - add it |
+| `audio` | duration, transcript and audio features | transcript, audio | no - add it |
+
+`BUILTIN_MODELS` (default `full,fast`) names the ones a server serves without being
+added; `ENGAGEMENT_MODEL_DEFAULT` (default `full`) must be one of them. The portable build
+packs only those. The Docker image copies all of `models/` in through a second build
+context (`additional_contexts` in `docker-compose.yml`, which needs Compose 2.17+; a bare
+`docker build` needs `--build-context models=../models`), and `BUILTIN_MODELS` decides
+what is served.
 
 `fast` leaves out screen text because OCR is the slowest scan. On 1080p lecture video, on a
 16-core CPU, the scans took about 7 s per minute of video for OCR, 4.3 s for scene stats,
@@ -147,17 +154,25 @@ one on its Model tab. `?model=<id>` on the recommendation request picks a model;
 the response names the model that answered.
 
 **Adding a model.** Open the server's own page (`http://localhost:5000/`) in a browser on
-the same machine. Under *Engagement models* you can:
-
-- download a published model in one click (checked against its pinned SHA-256),
-- download a package from any `https://` URL, with an optional SHA-256, or
-- upload a package.
+the same machine. Under *Engagement models* you can upload a package, or download one from
+an `https://` URL with an optional SHA-256. The page and the client's Model tab both link to
+where more models can be found (`MORE_MODELS_URL`, by default this repository's Releases
+page).
 
 A **model package** is a `.zip` holding exactly `model.json` and `model.joblib`. The server
 reads the card, checks that this server can compute its features and has the same
-scikit-learn version, loads the model once to make sure it works, and only then keeps it,
-under `MODELS_DIR` (default `data/models` beside the database). Added models can be deleted
-from the same page; built-in ones cannot.
+scikit-learn version, loads the model once to make sure it works, and only then keeps it.
+Added models live in a `models` directory beside the data directory: `models/` next to
+`data/` beside a portable executable, `data/models/` in a checkout (`MODELS_DIR` overrides
+it). They can be deleted from the same page; built-in ones cannot.
+
+**Sharing a model.** Package a committed model without retraining, and publish the zip
+(on a release, say) with the SHA-256 it prints:
+
+```sh
+cd ./server
+python scripts/package_model.py ../models/video    # writes dist/models/video.zip
+```
 
 > A model file is a pickle, and loading one runs whatever code its author put in it. Only
 > add models from providers you trust. Because of that, the page's forms answer only a
@@ -167,25 +182,22 @@ from the same page; built-in ones cannot.
 > sets it, so a public server answers with its built-in models only. `MODEL_MAX_BYTES`
 > caps a package (default 200 MB).
 
-**Training a model.** The built-in models are committed under
-`server/engagement_model/<id>/`, and the Docker image and portable build ship them as-is.
-Regenerate them, and commit the result, whenever there is a better export to learn from,
-the scikit-learn, numpy, pandas or joblib pins in `requirements.txt` change (a
-scikit-learn pickle does not load under another version) or anything in
-`model_training/` that shapes the models changes:
+**Training a model.** The models are committed under `models/<id>/`, and the Docker
+image and portable build ship them as-is. Regenerate them, and commit the result,
+whenever there is a better export to learn from, the scikit-learn, numpy, pandas or
+joblib pins in `requirements.txt` change (a scikit-learn pickle does not load under
+another version) or anything in `model_training/` that shapes the models changes:
 
 ```sh
 cd ./server
-python scripts/train_engagement_model.py path/to/export.zip --feature-set full
-python scripts/train_engagement_model.py path/to/export.zip --feature-set fast
-# The downloadable ones, as packages for a release:
-python scripts/train_engagement_model.py path/to/export.zip --feature-set video --no-save --package dist/models/video.zip
-python scripts/train_engagement_model.py path/to/export.zip --feature-set audio --no-save --package dist/models/audio.zip
+for set in full fast video audio; do
+  python scripts/train_engagement_model.py path/to/export.zip --feature-set $set
+done
 ```
 
-`--name`, `--version`, `--description`, `--provider`, `--provider-url` and `--notes` fill in
-the card. After publishing new packages, update their SHA-256s in `SUGGESTED_MODELS` in
-`server/config.py`.
+Each lands in `models/<feature set>/`. `--id`, `--name`, `--version`, `--description`,
+`--provider`, `--provider-url` and `--notes` fill in the card, and `--package FILE.zip`
+also writes a package.
 
 It trains on a client [export](#export) - the zip, or the zip unpacked into a folder.
 Only `manifest.json` is read, so exporting without video files is enough. A record
@@ -201,7 +213,7 @@ Training is seeded, so the same export, code and pins produce the same model. Th
 export itself is not committed, so the card records what it learned from:
 
 ```sh
-python -c "import json; print(json.load(open('engagement_model/full/model.json'))['training'])"
+python -c "import json; print(json.load(open('../models/full/model.json'))['training'])"
 ```
 
 #### How results are calculated
@@ -233,7 +245,8 @@ cd ./server
 python scripts/build_portable.py    # --install fetches what is missing
 ```
 Leaves `dist/open-insights-server-<platform>-x86_64`. Run it anywhere: it keeps
-its database and uploads in a `data` directory beside itself, and prints how to
+its database and uploads in a `data` directory and added models in a `models` directory
+beside itself, and prints how to
 point a client at it. Set `SHOW_INSTRUCTIONS=0` to silence that.
 
 - Build it on the platform you will run it on. PyInstaller cannot cross-compile,
