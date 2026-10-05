@@ -11,12 +11,16 @@ from config import (
     DB_PATH,
     JOB_LEASE_SECONDS,
     MAX_ATTEMPTS,
+    AUDIO_STATS_METHOD,
     AUDIO_STATS_PRODUCER,
     AUDIO_STATS_SETTINGS,
+    SCENE_STATS_METHOD,
     SCENE_STATS_PRODUCER,
     SCENE_STATS_SETTINGS,
+    TEXT_STATS_METHOD,
     TEXT_STATS_PRODUCER,
     TEXT_STATS_SETTINGS,
+    TRANSCRIPT_METHOD,
     TRANSCRIPT_PRODUCER,
     TRANSCRIPT_SETTINGS,
 )
@@ -59,6 +63,8 @@ class DatasetKind:
     # The thresholds and models behind `producer`, by name (see config.py).
     # Left out of comparison and hashing: a dict has no hash.
     settings: Mapping[str, Any] = field(compare=False)
+    # How the kind is calculated, in words (see config.py's *_METHOD).
+    method: str = field(default="", compare=False)
 
 
 TRANSCRIPT = DatasetKind(
@@ -67,6 +73,7 @@ TRANSCRIPT = DatasetKind(
     columns=("count_chars", "count_words", "segments_json"),
     producer=TRANSCRIPT_PRODUCER,
     settings=TRANSCRIPT_SETTINGS,
+    method=TRANSCRIPT_METHOD,
 )
 
 SCENE_STATS = DatasetKind(
@@ -75,6 +82,7 @@ SCENE_STATS = DatasetKind(
     columns=("duration_secs", "scenes"),
     producer=SCENE_STATS_PRODUCER,
     settings=SCENE_STATS_SETTINGS,
+    method=SCENE_STATS_METHOD,
 )
 
 TEXT_STATS = DatasetKind(
@@ -90,6 +98,7 @@ TEXT_STATS = DatasetKind(
     ),
     producer=TEXT_STATS_PRODUCER,
     settings=TEXT_STATS_SETTINGS,
+    method=TEXT_STATS_METHOD,
 )
 
 AUDIO_STATS = DatasetKind(
@@ -108,6 +117,7 @@ AUDIO_STATS = DatasetKind(
     ),
     producer=AUDIO_STATS_PRODUCER,
     settings=AUDIO_STATS_SETTINGS,
+    method=AUDIO_STATS_METHOD,
 )
 
 KINDS: dict[str, DatasetKind] = {

@@ -9,6 +9,7 @@ import {
   viewChildren,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import {
   BarController,
@@ -40,6 +41,7 @@ import {
   computeRecommendations,
 } from './recommendations';
 import { AnalysisService } from './analysis.service';
+import { AnalysisMethods, buildAnalysisMethods } from './analysis-methods';
 import { VideoDatabaseService } from '../video-records/video-database.service';
 import { SelectionService } from '../video-records/selection.service';
 import { downloadBlob } from '../video-records/manifest-export';
@@ -93,7 +95,7 @@ const FEATURE_KEYS: readonly FeatureKey[] = ANALYSIS_FEATURE_COLUMNS;
 @Component({
   selector: 'analysis',
   standalone: true,
-  imports: [MatButtonModule, MatIcon, RecommendationListComponent],
+  imports: [MatButtonModule, MatExpansionModule, MatIcon, RecommendationListComponent],
   template: `
     <div class="analysis-page">
       <section class="card actions-column">
@@ -131,6 +133,57 @@ const FEATURE_KEYS: readonly FeatureKey[] = ANALYSIS_FEATURE_COLUMNS;
       }
 
       <div class="results" [hidden]="!hasResult()">
+        @if (methods(); as m) {
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>How these numbers are calculated</mat-panel-title>
+              <mat-panel-description>
+                {{ m.records.used }} of {{ m.records.total }} records used
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <dl class="method-list">
+              <dt>Records</dt>
+              <dd>
+                {{ m.records.used }} of {{ m.records.total }} used. A record needs scene stats, a
+                transcript, screen text, audio stats and a YouTube content report.
+                @for (s of m.records.skipped; track s.reason) {
+                  <br />Left out {{ s.count }}: {{ s.reason }}
+                }
+              </dd>
+              <dt>Engagement</dt>
+              <dd>{{ m.target }}</dd>
+              @for (t of m.techniques; track t.label) {
+                <dt>{{ t.label }}</dt>
+                <dd>{{ t.text }}</dd>
+              }
+            </dl>
+            <h3 class="method-heading">Features</h3>
+            <table class="method-table">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>How it is computed</th>
+                  <th>From</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (f of m.features; track f.key) {
+                  <tr>
+                    <td>{{ f.label }}</td>
+                    <td>{{ f.definition }}</td>
+                    <td>{{ f.scans.join(', ') }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+            <p class="method-note">
+              How each Scan result is itself measured, and with which thresholds, is under "How Scan
+              calculates its data" on the Scan step. The export includes all of this as
+              methods.json.
+            </p>
+          </mat-expansion-panel>
+        }
+
         <section class="chart-card correlation-card">
           <div class="chart-container correlation-container">
             <canvas #correlationCanvas></canvas>
@@ -282,6 +335,7 @@ export class AnalysisComponent implements AfterViewInit {
 
   private lastResult = signal<AnalysisResult | null>(null);
   private lastRows: AnalysisFeatureRow[] = [];
+  protected methods = signal<AnalysisMethods | null>(null);
   protected recommendations = signal<RecommendationOutcome | null>(null);
   protected readonly minRowsForRecommendations = MIN_ROWS_FOR_RECOMMENDATIONS;
   protected readonly featureCount = ANALYSIS_FEATURE_COLUMNS.length;
@@ -325,16 +379,20 @@ export class AnalysisComponent implements AfterViewInit {
       // which is what the scope line above the button is for.
       const selected = this.selectionService.selection.selected;
       const records = selected.length > 0 ? selected : await this.dbService.getAllVideos();
-      const { rows, eligibleCount, totalCount } = this.analysisService.buildFeatureRows(records);
+      const rowResult = this.analysisService.buildFeatureRows(records);
+      const { rows, eligibleCount, totalCount } = rowResult;
 
       if (eligibleCount < 2) {
+        const reasons = rowResult.skipped.map((s) => `${s.count} ${s.reason}`).join(', ');
         this.statusMessage.set(
-          `Only ${eligibleCount} of ${totalCount} record(s) have transcript + scene stats + YouTube content data. Need at least 2 to run analysis.`,
+          `Only ${eligibleCount} of ${totalCount} record(s) have scene stats, a transcript, screen text, audio stats and a YouTube content report. Need at least 2 to run analysis.` +
+            (reasons ? ` Left out: ${reasons}.` : ''),
         );
         return;
       }
 
       const result = computeAnalysis(rows);
+      this.methods.set(buildAnalysisMethods(rowResult));
       this.renderResult(rows, result);
       this.lastRows = rows;
       this.lastResult.set(result);
@@ -362,6 +420,7 @@ export class AnalysisComponent implements AfterViewInit {
         featureKeys: FEATURE_KEYS,
         images,
         recommendations: outcome?.ok ? outcome.recommendations : null,
+        methods: this.methods(),
       });
       downloadBlob(blob, `open-insights-analysis-${new Date().toISOString()}.zip`);
     } catch (error) {
@@ -401,7 +460,7 @@ export class AnalysisComponent implements AfterViewInit {
         labels: FEATURE_KEYS.map((key) => FEATURE_LABELS[key]),
         datasets: [
           {
-            label: 'Correlation with Engagement',
+            label: 'Pearson r with engagement',
             data: [],
             backgroundColor: (ctx: ScriptableContext<'bar'>) =>
               (typeof ctx.raw === 'number' ? ctx.raw : 0) >= 0
@@ -416,7 +475,11 @@ export class AnalysisComponent implements AfterViewInit {
         maintainAspectRatio: false,
         scales: { x: { min: -1, max: 1 } },
         plugins: {
-          title: { display: true, text: 'Correlation with Engagement', color: CHART_INK },
+          title: {
+            display: true,
+            text: 'Correlation with Engagement (Pearson r)',
+            color: CHART_INK,
+          },
           legend: { display: false },
         },
       },
@@ -490,6 +553,8 @@ export class AnalysisComponent implements AfterViewInit {
 
   private renderResult(rows: AnalysisFeatureRow[], result: AnalysisResult): void {
     if (this.correlationChart) {
+      const title = this.correlationChart.options.plugins?.title;
+      if (title) title.text = `Correlation with Engagement (Pearson r, n = ${rows.length})`;
       this.correlationChart.data.datasets[0].data = FEATURE_KEYS.map(
         (key) => result.correlations[key] ?? 0,
       );

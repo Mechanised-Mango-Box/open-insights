@@ -14,11 +14,13 @@ import { DatasetSettings } from '../video-records/Dataset';
  * every parameter that could move the numbers, and the only place that knows
  * them all is the implementation itself. Splitting them is how a threshold gets
  * changed without the cache noticing. `settings` names the same parameters, for
- * reporting what a scan used.
+ * reporting what a scan used, and `method` says in words what they feed.
  */
 export type Computer<K extends DatasetKind> = {
   readonly producer: string;
   readonly settings: DatasetSettings;
+  /** How it calculates its result, in words, for the Scan page's methods panel. */
+  readonly method?: string;
   compute(file: File): Promise<DatasetPayload[K]>;
 };
 

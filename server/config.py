@@ -362,6 +362,13 @@ PITCH_CEILING_HZ = float(os.environ.get("PITCH_CEILING_HZ", "500.0"))
 # the 400 ms faster-whisper uses to avoid clipping words for transcription.
 SPEECH_MIN_SILENCE_MS = float(os.environ.get("SPEECH_MIN_SILENCE_MS", "250.0"))
 SPEECH_PAD_MS = float(os.environ.get("SPEECH_PAD_MS", "30.0"))
+# Praat's pitch frames are PITCH_TIME_STEP_SECS apart (its own default for the
+# limits above). Pitch variation needs at least PITCH_MIN_VOICED_SECS of voiced
+# speech to mean anything, and frames more than OCTAVE_ERROR_ST semitones from the
+# median are dropped as octave errors, the tracker's commonest mistake.
+PITCH_TIME_STEP_SECS = float(os.environ.get("PITCH_TIME_STEP_SECS", "0.01"))
+PITCH_MIN_VOICED_SECS = float(os.environ.get("PITCH_MIN_VOICED_SECS", "1.0"))
+OCTAVE_ERROR_ST = float(os.environ.get("OCTAVE_ERROR_ST", "12.0"))
 
 # Decoding and Praat's pitch tracker are both single-threaded, so two workers
 # buy two videos at once.
@@ -409,6 +416,8 @@ AUDIO_STATS_PRODUCER = (
     f"/floor={AUDIO_SILENCE_DBFS}dBFS/pitch_floor={PITCH_FLOOR_HZ}Hz"
     f"/pitch_ceiling={PITCH_CEILING_HZ}Hz"
     f"/pause_silence={SPEECH_MIN_SILENCE_MS}ms/pause_pad={SPEECH_PAD_MS}ms"
+    f"/pitch_step={PITCH_TIME_STEP_SECS}s/min_voiced={PITCH_MIN_VOICED_SECS}s"
+    f"/octave_error={OCTAVE_ERROR_ST}st"
 )
 
 # The same parameters, by name, for reporting: every ready result and /status
@@ -441,7 +450,47 @@ AUDIO_STATS_SETTINGS = {
     "pitch_ceiling_hz": PITCH_CEILING_HZ,
     "pause_min_silence_ms": SPEECH_MIN_SILENCE_MS,
     "pause_pad_ms": SPEECH_PAD_MS,
+    "pitch_time_step_secs": PITCH_TIME_STEP_SECS,
+    "pitch_min_voiced_secs": PITCH_MIN_VOICED_SECS,
+    "octave_error_st": OCTAVE_ERROR_ST,
 }
+
+# How each kind is calculated, in words, for whoever runs a scan: reported beside
+# its settings on /status. The values themselves are in the settings above, so
+# these describe the method and name the settings rather than repeating numbers
+# that could drift from them.
+TRANSCRIPT_METHOD = (
+    "Speech is transcribed by faster-whisper (OpenAI's Whisper model, run through "
+    "CTranslate2) in the configured language, optionally skipping silence with its "
+    "voice-activity filter. Word count is the transcript split on whitespace."
+)
+SCENE_STATS_METHOD = (
+    "Every frame is decoded (OpenCV, or PyAV for videos OpenCV cannot read such as "
+    "AV1) and converted to greyscale. A scene cut is counted whenever the mean "
+    "absolute difference from the previous frame, on a 0-255 scale, is above the "
+    "threshold. Duration is frame count / frame rate."
+)
+TEXT_STATS_METHOD = (
+    "One frame is sampled from the middle of every sampling interval and read by "
+    "RapidOCR (PP-OCRv6 small detection and recognition models). A sample whose "
+    "160x90 greyscale thumbnail differs from the last one read by less than the "
+    "reuse threshold (mean absolute difference, 0-255) reuses that reading. Only "
+    "lines recognised with at least the minimum confidence count; a word is a "
+    "token of two or more letters or digits. Mean words on screen is the mean "
+    "over samples, and coverage is text-box area / frame area."
+)
+AUDIO_STATS_METHOD = (
+    "Audio is decoded to 16 kHz mono. Speech is found by Silero VAD (faster-whisper's "
+    "default options, which merge silences under 2 s) and loudness is measured as RMS "
+    "in dBFS per frame. A frame outside speech counts as background sound when it is "
+    "at or above the silence floor and within the background margin of the speech's "
+    "median level. Pitch is tracked by Praat's autocorrelation method between the pitch "
+    "floor and ceiling; voiced frames in speech are put in semitones from the median, "
+    "octave errors dropped, and pitch variation is the standard deviation of the rest. "
+    "A second Silero pass ending speech at the pause silence length (padded by the "
+    "pause padding) gives speech ratio (speech seconds / duration) and the mean length "
+    "of the gaps between stretches of speech."
+)
 
 # A job whose worker died is requeued rather than failed, so a genuinely broken
 # video would otherwise retry forever. Past this many attempts it stays failed

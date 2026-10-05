@@ -30,7 +30,8 @@ export const WORKFLOW: View[] = [
     id: 'scan',
     label: 'Scan',
     icon: 'search',
-    blurb: 'Extract transcripts and scene stats across the selected records.',
+    blurb:
+      'Extract transcripts, scene stats, screen text and audio stats across the selected records.',
   },
   {
     id: 'export',
@@ -48,7 +49,7 @@ export const WORKFLOW: View[] = [
     id: 'recommend',
     label: 'Recommend',
     icon: 'online_prediction',
-    blurb: "Ask the server's model what it makes of a single video.",
+    blurb: "Choose one of the server's models and ask what it makes of a single video.",
   },
 ];
 

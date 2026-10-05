@@ -9,11 +9,14 @@ import {
 import { VideoRecord } from './VideoRecord';
 import {
   AudioStats,
+  DatasetSettings,
+  DatasetState,
   Transcript,
   TranscriptStats,
   SceneStats,
   TextStats,
   YoutubeContent,
+  isReady,
   readyData,
 } from './Dataset';
 
@@ -31,7 +34,46 @@ export interface ManifestRecord {
   transcript_path: string | null;
   video_file_path: string | null;
   audience_retention_path: string | null;
+  /**
+   * How each scan result above was made: the producer stamp, when, and the settings
+   * (thresholds, models) it ran with, by dataset kind. Optional because exports made
+   * before it was written do not carry it; a result made before results carried
+   * settings has a producer and no settings.
+   */
+  scan_provenance?: Partial<Record<ProvenanceKind, ScanProvenance>>;
 }
+
+export type ProvenanceKind =
+  'transcript' | 'transcript_stats' | 'scene_stats' | 'text_stats' | 'audio_stats';
+
+export type ScanProvenance = {
+  producer: string;
+  produced_at?: string;
+  settings?: DatasetSettings;
+};
+
+/** The provenance of every ready scan result on a record. */
+export const scanProvenance = (
+  record: VideoRecord,
+): Partial<Record<ProvenanceKind, ScanProvenance>> => {
+  const fields: Record<ProvenanceKind, DatasetState<unknown>> = {
+    transcript: record.ds_transcript,
+    transcript_stats: record.ds_transcriptStats,
+    scene_stats: record.ds_sceneStats,
+    text_stats: record.ds_textStats,
+    audio_stats: record.ds_audioStats,
+  };
+  const out: Partial<Record<ProvenanceKind, ScanProvenance>> = {};
+  for (const [kind, state] of Object.entries(fields) as [ProvenanceKind, DatasetState<unknown>][]) {
+    if (!isReady(state)) continue;
+    out[kind] = {
+      producer: state.producer,
+      ...(state.produced_at ? { produced_at: state.produced_at } : {}),
+      ...(state.settings ? { settings: state.settings } : {}),
+    };
+  }
+  return out;
+};
 
 export interface ExportManifest {
   generated_at: string;
@@ -145,6 +187,7 @@ export async function writeExportZip(
         transcript_path: null,
         video_file_path: null,
         audience_retention_path: null,
+        scan_provenance: scanProvenance(record),
       };
 
       const transcript = readyData(record.ds_transcript);

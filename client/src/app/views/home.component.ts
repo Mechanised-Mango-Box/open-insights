@@ -40,8 +40,9 @@ import { ServerChoiceCardComponent } from '../data-management/server-choice-card
         <div>
           <h2>Analysis looking thin?</h2>
           <p>
-            A record only counts toward it with <strong>all three</strong> of: scene stats,
-            transcript stats, and a YouTube average view duration.
+            A record only counts toward it with <strong>all five</strong> of: scene stats,
+            transcript stats, screen text, audio stats, and a YouTube average view duration. The
+            Analysis page lists how many records were left out and why.
           </p>
         </div>
       </section>

@@ -170,6 +170,16 @@ export itself is not committed, so the card records what it learned from:
 python -c "import json; print(json.load(open('engagement_model/full/model.json'))['training'])"
 ```
 
+#### How results are calculated
+
+Every scan result carries the settings it was made with, and `/status` reports each
+kind's settings and a description of its method (`*_SETTINGS` and `*_METHOD` in
+`server/config.py`). The Scan step shows them under "How Scan calculates its data", the
+Analysis step explains its techniques and constants and how many records it left out and
+why, and the Recommend step shows the workings behind each result. An export records
+each result's producer and settings in `manifest.json` (`scan_provenance`), and an
+analysis export includes a `methods.json`.
+
 The exploration scripts in `model_training/` take an export the same way (install
 `requirements-training.txt` first for their plots), e.g.
 `python -m model_training.data_analysis <export>` for histograms, correlations and

@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { SelectionService } from './selection.service';
 import { BulkScanService } from './bulk-scan.service';
+import { ScanMethodsComponent } from './scan-methods.component';
 
 /**
  * The Scan tab's bulk buttons. Each runs the very same action the table's per-row buttons run
@@ -14,7 +15,7 @@ import { BulkScanService } from './bulk-scan.service';
 @Component({
   selector: 'scan-actions',
   standalone: true,
-  imports: [MatButtonModule, MatIcon],
+  imports: [MatButtonModule, MatIcon, ScanMethodsComponent],
   template: `
     <section class="card actions-column">
       <p class="action-hint">{{ selectionService.selectedCount() }} record(s) selected.</p>
@@ -107,7 +108,17 @@ import { BulkScanService } from './bulk-scan.service';
         }
       </div>
     </section>
+
+    <scan-methods class="scan-methods" />
   `,
+  styles: [
+    `
+      .scan-methods {
+        display: block;
+        margin-top: 16px;
+      }
+    `,
+  ],
 })
 export class ScanActionsComponent {
   selectionService = inject(SelectionService);

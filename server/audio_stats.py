@@ -52,8 +52,11 @@ from config import (
     AUDIO_BACKGROUND_MARGIN_DB,
     AUDIO_FRAME_SECS,
     AUDIO_SILENCE_DBFS,
+    OCTAVE_ERROR_ST,
     PITCH_CEILING_HZ,
     PITCH_FLOOR_HZ,
+    PITCH_MIN_VOICED_SECS,
+    PITCH_TIME_STEP_SECS,
     SPEECH_MIN_SILENCE_MS,
     SPEECH_PAD_MS,
 )
@@ -62,8 +65,8 @@ from models import AudioStats
 # What faster-whisper decodes to and Silero VAD expects.
 SAMPLE_RATE = 16000
 
-# Praat's pitch frames, 10 ms apart: its own default for these limits.
-_PITCH_TIME_STEP = 0.01
+# Praat's pitch frames, 10 ms apart by default: its own default for these limits.
+_PITCH_TIME_STEP = PITCH_TIME_STEP_SECS
 
 # Pitch is tracked over this much audio at a time. Praat copies the samples to
 # float64, and a two-hour lecture in one piece would be most of a gigabyte.
@@ -73,10 +76,10 @@ _PITCH_CHUNK_SECS = 60.0
 _LEVEL_BLOCK_FRAMES = 4096
 
 # Less voiced speech than this and a standard deviation says nothing.
-_MIN_VOICED_SECS = 1.0
+_MIN_VOICED_SECS = PITCH_MIN_VOICED_SECS
 
 # Pitch frames further than this from the median are octave errors.
-_OCTAVE_ERROR_ST = 12.0
+_OCTAVE_ERROR_ST = OCTAVE_ERROR_ST
 
 # Speech intervals in seconds, from 16 kHz mono. Injectable so the measuring
 # can be tested on synthetic audio no VAD would call speech.

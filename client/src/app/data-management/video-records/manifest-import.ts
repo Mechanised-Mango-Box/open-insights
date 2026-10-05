@@ -8,7 +8,7 @@ import {
   TranscriptSegment,
   YoutubeAudienceRetention,
 } from './Dataset';
-import { ExportManifest, ManifestRecord } from './manifest-export';
+import { ExportManifest, ManifestRecord, ScanProvenance } from './manifest-export';
 import { parseTranscriptFile } from './transcript-import';
 import { readFileDurationSecs } from './video-duration';
 
@@ -24,11 +24,18 @@ export type ImportedRecord = Omit<VideoRecord, '__id'>;
  * and local-import is the honest answer anyway - this copy of the data did arrive by being
  * imported. `produced_at` is the export's own timestamp, the one date the zip does know.
  */
-const restored = <T>(data: T, generated_at: string): DatasetState<T> => ({
+const restored = <T>(
+  data: T,
+  generated_at: string,
+  provenance?: ScanProvenance,
+): DatasetState<T> => ({
   state: 'ready',
   data,
   producer: LOCAL_IMPORT,
   produced_at: generated_at,
+  // The settings it was made with travel with it when the export recorded them,
+  // so an imported value can still say which thresholds produced it.
+  ...(provenance?.settings ? { settings: provenance.settings } : {}),
 });
 
 const VIDEO_MIME_TYPES: Record<string, string> = {
@@ -203,12 +210,15 @@ export async function parseExportZip(
         ? (JSON.parse(await retentionText) as YoutubeAudienceRetention)
         : null;
 
+      const provenance = entry.scan_provenance;
       records.push({
         sort_name: entry.sort_name || 'Untitled Imported Record',
         video_file: await readVideoFile(file, entries, entry),
         ds_youtubeContent: entry.youtube_content ?? null,
         ds_youtubeAudienceRetention: retention,
-        ds_transcript: transcript ? restored(transcript, generated_at) : { state: 'absent' },
+        ds_transcript: transcript
+          ? restored(transcript, generated_at, provenance?.transcript)
+          : { state: 'absent' },
         ds_transcriptStats: entry.transcript_stats
           ? restored(
               {
@@ -222,19 +232,20 @@ export async function parseExportZip(
                 speaking_ratio: entry.transcript_stats.speaking_ratio ?? null,
               },
               generated_at,
+              provenance?.transcript_stats,
             )
           : { state: 'absent' },
         ds_sceneStats: entry.scene_stats
-          ? restored(entry.scene_stats, generated_at)
+          ? restored(entry.scene_stats, generated_at, provenance?.scene_stats)
           : { state: 'absent' },
         // A manifest written before screen text existed has no text_stats key at
         // all, which reads as absent exactly as a null does.
         ds_textStats: entry.text_stats
-          ? restored(entry.text_stats, generated_at)
+          ? restored(entry.text_stats, generated_at, provenance?.text_stats)
           : { state: 'absent' },
         // Likewise audio_stats, from before audio stats existed.
         ds_audioStats: entry.audio_stats
-          ? restored(entry.audio_stats, generated_at)
+          ? restored(entry.audio_stats, generated_at, provenance?.audio_stats)
           : { state: 'absent' },
       });
       onProgress?.(index + 1, manifest.records.length);

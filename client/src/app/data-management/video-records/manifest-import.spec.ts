@@ -120,6 +120,37 @@ describe('parseExportZip', () => {
     );
   });
 
+  it("carries each result's settings through the export, and records its producer", async () => {
+    const withSettings = record({
+      ds_sceneStats: {
+        state: 'ready',
+        data: { duration_secs: 3700, scenes: 42 },
+        producer: 'test',
+        produced_at: '2026-01-01T00:00:00.000Z',
+        settings: { threshold: 30 },
+      },
+    });
+    const blob = await buildExportZip([withSettings], { includeVideoFiles: false });
+    const zip = await JSZip.loadAsync(blob);
+    const manifest = JSON.parse(await zip.file('manifest.json')!.async('string')) as ExportManifest;
+    expect(manifest.records[0].scan_provenance?.scene_stats).toEqual({
+      producer: 'test',
+      produced_at: '2026-01-01T00:00:00.000Z',
+      settings: { threshold: 30 },
+    });
+    expect(manifest.records[0].scan_provenance?.transcript).toEqual({
+      producer: 'test',
+      produced_at: '2026-01-01T00:00:00.000Z',
+    });
+
+    const [imported] = await parseExportZip(new File([blob], 'export.zip'));
+    expect(imported.ds_sceneStats).toMatchObject({
+      producer: LOCAL_IMPORT,
+      settings: { threshold: 30 },
+    });
+    expect(imported.ds_transcript).not.toHaveProperty('settings');
+  });
+
   it('leaves datasets the export had nothing for absent', async () => {
     const [imported] = await roundTrip([
       record({

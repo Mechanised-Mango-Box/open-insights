@@ -95,6 +95,8 @@ export type ProviderStatus = {
       workers: ProviderWorkerCounts;
       /** What a scan of this kind would use there. */
       settings?: DatasetSettings;
+      /** How that scan calculates its result, in words. */
+      method?: string;
     }
   >;
 };

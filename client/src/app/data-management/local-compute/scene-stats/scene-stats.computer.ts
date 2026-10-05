@@ -69,6 +69,11 @@ export function measureSceneStats(
 export const sceneStatsComputer: Computer<'scene_stats'> = {
   producer: SCENE_STATS_PRODUCER_LOCAL,
   settings: { threshold: SCENE_THRESHOLD },
+  method:
+    'Every frame is decoded in this browser (WebCodecs, MP4 and MOV only) at full resolution ' +
+    'and converted to greyscale (BT.601 luma). A scene cut is counted whenever the mean ' +
+    'absolute difference from the previous frame, on a 0-255 scale, is above the threshold - ' +
+    "the server's definition, through the browser's decoder instead of FFmpeg.",
 
   async compute(file: File): Promise<SceneStats> {
     const { result, timings } = await measureSceneStats(file);
