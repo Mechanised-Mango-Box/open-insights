@@ -80,9 +80,9 @@ type VideoOption = {
               </span>
             }
           </span>
-          <button mat-stroked-button [disabled]="pending()" (click)="changeModel.emit()">
+          <button mat-button [disabled]="pending()" (click)="changeModel.emit()">
             <mat-icon>swap_horiz</mat-icon>
-            Change Model
+            Change
           </button>
         </div>
         @if (modelError()) {
@@ -271,6 +271,15 @@ type VideoOption = {
   `,
   styles: [
     `
+      /* A line of context with its edit link, not one of the step's stacked actions:
+         a text button at its own width, so it does not take the 300px floor the
+         action buttons below share and read as their peer. */
+      .actions.model-summary {
+        gap: 4px 8px;
+      }
+      .actions.model-summary > button {
+        min-width: 0;
+      }
       .video-picker {
         width: 100%;
         max-width: 640px;
