@@ -71,6 +71,15 @@ const BULK_ACTIONS_STYLES = `
   .bulk-actions {
     margin-bottom: 12px;
   }
+  .filter {
+    width: min(320px, 100%);
+  }
+  /* The table is far wider than a phone and wider than a narrow window, so it
+     scrolls sideways in here - leaving the filter, the buttons above and the rest
+     of the page where they are. */
+  .table-scroll {
+    overflow-x: auto;
+  }
   .no-data {
     padding: 16px;
     color: var(--mat-sys-on-surface-variant);
