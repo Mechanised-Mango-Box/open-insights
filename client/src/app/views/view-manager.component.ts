@@ -1,5 +1,10 @@
 import { Component, afterNextRender, computed, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { map } from 'rxjs';
 import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { VideoTableComponent } from '../data-management/video-records/video-table.component';
@@ -16,94 +21,114 @@ import { SERVER_CHOICE_PROMPT, ServerChoice } from '../data-management/server-ch
 import { HomeComponent } from './home.component';
 import { HOME, SETTINGS, VIEWS_WITH_RECORDS, ViewId, WORKFLOW } from './views';
 
+/** Below this width the sidebar would leave too little room beside it, so it becomes a
+    drawer. Repeated in the component's media query. */
+const HANDSET_QUERY = '(max-width: 768px)';
+
 @Component({
   selector: 'view-manager',
   template: `
-    <div class="shell">
-      <nav class="sidebar">
-        <button
-          class="brand"
-          [class.brand-active]="view() === home.id"
-          (click)="view.set(home.id)"
-          title="Overview and instructions"
-        >
-          <mat-icon>{{ home.icon }}</mat-icon>
-          <span>Open Insights</span>
-        </button>
+    <mat-sidenav-container class="shell">
+      <!-- Docked beside the content on a wide window; on a phone there is no room for
+           that, so it becomes a drawer over the content, opened from the top bar. -->
+      <mat-sidenav
+        [mode]="isHandset() ? 'over' : 'side'"
+        [opened]="!isHandset() || navOpen()"
+        [disableClose]="!isHandset()"
+        (openedChange)="isHandset() && navOpen.set($event)"
+      >
+        <nav class="sidebar">
+          <button
+            class="brand"
+            [class.brand-active]="view() === home.id"
+            (click)="go(home.id)"
+            title="Overview and instructions"
+          >
+            <mat-icon>{{ home.icon }}</mat-icon>
+            <span>Open Insights</span>
+          </button>
 
-        <mat-action-list class="steps">
-          @for (step of workflow; track step.id) {
-            <button mat-list-item [activated]="view() === step.id" (click)="view.set(step.id)">
-              <mat-icon matListItemIcon>{{ step.icon }}</mat-icon>
-              <span matListItemTitle>{{ step.label }}</span>
-            </button>
-          }
-        </mat-action-list>
-
-        <div class="sidebar-footer">
-          <processing-mode-badge />
-
-          <mat-action-list class="settings">
-            <button
-              mat-list-item
-              [activated]="view() === settings.id"
-              (click)="view.set(settings.id)"
-            >
-              <mat-icon matListItemIcon>{{ settings.icon }}</mat-icon>
-              <span matListItemTitle>{{ settings.label }}</span>
-            </button>
+          <mat-action-list class="steps">
+            @for (step of workflow; track step.id) {
+              <button mat-list-item [activated]="view() === step.id" (click)="go(step.id)">
+                <mat-icon matListItemIcon>{{ step.icon }}</mat-icon>
+                <span matListItemTitle>{{ step.label }}</span>
+              </button>
+            }
           </mat-action-list>
-        </div>
-      </nav>
 
-      <main class="content">
-        <header class="view-header">
-          <h1>{{ activeView().label }}</h1>
-          <p>{{ activeView().blurb }}</p>
-        </header>
+          <div class="sidebar-footer">
+            <processing-mode-badge />
 
-        @switch (view()) {
-          @case ('home') {
-            <home-overview (navigate)="view.set($event)" />
-          }
-          @case ('import') {
-            <video-records-import />
-          }
-          @case ('scan') {
-            <scan-actions />
-          }
-          @case ('export') {
-            <export-records />
-          }
-          @case ('analysis') {
-            @defer (on idle) {
-              <analysis />
-            } @placeholder {
-              <p>Loading analysis…</p>
-            }
-          }
-          @case ('recommend') {
-            <!-- Deferred like Analysis: its tabs, model picker and card pull in
-                 Material modules only this step uses. -->
-            @defer (on idle) {
-              <recommend-page />
-            } @placeholder {
-              <p>Loading recommendations…</p>
-            }
-          }
-          @case ('settings') {
-            <server-settings />
-          }
+            <mat-action-list class="settings">
+              <button mat-list-item [activated]="view() === settings.id" (click)="go(settings.id)">
+                <mat-icon matListItemIcon>{{ settings.icon }}</mat-icon>
+                <span matListItemTitle>{{ settings.label }}</span>
+              </button>
+            </mat-action-list>
+          </div>
+        </nav>
+      </mat-sidenav>
+
+      <mat-sidenav-content>
+        @if (isHandset()) {
+          <header class="topbar">
+            <button mat-icon-button aria-label="Open navigation" (click)="navOpen.set(true)">
+              <mat-icon>menu</mat-icon>
+            </button>
+            <span class="topbar-title">Open Insights</span>
+          </header>
         }
 
-        @if (showsRecords()) {
-          <section class="records">
-            <h2>Records</h2>
-            <video-table />
-          </section>
-        }
-      </main>
-    </div>
+        <main class="content">
+          <header class="view-header">
+            <h1>{{ activeView().label }}</h1>
+            <p>{{ activeView().blurb }}</p>
+          </header>
+
+          @switch (view()) {
+            @case ('home') {
+              <home-overview (navigate)="go($event)" />
+            }
+            @case ('import') {
+              <video-records-import />
+            }
+            @case ('scan') {
+              <scan-actions />
+            }
+            @case ('export') {
+              <export-records />
+            }
+            @case ('analysis') {
+              @defer (on idle) {
+                <analysis />
+              } @placeholder {
+                <p>Loading analysis…</p>
+              }
+            }
+            @case ('recommend') {
+              <!-- Deferred like Analysis: its tabs, model picker and card pull in
+                   Material modules only this step uses. -->
+              @defer (on idle) {
+                <recommend-page />
+              } @placeholder {
+                <p>Loading recommendations…</p>
+              }
+            }
+            @case ('settings') {
+              <server-settings />
+            }
+          }
+
+          @if (showsRecords()) {
+            <section class="records">
+              <h2>Records</h2>
+              <video-table />
+            </section>
+          }
+        </main>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
   `,
   styles: [
     `
@@ -112,16 +137,22 @@ import { HOME, SETTINGS, VIEWS_WITH_RECORDS, ViewId, WORKFLOW } from './views';
         height: 100%;
       }
       .shell {
-        display: flex;
         height: 100%;
+        /* The drawer's own surface and rounded corner are replaced by the sidebar's,
+           so docked and drawn out it is the same panel. */
+        --mat-sidenav-container-shape: 0;
+        --mat-sidenav-container-divider-color: var(--mat-sys-outline-variant);
+        --mat-sidenav-container-background-color: var(--mat-sys-surface-container);
+        --mat-sidenav-content-background-color: var(--mat-sys-surface);
       }
+      mat-sidenav {
+        width: 232px;
+      }
+      /* Fills the drawer, which does the scrolling. */
       .sidebar {
-        flex: 0 0 232px;
         display: flex;
         flex-direction: column;
-        overflow-y: auto;
-        background: var(--mat-sys-surface-container);
-        border-right: 1px solid var(--mat-sys-outline-variant);
+        min-height: 100%;
       }
       /* The app name doubles as the Home nav item, so it's a real button - styled as a
          title, but focusable and keyboard-activatable like the steps below it.
@@ -186,12 +217,25 @@ import { HOME, SETTINGS, VIEWS_WITH_RECORDS, ViewId, WORKFLOW } from './views';
         display: block;
         padding: 12px 16px 4px;
       }
+      /* mat-sidenav-content is the scroller, independent of the sidebar. */
       .content {
-        flex: 1 1 auto;
-        /* Scrolls independently of the sidebar; 'auto' on both axes so a wide record
-           table scrolls sideways in here rather than stretching the page. */
-        overflow: auto;
         padding: 24px 32px 48px;
+      }
+      /* Phone only: the one way back to the navigation once the sidebar becomes a
+         drawer. Sticky so it is there without scrolling back up a long view. */
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 8px;
+        background: var(--mat-sys-surface-container);
+        border-bottom: 1px solid var(--mat-sys-outline-variant);
+      }
+      .topbar-title {
+        font: var(--mat-sys-title-medium);
       }
       /* Ruled off so the view's name and blurb read as a header rather than as the first
          paragraph of whatever the view puts below it. */
@@ -215,10 +259,21 @@ import { HOME, SETTINGS, VIEWS_WITH_RECORDS, ViewId, WORKFLOW } from './views';
         font: var(--mat-sys-title-medium);
         margin: 0 0 8px;
       }
+      /* Must match HANDSET_QUERY. */
+      @media (max-width: 768px) {
+        .content {
+          padding: 16px 16px 32px;
+        }
+        .view-header h1 {
+          font: var(--mat-sys-title-large);
+        }
+      }
     `,
   ],
   imports: [
     MatListModule,
+    MatSidenavModule,
+    MatIconButton,
     MatIcon,
     HomeComponent,
     VideoTableComponent,
@@ -241,6 +296,25 @@ export class ViewManager {
   readonly home = HOME;
 
   view = signal<ViewId>(HOME.id);
+
+  private breakpoints = inject(BreakpointObserver);
+
+  // Seeded from the current width so a phone never renders one frame docked.
+  readonly isHandset = toSignal(
+    this.breakpoints.observe(HANDSET_QUERY).pipe(map((state) => state.matches)),
+    { initialValue: this.breakpoints.isMatched(HANDSET_QUERY) },
+  );
+
+  /** Whether the drawer is drawn out. Only means anything on a phone; docked, it is
+      always open. */
+  navOpen = signal(false);
+
+  /** Every nav item goes through here, so picking one on a phone also puts the drawer
+      away rather than leaving it covering the view just chosen. */
+  go(id: ViewId): void {
+    this.view.set(id);
+    this.navOpen.set(false);
+  }
 
   constructor() {
     // After the first render rather than during it: opening a dialog attaches a
