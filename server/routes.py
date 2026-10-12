@@ -11,6 +11,7 @@ from config import (
     PUBLIC_MAX_QUEUE_DEPTH,
     PUBLIC_UPLOAD_RATE_LIMIT,
     SHOW_INSTRUCTIONS,
+    UNVERSIONED_PACKAGES,
     UPLOAD_FOLDER,
     video_extension,
 )
@@ -60,8 +61,16 @@ def __route_status():
     not call requeue_expired(), unlike the dataset GET below: this is an
     observability read, the backfill sweep already reclaims dead leases on its own
     timer, and with backfill switched off a 'running' job that no worker is on is
-    exactly the thing you came here to see."""
-    return jsonify({"status": "ok", **queue_status()})
+    exactly the thing you came here to see.
+
+    unversioned_packages is empty on a healthy server. Anything in it means this
+    server stamps its results differently from one that can read those versions,
+    so results carried between the two read as stale - see config.py. It is here
+    because the warning config.py prints goes to a console that someone running a
+    portable build may never look at."""
+    return jsonify(
+        {"status": "ok", "unversioned_packages": UNVERSIONED_PACKAGES, **queue_status()}
+    )
 
 
 # A row without its file. Worded as an instruction because re-uploading is the

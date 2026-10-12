@@ -1,5 +1,6 @@
 """Check that a video row without its file is reported as missing rather than
-queued. Run from the repository root:
+queued, and that /status names any package whose version could not be read.
+Run from the repository root:
 
     python -m unittest server.tests.test_routes
 
@@ -148,6 +149,27 @@ class TestMissingVideoFile(unittest.TestCase):
         response = self.client.get(f"/api/videos/{'0' * 64}")
         self.assertEqual(response.status_code, 404)
         self.assertIn("No uploaded video found", response.get_json()["err"])
+
+
+class TestStatus(unittest.TestCase):
+    def setUp(self):
+        app = Flask(__name__)
+        auth.install(app)
+        app.register_blueprint(routes.bp)
+        self.client = app.test_client()
+
+    def test_a_server_that_can_read_every_version_reports_none_missing(self):
+        with mock.patch.object(routes, "UNVERSIONED_PACKAGES", []):
+            body = self.client.get("/status").get_json()
+        self.assertEqual(body["unversioned_packages"], [])
+        self.assertEqual(body["status"], "ok")
+
+    def test_a_package_whose_version_cannot_be_read_is_named(self):
+        """What a portable build without faster-whisper's dist-info looked like:
+        it scanned fine and stamped every result "faster-whisper-missing"."""
+        with mock.patch.object(routes, "UNVERSIONED_PACKAGES", ["faster-whisper"]):
+            body = self.client.get("/status").get_json()
+        self.assertEqual(body["unversioned_packages"], ["faster-whisper"])
 
 
 if __name__ == "__main__":
