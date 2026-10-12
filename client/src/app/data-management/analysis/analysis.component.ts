@@ -278,6 +278,7 @@ const FEATURE_KEYS: readonly FeatureKey[] = ANALYSIS_FEATURE_COLUMNS;
       }
       .feature-heading {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         gap: 10px;
         font: var(--mat-sys-title-medium);
@@ -298,7 +299,7 @@ const FEATURE_KEYS: readonly FeatureKey[] = ANALYSIS_FEATURE_COLUMNS;
       }
       .feature-charts {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
         gap: 16px;
       }
     `,

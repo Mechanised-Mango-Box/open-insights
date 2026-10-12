@@ -114,7 +114,9 @@
    Material's default centre so the icons stack into a single edge instead of
    drifting inward with each label's length. */
 .actions-column .actions > button {
-  min-width: 300px;
+  /* Capped at the card's width so a phone gets a full-width button instead of one
+     running off the card's edge. */
+  min-width: min(300px, 100%);
   justify-content: flex-start;
 }
 
@@ -187,11 +189,39 @@
   padding: 4px 12px;
   margin: 0 0 12px;
 }
+/*
+ * Phones. Cards and the gaps between them shed padding they cannot spare, and the
+ * method tables - up to seven columns on Recommend - scroll sideways within
+ * themselves rather than pushing the whole page wider than the screen.
+ */
 @media (max-width: 600px) {
+  .card {
+    padding: 16px;
+  }
+  .view-stack {
+    gap: 16px;
+  }
   .method-list {
     grid-template-columns: 1fr;
   }
   .method-list dd {
     margin-bottom: 6px;
+  }
+  .method-table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  /* A panel's title and description share one fixed-height row, which at this width
+     wraps both into a column too tall for it. Stack them and let the header grow. */
+  .mat-expansion-panel-header {
+    --mat-expansion-header-collapsed-state-height: auto;
+    --mat-expansion-header-expanded-state-height: auto;
+    min-height: 48px;
+    padding-block: 12px;
+  }
+  .mat-expansion-panel-header .mat-content {
+    flex-direction: column;
+    gap: 2px;
   }
 }
