@@ -66,7 +66,7 @@ TARGET_COLUMN: str = "average_percentage_viewed"
 
 # The feature subsets the published models are trained on, by model id.
 #
-# "recommended" keeps the four features that earn their place. Over 5-fold
+# "lite" keeps the four features that earn their place. Over 5-fold
 # cross-validation repeated 10 times on the 143 EduVideo Insights lectures, it
 # beat all eight for both models (forest RMSE 8.60 against 8.84, linear 8.23
 # against 8.37), and taking any one of the four out made both worse. Left out:
@@ -81,7 +81,7 @@ TARGET_COLUMN: str = "average_percentage_viewed"
 # transcription and 0.3 s for audio stats, on a 16-core CPU).
 FEATURE_SETS: Dict[str, List[str]] = {
     "all": list(FEATURE_COLUMNS),
-    "recommended": [
+    "lite": [
         "duration",
         "wpm",
         "speech_pace_variation",

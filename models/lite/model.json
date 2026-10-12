@@ -1,9 +1,9 @@
 {
   "format_version": 1,
-  "id": "recommended",
-  "name": "Recommended Features",
+  "id": "lite",
+  "name": "Lite Features",
   "version": "1",
-  "created_at": "2026-10-12T14:47:19+00:00",
+  "created_at": "2026-10-12T14:53:52+00:00",
   "description": "Duration, speaking speed, speech pace variation and mean pause - the features that improved its predictions in testing. Leaves out word count, which only restates duration, and the features that added noise. Needs only the transcript and audio scans.",
   "provider": {
     "name": "Open Insights",

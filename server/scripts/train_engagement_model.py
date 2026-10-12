@@ -5,7 +5,7 @@ the repository's models/<id>/ (model.joblib + model.json) that BUILTIN_MODELS
 names, and the Dockerfile and scripts/build_portable.py ship them as-is, so
 nothing runs this during a build.
 
-    python scripts/train_engagement_model.py EXPORT [--feature-set all|recommended|video|audio]
+    python scripts/train_engagement_model.py EXPORT [--feature-set all|lite|video|audio]
         [--out DIR | --no-save] [--package FILE.zip] [--name ...] [--provider ...] [--notes ...]
 
 EXPORT is an `open-insights-export-<timestamp>` zip from the client's Export
@@ -59,8 +59,8 @@ DEFAULT_META = {
         "All eight features: transcript, scene, on-screen text and audio. The most "
         "information, and the slowest to scan for.",
     ),
-    "recommended": (
-        "Recommended Features",
+    "lite": (
+        "Lite Features",
         "Duration, speaking speed, speech pace variation and mean pause - the features "
         "that improved its predictions in testing. Leaves out word count, which only "
         "restates duration, and the features that added noise. Needs only the "

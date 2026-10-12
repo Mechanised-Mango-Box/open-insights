@@ -154,8 +154,8 @@ def check_engagement_model() -> None:
     them would build cleanly and then die at startup on the user's machine, which
     is the failure stage_model() guards against for the weights.
     """
-    builtins = [m.strip() for m in os.environ.get("BUILTIN_MODELS", "all,recommended").split(",") if m.strip()]
-    default = os.environ.get("ENGAGEMENT_MODEL_DEFAULT", "recommended")
+    builtins = [m.strip() for m in os.environ.get("BUILTIN_MODELS", "all,lite").split(",") if m.strip()]
+    default = os.environ.get("ENGAGEMENT_MODEL_DEFAULT", "lite")
     if default not in builtins:
         raise SystemExit(f"The default model '{default}' is not in BUILTIN_MODELS ({', '.join(builtins)}).")
     for model in builtins:

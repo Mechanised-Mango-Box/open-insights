@@ -129,19 +129,19 @@ in the repository's top-level `models/`, trained on different feature sets:
 
 | Model | Features | Scans it needs | Ships in the server |
 |---|---|---|---|
-| `recommended` (default) | duration, speaking speed, speech pace variation, mean pause | transcript, audio | yes |
+| `lite` (default) | duration, speaking speed, speech pace variation, mean pause | transcript, audio | yes |
 | `all` | all eight | scene, transcript, screen text, audio | yes |
 | `video` | duration, scene change rate, text density | scene, screen text | no - add it |
 | `audio` | duration, transcript and audio features | transcript, audio | no - add it |
 
-`BUILTIN_MODELS` (default `all,recommended`) names the ones a server serves without being
-added; `ENGAGEMENT_MODEL_DEFAULT` (default `recommended`) must be one of them. The portable build
+`BUILTIN_MODELS` (default `all,lite`) names the ones a server serves without being
+added; `ENGAGEMENT_MODEL_DEFAULT` (default `lite`) must be one of them. The portable build
 packs only those. The Docker image copies all of `models/` in through a second build
 context (`additional_contexts` in `docker-compose.yml`, which needs Compose 2.17+; a bare
 `docker build` needs `--build-context models=../models`), and `BUILTIN_MODELS` decides
 what is served.
 
-`recommended` keeps the four features that improved predictions in testing. Over 5-fold
+`lite` keeps the four features that improved predictions in testing. Over 5-fold
 cross-validation repeated 10 times on the training export, it beat all eight for both
 models (forest RMSE 8.60 against 8.84, linear regression 8.23 against 8.37), and dropping
 any one of the four made both worse. It leaves out word count, which is duration × speaking
