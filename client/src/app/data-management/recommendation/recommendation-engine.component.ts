@@ -203,7 +203,7 @@ type VideoOption = {
             @if (selectedModel()?.card; as card) {
               It learned from {{ card.training.rows }} videos, and on the ones held out from its
               training it was typically {{ number(card.metrics.random_forest?.rmse ?? 0) }} points
-              out. The Model tab has its full card.
+              out. The Model page has its full card.
             }
           </p>
         </section>
