@@ -1,5 +1,6 @@
 import importlib.metadata
 import os
+import warnings
 from typing import cast
 
 from models import FileExt
@@ -376,6 +377,12 @@ OCTAVE_ERROR_ST = float(os.environ.get("OCTAVE_ERROR_ST", "12.0"))
 AUDIO_STATS_WORKERS = int(os.environ.get("AUDIO_STATS_WORKERS", "2"))
 
 
+# Distributions whose version could not be read, filled in by _package_version
+# below. Exposed so /status can report it and a test can assert on it: this is
+# the one config value that is a symptom rather than a setting.
+UNVERSIONED_PACKAGES: list[str] = []
+
+
 def _package_version(name: str) -> str:
     # Read from the installed metadata rather than by importing the package, so
     # loading config stays cheap - and a server missing the package still starts,
@@ -383,6 +390,7 @@ def _package_version(name: str) -> str:
     try:
         return importlib.metadata.version(name)
     except importlib.metadata.PackageNotFoundError:
+        UNVERSIONED_PACKAGES.append(name)
         return "missing"
 
 
@@ -420,6 +428,30 @@ AUDIO_STATS_PRODUCER = (
     f"/pitch_step={PITCH_TIME_STEP_SECS}s/min_voiced={PITCH_MIN_VOICED_SECS}s"
     f"/octave_error={OCTAVE_ERROR_ST}st"
 )
+
+# A version that cannot be read is not a cosmetic gap: the producer strings above
+# are cache keys, so "missing" in one of them puts this server in a different
+# cache namespace from an otherwise identical one. A database brought from another
+# server then reads as entirely stale, and every result in it is recomputed - work
+# that needs the video files a copied database does not bring with it.
+#
+# The cause is almost always packaging rather than a missing package: a frozen
+# build imports a package fine and still cannot read its dist-info unless the
+# spec copies it (see open-insights.spec). Warned rather than fatal, because a
+# server that scans while complaining is more use to someone holding a binary
+# than one that refuses to start over a string.
+if UNVERSIONED_PACKAGES:
+    warnings.warn(
+        "Could not read the installed version of: "
+        + ", ".join(UNVERSIONED_PACKAGES)
+        + ". Results will be stamped 'missing' for these, which makes this"
+        " server's cached results unreadable to any server that can read them"
+        " - and every imported result unreadable here. In a portable build this"
+        " means open-insights.spec is not copying their metadata.",
+        RuntimeWarning,
+        stacklevel=2,
+    )
+
 
 # The same parameters, by name, for reporting: every ready result and /status
 # carry its kind's settings, so whoever runs a scan can see the thresholds it
@@ -471,8 +503,12 @@ SCENE_STATS_METHOD = (
     "absolute difference from the previous frame, on a 0-255 scale, is above the "
     "threshold. Duration is frame count / frame rate."
 )
+# The PyAV fallback is named here as SCENE_STATS_METHOD names its own: text
+# stats have had one since the same change, and a reader comparing the two
+# would otherwise conclude that on-screen text cannot be read from an AV1 video.
 TEXT_STATS_METHOD = (
-    "One frame is sampled from the middle of every sampling interval and read by "
+    "One frame is sampled from the middle of every sampling interval (decoded by "
+    "OpenCV, or PyAV for videos OpenCV cannot read such as AV1) and read by "
     "RapidOCR (PP-OCRv6 small detection and recognition models). A sample whose "
     "160x90 greyscale thumbnail differs from the last one read by less than the "
     "reuse threshold (mean absolute difference, 0-255) reuses that reading. Only "

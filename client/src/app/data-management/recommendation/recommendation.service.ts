@@ -123,9 +123,9 @@ export type VideoRecommendation = {
  * a single video to a model the server already holds.
  *
  * The features travel in the body rather than being read back on the server:
- * two of them are only ever computed in the browser, and a Scan may have run on
- * local compute. One request and wait, rather than the POST -> 202 -> poll the
- * dataset kinds use - inference is a single forest evaluation, not a job.
+ * two of them are only ever computed in the browser. One request and wait,
+ * rather than the POST -> 202 -> poll the dataset kinds use - inference is a
+ * single forest evaluation, not a job.
  */
 @Injectable({ providedIn: 'root' })
 export class RecommendationService {

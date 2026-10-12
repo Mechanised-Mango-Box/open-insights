@@ -12,8 +12,7 @@ export const LOCAL_RECOMPUTE = 'local-recompute';
 /**
  * The thresholds and models a value was made with, by name - `{ threshold: 30 }` for scene
  * stats, say. The server reports its own with every result (the *_SETTINGS in
- * server/config.py), and each browser computer declares its own beside its producer.
- * Absent on values made before results carried them.
+ * server/config.py). Absent on values made before results carried them.
  */
 export type DatasetSettings = Record<string, string | number | boolean>;
 

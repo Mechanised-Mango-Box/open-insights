@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { appConfig } from '../app.config';
 import { ViewManager } from '../views/view-manager.component';
-import { ComputeConfigService } from './compute-config.service';
 import { LOCAL_SERVER_URL, ServerConfigService } from './server-config.service';
 import { SERVER_CHOICE_PROMPT } from './server-choice';
 
@@ -13,7 +12,6 @@ import { SERVER_CHOICE_PROMPT } from './server-choice';
  */
 describe('the processing-mode badge in the sidebar', () => {
   let fixture: ReturnType<typeof TestBed.createComponent<ViewManager>>;
-  let compute: ComputeConfigService;
   let server: ServerConfigService;
 
   const badge = () => fixture.nativeElement.querySelector('.mode-badge') as HTMLElement | null;
@@ -30,7 +28,6 @@ describe('the processing-mode badge in the sidebar', () => {
 
     fixture = TestBed.createComponent(ViewManager);
     await fixture.whenStable();
-    compute = TestBed.inject(ComputeConfigService);
     server = TestBed.inject(ServerConfigService);
   });
 
@@ -49,21 +46,13 @@ describe('the processing-mode badge in the sidebar', () => {
     server.setServerUrl(LOCAL_SERVER_URL);
     await fixture.whenStable();
     expect(badge()?.textContent?.trim()).toBe('Local');
-
-    compute.setExperimental(true);
-    compute.setTarget('transcript', 'local');
-    await fixture.whenStable();
-    expect(badge()?.textContent?.trim()).toBe('Experimental');
-    expect(badge()?.classList).toContain('mode-experimental');
+    expect(badge()?.classList).toContain('mode-local');
   });
 
-  it('names the actual place in its tooltip, so a split is never hidden', async () => {
-    compute.setExperimental(true);
-    compute.setTarget('scene_stats', 'local');
+  it("names the actual place in its tooltip, so 'Local' is never ambiguous", async () => {
+    server.setServerUrl(LOCAL_SERVER_URL);
     await fixture.whenStable();
 
-    expect(badge()?.getAttribute('title')).toBe(
-      'Work runs on: https://open-insights.duckdns.org + this browser',
-    );
+    expect(badge()?.getAttribute('title')).toBe(`Work runs on: ${LOCAL_SERVER_URL}`);
   });
 });

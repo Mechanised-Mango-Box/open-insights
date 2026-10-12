@@ -66,16 +66,6 @@ Getting the files from YouTube Studio:
 
 Sample reports are in `data/sample/`.
 
-### Browser compute (experimental)
-
-Run certain jobs on the browser instead
-
-- Transcription needs WebGPU
-- Scene stats read MP4 and MOV only
-- Screen text (OCR) and audio stats always run on the server
-
-> It is unstable and may be slow. Off by default
-
 ## For Developers/Hosts
 
 ### Client
