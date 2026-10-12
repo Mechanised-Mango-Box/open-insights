@@ -187,7 +187,7 @@ another version) or anything in `model_training/` that shapes the models changes
 
 ```sh
 cd ./server
-for set in full fast video audio; do
+for set in all lite video audio; do
   python scripts/train_engagement_model.py path/to/export.zip --feature-set $set
 done
 ```
@@ -223,6 +223,13 @@ why, and the Recommend step shows the workings behind each result. An export rec
 each result's producer and settings in `manifest.json` (`scan_provenance`), and an
 analysis export includes a `methods.json`.
 
+A result's producer names the OCR, transcription and pitch packages with their versions,
+and the server serves a cached result only when its producer matches its own. If the
+server cannot read one of those versions, it stamps the package as `missing`, prints a
+warning at startup, and lists the package under `unversioned_packages` in `/status`.
+On a healthy server that list is empty. A non-empty list means this server cannot use
+results made by other servers, and other servers cannot use its results.
+
 The exploration scripts in `model_training/` take an export the same way (install
 `requirements-training.txt` first for their plots), e.g.
 `python -m model_training.data_analysis <export>` for histograms, correlations and
@@ -235,12 +242,21 @@ written up in `data/sample/edu-video-insights/COMPARISON.md`.
 
 ### A portable executable
 
-A single file with the transcription weights inside. No Python, no pip, no network.
+A single file with every model it needs inside: the transcription weights, the OCR and
+speech-detection models, and the built-in engagement models. Running it needs no Python,
+no pip and no network.
 
 ```sh
 cd ./server
-python scripts/build_portable.py    # --install fetches what is missing
+python scripts/build_portable.py    # --install-deps pip-installs what is missing
 ```
+
+Building needs the network once, to download the transcription weights into
+`build/models/`. `--skip-model` reuses them on later builds, and `--clean` discards
+PyInstaller's cached analysis. Build with Python 3.13, which the Dockerfile pins; other
+versions may work but are untested. The build stops if a required package is missing,
+including `requests`, which OCR needs at runtime.
+
 Leaves `dist/open-insights-server-<platform>-x86_64`. Run it anywhere: it keeps
 its database and uploads in a `data` directory and added models in a `models` directory
 beside itself, and prints how to
@@ -250,6 +266,11 @@ point a client at it. Set `SHOW_INSTRUCTIONS=0` to silence that.
   and a Linux build will not run on an older distribution than the one that built it.
 - Binds `127.0.0.1` only, unlike `python main.py`. Set `SERVER_HOST=0.0.0.0` to expose it.
 - Unpacks itself on every launch, so startup takes a few seconds.
+- Check `http://localhost:5000/status` after a build: `unversioned_packages` should be
+  empty (see [How results are calculated](#how-results-are-calculated)).
+- `data/db.sqlite` can be copied to another server, and its results are served there as
+  long as the two servers' producers match. The videos stay behind in `data/uploads/`,
+  so the client re-uploads a video the first time a new scan needs it.
 
 ### A public server
 
