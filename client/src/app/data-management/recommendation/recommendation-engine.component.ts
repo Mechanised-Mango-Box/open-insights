@@ -224,11 +224,15 @@ type VideoOption = {
               @for (item of improvements(); track item.key) {
                 <li class="improvement">
                   <span class="direction">{{ item.suggestion }}</span>
-                  <div>
-                    <strong>{{ item.label }}</strong>
-                    - {{ number(item.value) }} in this video, against a training average of
-                    {{ number(item.trainingMean) }}
-                    <span class="cost">({{ number(item.contribution) }} points)</span>
+                  <strong class="improvement-label">{{ item.label }}</strong>
+                  <span class="cost" title="Estimated effect on average percentage viewed">
+                    {{ number(item.contribution) }} points
+                  </span>
+                  <div class="improvement-body">
+                    <div class="improvement-values">
+                      {{ number(item.value) }} in this video · training average
+                      {{ number(item.trainingMean) }}
+                    </div>
                     @if (item.placement; as placement) {
                       <div class="placement">
                         <distribution-strip
@@ -239,7 +243,7 @@ type VideoOption = {
                         <span>{{ placement.sentence }}</span>
                       </div>
                     }
-                    <div class="advice">{{ item.advice }}</div>
+                    <p class="advice">{{ item.advice }}</p>
                   </div>
                 </li>
               }
@@ -426,18 +430,43 @@ type VideoOption = {
         list-style: none;
         margin: 0;
         padding: 0;
+      }
+      /* Each item reads as a heading row - what to change, which feature, what it
+         is estimated to cost - with the detail indented under the feature's name. */
+      .improvement {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 6px 12px;
+        padding: 14px 0;
+      }
+      .improvement + .improvement {
+        border-top: 1px solid var(--mat-sys-outline-variant);
+      }
+      .improvement:first-child {
+        padding-top: 4px;
+      }
+      .improvement:last-child {
+        padding-bottom: 0;
+      }
+      .improvement-label {
+        font: var(--mat-sys-title-small);
+      }
+      .cost {
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      .improvement-body {
+        grid-column: 2 / -1;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 6px;
       }
-      .improvement {
-        display: flex;
-        align-items: baseline;
-        gap: 10px;
-      }
+      /* A fixed width, not a minimum: every item is its own grid, so the pill has
+         to be the same size in each for the feature names to line up. */
       .direction {
-        flex: none;
-        min-width: 72px;
+        width: 84px;
+        box-sizing: border-box;
         text-align: center;
         text-transform: uppercase;
         font-size: 0.7em;
@@ -448,18 +477,20 @@ type VideoOption = {
         color: var(--mat-sys-primary);
       }
       .cost,
+      .improvement-values,
       .advice {
         color: var(--mat-sys-on-surface-variant);
       }
       .advice {
-        margin-top: 2px;
+        margin: 0;
+        font: var(--mat-sys-body-small);
       }
       .placement {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        gap: 4px 10px;
-        margin: 4px 0 0;
+        gap: 4px 12px;
+        margin: 0;
         color: var(--mat-sys-on-surface-variant);
       }
       .comparison-list {
@@ -506,6 +537,12 @@ type VideoOption = {
       }
       /* Phone width: name and value on one line, the strip and its sentence under them. */
       @media (max-width: 600px) {
+        .improvement-body {
+          grid-column: 1 / -1;
+        }
+        .improvement distribution-strip {
+          width: 100%;
+        }
         .comparison-row {
           grid-template-columns: 1fr auto;
         }
