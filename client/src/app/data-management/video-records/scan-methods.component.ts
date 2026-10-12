@@ -1,8 +1,6 @@
 import { Component, computed, effect, inject, signal, untracked } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { ComputeConfigService } from '../compute-config.service';
-import { ComputeQueueService } from '../local-compute/compute-queue.service';
 import { DATASET_KINDS, DatasetKind, ProviderStatus } from '../providers/dataset-provider';
 import { ServerDatasetProvider } from '../providers/server-dataset.provider';
 import { ServerConfigService } from '../server-config.service';
@@ -51,10 +49,9 @@ const sameSettings = (a: DatasetSettings | undefined, b: DatasetSettings | undef
  * "How Scan calculates its data": for each kind of result, where it runs, how it
  * is calculated and every threshold it uses, with units.
  *
- * Nothing is written down here. A kind that runs on the server is described by
- * the server's own /status (the method and settings in server/config.py), and one
- * that runs in this browser by its computer - so this always describes the scan
- * that would actually run, wherever that is.
+ * Nothing is written down here: each kind is described by the server's own
+ * /status (the method and settings in server/config.py), so this always
+ * describes the scan that would actually run.
  */
 @Component({
   selector: 'scan-methods',
@@ -109,8 +106,6 @@ const sameSettings = (a: DatasetSettings | undefined, b: DatasetSettings | undef
   `,
 })
 export class ScanMethodsComponent {
-  private computeConfig = inject(ComputeConfigService);
-  private queue = inject(ComputeQueueService);
   private server = inject(ServerDatasetProvider);
   private serverConfig = inject(ServerConfigService);
   private videoDatabase = inject(VideoDatabaseService);
@@ -152,13 +147,10 @@ export class ScanMethodsComponent {
 
     const rows: MethodRow[] = [];
     for (const kind of DATASET_KINDS) {
-      if (this.computeConfig.targetFor(kind) === 'local') {
-        const computer = this.queue.computerFor(kind);
-        rows.push(describe(kind, 'This browser', computer?.method ?? null, computer?.settings));
-      } else {
-        const reported = status?.kinds[kind];
-        rows.push(describe(kind, serverUrl, reported?.method ?? null, reported?.settings));
-      }
+      const reported = status?.kinds[kind];
+      rows.push(describe(kind, serverUrl, reported?.method ?? null, reported?.settings));
+      // The transcript's own stats are derived here from whatever the server
+      // sent back, so they are the one row this panel describes itself.
       if (kind === 'transcript') {
         rows.push(
           describe(
@@ -175,7 +167,6 @@ export class ScanMethodsComponent {
 
   /** Asks the server only when the panel is opened, and again on Refresh. */
   async load(): Promise<void> {
-    if (!DATASET_KINDS.some((kind) => this.computeConfig.targetFor(kind) === 'server')) return;
     this.error.set(null);
     try {
       this.status.set(await this.server.status());

@@ -5,10 +5,9 @@ import { ProcessingMode, ProcessingModeService } from './processing-mode.service
  * Where the work goes, on screen at all times.
  *
  * Sits above the Settings nav item rather than inside Settings, because the
- * settings that produce it are the ones you forget you changed - a server URL
- * pointed at localhost, or transcription left in the browser from last session.
- * Both alter the results, so neither should only be visible to someone who went
- * looking.
+ * setting that produces it is the one you forget you changed - a server URL
+ * left pointed at localhost. It alters the results, so it should not only be
+ * visible to someone who went looking.
  */
 @Component({
   selector: 'processing-mode-badge',
@@ -46,16 +45,6 @@ import { ProcessingMode, ProcessingModeService } from './processing-mode.service
       .mode-local .dot {
         background: var(--mat-sys-tertiary);
       }
-      /* Coloured through, not just dotted: this is the same "not the normal
-         path" signal the experimental callout in Settings uses, and it has to
-         survive being skim-read. */
-      .mode-experimental {
-        color: var(--mat-sys-error);
-        border-color: var(--mat-sys-error);
-      }
-      .mode-experimental .dot {
-        background: var(--mat-sys-error);
-      }
     `,
   ],
 })
@@ -67,12 +56,11 @@ export class ProcessingModeBadgeComponent {
   protected readonly labels: Record<ProcessingMode, string> = {
     cloud: 'Cloud',
     local: 'Local',
-    experimental: 'Experimental',
   };
 
   protected readonly label = computed(() => this.labels[this.mode()]);
 
   /** Names the actual place, so "Local" against a server that is not on this
-   * machine - or a split across two - is never left ambiguous. */
+   * machine is never left ambiguous. */
   protected readonly tooltip = computed(() => `Work runs on: ${this.processingMode.detail()}`);
 }

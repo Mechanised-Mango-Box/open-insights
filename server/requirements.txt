@@ -29,11 +29,20 @@ gunicorn==23.0.0
 # below, overwrite its cv2, and need libGL - which the slim image does not have.
 # It goes in with --no-deps from requirements-nodeps.txt, and these are the rest
 # of what it needs. onnxruntime, its inference engine, already comes with
-# faster-whisper, as do PyYAML, requests and tqdm.
+# faster-whisper, as do PyYAML (via ctranslate2 and huggingface_hub) and tqdm.
+#
+# requests used to arrive that way too and no longer does: huggingface_hub 1.x
+# moved to httpx and now names requests only under its `gradio` extra. Nothing
+# else in this file brings it, so without the pin below OCR fails on the first
+# frame - rapidocr/utils/load_image.py imports it at module level, on the path
+# every read takes, not just the model download this server never performs.
+# It is easy to miss because a developer's system python usually has requests
+# from somewhere else; a built container or portable binary does not.
 colorlog==6.12.0
 omegaconf==2.3.1
 pillow==12.3.0
 pyclipper==1.4.0
+requests==2.33.1
 shapely==2.1.2
 six==1.17.0
 

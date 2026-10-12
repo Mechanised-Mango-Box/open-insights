@@ -9,14 +9,13 @@ import {
 } from '../video-records/Dataset';
 
 /**
- * What computes a dataset for a video. One implementation talks to a server;
- * the next runs the work in this browser.
+ * What computes a dataset for a video. One implementation, which talks to a
+ * server - kept as an abstract class rather than inlined so the call sites stay
+ * free of HTTP, which is what made a second implementation possible once.
  *
  * The vocabulary below is the server's own (server/db.py dataset_state), kept
  * unchanged rather than translated: the layers used to have three vocabularies
- * for these states and translating between them is what let them drift. It
- * stays the vocabulary even once no server is involved, because it is the
- * vocabulary the records and the badges are already written in.
+ * for these states and translating between them is what let them drift.
  */
 
 export type DatasetKind = 'transcript' | 'scene_stats' | 'text_stats' | 'audio_stats';
@@ -130,7 +129,7 @@ export class SourceMissingError extends Error {
 }
 
 export abstract class DatasetProvider {
-  /** Names where the work happens, for badges: a server URL, or "this browser". */
+  /** Names where the work happens, for badges: a server URL. */
   abstract readonly label: Signal<string>;
 
   /**

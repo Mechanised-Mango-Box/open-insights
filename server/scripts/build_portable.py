@@ -52,6 +52,10 @@ REQUIRED_PACKAGES = {
     "pandas": "pandas",
     "sklearn": "scikit-learn",
     "rapidocr": "rapidocr",
+    # rapidocr imports it at module level (utils/load_image.py), and nothing in
+    # requirements.txt brings it transitively any more - see the note there. A
+    # bundle built without it starts fine and fails every OCR scan.
+    "requests": "requests",
     "shapely": "shapely",
     "pyclipper": "pyclipper",
     "parselmouth": "praat-parselmouth",

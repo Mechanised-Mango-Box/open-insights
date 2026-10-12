@@ -58,7 +58,7 @@ export const SETTINGS: View = {
   id: 'settings',
   label: 'Settings',
   icon: 'settings',
-  blurb: 'Choose which server this browser talks to, and where each kind of scan runs.',
+  blurb: 'Choose which server this browser talks to, and check that it answers.',
 };
 
 /**

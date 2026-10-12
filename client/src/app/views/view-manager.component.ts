@@ -16,7 +16,6 @@ import { RecommendPageComponent } from '../data-management/recommendation/recomm
 import { ServerSettingsComponent } from '../data-management/server-settings.component';
 import { ProcessingModeBadgeComponent } from '../data-management/processing-mode-badge.component';
 import { ServerChoiceDialogComponent } from '../data-management/server-choice-dialog.component';
-import { ComputeConfigService } from '../data-management/compute-config.service';
 import { SERVER_CHOICE_PROMPT, ServerChoice } from '../data-management/server-choice';
 import { HomeComponent } from './home.component';
 import { HOME, SETTINGS, VIEWS_WITH_RECORDS, ViewId, WORKFLOW } from './views';
@@ -288,7 +287,6 @@ const HANDSET_QUERY = '(max-width: 768px)';
 })
 export class ViewManager {
   private dialog = inject(MatDialog);
-  private computeConfig = inject(ComputeConfigService);
   private promptEnabled = inject(SERVER_CHOICE_PROMPT);
 
   readonly workflow = WORKFLOW;
@@ -330,10 +328,7 @@ export class ViewManager {
    * asked again next time rather than settled forever.
    */
   private askWhereWorkRuns(): void {
-    // Nothing to ask when no kind is going to a server at all. Note this is
-    // stricter than "the experiment is on": one kind in the browser and one on
-    // the server still leaves the server question live.
-    if (!this.promptEnabled || !this.computeConfig.usesServer()) return;
+    if (!this.promptEnabled) return;
 
     this.dialog
       .open(ServerChoiceDialogComponent, { width: 'min(560px, 92vw)' })

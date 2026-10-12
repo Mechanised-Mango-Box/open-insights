@@ -162,6 +162,28 @@ def _opencv_frames(file_path: Path, sample_secs: float) -> Iterator[tuple[float,
         video_capture.release()
 
 
+def _decoding_errors_named(
+    frames: Iterator[tuple[float, np.ndarray]], file_path: Path
+) -> Iterator[tuple[float, np.ndarray]]:
+    """Passes frames through, reporting a failure to decode them as one.
+
+    Wrapping only the decoder matters because the caller runs OCR over what this
+    yields. The try used to span both, so anything the OCR raised was reported as
+    a video that could not be read - a missing `requests` module surfaced as
+    "No frames could be read from the video (codec av1)", which sent an
+    investigation to the decoder for a packaging bug.
+
+    A consumer that raises closes this generator rather than resuming it, and
+    GeneratorExit is a BaseException, so an OCR failure passes through untouched.
+    """
+    try:
+        yield from frames
+    except Exception as e:  # PyAV's own errors, named rather than swallowed
+        raise RuntimeError(
+            f"No frames could be read from the video (codec {codec_name(file_path)}): {e}"
+        ) from e
+
+
 def _pyav_frames(file_path: Path, sample_secs: float) -> Iterator[tuple[float, np.ndarray]]:
     """The same samples, decoded by PyAV - for a codec OpenCV opens and then
     cannot decode (see video_files)."""
@@ -214,12 +236,9 @@ def calculate_text_stats(
     # video both can read. PyAV only when OpenCV produced nothing at all.
     samples = read_samples(_opencv_frames(file_path, sample_secs))
     if not samples:
-        try:
-            samples = read_samples(_pyav_frames(file_path, sample_secs))
-        except Exception as e:  # PyAV's own errors, named rather than swallowed
-            raise RuntimeError(
-                f"No frames could be read from the video (codec {codec_name(file_path)}): {e}"
-            ) from e
+        samples = read_samples(
+            _decoding_errors_named(_pyav_frames(file_path, sample_secs), file_path)
+        )
     if not samples:
         raise RuntimeError(
             f"No frames could be read from the video (codec {codec_name(file_path)})."

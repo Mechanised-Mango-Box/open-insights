@@ -119,6 +119,39 @@ class TestCalculateTextStats(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             calculate_text_stats(junk, ocr=FakeOcr())
 
+    def test_an_ocr_failure_is_not_reported_as_a_video_that_cannot_be_read(self):
+        """The fallback's error handling must not cover the OCR.
+
+        It used to: the try wrapped read_samples(), which runs the model on every
+        frame, so a broken OCR install was reported as "No frames could be read
+        from the video (codec av1)". A missing `requests` in a portable build
+        read as an AV1 decoding problem, which is not where anyone would look.
+        """
+
+        def broken_ocr(frame):
+            raise ModuleNotFoundError("No module named 'requests'")
+
+        # Forced down the PyAV path, which is the one that wrapped the OCR.
+        with mock.patch.object(text_stats, "_opencv_frames", return_value=iter(())):
+            with self.assertRaises(ModuleNotFoundError) as caught:
+                calculate_text_stats(self.video, ocr=broken_ocr, sample_secs=5.0)
+        self.assertNotIn("No frames could be read", str(caught.exception))
+
+    def test_a_decoding_failure_on_the_pyav_path_still_names_the_codec(self):
+        """The other half of the split above: a decoder that fails mid-stream is
+        still reported as one, so narrowing the try did not stop naming it."""
+
+        def failing_frames(file_path, sample_secs):
+            raise RuntimeError("decoder gave up")
+            yield  # pragma: no cover - makes this a generator
+
+        with mock.patch.object(text_stats, "_opencv_frames", return_value=iter(())):
+            with mock.patch.object(text_stats, "_pyav_frames", failing_frames):
+                with self.assertRaises(RuntimeError) as caught:
+                    calculate_text_stats(self.video, ocr=FakeOcr(), sample_secs=5.0)
+        self.assertIn("No frames could be read", str(caught.exception))
+        self.assertIn("decoder gave up", str(caught.exception))
+
 
 OLD_JOBS = """
     CREATE TABLE files (file_hash TEXT PRIMARY KEY, file_ext TEXT NOT NULL);
