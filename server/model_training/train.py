@@ -19,6 +19,7 @@ from model_training.data_preparation import (
     TARGET_DEFINITION,
 )
 from model_training.model_card import BUNDLE_FILENAME, CARD_FILENAME, build_card
+from model_training.training_distribution import summarise_training_data
 from model_training.regression import (
     fit_scaler_and_train_model,
     predict_engagement,
@@ -154,6 +155,9 @@ def run_training_pipeline(
         coefficients=coef_summary["coefficients"],
         intercept=coef_summary["intercept (b0)"],
         recommendation_threshold=recommendation_threshold,
+        # The training split, as the scaler saw it, so percentiles agree with
+        # the training mean and SD inference reports beside them.
+        training_distribution=summarise_training_data(X_train, y_train, features),
     )
 
     # 11. Persist the model if a directory is specified: the bundle the server

@@ -194,7 +194,7 @@ function describeRequestFailure(error: unknown, url: string): string {
         margin-top: 16px;
       }
       .actions mat-form-field {
-        width: 320px;
+        width: min(320px, 100%);
       }
       .status-summary {
         font: var(--mat-sys-title-small);
@@ -223,6 +223,13 @@ function describeRequestFailure(error: unknown, url: string): string {
       .settings-table.numeric th:not(:first-child),
       .settings-table.numeric td:not(:first-child) {
         text-align: right;
+      }
+      /* Six columns of counts do not fit a phone; the table scrolls within the card. */
+      @media (max-width: 600px) {
+        .settings-table {
+          display: block;
+          overflow-x: auto;
+        }
       }
     `,
   ],

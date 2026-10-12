@@ -111,6 +111,7 @@ class TestModelRegistry(unittest.TestCase):
             ({"id": "../escape"}, "id must be"),
             ({"features": []}, "features must be"),
             ({"features": ["duration", "not_a_feature"]}, "cannot compute"),
+            ({"training_distribution": {"features": {}, "target": None}}, "training_distribution"),
         ):
             with self.subTest(changes=changes):
                 with self.assertRaisesRegex(ModelError, message):

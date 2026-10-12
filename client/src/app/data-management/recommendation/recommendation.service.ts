@@ -19,6 +19,36 @@ export const modelsUrl = (serverUrl: string): string => `${serverUrl}/api/models
 /** Held-out accuracy of one of a model's two halves. */
 export type ModelMetrics = { rmse: number; r2: number };
 
+/** np.histogram's output: edges has one more entry than counts. */
+export type TrainingHistogram = {
+  edges: number[];
+  counts: number[];
+};
+
+/** One feature's spread across a model's training videos. The viewing quartiles
+ * are per bin, and null where too few videos share the bin to show them. */
+export type FeatureDistribution = {
+  quantiles: number[];
+  histogram: TrainingHistogram & {
+    target_p25: (number | null)[];
+    target_median: (number | null)[];
+    target_p75: (number | null)[];
+  };
+};
+
+/**
+ * Where a model's training videos sat, in aggregates only. Mirrors
+ * summarise_training_data() in server/model_training/training_distribution.py.
+ */
+export type TrainingDistribution = {
+  rows: number;
+  bins: number;
+  min_videos_per_bin: number;
+  quantile_levels: number[];
+  features: Record<string, FeatureDistribution>;
+  target: { quantiles: number[]; histogram: TrainingHistogram };
+};
+
 /**
  * What a model is, as its provider describes it. Mirrors build_card() in
  * server/model_training/model_card.py. Read from plain JSON on the server, so it
@@ -59,6 +89,8 @@ export type ModelCard = {
   intercept: number;
   recommendation_threshold: number;
   framework: Record<string, string>;
+  /** Absent from models trained before it was added. */
+  training_distribution?: TrainingDistribution;
 };
 
 /** One model the server holds. Mirrors ModelRegistry.entries() in server/model_registry.py. */
@@ -104,11 +136,19 @@ export type VideoFeatureAssessment = FeatureRecommendation & {
   contribution: number;
   suggestion: Suggestion;
   advice: string;
+  /** Roughly what percentage of the training videos sit below this value. This
+   * and expected_curve are absent when the model's card has no training_distribution. */
+  training_percentile?: number;
+  /** The model's prediction for this video with only this feature moved across
+   * its training range. Passes through value at exactly the prediction. */
+  expected_curve?: { x: number[]; apv: number[] };
 };
 
 export type VideoRecommendation = {
   /** The random forest's prediction, in percent. Not clipped to 0-100. */
   average_percentage_viewed: number;
+  /** Where the prediction sits among the APVs the training videos actually got. */
+  target_percentile?: number;
   threshold: number;
   features: Record<string, VideoFeatureAssessment>;
   /** The model that answered. Absent from servers older than model selection. */
