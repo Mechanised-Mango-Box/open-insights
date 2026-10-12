@@ -287,7 +287,7 @@ ENGAGEMENT_MODEL_DIR = os.environ.get("ENGAGEMENT_MODEL_DIR") or str(
 _DEFAULT_BUILTINS = (
     ",".join(sorted(d.name for d in _bundled_engagement.iterdir() if d.is_dir()))
     if _bundled_engagement is not None and _bundled_engagement.is_dir()
-    else "full,fast"
+    else "all,recommended"
 )
 BUILTIN_MODELS = [
     name.strip()
@@ -296,7 +296,7 @@ BUILTIN_MODELS = [
 ]
 
 # Which built-in model answers a recommendation that names none.
-ENGAGEMENT_MODEL_DEFAULT = os.environ.get("ENGAGEMENT_MODEL_DEFAULT", "full")
+ENGAGEMENT_MODEL_DEFAULT = os.environ.get("ENGAGEMENT_MODEL_DEFAULT", "recommended")
 
 # Models added from the server's page (model_registry.py), in a models/ directory
 # beside the data directory: <exe>/data and <exe>/models for a portable build,

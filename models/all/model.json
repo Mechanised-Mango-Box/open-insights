@@ -1,10 +1,10 @@
 {
   "format_version": 1,
-  "id": "fast",
-  "name": "Fast features",
+  "id": "all",
+  "name": "All Features",
   "version": "1",
-  "created_at": "2026-10-12T14:27:00+00:00",
-  "description": "Every feature except on-screen text, so the slow OCR scan is never needed. Transcript, scene and audio stats only.",
+  "created_at": "2026-10-12T14:47:18+00:00",
+  "description": "All eight features: transcript, scene, on-screen text and audio. The most information, and the slowest to scan for.",
   "provider": {
     "name": "Open Insights",
     "url": ""
@@ -32,6 +32,7 @@
     "word_count",
     "speech_pace_variation",
     "speech_ratio",
+    "text_density",
     "mean_pause_secs"
   ],
   "feature_definitions": {
@@ -41,6 +42,7 @@
     "word_count": "Words in the Whisper transcript.",
     "speech_pace_variation": "Standard deviation of words per minute across 30 s windows of the transcript.",
     "speech_ratio": "Seconds of speech heard by Silero VAD / video length (0-1).",
+    "text_density": "Mean number of words on screen per sampled frame (RapidOCR).",
     "mean_pause_secs": "Mean length in seconds of the gaps between stretches of speech (Silero VAD)."
   },
   "target": "average_percentage_viewed",
@@ -56,31 +58,33 @@
   },
   "metrics": {
     "random_forest": {
-      "rmse": 6.740241083267627,
-      "r2": 0.18793957005797968
+      "rmse": 6.837038215543542,
+      "r2": 0.16444796284800534
     },
     "linear_regression": {
-      "rmse": 6.6729195074844,
-      "r2": 0.2040802893542566
+      "rmse": 6.680766011441828,
+      "r2": 0.20220738831747676
     }
   },
   "feature_importances": {
-    "duration": 0.12300928398063966,
-    "wpm": 0.10107033647945618,
-    "scene_change_rate": 0.09928854668180208,
-    "word_count": 0.12294752597127619,
-    "speech_pace_variation": 0.2099426172439042,
-    "speech_ratio": 0.08975192399742965,
-    "mean_pause_secs": 0.2539897656454921
+    "duration": 0.10612550251651079,
+    "wpm": 0.08199830084338293,
+    "scene_change_rate": 0.08961225145340133,
+    "word_count": 0.11708308663692758,
+    "speech_pace_variation": 0.19447796554214405,
+    "speech_ratio": 0.07961395408870274,
+    "text_density": 0.08372016861116721,
+    "mean_pause_secs": 0.24736877030776344
   },
   "coefficients": {
-    "duration": -12.628999386245887,
-    "wpm": -3.1299066496728445,
-    "scene_change_rate": -0.05433986991176151,
-    "word_count": 11.264086407011424,
-    "speech_pace_variation": -2.0473207383274814,
-    "speech_ratio": -1.2024974053345596,
-    "mean_pause_secs": -3.762812557003695
+    "duration": -12.77007315085932,
+    "wpm": -3.1220557012171835,
+    "scene_change_rate": -0.06163856951600246,
+    "word_count": 11.418773033894073,
+    "speech_pace_variation": -2.0413735957268666,
+    "speech_ratio": -1.1766647524271616,
+    "text_density": -0.09963291237713671,
+    "mean_pause_secs": -3.722421721964394
   },
   "intercept": 69.29514132705037,
   "recommendation_threshold": 1.0,
@@ -794,6 +798,119 @@
             73.79217264483415,
             75.98892428869743,
             76.21748396588517
+          ]
+        }
+      },
+      "text_density": {
+        "quantiles": [
+          0.8888888888888888,
+          1.788475975975976,
+          2.841770740410348,
+          3.6493729096989966,
+          3.922857142857143,
+          4.4151295133438,
+          4.839849624060149,
+          5.2713256113256115,
+          6.028571428571429,
+          7.200545613269314,
+          7.709489456159822,
+          8.209895833333334,
+          8.552136752136752,
+          9.56134676564157,
+          10.858795285901351,
+          11.888157894736842,
+          15.0,
+          18.294489795918363,
+          25.924882247847982,
+          65.8875595238093,
+          218.13924050632912
+        ],
+        "histogram": {
+          "edges": [
+            0.8888888888888888,
+            15.372245663384904,
+            29.85560243788092,
+            44.33895921237693,
+            58.822315986872944,
+            73.30567276136895,
+            87.78902953586497,
+            102.27238631036099,
+            116.755743084857,
+            131.23909985935302,
+            145.72245663384902,
+            160.20581340834505,
+            174.68917018284105,
+            189.17252695733708,
+            203.6558837318331,
+            218.13924050632912
+          ],
+          "counts": [
+            93,
+            10,
+            2,
+            3,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            2,
+            1,
+            0,
+            0,
+            1
+          ],
+          "target_p25": [
+            66.1553249199326,
+            68.67882731000442,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "target_median": [
+            72.53566479079008,
+            70.71567806359623,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "target_p75": [
+            75.49468572956603,
+            72.89440447351109,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
           ]
         }
       },

@@ -64,19 +64,27 @@ FEATURE_COLUMNS: List[str] = [
 
 TARGET_COLUMN: str = "average_percentage_viewed"
 
-# The feature subsets the published models are trained on, by model id. "fast"
-# leaves out on-screen text: OCR is the slowest scan by far (about 7 s per minute
-# of 1080p video, against 4 s for scene stats, 1.3 s for transcription and 0.3 s
-# for audio stats, measured on a 16-core CPU).
+# The feature subsets the published models are trained on, by model id.
+#
+# "recommended" keeps the four features that earn their place. Over 5-fold
+# cross-validation repeated 10 times on the 143 EduVideo Insights lectures, it
+# beat all eight for both models (forest RMSE 8.60 against 8.84, linear 8.23
+# against 8.37), and taking any one of the four out made both worse. Left out:
+#   - word_count: duration x WPM, correlated 0.99 with duration, so the
+#     regression split one effect into a large positive and a large negative
+#     coefficient - "more words, but a shorter video" advice;
+#   - text_density, scene_change_rate: coefficients near zero, and dropping
+#     either lowered the error;
+#   - speech_ratio: correlated -0.82 with mean pause, which says it better.
+# It needs only the transcript and audio scans - no OCR or scene scan, the two
+# slowest (about 7 s and 4 s per minute of 1080p video, against 1.3 s for
+# transcription and 0.3 s for audio stats, on a 16-core CPU).
 FEATURE_SETS: Dict[str, List[str]] = {
-    "full": list(FEATURE_COLUMNS),
-    "fast": [
+    "all": list(FEATURE_COLUMNS),
+    "recommended": [
         "duration",
         "wpm",
-        "scene_change_rate",
-        "word_count",
         "speech_pace_variation",
-        "speech_ratio",
         "mean_pause_secs",
     ],
     "video": ["duration", "scene_change_rate", "text_density"],

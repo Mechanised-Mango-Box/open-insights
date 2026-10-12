@@ -25,11 +25,11 @@ datas = [
 ]
 
 # The built-in engagement models, packed straight from the repository's models/:
-# only the ones BUILTIN_MODELS names (full and fast unless it is set), so the
+# only the ones BUILTIN_MODELS names (all and recommended unless it is set), so the
 # others stay download-only. They land at sys._MEIPASS/engagement_models/<id>,
 # where config.ENGAGEMENT_MODEL_DIR looks, and config takes the packed set as the
 # frozen build's built-ins.
-for _model in os.environ.get("BUILTIN_MODELS", "full,fast").split(","):
+for _model in os.environ.get("BUILTIN_MODELS", "all,recommended").split(","):
     if _model.strip():
         datas.append(
             (
