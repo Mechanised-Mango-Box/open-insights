@@ -85,6 +85,47 @@ class TestInference(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     predictor.predict(invalid)
 
+    def test_places_the_video_against_its_training_data(self):
+        df = generate_mock_training_data(num_samples=50, random_state=42)
+        with tempfile.TemporaryDirectory() as directory:
+            run_training_pipeline(raw_df=df, save_dir=directory)
+            predictor = EngagementPredictor(directory)
+            features = df[FEATURE_COLUMNS].iloc[0].to_dict()
+            result = predictor.predict(features)
+
+            distribution = predictor.card['training_distribution']
+            self.assertGreaterEqual(result['target_percentile'], 0)
+            self.assertLessEqual(result['target_percentile'], 100)
+            for name in FEATURE_COLUMNS:
+                feature = result['features'][name]
+                self.assertGreaterEqual(feature['training_percentile'], 0)
+                self.assertLessEqual(feature['training_percentile'], 100)
+
+                # The curve sweeps the whole training range, and passes through
+                # this video's own value at exactly its prediction.
+                curve = feature['expected_curve']
+                edges = distribution['features'][name]['histogram']['edges']
+                self.assertAlmostEqual(curve['x'][0], min(edges[0], features[name]))
+                self.assertAlmostEqual(curve['x'][-1], max(edges[-1], features[name]))
+                self.assertEqual(curve['x'], sorted(curve['x']))
+                self.assertEqual(len(curve['x']), len(curve['apv']))
+                at_value = curve['apv'][curve['x'].index(features[name])]
+                self.assertAlmostEqual(at_value, result[TARGET_COLUMN])
+
+    def test_card_without_training_distribution(self):
+        # Models trained before the distribution existed still predict, and
+        # leave out what they cannot say.
+        df = generate_mock_training_data(num_samples=50, random_state=42)
+        with tempfile.TemporaryDirectory() as directory:
+            run_training_pipeline(raw_df=df, save_dir=directory)
+            predictor = EngagementPredictor(directory)
+            del predictor.card['training_distribution']
+            result = predictor.predict(df[FEATURE_COLUMNS].iloc[0].to_dict())
+            self.assertNotIn('target_percentile', result)
+            for feature in result['features'].values():
+                self.assertNotIn('training_percentile', feature)
+                self.assertNotIn('expected_curve', feature)
+
     def test_missing_bundle(self):
         # Make an empty folder without training or saving any models into it.
         with tempfile.TemporaryDirectory() as directory:
