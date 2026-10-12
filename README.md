@@ -129,21 +129,28 @@ in the repository's top-level `models/`, trained on different feature sets:
 
 | Model | Features | Scans it needs | Ships in the server |
 |---|---|---|---|
-| `full` (default) | all eight | scene, transcript, screen text, audio | yes |
-| `fast` | all but on-screen text | scene, transcript, audio | yes |
+| `lite` (default) | duration, speaking speed, speech pace variation, mean pause | transcript, audio | yes |
+| `all` | all eight | scene, transcript, screen text, audio | yes |
 | `video` | duration, scene change rate, text density | scene, screen text | no - add it |
 | `audio` | duration, transcript and audio features | transcript, audio | no - add it |
 
-`BUILTIN_MODELS` (default `full,fast`) names the ones a server serves without being
-added; `ENGAGEMENT_MODEL_DEFAULT` (default `full`) must be one of them. The portable build
+`BUILTIN_MODELS` (default `all,lite`) names the ones a server serves without being
+added; `ENGAGEMENT_MODEL_DEFAULT` (default `lite`) must be one of them. The portable build
 packs only those. The Docker image copies all of `models/` in through a second build
 context (`additional_contexts` in `docker-compose.yml`, which needs Compose 2.17+; a bare
 `docker build` needs `--build-context models=../models`), and `BUILTIN_MODELS` decides
 what is served.
 
-`fast` leaves out screen text because OCR is the slowest scan. On 1080p lecture video, on a
-16-core CPU, the scans took about 7 s per minute of video for OCR, 4.3 s for scene stats,
-1.3 s for transcription and 0.3 s for audio stats.
+`lite` keeps the four features that improved predictions in testing. Over 5-fold
+cross-validation repeated 10 times on the training export, it beat all eight for both
+models (forest RMSE 8.60 against 8.84, linear regression 8.23 against 8.37), and dropping
+any one of the four made both worse. It leaves out word count, which is duration × speaking
+speed and correlates 0.99 with duration, so the regression split one effect into opposing
+coefficients. It also leaves out text density and scene change rate, which added noise, and
+speech ratio, which mean pause already covers (correlation −0.82). That also means it never
+needs the two slowest scans: on 1080p lecture video, on a 16-core CPU, OCR took about 7 s
+per minute of video and scene stats 4.3 s, against 1.3 s for transcription and 0.3 s for
+audio stats.
 
 Each model is a directory with `model.joblib` (the pickled models) and `model.json` (its
 **model card**). The card records the provider, notes, when it was trained, the
@@ -213,7 +220,7 @@ Training is seeded, so the same export, code and pins produce the same model. Th
 export itself is not committed, so the card records what it learned from:
 
 ```sh
-python -c "import json; print(json.load(open('../models/full/model.json'))['training'])"
+python -c "import json; print(json.load(open('../models/all/model.json'))['training'])"
 ```
 
 #### How results are calculated
