@@ -9,8 +9,8 @@ export const TRANSCRIPT_STATS_SETTINGS: DatasetSettings = {
   pace_window_secs: SPEECH_PACE_WINDOW_SECS,
 };
 
-/** How the transcript stats are computed - always in this browser, whichever
- * provider made the transcript. */
+/** How the transcript stats are computed - in this browser, from whatever
+ * transcript the server returned. */
 export const TRANSCRIPT_STATS_METHOD =
   'Computed in this browser from the transcript. Word and character counts come from the ' +
   'transcript text. Speech pace variation is the sample standard deviation of words per ' +
@@ -21,7 +21,7 @@ export const TRANSCRIPT_STATS_METHOD =
 type SettingLabel = { label: string; unit?: string };
 
 /** How each setting reads in a sentence. The keys are the server's (the *_SETTINGS in
- * server/config.py) and the browser computers'; an unknown key reads as itself. */
+ * server/config.py), plus the transcript stats' own; an unknown key reads as itself. */
 const SETTING_LABELS: Record<string, SettingLabel> = {
   // Scene stats: the mean grey-level change between frames, out of 255, that counts as a cut.
   threshold: { label: 'scene-change threshold', unit: ' (of 255)' },

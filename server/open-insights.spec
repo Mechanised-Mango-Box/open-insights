@@ -15,7 +15,7 @@ written there.
 
 import os
 
-from PyInstaller.utils.hooks import collect_all, collect_data_files
+from PyInstaller.utils.hooks import collect_all, collect_data_files, copy_metadata
 
 # The weights, staged by the build script from the faster-whisper cache and
 # flattened. They land at sys._MEIPASS/models/<model name>, which is where
@@ -25,11 +25,11 @@ datas = [
 ]
 
 # The built-in engagement models, packed straight from the repository's models/:
-# only the ones BUILTIN_MODELS names (full and fast unless it is set), so the
+# only the ones BUILTIN_MODELS names (all and lite unless it is set), so the
 # others stay download-only. They land at sys._MEIPASS/engagement_models/<id>,
 # where config.ENGAGEMENT_MODEL_DIR looks, and config takes the packed set as the
 # frozen build's built-ins.
-for _model in os.environ.get("BUILTIN_MODELS", "full,fast").split(","):
+for _model in os.environ.get("BUILTIN_MODELS", "all,lite").split(","):
     if _model.strip():
         datas.append(
             (
@@ -85,6 +85,23 @@ for package in (
 # faster-whisper ships the silero VAD model as package data. Transcription uses
 # it only when WHISPER_VAD=1, but audio stats find speech with it on every scan.
 datas += collect_data_files("faster_whisper")
+
+# The dist-info of every package config.py reads a version from. Nothing imports
+# this metadata, so without it the bundle still starts and still scans - and
+# silently stamps its results with a different producer than a pip-installed
+# server does, because _package_version() falls back to the string "missing".
+#
+# That is not cosmetic. A producer is the cache key: a database brought from
+# another server reads as stale on this one and every result in it is recomputed,
+# which needs the video files that a database copied on its own does not bring.
+# faster-whisper was the one that bit - parselmouth and rapidocr happen to be in
+# the collect_all list above, which copies metadata as a side effect, and so
+# resolved correctly while faster-whisper read as "missing".
+#
+# Named by distribution rather than import name ("faster-whisper", not
+# "faster_whisper"), which is what importlib.metadata.version() is given.
+for _distribution in ("faster-whisper", "rapidocr", "praat-parselmouth"):
+    datas += copy_metadata(_distribution)
 
 a = Analysis(
     ["entry.py"],

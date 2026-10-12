@@ -3,9 +3,22 @@
  * and HomeComponent (whose instructions link straight to a step). Kept out of both
  * components so neither has to import the other.
  */
-export type ViewId = 'home' | 'import' | 'scan' | 'export' | 'analysis' | 'recommend' | 'settings';
+export type ViewId =
+  | 'home'
+  | 'import'
+  | 'scan'
+  | 'export'
+  | 'analysis'
+  | 'recommend'
+  | 'recommend-model'
+  | 'recommend-results'
+  | 'settings';
 
-export type View = { id: ViewId; label: string; icon: string; blurb: string };
+/**
+ * A view with subpages is never shown itself: the sidebar lists the subpages beneath it,
+ * and going to the parent lands on whichever of them was open last.
+ */
+export type View = { id: ViewId; label: string; icon: string; blurb: string; subpages?: View[] };
 
 /** Reached by clicking the app name at the top of the sidebar, not by a nav item. */
 export const HOME: View = {
@@ -51,6 +64,20 @@ export const WORKFLOW: View[] = [
     label: 'Recommend',
     icon: 'online_prediction',
     blurb: "Choose one of the server's models and ask what it makes of a single video.",
+    subpages: [
+      {
+        id: 'recommend-model',
+        label: 'Model',
+        icon: 'model_training',
+        blurb: "Choose which of the server's models to ask, and read what its card says about it.",
+      },
+      {
+        id: 'recommend-results',
+        label: 'Results',
+        icon: 'query_stats',
+        blurb: 'Pick one video and read what the chosen model makes of it.',
+      },
+    ],
   },
 ];
 
@@ -58,7 +85,7 @@ export const SETTINGS: View = {
   id: 'settings',
   label: 'Settings',
   icon: 'settings',
-  blurb: 'Choose which server this browser talks to, and where each kind of scan runs.',
+  blurb: 'Choose which server this browser talks to, and check that it answers.',
 };
 
 /**

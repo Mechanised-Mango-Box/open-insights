@@ -18,7 +18,15 @@ import {
   RecommendationRow,
 } from '../analysis/recommendation-list.component';
 import { HighlightSegment, highlight, rankFuzzy } from './fuzzy';
-import { RecommendationService, Suggestion, VideoRecommendation } from './recommendation.service';
+import {
+  FeatureDistribution,
+  RecommendationService,
+  Suggestion,
+  VideoRecommendation,
+} from './recommendation.service';
+import { DistributionStripComponent } from './distribution-strip.component';
+import { TrainingComparisonChartComponent } from './training-comparison-chart.component';
+import { ordinal, percentileSentence, viewingSentence } from './training-comparison';
 import { SCAN_STEP_LABELS, ScanStep, missingScanSteps } from './scan-first';
 import { ScanFirstDialogComponent, ScanFirstDialogData } from './scan-first-dialog.component';
 
@@ -31,6 +39,23 @@ type Improvement = {
   value: number;
   trainingMean: number;
   contribution: number;
+  /** Where the value sits among the training videos, when the model can say. */
+  placement: Placement | null;
+};
+
+/** One feature of this video placed against the model's training videos. */
+type Placement = {
+  distribution: FeatureDistribution;
+  percentile: number;
+  sentence: string;
+};
+
+/** A row of the training comparison: one feature, ready to strip and chart. */
+type Comparison = Placement & {
+  key: string;
+  label: string;
+  value: number;
+  curve?: { x: number[]; apv: number[] };
 };
 
 /** One entry in the video picker. Every record is choosable; the note only says
@@ -66,7 +91,9 @@ type VideoOption = {
     MatFormFieldModule,
     MatIcon,
     MatInputModule,
+    DistributionStripComponent,
     RecommendationListComponent,
+    TrainingComparisonChartComponent,
   ],
   template: `
     <div class="view-stack">
@@ -160,13 +187,23 @@ type VideoOption = {
             <span class="prediction-value">{{ percent(result.average_percentage_viewed) }}</span>
             average percentage viewed
           </p>
+          @if (targetPlacement(); as target) {
+            <p class="placement">
+              <distribution-strip
+                [histogram]="target.histogram"
+                [value]="result.average_percentage_viewed"
+                [label]="'Predicted viewing: ' + target.sentence"
+              />
+              <span>That is {{ target.sentence }}.</span>
+            </p>
+          }
           <p class="card-lead">
             From {{ answeredBy() }} on the dataset server, not from your own records - the Analysis
             step is the one that reports on those.
             @if (selectedModel()?.card; as card) {
               It learned from {{ card.training.rows }} videos, and on the ones held out from its
               training it was typically {{ number(card.metrics.random_forest?.rmse ?? 0) }} points
-              out. The Model tab has its full card.
+              out. The Model page has its full card.
             }
           </p>
         </section>
@@ -187,16 +224,85 @@ type VideoOption = {
               @for (item of improvements(); track item.key) {
                 <li class="improvement">
                   <span class="direction">{{ item.suggestion }}</span>
-                  <div>
-                    <strong>{{ item.label }}</strong>
-                    - {{ number(item.value) }} in this video, against a training average of
-                    {{ number(item.trainingMean) }}
-                    <span class="cost">({{ number(item.contribution) }} points)</span>
-                    <div class="advice">{{ item.advice }}</div>
+                  <strong class="improvement-label">{{ item.label }}</strong>
+                  <span class="cost" title="Estimated effect on average percentage viewed">
+                    {{ number(item.contribution) }} points
+                  </span>
+                  <div class="improvement-body">
+                    <div class="improvement-values">
+                      {{ number(item.value) }} in this video · training average
+                      {{ number(item.trainingMean) }}
+                    </div>
+                    @if (item.placement; as placement) {
+                      <div class="placement">
+                        <distribution-strip
+                          [histogram]="placement.distribution.histogram"
+                          [value]="item.value"
+                          [label]="item.label + ': ' + placement.sentence"
+                        />
+                        <span>{{ placement.sentence }}</span>
+                      </div>
+                    }
+                    <p class="advice">{{ item.advice }}</p>
                   </div>
                 </li>
               }
             </ul>
+          }
+        </section>
+
+        <section class="card">
+          <h2>Compared with the training videos</h2>
+          @if (comparisons().length === 0) {
+            <p class="card-lead">
+              This model's card has no summary of the videos it was trained on, so this video cannot
+              be placed against them. Models trained before that summary was recorded lack it;
+              retraining with the current scripts/train_engagement_model.py adds one.
+            </p>
+          } @else {
+            <p class="card-lead">
+              Each of this video's values among the {{ trainingRows() }} videos the model trained
+              on. Choose one to see what training videos at each value typically got, and what the
+              model expects for this video if only that value changed.
+            </p>
+            <div class="comparison-list" role="radiogroup" aria-label="Feature to chart">
+              @for (row of comparisons(); track row.key) {
+                <button
+                  type="button"
+                  class="comparison-row"
+                  role="radio"
+                  [class.selected]="row.key === shown()?.key"
+                  [attr.aria-checked]="row.key === shown()?.key"
+                  (click)="chartedKey.set(row.key)"
+                >
+                  <span class="comparison-label">{{ row.label }}</span>
+                  <span class="comparison-value">{{ number(row.value) }}</span>
+                  <distribution-strip
+                    [histogram]="row.distribution.histogram"
+                    [value]="row.value"
+                    [label]="row.label + ': ' + row.sentence"
+                  />
+                  <span class="comparison-sentence">{{ row.sentence }}</span>
+                </button>
+              }
+            </div>
+            @if (shown(); as row) {
+              <h3>{{ row.label }}</h3>
+              <training-comparison-chart
+                [label]="row.label"
+                [distribution]="row.distribution"
+                [value]="row.value"
+                [prediction]="result.average_percentage_viewed"
+                [curve]="row.curve"
+              />
+              <p class="card-lead chart-note">
+                The shaded band is where the middle half of the training videos at each value
+                landed, and the solid line their median; bins with fewer than
+                {{ minVideosPerBin() }} videos are left blank. The dashed line is the model's
+                prediction for this video with only {{ row.label.toLowerCase() }} changed - what it
+                would expect, not a promise of what changing the video will do.
+              </p>
+            }
           }
         </section>
 
@@ -232,6 +338,15 @@ type VideoOption = {
               z = (value - training mean) / training SD. Contribution = coefficient x z: how many
               points this value moves the linear estimate away from an average training video.
             </dd>
+            <dt>Compared with the training videos</dt>
+            <dd>
+              Percentile: roughly the share of the model's training videos with a lower value, read
+              off their 5% quantiles. The typical band and line: the 25th, 50th and 75th percentiles
+              of average percentage viewed among the training videos in each histogram bin. The
+              expected line: the random forest's prediction for this video with that one feature
+              moved across the training range and every other feature left as it is - so it passes
+              through this video's own prediction.
+            </dd>
             <dt>Suggestions</dt>
             <dd>
               Increase when the relationship is positive and z is below 0; decrease when it is
@@ -249,6 +364,7 @@ type VideoOption = {
                 <th>z</th>
                 <th>Coefficient</th>
                 <th>Contribution</th>
+                <th>Percentile</th>
               </tr>
             </thead>
             <tbody>
@@ -261,6 +377,13 @@ type VideoOption = {
                   <td>{{ number(row.z_score) }}</td>
                   <td>{{ number(row.coefficient) }}</td>
                   <td>{{ number(row.contribution) }}</td>
+                  <td>
+                    {{
+                      row.training_percentile == null
+                        ? '-'
+                        : ordinal(Math.round(row.training_percentile))
+                    }}
+                  </td>
                 </tr>
               }
             </tbody>
@@ -307,18 +430,43 @@ type VideoOption = {
         list-style: none;
         margin: 0;
         padding: 0;
+      }
+      /* Each item reads as a heading row - what to change, which feature, what it
+         is estimated to cost - with the detail indented under the feature's name. */
+      .improvement {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 6px 12px;
+        padding: 14px 0;
+      }
+      .improvement + .improvement {
+        border-top: 1px solid var(--mat-sys-outline-variant);
+      }
+      .improvement:first-child {
+        padding-top: 4px;
+      }
+      .improvement:last-child {
+        padding-bottom: 0;
+      }
+      .improvement-label {
+        font: var(--mat-sys-title-small);
+      }
+      .cost {
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      .improvement-body {
+        grid-column: 2 / -1;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 6px;
       }
-      .improvement {
-        display: flex;
-        align-items: baseline;
-        gap: 10px;
-      }
+      /* A fixed width, not a minimum: every item is its own grid, so the pill has
+         to be the same size in each for the feature names to line up. */
       .direction {
-        flex: none;
-        min-width: 72px;
+        width: 84px;
+        box-sizing: border-box;
         text-align: center;
         text-transform: uppercase;
         font-size: 0.7em;
@@ -329,11 +477,82 @@ type VideoOption = {
         color: var(--mat-sys-primary);
       }
       .cost,
+      .improvement-values,
       .advice {
         color: var(--mat-sys-on-surface-variant);
       }
       .advice {
-        margin-top: 2px;
+        margin: 0;
+        font: var(--mat-sys-body-small);
+      }
+      .placement {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px 12px;
+        margin: 0;
+        color: var(--mat-sys-on-surface-variant);
+      }
+      .comparison-list {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 16px;
+      }
+      /* A row is a button so the whole of it chooses the chart; dressed as a row. */
+      .comparison-row {
+        display: grid;
+        grid-template-columns: minmax(120px, 1fr) 72px 160px minmax(160px, 1.4fr);
+        align-items: center;
+        gap: 4px 16px;
+        padding: 8px 12px;
+        border: 0;
+        border-left: 3px solid transparent;
+        border-radius: 8px;
+        background: none;
+        color: inherit;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+      }
+      .comparison-row:hover {
+        background: color-mix(in srgb, var(--mat-sys-on-surface) 6%, transparent);
+      }
+      .comparison-row:focus-visible {
+        outline: 2px solid var(--mat-sys-primary);
+        outline-offset: -2px;
+      }
+      .comparison-row.selected {
+        border-left-color: var(--mat-sys-primary);
+        background: color-mix(in srgb, var(--mat-sys-primary) 12%, transparent);
+      }
+      .comparison-value {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      .comparison-sentence {
+        color: var(--mat-sys-on-surface-variant);
+      }
+      .chart-note {
+        margin-top: 12px;
+      }
+      /* Phone width: name and value on one line, the strip and its sentence under them. */
+      @media (max-width: 600px) {
+        .improvement-body {
+          grid-column: 1 / -1;
+        }
+        .improvement distribution-strip {
+          width: 100%;
+        }
+        .comparison-row {
+          grid-template-columns: 1fr auto;
+        }
+        .comparison-row distribution-strip,
+        .comparison-sentence {
+          grid-column: 1 / -1;
+        }
+        .comparison-row distribution-strip {
+          width: 100%;
+        }
       }
     `,
   ],
@@ -373,6 +592,7 @@ export class RecommendationEngineComponent {
       untracked(() => {
         this.result.set(null);
         this.status.set(null);
+        this.chartedKey.set(null);
       });
     });
   }
@@ -385,6 +605,55 @@ export class RecommendationEngineComponent {
   protected trees = computed(() => {
     const value = this.selectedModel()?.card?.hyperparameters['n_estimators'];
     return typeof value === 'number' ? value : null;
+  });
+
+  protected readonly Math = Math;
+  protected readonly ordinal = ordinal;
+
+  private distribution = computed(() => this.selectedModel()?.card?.training_distribution ?? null);
+  protected trainingRows = computed(() => this.distribution()?.rows ?? 0);
+  protected minVideosPerBin = computed(() => this.distribution()?.min_videos_per_bin ?? 0);
+
+  /** The feature chosen to chart, or null for the default. */
+  protected chartedKey = signal<string | null>(null);
+
+  /** Where a feature's value sits among the training videos, or null when this
+   * model's card or the server's answer cannot say. */
+  private placementFor(key: string, percentile: number | undefined): Placement | null {
+    const distribution = this.distribution();
+    const feature = distribution?.features[key];
+    if (!distribution || !feature || percentile == null) return null;
+    return {
+      distribution: feature,
+      percentile,
+      sentence: percentileSentence(percentile, distribution.rows),
+    };
+  }
+
+  protected targetPlacement = computed(() => {
+    const distribution = this.distribution();
+    const percentile = this.result()?.target_percentile;
+    if (!distribution || percentile == null) return null;
+    return {
+      histogram: distribution.target.histogram,
+      sentence: viewingSentence(percentile, distribution.rows),
+    };
+  });
+
+  protected comparisons = computed<Comparison[]>(() =>
+    Object.entries(this.result()?.features ?? {}).flatMap(([key, f]) => {
+      const placement = this.placementFor(key, f.training_percentile);
+      return placement
+        ? [{ ...placement, key, label: labelFor(key), value: f.value, curve: f.expected_curve }]
+        : [];
+    }),
+  );
+
+  /** The charted row: the one chosen, else the costliest improvement, else the first. */
+  protected shown = computed<Comparison | null>(() => {
+    const rows = this.comparisons();
+    const wanted = this.chartedKey() ?? this.improvements()[0]?.key;
+    return rows.find((row) => row.key === wanted) ?? rows[0] ?? null;
   });
 
   protected workings = computed(() =>
@@ -466,6 +735,7 @@ export class RecommendationEngineComponent {
         value: f.value,
         trainingMean: f.training_mean,
         contribution: f.contribution,
+        placement: this.placementFor(key, f.training_percentile),
       }));
   });
 
@@ -499,6 +769,7 @@ export class RecommendationEngineComponent {
     this.query.set(this.nameOf(id));
     this.result.set(null);
     this.status.set(null);
+    this.chartedKey.set(null);
   }
 
   /** Closing the panel without choosing puts the box back to the current
@@ -514,6 +785,7 @@ export class RecommendationEngineComponent {
 
     this.status.set(null);
     this.result.set(null);
+    this.chartedKey.set(null);
 
     // Fixed for the whole submit, so a model changed mid-scan cannot be sent
     // features computed for another one.

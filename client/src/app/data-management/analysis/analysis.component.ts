@@ -46,6 +46,7 @@ import { VideoDatabaseService } from '../video-records/video-database.service';
 import { SelectionService } from '../video-records/selection.service';
 import { downloadBlob } from '../video-records/manifest-export';
 import { ChartImage, buildAnalysisExportZip, snapshotChartToBase64 } from './analysis-export';
+import { CHART_GRID, CHART_INK, CHART_MUTED_INK, CHART_SURFACE, PALETTE } from './chart-theme';
 
 // Only the chart types this component actually renders (bar/scatter/line with
 // category+linear scales) - chart.js/auto would pull in every controller,
@@ -63,28 +64,6 @@ Chart.register(
   Title,
   Tooltip,
 );
-
-/**
- * The charts are a deliberate light island in an otherwise dark app: a white surface with
- * dark ink, both on the page and in the exported PNGs. Keeping the two identical means a
- * chart reads on screen exactly as it will in whatever report it gets dropped into, and
- * there is no second theme to keep in step.
- *
- * The values are the dataviz palette's light-mode column, validated as a set (CVD
- * separation + contrast) against this white surface.
- */
-const CHART_SURFACE = '#ffffff';
-const CHART_INK = '#0b0b0b';
-const CHART_MUTED_INK = '#52514e';
-const CHART_GRID = '#e1e0d9';
-
-const PALETTE = {
-  positive: '#2a78d6',
-  negative: '#e34948',
-  histogram: '#2a78d6',
-  scatterPoint: 'rgba(137, 135, 129, 0.7)',
-  trend: '#eb6834',
-} as const;
 
 type FeatureKey = AnalysisFeatureColumn;
 
@@ -278,6 +257,7 @@ const FEATURE_KEYS: readonly FeatureKey[] = ANALYSIS_FEATURE_COLUMNS;
       }
       .feature-heading {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         gap: 10px;
         font: var(--mat-sys-title-medium);
@@ -298,7 +278,7 @@ const FEATURE_KEYS: readonly FeatureKey[] = ANALYSIS_FEATURE_COLUMNS;
       }
       .feature-charts {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
         gap: 16px;
       }
     `,
