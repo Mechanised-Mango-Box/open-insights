@@ -43,6 +43,7 @@ so a model without scene features never needs the scene scan. The client makes t
 same choice (durationSourceFor in client/src/app/data-management/analysis/stats.ts).
 """
 import json
+import math
 import zipfile
 from collections import Counter
 from pathlib import Path
@@ -64,7 +65,9 @@ FEATURE_COLUMNS: List[str] = [
 
 TARGET_COLUMN: str = "average_percentage_viewed"
 
-# The feature subsets the published models are trained on, by model id.
+# The feature subsets the published models are trained on, by model id. The
+# client offers the same sets when it trains one (FEATURE_PRESETS in
+# client/src/app/data-management/analysis/stats.ts) - change both together.
 #
 # "lite" keeps the four features that earn their place. Over 5-fold
 # cross-validation repeated 10 times on the 143 EduVideo Insights lectures, it
@@ -236,32 +239,61 @@ def load_export_dataset(
     _check_features(features)
     path = Path(path)
     manifest = _read_manifest(path)
-    records = manifest.get("records")
+    try:
+        df, skipped = dataset_from_manifest(manifest, features, name="manifest.json")
+    except ValueError as error:
+        raise ValueError(f"{path}: {error}") from error
+
+    if verbose:
+        total = len(df) + sum(skipped.values())
+        print(f"[ Data ] {path.name}: {len(df)} of {total} record(s) usable for training.")
+        for reason, count in skipped.most_common():
+            print(f"  skipped {count}: {reason}")
+    return df
+
+
+def dataset_from_manifest(
+    manifest: Any, features: Optional[List[str]] = None, name: str = "manifest"
+) -> Tuple[pd.DataFrame, Counter]:
+    """
+    The training DataFrame for an export's manifest - from a file, or sent by the
+    client to POST /api/models/train - and why each other record was left out.
+
+    Tolerates any JSON: a record that is not the shape an export writes, or whose
+    numbers are not finite, is skipped and counted like one missing a scan, since
+    a request can carry anything. Raises ValueError when there is no records array
+    or fewer than MIN_TRAINING_ROWS records are usable.
+    """
+    features = list(features or FEATURE_COLUMNS)
+    _check_features(features)
+    records = manifest.get("records") if isinstance(manifest, dict) else None
     if not isinstance(records, list):
-        raise ValueError(f"{path}: manifest.json is malformed - no records array.")
+        raise ValueError(f"{name} is malformed - no records array.")
 
     rows: List[Dict[str, float]] = []
     skipped: Counter = Counter()
     for record in records:
-        row, reason = _record_to_row(record, features)
+        try:
+            row, reason = _record_to_row(record, features)
+        except (AttributeError, KeyError, TypeError, ZeroDivisionError):
+            row, reason = None, "malformed record"
+        if row is not None and not all(
+            isinstance(value, (int, float)) and math.isfinite(value) for value in row.values()
+        ):
+            row, reason = None, "a value that is not a finite number"
         if row is None:
             skipped[reason] += 1
         else:
             rows.append(row)
 
-    if verbose:
-        print(f"[ Data ] {path.name}: {len(rows)} of {len(records)} record(s) usable for training.")
-        for reason, count in skipped.most_common():
-            print(f"  skipped {count}: {reason}")
-
     if len(rows) < MIN_TRAINING_ROWS:
         raise ValueError(
-            f"{path}: only {len(rows)} usable record(s), need at least {MIN_TRAINING_ROWS}. "
+            f"Only {len(rows)} usable record(s), need at least {MIN_TRAINING_ROWS}. "
             f"Run Scan ({', '.join(required_sources(features))}) and import the YouTube "
-            "content report for more videos, then export again."
+            "content report for more videos."
         )
 
-    return pd.DataFrame(rows, columns=features + [TARGET_COLUMN])
+    return pd.DataFrame(rows, columns=features + [TARGET_COLUMN]), skipped
 
 
 def _check_features(features: List[str]) -> None:

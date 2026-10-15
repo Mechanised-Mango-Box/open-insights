@@ -65,6 +65,25 @@ export const FEATURE_LABELS: Record<AnalysisFeatureColumn, string> = {
   mean_pause_secs: 'Mean Pause (seconds)',
 };
 
+/** The feature sets a model can be trained on, by the id the server's models use.
+ * Mirrors FEATURE_SETS in server/model_training/data_preparation.py, which says why
+ * each holds what it does; models/<id>/ holds the server's own model for each. */
+export const FEATURE_PRESETS = {
+  all: [...ANALYSIS_FEATURE_COLUMNS],
+  lite: ['duration', 'wpm', 'speech_pace_variation', 'mean_pause_secs'],
+  video: ['duration', 'scene_change_rate', 'text_density'],
+  audio: [
+    'duration',
+    'wpm',
+    'word_count',
+    'speech_pace_variation',
+    'speech_ratio',
+    'mean_pause_secs',
+  ],
+} as const satisfies Record<string, readonly AnalysisFeatureColumn[]>;
+
+export type FeaturePreset = keyof typeof FEATURE_PRESETS;
+
 export const ANALYSIS_TARGET_COLUMN =
   'average_percentage_viewed' satisfies keyof AnalysisFeatureRow;
 

@@ -125,7 +125,7 @@ const HANDSET_QUERY = '(max-width: 768px)';
             }
             @case ('analysis') {
               @defer (on idle) {
-                <analysis />
+                <analysis (navigate)="go($event)" />
               } @placeholder {
                 <p>Loading analysis…</p>
               }

@@ -74,7 +74,7 @@ export const neededScansLabel = (features: readonly AnalysisFeatureColumn[]): st
  * The choice is remembered per server, in this browser: model ids belong to the
  * server that holds them, so a choice made against a local server should not
  * follow the browser to the shared one. Models are added on the server's own
- * page, not here - this only lists and chooses.
+ * page, or trained from the Analysis step - this only lists and chooses.
  */
 @Injectable({ providedIn: 'root' })
 export class ModelSelectionService {
