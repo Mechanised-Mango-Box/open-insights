@@ -34,12 +34,12 @@ See [Reproducing](#reproducing) for how to run it.
   feature. With them, R² on the training data goes from 0.078 to 0.21. See
   [Speech ratio and pauses](#speech-ratio-and-pauses).
 - **Text density (words on screen, by OCR) adds almost nothing.** More text goes with slightly
-  less watching (r = −0.10; rank correlation −0.21), but its in-sample weight in the 8-feature
-  model is −0.02.
+  less watching (r = −0.10; rank correlation −0.21), but its in-sample weight in the 9-feature
+  model is −0.05.
 - **Still, no model predicts engagement on videos it hasn't seen with any confidence.** Under
-  repeated 5-fold cross-validation the best model scores RMSE 8.37 ± 1.82, against 9.00 ± 1.42 for
+  repeated 5-fold cross-validation the best model scores RMSE 8.38 ± 1.85, against 9.00 ± 1.42 for
   simply predicting the average, a gain well inside the fold-to-fold SD. The shipped model's
-  reported score (RMSE 6.68, R² 0.20) comes from one 29-video test set. It can't be compared with
+  reported score (RMSE 6.62, R² 0.22) comes from one 29-video test set. It can't be compared with
   the paper's in-sample 8.6 / 0.085.
 
 ## How each feature is measured
@@ -187,7 +187,7 @@ Weights are percentage points of APV per standard deviation of each feature.
 | Upstream data, upstream's gradient descent | −21.81 | 20.52 | −3.04 | −1.02 | 1.15 | — | — | — | — | 8.603 | 0.0853 |
 | Upstream data, exact least squares | −22.01 | 20.73 | −3.07 | −1.03 | 1.15 | — | — | — | — | 8.603 | 0.0854 |
 | This project, paper's 5 features | −16.05 | 14.20 | −2.24 | 0.31 | 0.34 | — | — | — | — | 8.651 | 0.0780 |
-| This project, model's 8 features (143 videos) | −14.86 | 13.21 | −3.67 | — | 0.61 | −1.65 | −0.02 | −0.92 | −3.61 | 7.994 | 0.2136 |
+| This project, model's 9 features (143 videos) | −16.35 | 15.11 | −3.84 | −0.93 | 1.40 | −1.64 | −0.05 | −0.95 | −3.67 | 7.988 | 0.2149 |
 
 - **The paper's weights come from upstream's gradient descent, not exact least squares.** They
   are reproduced by upstream's `gradient_descent` in
@@ -199,6 +199,10 @@ Weights are percentage points of APV per standard deviation of each feature.
 - **The same protocol on this project's features gives nearly the same fit (R² 0.078 vs 0.085).**
   The duration and word-count weights still come out large and opposite-signed. Both scene weights
   are close to zero in both projects.
+- **Scene count, a model feature again, adds little.** Its weight is −0.93 in-sample and −0.91 in
+  the shipped model, both under the 1.0 threshold `inference.py` treats as worth advice. With scene
+  rate also in, their variance inflation factors are 8.5 and 7.1: the two overlap, but each can
+  still be read.
 
 ### Why word count gets a positive weight
 
@@ -209,7 +213,7 @@ correlation with engagement is negative. The cause is collinearity:
 |---|---|---|---|
 | Upstream, paper's 5 features | 187 | 199 | 4.7–5.7 |
 | This project, paper's 5 features | 179 | 189 | 3.7–4.7 |
-| This project, model's 8 features | 177 | 180 | 1.1–4.9 |
+| This project, model's 9 features | 199 | 215 | 1.2–8.5 |
 
 - **Duration and word count carry almost the same information.** Words ≈ wpm × duration, and the
   two correlate at r = 0.987. A variance inflation factor near 180 means the data barely
@@ -221,7 +225,7 @@ correlation with engagement is negative. The cause is collinearity:
   means anything on its own.
 
 **This matters for the app.** `inference.py` turns each linear weight above ±1 into advice. The
-shipped model's word-count weight is +11.4, so it tells a short video to *add words*, while telling
+shipped model's word-count weight is +12.9, so it tells a short video to *add words*, while telling
 long videos to cut duration. That advice is an artefact of the collinearity. The fix is to
 drop one of the pair or combine them, for example by keeping duration and wpm, since word count is
 their product. That is a modelling change, and this comparison doesn't make it.
@@ -232,7 +236,7 @@ their product. That is a modelling change, and this comparison doesn't make it.
 |---|---|---|---|---|---|
 | Upstream data, paper's 5 features | 6.99 | 0.108 | 7.81 | −0.111 | 7.41 |
 | This project, paper's 5 features | 7.07 | 0.094 | 7.32 | 0.027 | 7.42 |
-| This project, model's 8 features (shipped) | 6.68 | 0.202 | 6.84 | 0.164 | 7.62 |
+| This project, model's 9 features (shipped) | 6.62 | 0.217 | 6.80 | 0.174 | 7.62 |
 
 - **The last row is what `python -m model_training.train` reports for the committed model.** It
   trains on 143 videos (one has no pause to measure; see below), so its 80/20 split holds out a
@@ -249,16 +253,16 @@ their product. That is a modelling change, and this comparison doesn't make it.
 |---|---|---|---|---|---|
 | Upstream data, paper's 5 features | 8.94 ± 1.51 | 9.88 ± 1.54 | 8.96 ± 1.43 | −0.058 ± 0.176 | −0.301 ± 0.232 |
 | This project, paper's 5 features | 9.09 ± 1.49 | 9.57 ± 1.66 | 8.98 ± 1.44 | −0.100 ± 0.237 | −0.210 ± 0.221 |
-| This project, model's 8 features (143 videos) | 8.37 ± 1.82 | 8.84 ± 1.68 | 9.00 ± 1.42 | +0.087 ± 0.169 | −0.031 ± 0.200 |
+| This project, model's 9 features (143 videos) | 8.38 ± 1.85 | 8.86 ± 1.70 | 9.00 ± 1.42 | +0.083 ± 0.175 | −0.036 ± 0.193 |
 
 The mean predictor's own R² averages −0.057 over these folds. It uses the training fold's mean, so
 it scores a little below zero on each test fold.
 
 - **The paper's five features predict engagement no better than the average, with either
   project's data.** The random forest does worse than the average.
-- **Only the model's 8 features beat the average, and only just.** Its linear RMSE is 8.37
-  against 9.00, 0.6 pp (7%) lower, still inside the fold-to-fold SD of 1.8. The forest beats the
-  average by less (8.84).
+- **Only the model's 9 features beat the average, and only just.** Its linear RMSE is 8.38
+  against 9.00, 0.6 pp (7%) lower, still inside the fold-to-fold SD of 1.85. The forest beats the
+  average by less (8.86).
 - **The paper's in-sample R² of 0.085 does not carry over to new videos.** This matches its own
   closing caution that "these results should serve primarily as exploratory indicators."
 
@@ -277,7 +281,7 @@ Words on screen, read by OCR from one frame every 5 seconds and averaged over th
 - **The association is weak and negative.** Pearson r = −0.10 and rank correlation −0.21. Taking
   the log to tame the screen recordings (r = −0.13) changes nothing under cross-validation.
 - **It is not duration in disguise.** Its variance inflation factor is 1.1, so unlike word count
-  its weight can be read on its own. That weight is −0.02 in-sample and −0.10 in the shipped
+  its weight can be read on its own. That weight is −0.05 in-sample and −0.16 in the shipped
   model, both under the 1.0 threshold `inference.py` treats as a relationship worth advice. So
   the app reports text density as having "little to no measurable relationship" with engagement.
 - **As a predictor it adds nothing measurable here.** One lecturer's slides vary too little for
@@ -300,7 +304,7 @@ for a pause in speech research.
   APV of any speech feature (r = −0.30, rank correlation −0.22), stronger than speech pace
   variation (−0.21). Pauses per minute is weaker (r = −0.09) and is not a model feature.
 - **In the model the two partly overlap.** More speech means fewer and shorter pauses, so with
-  both in, speech ratio's weight turns slightly negative (−0.92 in-sample) despite its positive
+  both in, speech ratio's weight turns slightly negative (−0.95 in-sample) despite its positive
   correlation. Their variance inflation factors are 3.5 and 3.8: related, but each still readable.
 - **One video is left out of the model.** `yytmPfR8Hr8` (Thermoforming, 1.6 min) has music under
   the narration the whole way through, so the VAD finds one unbroken stretch of speech and there is

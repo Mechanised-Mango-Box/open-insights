@@ -22,7 +22,7 @@ export const PRESET_LABELS: Record<FeaturePreset, { name: string; description: s
   },
   all: {
     name: 'All features',
-    description: 'All eight features. The most information, and the slowest to scan for.',
+    description: 'All nine features. The most information, and the slowest to scan for.',
   },
   video: {
     name: 'Video only',

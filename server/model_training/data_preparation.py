@@ -23,6 +23,7 @@ numbers would be scoring inputs it never saw.
     speech_ratio           audio_stats, as-is                     (0-1)
     text_density           text_stats.mean_words                  (words on screen)
     mean_pause_secs        audio_stats, as-is                     (seconds)
+    scene_count            scene_stats.scenes                     (cuts in the whole video)
     average_percentage_viewed
                            average_view_duration_secs / scene_stats.duration_secs * 100
 
@@ -38,7 +39,8 @@ pause to average), or it has no YouTube average view duration.
 
 A model can learn from a subset of the features (FEATURE_SETS), and then only the
 scans those features come from are required. Duration is read from scene stats
-when the set has a scene feature to divide by it, and from audio stats otherwise,
+when the set has a scene feature (which needs the scene scan regardless), and from
+audio stats otherwise,
 so a model without scene features never needs the scene scan. The client makes the
 same choice (durationSourceFor in client/src/app/data-management/analysis/stats.ts).
 """
@@ -61,6 +63,9 @@ FEATURE_COLUMNS: List[str] = [
     "speech_ratio",
     "text_density",
     "mean_pause_secs",
+    # Last rather than beside scene_change_rate: models trained before it existed
+    # list their features in this order, and appending keeps that order a prefix.
+    "scene_count",
 ]
 
 TARGET_COLUMN: str = "average_percentage_viewed"
@@ -71,8 +76,8 @@ TARGET_COLUMN: str = "average_percentage_viewed"
 #
 # "lite" keeps the four features that earn their place. Over 5-fold
 # cross-validation repeated 10 times on the 143 EduVideo Insights lectures, it
-# beat all eight for both models (forest RMSE 8.60 against 8.84, linear 8.23
-# against 8.37), and taking any one of the four out made both worse. Left out:
+# beat all nine for both models (forest RMSE 8.60 against 8.86, linear 8.23
+# against 8.38), and taking any one of the four out made both worse. Left out:
 #   - word_count: duration x WPM, correlated 0.99 with duration, so the
 #     regression split one effect into a large positive and a large negative
 #     coefficient - "more words, but a shorter video" advice;
@@ -112,6 +117,7 @@ FEATURE_SOURCES: Dict[str, Tuple[str, ...]] = {
     "speech_ratio": ("audio_stats",),
     "text_density": ("text_stats",),
     "mean_pause_secs": ("audio_stats",),
+    "scene_count": ("scene_stats",),
 }
 
 # How each feature is computed, in words. Copied into every model card, so a
@@ -125,19 +131,22 @@ FEATURE_DEFINITIONS: Dict[str, str] = {
     "speech_ratio": "Seconds of speech heard by Silero VAD / video length (0-1).",
     "text_density": "Mean number of words on screen per sampled frame (RapidOCR).",
     "mean_pause_secs": "Mean length in seconds of the gaps between stretches of speech (Silero VAD).",
+    "scene_count": "Scene cuts detected in the whole video (scene stats' cut count).",
 }
 
 TARGET_DEFINITION: str = (
     "Average percentage viewed: YouTube's average view duration / video duration x 100."
 )
 
-# Below this there is too little to split 80/20 and still fit eight features.
+# Below this there is too little to split 80/20 and still fit every feature.
 MIN_TRAINING_ROWS = 10
 
 
 def duration_source(features: List[str]) -> str:
-    """The scan result a feature set reads its duration from."""
-    return "scene_stats" if "scene_change_rate" in features else "audio_stats"
+    """The scan result a feature set reads its duration from: scene stats when the
+    set has a scene feature, since it needs the scene scan anyway."""
+    scene_features = ("scene_change_rate", "scene_count")
+    return "scene_stats" if any(name in features for name in scene_features) else "audio_stats"
 
 
 def required_sources(features: List[str]) -> List[str]:
@@ -219,6 +228,7 @@ def _record_to_row(
         "speech_ratio": lambda: audio_stats["speech_ratio"],
         "text_density": lambda: sources["text_stats"]["mean_words"],
         "mean_pause_secs": lambda: audio_stats["mean_pause_secs"],
+        "scene_count": lambda: sources["scene_stats"]["scenes"],
     }
     row = {name: compute[name]() for name in features}
     row[TARGET_COLUMN] = average_view_duration_secs / duration_secs * 100

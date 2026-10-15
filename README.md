@@ -120,7 +120,7 @@ in the repository's top-level `models/`, trained on different feature sets:
 | Model | Features | Scans it needs | Ships in the server |
 |---|---|---|---|
 | `lite` (default) | duration, speaking speed, speech pace variation, mean pause | transcript, audio | yes |
-| `all` | all eight | scene, transcript, screen text, audio | yes |
+| `all` | all nine, scene count among them | scene, transcript, screen text, audio | yes |
 | `video` | duration, scene change rate, text density | scene, screen text | no - add it |
 | `audio` | duration, transcript and audio features | transcript, audio | no - add it |
 
@@ -132,8 +132,8 @@ context (`additional_contexts` in `docker-compose.yml`, which needs Compose 2.17
 what is served.
 
 `lite` keeps the four features that improved predictions in testing. Over 5-fold
-cross-validation repeated 10 times on the training export, it beat all eight for both
-models (forest RMSE 8.60 against 8.84, linear regression 8.23 against 8.37), and dropping
+cross-validation repeated 10 times on the training export, it beat all nine for both
+models (forest RMSE 8.60 against 8.86, linear regression 8.23 against 8.38), and dropping
 any one of the four made both worse. It leaves out word count, which is duration × speaking
 speed and correlates 0.99 with duration, so the regression split one effect into opposing
 coefficients. It also leaves out text density and scene change rate, which added noise, and

@@ -22,6 +22,7 @@ export type AnalysisFeatureRow = {
   speech_ratio: number;
   text_density: number;
   mean_pause_secs: number;
+  scene_count: number;
   average_percentage_viewed: number;
 };
 
@@ -42,6 +43,7 @@ export const ANALYSIS_FEATURE_COLUMNS = [
   'speech_ratio',
   'text_density',
   'mean_pause_secs',
+  'scene_count',
 ] as const satisfies readonly (keyof AnalysisFeatureRow)[];
 
 /** The feature columns as a union - the one place that spelling is derived, so a
@@ -63,6 +65,7 @@ export const FEATURE_LABELS: Record<AnalysisFeatureColumn, string> = {
   speech_ratio: 'Speech Ratio',
   text_density: 'Text Density (words on screen)',
   mean_pause_secs: 'Mean Pause (seconds)',
+  scene_count: 'Scene Count (cuts)',
 };
 
 /** The feature sets a model can be trained on, by the id the server's models use.
@@ -100,6 +103,7 @@ export const FEATURE_DEFINITIONS: Record<AnalysisFeatureColumn, string> = {
   speech_ratio: 'Seconds of speech heard by Silero VAD / video length (0-1).',
   text_density: 'Mean number of words on screen per sampled frame (RapidOCR).',
   mean_pause_secs: 'Mean length in seconds of the gaps between stretches of speech (Silero VAD).',
+  scene_count: "Scene cuts detected in the whole video (scene stats' cut count).",
 };
 
 export const TARGET_DEFINITION =
@@ -120,15 +124,19 @@ export const FEATURE_SOURCES: Record<AnalysisFeatureColumn, readonly FeatureSour
   speech_ratio: ['audioStats'],
   text_density: ['textStats'],
   mean_pause_secs: ['audioStats'],
+  scene_count: ['sceneStats'],
 };
 
-/** Where a feature set reads its duration: scene stats when it has a scene feature
- * to divide by it, audio stats otherwise - so a model without scene features never
- * needs the scene scan. Mirrors duration_source() in data_preparation.py. */
+/** Where a feature set reads its duration: scene stats when it has a scene feature,
+ * which needs the scene scan regardless, audio stats otherwise - so a model without
+ * scene features never needs the scene scan. Mirrors duration_source() in
+ * data_preparation.py. */
 export const durationSourceFor = (
   features: readonly AnalysisFeatureColumn[],
 ): 'sceneStats' | 'audioStats' =>
-  features.includes('scene_change_rate') ? 'sceneStats' : 'audioStats';
+  features.includes('scene_change_rate') || features.includes('scene_count')
+    ? 'sceneStats'
+    : 'audioStats';
 
 /** Every Scan result a feature set needs, its duration's included, in Scan order. */
 export const requiredSourcesFor = (features: readonly AnalysisFeatureColumn[]): FeatureSource[] => {

@@ -160,9 +160,9 @@ def load_upstream(upstream_dir: Path) -> pd.DataFrame:
 
 def load_project(export_path: Path) -> Tuple[pd.DataFrame, Counter]:
     """
-    An export's training rows, as load_export_dataset() builds them, plus each video's
-    YouTube id (the join key) and raw scene count (the paper's fourth feature, which
-    this project's models use only as a rate). Also returns why any record was skipped.
+    An export's training rows, as load_export_dataset() builds them - the raw scene
+    count, the paper's fourth feature, among them - plus each video's YouTube id
+    (the join key). Also returns why any record was skipped.
     """
     manifest = _read_manifest(Path(export_path))
     rows: List[Dict[str, Any]] = []
@@ -179,7 +179,6 @@ def load_project(export_path: Path) -> Tuple[pd.DataFrame, Counter]:
             skipped[reason] += 1
             continue
         row["video_id"] = record["youtube_content"].get("content")
-        row["scene_count"] = record["scene_stats"]["scenes"]
         rows.append(row)
 
     df = pd.DataFrame(rows).set_index("video_id")

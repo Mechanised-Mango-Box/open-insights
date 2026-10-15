@@ -45,6 +45,10 @@ def generate_mock_training_data(num_samples: int = 200, random_state: int = 42) 
     mean_pause_secs = np.clip(rng.normal(0.35, 0.1, num_samples), 0.2, None)
     average_percentage_viewed = average_percentage_viewed - 10.0 * mean_pause_secs
 
+    # Scene cuts in the whole video: the rate over the duration, so it adds no
+    # random draw and every column above keeps its values.
+    scene_count = scene_change_rate * duration
+
     # YouTube percentage viewed should stay between 0 and 100
     average_percentage_viewed = np.clip(
         average_percentage_viewed,
@@ -61,6 +65,7 @@ def generate_mock_training_data(num_samples: int = 200, random_state: int = 42) 
         "speech_ratio": speech_ratio,
         "text_density": text_density,
         "mean_pause_secs": mean_pause_secs,
+        "scene_count": scene_count,
         "average_percentage_viewed": average_percentage_viewed,
     }) 
 
