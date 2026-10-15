@@ -162,6 +162,7 @@ describe('computeRecommendations', () => {
     speech_ratio: 0.8,
     text_density: 20,
     mean_pause_secs: 0.35,
+    scene_count: 20,
     average_percentage_viewed: 50,
     ...overrides,
   });
@@ -189,6 +190,7 @@ describe('computeRecommendations', () => {
         speech_ratio: 0.5 + (i % 5) * 0.1,
         text_density: 20 + ((i * 13) % 11) * 3,
         mean_pause_secs: 0.25 + ((i * 5) % 7) * 0.05,
+        scene_count: 20 + ((i * 5) % 11) * 2,
         average_percentage_viewed: 50 - i * 2,
       }),
     );

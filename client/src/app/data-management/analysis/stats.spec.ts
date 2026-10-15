@@ -52,6 +52,7 @@ describe('computeAnalysis', () => {
       speech_ratio: 0.8,
       text_density: 20,
       mean_pause_secs: 0.3,
+      scene_count: 20,
       average_percentage_viewed: 50,
     },
     {
@@ -63,6 +64,7 @@ describe('computeAnalysis', () => {
       speech_ratio: 0.65,
       text_density: 45,
       mean_pause_secs: 0.55,
+      scene_count: 80,
       average_percentage_viewed: 30,
     },
     {
@@ -74,6 +76,7 @@ describe('computeAnalysis', () => {
       speech_ratio: 0.72,
       text_density: 32,
       mean_pause_secs: 0.4,
+      scene_count: 45,
       average_percentage_viewed: 41,
     },
   ];

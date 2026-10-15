@@ -56,7 +56,7 @@ DEFAULT_NOTES = (
 DEFAULT_META = {
     "all": (
         "All Features",
-        "All eight features: transcript, scene, on-screen text and audio. The most "
+        "All nine features: transcript, scene, on-screen text and audio. The most "
         "information, and the slowest to scan for.",
     ),
     "lite": (

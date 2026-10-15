@@ -66,6 +66,7 @@ describe('buildVideoFeatures', () => {
       speech_ratio: 0.9,
       text_density: 35,
       mean_pause_secs: 0.35,
+      scene_count: 30,
     });
   });
 
@@ -142,6 +143,20 @@ describe('buildFeaturesFor', () => {
       speech_ratio: 0.8,
     });
     expect(buildVideoFeatures(noScene)).toBeNull();
+  });
+
+  it('reads duration from scene stats for scene count, which needs the scene scan anyway', () => {
+    const shorterAudio = record({
+      ds_audioStats: { state: 'absent' },
+      ds_transcriptStats: { state: 'absent' },
+    });
+    expect(buildFeaturesFor(shorterAudio, ['duration', 'scene_count'])).toEqual({
+      duration: 10,
+      scene_count: 30,
+    });
+    expect(featureSkipReason(record({ ds_sceneStats: { state: 'absent' } }), ['scene_count'])).toBe(
+      'no scene stats',
+    );
   });
 
   it('agrees with buildVideoFeatures for the full set', () => {

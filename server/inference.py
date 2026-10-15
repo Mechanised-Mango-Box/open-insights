@@ -78,7 +78,8 @@ class EngagementPredictor:
         ignored) as finite, nonnegative numbers, in the units
         the model was trained on: duration in minutes, scene_change_rate per
         minute, speech_pace_variation as a WPM standard deviation, speech_ratio
-        as a 0-1 fraction, mean_pause_secs in seconds. Nothing is converted here. Invalid input raises
+        as a 0-1 fraction, mean_pause_secs in seconds, scene_count as the cuts in
+        the whole video. Nothing is converted here. Invalid input raises
         ValueError for the API layer to handle as a 400.
         """
         if not isinstance(features, Mapping):

@@ -4,11 +4,14 @@ import {
   ElementRef,
   computed,
   inject,
+  output,
   signal,
   viewChild,
   viewChildren,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { firstValueFrom } from 'rxjs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import {
@@ -45,6 +48,13 @@ import { AnalysisMethods, buildAnalysisMethods } from './analysis-methods';
 import { VideoDatabaseService } from '../video-records/video-database.service';
 import { SelectionService } from '../video-records/selection.service';
 import { downloadBlob } from '../video-records/manifest-export';
+import { VideoRecord } from '../video-records/VideoRecord';
+import { ViewId } from '../../views/views';
+import {
+  CreateModelDialogComponent,
+  CreateModelDialogData,
+  CreateModelDialogResult,
+} from './create-model-dialog.component';
 import { ChartImage, buildAnalysisExportZip, snapshotChartToBase64 } from './analysis-export';
 import { CHART_GRID, CHART_INK, CHART_MUTED_INK, CHART_SURFACE, PALETTE } from './chart-theme';
 
@@ -95,6 +105,14 @@ const FEATURE_KEYS: readonly FeatureKey[] = ANALYSIS_FEATURE_COLUMNS;
           >
             <mat-icon>download</mat-icon>
             Export Analysis
+          </button>
+          <button
+            mat-stroked-button
+            (click)="createModel()"
+            [disabled]="!hasResult() || creatingModel()"
+          >
+            <mat-icon>model_training</mat-icon>
+            Create Model
           </button>
         </div>
 
@@ -288,6 +306,10 @@ export class AnalysisComponent implements AfterViewInit {
   private dbService = inject(VideoDatabaseService);
   private analysisService = inject(AnalysisService);
   private selectionService = inject(SelectionService);
+  private dialog = inject(MatDialog);
+
+  /** Asked to show another step: Recommend's Results, to try a model just created. */
+  navigate = output<ViewId>();
 
   /** What the next run will cover, so narrowing the analysis to a selection is
    * visible before pressing the button rather than inferred from the result. */
@@ -308,10 +330,14 @@ export class AnalysisComponent implements AfterViewInit {
 
   loading = signal(false);
   exporting = signal(false);
+  creatingModel = signal(false);
   statusMessage = signal<string | null>(null);
 
   private lastResult = signal<AnalysisResult | null>(null);
   private lastRows: AnalysisFeatureRow[] = [];
+  /** Every record the last run covered, the ones it left out included: a model
+   * on fewer features can learn from records the full analysis could not use. */
+  private lastRecords: VideoRecord[] = [];
   protected methods = signal<AnalysisMethods | null>(null);
   protected recommendations = signal<RecommendationOutcome | null>(null);
   protected readonly minRowsForRecommendations = MIN_ROWS_FOR_RECOMMENDATIONS;
@@ -372,6 +398,7 @@ export class AnalysisComponent implements AfterViewInit {
       this.methods.set(buildAnalysisMethods(rowResult));
       this.renderResult(rows, result);
       this.lastRows = rows;
+      this.lastRecords = records;
       this.lastResult.set(result);
       this.recommendations.set(computeRecommendations(rows));
       this.statusMessage.set(`Analysis run on ${eligibleCount} of ${totalCount} record(s).`);
@@ -405,6 +432,30 @@ export class AnalysisComponent implements AfterViewInit {
       this.statusMessage.set('Export failed. See console for details.');
     } finally {
       this.exporting.set(false);
+    }
+  }
+
+  /** Trains a model on the server from the records this analysis covered. */
+  async createModel(): Promise<void> {
+    if (!this.hasResult()) return;
+    this.creatingModel.set(true);
+    try {
+      const ref = this.dialog.open<
+        CreateModelDialogComponent,
+        CreateModelDialogData,
+        CreateModelDialogResult
+      >(CreateModelDialogComponent, {
+        data: { records: this.lastRecords },
+        width: '640px',
+        maxWidth: '95vw',
+      });
+      const created = await firstValueFrom(ref.afterClosed());
+      if (!created) return;
+      const name = created.model.card?.name ?? created.model.id;
+      this.statusMessage.set(`Created ${name}. Recommend now asks it.`);
+      if (created.tryIt) this.navigate.emit('recommend-results');
+    } finally {
+      this.creatingModel.set(false);
     }
   }
 

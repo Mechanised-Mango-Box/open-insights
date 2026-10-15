@@ -105,6 +105,16 @@ PUBLIC_RATE_LIMIT = os.environ.get("PUBLIC_RATE_LIMIT", "600 per minute")
 PUBLIC_UPLOAD_RATE_LIMIT = os.environ.get("PUBLIC_UPLOAD_RATE_LIMIT", "20 per hour")
 PUBLIC_COMPUTE_RATE_LIMIT = os.environ.get("PUBLIC_COMPUTE_RATE_LIMIT", "120 per hour")
 
+# Training a model (POST /api/models/train) is cheap - seconds of CPU on a few
+# hundred rows - but every one is kept for good and listed to everyone, so it is
+# counted per hour like the other writes, and tighter. The private key is exempt.
+PUBLIC_TRAIN_RATE_LIMIT = os.environ.get("PUBLIC_TRAIN_RATE_LIMIT", "5 per hour")
+
+# How many models the public tier may have trained here before it is told the
+# server is full. Nothing deletes a trained model but its operator, so without
+# this the model list everyone picks from grows without bound. 0 disables it.
+PUBLIC_MAX_TRAINED_MODELS = int(os.environ.get("PUBLIC_MAX_TRAINED_MODELS", "50"))
+
 # Cap on the upload directory, past which the least recently used videos are
 # deleted until it fits. 0 - the default - never deletes anything.
 #
@@ -308,6 +318,17 @@ MODELS_DIR = os.environ.get("MODELS_DIR", str(_DATA_DIR.parent / "models"))
 # this machine can (see model_portal.py): a model file is a pickle, and loading one
 # runs whatever code its author put in it. docker-compose.yml turns it off.
 MODEL_MANAGEMENT = os.environ.get("MODEL_MANAGEMENT", "1") == "1"
+
+# Whether a client may train a model here from its records (POST /api/models/train).
+# Separate from MODEL_MANAGEMENT, and safe to leave on for a public server: the
+# server builds that pickle itself from numbers, so nothing a caller sends is ever
+# unpickled. The public tier is rate limited and capped (PUBLIC_TRAIN_RATE_LIMIT,
+# PUBLIC_MAX_TRAINED_MODELS); a local server without keys is not limited at all.
+MODEL_TRAINING = os.environ.get("MODEL_TRAINING", "1") == "1"
+
+# The most records one training request may carry, from any caller. Bounds the
+# CPU and memory one request can spend: 144 records train in about a second.
+MAX_TRAIN_RECORDS = int(os.environ.get("MAX_TRAIN_RECORDS", "5000"))
 
 # The largest model package accepted, compressed or not. The built-in models are
 # about 1 MB each.

@@ -4,6 +4,8 @@ import { firstValueFrom } from 'rxjs';
 import { ServerConfigService } from '../server-config.service';
 import { VideoFeatures } from '../analysis/analysis.service';
 import { FeatureRecommendation } from '../analysis/recommendations';
+import { AnalysisFeatureColumn } from '../analysis/stats';
+import { TrainingRecord } from '../video-records/manifest-export';
 
 /**
  * Built as a plain function so it can be tested without standing up HttpClient -
@@ -15,6 +17,8 @@ export const recommendationUrl = (serverUrl: string, hash: string, modelId?: str
   (modelId ? `?model=${encodeURIComponent(modelId)}` : '');
 
 export const modelsUrl = (serverUrl: string): string => `${serverUrl}/api/models`;
+
+export const trainModelUrl = (serverUrl: string): string => `${serverUrl}/api/models/train`;
 
 /** Held-out accuracy of one of a model's two halves. */
 export type ModelMetrics = { rmse: number; r2: number };
@@ -111,6 +115,34 @@ export type ModelList = {
   models: ModelEntry[];
   /** Where to find more models to add. Absent from servers before it was added. */
   more_models_url?: string;
+  /** Whether POST /api/models/train is on. Absent from servers that cannot train. */
+  can_train?: boolean;
+};
+
+/** What a new model's card says about it, as the person training it puts it.
+ * The rest of the card the server fills in from the training run. */
+export type TrainModelMeta = {
+  id: string;
+  name: string;
+  description?: string;
+  notes?: string;
+  provider?: { name?: string; url?: string };
+};
+
+/** The body of POST /api/models/train. Mirrors ModelRegistry.train() in server/model_registry.py. */
+export type TrainModelRequest = {
+  manifest: { records: TrainingRecord[] };
+  features: AnalysisFeatureColumn[];
+  meta: TrainModelMeta;
+};
+
+export type TrainModelResult = {
+  /** The new model, as GET /api/models lists it. */
+  model: ModelEntry;
+  /** How many of the records sent it learned from. */
+  used_rows: number;
+  /** Why the others were left out, by reason. */
+  skipped: Record<string, number>;
 };
 
 /** Which way a feature would have to move to sit where the training data sees
@@ -198,6 +230,16 @@ export class RecommendationService {
   async listModels(): Promise<ModelList> {
     return await firstValueFrom(
       this.http.get<ModelList>(modelsUrl(this.serverConfig.serverUrl()), {
+        headers: this.authHeaders(),
+      }),
+    );
+  }
+
+  /** Trains a model on the server from these records and keeps it there. One
+   * request and wait: a few hundred records train in about a second. */
+  async trainModel(request: TrainModelRequest): Promise<TrainModelResult> {
+    return await firstValueFrom(
+      this.http.post<TrainModelResult>(trainModelUrl(this.serverConfig.serverUrl()), request, {
         headers: this.authHeaders(),
       }),
     );
