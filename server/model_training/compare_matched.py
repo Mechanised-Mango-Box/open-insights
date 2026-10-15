@@ -54,8 +54,8 @@ def main():
         ("Original five / Forest", upstream, PAPER_FEATURES, "forest"),
         ("Rescanned five / Linear", project, PAPER_FEATURES, "linear"),
         ("Rescanned five / Forest", project, PAPER_FEATURES, "forest"),
-        ("Expanded eight / Linear", project, FEATURE_COLUMNS, "linear"),
-        ("Expanded eight / Forest", project, FEATURE_COLUMNS, "forest"),
+        ("Expanded nine / Linear", project, FEATURE_COLUMNS, "linear"),
+        ("Expanded nine / Forest", project, FEATURE_COLUMNS, "forest"),
     ]
     folds = list(RepeatedKFold(n_splits=5, n_repeats=10, random_state=42).split(ids))
     metrics, predictions, partitions = [], [], []
@@ -128,7 +128,7 @@ def main():
     }
     (args.out / "method.json").write_text(json.dumps(metadata, indent=2))
     fig, axes = plt.subplots(1, 2, figsize=(10, 4.5), sharex=True, sharey=True)
-    for ax, name in zip(axes, ["Original five / Linear", "Expanded eight / Forest"]):
+    for ax, name in zip(axes, ["Original five / Linear", "Expanded nine / Forest"]):
         subset = oof[oof.model == name]
         ax.scatter(subset.actual_apv, subset.predicted_apv, s=20, alpha=0.65)
         ax.plot([30, 90], [30, 90], "--", color="gray")
@@ -174,8 +174,8 @@ def plot_metric_comparison(summary, out_dir):
     names = [
         "Mean baseline",
         "Original five / Linear",
-        "Expanded eight / Forest",
-        "Expanded eight / Linear",
+        "Expanded nine / Forest",
+        "Expanded nine / Linear",
     ]
     labels = [
         "Mean\nbaseline",

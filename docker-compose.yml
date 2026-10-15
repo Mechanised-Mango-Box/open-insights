@@ -42,6 +42,8 @@ services:
       # lives inside the container and dies with it.
       UPLOAD_FOLDER: /data/uploads
       DB_PATH: /data/db.sqlite
+      # Models clients train here (POST /api/models/train) are kept for good.
+      MODELS_DIR: /data/models
 
       # The Dockerfile already sets this to 0; repeated here so it is visible
       # alongside the rest of the public-deployment settings and can be turned
@@ -52,8 +54,10 @@ services:
       WHISPER_MODEL: ${WHISPER_MODEL:-tiny.en}
 
       # Off. Adding a model unpickles it, which runs its code; a public server
-      # answers with its built-in models only. (The page's forms also refuse
-      # anyone not on the server's own machine, but this needs no such argument.)
+      # takes no model packages. (The page's forms also refuse anyone not on the
+      # server's own machine, but this needs no such argument.) Models trained
+      # here from a client's records are another matter - nothing is unpickled -
+      # and MODEL_TRAINING leaves those on, capped below.
       MODEL_MANAGEMENT: "0"
 
       # The two keys. Both come from .env; neither has a default, because a
@@ -73,6 +77,9 @@ services:
       PUBLIC_RATE_LIMIT: ${PUBLIC_RATE_LIMIT:-600 per minute}
       PUBLIC_UPLOAD_RATE_LIMIT: ${PUBLIC_UPLOAD_RATE_LIMIT:-20 per hour}
       PUBLIC_COMPUTE_RATE_LIMIT: ${PUBLIC_COMPUTE_RATE_LIMIT:-120 per hour}
+      PUBLIC_TRAIN_RATE_LIMIT: ${PUBLIC_TRAIN_RATE_LIMIT:-5 per hour}
+      PUBLIC_MAX_TRAINED_MODELS: ${PUBLIC_MAX_TRAINED_MODELS:-50}
+      MAX_TRAIN_RECORDS: ${MAX_TRAIN_RECORDS:-5000}
 
       # Nothing else in the server has ever deleted an upload, so on a shared
       # box this is the only thing between a public endpoint and a full volume.

@@ -6,9 +6,12 @@ from uuid import uuid4
 from auth import is_private, limiter
 from config import (
     ALLOWED_EXTENSIONS,
+    MODEL_TRAINING,
     MORE_MODELS_URL,
     PUBLIC_COMPUTE_RATE_LIMIT,
     PUBLIC_MAX_QUEUE_DEPTH,
+    PUBLIC_MAX_TRAINED_MODELS,
+    PUBLIC_TRAIN_RATE_LIMIT,
     PUBLIC_UPLOAD_RATE_LIMIT,
     SHOW_INSTRUCTIONS,
     UNVERSIONED_PACKAGES,
@@ -27,7 +30,7 @@ from db import (
 from flask import Blueprint, current_app, jsonify, make_response, redirect, request
 from instructions import page_html
 from model_portal import PORTAL_CSS, models_card_html
-from model_registry import ModelError
+from model_registry import ModelError, ModelExists
 from werkzeug.exceptions import NotFound
 from processing import SUBMIT, queue_status
 from utils import Failure, hash_stream
@@ -158,14 +161,74 @@ def __route_get_dataset(file_hash: str, kind_name: str):
 def __route_models():
     """Every engagement model this server holds, with its card, and which one a
     recommendation that names none is answered by. Reads only the cards (see
-    model_registry.py); adding and deleting models is the page at /'s job."""
+    model_registry.py). Adding and deleting packages is the page at /'s job;
+    can_train says whether POST /api/models/train will take a new one."""
     registry = current_app.extensions["model_registry"]
     return jsonify(
         {
             "default": registry.default_id,
             "models": registry.entries(),
             "more_models_url": MORE_MODELS_URL,
+            "can_train": MODEL_TRAINING,
         }
+    )
+
+
+@bp.post("/api/models/train")
+@limiter.limit(PUBLIC_TRAIN_RATE_LIMIT, exempt_when=is_private)
+def __route_train_model():
+    """Trains an engagement model on the records the client sends and keeps it,
+    as an added model every client of this server can then choose.
+
+    The body is {manifest, features, meta}: manifest is an export's manifest.json
+    without its files (records with their Scan results and YouTube content),
+    features the columns to learn from, and meta the card's id, name and the
+    rest (see ModelRegistry.train). One request and wait, like a recommendation:
+    a few hundred records train in about a second, which is not worth a job.
+
+    Open to the public tier, rate limited and capped at PUBLIC_MAX_TRAINED_MODELS,
+    because nothing the caller sends is unpickled - unlike a package added on the
+    page at /. A local server without keys treats every caller as private."""
+    if not MODEL_TRAINING:
+        return jsonify({"err": "Training models is turned off on this server."}), 403
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return jsonify({"err": "Expected a JSON object with manifest, features and meta."}), 400
+
+    registry = current_app.extensions["model_registry"]
+    tier = "private" if is_private() else "public"
+    if (
+        tier == "public"
+        and PUBLIC_MAX_TRAINED_MODELS
+        and registry.trained_count("public") >= PUBLIC_MAX_TRAINED_MODELS
+    ):
+        return (
+            jsonify(
+                {
+                    "err": "This server holds as many trained models as it takes; "
+                    "try a local server."
+                }
+            ),
+            503,
+        )
+
+    try:
+        card, used, skipped = registry.train(
+            body.get("manifest"), body.get("features"), body.get("meta"), trained_by=tier
+        )
+    except ModelExists as e:
+        return jsonify({"err": str(e)}), 409
+    except ModelError as e:
+        return jsonify({"err": str(e)}), 400
+    return (
+        jsonify(
+            {
+                "model": registry.entry(card["id"]),
+                "used_rows": used,
+                "skipped": dict(skipped.most_common()),
+            }
+        ),
+        201,
     )
 
 

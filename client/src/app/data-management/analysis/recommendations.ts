@@ -54,6 +54,7 @@ const FEATURE_DISPLAY_NAMES: Record<string, string> = {
   speech_ratio: 'speech ratio',
   text_density: 'text density (words on screen)',
   mean_pause_secs: 'mean pause length',
+  scene_count: 'scene count',
 };
 
 /**

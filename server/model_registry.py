@@ -6,7 +6,8 @@ Two places hold them:
     loaded at startup so a missing or stale one stops the server at boot rather
     than 500ing the first person to ask. Other directories there are ignored.
   - added: each directory under MODELS_DIR, put there by the page at / (see
-    model_portal.py). Loaded on first use.
+    model_portal.py) or trained here from a client's records (train(), behind
+    POST /api/models/train). Loaded on first use.
 
 Each directory is a model.joblib and a model.json card (model_training/model_card.py).
 Listing reads only the cards, never the pickles: a model's description must be
@@ -18,9 +19,11 @@ import json
 import os
 import shutil
 import ssl
+import tempfile
 import threading
 import urllib.request
 import zipfile
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -28,13 +31,15 @@ from urllib.parse import urlsplit
 from uuid import uuid4
 
 from inference import EngagementPredictor
-from model_training.data_preparation import FEATURE_COLUMNS
+from model_training.data_preparation import FEATURE_COLUMNS, dataset_from_manifest
 from model_training.model_card import (
     BUNDLE_FILENAME,
     CARD_FILENAME,
+    MODEL_ID_PATTERN,
     framework_versions,
     validate_card,
 )
+from model_training.train import run_training_pipeline
 
 # Written beside an added model: when and from where it came.
 _INSTALL_FILENAME = "installed.json"
@@ -44,6 +49,16 @@ _DOWNLOAD_TIMEOUT_SECS = 60
 
 class ModelError(ValueError):
     """A model that cannot be added, found or used. Its message is for the user."""
+
+
+class ModelExists(ModelError):
+    """A model with that id is already on this server."""
+
+
+# The longest each text field of a trained model's card may be: a card is listed
+# to everyone who asks the server for its models.
+_META_LIMITS = {"name": 100, "version": 32, "description": 1000, "notes": 2000}
+_PROVIDER_LIMITS = {"name": 100, "url": 500}
 
 
 def _read_card(directory: Path) -> dict[str, Any] | None:
@@ -196,7 +211,13 @@ class ModelRegistry:
 
     # ------------------------------------------------------------------ adding
 
-    def add_package(self, package: Path, origin: str, sha256: str | None = None) -> dict[str, Any]:
+    def add_package(
+        self,
+        package: Path,
+        origin: str,
+        sha256: str | None = None,
+        trained_by: str | None = None,
+    ) -> dict[str, Any]:
         """Validates a model package and keeps it. Returns its card.
 
         The package is a .zip of exactly model.json and model.joblib. Its card is
@@ -230,7 +251,7 @@ class ModelRegistry:
 
             with self._lock:
                 if model_id in self._directories():
-                    raise ModelError(
+                    raise ModelExists(
                         f"A model with id '{model_id}' is already on this server. "
                         "Delete it first, or give the new one another id."
                     )
@@ -259,6 +280,7 @@ class ModelRegistry:
                                 .isoformat(),
                                 "origin": origin,
                                 "sha256": sha256 or _sha256(package),
+                                **({"trained_by": trained_by} if trained_by else {}),
                             },
                             indent=2,
                         ),
@@ -270,6 +292,82 @@ class ModelRegistry:
                     raise
                 self._predictors[model_id] = predictor
         return card
+
+    def train(
+        self, manifest: Any, features: Any, meta: Any, trained_by: str
+    ) -> tuple[dict[str, Any], int, Counter]:
+        """Trains a model on a client's records and keeps it. Returns its card, how
+        many records it learned from, and why the others were left out.
+
+        `manifest` is an export's manifest.json - the records, without their
+        files - so the rows are built exactly as scripts/train_engagement_model.py
+        builds them from an export. The model is then written as a package and
+        added through add_package(), like any other: the same checks, the same
+        one-rename install. Nothing the caller sent is unpickled; the pickle is
+        built here, from numbers.
+        """
+        from config import MAX_TRAIN_RECORDS
+
+        if not isinstance(features, list) or not features or not all(
+            isinstance(name, str) for name in features
+        ):
+            raise ModelError("features must be a non-empty list of feature names.")
+        unknown = [name for name in features if name not in FEATURE_COLUMNS]
+        if unknown:
+            raise ModelError(f"Unknown features: {', '.join(unknown)}.")
+        if len(set(features)) != len(features):
+            raise ModelError("features must not repeat.")
+        meta = _clean_meta(meta)
+        records = manifest.get("records") if isinstance(manifest, dict) else None
+        if isinstance(records, list) and len(records) > MAX_TRAIN_RECORDS:
+            raise ModelError(
+                f"{len(records)} records is more than this server trains on at once "
+                f"({MAX_TRAIN_RECORDS})."
+            )
+        # Checked now so a taken id fails before the training, not after it;
+        # add_package() checks again under the lock.
+        if meta["id"] in self._directories():
+            raise ModelExists(
+                f"A model with id '{meta['id']}' is already on this server. "
+                "Give the new one another id."
+            )
+
+        try:
+            raw_df, skipped = dataset_from_manifest(manifest, features, name="The request")
+        except ValueError as error:
+            raise ModelError(str(error)) from error
+        used = len(raw_df)
+
+        with tempfile.TemporaryDirectory() as directory:
+            package = Path(directory) / "package.zip"
+            run_training_pipeline(
+                raw_df=raw_df,
+                dataset_name=f"{used} records sent by a client",
+                features=features,
+                meta=meta,
+                package_path=str(package),
+                verbose=False,
+            )
+            card = self.add_package(
+                package,
+                origin=f"trained on this server ({trained_by} tier) from {used} records",
+                trained_by=trained_by,
+            )
+        return card, used, skipped
+
+    def trained_count(self, trained_by: str) -> int:
+        """How many added models were trained here by callers of this tier."""
+        count = 0
+        for directory, source in self._directories().values():
+            if source != "added":
+                continue
+            try:
+                install = json.loads((directory / _INSTALL_FILENAME).read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                continue
+            if isinstance(install, dict) and install.get("trained_by") == trained_by:
+                count += 1
+        return count
 
     def add_from_url(self, url: str, expected_sha256: str | None = None) -> dict[str, Any]:
         """Downloads a model package over HTTPS and adds it. When a SHA-256 is
@@ -321,6 +419,51 @@ class ModelRegistry:
                 raise ModelError("Built-in models cannot be deleted.")
             self._predictors.pop(model_id, None)
             shutil.rmtree(directory)
+
+
+def _clean_meta(meta: Any) -> dict[str, Any]:
+    """The card fields a caller may set for a model trained here, checked: a
+    valid id, a name, and short plain strings for the rest. Anything else in the
+    request is dropped rather than copied into the card."""
+    if not isinstance(meta, dict):
+        raise ModelError("meta must be an object with at least an id and a name.")
+
+    def text(source: dict, key: str, limit: int) -> str:
+        value = source.get(key)
+        if value is None:
+            return ""
+        if not isinstance(value, str):
+            raise ModelError(f"{key} must be a string.")
+        value = value.strip()
+        if len(value) > limit:
+            raise ModelError(f"{key} must be at most {limit} characters.")
+        return value
+
+    model_id = meta.get("id")
+    if not isinstance(model_id, str) or not MODEL_ID_PATTERN.match(model_id):
+        raise ModelError(
+            "id must be 1-64 lower-case letters, digits, '-' or '_', starting with a letter or digit."
+        )
+    cleaned: dict[str, Any] = {"id": model_id}
+    for key, limit in _META_LIMITS.items():
+        cleaned[key] = text(meta, key, limit)
+    if not cleaned["name"]:
+        raise ModelError("name must not be empty.")
+    cleaned["version"] = cleaned["version"] or "1"
+
+    provider = meta.get("provider") or {}
+    if not isinstance(provider, dict):
+        raise ModelError("provider must be an object with a name and a url.")
+    cleaned["provider"] = {
+        key: text(provider, key, limit) for key, limit in _PROVIDER_LIMITS.items()
+    }
+    if cleaned["provider"]["url"] and urlsplit(cleaned["provider"]["url"]).scheme not in (
+        "http",
+        "https",
+    ):
+        raise ModelError("provider url must be an http:// or https:// address.")
+    cleaned["provider"]["name"] = cleaned["provider"]["name"] or "Trained on this server"
+    return cleaned
 
 
 def _sha256(path: Path) -> str:
