@@ -127,18 +127,7 @@ def main():
         "numpy_version": np.__version__,
     }
     (args.out / "method.json").write_text(json.dumps(metadata, indent=2))
-    fig, axes = plt.subplots(1, 2, figsize=(10, 4.5), sharex=True, sharey=True)
-    for ax, name in zip(axes, ["Original five / Linear", "Expanded eight / Forest"]):
-        subset = oof[oof.model == name]
-        ax.scatter(subset.actual_apv, subset.predicted_apv, s=20, alpha=0.65)
-        ax.plot([30, 90], [30, 90], "--", color="gray")
-        ax.set(title=name, xlabel="Actual APV (%)", xlim=(30, 90), ylim=(30, 90))
-        ax.grid(alpha=0.2)
-    axes[0].set_ylabel("Predicted APV (%)")
-    fig.suptitle("Held-out predictions: first five-fold repeat, 143 matched videos")
-    fig.tight_layout()
-    fig.savefig(args.out / "actual_vs_predicted.png", dpi=200)
-    plt.close(fig)
+    plot_actual_vs_predicted(oof, args.out)
     lines = [
         "# Matched model comparison",
         "",
@@ -167,6 +156,37 @@ def main():
     (args.out / "report.md").write_text("\n".join(lines) + "\n")
     print(summary.round(4).to_string())
     print(f"\nSaved to {args.out.resolve()}")
+
+
+def plot_actual_vs_predicted(predictions, out_dir):
+    """Save held-out predictions with a legend and explanations of APV and the reference line."""
+    fig, axes = plt.subplots(1, 2, figsize=(11, 6), sharex=True, sharey=True)
+    names = ["Original five / Linear", "Expanded eight / Forest"]
+    titles = ["Original five features: Linear Regression",
+              "Expanded eight features: Random Forest"]
+    for ax, name, title in zip(axes, names, titles):
+        subset = predictions[predictions.model == name]
+        ax.scatter(subset.actual_apv, subset.predicted_apv, s=25, alpha=0.65,
+                   label="Held-out video prediction")
+        ax.plot([30, 90], [30, 90], ":", color="gray", linewidth=1.8,
+                label="Perfect prediction (predicted = actual)")
+        ax.set(title=title, xlabel="Actual APV (%)", xlim=(30, 90), ylim=(30, 90))
+        ax.grid(alpha=0.2)
+        ax.legend(loc="lower right", fontsize=8)
+    axes[0].set_ylabel("Predicted APV (%)")
+    count = predictions[predictions.model == names[0]].video_id.nunique()
+    fig.suptitle("Actual vs predicted video engagement", fontsize=16, y=0.97)
+    fig.text(0.5, 0.90, f"{count} matched videos held out from training; first five-fold cross-validation repeat",
+             ha="center", fontsize=10)
+    fig.text(0.5, 0.08,
+             "APV (average percentage viewed) measures how much of a video viewers watch on average.",
+             ha="center", fontsize=10)
+    fig.text(0.5, 0.045,
+             "The dotted line marks perfect predictions; points above it overpredict APV, and points below it underpredict.",
+             ha="center", fontsize=9)
+    fig.tight_layout(rect=[0, 0.13, 1, 0.87])
+    fig.savefig(out_dir / "actual_vs_predicted.png", dpi=200)
+    plt.close(fig)
 
 
 def plot_metric_comparison(summary, out_dir):

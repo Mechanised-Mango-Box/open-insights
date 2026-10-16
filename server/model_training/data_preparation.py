@@ -42,6 +42,7 @@ when the set has a scene feature to divide by it, and from audio stats otherwise
 so a model without scene features never needs the scene scan. The client makes the
 same choice (durationSourceFor in client/src/app/data-management/analysis/stats.ts).
 """
+
 import json
 import zipfile
 from collections import Counter
@@ -152,7 +153,9 @@ def _read_manifest(path: Path) -> Dict[str, Any]:
             try:
                 return json.loads(archive.read("manifest.json").decode("utf-8"))
             except KeyError:
-                raise ValueError(f"{path} is not an export: manifest.json is missing.") from None
+                raise ValueError(
+                    f"{path} is not an export: manifest.json is missing."
+                ) from None
 
     raise ValueError(f"{path} is neither an export folder nor an export .zip.")
 
@@ -185,7 +188,10 @@ def _record_to_row(
 
     transcript_stats = sources.get("transcript_stats") or {}
     audio_stats = sources.get("audio_stats") or {}
-    if "speech_pace_variation" in features and transcript_stats.get("speech_pace_variation") is None:
+    if (
+        "speech_pace_variation" in features
+        and transcript_stats.get("speech_pace_variation") is None
+    ):
         return None, "speech features not measured"
     if "speech_ratio" in features and audio_stats.get("speech_ratio") is None:
         return None, "speech features not measured"
@@ -242,7 +248,9 @@ def load_export_dataset(
             rows.append(row)
 
     if verbose:
-        print(f"[ Data ] {path.name}: {len(rows)} of {len(records)} record(s) usable for training.")
+        print(
+            f"[ Data ] {path.name}: {len(rows)} of {len(records)} record(s) usable for training."
+        )
         for reason, count in skipped.most_common():
             print(f"  skipped {count}: {reason}")
 
