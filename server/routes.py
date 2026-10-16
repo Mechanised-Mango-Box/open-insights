@@ -6,11 +6,15 @@ from uuid import uuid4
 from auth import is_private, limiter
 from config import (
     ALLOWED_EXTENSIONS,
+    MODEL_TRAINING,
     MORE_MODELS_URL,
     PUBLIC_COMPUTE_RATE_LIMIT,
     PUBLIC_MAX_QUEUE_DEPTH,
+    PUBLIC_MAX_TRAINED_MODELS,
+    PUBLIC_TRAIN_RATE_LIMIT,
     PUBLIC_UPLOAD_RATE_LIMIT,
     SHOW_INSTRUCTIONS,
+    UNVERSIONED_PACKAGES,
     UPLOAD_FOLDER,
     video_extension,
 )
@@ -26,7 +30,7 @@ from db import (
 from flask import Blueprint, current_app, jsonify, make_response, redirect, request
 from instructions import page_html
 from model_portal import PORTAL_CSS, models_card_html
-from model_registry import ModelError
+from model_registry import ModelError, ModelExists
 from werkzeug.exceptions import NotFound
 from processing import SUBMIT, queue_status
 from utils import Failure, hash_stream
@@ -60,15 +64,42 @@ def __route_status():
     not call requeue_expired(), unlike the dataset GET below: this is an
     observability read, the backfill sweep already reclaims dead leases on its own
     timer, and with backfill switched off a 'running' job that no worker is on is
-    exactly the thing you came here to see."""
-    return jsonify({"status": "ok", **queue_status()})
+    exactly the thing you came here to see.
+
+    unversioned_packages is empty on a healthy server. Anything in it means this
+    server stamps its results differently from one that can read those versions,
+    so results carried between the two read as stale - see config.py. It is here
+    because the warning config.py prints goes to a console that someone running a
+    portable build may never look at."""
+    return jsonify(
+        {"status": "ok", "unversioned_packages": UNVERSIONED_PACKAGES, **queue_status()}
+    )
+
+
+# A row without its file. Worded as an instruction because re-uploading is the
+# whole remedy, and the client does it unprompted on this 404.
+_MISSING_FILE = (
+    "The video file for '{file_hash}' is not on this server; upload it again to "
+    "compute anything new from it."
+)
 
 
 @bp.get("/api/videos/<file_hash>")
 def __route_get_video(file_hash: str):
+    """Whether this server holds the video itself - the client's sourceStatus()
+    probe, which turns a 404 here into an upload.
+
+    Answered from the file rather than the row, because the two come apart: a
+    database carried over from another server names every video that server had,
+    and brings none of their bytes. Trusting the row told the client the video
+    was here, so it never re-uploaded, and the work it then asked for failed one
+    job at a time with "No such file or directory"."""
     file_ext = get_file_ext(file_hash)
     if file_ext is None:
         return jsonify({"err": f"No uploaded video found for file hash '{file_hash}'."}), 404
+
+    if not (Path(UPLOAD_FOLDER) / f"{file_hash}.{file_ext}").exists():
+        return jsonify({"err": _MISSING_FILE.format(file_hash=file_hash)}), 404
 
     return jsonify({"file_hash": file_hash, "file_ext": file_ext})
 
@@ -130,14 +161,74 @@ def __route_get_dataset(file_hash: str, kind_name: str):
 def __route_models():
     """Every engagement model this server holds, with its card, and which one a
     recommendation that names none is answered by. Reads only the cards (see
-    model_registry.py); adding and deleting models is the page at /'s job."""
+    model_registry.py). Adding and deleting packages is the page at /'s job;
+    can_train says whether POST /api/models/train will take a new one."""
     registry = current_app.extensions["model_registry"]
     return jsonify(
         {
             "default": registry.default_id,
             "models": registry.entries(),
             "more_models_url": MORE_MODELS_URL,
+            "can_train": MODEL_TRAINING,
         }
+    )
+
+
+@bp.post("/api/models/train")
+@limiter.limit(PUBLIC_TRAIN_RATE_LIMIT, exempt_when=is_private)
+def __route_train_model():
+    """Trains an engagement model on the records the client sends and keeps it,
+    as an added model every client of this server can then choose.
+
+    The body is {manifest, features, meta}: manifest is an export's manifest.json
+    without its files (records with their Scan results and YouTube content),
+    features the columns to learn from, and meta the card's id, name and the
+    rest (see ModelRegistry.train). One request and wait, like a recommendation:
+    a few hundred records train in about a second, which is not worth a job.
+
+    Open to the public tier, rate limited and capped at PUBLIC_MAX_TRAINED_MODELS,
+    because nothing the caller sends is unpickled - unlike a package added on the
+    page at /. A local server without keys treats every caller as private."""
+    if not MODEL_TRAINING:
+        return jsonify({"err": "Training models is turned off on this server."}), 403
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return jsonify({"err": "Expected a JSON object with manifest, features and meta."}), 400
+
+    registry = current_app.extensions["model_registry"]
+    tier = "private" if is_private() else "public"
+    if (
+        tier == "public"
+        and PUBLIC_MAX_TRAINED_MODELS
+        and registry.trained_count("public") >= PUBLIC_MAX_TRAINED_MODELS
+    ):
+        return (
+            jsonify(
+                {
+                    "err": "This server holds as many trained models as it takes; "
+                    "try a local server."
+                }
+            ),
+            503,
+        )
+
+    try:
+        card, used, skipped = registry.train(
+            body.get("manifest"), body.get("features"), body.get("meta"), trained_by=tier
+        )
+    except ModelExists as e:
+        return jsonify({"err": str(e)}), 409
+    except ModelError as e:
+        return jsonify({"err": str(e)}), 400
+    return (
+        jsonify(
+            {
+                "model": registry.entry(card["id"]),
+                "used_rows": used,
+                "skipped": dict(skipped.most_common()),
+            }
+        ),
+        201,
     )
 
 
@@ -151,8 +242,8 @@ def __route_recommendation(file_hash: str):
 
     The features arrive in the body, computed by the client from the video's
     Scan results, rather than being read back from this server's datasets: one
-    of them - speech pace variation - is only ever computed in the browser, and a Scan may have run on local compute with nothing stored
-    here. So file_hash names the video the answer is about but is not looked up.
+    of them - speech pace variation - is only ever computed in the browser. So
+    file_hash names the video the answer is about but is not looked up.
 
     Declared before the <kind_name> route below, and more specific than it:
     "recommendation" is not a DatasetKind, so without this the wildcard would
@@ -197,6 +288,20 @@ def __route_start_dataset(file_hash: str, kind_name: str):
     you deliberately regenerate a result that is already current - the
     'yes, I really do want to try that broken video again'."""
     kind, file_path = _resolve(file_hash, kind_name)
+
+    # Nothing can be computed from a video this server does not hold - see the
+    # note on the video GET above. Checked here and not in _resolve(), because
+    # the dataset GET resolves through it too and must keep serving results that
+    # were computed elsewhere and carried here in a database: reading those is
+    # the reason to bring one over. Only work needs the bytes.
+    #
+    # A result that is already current is still served rather than refused:
+    # enqueue() would decline to queue it anyway, so the POST the client opens
+    # every fetch with must not turn into a 404 over a file it is not going to
+    # read. dataset_state() reports a stale result as absent, which is exactly
+    # the case that does need the file.
+    if not file_path.exists() and dataset_state(kind, file_hash)["state"] != "ready":
+        raise _not_found(_MISSING_FILE.format(file_hash=file_hash))
 
     requeue_expired()
 

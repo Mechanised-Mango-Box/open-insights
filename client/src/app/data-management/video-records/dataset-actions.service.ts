@@ -9,7 +9,6 @@ import {
   untracked,
 } from '@angular/core';
 import { DatasetKind, DatasetProvider, SourceResolver } from '../providers/dataset-provider';
-import { ComputeConfigService } from '../compute-config.service';
 import { ServerConfigService } from '../server-config.service';
 import { VideoRecord } from './VideoRecord';
 import {
@@ -66,11 +65,9 @@ type CheckOptions = {
 export class DatasetActionsService {
   private provider = inject(DatasetProvider);
   private serverConfig = inject(ServerConfigService);
-  private computeConfig = inject(ComputeConfigService);
   private destroyRef = inject(DestroyRef);
 
-  /** Where work currently goes, for badge wording - the badges say "on X", and X
-   * is no longer always a server. */
+  /** Where work currently goes, for badge wording - the badges say "on X". */
   readonly providerLabel = computed(() => this.provider.label());
 
   // In-flight actions, keyed by file hash.
@@ -96,14 +93,11 @@ export class DatasetActionsService {
   private refreshing = new Set<string>();
 
   constructor() {
-    // Every cached status is an answer from one specific place, so changing where the
-    // question goes invalidates all of them at once - whether that is a different server
-    // or a kind moving between the server and this browser. Harmless on the first run,
-    // when nothing is tracked yet.
+    // Every cached status is an answer from one specific server, so pointing the
+    // question at a different one invalidates all of them at once. Harmless on
+    // the first run, when nothing is tracked yet.
     effect(() => {
       this.serverConfig.serverUrl();
-      this.computeConfig.targets();
-      this.computeConfig.experimental();
       untracked(() => this.recheckAll());
     });
 
@@ -310,7 +304,7 @@ export class DatasetActionsService {
     }
   }
 
-  /** Reads the video's on-screen text. Server only - see ComputeConfigService. */
+  /** Reads the video's on-screen text. */
   async fetchTextStats(record: VideoRecord): Promise<void> {
     const hash = record.video_file.hash;
     if (!hash) throw new Error('No file hash for this record.');
@@ -357,7 +351,7 @@ export class DatasetActionsService {
     }
   }
 
-  /** Measures background sound and pitch variation. Server only - see ComputeConfigService. */
+  /** Measures background sound and pitch variation. */
   async fetchAudioStats(record: VideoRecord): Promise<void> {
     const hash = record.video_file.hash;
     if (!hash) throw new Error('No file hash for this record.');

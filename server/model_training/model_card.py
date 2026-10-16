@@ -18,6 +18,8 @@ import re
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
+from model_training.training_distribution import validate_distribution
+
 CARD_FORMAT_VERSION = 1
 
 BUNDLE_FILENAME = "model.joblib"
@@ -56,12 +58,17 @@ def build_card(
     coefficients: Dict[str, float],
     intercept: float,
     recommendation_threshold: float,
+    training_distribution: Optional[Dict[str, Any]] = None,
     created_at: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Assembles a card. `meta` carries what only the person training it can say:
-    id, name, version, description, provider {name, url}, notes."""
+    id, name, version, description, provider {name, url}, notes.
+
+    training_distribution (training_distribution.py) is optional: cards written
+    before it existed still load, and simply cannot place a video against their
+    training data."""
     provider = meta.get("provider") or {}
-    return {
+    card = {
         "format_version": CARD_FORMAT_VERSION,
         "id": meta["id"],
         "name": meta.get("name") or meta["id"],
@@ -93,6 +100,9 @@ def build_card(
         "recommendation_threshold": recommendation_threshold,
         "framework": framework_versions(),
     }
+    if training_distribution is not None:
+        card["training_distribution"] = training_distribution
+    return card
 
 
 def validate_card(card: Any) -> List[str]:
@@ -127,4 +137,6 @@ def validate_card(card: Any) -> List[str]:
         errors.append("recommendation_threshold must be a number.")
     if not isinstance(card.get("framework"), dict):
         errors.append("framework must be an object of package versions.")
+    if "training_distribution" in card:
+        errors.extend(validate_distribution(card["training_distribution"]))
     return errors

@@ -117,6 +117,7 @@ class TestLoadExportDataset(unittest.TestCase):
         self.assertAlmostEqual(row["speech_ratio"], 0.9)  # audio_stats, not transcript_stats
         self.assertAlmostEqual(row["text_density"], 35.0)  # text_stats.mean_words
         self.assertAlmostEqual(row["mean_pause_secs"], 0.35)
+        self.assertAlmostEqual(row["scene_count"], 20)  # scene_stats.scenes, not a rate
         self.assertAlmostEqual(row[TARGET_COLUMN], 60.0)  # 360 s of 600 s
 
     def test_skips_records_the_client_would_skip(self):
@@ -145,6 +146,22 @@ class TestLoadExportDataset(unittest.TestCase):
         self.assertAlmostEqual(row["duration"], 8.0)
         self.assertAlmostEqual(row["wpm"], 187.5)  # 1500 words / 8 min
         self.assertAlmostEqual(row[TARGET_COLUMN], 75.0)  # 360 s of 480 s
+
+    def test_scene_count_reads_its_duration_from_scene_stats(self):
+        # Like scene_change_rate, it needs the scene scan, so the target divides by
+        # the scene duration (600 s) even with no other scene feature, and records
+        # 102-103 (no scene stats, a zero scene duration) drop out.
+        manifest = make_manifest()
+        for record in manifest["records"]:
+            if record.get("audio_stats"):
+                record["audio_stats"] = {**record["audio_stats"], "duration_secs": 480}
+        (self.folder / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+
+        df = load_export_dataset(self.folder, verbose=False, features=["duration", "scene_count"])
+        row = df.iloc[0]
+        self.assertAlmostEqual(row["duration"], 10.0)
+        self.assertAlmostEqual(row["scene_count"], 20)
+        self.assertAlmostEqual(row[TARGET_COLUMN], 60.0)
 
     def test_rejects_unknown_features(self):
         with self.assertRaisesRegex(ValueError, "Unknown"):

@@ -26,6 +26,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.5563660132014769,
     text_density: 24.34817250699507,
     mean_pause_secs: 0.3476556081445155,
+    scene_count: 277.04184833361444,
     average_percentage_viewed: 68.03554830048263,
   },
   {
@@ -37,6 +38,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.8020020073317644,
     text_density: 8.056871208720736,
     mean_pause_secs: 0.3571441844292605,
+    scene_count: 174.42486030068235,
     average_percentage_viewed: 52.214195270497086,
   },
   {
@@ -48,6 +50,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.4967693823950188,
     text_density: 71.42673284285982,
     mean_pause_secs: 0.27476885275544105,
+    scene_count: 237.66442269145134,
     average_percentage_viewed: 48.92212642805427,
   },
   {
@@ -59,6 +62,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.4447006582590102,
     text_density: 36.14781066984967,
     mean_pause_secs: 0.39547841629969166,
+    scene_count: 16.419491361118016,
     average_percentage_viewed: 53.76586004684911,
   },
   {
@@ -70,6 +74,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.7043284683432844,
     text_density: 64.14804046822022,
     mean_pause_secs: 0.2960702650512679,
+    scene_count: 73.28678940851349,
     average_percentage_viewed: 64.45682399063932,
   },
   {
@@ -81,6 +86,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.6150108588602108,
     text_density: 40.33311492283149,
     mean_pause_secs: 0.3357096791503239,
+    scene_count: 155.0397569536864,
     average_percentage_viewed: 55.80137320430222,
   },
   {
@@ -92,6 +98,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.7746079193568334,
     text_density: 22.639911807427644,
     mean_pause_secs: 0.23917392078184868,
+    scene_count: 8.603510234874628,
     average_percentage_viewed: 65.30378964271799,
   },
   {
@@ -103,6 +110,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 1.0,
     text_density: 31.832868499943693,
     mean_pause_secs: 0.22838972397918045,
+    scene_count: 332.2364809680234,
     average_percentage_viewed: 62.37253066203258,
   },
   {
@@ -114,6 +122,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.6252415227881878,
     text_density: 25.99422373742751,
     mean_pause_secs: 0.48355318553000226,
+    scene_count: 163.40717979371837,
     average_percentage_viewed: 46.07828663698773,
   },
   {
@@ -125,6 +134,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.6564084620334141,
     text_density: 40.19897747962284,
     mean_pause_secs: 0.29928952954615246,
+    scene_count: 240.9922742379889,
     average_percentage_viewed: 75.5724947324829,
   },
   {
@@ -136,6 +146,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.7808105919097048,
     text_density: 30.61832900807611,
     mean_pause_secs: 0.37916803563558016,
+    scene_count: 106.70755872162827,
     average_percentage_viewed: 65.65278079795702,
   },
   {
@@ -147,6 +158,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.8239519937118535,
     text_density: 32.50195710145504,
     mean_pause_secs: 0.34662095652326275,
+    scene_count: 102.3373664554313,
     average_percentage_viewed: 76.89384234750908,
   },
   {
@@ -158,6 +170,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.7235390901141363,
     text_density: 5.535632896602159,
     mean_pause_secs: 0.30588547972378155,
+    scene_count: 100.50872969653463,
     average_percentage_viewed: 77.39518087579141,
   },
   {
@@ -169,6 +182,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.7191104504620175,
     text_density: 19.82885180947199,
     mean_pause_secs: 0.299203902966278,
+    scene_count: 164.29867250196705,
     average_percentage_viewed: 64.97554040347744,
   },
   {
@@ -180,6 +194,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.8553694432680816,
     text_density: 81.35143872001075,
     mean_pause_secs: 0.4130082591445586,
+    scene_count: 53.412558764194095,
     average_percentage_viewed: 64.99702824271337,
   },
   {
@@ -191,6 +206,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.8279861455550848,
     text_density: 23.21916959370707,
     mean_pause_secs: 0.319813239546609,
+    scene_count: 134.76427169730837,
     average_percentage_viewed: 73.62374550364423,
   },
   {
@@ -202,6 +218,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.5949486251889466,
     text_density: 13.64765530941268,
     mean_pause_secs: 0.33485563518287076,
+    scene_count: 137.23537802260998,
     average_percentage_viewed: 46.00849029701086,
   },
   {
@@ -213,6 +230,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.7381228022076237,
     text_density: 48.433158314375774,
     mean_pause_secs: 0.3522221557194479,
+    scene_count: 170.9979817576182,
     average_percentage_viewed: 52.79573990564324,
   },
   {
@@ -224,6 +242,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.7552930272992211,
     text_density: 75.1818049889133,
     mean_pause_secs: 0.46765083202520014,
+    scene_count: 48.055334773654394,
     average_percentage_viewed: 52.38186550080691,
   },
   {
@@ -235,6 +254,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.5918273066926334,
     text_density: 3.6493924379698015,
     mean_pause_secs: 0.4180510974633138,
+    scene_count: 460.81159704764684,
     average_percentage_viewed: 51.03508839767997,
   },
   {
@@ -246,6 +266,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.7889758651011545,
     text_density: 34.78695379371823,
     mean_pause_secs: 0.38826002677279925,
+    scene_count: 35.57918935420267,
     average_percentage_viewed: 74.90916256600411,
   },
   {
@@ -257,6 +278,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.6213065284235184,
     text_density: 24.198686151627307,
     mean_pause_secs: 0.2936428606646758,
+    scene_count: 76.49228050694376,
     average_percentage_viewed: 69.51542665723835,
   },
   {
@@ -268,6 +290,7 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.8958100061875565,
     text_density: 0.0,
     mean_pause_secs: 0.21180312799935344,
+    scene_count: 106.5185112757288,
     average_percentage_viewed: 63.03113986779739,
   },
   {
@@ -279,20 +302,22 @@ export const RECOMMENDATIONS_GOLDEN_ROWS: AnalysisFeatureRow[] = [
     speech_ratio: 0.7789118868907609,
     text_density: 58.37316773145979,
     mean_pause_secs: 0.4449529931735302,
+    scene_count: 52.32988230183804,
     average_percentage_viewed: 74.99373692171842,
   },
 ];
 
 /** sklearn's model.coef_, in ANALYSIS_FEATURE_COLUMNS order. */
 export const RECOMMENDATIONS_GOLDEN_COEFFICIENTS: Record<string, number> = {
-  duration: -5.784345603164253,
-  wpm: 1.1790820797335841,
-  scene_change_rate: 4.053514653203545,
-  word_count: -0.6415198172034865,
-  speech_pace_variation: -2.164016539999234,
-  speech_ratio: 2.6363257370409348,
-  text_density: 0.520800104447326,
-  mean_pause_secs: -1.3076915881566384,
+  duration: -4.568909511259274,
+  wpm: 1.071395072177163,
+  scene_change_rate: 5.385518464187349,
+  word_count: -0.49888773267508757,
+  speech_pace_variation: -2.1559466699334107,
+  speech_ratio: 2.561066722767352,
+  text_density: 0.39358135057461513,
+  mean_pause_secs: -1.402661598661159,
+  scene_count: -2.1109149339656144,
 };
 
 /** sklearn's model.intercept_ - mean(y), since every column is centred. */

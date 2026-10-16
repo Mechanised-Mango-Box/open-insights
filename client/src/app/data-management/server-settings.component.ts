@@ -10,23 +10,8 @@ import {
   DEFAULT_SERVER_URL,
   DEFAULT_API_KEY,
 } from './server-config.service';
-import { ComputeConfigService, ComputeTarget } from './compute-config.service';
-import { ComputeQueueService } from './local-compute/compute-queue.service';
-import {
-  DATASET_KINDS,
-  DatasetKind,
-  DatasetProvider,
-  ProviderStatus,
-} from './providers/dataset-provider';
+import { DatasetProvider, ProviderStatus } from './providers/dataset-provider';
 
-/**
- * Two cards, in the order the settings depend on each other: which server to
- * talk to and whether it answers, then what is allowed to run somewhere else.
- *
- * The status check lives inside the server card rather than as a section of its
- * own - it reads the URL set directly above it, and reading that URL is half of
- * what it is for.
- */
 /**
  * The one failure a status 0 cannot explain but we can: a page served over
  * https cannot reach an http:// server, and the browser blocks it as mixed
@@ -68,6 +53,13 @@ function describeRequestFailure(error: unknown, url: string): string {
   return String(error);
 }
 
+/**
+ * Which server to talk to, and whether it answers.
+ *
+ * The status check lives inside the server card rather than as a section of its
+ * own - it reads the URL set directly above it, and reading that URL is half of
+ * what it is for.
+ */
 @Component({
   selector: 'server-settings',
   standalone: true,
@@ -194,120 +186,21 @@ function describeRequestFailure(error: unknown, url: string): string {
           </p>
         }
       </section>
-
-      <section class="card">
-        <h2>Where Work Runs</h2>
-        <p class="card-lead">
-          Work runs on the dataset server above. Running it in this browser instead is experimental.
-        </p>
-
-        <div class="experimental">
-          <h3>Experimental: run the work in this browser</h3>
-          <p class="action-hint">
-            Keeps your video on this machine and needs no server. It is
-            <strong>much slower</strong> — the server manages around 15× realtime for scene stats
-            across all its cores, where a browser has one thread and no SIMD — so a full batch can
-            take many hours. It also accepts less: MP4 and MOV only for scene stats, and
-            transcription needs WebGPU.
-          </p>
-          <p class="action-hint">
-            Results are stamped as coming from a different producer, so anything already computed by
-            the server reads as not started, and the two are never mixed into one analysis. None of
-            it has been checked against known-good results yet, so treat what it produces as
-            provisional.
-          </p>
-          <div class="actions">
-            @if (computeConfig.experimental()) {
-              <button mat-stroked-button type="button" (click)="setExperimental(false)">
-                <mat-icon>block</mat-icon>
-                Disable Browser Compute
-              </button>
-              <span class="action-status">Enabled — choose per task below.</span>
-            } @else {
-              <button mat-stroked-button type="button" (click)="setExperimental(true)">
-                <mat-icon>science</mat-icon>
-                I Understand — Enable Browser Compute
-              </button>
-            }
-          </div>
-        </div>
-
-        <table class="settings-table">
-          <thead>
-            <tr>
-              <th>Task</th>
-              <th>This browser</th>
-              <th>Server</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (kind of kinds; track kind) {
-              <tr class="no-rule">
-                <td>{{ kindLabels[kind] }}</td>
-                <td>
-                  @if (!computeConfig.experimental()) {
-                    <span class="action-hint">Enable above to use this</span>
-                  } @else if (localAvailable(kind)) {
-                    <button
-                      mat-stroked-button
-                      type="button"
-                      [disabled]="computeConfig.targetFor(kind) === 'local'"
-                      (click)="setTarget(kind, 'local')"
-                    >
-                      This browser
-                    </button>
-                  } @else {
-                    <span class="action-hint">Not available in this browser</span>
-                  }
-                </td>
-                <td>
-                  <button
-                    mat-stroked-button
-                    type="button"
-                    [disabled]="computeConfig.targetFor(kind) === 'server'"
-                    (click)="setTarget(kind, 'server')"
-                  >
-                    Server
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="3" class="kind-note action-hint">{{ kindNotes[kind] }}</td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </section>
     </div>
   `,
   styles: [
     `
-      .experimental h3 {
-        margin-top: 0;
-      }
-      .experimental .action-hint {
-        margin-bottom: 8px;
-      }
       .save-row {
         margin-top: 16px;
       }
       .actions mat-form-field {
-        width: 320px;
+        width: min(320px, 100%);
       }
       .status-summary {
         font: var(--mat-sys-title-small);
       }
       .status-error {
         color: var(--mat-sys-error);
-      }
-      /* The experiment is bordered off rather than merely worded differently:
-         the warning has to survive being skim-read. */
-      .experimental {
-        border: 1px solid var(--mat-sys-outline-variant);
-        border-left: 4px solid var(--mat-sys-error);
-        border-radius: 8px;
-        padding: 16px;
-        margin-bottom: 20px;
       }
       /* Plain tables rather than MatTable: these are a handful of static rows
          with no sorting, filtering or selection, so a MatTableDataSource would
@@ -331,66 +224,19 @@ function describeRequestFailure(error: unknown, url: string): string {
       .settings-table.numeric td:not(:first-child) {
         text-align: right;
       }
-      /* A task and its note are one entry, so only the note carries the rule. */
-      .settings-table tr.no-rule td {
-        border-bottom: none;
-      }
-      .kind-note {
-        padding-bottom: 12px;
-        max-width: 60ch;
+      /* Six columns of counts do not fit a phone; the table scrolls within the card. */
+      @media (max-width: 600px) {
+        .settings-table {
+          display: block;
+          overflow-x: auto;
+        }
       }
     `,
   ],
 })
 export class ServerSettingsComponent {
   serverConfig = inject(ServerConfigService);
-  computeConfig = inject(ComputeConfigService);
   private provider = inject(DatasetProvider);
-  private queue = inject(ComputeQueueService);
-
-  // Widened from the const tuple: the template's @for infers `unknown` from a
-  // readonly tuple, but reads the union correctly off an array type.
-  protected readonly kinds: readonly DatasetKind[] = DATASET_KINDS;
-  protected readonly kindLabels: Record<DatasetKind, string> = {
-    transcript: 'Transcript',
-    scene_stats: 'Scene stats',
-    text_stats: 'Screen text',
-    audio_stats: 'Audio stats',
-  };
-
-  /** What changes by moving a kind into the browser. Both of these alter the
-   * numbers, not just where they are computed, so neither should be discovered
-   * after a batch has run. */
-  protected readonly kindNotes: Record<DatasetKind, string> = {
-    transcript:
-      'In this browser: Whisper tiny.en, needing WebGPU and a one-time ~75MB model download. ' +
-      'It is a much smaller model than the server runs, so word counts - and the word count, ' +
-      'speaking speed and pace variation features built on them - will shift. Transcripts already held from a server were made by a ' +
-      'different model and will read as not started.',
-    scene_stats:
-      'In this browser: WebCodecs, MP4 and MOV only (not .mkv or .webm). Same threshold as the ' +
-      'server, but frames come through a different decoder, so counts may differ slightly. ' +
-      'Scene stats already held from a server will read as not started.',
-    text_stats:
-      'Server only: OCR (RapidOCR) has no browser implementation, so this always runs on the server.',
-    audio_stats:
-      'Server only: speech detection (Silero VAD) and pitch tracking (Praat) have no browser ' +
-      'implementation, so this always runs on the server.',
-  };
-
-  /** A kind can only be sent to this browser once something here knows how to
-   * compute it - offering the switch before then would just produce errors. */
-  protected localAvailable(kind: DatasetKind): boolean {
-    return this.queue.computerFor(kind) !== undefined;
-  }
-
-  protected setTarget(kind: DatasetKind, target: ComputeTarget): void {
-    this.computeConfig.setTarget(kind, target);
-  }
-
-  protected setExperimental(enabled: boolean): void {
-    this.computeConfig.setExperimental(enabled);
-  }
 
   draftUrl = signal(this.serverConfig.serverUrl());
   draftKey = signal(this.serverConfig.apiKey());

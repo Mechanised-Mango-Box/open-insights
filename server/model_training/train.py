@@ -19,6 +19,7 @@ from model_training.data_preparation import (
     TARGET_DEFINITION,
 )
 from model_training.model_card import BUNDLE_FILENAME, CARD_FILENAME, build_card
+from model_training.training_distribution import summarise_training_data
 from model_training.regression import (
     fit_scaler_and_train_model,
     predict_engagement,
@@ -59,6 +60,7 @@ def run_training_pipeline(
     features: Optional[List[str]] = None,
     meta: Optional[Dict[str, Any]] = None,
     package_path: Optional[str] = None,
+    verbose: bool = True,
 ) -> Dict[str, Any]:
     """
     Main programmatic execution pipeline for training the model.
@@ -79,6 +81,8 @@ def run_training_pipeline(
             model_training/model_card.py). Defaults to an id of "model".
         package_path: Also write a model package - a .zip of model.json and
             model.joblib, which the server's page can add - to this path.
+        verbose: Print the evaluation report and the feature relationships. The
+            server turns it off when it trains a model for a client.
 
     Returns:
         Dict containing trained models, scaler, evaluation metrics, coefficients, and recommendations.
@@ -154,6 +158,9 @@ def run_training_pipeline(
         coefficients=coef_summary["coefficients"],
         intercept=coef_summary["intercept (b0)"],
         recommendation_threshold=recommendation_threshold,
+        # The training split, as the scaler saw it, so percentiles agree with
+        # the training mean and SD inference reports beside them.
+        training_distribution=summarise_training_data(X_train, y_train, features),
     )
 
     # 11. Persist the model if a directory is specified: the bundle the server
@@ -192,12 +199,13 @@ def run_training_pipeline(
         "recommendations": recommendations,
     }
 
-    print(format_evaluation_report(metrics))
-    print(f"Intercept & Coefficients:\n  {coef_summary}")
-    print(f"\nFeature Relationship Recommendations (threshold = {recommendation_threshold}):")
-    for feat, data in recommendations["features"].items():
-        print(f"  [{feat}] coef={data['coefficient']:+.4f} -> {data['relationship'].upper()}")
-        print(f"    Recommendation: {data['recommendation']}")
+    if verbose:
+        print(format_evaluation_report(metrics))
+        print(f"Intercept & Coefficients:\n  {coef_summary}")
+        print(f"\nFeature Relationship Recommendations (threshold = {recommendation_threshold}):")
+        for feat, data in recommendations["features"].items():
+            print(f"  [{feat}] coef={data['coefficient']:+.4f} -> {data['relationship'].upper()}")
+            print(f"    Recommendation: {data['recommendation']}")
 
     return results
 

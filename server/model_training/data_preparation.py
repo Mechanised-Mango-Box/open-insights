@@ -23,6 +23,7 @@ numbers would be scoring inputs it never saw.
     speech_ratio           audio_stats, as-is                     (0-1)
     text_density           text_stats.mean_words                  (words on screen)
     mean_pause_secs        audio_stats, as-is                     (seconds)
+    scene_count            scene_stats.scenes                     (cuts in the whole video)
     average_percentage_viewed
                            average_view_duration_secs / scene_stats.duration_secs * 100
 
@@ -38,12 +39,14 @@ pause to average), or it has no YouTube average view duration.
 
 A model can learn from a subset of the features (FEATURE_SETS), and then only the
 scans those features come from are required. Duration is read from scene stats
-when the set has a scene feature to divide by it, and from audio stats otherwise,
+when the set has a scene feature (which needs the scene scan regardless), and from
+audio stats otherwise,
 so a model without scene features never needs the scene scan. The client makes the
 same choice (durationSourceFor in client/src/app/data-management/analysis/stats.ts).
 """
 
 import json
+import math
 import zipfile
 from collections import Counter
 from pathlib import Path
@@ -61,23 +64,36 @@ FEATURE_COLUMNS: List[str] = [
     "speech_ratio",
     "text_density",
     "mean_pause_secs",
+    # Last rather than beside scene_change_rate: models trained before it existed
+    # list their features in this order, and appending keeps that order a prefix.
+    "scene_count",
 ]
 
 TARGET_COLUMN: str = "average_percentage_viewed"
 
-# The feature subsets the published models are trained on, by model id. "fast"
-# leaves out on-screen text: OCR is the slowest scan by far (about 7 s per minute
-# of 1080p video, against 4 s for scene stats, 1.3 s for transcription and 0.3 s
-# for audio stats, measured on a 16-core CPU).
+# The feature subsets the published models are trained on, by model id. The
+# client offers the same sets when it trains one (FEATURE_PRESETS in
+# client/src/app/data-management/analysis/stats.ts) - change both together.
+#
+# "lite" keeps the four features that earn their place. Over 5-fold
+# cross-validation repeated 10 times on the 143 EduVideo Insights lectures, it
+# beat all nine for both models (forest RMSE 8.60 against 8.86, linear 8.23
+# against 8.38), and taking any one of the four out made both worse. Left out:
+#   - word_count: duration x WPM, correlated 0.99 with duration, so the
+#     regression split one effect into a large positive and a large negative
+#     coefficient - "more words, but a shorter video" advice;
+#   - text_density, scene_change_rate: coefficients near zero, and dropping
+#     either lowered the error;
+#   - speech_ratio: correlated -0.82 with mean pause, which says it better.
+# It needs only the transcript and audio scans - no OCR or scene scan, the two
+# slowest (about 7 s and 4 s per minute of 1080p video, against 1.3 s for
+# transcription and 0.3 s for audio stats, on a 16-core CPU).
 FEATURE_SETS: Dict[str, List[str]] = {
-    "full": list(FEATURE_COLUMNS),
-    "fast": [
+    "all": list(FEATURE_COLUMNS),
+    "lite": [
         "duration",
         "wpm",
-        "scene_change_rate",
-        "word_count",
         "speech_pace_variation",
-        "speech_ratio",
         "mean_pause_secs",
     ],
     "video": ["duration", "scene_change_rate", "text_density"],
@@ -102,6 +118,7 @@ FEATURE_SOURCES: Dict[str, Tuple[str, ...]] = {
     "speech_ratio": ("audio_stats",),
     "text_density": ("text_stats",),
     "mean_pause_secs": ("audio_stats",),
+    "scene_count": ("scene_stats",),
 }
 
 # How each feature is computed, in words. Copied into every model card, so a
@@ -115,19 +132,22 @@ FEATURE_DEFINITIONS: Dict[str, str] = {
     "speech_ratio": "Seconds of speech heard by Silero VAD / video length (0-1).",
     "text_density": "Mean number of words on screen per sampled frame (RapidOCR).",
     "mean_pause_secs": "Mean length in seconds of the gaps between stretches of speech (Silero VAD).",
+    "scene_count": "Scene cuts detected in the whole video (scene stats' cut count).",
 }
 
 TARGET_DEFINITION: str = (
     "Average percentage viewed: YouTube's average view duration / video duration x 100."
 )
 
-# Below this there is too little to split 80/20 and still fit eight features.
+# Below this there is too little to split 80/20 and still fit every feature.
 MIN_TRAINING_ROWS = 10
 
 
 def duration_source(features: List[str]) -> str:
-    """The scan result a feature set reads its duration from."""
-    return "scene_stats" if "scene_change_rate" in features else "audio_stats"
+    """The scan result a feature set reads its duration from: scene stats when the
+    set has a scene feature, since it needs the scene scan anyway."""
+    scene_features = ("scene_change_rate", "scene_count")
+    return "scene_stats" if any(name in features for name in scene_features) else "audio_stats"
 
 
 def required_sources(features: List[str]) -> List[str]:
@@ -214,6 +234,7 @@ def _record_to_row(
         "speech_ratio": lambda: audio_stats["speech_ratio"],
         "text_density": lambda: sources["text_stats"]["mean_words"],
         "mean_pause_secs": lambda: audio_stats["mean_pause_secs"],
+        "scene_count": lambda: sources["scene_stats"]["scenes"],
     }
     row = {name: compute[name]() for name in features}
     row[TARGET_COLUMN] = average_view_duration_secs / duration_secs * 100
@@ -234,34 +255,61 @@ def load_export_dataset(
     _check_features(features)
     path = Path(path)
     manifest = _read_manifest(path)
-    records = manifest.get("records")
+    try:
+        df, skipped = dataset_from_manifest(manifest, features, name="manifest.json")
+    except ValueError as error:
+        raise ValueError(f"{path}: {error}") from error
+
+    if verbose:
+        total = len(df) + sum(skipped.values())
+        print(f"[ Data ] {path.name}: {len(df)} of {total} record(s) usable for training.")
+        for reason, count in skipped.most_common():
+            print(f"  skipped {count}: {reason}")
+    return df
+
+
+def dataset_from_manifest(
+    manifest: Any, features: Optional[List[str]] = None, name: str = "manifest"
+) -> Tuple[pd.DataFrame, Counter]:
+    """
+    The training DataFrame for an export's manifest - from a file, or sent by the
+    client to POST /api/models/train - and why each other record was left out.
+
+    Tolerates any JSON: a record that is not the shape an export writes, or whose
+    numbers are not finite, is skipped and counted like one missing a scan, since
+    a request can carry anything. Raises ValueError when there is no records array
+    or fewer than MIN_TRAINING_ROWS records are usable.
+    """
+    features = list(features or FEATURE_COLUMNS)
+    _check_features(features)
+    records = manifest.get("records") if isinstance(manifest, dict) else None
     if not isinstance(records, list):
-        raise ValueError(f"{path}: manifest.json is malformed - no records array.")
+        raise ValueError(f"{name} is malformed - no records array.")
 
     rows: List[Dict[str, float]] = []
     skipped: Counter = Counter()
     for record in records:
-        row, reason = _record_to_row(record, features)
+        try:
+            row, reason = _record_to_row(record, features)
+        except (AttributeError, KeyError, TypeError, ZeroDivisionError):
+            row, reason = None, "malformed record"
+        if row is not None and not all(
+            isinstance(value, (int, float)) and math.isfinite(value) for value in row.values()
+        ):
+            row, reason = None, "a value that is not a finite number"
         if row is None:
             skipped[reason] += 1
         else:
             rows.append(row)
 
-    if verbose:
-        print(
-            f"[ Data ] {path.name}: {len(rows)} of {len(records)} record(s) usable for training."
-        )
-        for reason, count in skipped.most_common():
-            print(f"  skipped {count}: {reason}")
-
     if len(rows) < MIN_TRAINING_ROWS:
         raise ValueError(
-            f"{path}: only {len(rows)} usable record(s), need at least {MIN_TRAINING_ROWS}. "
+            f"Only {len(rows)} usable record(s), need at least {MIN_TRAINING_ROWS}. "
             f"Run Scan ({', '.join(required_sources(features))}) and import the YouTube "
-            "content report for more videos, then export again."
+            "content report for more videos."
         )
 
-    return pd.DataFrame(rows, columns=features + [TARGET_COLUMN])
+    return pd.DataFrame(rows, columns=features + [TARGET_COLUMN]), skipped
 
 
 def _check_features(features: List[str]) -> None:

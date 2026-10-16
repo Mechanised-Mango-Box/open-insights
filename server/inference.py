@@ -11,14 +11,20 @@ from numbers import Real
 from pathlib import Path
 
 import joblib
+import numpy as np
 import pandas as pd
 
 from model_training.data_preparation import FEATURE_COLUMNS, TARGET_COLUMN
 from model_training.model_card import BUNDLE_FILENAME
 from model_training.regression import FEATURE_DISPLAY_NAMES, generate_feature_recommendations
+from model_training.training_distribution import percentile_of
 
 
 SERVER_DIR = Path(__file__).resolve().parent
+
+# How many points across the training range each expected curve is drawn from,
+# before this video's own value is added.
+CURVE_POINTS = 25
 
 
 class EngagementPredictor:
@@ -58,11 +64,22 @@ class EngagementPredictor:
         too weak to say. These are associations in the training data, not a
         causal explanation of the forest's prediction or a guaranteed improvement.
 
+        When the model's card carries a training_distribution (see
+        model_training/training_distribution.py), each feature also gets
+        training_percentile - roughly what percentage of the training videos sit
+        below this value - and expected_curve: the forest's prediction for this
+        video with only that feature moved across the training range, every
+        other feature left as it is. The curve passes through this video's own
+        value at exactly the prediction. target_percentile places the predicted
+        APV among the APVs the training videos actually got. Models trained
+        before the distribution existed leave all three out.
+
         Requires every one of this model's feature_columns (any others are
         ignored) as finite, nonnegative numbers, in the units
         the model was trained on: duration in minutes, scene_change_rate per
         minute, speech_pace_variation as a WPM standard deviation, speech_ratio
-        as a 0-1 fraction, mean_pause_secs in seconds. Nothing is converted here. Invalid input raises
+        as a 0-1 fraction, mean_pause_secs in seconds, scene_count as the cuts in
+        the whole video. Nothing is converted here. Invalid input raises
         ValueError for the API layer to handle as a 400.
         """
         if not isinstance(features, Mapping):
@@ -120,11 +137,60 @@ class EngagementPredictor:
             }
 
         # Preserve the regression output rather than silently clipping its range.
-        return {
+        result = {
             TARGET_COLUMN: prediction,
             "threshold": self.recommendation_threshold,
             "features": per_feature,
         }
+
+        distribution = (self.card or {}).get("training_distribution")
+        if distribution:
+            summaries = {
+                name: distribution["features"][name]
+                for name in columns
+                if name in distribution["features"]
+            }
+            curves = self._expected_curves(row, summaries)
+            for name, summary in summaries.items():
+                per_feature[name]["training_percentile"] = percentile_of(
+                    row[name], summary["quantiles"]
+                )
+                per_feature[name]["expected_curve"] = curves[name]
+            result["target_percentile"] = percentile_of(
+                prediction, distribution["target"]["quantiles"]
+            )
+        return result
+
+    def _expected_curves(
+        self, row: dict[str, float], summaries: Mapping[str, Mapping[str, object]]
+    ) -> dict[str, dict[str, list[float]]]:
+        """The forest's prediction for this video with one feature at a time
+        swept across its training range. One batched predict for every curve."""
+        grids = {}
+        for name, summary in summaries.items():
+            edges = summary["histogram"]["edges"]
+            grid = np.linspace(edges[0], edges[-1], CURVE_POINTS)
+            # This video's own value too, so the curve passes through the
+            # prediction itself rather than near it.
+            grids[name] = np.unique(np.append(grid, row[name]))
+
+        if not grids:
+            return {}
+        frame = pd.DataFrame(
+            [{**row, name: float(x)} for name, grid in grids.items() for x in grid],
+            columns=self.feature_columns,
+        )
+        predictions = self.model.predict(frame)
+
+        curves, start = {}, 0
+        for name, grid in grids.items():
+            end = start + len(grid)
+            curves[name] = {
+                "x": [float(x) for x in grid],
+                "apv": [float(y) for y in predictions[start:end]],
+            }
+            start = end
+        return curves
 
 
 def _suggestion(relationship: str, z: float) -> str:

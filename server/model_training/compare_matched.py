@@ -54,8 +54,8 @@ def main():
         ("Original five / Forest", upstream, PAPER_FEATURES, "forest"),
         ("Rescanned five / Linear", project, PAPER_FEATURES, "linear"),
         ("Rescanned five / Forest", project, PAPER_FEATURES, "forest"),
-        ("Expanded eight / Linear", project, FEATURE_COLUMNS, "linear"),
-        ("Expanded eight / Forest", project, FEATURE_COLUMNS, "forest"),
+        ("Expanded nine / Linear", project, FEATURE_COLUMNS, "linear"),
+        ("Expanded nine / Forest", project, FEATURE_COLUMNS, "forest"),
     ]
     folds = list(RepeatedKFold(n_splits=5, n_repeats=10, random_state=42).split(ids))
     metrics, predictions, partitions = [], [], []
@@ -134,7 +134,7 @@ def main():
         f"{len(ids)} identical videos; 5 folds repeated 10 times. Every run uses the original APV labels.",
         "Models are retrained within each fold. Scaling uses training rows only. No tuning was performed.",
         "Original features use last year's extraction; rescanned features use the supplied export.",
-        "Scene count is included in the five-feature runs, but excluded from the production eight-feature set.",
+        "Scene count is included in both the five-feature and expanded nine-feature runs.",
         "",
         "| Model | MAE mean ± SD | RMSE mean ± SD | R² mean ± SD |",
         "|---|---:|---:|---:|",
@@ -150,7 +150,7 @@ def main():
         "SD describes fold variation, not a confidence interval or significance test. Repeated folds are dependent.",
         "The prediction figure uses only the first repeat: each video is predicted once while held out.",
         f"Excluded videos: {', '.join(metadata['excluded_video_ids']) or 'none'}.",
-        "The expanded features differ in both extraction and feature selection; they are not simply a superset of the original five.",
+        "The expanded features include the original five plus four additional features; extraction methods also differ from the original dataset.",
         "This analysis does not overwrite saved models or the existing comparison report.",
     ]
     (args.out / "report.md").write_text("\n".join(lines) + "\n")
@@ -161,9 +161,9 @@ def main():
 def plot_actual_vs_predicted(predictions, out_dir):
     """Save held-out predictions with a legend and explanations of APV and the reference line."""
     fig, axes = plt.subplots(1, 2, figsize=(11, 6), sharex=True, sharey=True)
-    names = ["Original five / Linear", "Expanded eight / Forest"]
+    names = ["Original five / Linear", "Expanded nine / Forest"]
     titles = ["Original five features: Linear Regression",
-              "Expanded eight features: Random Forest"]
+              "Expanded nine features: Random Forest"]
     for ax, name, title in zip(axes, names, titles):
         subset = predictions[predictions.model == name]
         ax.scatter(subset.actual_apv, subset.predicted_apv, s=25, alpha=0.65,
@@ -194,14 +194,14 @@ def plot_metric_comparison(summary, out_dir):
     names = [
         "Mean baseline",
         "Original five / Linear",
-        "Expanded eight / Forest",
-        "Expanded eight / Linear",
+        "Expanded nine / Forest",
+        "Expanded nine / Linear",
     ]
     labels = [
         "Mean\nbaseline",
         "Original 5\nLinear\nRegression",
-        "Expanded 8\nRandom\nForest",
-        "Expanded 8\nLinear\nRegression",
+        "Expanded 9\nRandom\nForest",
+        "Expanded 9\nLinear\nRegression",
     ]
     colors = ["#8795a1", "#4779ad", "#db9237", "#37948b"]
     selected = summary.loc[names]

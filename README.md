@@ -66,16 +66,6 @@ Getting the files from YouTube Studio:
 
 Sample reports are in `data/sample/`.
 
-### Browser compute (experimental)
-
-Run certain jobs on the browser instead
-
-- Transcription needs WebGPU
-- Scene stats read MP4 and MOV only
-- Screen text (OCR) and audio stats always run on the server
-
-> It is unstable and may be slow. Off by default
-
 ## For Developers/Hosts
 
 ### Client
@@ -129,21 +119,28 @@ in the repository's top-level `models/`, trained on different feature sets:
 
 | Model | Features | Scans it needs | Ships in the server |
 |---|---|---|---|
-| `full` (default) | all eight | scene, transcript, screen text, audio | yes |
-| `fast` | all but on-screen text | scene, transcript, audio | yes |
+| `lite` (default) | duration, speaking speed, speech pace variation, mean pause | transcript, audio | yes |
+| `all` | all nine, scene count among them | scene, transcript, screen text, audio | yes |
 | `video` | duration, scene change rate, text density | scene, screen text | no - add it |
 | `audio` | duration, transcript and audio features | transcript, audio | no - add it |
 
-`BUILTIN_MODELS` (default `full,fast`) names the ones a server serves without being
-added; `ENGAGEMENT_MODEL_DEFAULT` (default `full`) must be one of them. The portable build
+`BUILTIN_MODELS` (default `all,lite`) names the ones a server serves without being
+added; `ENGAGEMENT_MODEL_DEFAULT` (default `lite`) must be one of them. The portable build
 packs only those. The Docker image copies all of `models/` in through a second build
 context (`additional_contexts` in `docker-compose.yml`, which needs Compose 2.17+; a bare
 `docker build` needs `--build-context models=../models`), and `BUILTIN_MODELS` decides
 what is served.
 
-`fast` leaves out screen text because OCR is the slowest scan. On 1080p lecture video, on a
-16-core CPU, the scans took about 7 s per minute of video for OCR, 4.3 s for scene stats,
-1.3 s for transcription and 0.3 s for audio stats.
+`lite` keeps the four features that improved predictions in testing. Over 5-fold
+cross-validation repeated 10 times on the training export, it beat all nine for both
+models (forest RMSE 8.60 against 8.86, linear regression 8.23 against 8.38), and dropping
+any one of the four made both worse. It leaves out word count, which is duration × speaking
+speed and correlates 0.99 with duration, so the regression split one effect into opposing
+coefficients. It also leaves out text density and scene change rate, which added noise, and
+speech ratio, which mean pause already covers (correlation −0.82). That also means it never
+needs the two slowest scans: on 1080p lecture video, on a 16-core CPU, OCR took about 7 s
+per minute of video and scene stats 4.3 s, against 1.3 s for transcription and 0.3 s for
+audio stats.
 
 Each model is a directory with `model.joblib` (the pickled models) and `model.json` (its
 **model card**). The card records the provider, notes, when it was trained, the
@@ -190,7 +187,7 @@ another version) or anything in `model_training/` that shapes the models changes
 
 ```sh
 cd ./server
-for set in full fast video audio; do
+for set in all lite video audio; do
   python scripts/train_engagement_model.py path/to/export.zip --feature-set $set
 done
 ```
@@ -213,7 +210,7 @@ Training is seeded, so the same export, code and pins produce the same model. Th
 export itself is not committed, so the card records what it learned from:
 
 ```sh
-python -c "import json; print(json.load(open('../models/full/model.json'))['training'])"
+python -c "import json; print(json.load(open('../models/all/model.json'))['training'])"
 ```
 
 #### How results are calculated
@@ -225,6 +222,13 @@ Analysis step explains its techniques and constants and how many records it left
 why, and the Recommend step shows the workings behind each result. An export records
 each result's producer and settings in `manifest.json` (`scan_provenance`), and an
 analysis export includes a `methods.json`.
+
+A result's producer names the OCR, transcription and pitch packages with their versions,
+and the server serves a cached result only when its producer matches its own. If the
+server cannot read one of those versions, it stamps the package as `missing`, prints a
+warning at startup, and lists the package under `unversioned_packages` in `/status`.
+On a healthy server that list is empty. A non-empty list means this server cannot use
+results made by other servers, and other servers cannot use its results.
 
 The exploration scripts in `model_training/` take an export the same way (install
 `requirements-training.txt` first for their plots), e.g.
@@ -238,12 +242,21 @@ written up in `data/sample/edu-video-insights/COMPARISON.md`.
 
 ### A portable executable
 
-A single file with the transcription weights inside. No Python, no pip, no network.
+A single file with every model it needs inside: the transcription weights, the OCR and
+speech-detection models, and the built-in engagement models. Running it needs no Python,
+no pip and no network.
 
 ```sh
 cd ./server
-python scripts/build_portable.py    # --install fetches what is missing
+python scripts/build_portable.py    # --install-deps pip-installs what is missing
 ```
+
+Building needs the network once, to download the transcription weights into
+`build/models/`. `--skip-model` reuses them on later builds, and `--clean` discards
+PyInstaller's cached analysis. Build with Python 3.13, which the Dockerfile pins; other
+versions may work but are untested. The build stops if a required package is missing,
+including `requests`, which OCR needs at runtime.
+
 Leaves `dist/open-insights-server-<platform>-x86_64`. Run it anywhere: it keeps
 its database and uploads in a `data` directory and added models in a `models` directory
 beside itself, and prints how to
@@ -253,6 +266,11 @@ point a client at it. Set `SHOW_INSTRUCTIONS=0` to silence that.
   and a Linux build will not run on an older distribution than the one that built it.
 - Binds `127.0.0.1` only, unlike `python main.py`. Set `SERVER_HOST=0.0.0.0` to expose it.
 - Unpacks itself on every launch, so startup takes a few seconds.
+- Check `http://localhost:5000/status` after a build: `unversioned_packages` should be
+  empty (see [How results are calculated](#how-results-are-calculated)).
+- `data/db.sqlite` can be copied to another server, and its results are served there as
+  long as the two servers' producers match. The videos stay behind in `data/uploads/`,
+  so the client re-uploads a video the first time a new scan needs it.
 
 ### A public server
 

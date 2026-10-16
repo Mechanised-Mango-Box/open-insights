@@ -5,13 +5,13 @@ the repository's models/<id>/ (model.joblib + model.json) that BUILTIN_MODELS
 names, and the Dockerfile and scripts/build_portable.py ship them as-is, so
 nothing runs this during a build.
 
-    python scripts/train_engagement_model.py EXPORT [--feature-set full|fast|video|audio]
+    python scripts/train_engagement_model.py EXPORT [--feature-set all|lite|video|audio]
         [--out DIR | --no-save] [--package FILE.zip] [--name ...] [--provider ...] [--notes ...]
 
 EXPORT is an `open-insights-export-<timestamp>` zip from the client's Export
 step, or that zip unpacked into a folder. Only its manifest.json is read, so an
 export with or without video files works the same. Each record needs the Scan
-results its feature set is computed from (all four scans for "full"; see
+results its feature set is computed from (all four scans for "all"; see
 FEATURE_SETS in model_training/data_preparation.py) plus an imported YouTube
 content report (for the average view duration); records missing any of those are
 skipped and counted in the output.
@@ -54,15 +54,17 @@ DEFAULT_NOTES = (
 
 # What each published model is called and for, unless overridden on the command line.
 DEFAULT_META = {
-    "full": (
-        "Full features",
-        "All eight features: transcript, scene, on-screen text and audio. The most "
+    "all": (
+        "All Features",
+        "All nine features: transcript, scene, on-screen text and audio. The most "
         "information, and the slowest to scan for.",
     ),
-    "fast": (
-        "Fast features",
-        "Every feature except on-screen text, so the slow OCR scan is never needed. "
-        "Transcript, scene and audio stats only.",
+    "lite": (
+        "Lite Features",
+        "Duration, speaking speed, speech pace variation and mean pause - the features "
+        "that improved its predictions in testing. Leaves out word count, which only "
+        "restates duration, and the features that added noise. Needs only the "
+        "transcript and audio scans.",
     ),
     "video": (
         "Video only",
@@ -87,8 +89,8 @@ def main() -> None:
     parser.add_argument(
         "--feature-set",
         choices=sorted(FEATURE_SETS),
-        default="full",
-        help="which features the model learns from; also its default id (default: full)",
+        default="all",
+        help="which features the model learns from; also its default id (default: all)",
     )
     parser.add_argument("--id", help="model id (default: the feature set's name)")
     parser.add_argument("--name", help="display name")

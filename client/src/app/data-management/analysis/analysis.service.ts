@@ -47,7 +47,7 @@ const computeFeatures = (
   const textStats = readyData(record.ds_textStats);
   const audioStats = readyData(record.ds_audioStats);
 
-  if ((durationSource === 'sceneStats' || needs('scene_change_rate')) && !sceneStats)
+  if ((durationSource === 'sceneStats' || needs('scene_change_rate', 'scene_count')) && !sceneStats)
     return { ok: false, reason: 'no scene stats' };
   if (needs('wpm', 'word_count', 'speech_pace_variation') && !transcriptStats)
     return { ok: false, reason: 'no transcript stats' };
@@ -85,6 +85,7 @@ const computeFeatures = (
     speech_ratio: () => audioStats!.speech_ratio!,
     text_density: () => textStats!.mean_words,
     mean_pause_secs: () => audioStats!.mean_pause_secs!,
+    scene_count: () => sceneStats!.scenes,
   };
   const features: Partial<VideoFeatures> = {};
   for (const column of columns) features[column] = compute[column]();

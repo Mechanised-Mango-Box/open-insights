@@ -1,5 +1,6 @@
 import importlib.metadata
 import os
+import warnings
 from typing import cast
 
 from models import FileExt
@@ -103,6 +104,16 @@ PUBLIC_MAX_QUEUE_DEPTH = int(os.environ.get("PUBLIC_MAX_QUEUE_DEPTH", "0"))
 PUBLIC_RATE_LIMIT = os.environ.get("PUBLIC_RATE_LIMIT", "600 per minute")
 PUBLIC_UPLOAD_RATE_LIMIT = os.environ.get("PUBLIC_UPLOAD_RATE_LIMIT", "20 per hour")
 PUBLIC_COMPUTE_RATE_LIMIT = os.environ.get("PUBLIC_COMPUTE_RATE_LIMIT", "120 per hour")
+
+# Training a model (POST /api/models/train) is cheap - seconds of CPU on a few
+# hundred rows - but every one is kept for good and listed to everyone, so it is
+# counted per hour like the other writes, and tighter. The private key is exempt.
+PUBLIC_TRAIN_RATE_LIMIT = os.environ.get("PUBLIC_TRAIN_RATE_LIMIT", "5 per hour")
+
+# How many models the public tier may have trained here before it is told the
+# server is full. Nothing deletes a trained model but its operator, so without
+# this the model list everyone picks from grows without bound. 0 disables it.
+PUBLIC_MAX_TRAINED_MODELS = int(os.environ.get("PUBLIC_MAX_TRAINED_MODELS", "50"))
 
 # Cap on the upload directory, past which the least recently used videos are
 # deleted until it fits. 0 - the default - never deletes anything.
@@ -287,7 +298,7 @@ ENGAGEMENT_MODEL_DIR = os.environ.get("ENGAGEMENT_MODEL_DIR") or str(
 _DEFAULT_BUILTINS = (
     ",".join(sorted(d.name for d in _bundled_engagement.iterdir() if d.is_dir()))
     if _bundled_engagement is not None and _bundled_engagement.is_dir()
-    else "full,fast"
+    else "all,lite"
 )
 BUILTIN_MODELS = [
     name.strip()
@@ -296,7 +307,7 @@ BUILTIN_MODELS = [
 ]
 
 # Which built-in model answers a recommendation that names none.
-ENGAGEMENT_MODEL_DEFAULT = os.environ.get("ENGAGEMENT_MODEL_DEFAULT", "full")
+ENGAGEMENT_MODEL_DEFAULT = os.environ.get("ENGAGEMENT_MODEL_DEFAULT", "lite")
 
 # Models added from the server's page (model_registry.py), in a models/ directory
 # beside the data directory: <exe>/data and <exe>/models for a portable build,
@@ -307,6 +318,17 @@ MODELS_DIR = os.environ.get("MODELS_DIR", str(_DATA_DIR.parent / "models"))
 # this machine can (see model_portal.py): a model file is a pickle, and loading one
 # runs whatever code its author put in it. docker-compose.yml turns it off.
 MODEL_MANAGEMENT = os.environ.get("MODEL_MANAGEMENT", "1") == "1"
+
+# Whether a client may train a model here from its records (POST /api/models/train).
+# Separate from MODEL_MANAGEMENT, and safe to leave on for a public server: the
+# server builds that pickle itself from numbers, so nothing a caller sends is ever
+# unpickled. The public tier is rate limited and capped (PUBLIC_TRAIN_RATE_LIMIT,
+# PUBLIC_MAX_TRAINED_MODELS); a local server without keys is not limited at all.
+MODEL_TRAINING = os.environ.get("MODEL_TRAINING", "1") == "1"
+
+# The most records one training request may carry, from any caller. Bounds the
+# CPU and memory one request can spend: 144 records train in about a second.
+MAX_TRAIN_RECORDS = int(os.environ.get("MAX_TRAIN_RECORDS", "5000"))
 
 # The largest model package accepted, compressed or not. The built-in models are
 # about 1 MB each.
@@ -376,6 +398,12 @@ OCTAVE_ERROR_ST = float(os.environ.get("OCTAVE_ERROR_ST", "12.0"))
 AUDIO_STATS_WORKERS = int(os.environ.get("AUDIO_STATS_WORKERS", "2"))
 
 
+# Distributions whose version could not be read, filled in by _package_version
+# below. Exposed so /status can report it and a test can assert on it: this is
+# the one config value that is a symptom rather than a setting.
+UNVERSIONED_PACKAGES: list[str] = []
+
+
 def _package_version(name: str) -> str:
     # Read from the installed metadata rather than by importing the package, so
     # loading config stays cheap - and a server missing the package still starts,
@@ -383,6 +411,7 @@ def _package_version(name: str) -> str:
     try:
         return importlib.metadata.version(name)
     except importlib.metadata.PackageNotFoundError:
+        UNVERSIONED_PACKAGES.append(name)
         return "missing"
 
 
@@ -420,6 +449,30 @@ AUDIO_STATS_PRODUCER = (
     f"/pitch_step={PITCH_TIME_STEP_SECS}s/min_voiced={PITCH_MIN_VOICED_SECS}s"
     f"/octave_error={OCTAVE_ERROR_ST}st"
 )
+
+# A version that cannot be read is not a cosmetic gap: the producer strings above
+# are cache keys, so "missing" in one of them puts this server in a different
+# cache namespace from an otherwise identical one. A database brought from another
+# server then reads as entirely stale, and every result in it is recomputed - work
+# that needs the video files a copied database does not bring with it.
+#
+# The cause is almost always packaging rather than a missing package: a frozen
+# build imports a package fine and still cannot read its dist-info unless the
+# spec copies it (see open-insights.spec). Warned rather than fatal, because a
+# server that scans while complaining is more use to someone holding a binary
+# than one that refuses to start over a string.
+if UNVERSIONED_PACKAGES:
+    warnings.warn(
+        "Could not read the installed version of: "
+        + ", ".join(UNVERSIONED_PACKAGES)
+        + ". Results will be stamped 'missing' for these, which makes this"
+        " server's cached results unreadable to any server that can read them"
+        " - and every imported result unreadable here. In a portable build this"
+        " means open-insights.spec is not copying their metadata.",
+        RuntimeWarning,
+        stacklevel=2,
+    )
+
 
 # The same parameters, by name, for reporting: every ready result and /status
 # carry its kind's settings, so whoever runs a scan can see the thresholds it
@@ -471,8 +524,12 @@ SCENE_STATS_METHOD = (
     "absolute difference from the previous frame, on a 0-255 scale, is above the "
     "threshold. Duration is frame count / frame rate."
 )
+# The PyAV fallback is named here as SCENE_STATS_METHOD names its own: text
+# stats have had one since the same change, and a reader comparing the two
+# would otherwise conclude that on-screen text cannot be read from an AV1 video.
 TEXT_STATS_METHOD = (
-    "One frame is sampled from the middle of every sampling interval and read by "
+    "One frame is sampled from the middle of every sampling interval (decoded by "
+    "OpenCV, or PyAV for videos OpenCV cannot read such as AV1) and read by "
     "RapidOCR (PP-OCRv6 small detection and recognition models). A sample whose "
     "160x90 greyscale thumbnail differs from the last one read by less than the "
     "reuse threshold (mean absolute difference, 0-255) reuses that reading. Only "
