@@ -2,6 +2,23 @@
 
 A video analysis tool for audio/video features and audience engagement.
 
+## Overview
+
+```mermaid
+block-beta
+  columns 1
+  L1["<b>1 · Data Collection / Storage</b><br/>Import reports, videos, transcripts and retention data"]
+  space
+  L2["<b>2 · Feature Extraction</b><br/>Scan videos for transcripts, scene changes,<br/>on-screen text and audio"]
+  space
+  L3["<b>3 · Data Analysis</b><br/>Find links between video features and engagement<br/>Train engagement models"]
+  space
+  L4["<b>4 · Insights & Feedback</b><br/>Charts, engagement predictions and<br/>recommendations for each video"]
+  L1 --> L2
+  L2 --> L3
+  L3 --> L4
+```
+
 ## Quickstart
 
 1. Go to https://open-insights-ccx.pages.dev/
