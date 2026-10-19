@@ -127,25 +127,14 @@ def main():
         "numpy_version": np.__version__,
     }
     (args.out / "method.json").write_text(json.dumps(metadata, indent=2))
-    fig, axes = plt.subplots(1, 2, figsize=(10, 4.5), sharex=True, sharey=True)
-    for ax, name in zip(axes, ["Original five / Linear", "Expanded nine / Forest"]):
-        subset = oof[oof.model == name]
-        ax.scatter(subset.actual_apv, subset.predicted_apv, s=20, alpha=0.65)
-        ax.plot([30, 90], [30, 90], "--", color="gray")
-        ax.set(title=name, xlabel="Actual APV (%)", xlim=(30, 90), ylim=(30, 90))
-        ax.grid(alpha=0.2)
-    axes[0].set_ylabel("Predicted APV (%)")
-    fig.suptitle("Held-out predictions: first five-fold repeat, 143 matched videos")
-    fig.tight_layout()
-    fig.savefig(args.out / "actual_vs_predicted.png", dpi=200)
-    plt.close(fig)
+    plot_actual_vs_predicted(oof, args.out)
     lines = [
         "# Matched model comparison",
         "",
         f"{len(ids)} identical videos; 5 folds repeated 10 times. Every run uses the original APV labels.",
         "Models are retrained within each fold. Scaling uses training rows only. No tuning was performed.",
         "Original features use last year's extraction; rescanned features use the supplied export.",
-        "Scene count is included in the five-feature runs, but excluded from the production eight-feature set.",
+        "Scene count is included in both the five-feature and expanded nine-feature runs.",
         "",
         "| Model | MAE mean ± SD | RMSE mean ± SD | R² mean ± SD |",
         "|---|---:|---:|---:|",
@@ -161,12 +150,43 @@ def main():
         "SD describes fold variation, not a confidence interval or significance test. Repeated folds are dependent.",
         "The prediction figure uses only the first repeat: each video is predicted once while held out.",
         f"Excluded videos: {', '.join(metadata['excluded_video_ids']) or 'none'}.",
-        "The expanded features differ in both extraction and feature selection; they are not simply a superset of the original five.",
+        "The expanded features include the original five plus four additional features; extraction methods also differ from the original dataset.",
         "This analysis does not overwrite saved models or the existing comparison report.",
     ]
     (args.out / "report.md").write_text("\n".join(lines) + "\n")
     print(summary.round(4).to_string())
     print(f"\nSaved to {args.out.resolve()}")
+
+
+def plot_actual_vs_predicted(predictions, out_dir):
+    """Save held-out predictions with a legend and explanations of APV and the reference line."""
+    fig, axes = plt.subplots(1, 2, figsize=(11, 6), sharex=True, sharey=True)
+    names = ["Original five / Linear", "Expanded nine / Forest"]
+    titles = ["Original five features: Linear Regression",
+              "Expanded nine features: Random Forest"]
+    for ax, name, title in zip(axes, names, titles):
+        subset = predictions[predictions.model == name]
+        ax.scatter(subset.actual_apv, subset.predicted_apv, s=25, alpha=0.65,
+                   label="Held-out video prediction")
+        ax.plot([30, 90], [30, 90], ":", color="gray", linewidth=1.8,
+                label="Perfect prediction (predicted = actual)")
+        ax.set(title=title, xlabel="Actual APV (%)", xlim=(30, 90), ylim=(30, 90))
+        ax.grid(alpha=0.2)
+        ax.legend(loc="lower right", fontsize=8)
+    axes[0].set_ylabel("Predicted APV (%)")
+    count = predictions[predictions.model == names[0]].video_id.nunique()
+    fig.suptitle("Actual vs predicted video engagement", fontsize=16, y=0.97)
+    fig.text(0.5, 0.90, f"{count} matched videos held out from training; first five-fold cross-validation repeat",
+             ha="center", fontsize=10)
+    fig.text(0.5, 0.08,
+             "APV (average percentage viewed) measures how much of a video viewers watch on average.",
+             ha="center", fontsize=10)
+    fig.text(0.5, 0.045,
+             "The dotted line marks perfect predictions; points above it overpredict APV, and points below it underpredict.",
+             ha="center", fontsize=9)
+    fig.tight_layout(rect=[0, 0.13, 1, 0.87])
+    fig.savefig(out_dir / "actual_vs_predicted.png", dpi=200)
+    plt.close(fig)
 
 
 def plot_metric_comparison(summary, out_dir):
@@ -180,8 +200,8 @@ def plot_metric_comparison(summary, out_dir):
     labels = [
         "Mean\nbaseline",
         "Original 5\nLinear\nRegression",
-        "Expanded 8\nRandom\nForest",
-        "Expanded 8\nLinear\nRegression",
+        "Expanded 9\nRandom\nForest",
+        "Expanded 9\nLinear\nRegression",
     ]
     colors = ["#8795a1", "#4779ad", "#db9237", "#37948b"]
     selected = summary.loc[names]
