@@ -8,7 +8,10 @@
 # of aarch64 wheels across ctranslate2/onnxruntime/av. The public host is x86-64,
 # where those wheels are better supported still - the pin is what keeps an arm64
 # build working as well. 3.14 has gaps that force source builds.
-FROM python:3.13-slim-bookworm
+#
+# Pinned to a patch release and its digest, not the floating 3.13 tag, so that a
+# rebuild of the same commit starts from the same image. Bump the two together.
+FROM python:3.13.18-slim-bookworm@sha256:93498f36dc7e24ef233bfdf6cc17d4b8bd32d94ee737143e906460d5f5a914c5
 
 # No system ffmpeg: faster-whisper reaches it through `av`, which bundles its own
 # libs, and opencv-python-headless drops the GUI shared libraries that the

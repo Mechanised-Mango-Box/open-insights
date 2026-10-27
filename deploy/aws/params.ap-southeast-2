@@ -1,0 +1,13 @@
+# Stack parameters for ap-southeast-2, one Key=Value per line, passed to
+# `aws cloudformation deploy --parameter-overrides` by deploy.sh. GitRef comes from
+# HEAD, AlertEmail from $ALERT_EMAIL; neither belongs here.
+#
+# ImageId is an explicit AMI, not the "latest" alias, so a commit always meets the
+# same OS. `deploy.sh pin-ami` rewrites it to the current Amazon Linux 2023 release;
+# commit the result.
+ImageId=ami-07887b6789db08b82
+InstanceType=t3.small
+CpuCredits=standard
+RootVolumeSize=20
+DataVolumeSize=30
+MonthlyBudgetUsd=50
