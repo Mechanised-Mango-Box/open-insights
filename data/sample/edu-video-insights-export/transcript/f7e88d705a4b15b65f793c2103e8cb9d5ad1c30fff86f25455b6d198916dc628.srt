@@ -1,0 +1,343 @@
+1
+00:00:00,000 --> 00:00:05,440
+ Hey, everyone. Alex from the future here, you can tell because my hair is probably longer
+
+2
+00:00:05,440 --> 00:00:12,120
+ in the bags under my eyes. I've gotten deeper. I realize now in your actual week two that
+
+3
+00:00:12,120 --> 00:00:16,520
+ I never came back to record what I promised, the kind of generation of the state space
+
+4
+00:00:16,520 --> 00:00:22,920
+ equations in the problem 2.7 in matrix form. And so I'm back. I'm here to do that for
+
+5
+00:00:22,920 --> 00:00:26,960
+ you now. I'm sorry it's taken me a little while to get to it. It was one of those things
+
+6
+00:00:26,960 --> 00:00:30,800
+ where I said, yeah, I'll come back and do that later and then just totally forgot.
+
+7
+00:00:30,800 --> 00:00:36,120
+ So, so we have this state space equation here which corresponds to the block diagram that
+
+8
+00:00:36,120 --> 00:00:39,720
+ we worked through in the video that goes before this one, whether it's going to go before
+
+9
+00:00:39,720 --> 00:00:44,640
+ this one, I should say. And we need to write this in matrix form. Now I haven't talked
+
+10
+00:00:44,640 --> 00:00:48,200
+ about this yet. I've kind of left it in the assigned readings for this week. But putting
+
+11
+00:00:48,200 --> 00:00:52,440
+ state space equations in the matrix form is actually really easy. But something you should
+
+12
+00:00:52,480 --> 00:00:57,000
+ only really do for linear state space equations. But when you can, there are a couple
+
+13
+00:00:57,000 --> 00:01:01,720
+ of reasons why you might choose to. Number one, it makes solving state space equations
+
+14
+00:01:01,720 --> 00:01:06,520
+ really easy. There are entire toolboxes within programs like MATLAB for solving linear
+
+15
+00:01:06,520 --> 00:01:11,960
+ state space equations and even doing other kinds of analysis on those systems. But these
+
+16
+00:01:11,960 --> 00:01:17,160
+ toolboxes rely on you kind of providing the system in matrix form. Number two, it makes
+
+17
+00:01:17,160 --> 00:01:21,880
+ conversion of our linear state space models into other representations, kind of block diagrams
+
+18
+00:01:21,880 --> 00:01:25,800
+ and one, we're not going to meet for a couple of weeks called the transfer function.
+
+19
+00:01:25,800 --> 00:01:29,480
+ I'm pretty straightforward. And number three, it's just a good skill to kind of have under
+
+20
+00:01:29,480 --> 00:01:34,920
+ your belt another way to kind of represent your kind of physical systems. So, what is
+
+21
+00:01:34,920 --> 00:01:38,720
+ the matrix form of a state space model? Well, it's where you write the state derivative
+
+22
+00:01:38,720 --> 00:01:46,680
+ vector z dot. As some matrix A times the state vector z plus another matrix B times
+
+23
+00:01:46,680 --> 00:01:54,680
+ the input vector U. And you write, if you have any outputs, in vector form Y is some matrix
+
+24
+00:01:54,680 --> 00:02:00,920
+ C times the state vector z plus some matrix D times the input vector U. What are the dimensions
+
+25
+00:02:00,920 --> 00:02:04,760
+ and what goes into these matrices? Well, it's pretty easy to see when you start to write it out.
+
+26
+00:02:05,320 --> 00:02:09,480
+ For example, for concreteness, let's do the kind of one we have in front of us, right? There
+
+27
+00:02:09,480 --> 00:02:14,760
+ are three states, z1, z2, z3. So, the state derivative vector is going to look like z1 dot
+
+28
+00:02:14,760 --> 00:02:21,400
+ z2 dot z3 dot. That's going to be some matrix A. We don't know what's inside of there yet.
+
+29
+00:02:21,400 --> 00:02:30,040
+ Multiply by the state vector z. So, z1 z2 z3 plus some other matrix B. Again, we don't know what's
+
+30
+00:02:30,040 --> 00:02:35,160
+ in there yet. Multiply by the input vector U. Well, in this case, in this particular problem,
+
+31
+00:02:35,160 --> 00:02:40,280
+ there's only one input. So, the input vector is a one, one, one, right? It's just kind of U1.
+
+32
+00:02:41,000 --> 00:02:48,040
+ As for outputs, well, there's only one output equation here, right? And it's kind of Y, Y equals
+
+33
+00:02:48,040 --> 00:02:53,160
+ z1. It's a pretty boring one. You can imagine that there might be other outputs as well. So,
+
+34
+00:02:53,160 --> 00:03:00,200
+ in general, we have the output vector Y, which in this case is a one by one, is some matrix C,
+
+35
+00:03:00,200 --> 00:03:10,600
+ multiplied by the state vectors in, plus some other matrix D multiplied by the vector U, which
+
+36
+00:03:10,600 --> 00:03:15,960
+ again, in this case, is just a one by one. But in general, could be many inputs kind of tool
+
+37
+00:03:15,960 --> 00:03:21,480
+ because they're normally column vectors. Okay, cool, cool, cool, cool, cool. Well, what has to go
+
+38
+00:03:21,480 --> 00:03:26,680
+ inside of these matrices? Basically, whatever is required to still make the state space equations
+
+39
+00:03:26,680 --> 00:03:32,040
+ true, right? And what dimensions they have to be? Well, we require the matrix multiplications
+
+40
+00:03:32,040 --> 00:03:37,880
+ to be kind of valid, right? This here is a kind of matrix multiplication between the matrix A
+
+41
+00:03:37,880 --> 00:03:43,240
+ and the vector Z, as is this between the kind of matrix C and the vector U, which means that the
+
+42
+00:03:43,240 --> 00:03:51,720
+ dimensions have to match. Z is kind of a findoroid out. Z is kind of a 301 column, which means that
+
+43
+00:03:51,720 --> 00:03:56,200
+ for this kind of matrix multiplication we defined, the second dimension of A needs to be three
+
+44
+00:03:56,280 --> 00:04:02,360
+ as well. And if the kind of product of these two things is going to give something which ends up
+
+45
+00:04:02,360 --> 00:04:06,200
+ looking like the guy on the left because the dimensions on one side of an equality have to look
+
+46
+00:04:06,200 --> 00:04:10,840
+ the same as the dimensions on the other side of an equality. Well, then since this thing is a
+
+47
+00:04:10,840 --> 00:04:16,680
+ 301 column, then the result of this is also going to need to be a 301 column, which means that A is
+
+48
+00:04:16,680 --> 00:04:21,800
+ going to need to be three by three. In general, actually, the dimensions of the A matrix are always
+
+49
+00:04:21,800 --> 00:04:28,600
+ going to be kind of end states by end states, since it kind of maps the kind of state inputs to
+
+50
+00:04:28,600 --> 00:04:35,640
+ the state derivative outputs. Okay, cool, cool, cool, cool, cool. Well, what needs to go in here?
+
+51
+00:04:35,640 --> 00:04:40,440
+ Whatever's going to make the state space equations true. So if I look at the Z1 dot equation,
+
+52
+00:04:40,440 --> 00:04:49,720
+ Z1 dot is just one, Z2, right? Z1 dot is just one, Z2. So Z1 dot has zero amounts of Z1,
+
+53
+00:04:49,720 --> 00:04:57,960
+ one amount of Z2, and zero amounts of Z3. It also has zero amounts of the input U1. Okay,
+
+54
+00:04:57,960 --> 00:05:06,920
+ what about Z2 dot? Well, Z2 dot is just Z3. So Z2 dot has zero amounts of Z1, zero amounts of Z2,
+
+55
+00:05:06,920 --> 00:05:14,520
+ and one amount of Z3. Finally, Z3 dot. Oops, sorry, hold on. That one also has no amounts of the input.
+
+56
+00:05:15,320 --> 00:05:26,440
+ Z3 dot has kind of B0 amount of U, B0 amount of U, plus minus A1, B0 amount of Z2,
+
+57
+00:05:27,240 --> 00:05:35,640
+ minus B0, A1 amounts of Z2, minus A2, B0 amount of Z3.
+
+58
+00:05:36,440 --> 00:05:43,160
+ And we have minus A0, B0 amounts of Z1.
+
+59
+00:05:47,160 --> 00:05:52,360
+ Okay, with that, the kind of state space equations are represented in a matrix form. What about
+
+60
+00:05:52,360 --> 00:05:58,680
+ the output equation? Well, the output equation in this case is just Z1. So Y of t has one amount
+
+61
+00:05:58,680 --> 00:06:04,360
+ of Z1, no amounts of Z2, no amounts of Z3, and no amounts of the input.
+
+62
+00:06:05,160 --> 00:06:15,080
+ So if we write out our kind of matrices, we have A is 0, 1, 0, 0, 0, 0, 1, minus A0, B0, minus
+
+63
+00:06:15,080 --> 00:06:31,160
+ A1, B0, minus A2, B0. B is 0, 0, B0. C is 1, 0, 0, and D is just 0.
+
+64
+00:06:31,560 --> 00:06:37,400
+ And in general, we said that A is always going to have dimensions and states by end states,
+
+65
+00:06:37,400 --> 00:06:43,640
+ in this case 3 by 3. By the same token, kind of the B matrix maps the number of inputs to the
+
+66
+00:06:43,640 --> 00:06:49,800
+ state derivatives. So it's going to have end states rows and kind of end inputs columns, right?
+
+67
+00:06:49,800 --> 00:06:53,960
+ End states rows, 3 of them here, and inputs columns, kind of one of them here.
+
+68
+00:06:54,520 --> 00:06:58,280
+ C maps the kind of states to the outputs. So it's going to have
+
+69
+00:06:58,280 --> 00:07:04,200
+ end outputs rows and end states columns, and D maps the kind of inputs to the outputs.
+
+70
+00:07:04,200 --> 00:07:08,520
+ So it's going to have end outputs rows and end inputs columns,
+
+71
+00:07:08,520 --> 00:07:13,160
+ which is how we've ended up with 1 by 1 over here. And that's the process in general.
+
+72
+00:07:13,160 --> 00:07:16,920
+ You just need to kind of fill in the sizes of the matrices and then go looking for
+
+73
+00:07:16,920 --> 00:07:21,160
+ kind of the terms that need to go into each of the individual spots in order to make the state
+
+74
+00:07:21,160 --> 00:07:27,800
+ space equations true. You have to ask yourself how much Z1 is in Z1 dot, how much Z2 is in Z1 dot,
+
+75
+00:07:27,800 --> 00:07:33,560
+ how much Z3 is in Z1 dot, and so on. A kind of cool fact about matrix form is that it actually
+
+76
+00:07:33,560 --> 00:07:38,840
+ tells you the kind of values of the gains that are present in each of the kind of feedback terms
+
+77
+00:07:38,840 --> 00:07:43,400
+ that go to the integrators. What do I mean by that? Well, if I look at this, this tells me that the
+
+78
+00:07:43,400 --> 00:07:49,080
+ amount of Z1 going into Z1 dot is 0. And if I have a look at my block diagram, I can kind of see
+
+79
+00:07:49,080 --> 00:07:55,960
+ that, right? Here's Z1 dot and how much Z1 is going into it, 0. If I kind of look for a non-trivial
+
+80
+00:07:55,960 --> 00:08:04,200
+ example, it tells me that there's minus a2 b naught amount of Z3 going into Z3 dot. If I have a look,
+
+81
+00:08:04,200 --> 00:08:13,400
+ here's kind of Z3 dot. And I do have kind of minus a2 b naught amounts of Z3 going into it.
+
+82
+00:08:13,400 --> 00:08:18,040
+ So matrix form is actually a really nice window into what gains are required to build the block
+
+83
+00:08:18,040 --> 00:08:22,760
+ diagram of a state space model. In fact, most times if you have a linear state space model,
+
+84
+00:08:22,760 --> 00:08:27,080
+ I'd recommend putting it into matrix form first and then putting it into a block diagram
+
+85
+00:08:27,080 --> 00:08:31,400
+ because matrix form is going to make that process a whole lot easier. All right, that's all I've got
+
+86
+00:08:31,400 --> 00:08:41,400
+ for this one. Sorry for leaving it, so like, bye.

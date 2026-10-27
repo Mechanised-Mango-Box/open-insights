@@ -1,24 +1,32 @@
 import { Signal } from '@angular/core';
-import { SceneStats, TranscriptSegment, TranscriptStats } from '../video-records/Dataset';
+import {
+  AudioStats,
+  DatasetSettings,
+  SceneStats,
+  TextStats,
+  TranscriptSegment,
+  TranscriptStats,
+} from '../video-records/Dataset';
 
 /**
- * What computes a dataset for a video. One implementation talks to a server;
- * the next runs the work in this browser.
+ * What computes a dataset for a video. One implementation, which talks to a
+ * server - kept as an abstract class rather than inlined so the call sites stay
+ * free of HTTP, which is what made a second implementation possible once.
  *
  * The vocabulary below is the server's own (server/db.py dataset_state), kept
  * unchanged rather than translated: the layers used to have three vocabularies
- * for these states and translating between them is what let them drift. It
- * stays the vocabulary even once no server is involved, because it is the
- * vocabulary the records and the badges are already written in.
+ * for these states and translating between them is what let them drift.
  */
 
-export type DatasetKind = 'transcript' | 'scene_stats';
+export type DatasetKind = 'transcript' | 'scene_stats' | 'text_stats' | 'audio_stats';
 
 /** Every kind, for the places that have to iterate them (routing settings, queue
  * bookkeeping). Kept beside the type so adding a kind is one edit, not a hunt. */
 export const DATASET_KINDS = [
   'transcript',
   'scene_stats',
+  'text_stats',
+  'audio_stats',
 ] as const satisfies readonly DatasetKind[];
 
 /** The 'complete' shape of a transcript dataset - segments and their stats
@@ -30,6 +38,8 @@ export type TranscriptPayload = TranscriptStats & { segments: TranscriptSegment[
 export type DatasetPayload = {
   transcript: TranscriptPayload;
   scene_stats: SceneStats;
+  text_stats: TextStats;
+  audio_stats: AudioStats;
 };
 
 export type DatasetStatus = 'absent' | 'queued' | 'running' | 'ready' | 'failed';
@@ -41,6 +51,8 @@ export type DatasetReady<T> = {
   state: 'ready';
   producer: string;
   produced_at?: string;
+  /** What `producer` was run with, by name. */
+  settings?: DatasetSettings;
   refreshing?: 'queued' | 'running';
   refresh_error?: string;
 } & T;
@@ -75,7 +87,17 @@ export type ProviderStatus = {
   status: string;
   queue: ProviderJobCounts;
   workers: { total: number; busy: number; idle: number };
-  kinds: Record<string, { jobs: ProviderJobCounts; workers: ProviderWorkerCounts }>;
+  kinds: Record<
+    string,
+    {
+      jobs: ProviderJobCounts;
+      workers: ProviderWorkerCounts;
+      /** What a scan of this kind would use there. */
+      settings?: DatasetSettings;
+      /** How that scan calculates its result, in words. */
+      method?: string;
+    }
+  >;
 };
 
 /**
@@ -107,7 +129,7 @@ export class SourceMissingError extends Error {
 }
 
 export abstract class DatasetProvider {
-  /** Names where the work happens, for badges: a server URL, or "this browser". */
+  /** Names where the work happens, for badges: a server URL. */
   abstract readonly label: Signal<string>;
 
   /**

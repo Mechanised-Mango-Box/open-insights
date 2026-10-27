@@ -1,0 +1,379 @@
+1
+00:00:00,000 --> 00:00:03,680
+ Alright, having talked about composites and their properties in general for a little while,
+
+2
+00:00:03,680 --> 00:00:06,400
+ we can now move on to meetings and actual composites.
+
+3
+00:00:06,400 --> 00:00:11,200
+ In this video we're going to talk about macroscopic composites, those which in reality do present
+
+4
+00:00:11,200 --> 00:00:15,040
+ as true series or parallel arrangements of their constituents.
+
+5
+00:00:15,040 --> 00:00:18,960
+ There are a surprising number of real world composites that are actually arranged this way.
+
+6
+00:00:18,960 --> 00:00:24,080
+ For example, many macroscopic composites are formed specifically to imbue some engineering material
+
+7
+00:00:24,080 --> 00:00:28,320
+ with some combination of non-mechanical properties that it didn't have before.
+
+8
+00:00:28,400 --> 00:00:32,640
+ For instance, coding or painting and engineering metal to give it some corrosion resistance
+
+9
+00:00:32,640 --> 00:00:34,880
+ or to insulate it electrically or thermally.
+
+10
+00:00:34,880 --> 00:00:39,760
+ But macroscopic composites are also constructed to give an efficient approach to achieving some
+
+11
+00:00:39,760 --> 00:00:44,800
+ strength or stiffness in terms of their cost or in terms of their weight or in terms of their volume.
+
+12
+00:00:44,800 --> 00:00:48,320
+ We also very commonly use macroscopic composites, not necessarily by choice,
+
+13
+00:00:48,320 --> 00:00:51,200
+ but because they're the result of some recycling process.
+
+14
+00:00:51,200 --> 00:00:55,040
+ Often it's the case that good enough properties can be had from a recycled competitor,
+
+15
+00:00:55,040 --> 00:00:59,040
+ significant reduction in emitted CO2 and embodied energy in these products.
+
+16
+00:00:59,040 --> 00:01:01,520
+ In a moment, I'm going to talk about a few specific examples,
+
+17
+00:01:01,520 --> 00:01:05,280
+ but what you should keep in mind as I do this is that most macroscopic composites
+
+18
+00:01:05,280 --> 00:01:08,000
+ when loaded in their principal directions, in other words,
+
+19
+00:01:08,000 --> 00:01:12,320
+ kind of along their layers or across their layers, demonstrate exactly the kind of
+
+20
+00:01:12,320 --> 00:01:15,840
+ series and parallel behavior that we've discussed over the last few videos.
+
+21
+00:01:15,840 --> 00:01:19,280
+ Think start to get a little bit more complicated if you start to load them out of alignment
+
+22
+00:01:19,280 --> 00:01:23,200
+ with these principal directions, but we won't get into that so much in this course.
+
+23
+00:01:23,200 --> 00:01:26,080
+ To kick off, we'll talk first about construction composites because these
+
+24
+00:01:26,080 --> 00:01:29,920
+ are very, very common in the building industry. Here, they're usually very tight constraints
+
+25
+00:01:29,920 --> 00:01:33,600
+ on both volume and weight in the materials that you use to make up a building,
+
+26
+00:01:33,600 --> 00:01:37,840
+ the former obviously because as you increase the volume of say columns that you use to hold
+
+27
+00:01:37,840 --> 00:01:41,200
+ or floor up, you reduce the floor space that you can then sell.
+
+28
+00:01:41,200 --> 00:01:44,080
+ And the latter obviously because with increased weight in your structure,
+
+29
+00:01:44,080 --> 00:01:48,960
+ you require more structure to hold it up and this is kind of a self-perpetuating cycle.
+
+30
+00:01:48,960 --> 00:01:52,960
+ You couple these strong constraints with the huge economic incentive to minimize
+
+31
+00:01:52,960 --> 00:01:57,040
+ cost and you've got this perfect breeding ground for the design of composite structures that
+
+32
+00:01:57,040 --> 00:02:01,520
+ can give you a lot of stiffness and a lot of strength while taking up not very much space
+
+33
+00:02:01,520 --> 00:02:04,880
+ and not weighing a whole lot and being reasonably cheap.
+
+34
+00:02:04,880 --> 00:02:08,800
+ We've actually already met one construction composite still reinforced concrete a few weeks
+
+35
+00:02:08,800 --> 00:02:11,920
+ ago when we were talking about ceramics. And at that point, we talked about that composite
+
+36
+00:02:11,920 --> 00:02:16,720
+ in the context of pre-stressing concrete to give it some tensile loading capacity.
+
+37
+00:02:16,800 --> 00:02:20,480
+ Well, it turns out that you can make a composite of steel and concrete and even without
+
+38
+00:02:20,480 --> 00:02:24,560
+ pre-stressing it, the steel will give the composite some tensile loading capacity.
+
+39
+00:02:24,560 --> 00:02:27,760
+ Given that concrete is a relatively cheap way to fill a volume, it has a really,
+
+40
+00:02:27,760 --> 00:02:29,280
+ really good compressive strength.
+
+41
+00:02:29,280 --> 00:02:33,760
+ Addition of just a little bit of steel to form a concrete steel composite means you can get
+
+42
+00:02:33,760 --> 00:02:36,880
+ that tensile loading capacity at a relatively low cost.
+
+43
+00:02:36,880 --> 00:02:41,200
+ Factually, often see steel concrete composites used in a range of civil applications.
+
+44
+00:02:41,200 --> 00:02:46,000
+ Many construction columns are made, for example, by filling steel tubes or pipes with concrete.
+
+45
+00:02:46,000 --> 00:02:49,360
+ The concrete provides a very cheap way to get a whole lot of compressive strength,
+
+46
+00:02:49,360 --> 00:02:53,440
+ and the steel in this case acts primarily as a full work for the concrete but also provides
+
+47
+00:02:53,440 --> 00:02:55,680
+ some tensile loading and bending capacity.
+
+48
+00:02:55,680 --> 00:02:58,480
+ The concrete on its own would be quite brittle in tension or in bending,
+
+49
+00:02:58,480 --> 00:03:02,080
+ and the steel being a relatively thin-walled tube would probably otherwise buckle.
+
+50
+00:03:02,080 --> 00:03:05,840
+ This composite works out to be more cost effective than either of the other options.
+
+51
+00:03:05,840 --> 00:03:09,680
+ The concrete on its own would probably need a much, much larger cross-section to have enough
+
+52
+00:03:09,680 --> 00:03:12,960
+ confidence that it's not going to fail in tension or fail in bending.
+
+53
+00:03:12,960 --> 00:03:16,320
+ And the steel would probably be prohibitively expensive and difficult to manufacture
+
+54
+00:03:16,320 --> 00:03:18,160
+ if it were a solid cross-section as well.
+
+55
+00:03:18,160 --> 00:03:21,760
+ Similar steel concrete columns are made in a bunch of different ways by casting concrete
+
+56
+00:03:21,760 --> 00:03:25,680
+ around an eye beam, for example, or simply reinforcing concrete with lengths of rebar.
+
+57
+00:03:25,680 --> 00:03:30,000
+ On a related note, another very, very common type of structural or macroscopic composite
+
+58
+00:03:30,000 --> 00:03:32,240
+ are so-called sandwich structures.
+
+59
+00:03:32,240 --> 00:03:36,400
+ These are composites that the general characterised by having a thick but lightweight core,
+
+60
+00:03:36,400 --> 00:03:39,760
+ covered by a thin but strong and stiff outer skin.
+
+61
+00:03:39,840 --> 00:03:43,120
+ A very common sandwich structure, for example, is aluminium honeycomb,
+
+62
+00:03:43,120 --> 00:03:48,400
+ which has aluminium sheet skin on the outside and a folded formed aluminium honeycomb
+
+63
+00:03:48,400 --> 00:03:49,760
+ structure on the inside.
+
+64
+00:03:49,760 --> 00:03:52,480
+ But you also see sandwich structures of dissimilar materials.
+
+65
+00:03:52,480 --> 00:03:55,840
+ Very often, aluminium is used to skin polymer foam cores, for example,
+
+66
+00:03:55,840 --> 00:03:58,160
+ because they're very, very cheap to manufacture.
+
+67
+00:03:58,160 --> 00:04:01,440
+ In any case, sandwich structures are commonly used to sustain bending loads,
+
+68
+00:04:01,440 --> 00:04:05,680
+ because you can get a very, very large thickness in the direction of bending without adding
+
+69
+00:04:05,680 --> 00:04:06,800
+ substantial weight.
+
+70
+00:04:06,800 --> 00:04:11,520
+ And as you've already seen in civil 1100 and will revise more in your ladyy design courses,
+
+71
+00:04:11,520 --> 00:04:16,160
+ increasing that thickness in the direction of bending drastically reduces the stress that
+
+72
+00:04:16,160 --> 00:04:17,360
+ you see in your part.
+
+73
+00:04:17,360 --> 00:04:21,680
+ Sandwich structures are used all over the place from the construction industry all the way up to
+
+74
+00:04:21,680 --> 00:04:26,320
+ very, very high-level motorsport, but where I think their characteristic is in the aerospace
+
+75
+00:04:26,320 --> 00:04:26,880
+ industry.
+
+76
+00:04:26,880 --> 00:04:30,720
+ Sandwich structures and particularly aluminium honeycomb are very, very commonly used in the
+
+77
+00:04:30,720 --> 00:04:32,720
+ fuselage of many aeroplanes.
+
+78
+00:04:32,800 --> 00:04:36,240
+ And here, in combination with other materials, they provide a very, very lightweight
+
+79
+00:04:36,240 --> 00:04:39,600
+ approach to building a really stiff and really strong chassis.
+
+80
+00:04:39,600 --> 00:04:43,200
+ It's important to note that most sandwich structures are held together only by adhesives
+
+81
+00:04:43,200 --> 00:04:46,160
+ or by braising if they're metal on metal sandwich structures.
+
+82
+00:04:46,160 --> 00:04:50,160
+ And consequently, they're at risk of delamination if loaded in tension or if a shear load is
+
+83
+00:04:50,160 --> 00:04:51,600
+ introduced between the layers.
+
+84
+00:04:51,600 --> 00:04:54,960
+ This is an aspect that's taken into account by the designers of any structure that's going
+
+85
+00:04:54,960 --> 00:04:56,720
+ to include a sandwich composite.
+
+86
+00:04:56,720 --> 00:05:00,000
+ And it's something that you should keep in mind whenever you plan to use one of these as well.
+
+87
+00:05:00,080 --> 00:05:03,760
+ Finally, on note that sandwich structures aren't only used for their mechanical load bearing
+
+88
+00:05:03,760 --> 00:05:07,440
+ ability, but are also very commonly used for their non-mechanical properties as well.
+
+89
+00:05:07,440 --> 00:05:10,880
+ Sandwich structures that include polymer foams, for example, are very commonly used in the
+
+90
+00:05:10,880 --> 00:05:15,120
+ building and construction industry because they provide a thermal insulation and a acoustic
+
+91
+00:05:15,120 --> 00:05:19,840
+ insulation while still maintaining a moderate level of strength and stiffness and wear resistance.
+
+92
+00:05:19,840 --> 00:05:24,800
+ Aluminium composite panels ACPs, for example, are very commonly used in the facades of many
+
+93
+00:05:24,800 --> 00:05:25,600
+ buildings.
+
+94
+00:05:25,600 --> 00:05:29,200
+ I might leave it there for sandwich structures, but I've left some more extension material on the
+
+95
+00:05:29,200 --> 00:05:31,200
+ textbook page for this video if you'd like to check it out.

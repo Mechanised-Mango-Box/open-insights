@@ -59,7 +59,7 @@ describe('generateFeatureRecommendations wording and structure', () => {
     'scene_change_rate',
     'word_count',
     'speech_pace_variation',
-    'speaking_ratio',
+    'speech_ratio',
   ];
   const COEFFICIENTS = [2.5, -3.0, 0.5, -0.99, 1.2, -0.5];
 
@@ -100,15 +100,15 @@ describe('generateFeatureRecommendations wording and structure', () => {
     expect(recs.features['speech_pace_variation'].recommendation).toBe(
       'In this dataset, higher speech pace variation is associated with higher average percentage viewed.',
     );
-    expect(recs.features['speaking_ratio'].relationship).toBe('weak');
-    expect(recs.features['speaking_ratio'].recommendation).toBe(
-      'In this dataset, speaking ratio has little to no measurable relationship with average percentage viewed.',
+    expect(recs.features['speech_ratio'].relationship).toBe('weak');
+    expect(recs.features['speech_ratio'].recommendation).toBe(
+      'In this dataset, speech ratio has little to no measurable relationship with average percentage viewed.',
     );
   });
 
   it('carries the coefficient through unchanged', () => {
     expect(recs.features['duration'].coefficient).toBe(2.5);
-    expect(recs.features['speaking_ratio'].coefficient).toBe(-0.5);
+    expect(recs.features['speech_ratio'].coefficient).toBe(-0.5);
   });
 });
 
@@ -159,7 +159,10 @@ describe('computeRecommendations', () => {
     scene_change_rate: 2,
     word_count: 1200,
     speech_pace_variation: 15,
-    speaking_ratio: 0.8,
+    speech_ratio: 0.8,
+    text_density: 20,
+    mean_pause_secs: 0.35,
+    scene_count: 20,
     average_percentage_viewed: 50,
     ...overrides,
   });
@@ -184,7 +187,10 @@ describe('computeRecommendations', () => {
         scene_change_rate: 2 + ((i * 3) % 5),
         word_count: 1200 + ((i * 11) % 17) * 30,
         speech_pace_variation: 15 + ((i * 5) % 9),
-        speaking_ratio: 0.5 + (i % 5) * 0.1,
+        speech_ratio: 0.5 + (i % 5) * 0.1,
+        text_density: 20 + ((i * 13) % 11) * 3,
+        mean_pause_secs: 0.25 + ((i * 5) % 7) * 0.05,
+        scene_count: 20 + ((i * 5) % 11) * 2,
         average_percentage_viewed: 50 - i * 2,
       }),
     );
@@ -193,7 +199,9 @@ describe('computeRecommendations', () => {
 
     expect(outcome.ok).toBe(true);
     if (!outcome.ok) return;
-    expect(Object.keys(outcome.recommendations.features)).toHaveLength(6);
+    expect(Object.keys(outcome.recommendations.features)).toHaveLength(
+      ANALYSIS_FEATURE_COLUMNS.length,
+    );
     for (const feature of Object.values(outcome.recommendations.features)) {
       expect(Number.isFinite(feature.coefficient)).toBe(true);
       expect(feature.recommendation).toContain('In this dataset,');
@@ -239,8 +247,9 @@ describe('the fit, against the sklearn it was ported from', () => {
     const recs = generateFeatureRecommendations(coefficients, ANALYSIS_FEATURE_COLUMNS);
 
     // Straight from the golden values: |coef| >= 1 either way, under it weak.
-    expect(recs.features['word_count'].relationship).toBe('negative');
+    expect(recs.features['duration'].relationship).toBe('negative');
     expect(recs.features['scene_change_rate'].relationship).toBe('positive');
-    expect(recs.features['duration'].relationship).toBe('weak');
+    expect(recs.features['word_count'].relationship).toBe('weak');
+    expect(recs.features['text_density'].relationship).toBe('weak');
   });
 });

@@ -1,0 +1,255 @@
+1
+00:00:00,000 --> 00:00:05,760
+ In the Gravity Tanks video, I alluded to the fact there are actually other types of
+
+2
+00:00:05,760 --> 00:00:09,240
+ kind of fluid capacitor, and that we would meet them later on.
+
+3
+00:00:09,240 --> 00:00:11,520
+ Well, the time has come for us to do that.
+
+4
+00:00:11,520 --> 00:00:15,560
+ In this video, I want to talk about compressed gas accumulators, and at the same time fluid
+
+5
+00:00:15,560 --> 00:00:16,560
+ compressibility.
+
+6
+00:00:16,560 --> 00:00:21,120
+ Compressed gas accumulators, which you'll sometimes see drawn like this, or might see real
+
+7
+00:00:21,120 --> 00:00:26,120
+ life looking like this, are kind of elements that we put into our kind of hydraulic lines
+
+8
+00:00:26,120 --> 00:00:31,480
+ to add some level of compressibility, to maybe absorb shock, maybe to smooth that
+
+9
+00:00:31,480 --> 00:00:35,400
+ pressure changes in the same way that kind of capacitors and electrical circuits are used
+
+10
+00:00:35,400 --> 00:00:39,240
+ to smooth that voltage changes to smooth that noise, or just to store energy or fluid
+
+11
+00:00:39,240 --> 00:00:42,720
+ so that you can release it later, in the same way you might charge up a capacitor so
+
+12
+00:00:42,720 --> 00:00:45,800
+ that you can kind of drive an electrical circuit later.
+
+13
+00:00:45,800 --> 00:00:49,280
+ The typical anatomy of a compressed gas accumulator is something like this.
+
+14
+00:00:49,280 --> 00:00:53,560
+ You've got a kind of flexible bladder on the inside that's filled with a gas which is highly
+
+15
+00:00:53,560 --> 00:00:58,040
+ compressible compared to our working fluid, and basically, as you pump the working fluid
+
+16
+00:00:58,040 --> 00:01:02,720
+ into the bottom with a pressure kind of P, what you do is kind of compress that bladder
+
+17
+00:01:02,720 --> 00:01:07,880
+ and doing so like a spring, you kind of squish the molecules together and store energy.
+
+18
+00:01:07,880 --> 00:01:12,000
+ Later on, that energy can be released by that kind of gas expanding and forcing the fluid
+
+19
+00:01:12,000 --> 00:01:13,840
+ back out of the accumulator.
+
+20
+00:01:13,840 --> 00:01:17,960
+ The CCR for compressed gas accumulators depends a lot on that construction.
+
+21
+00:01:17,960 --> 00:01:22,480
+ One example looks like this, and in the same way as gravity tanks, we have this kind of CCR,
+
+22
+00:01:22,520 --> 00:01:27,440
+ this relationship where the kind of volume of that tank, the volume of this accumulator
+
+23
+00:01:27,440 --> 00:01:30,640
+ is related to the pressure that it kind of produces.
+
+24
+00:01:30,640 --> 00:01:34,720
+ In contrast though, to gravity tanks where the volume is related to the pressure across
+
+25
+00:01:34,720 --> 00:01:38,880
+ the tank, the difference between the top and the bottom, for a compressed gas accumulator,
+
+26
+00:01:38,880 --> 00:01:42,480
+ the volume is only related to the pressure at the base of the tank, and in this way I think
+
+27
+00:01:42,480 --> 00:01:45,040
+ these are actually slightly nicer to deal with.
+
+28
+00:01:45,040 --> 00:01:49,440
+ The CCR might be a little bit more gross, but we only have one stage to relate a pressure
+
+29
+00:01:49,440 --> 00:01:51,240
+ back to a volume.
+
+30
+00:01:51,240 --> 00:01:55,720
+ These other quantities in the CCR, the P-naught and the K and the V-naught, these are kind
+
+31
+00:01:55,720 --> 00:01:59,600
+ of characteristics that determine kind of half flexible this thing is.
+
+32
+00:01:59,600 --> 00:02:02,080
+ They're constants and they'll usually be given to you.
+
+33
+00:02:02,080 --> 00:02:05,320
+ We might be able to characterize them if you go and run an experiment for that particular
+
+34
+00:02:05,320 --> 00:02:07,480
+ model, if you do some society.
+
+35
+00:02:07,480 --> 00:02:10,560
+ If you're dealing with a compressed gas accumulator that you don't know the CCR for
+
+36
+00:02:10,560 --> 00:02:15,200
+ or maybe the model that we've presented here isn't going to be suitable, you could always
+
+37
+00:02:15,200 --> 00:02:19,160
+ use the kind of general nonlinear function description, similar to what we did for kind
+
+38
+00:02:19,160 --> 00:02:20,160
+ of nonlinear valves.
+
+39
+00:02:20,400 --> 00:02:24,640
+ You can say that the pressure at the base of it is some nonlinear function of its volume
+
+40
+00:02:24,640 --> 00:02:28,160
+ and leave the job for somebody else to come back and characterize, you can kind of keep
+
+41
+00:02:28,160 --> 00:02:29,680
+ the can down the road.
+
+42
+00:02:29,680 --> 00:02:33,680
+ This is actually kind of the approach we take to deal with, the highly nonlinear and highly
+
+43
+00:02:33,680 --> 00:02:36,440
+ confusing case of compressible fluids.
+
+44
+00:02:36,440 --> 00:02:39,480
+ Remember one of the fundamental assumptions we made at the start of the week when we
+
+45
+00:02:39,480 --> 00:02:43,400
+ said we'd be modeling fluid power systems was that the fluids we're dealing with would
+
+46
+00:02:43,400 --> 00:02:47,480
+ be incompressible, right, that they kind of directly transmit the pressure that we put
+
+47
+00:02:47,480 --> 00:02:48,480
+ in.
+
+48
+00:02:48,800 --> 00:02:53,160
+ If we want to model a compressible fluid, say like air and eumatic systems, we're not going
+
+49
+00:02:53,160 --> 00:02:57,280
+ to do it by breaking that fundamental assumption, instead what we're going to do is introduce
+
+50
+00:02:57,280 --> 00:03:02,280
+ an extra accumulator somewhere in the circuit to model that compressibility.
+
+51
+00:03:02,280 --> 00:03:05,280
+ In this course at least we're probably going to use the general function notation for
+
+52
+00:03:05,280 --> 00:03:06,280
+ these accumulators.
+
+53
+00:03:06,280 --> 00:03:09,520
+ We're not going to try and characterize them in any way, but that's exactly how you would
+
+54
+00:03:09,520 --> 00:03:10,520
+ do it in real life.
+
+55
+00:03:10,520 --> 00:03:13,880
+ You'd use that kind of general function notation and then you'd go and run some sort
+
+56
+00:03:13,880 --> 00:03:17,920
+ of experiment to try and characterize what you should make that fire, what you should make
+
+57
+00:03:17,920 --> 00:03:21,080
+ that non-linear function to actually capture the behavior.
+
+58
+00:03:21,080 --> 00:03:24,080
+ Whether you're dealing with actual accumulators or you're dealing with accumulators'
+
+59
+00:03:24,080 --> 00:03:28,360
+ modeling compressibility, the SSR is kind of the same story as gravity tanks.
+
+60
+00:03:28,360 --> 00:03:32,760
+ You need to define whether the flow is going into or out of the accumulator and kind
+
+61
+00:03:32,760 --> 00:03:36,920
+ of corresponding to that you need to define what the kind of volume time rate, the flow
+
+62
+00:03:36,920 --> 00:03:39,400
+ rate going in or out of the accumulator is.
+
+63
+00:03:39,400 --> 00:03:43,200
+ I've got a problem lined up for you, problem 5.3 that includes a gas accumulator, so let's
+
+64
+00:03:43,200 --> 00:03:45,360
+ go and do that one now and see if we can build some intuition.

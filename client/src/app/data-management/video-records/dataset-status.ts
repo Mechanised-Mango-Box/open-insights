@@ -1,4 +1,5 @@
-import { DatasetState, LOCAL_IMPORT, LOCAL_RECOMPUTE } from './Dataset';
+import { DatasetSettings, DatasetState, LOCAL_IMPORT, LOCAL_RECOMPUTE } from './Dataset';
+import { describeSettings } from './dataset-settings';
 import { DatasetStatus } from '../providers/dataset-provider';
 
 export type ServerStatus = 'checking' | 'exists' | 'missing' | 'error';
@@ -97,6 +98,12 @@ export function datasetPeekStatusIcon(result: DatasetPeekResult, where: string):
   }
 }
 
+/** ", with scene-change threshold 30" - the settings a held value was made with, if known. */
+const settingsNote = (settings: DatasetSettings | undefined): string => {
+  const described = describeSettings(settings);
+  return described ? `, with ${described}` : '';
+};
+
 /**
  * Icon/label for a dataset value this browser actually holds.
  *
@@ -157,13 +164,15 @@ export function datasetStateIcon(
       if (value.producer === LOCAL_IMPORT || value.producer === LOCAL_RECOMPUTE) {
         return {
           icon: 'cloud_queue',
-          label: `Imported or recomputed here - click to replace with the version from ${where}`,
+          label:
+            `Imported or recomputed here${settingsNote(value.settings)}` +
+            ` - click to replace with the version from ${where}`,
           cssClass: 'status-missing',
         };
       }
       return {
         icon: 'cloud_done',
-        label: `Synced with ${where} (${value.producer})`,
+        label: `Synced with ${where} (${value.producer})${settingsNote(value.settings)}`,
         cssClass: 'status-exists',
       };
   }

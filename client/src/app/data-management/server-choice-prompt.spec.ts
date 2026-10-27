@@ -5,7 +5,6 @@ import { firstValueFrom } from 'rxjs';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { appConfig } from '../app.config';
 import { ViewManager } from '../views/view-manager.component';
-import { ComputeConfigService } from './compute-config.service';
 import { DEFAULT_SERVER_URL, LOCAL_SERVER_URL, ServerConfigService } from './server-config.service';
 
 /**
@@ -17,7 +16,6 @@ import { DEFAULT_SERVER_URL, LOCAL_SERVER_URL, ServerConfigService } from './ser
 describe('the server-choice prompt on load', () => {
   let fixture: ReturnType<typeof TestBed.createComponent<ViewManager>>;
   let server: ServerConfigService;
-  let compute: ComputeConfigService;
 
   const dialog = () => document.querySelector('server-choice-dialog');
   const button = (text: string) =>
@@ -57,7 +55,6 @@ describe('the server-choice prompt on load', () => {
     }).compileComponents();
 
     server = TestBed.inject(ServerConfigService);
-    compute = TestBed.inject(ComputeConfigService);
   });
 
   afterEach(() => {
@@ -100,15 +97,5 @@ describe('the server-choice prompt on load', () => {
 
     expect(server.serverUrl()).toBe(DEFAULT_SERVER_URL);
     expect(heading()).toBe('Overview');
-  });
-
-  it('does not ask when no work is going to a server at all', async () => {
-    compute.setExperimental(true);
-    compute.setTarget('transcript', 'local');
-    compute.setTarget('scene_stats', 'local');
-
-    await render();
-
-    expect(dialog()).toBeNull();
   });
 });

@@ -1,0 +1,71 @@
+1
+00:00:00,000 --> 00:00:03,520
+ All right, everybody, week eight, time to talk about manufacturing with engineering
+
+2
+00:00:03,520 --> 00:00:06,720
+ ceramics. I know the pace has been pretty full on the last seven weeks.
+
+3
+00:00:06,720 --> 00:00:09,120
+ Not too long. We are still flying half a ship.
+
+4
+00:00:09,120 --> 00:00:12,800
+ The good news for you is that this week is going to be super duper laid back and
+
+5
+00:00:12,800 --> 00:00:16,560
+ crazy because most of the manufacturing processes we're going to talk about this week for
+
+6
+00:00:16,560 --> 00:00:21,280
+ engineering ceramics are variations on processes that we've already seen before when we talked
+
+7
+00:00:21,280 --> 00:00:25,920
+ about manufacturing with metals and manufacturing with polymers. The amount of content and the
+
+8
+00:00:25,920 --> 00:00:29,760
+ difficulty of the content this week is going to be much lower. While there will be something
+
+9
+00:00:29,760 --> 00:00:34,240
+ totally new when we talk about manufacture of ceramic powders and a little bit of chemistry
+
+10
+00:00:34,240 --> 00:00:38,320
+ that we'll need to cover there as well. That's about as hard as it's going to get this week.
+
+11
+00:00:38,320 --> 00:00:42,640
+ After that, because all the processes we're going to meet this week are only slight variations
+
+12
+00:00:42,640 --> 00:00:47,360
+ on ones we've met before, I'm really only going to point out how these processes differ.
+
+13
+00:00:47,360 --> 00:00:52,080
+ And then link you to some associated resources that take you through how exactly they're performed.
+
+14
+00:00:52,080 --> 00:00:55,280
+ To supplement that, I'm very happy to say that my colleague, Dr. Dylan Cuskell,
+
+15
+00:00:55,280 --> 00:00:59,600
+ is currently agreed to film another case study video for us. This time on manufacturing of
+
+16
+00:00:59,600 --> 00:01:03,360
+ some of the ceramic cities used in this research. So I hope you enjoyed this slightly more
+
+17
+00:01:03,360 --> 00:01:07,200
+ laid back week. We'll finish everything up at the end of the week like always with a big picture
+
+18
+00:01:07,200 --> 00:01:08,160
+ video.

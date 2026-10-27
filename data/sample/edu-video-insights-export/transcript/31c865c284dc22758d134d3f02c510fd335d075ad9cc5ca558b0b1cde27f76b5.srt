@@ -1,0 +1,151 @@
+1
+00:00:00,000 --> 00:00:04,240
+ Like a few of the properties we've met already, hardness, the focus of this video is
+
+2
+00:00:04,240 --> 00:00:09,440
+ also a bit of an ambiguous term. Generally speaking, hardness refers to one of several material
+
+3
+00:00:09,440 --> 00:00:14,160
+ properties related to the resistance of a material to some sort of localized plastic
+
+4
+00:00:14,160 --> 00:00:19,200
+ defamation. In this context we're generally talking about scratching or indentation and
+
+5
+00:00:19,200 --> 00:00:23,520
+ engineers are generally concerned about hardness because it correlates very closely with
+
+6
+00:00:23,520 --> 00:00:28,480
+ wear resistance. Viewer designing surfaces that are likely to come into and out of contact,
+
+7
+00:00:28,480 --> 00:00:33,040
+ hardness is a property you're probably quite interested in. Hardness is quite closely correlated
+
+8
+00:00:33,040 --> 00:00:37,760
+ with yield strength because typically the same mechanism that governs one, governs the other.
+
+9
+00:00:37,760 --> 00:00:41,600
+ And if you look at a plot of hardness versus yield strength you'll see that most materials
+
+10
+00:00:41,600 --> 00:00:46,240
+ actually lie on a line of constant gradient. There are two types of hardness we'll talk about
+
+11
+00:00:46,240 --> 00:00:50,960
+ in this course. The first scratch hardness you're probably already familiar with and you likely
+
+12
+00:00:50,960 --> 00:00:56,320
+ met in high school. As the name suggests, scratch hardness is the resistance of a material to scratches
+
+13
+00:00:56,320 --> 00:01:01,120
+ or abrasion. Tests for scratch hardness have classically been quite empirical and a little bit
+
+14
+00:01:01,120 --> 00:01:06,160
+ hand wavy. One of the earliest such tests which is still used today by geologists in the field is
+
+15
+00:01:06,160 --> 00:01:11,600
+ the most scale. Here materials are ranked on a scale of 1 to 10, 1 being talc quite a soft material
+
+16
+00:01:11,600 --> 00:01:17,600
+ and 10 being diamond, ostensibly the hardest material. And the ramp-up of scratch hardness from 1 to 10
+
+17
+00:01:17,600 --> 00:01:22,800
+ is very much not linear on this scale. That being said, it's quite useful for geologists to quickly
+
+18
+00:01:22,800 --> 00:01:27,120
+ rule out whether the material they're dealing with is one type or another. And sometimes for
+
+19
+00:01:27,120 --> 00:01:30,880
+ engineers it can be as well. As an engineer you'll probably go into be concerned with more
+
+20
+00:01:30,880 --> 00:01:35,600
+ quantitative and repeatable methods of measuring hardness. There are a few different empirical
+
+21
+00:01:35,600 --> 00:01:40,480
+ approaches that we engineers use to measure hardness but generally speaking they all kind of work
+
+22
+00:01:40,480 --> 00:01:46,000
+ the same way. With some sort of calibrated tool we puncture indent the sample that we're looking at
+
+23
+00:01:46,000 --> 00:01:50,000
+ and the depth of that puncture, the depth of that indentation tells us about the hardness of the
+
+24
+00:01:50,560 --> 00:01:54,560
+ material. As you can imagine any depth reading is going to be dependent not just on the material
+
+25
+00:01:54,560 --> 00:01:59,840
+ properties but also on the material of your probe, on how much force you apply, on the geometry of
+
+26
+00:01:59,840 --> 00:02:05,360
+ the probe and as a result there are unsurprisingly standards about the way that you conduct hardness
+
+27
+00:02:05,360 --> 00:02:10,640
+ tests. Two reasonably common approaches are the Vikas hardness test and the Brunell hardness test.
+
+28
+00:02:10,640 --> 00:02:15,520
+ The former involves penetrating a probe with a diamond shaped indent and the latter with a spherical
+
+29
+00:02:15,520 --> 00:02:20,480
+ indent but they work in much the same way. These two tests each have their relative strengths
+
+30
+00:02:20,480 --> 00:02:24,960
+ and weaknesses but to be honest if you ever found yourself in a situation where you needed to measure
+
+31
+00:02:24,960 --> 00:02:29,200
+ the hardness of material it's likely your selection of a test would come more down to what's
+
+32
+00:02:29,200 --> 00:02:34,000
+ available to you as opposed to what's most appropriate. Because measuring hardness is a reasonably
+
+33
+00:02:34,000 --> 00:02:39,840
+ non-destructive non-intrusive technique it's often used as a way to identify an unknown material
+
+34
+00:02:39,840 --> 00:02:44,480
+ or because they're correlated as a rudimentary way of estimating yield strength. This can be a little
+
+35
+00:02:44,480 --> 00:02:49,040
+ bit tricky though because quite a few materials can actually change their hardness depending on
+
+36
+00:02:49,040 --> 00:02:52,960
+ say a heat treatment. We'll talk a little bit more about this later in the course but
+
+37
+00:02:52,960 --> 00:02:57,200
+ it's something you should keep in mind. Hardness is one of those properties that can vary wildly
+
+38
+00:02:57,200 --> 00:03:00,400
+ depending on how your material has been treated.

@@ -1,0 +1,259 @@
+1
+00:00:00,000 --> 00:00:05,160
+ Alright, just like last week we're going to meet a few basic components and talk about
+
+2
+00:00:05,160 --> 00:00:09,640
+ their CCRs and SSRs and then we're going to go on and model some rotating mechanical
+
+3
+00:00:09,640 --> 00:00:11,040
+ systems.
+
+4
+00:00:11,040 --> 00:00:15,040
+ The first component that we need to meet is analogous to the masses that we met last
+
+5
+00:00:15,040 --> 00:00:18,280
+ week and it's kind of what we've already been talking about.
+
+6
+00:00:18,280 --> 00:00:22,640
+ It's what we call inertia in rotating systems, rotating masses.
+
+7
+00:00:22,640 --> 00:00:27,720
+ Like I said in the previous video, we're treating these rotating masses as rigid bodies
+
+8
+00:00:27,720 --> 00:00:31,480
+ and their size and shape begins to matter because this has an effect on the way
+
+9
+00:00:31,480 --> 00:00:33,160
+ that they rotate.
+
+10
+00:00:33,160 --> 00:00:36,920
+ We capture this effect through a property of these bodies that we call the mass moment
+
+11
+00:00:36,920 --> 00:00:42,240
+ of inertia and this is kind of like the rotating analog to the mass M. The mass moment
+
+12
+00:00:42,240 --> 00:00:47,360
+ of inertia we normally give the symbol J and it's given by this formula which on first
+
+13
+00:00:47,360 --> 00:00:52,160
+ blush looks pretty confronting but it's actually a lot more simple than it appears.
+
+14
+00:00:52,160 --> 00:00:56,600
+ This quantity, this inner rule, captures the distribution of mass in a body and it puts
+
+15
+00:00:56,600 --> 00:01:01,520
+ a penalty on that mass awaiting towards its distance from the center of rotation which
+
+16
+00:01:01,520 --> 00:01:06,080
+ they call R typically the radius and it has a square in it.
+
+17
+00:01:06,080 --> 00:01:10,120
+ So masses that are far from the center of the body contribute a great deal towards the mass
+
+18
+00:01:10,120 --> 00:01:11,160
+ moment of inertia.
+
+19
+00:01:11,160 --> 00:01:16,000
+ A small amount of mass far away from the center of rotation can have a huge effect.
+
+20
+00:01:16,000 --> 00:01:19,960
+ Maybe more of an effect than a big mass that's close to the center of the body.
+
+21
+00:01:19,960 --> 00:01:22,960
+ You might know this whenever you're kind of spinning on an office chair if you put your
+
+22
+00:01:22,960 --> 00:01:27,200
+ your legs and your arms out if you kind of distribute your mass further from the center
+
+23
+00:01:27,200 --> 00:01:31,440
+ you slow down and it's because you have to kind of preserve that same amount of energy
+
+24
+00:01:31,440 --> 00:01:35,640
+ that same amount of momentum which we'll get to in a moment but your mass moment of
+
+25
+00:01:35,640 --> 00:01:37,040
+ inertia is suddenly changed.
+
+26
+00:01:37,040 --> 00:01:42,120
+ It suddenly got much bigger because now that mass has distributed much further out.
+
+27
+00:01:42,120 --> 00:01:46,760
+ This is actually used to great effect by people who are professional athletes, not myself
+
+28
+00:01:46,760 --> 00:01:52,160
+ but if you look at kind of ice skaters for example, they'll often change their kind of
+
+29
+00:01:52,160 --> 00:01:57,760
+ pose on the ice to change their mass moment of inertia and by bringing their arms and
+
+30
+00:01:57,760 --> 00:02:01,280
+ their legs in close to the body they can spin really fast and by putting them outside
+
+31
+00:02:01,280 --> 00:02:03,400
+ they can slow themselves down.
+
+32
+00:02:03,400 --> 00:02:07,880
+ In this course rotating masses or inertia we're going to represent as cylinders with
+
+33
+00:02:07,880 --> 00:02:13,160
+ the letter J which represents their mass moment of inertia are written inside of them.
+
+34
+00:02:13,160 --> 00:02:17,120
+ And we do this because for any shape you can kind of put it into a CAD program, a
+
+35
+00:02:17,120 --> 00:02:21,440
+ computer aided design program and get it to tell you what the mass moment of inertia
+
+36
+00:02:21,440 --> 00:02:26,240
+ of that shape is about one of its axes and then you could of course find a cylinder
+
+37
+00:02:26,240 --> 00:02:30,920
+ that has the same mass moment of inertia and as far as our analysis is concerned will
+
+38
+00:02:30,920 --> 00:02:32,680
+ behave in the same way.
+
+39
+00:02:32,680 --> 00:02:36,000
+ It's also because I'm not very good at drawing complicated shapes and drawing cylinders
+
+40
+00:02:36,000 --> 00:02:38,080
+ is pretty easy.
+
+41
+00:02:38,080 --> 00:02:43,240
+ The general kind of governing principles that apply to masses last week also extend and
+
+42
+00:02:43,240 --> 00:02:48,000
+ have a nice analog to the rotating masses to the nurtures that we're meeting this week.
+
+43
+00:02:48,000 --> 00:02:53,560
+ Their store energy with increasing velocity according to the same kind of equation.
+
+44
+00:02:53,560 --> 00:02:58,400
+ They have an angular momentum which is like the analog to the linear momentum we met last
+
+45
+00:02:58,400 --> 00:03:02,480
+ week and in the same way that linear momentum was the amount of oomph that you have going
+
+46
+00:03:02,480 --> 00:03:04,240
+ in the forward direction.
+
+47
+00:03:04,240 --> 00:03:09,280
+ Angular momentum is the amount of oomph that you have in kind of the rotating direction.
+
+48
+00:03:09,280 --> 00:03:14,000
+ And finally in the same way that if you took the derivative of linear momentum last week
+
+49
+00:03:14,000 --> 00:03:19,200
+ you've got the net force actually if you take the derivative of angular momentum in
+
+50
+00:03:19,200 --> 00:03:26,160
+ the rotating domain you get net torque and these things make up the CCRs for our masses L equals
+
+51
+00:03:26,160 --> 00:03:29,560
+ J omega and L dot equals net torque.
+
+52
+00:03:29,560 --> 00:03:34,680
+ As far as SSRs are concerned it's the same kind of process again as last week we need
+
+53
+00:03:34,680 --> 00:03:40,160
+ to write the net torque equation for every mass, every inertia that we see in our system
+
+54
+00:03:40,160 --> 00:03:45,480
+ and we do this by following the same process by drawing a free body diagram.
+
+55
+00:03:45,480 --> 00:03:50,320
+ The process is slightly different in the free body diagram as for torques involved kind
+
+56
+00:03:50,320 --> 00:03:55,920
+ of drawing on a rotating quantity as opposed to a kind of translating quantity but we get
+
+57
+00:03:55,920 --> 00:04:00,600
+ away with this we get away from having to draw kind of complicated rotations by drawing
+
+58
+00:04:00,600 --> 00:04:04,000
+ arrows that represent the rotations according to the right hand rule.
+
+59
+00:04:04,000 --> 00:04:08,040
+ Take your right hand which is merely in this image so you know it won't look like mine
+
+60
+00:04:08,040 --> 00:04:09,040
+ right now.
+
+61
+00:04:09,040 --> 00:04:12,800
+ If you take your right hand and your thumb represents the way you draw the arrow your
+
+62
+00:04:12,800 --> 00:04:15,720
+ fingers represent the way that you're assuming the torque is acting.
+
+63
+00:04:15,720 --> 00:04:20,360
+ Let's have a go at problem 2.2 together and draw some free body diagrams for rotating
+
+64
+00:04:20,360 --> 00:04:21,360
+ systems.
+
+65
+00:04:21,360 --> 00:04:22,520
+ See if we can put it up some intuition.

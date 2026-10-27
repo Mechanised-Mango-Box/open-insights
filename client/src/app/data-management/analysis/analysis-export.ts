@@ -2,6 +2,7 @@ import JSZip from 'jszip';
 import { Chart } from 'chart.js';
 import { AnalysisFeatureRow, AnalysisResult } from './stats';
 import { Recommendations } from './recommendations';
+import { AnalysisMethods } from './analysis-methods';
 
 /** A chart already encoded as base64 PNG, destined for the export's images/ folder. */
 export interface ChartImage {
@@ -16,6 +17,8 @@ export interface AnalysisExportInput {
   images: ChartImage[];
   /** Omitted when the dataset was too small or too collinear to fit. */
   recommendations?: Recommendations | null;
+  /** What produced the figures, written as methods.json. */
+  methods?: AnalysisMethods | null;
 }
 
 /** Values are numeric or known feature keys, so this does no quoting of its own.
@@ -50,7 +53,8 @@ export function snapshotChartToBase64(chart: Chart, background: string): string 
 
 /**
  * Bundles the current analysis as a zip: images/ holds a PNG per chart, figures/ holds the
- * numbers behind them as CSVs, so a figure can be re-plotted or checked outside the app.
+ * numbers behind them as CSVs, so a figure can be re-plotted or checked outside the app,
+ * and methods.json says which records, techniques and constants produced them.
  */
 export async function buildAnalysisExportZip({
   result,
@@ -58,8 +62,11 @@ export async function buildAnalysisExportZip({
   featureKeys,
   images,
   recommendations,
+  methods,
 }: AnalysisExportInput): Promise<Blob> {
   const zip = new JSZip();
+
+  if (methods) zip.file('methods.json', JSON.stringify(methods, null, 2));
 
   // The sentences carry commas, so this is the one place in the export that has
   // to quote - toCsv() deliberately does not, every other column being numeric.

@@ -1,0 +1,311 @@
+1
+00:00:00,000 --> 00:00:04,720
+ The physics and the chemistry and the crystallography of metals that we've just recently talked about
+
+2
+00:00:04,720 --> 00:00:08,640
+ also help explain and motivate their non-mechanical properties as well.
+
+3
+00:00:08,640 --> 00:00:13,520
+ For example, last week I told you, and this week I reiterated that metals are generally known
+
+4
+00:00:13,520 --> 00:00:16,480
+ as being good thermal and electrical conductors.
+
+5
+00:00:16,480 --> 00:00:20,080
+ This is largely owed to the type of bonding, the metallic bonding that they make.
+
+6
+00:00:20,080 --> 00:00:24,960
+ In a metal you have a sea of free electrons that tend to act as very good carriers of
+
+7
+00:00:24,960 --> 00:00:27,120
+ a thermal and electrical energy.
+
+8
+00:00:27,200 --> 00:00:31,440
+ Unlike ceramics which will meet in a few weeks time that mostly conduct heat by
+
+9
+00:00:31,440 --> 00:00:34,240
+ atoms bumping against each other through vibration.
+
+10
+00:00:34,240 --> 00:00:40,240
+ Metals mostly conduct heat by electrons bumping against each other and atoms through vibration.
+
+11
+00:00:40,240 --> 00:00:43,920
+ In reality, all of these modes contribute to the thermal conductivity of metals,
+
+12
+00:00:43,920 --> 00:00:48,560
+ atoms bumping against atoms and electrons bumping against electrons and electrons bumping against
+
+13
+00:00:48,560 --> 00:00:54,080
+ atoms, but in metals the electron to electron energy transfer is the dominant mode of heat
+
+14
+00:00:54,080 --> 00:00:57,520
+ transfer and it's what makes them such good thermal conductors.
+
+15
+00:00:57,520 --> 00:01:01,680
+ The sea of electrons in metals is why they're also such good electrical conductors.
+
+16
+00:01:01,680 --> 00:01:06,000
+ As opposed to something like a ceramic where all of the free electrons are accounted for and you
+
+17
+00:01:06,000 --> 00:01:10,960
+ need to strip them away from an atom to be able to transfer them from one place to another.
+
+18
+00:01:10,960 --> 00:01:14,880
+ In a metal because they're all kind of shared you can just apply a voltage and the
+
+19
+00:01:14,880 --> 00:01:19,680
+ entire sea will kind of shift over will move in the direction of the voltage.
+
+20
+00:01:19,680 --> 00:01:24,000
+ Allowing elements can have a huge impact on the thermal and electrical properties of metals
+
+21
+00:01:24,240 --> 00:01:28,480
+ partially by limiting the movement of these free electrons. For example, very small amounts
+
+22
+00:01:28,480 --> 00:01:33,520
+ of alloy elements can be used to reduce the conductivity of a metal substantially and small
+
+23
+00:01:33,520 --> 00:01:38,080
+ amounts of alloy elements can also significantly impact the melting temperature of metals.
+
+24
+00:01:38,080 --> 00:01:42,960
+ A silicon for example is quite often alloyed with aluminium to make it easier to cast by
+
+25
+00:01:42,960 --> 00:01:47,120
+ lowering its melting temperature. Generally speaking, as long as they remain a solid,
+
+26
+00:01:47,120 --> 00:01:52,000
+ metals tend to have reasonably continuous responses in thermal and electrical properties with
+
+27
+00:01:52,000 --> 00:01:56,000
+ changes in temperature. They generally get weaker and less stiff with increasing
+
+28
+00:01:56,000 --> 00:02:01,600
+ temperature corresponding to ease of motion of dislocations with that added thermal energy and
+
+29
+00:02:01,600 --> 00:02:06,240
+ an average expansion of the lattice and effective weakening of the metallic bonds inside the
+
+30
+00:02:06,240 --> 00:02:10,400
+ material with increasing temperature and continuously worsening electrical properties
+
+31
+00:02:10,400 --> 00:02:14,640
+ with increases in temperature as resistivity tends to increase with temperature.
+
+32
+00:02:14,640 --> 00:02:19,280
+ In terms of flammability, most metals aren't particularly flammable, at least not in the states
+
+33
+00:02:19,280 --> 00:02:24,320
+ that we tend to find them in the oxygen concentrations and temperatures that we tend to use them at.
+
+34
+00:02:24,320 --> 00:02:28,480
+ It's not to say that metals can't burn. There are some metals like sodium, for example,
+
+35
+00:02:28,480 --> 00:02:32,720
+ that are quite volatile. It's not often we hear or talk about metal fires as engineers,
+
+36
+00:02:32,720 --> 00:02:36,880
+ though, because largely for these reasons, we don't tend to build structures and components
+
+37
+00:02:36,880 --> 00:02:40,560
+ out of things like sodium. There are, of course, exceptions to this rule and situations
+
+38
+00:02:40,560 --> 00:02:44,880
+ where engineers like to use metals that are quite volatile. Lithium polymer batteries are one
+
+39
+00:02:44,880 --> 00:02:49,920
+ example and lithium battery fires can actually be quite nasty. If you puncture or damage a
+
+40
+00:02:49,920 --> 00:02:55,440
+ lithium battery or you overhead it or you short circuit it internally or you overcharge it or over
+
+41
+00:02:55,440 --> 00:03:00,080
+ discharge it, then you can start a process known as thermal runaway. Essentially, a chemical
+
+42
+00:03:00,080 --> 00:03:05,040
+ reaction, a fire that's self-accelerating, the heat from the fire kind of feeds the fire and makes
+
+43
+00:03:05,040 --> 00:03:08,880
+ it more intense and that produces more heat, which feeds the fire and you get this
+
+44
+00:03:08,880 --> 00:03:12,480
+ positive feedback loop that results in quite a spectacular result.
+
+45
+00:03:12,480 --> 00:03:16,480
+ Finally, in terms of environmental properties, metals can be a little bit complicated.
+
+46
+00:03:16,480 --> 00:03:20,400
+ The embodied energy and carbon footprint required to dig metals out of the ground and
+
+47
+00:03:20,400 --> 00:03:24,960
+ refine them into something useful and then shape them into the components that we want can be
+
+48
+00:03:24,960 --> 00:03:29,920
+ pretty extensive. But on the other hand, metals are generally very, very easy to recycle because they
+
+49
+00:03:29,920 --> 00:03:35,200
+ can be rounded up, melted down, recast, reforged, whatever. These two things coming together,
+
+50
+00:03:35,200 --> 00:03:39,840
+ the energy and expense required to refine virgin metals and the relative ease by which
+
+51
+00:03:39,840 --> 00:03:45,280
+ metals can be remanufactured or recycled, is one of the few situations where what's economically
+
+52
+00:03:45,280 --> 00:03:49,600
+ good and what's environmentally good come together. We've already talked about how aluminium is
+
+53
+00:03:49,600 --> 00:03:54,240
+ extremely energy intensive to produce and when we meet aluminium alloys in a couple of videos,
+
+54
+00:03:54,240 --> 00:03:59,120
+ we'll see why. This is one of the reasons why recycled aluminium is so prevalent in our society,
+
+55
+00:03:59,120 --> 00:04:04,800
+ why 75% of all aluminium that's ever been refined is still in use today because the energy
+
+56
+00:04:04,800 --> 00:04:11,440
+ required to extract and refine and shape virgin aluminium is so much more than the energy required
+
+57
+00:04:11,440 --> 00:04:15,920
+ to recycle the aluminium that we already have. You should be mindful that generally recycled
+
+58
+00:04:15,920 --> 00:04:20,880
+ metals are used for, let's say, lower quality applications. In other words, places that aren't
+
+59
+00:04:20,880 --> 00:04:24,720
+ safety critical. This is because in the recycling process, there is a potential for
+
+60
+00:04:24,720 --> 00:04:29,520
+ inclusions and other contaminants to get caught up with your recycled metals. In some cases, this is
+
+61
+00:04:29,520 --> 00:04:33,760
+ much more significant of a threat than others. If you're recycling aluminium, for example,
+
+62
+00:04:33,760 --> 00:04:38,240
+ the presence of any, say, still fasteners in your aluminium can become quite a large problem.
+
+63
+00:04:38,240 --> 00:04:42,720
+ aluminium melts in a much lower temperature than steel and that means if you have your aluminium
+
+64
+00:04:42,720 --> 00:04:48,080
+ recycling plant operating at a temperature it likes to melt at, you might have some unmelted,
+
+65
+00:04:48,080 --> 00:04:53,840
+ unrefined old steel nuts and bolts floating around inside of your mixture. In the best case,
+
+66
+00:04:53,840 --> 00:04:58,800
+ these contaminants will damage your expensive recycling machinery. In the worst case, these contaminants
+
+67
+00:04:58,800 --> 00:05:03,600
+ could end up inside of a recycled aluminium product that could pose a risk to somebody's
+
+68
+00:05:03,600 --> 00:05:07,440
+ life. The reason that I'm telling you this is that if you ever find yourself in a situation where
+
+69
+00:05:07,440 --> 00:05:12,880
+ you're recycling a scrap metal, you should make a point to separate out the steel and the aluminium
+
+70
+00:05:12,880 --> 00:05:17,200
+ components to remove any steel bolts from aluminium structures, for example. Because it's not
+
+71
+00:05:17,200 --> 00:05:21,120
+ economically viable for recycling plants to do this, if there are any aluminium components that
+
+72
+00:05:21,120 --> 00:05:25,760
+ have steel contaminants in them, bolts and nuts left over, for example, these products will almost
+
+73
+00:05:25,760 --> 00:05:30,320
+ certainly end up in landfill. There are other cases where this isn't such a big deal. For example,
+
+74
+00:05:30,320 --> 00:05:34,480
+ if you have aluminium rivets in a steel structure that's being recycled, because steel
+
+75
+00:05:34,480 --> 00:05:38,880
+ melts in a much higher temperature than aluminium, it's likely that any aluminium left in there
+
+76
+00:05:38,880 --> 00:05:44,720
+ might get burnt off or melted and flowed to the top and skimmed away. In summary, provided you
+
+77
+00:05:44,720 --> 00:05:49,280
+ take the time to separate your recyclables into their constituents, recycling metals is actually
+
+78
+00:05:49,280 --> 00:05:59,280
+ a very economically environmentally good thing to do.

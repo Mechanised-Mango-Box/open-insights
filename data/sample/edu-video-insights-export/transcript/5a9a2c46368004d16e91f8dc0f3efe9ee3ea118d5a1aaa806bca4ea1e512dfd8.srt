@@ -1,0 +1,211 @@
+1
+00:00:00,000 --> 00:00:04,680
+ All right, let's talk about motors and generators. As we begin to work with
+
+2
+00:00:04,680 --> 00:00:09,080
+ multi-domain electro-mechanical systems, things that are both mechanical and
+
+3
+00:00:09,080 --> 00:00:13,120
+ electrical, the kind of linking element between these are going to be
+
+4
+00:00:13,120 --> 00:00:17,320
+ motors. In this course we only talk about DC circuits and so we're only going to
+
+5
+00:00:17,320 --> 00:00:22,360
+ talk about DC motors as well. We'll normally draw them like this and the
+
+6
+00:00:22,360 --> 00:00:26,680
+ particular CCRs and SSRs for a DC motor depend on the type of motor that we're
+
+7
+00:00:26,680 --> 00:00:30,640
+ talking about. To begin with, let's talk about permanent magnet DC motors,
+
+8
+00:00:30,640 --> 00:00:34,240
+ kind of the simplest ones you're going to encounter. You would have no doubt
+
+9
+00:00:34,240 --> 00:00:37,240
+ talked about these already in your physics courses and probably in high
+
+10
+00:00:37,240 --> 00:00:41,400
+ school physics as well, but at a really brief recap, a permanent magnet DC motor
+
+11
+00:00:41,400 --> 00:00:46,080
+ consists of some permanent magnets mounted in the casing and some coils of wire
+
+12
+00:00:46,080 --> 00:00:49,480
+ on the inside that you pass a current through. As you do that, you kind of
+
+13
+00:00:49,480 --> 00:00:53,240
+ generate a magnetic field that interacts with the permanent magnetic field
+
+14
+00:00:53,320 --> 00:00:58,040
+ and causes the kind of armature to start spinning. Some DC motors use a device
+
+15
+00:00:58,040 --> 00:01:01,920
+ called a commutator to make sure that you keep spinning. This can be a real
+
+16
+00:01:01,920 --> 00:01:05,880
+ physical thing like a slip ring commutator with some DC brushes kind of
+
+17
+00:01:05,880 --> 00:01:09,680
+ pressing against it, but there are other types of commutator as well and it's
+
+18
+00:01:09,680 --> 00:01:13,440
+ also something that can be done with switching circuitry. The reasonably simple
+
+19
+00:01:13,440 --> 00:01:18,120
+ permanent magnet DC motors will meet in this course have these CCRs and you'll
+
+20
+00:01:18,120 --> 00:01:21,560
+ notice something interesting about these. This is the first gyrator element that
+
+21
+00:01:21,560 --> 00:01:25,280
+ we've met. I promised you last week we'd come across one and here we are.
+
+22
+00:01:25,280 --> 00:01:30,240
+ You'll notice that kind of an input effort is related to an output flow and vice
+
+23
+00:01:30,240 --> 00:01:35,440
+ versa. Unlike the transformers we met last week, gearboxes where efforts were
+
+24
+00:01:35,440 --> 00:01:40,560
+ mapped to efforts and flows to flows. The constants you see in these CCRs, K-T and
+
+25
+00:01:40,560 --> 00:01:45,320
+ K-Omega are kind of creatively called the motor constants and describe them
+
+26
+00:01:45,320 --> 00:01:49,600
+ mapping from effort to flow. These constants when you're working in SI units
+
+27
+00:01:49,600 --> 00:01:54,880
+ end up being the same and normally will replace both K-T and K-Omega with K-M
+
+28
+00:01:54,880 --> 00:01:59,440
+ for motor. In this course we're going to treat motors as ideal gyrators meaning
+
+29
+00:01:59,440 --> 00:02:03,680
+ that all of the input power is transferred to output power. I'm doing so
+
+30
+00:02:03,680 --> 00:02:07,760
+ we're assuming that our motors have no mass that we don't store any kind of
+
+31
+00:02:07,760 --> 00:02:11,120
+ energy in the magnetism or the field warnings that these field warnings have
+
+32
+00:02:11,120 --> 00:02:15,120
+ no resistance. If we ever want to capture that kind of information, the kind of
+
+33
+00:02:15,120 --> 00:02:19,280
+ energy stored in the magnetic field and the warnings and the energy lost to
+
+34
+00:02:19,280 --> 00:02:23,120
+ the resistance of the windings and the inertia, the non-negligible inertia of
+
+35
+00:02:23,120 --> 00:02:26,960
+ all the rotating parts in a motor, we'll typically do this by including
+
+36
+00:02:26,960 --> 00:02:31,920
+ inductors and resistors and inertia kind of to the side of an ideal motor
+
+37
+00:02:31,920 --> 00:02:35,120
+ generator element. In this course we're not going to make any assumptions or
+
+38
+00:02:35,120 --> 00:02:37,760
+ place any constraints that would prevent a motor from acting like a
+
+39
+00:02:37,760 --> 00:02:41,760
+ generator. I'm in the real world, motors sometimes acting as motors and
+
+40
+00:02:41,760 --> 00:02:45,440
+ sometimes acting as generators is pretty common. An example of this would be
+
+41
+00:02:45,440 --> 00:02:49,920
+ regenerative braking. If you have a DC motor that kind of drives a wheel,
+
+42
+00:02:49,920 --> 00:02:53,760
+ all that motor can also act as a generator and provide a braking torque.
+
+43
+00:02:53,760 --> 00:02:57,440
+ In doing so you can charge up whatever battery is used to power your car and then
+
+44
+00:02:57,440 --> 00:03:00,400
+ release that energy later on by using it as a motor again.
+
+45
+00:03:00,400 --> 00:03:03,120
+ Whether or not you decide to call something a motor or a generator,
+
+46
+00:03:03,120 --> 00:03:06,480
+ largely has to do with whether you're taking energy from an electrical
+
+47
+00:03:06,480 --> 00:03:10,000
+ system to deliver to a mechanical system or vice versa.
+
+48
+00:03:10,080 --> 00:03:12,720
+ This has proven to be a pretty challenging concept for students in the
+
+49
+00:03:12,720 --> 00:03:15,840
+ last couple of years and so I've written a problem, 4.3, which
+
+50
+00:03:15,840 --> 00:03:19,280
+ hopefully give you some intuition on how you decide whether something's a motor
+
+51
+00:03:19,280 --> 00:03:22,800
+ or a generator, which way you should draw the attached torque.
+
+52
+00:03:22,800 --> 00:03:25,920
+ And to go with that, which way you should draw the polarity on the motor to make
+
+53
+00:03:25,920 --> 00:03:32,320
+ sure that all three of these things agree.

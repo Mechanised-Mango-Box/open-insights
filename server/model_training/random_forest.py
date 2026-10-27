@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 
-from model_training.data_preparation import load_export_dataset
+from model_training.data_preparation import FEATURE_COLUMNS, load_export_dataset
 
 
 # The dataset is a client export (folder or .zip), passed on the command line:
@@ -17,16 +17,9 @@ if len(sys.argv) != 2:
     sys.exit("usage: python -m model_training.random_forest <export folder or .zip>")
 dataset = load_export_dataset(sys.argv[1])
 
-# X contains the video features/predictors that the model learns from.
-feature_columns = [
-    "duration",
-    "wpm",
-    "scene_change_rate",
-    "word_count",
-    "speech_pace_variation",
-    "speaking_ratio",
-]
-X = dataset[feature_columns]
+# X contains the video features/predictors that the model learns from - the
+# same list train.py uses, so this script tries the model that ships.
+X = dataset[FEATURE_COLUMNS]
 
 # y contains the number that we are trying to predict.
 y = dataset["average_percentage_viewed"]

@@ -1,0 +1,895 @@
+1
+00:00:00,000 --> 00:00:01,920
+ At this point, I've had lots of practice telling you
+
+2
+00:00:01,920 --> 00:00:03,400
+ that this isn't a chemistry course,
+
+3
+00:00:03,400 --> 00:00:05,640
+ but we will need to talk about the chemistry
+
+4
+00:00:05,640 --> 00:00:07,560
+ and the physics of engineering polymers
+
+5
+00:00:07,560 --> 00:00:10,480
+ to understand why it is that they have the properties
+
+6
+00:00:10,480 --> 00:00:11,640
+ that they have.
+
+7
+00:00:11,640 --> 00:00:13,520
+ In this video, we're only going to scratch the surface
+
+8
+00:00:13,520 --> 00:00:15,520
+ of this physics and chemistry background,
+
+9
+00:00:15,520 --> 00:00:18,520
+ but I will link you to some other more in-depth resources
+
+10
+00:00:18,520 --> 00:00:20,080
+ on the textbook page for this video
+
+11
+00:00:20,080 --> 00:00:21,800
+ if you're interested in checking those out.
+
+12
+00:00:21,800 --> 00:00:23,360
+ To begin with, I think we'll define
+
+13
+00:00:23,360 --> 00:00:25,840
+ that polymers really are just long chains
+
+14
+00:00:25,840 --> 00:00:28,400
+ of repeating chemical molecules, units,
+
+15
+00:00:28,400 --> 00:00:30,440
+ that we call monomers.
+
+16
+00:00:30,440 --> 00:00:31,760
+ If you zoom in from a bulk polymer,
+
+17
+00:00:31,760 --> 00:00:32,760
+ you'll see these chains,
+
+18
+00:00:32,760 --> 00:00:34,720
+ and if you zoom in again onto one chain,
+
+19
+00:00:34,720 --> 00:00:35,600
+ you'll see that really,
+
+20
+00:00:35,600 --> 00:00:37,840
+ it's just made up of these repeating units
+
+21
+00:00:37,840 --> 00:00:39,520
+ over and over and over again.
+
+22
+00:00:39,520 --> 00:00:41,440
+ The bulk properties of an engineering polymer
+
+23
+00:00:41,440 --> 00:00:43,760
+ are largely a function of what these chains are made of
+
+24
+00:00:43,760 --> 00:00:45,960
+ and how the chains themselves are held together
+
+25
+00:00:45,960 --> 00:00:47,840
+ and how the different chains of a polymer
+
+26
+00:00:47,840 --> 00:00:50,040
+ interact with each other within the bulk.
+
+27
+00:00:50,040 --> 00:00:52,440
+ Unlike metals, which were held together with metallic bonds,
+
+28
+00:00:52,440 --> 00:00:54,240
+ the electron sharing arrangement
+
+29
+00:00:54,240 --> 00:00:56,280
+ that gave them a lot of their nice thermal
+
+30
+00:00:56,280 --> 00:00:57,640
+ and electrical properties.
+
+31
+00:00:57,680 --> 00:01:00,600
+ Polymers are held together with covalent bonds,
+
+32
+00:01:00,600 --> 00:01:02,560
+ very, very strong bonds that arise
+
+33
+00:01:02,560 --> 00:01:04,600
+ from an electron sharing arrangement.
+
+34
+00:01:04,600 --> 00:01:06,720
+ Without delving too deeply into the chemistry,
+
+35
+00:01:06,720 --> 00:01:09,360
+ I'll say that covalent bonds are generally motivated
+
+36
+00:01:09,360 --> 00:01:12,840
+ by the desire of an atom to fill its outermost electron shell,
+
+37
+00:01:12,840 --> 00:01:14,640
+ its valence electron shell.
+
+38
+00:01:14,640 --> 00:01:16,680
+ If a particular atom is somewhat short
+
+39
+00:01:16,680 --> 00:01:18,120
+ of filling this valence shell,
+
+40
+00:01:18,120 --> 00:01:19,880
+ then it's going to go looking for other atoms
+
+41
+00:01:19,880 --> 00:01:23,440
+ that it can share electrons with covalently bond with
+
+42
+00:01:23,440 --> 00:01:25,440
+ so that hopefully they can both come closer
+
+43
+00:01:25,440 --> 00:01:27,080
+ to having a full shell.
+
+44
+00:01:27,080 --> 00:01:29,360
+ Most engineering polymers are what we call organic,
+
+45
+00:01:29,360 --> 00:01:31,880
+ meaning that they're largely composed of carbon.
+
+46
+00:01:31,880 --> 00:01:34,000
+ Carbon is exactly for electron short
+
+47
+00:01:34,000 --> 00:01:35,240
+ of filling its outer shell.
+
+48
+00:01:35,240 --> 00:01:38,360
+ And consequently, it would like to make four covalent bonds
+
+49
+00:01:38,360 --> 00:01:40,240
+ if it could to do so.
+
+50
+00:01:40,240 --> 00:01:42,760
+ In organic polymers, this manifests as carbon atoms
+
+51
+00:01:42,760 --> 00:01:44,680
+ forming the backbone of a long chain
+
+52
+00:01:44,680 --> 00:01:48,840
+ and small fingers coming off each carbon atom to other atoms.
+
+53
+00:01:48,840 --> 00:01:50,680
+ Here, each carbon atom is quite happy.
+
+54
+00:01:50,680 --> 00:01:52,360
+ It's made one bond to each of its neighbors
+
+55
+00:01:52,360 --> 00:01:54,040
+ and one bond to each of the two fingers
+
+56
+00:01:54,040 --> 00:01:55,080
+ that are attached to it as well.
+
+57
+00:01:55,480 --> 00:01:57,320
+ Consequently, by making four bonds,
+
+58
+00:01:57,320 --> 00:01:59,760
+ it's completely filled up its valence shell.
+
+59
+00:01:59,760 --> 00:02:02,760
+ A bulk polymer consists of many, many of these chains,
+
+60
+00:02:02,760 --> 00:02:04,960
+ each of which are very, very long.
+
+61
+00:02:04,960 --> 00:02:07,240
+ Each of these polymer chains can consist of hundreds
+
+62
+00:02:07,240 --> 00:02:10,240
+ of repetitions of this kind of smallest base unit
+
+63
+00:02:10,240 --> 00:02:12,360
+ all the way up to thousands or tens of thousands
+
+64
+00:02:12,360 --> 00:02:13,600
+ of repetitions.
+
+65
+00:02:13,600 --> 00:02:16,080
+ And in the bulk, the way that these chains are arranged,
+
+66
+00:02:16,080 --> 00:02:18,120
+ the way that they're ordered has a pretty substantial
+
+67
+00:02:18,120 --> 00:02:19,600
+ effect on their properties.
+
+68
+00:02:19,600 --> 00:02:22,360
+ Occasionally, polymer chains can form in a reasonably
+
+69
+00:02:22,360 --> 00:02:24,400
+ ordered arrangement that we call crystalline,
+
+70
+00:02:24,400 --> 00:02:27,080
+ a little bit like the metals that we met two weeks ago.
+
+71
+00:02:27,080 --> 00:02:29,600
+ But most of the time, polymer chains are quite amorphous,
+
+72
+00:02:29,600 --> 00:02:32,320
+ quite unordered and messy, all over the place,
+
+73
+00:02:32,320 --> 00:02:35,560
+ kind of entangled and intertwined and interlinked.
+
+74
+00:02:35,560 --> 00:02:37,920
+ Crystalline or not, there are two main ways
+
+75
+00:02:37,920 --> 00:02:39,720
+ that polymer chains connect to each other
+
+76
+00:02:39,720 --> 00:02:41,960
+ to make up a bulk polymer.
+
+77
+00:02:41,960 --> 00:02:43,640
+ The first way called cross-linking
+
+78
+00:02:43,640 --> 00:02:46,880
+ is where one polymer chain branches off into another one.
+
+79
+00:02:46,880 --> 00:02:48,840
+ Essentially, from one finger of chain one
+
+80
+00:02:48,840 --> 00:02:51,880
+ begins a linking chain that connects it to chain two.
+
+81
+00:02:51,880 --> 00:02:53,680
+ This is quite a robust method of attachment
+
+82
+00:02:53,760 --> 00:02:54,720
+ of two polymer chains,
+
+83
+00:02:54,720 --> 00:02:56,960
+ because essentially it consists of covalent bonds,
+
+84
+00:02:56,960 --> 00:02:59,080
+ which are even stronger than the metallic one
+
+85
+00:02:59,080 --> 00:03:00,640
+ that we met two weeks ago.
+
+86
+00:03:00,640 --> 00:03:02,760
+ But for most polymers, cross-linking like this
+
+87
+00:03:02,760 --> 00:03:05,600
+ isn't the dominant method of attachment between chains.
+
+88
+00:03:05,600 --> 00:03:08,480
+ Instead, most bulk polymers consist of polymer chains
+
+89
+00:03:08,480 --> 00:03:10,800
+ that are held together electrostatically
+
+90
+00:03:10,800 --> 00:03:13,840
+ through reasonably weak, Vanderwalls bonds.
+
+91
+00:03:13,840 --> 00:03:16,160
+ I won't get into too much detail about Vanderwalls bonds.
+
+92
+00:03:16,160 --> 00:03:17,920
+ I'll leave a link for you on the textbook page
+
+93
+00:03:17,920 --> 00:03:20,040
+ because it's a little bit complicated how they work.
+
+94
+00:03:20,040 --> 00:03:22,120
+ But if you're going to understand one thing about them,
+
+95
+00:03:22,120 --> 00:03:23,960
+ you should understand that they're reasonably weak,
+
+96
+00:03:23,960 --> 00:03:26,680
+ essentially only providing a little bit of stickiness
+
+97
+00:03:26,680 --> 00:03:28,880
+ between the chains as opposed to covalent bonds,
+
+98
+00:03:28,880 --> 00:03:32,240
+ which provide a really, really strong robust link.
+
+99
+00:03:32,240 --> 00:03:33,880
+ The mechanical properties of a polymer
+
+100
+00:03:33,880 --> 00:03:36,840
+ are largely a function of which of these types of bonds
+
+101
+00:03:36,840 --> 00:03:39,640
+ and in what proportion these types of bonds are present
+
+102
+00:03:39,640 --> 00:03:41,360
+ to hold the chains together.
+
+103
+00:03:41,360 --> 00:03:44,440
+ Most into chain bonds in polymers are Vanderwalls bonds
+
+104
+00:03:44,440 --> 00:03:46,320
+ that give way pretty easily.
+
+105
+00:03:46,320 --> 00:03:47,960
+ This is what gives a lot of these polymers
+
+106
+00:03:47,960 --> 00:03:50,480
+ their low strength and relative ductility.
+
+107
+00:03:50,480 --> 00:03:53,000
+ In this way, polymers held together by Vanderwalls bonds
+
+108
+00:03:53,000 --> 00:03:54,960
+ are a little bit like wet spaghetti.
+
+109
+00:03:54,960 --> 00:03:56,720
+ Each strand is itself quite strong
+
+110
+00:03:56,720 --> 00:03:58,840
+ if you can load just that strand up
+
+111
+00:03:58,840 --> 00:04:01,640
+ because it's held together by nice strong covalent bonds.
+
+112
+00:04:01,640 --> 00:04:04,360
+ But if you kind of pull on the entire assembly
+
+113
+00:04:04,360 --> 00:04:07,000
+ of wet spaghetti, rather than transferring the load
+
+114
+00:04:07,000 --> 00:04:09,200
+ directly through the backbones of the chains
+
+115
+00:04:09,200 --> 00:04:10,880
+ through the strands of spaghetti,
+
+116
+00:04:10,880 --> 00:04:13,880
+ instead they have a tendency to just slide over each other,
+
+117
+00:04:13,880 --> 00:04:15,240
+ slip past each other.
+
+118
+00:04:15,240 --> 00:04:18,880
+ The inter-strand stiffness is just not particularly robust
+
+119
+00:04:18,960 --> 00:04:21,160
+ compared to the strength of the backbones
+
+120
+00:04:21,160 --> 00:04:22,960
+ of the polymer chains.
+
+121
+00:04:22,960 --> 00:04:24,520
+ While humans have been working with polymers
+
+122
+00:04:24,520 --> 00:04:26,880
+ in one form or another for thousands of years,
+
+123
+00:04:26,880 --> 00:04:29,520
+ we only really started to mass produce these things
+
+124
+00:04:29,520 --> 00:04:31,840
+ to really get going in the last 80 years
+
+125
+00:04:31,840 --> 00:04:33,640
+ around the time of the Second World War.
+
+126
+00:04:33,640 --> 00:04:35,800
+ When restrictions and shortages on natural fibers
+
+127
+00:04:35,800 --> 00:04:37,400
+ provide a sufficient motivation for us
+
+128
+00:04:37,400 --> 00:04:39,000
+ to begin to look into these things.
+
+129
+00:04:39,000 --> 00:04:41,440
+ What's kind of incredible is that over the last 80 years,
+
+130
+00:04:41,440 --> 00:04:43,200
+ we've near-perfected this process.
+
+131
+00:04:43,200 --> 00:04:45,200
+ We've gotten almost as good at making polymers
+
+132
+00:04:45,200 --> 00:04:46,800
+ as we have it making steel.
+
+133
+00:04:46,800 --> 00:04:48,400
+ If you look around you, you'd be hard-pressed not
+
+134
+00:04:48,400 --> 00:04:50,200
+ to find a polymer of one form or another,
+
+135
+00:04:50,200 --> 00:04:52,600
+ and we humans have gotten so good at making them
+
+136
+00:04:52,600 --> 00:04:54,160
+ that we can tune their properties
+
+137
+00:04:54,160 --> 00:04:56,160
+ for very specific problems.
+
+138
+00:04:56,160 --> 00:04:58,000
+ Cameras do this in a bunch of different ways
+
+139
+00:04:58,000 --> 00:04:59,600
+ by changing the relative amounts
+
+140
+00:04:59,600 --> 00:05:02,640
+ of strong cross-links versus weak van der Waals bonds,
+
+141
+00:05:02,640 --> 00:05:04,560
+ by changing the particular monomers
+
+142
+00:05:04,560 --> 00:05:06,000
+ that make up a polymer chain,
+
+143
+00:05:06,000 --> 00:05:09,320
+ by sometimes substituting in one in every end element
+
+144
+00:05:09,320 --> 00:05:11,000
+ of the chain with a different monomer.
+
+145
+00:05:11,000 --> 00:05:13,240
+ By sometimes changing one particular monomer
+
+146
+00:05:13,240 --> 00:05:15,440
+ to another, by only changing one element
+
+147
+00:05:15,440 --> 00:05:17,360
+ on one finger of the monomer.
+
+148
+00:05:17,360 --> 00:05:19,600
+ And by turning these knobs, you can craft polymers
+
+149
+00:05:19,600 --> 00:05:21,160
+ that are stiff or strong.
+
+150
+00:05:21,160 --> 00:05:23,320
+ Polymers which have great optical clarity.
+
+151
+00:05:23,320 --> 00:05:26,000
+ Polymers that are extremely resistant to high temperatures.
+
+152
+00:05:26,000 --> 00:05:27,800
+ Polymers that mimic other materials,
+
+153
+00:05:27,800 --> 00:05:29,600
+ either in their properties or their appearance.
+
+154
+00:05:29,600 --> 00:05:32,240
+ And polymers that are super duper recyclable.
+
+155
+00:05:32,240 --> 00:05:33,840
+ Well, I'm not trying to make a chemistry of you,
+
+156
+00:05:33,840 --> 00:05:36,200
+ and we won't be talking about how you kind of achieve
+
+157
+00:05:36,200 --> 00:05:37,560
+ these specific tasks.
+
+158
+00:05:37,560 --> 00:05:39,600
+ It's important you note that some polymers
+
+159
+00:05:39,600 --> 00:05:41,960
+ are highly tuned for a particular problem type.
+
+160
+00:05:41,960 --> 00:05:44,680
+ And unlike some metals which are quite versatile
+
+161
+00:05:44,680 --> 00:05:46,960
+ and can be used in a range of different applications,
+
+162
+00:05:46,960 --> 00:05:48,600
+ polymers have generally been made
+
+163
+00:05:48,600 --> 00:05:50,920
+ with a particular application in mind.
+
+164
+00:05:50,920 --> 00:05:53,440
+ If a particular polymer isn't well suited to your problem,
+
+165
+00:05:53,440 --> 00:05:54,880
+ it's likely that there's another one
+
+166
+00:05:54,880 --> 00:05:56,560
+ which is very suited to your problem.
+
+167
+00:05:56,560 --> 00:05:57,840
+ You've just got to go and find it.
+
+168
+00:05:57,840 --> 00:06:00,200
+ To finish up, before we move on to mechanical properties,
+
+169
+00:06:00,200 --> 00:06:01,960
+ I'm going to talk just a little bit
+
+170
+00:06:01,960 --> 00:06:04,240
+ about how polymers are made.
+
+171
+00:06:04,240 --> 00:06:06,000
+ I've already told you that polymers consist
+
+172
+00:06:06,000 --> 00:06:09,680
+ of long repeating chains of small base units called monomers.
+
+173
+00:06:09,680 --> 00:06:12,320
+ But what I haven't told you is how these monomers
+
+174
+00:06:12,320 --> 00:06:15,000
+ end up connecting together to make up these polymer chains.
+
+175
+00:06:15,000 --> 00:06:16,960
+ And it's actually super duper interesting.
+
+176
+00:06:16,960 --> 00:06:19,280
+ Most monomers, the base units of polymers
+
+177
+00:06:19,280 --> 00:06:22,960
+ are in and of themselves relatively stable compounds.
+
+178
+00:06:22,960 --> 00:06:25,920
+ Monomers usually don't have any free electrons kicking around.
+
+179
+00:06:25,920 --> 00:06:27,480
+ They have full valence shells.
+
+180
+00:06:27,480 --> 00:06:28,920
+ There are a couple of different ways
+
+181
+00:06:28,920 --> 00:06:31,080
+ that you can force a monomer to begin joining
+
+182
+00:06:31,080 --> 00:06:33,120
+ with other monomers to make a polymer.
+
+183
+00:06:33,120 --> 00:06:36,000
+ One of them is called addition polymerization.
+
+184
+00:06:36,000 --> 00:06:38,000
+ In this regime, monomers which have a double
+
+185
+00:06:38,000 --> 00:06:40,640
+ or triple covalent bond at their backbone are used.
+
+186
+00:06:40,640 --> 00:06:43,200
+ These double and triple bonds aren't particularly stable.
+
+187
+00:06:43,200 --> 00:06:45,520
+ And so when provided sufficient motivation
+
+188
+00:06:45,520 --> 00:06:48,920
+ in the form of heat or some sort of catalyzing initiator,
+
+189
+00:06:48,920 --> 00:06:51,760
+ they break apart, leaving a free electron side
+
+190
+00:06:51,760 --> 00:06:53,120
+ at the end of the monomer.
+
+191
+00:06:53,120 --> 00:06:54,960
+ Then this monomer meets another monomer
+
+192
+00:06:54,960 --> 00:06:57,520
+ who's also been broken apart and the two of them,
+
+193
+00:06:57,520 --> 00:07:01,080
+ each having a free electron to contribute covalently bond,
+
+194
+00:07:01,080 --> 00:07:02,240
+ joining together.
+
+195
+00:07:02,240 --> 00:07:04,920
+ This process repeats over and over again
+
+196
+00:07:04,920 --> 00:07:07,120
+ as you grow and grow and grow the chain
+
+197
+00:07:07,120 --> 00:07:09,280
+ until finally either two chains meet up
+
+198
+00:07:09,280 --> 00:07:11,120
+ and the reaction is terminated.
+
+199
+00:07:11,120 --> 00:07:12,800
+ Or in the same way that a catalyst
+
+200
+00:07:12,800 --> 00:07:14,600
+ was put into and initiate the reaction
+
+201
+00:07:14,600 --> 00:07:17,040
+ and now the chemical is added to terminate it.
+
+202
+00:07:17,040 --> 00:07:19,880
+ These days, the monomers that we use to make our polymers
+
+203
+00:07:19,880 --> 00:07:22,200
+ are largely derived from fossil fuels.
+
+204
+00:07:22,200 --> 00:07:24,560
+ For example, in large refineries crude oil
+
+205
+00:07:24,560 --> 00:07:27,720
+ and natural gas are converted into ethane and propane
+
+206
+00:07:27,720 --> 00:07:30,320
+ before being sent to what are called cracky plants
+
+207
+00:07:30,320 --> 00:07:34,040
+ to convert these into the monomers ethylene and propylene.
+
+208
+00:07:34,040 --> 00:07:35,400
+ These monomers are then packaged up
+
+209
+00:07:35,400 --> 00:07:37,080
+ and shipped and transported to places
+
+210
+00:07:37,080 --> 00:07:38,600
+ that will polymerize them
+
+211
+00:07:38,600 --> 00:07:41,160
+ either through additional condensation polymerization
+
+212
+00:07:41,160 --> 00:07:44,000
+ to make the polymers that we know and love.
+
+213
+00:07:44,000 --> 00:07:46,160
+ When where this polymerization process happens
+
+214
+00:07:46,160 --> 00:07:48,360
+ is largely a function of the specific polymer
+
+215
+00:07:48,360 --> 00:07:49,320
+ that you're talking about.
+
+216
+00:07:49,320 --> 00:07:51,120
+ Some polymers are made in bulk quantities
+
+217
+00:07:51,120 --> 00:07:52,840
+ turned into little plastic pellets
+
+218
+00:07:52,840 --> 00:07:54,560
+ that are shipped around the world and later
+
+219
+00:07:54,560 --> 00:07:57,600
+ are melted down in cast or rejected mold into parts.
+
+220
+00:07:57,600 --> 00:07:59,320
+ Some polymers can't be remelted
+
+221
+00:07:59,320 --> 00:08:01,280
+ and as a result need to be polymerized
+
+222
+00:08:01,280 --> 00:08:04,000
+ shortly before being turned into their final shape.
+
+223
+00:08:04,000 --> 00:08:04,800
+ We'll talk a lot more
+
+224
+00:08:04,800 --> 00:08:07,720
+ about manufacturing and supply of polymers next week.

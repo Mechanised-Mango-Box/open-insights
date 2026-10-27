@@ -1,0 +1,183 @@
+1
+00:00:00,000 --> 00:00:04,240
+ Just to be clear before I start this video is optional. You're not going to be
+
+2
+00:00:04,240 --> 00:00:06,840
+ assessed on this content and you should feel free to skip it if you don't
+
+3
+00:00:06,840 --> 00:00:09,960
+ want to hear me talk. But if you have two minutes, I'd really appreciate your
+
+4
+00:00:09,960 --> 00:00:14,040
+ time. As you may or may not know, lecture is here at the University of
+
+5
+00:00:14,040 --> 00:00:19,400
+ also researchers and one of my areas of research is engineering education. I'm
+
+6
+00:00:19,400 --> 00:00:21,960
+ really passionate about trying to make sure that you guys have the best
+
+7
+00:00:21,960 --> 00:00:25,520
+ experience possible at university and this semester we're trying a couple of
+
+8
+00:00:25,520 --> 00:00:29,960
+ things in age 2440 somewhat in response to coronavirus but also because we
+
+9
+00:00:29,960 --> 00:00:33,960
+ suspect they might be better ways of teaching. For example, whiteboard
+
+10
+00:00:33,960 --> 00:00:37,600
+ workshops, the tutorial style that we use in this course, also used in the
+
+11
+00:00:37,600 --> 00:00:42,040
+ math courses. And those guys had to adapt to coronavirus and semester one pretty
+
+12
+00:00:42,040 --> 00:00:46,080
+ rapidly. And they got some student feedback at the end of last semester. We've
+
+13
+00:00:46,080 --> 00:00:48,840
+ taken that student feedback and we've tried to implement some of those
+
+14
+00:00:48,840 --> 00:00:53,160
+ changes in 2440 to improve your experience. So at the end of semester you
+
+15
+00:00:53,160 --> 00:00:56,880
+ may be asked some questions, you may be even a survey. But about your experience
+
+16
+00:00:56,880 --> 00:01:01,120
+ in 2440 with regards to those whiteboard workshops and your participation would
+
+17
+00:01:01,120 --> 00:01:05,040
+ be greatly appreciated. The second point has to do with these videos. I've been
+
+18
+00:01:05,040 --> 00:01:08,960
+ working with Dr. Sarah Dart, a QUT who for a long time has been producing worked
+
+19
+00:01:08,960 --> 00:01:12,960
+ example videos and looking into their effectiveness at engaging with students
+
+20
+00:01:12,960 --> 00:01:17,400
+ and delivering course content this way. Obviously we've been forced to do
+
+21
+00:01:17,400 --> 00:01:21,600
+ something like this due to coronavirus. But we've been trying to follow best
+
+22
+00:01:21,600 --> 00:01:25,320
+ practices in the way produced them. So one of the things we're interested in is
+
+23
+00:01:25,320 --> 00:01:28,840
+ whether this actually leads to a rising engagement and whether you find
+
+24
+00:01:28,840 --> 00:01:32,600
+ these videos useful. So again, there may be a survey toward the end of the course
+
+25
+00:01:32,600 --> 00:01:36,480
+ and your participation and that would be greatly appreciated. I started every
+
+26
+00:01:36,480 --> 00:01:40,280
+ year when we were designing age 2440 by looking at these student feedback
+
+27
+00:01:40,280 --> 00:01:44,320
+ and courses, SFC comments from the previous year and worth me out, what it is
+
+28
+00:01:44,320 --> 00:01:48,360
+ that we did well and where it is we can improve. Your feedback's really
+
+29
+00:01:48,360 --> 00:01:53,680
+ important in this sense. But SFC's are the only way to get it to me. If during
+
+30
+00:01:53,680 --> 00:01:55,840
+ the course of this semester, there's something we're doing that you really
+
+31
+00:01:55,840 --> 00:01:59,920
+ like, please let me know and we'll do more of it by the same token. If there's
+
+32
+00:01:59,920 --> 00:02:02,600
+ something we're doing, which is really, really pissing you off, I want to
+
+33
+00:02:02,600 --> 00:02:05,920
+ hear about that as well. And we'll do our very best to address it and make the
+
+34
+00:02:05,920 --> 00:02:10,040
+ course better for you. To give you an example, last year was the first time we
+
+35
+00:02:10,040 --> 00:02:14,600
+ ran the Viva Virta major assignment. And while the labs did still build on
+
+36
+00:02:14,600 --> 00:02:17,400
+ each other to give you the skills you needed to complete that assignment, it
+
+37
+00:02:17,400 --> 00:02:21,240
+ wasn't quite as explicit as it is now. And we got a lot of student feedback
+
+38
+00:02:21,240 --> 00:02:24,920
+ saying that the amount of work required compared to the weight of the assignment
+
+39
+00:02:24,920 --> 00:02:29,640
+ was disproportionate. In response to that this year, we've actually built most of
+
+40
+00:02:29,640 --> 00:02:33,200
+ that assignment into the labs themselves. So not only are you getting the skills,
+
+41
+00:02:33,200 --> 00:02:37,560
+ but you're also developing the content that you'll need to complete that major
+
+42
+00:02:37,560 --> 00:02:41,240
+ assignment. So your feedback is being listened to, it is being heard. Long story
+
+43
+00:02:41,240 --> 00:02:44,800
+ short, this is your course and you guys have the power and the autonomy to see
+
+44
+00:02:44,800 --> 00:02:48,920
+ changes made. All you need to do is let me know what it is you require and I'll do
+
+45
+00:02:49,000 --> 00:02:52,840
+ my very best to make sure that you have that and support your learning. All right.
+
+46
+00:02:52,840 --> 00:02:53,280
+ Thanks.

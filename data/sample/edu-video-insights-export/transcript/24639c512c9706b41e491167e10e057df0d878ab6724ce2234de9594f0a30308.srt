@@ -1,0 +1,115 @@
+1
+00:00:00,000 --> 00:00:06,280
+ In this video, we're going to talk about some of the processes for bulk manufacture and further shaping of polystyrene foams.
+
+2
+00:00:06,280 --> 00:00:13,580
+ Like the name expanded polystyrene foam might suggest, styrofoam products are made by expanding noodles of polystyrene.
+
+3
+00:00:13,580 --> 00:00:24,300
+ Polystyrene pellets about a millimeter in diameter are put into a steam chamber where they can be subjected to temperatures up to 200 degrees and grow to up to 40 times their original size.
+
+4
+00:00:24,300 --> 00:00:28,600
+ The polystyrene pellets are then bagged and shipped all over the world for further processing.
+
+5
+00:00:28,600 --> 00:00:34,000
+ To form bulk styrofoam products, the pellets are consolidated under steam and high temperatures again.
+
+6
+00:00:34,000 --> 00:00:41,200
+ And this bulk product can be made in a range of different densities depending on how many pellets are included in a particular molding process.
+
+7
+00:00:41,200 --> 00:00:45,400
+ This consolidation process isn't only limited to making bulk polystyrene products.
+
+8
+00:00:45,400 --> 00:00:49,800
+ In fact, many small-scale polystyrene packaging products are made the same way.
+
+9
+00:00:49,800 --> 00:00:55,500
+ And because the consolidation process only requires a reasonably simple negative of the part you'd like to make,
+
+10
+00:00:55,500 --> 00:00:59,600
+ fairly complicated geometries can be made out of expanded polystyrene foam.
+
+11
+00:00:59,600 --> 00:01:09,200
+ For slightly more custom or lower volume, jobs where you'd like to make some sort of complicated shape without having to invest in making your own steam oven to consolidate the polystyrene,
+
+12
+00:01:09,200 --> 00:01:13,200
+ you can cut this out of larger blocks using a hot wire cutter.
+
+13
+00:01:13,200 --> 00:01:18,600
+ Here, a current is passed through a conductive wire with a higher resistance like a nickel chromium wire, for example,
+
+14
+00:01:18,600 --> 00:01:24,000
+ that heats up and essentially melts the polystyrene foam as it's passed through the wire.
+
+15
+00:01:24,000 --> 00:01:29,700
+ Hot wire cutters like this can be hand operated and used by artists to make all sorts of different shapes and sculptures,
+
+16
+00:01:29,700 --> 00:01:36,600
+ but for engineering applications, you'll probably likely to turn to a CNC computer numerically controlled hot wire cutter.
+
+17
+00:01:36,600 --> 00:01:39,900
+ These CNC hot wire cutters have a range of different capabilities.
+
+18
+00:01:39,900 --> 00:01:43,700
+ Generally speaking, a hot wire is only capable of making 2D cuts,
+
+19
+00:01:43,700 --> 00:01:50,900
+ but with CNC control, these 2D cuts can be made from a variety of different angles to build up complicated 3D geometries.
+
+20
+00:01:50,900 --> 00:01:57,300
+ Hot wire cutting of polystyrene foam is quite common if you're looking to manufacture, say, a mould to lay a composite inside of.
+
+21
+00:01:57,300 --> 00:02:05,700
+ And the finished straight off the hot wire cutter is usually pretty good because it has a tendency to seal all of the pores of the polystyrene as it moves over it.
+
+22
+00:02:05,700 --> 00:02:10,700
+ That being said, professionals who do hot wire cutting spend a lot of time carefully tuning their settings.
+
+23
+00:02:10,700 --> 00:02:17,300
+ If the hot wire cutter, for example, is to spend too long in one place as it goes along, it can eat into the foam where it's moving.
+
+24
+00:02:17,300 --> 00:02:24,800
+ And so really careful control of both the tension on the hot wire and the feed rate of the hot wire is needed to ensure a good result.
+
+25
+00:02:24,800 --> 00:02:32,600
+ While low density polystyrene foams are reasonably sensitive and can't easily be machined because the small polystyrene beads have a tendency to rip out.
+
+26
+00:02:32,600 --> 00:02:39,600
+ Higher density foams, which you might turn to when you're trying to make a really high quality mould, for example, are often machined.
+
+27
+00:02:39,600 --> 00:02:51,000
+ As you can imagine, for a big powerful CNC machine that's used to cutting aluminium will steal polystyrene doesn't put up much of a fight, though there is some work needed in the tuning of feeds and speeds to ensure a good quality cut.
+
+28
+00:02:51,000 --> 00:02:54,700
+ To make sure that you don't, for example, drag the tool and melt the polystyrene.
+
+29
+00:02:54,700 --> 00:03:03,200
+ We'll talk a little bit more about these techniques and their usefulness in constructing moulds and plugs for composite layout when we get to manufacturing with composites in a couple of weeks time.

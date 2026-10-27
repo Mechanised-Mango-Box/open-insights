@@ -1,0 +1,9 @@
+# Installed on top of requirements.txt with --no-deps:
+#
+#   pip install -r requirements.txt
+#   pip install --no-deps -r requirements-nodeps.txt
+#
+# rapidocr declares opencv-python, which would clobber opencv-python-headless (see
+# the note in requirements.txt); its other dependencies are pinned there. The
+# OCR models it runs ship inside this wheel, so it needs no download at runtime.
+rapidocr==3.9.2

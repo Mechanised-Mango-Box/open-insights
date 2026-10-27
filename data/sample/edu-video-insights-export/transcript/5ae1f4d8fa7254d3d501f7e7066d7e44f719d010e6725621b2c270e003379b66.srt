@@ -1,0 +1,387 @@
+1
+00:00:00,000 --> 00:00:04,080
+ In this video, we're going to talk about the so-called non-technical ceramics.
+
+2
+00:00:04,080 --> 00:00:08,560
+ As the name suggests, non-technical ceramics are those that aren't particularly designed for,
+
+3
+00:00:08,560 --> 00:00:12,240
+ let's say, strenuous or intensive engineering applications.
+
+4
+00:00:12,240 --> 00:00:14,320
+ They're not designed for particularly high temperatures.
+
+5
+00:00:14,320 --> 00:00:18,880
+ They're not designed for massive amounts of stress or humongous stiffnesses required.
+
+6
+00:00:18,880 --> 00:00:22,080
+ Non-technical ceramics instead are commonly used in, let's say,
+
+7
+00:00:22,080 --> 00:00:24,880
+ civil or construction or building applications,
+
+8
+00:00:24,880 --> 00:00:27,440
+ where they're instead favored for their economy.
+
+9
+00:00:27,440 --> 00:00:31,840
+ Non-technical ceramics typically consist of mixtures of naturally occurring oxides
+
+10
+00:00:31,840 --> 00:00:35,520
+ and silicates and carbonates that are mined from the earth,
+
+11
+00:00:35,520 --> 00:00:39,280
+ typically in the form of limestone or chalk or clay or sand.
+
+12
+00:00:39,280 --> 00:00:43,200
+ And unlike technical ceramics which are characterized largely based on their chemical
+
+13
+00:00:43,200 --> 00:00:46,720
+ composition and unlike all the materials we've met thus far that were largely
+
+14
+00:00:46,720 --> 00:00:50,720
+ characterized based on their properties, we characterize non-technical ceramics in a different way
+
+15
+00:00:50,720 --> 00:00:53,360
+ again, largely based on how they're manufactured.
+
+16
+00:00:53,360 --> 00:00:57,120
+ Either those which occur naturally, those which are fired from a green body or
+
+17
+00:00:57,120 --> 00:01:00,960
+ those which are set at room temperature, a group we called cements.
+
+18
+00:01:00,960 --> 00:01:05,600
+ So-called natural ceramics or natural non-technical ceramics are those which we use with
+
+19
+00:01:05,600 --> 00:01:10,400
+ very little post-processing, those which we dig out of the ground and then shape and largely
+
+20
+00:01:10,400 --> 00:01:12,080
+ use the way that we found them.
+
+21
+00:01:12,080 --> 00:01:15,760
+ While there are many, many natural non-technical ceramics that we dig out of the ground and we use
+
+22
+00:01:15,760 --> 00:01:20,160
+ to make things out of like granite and basalt, I'm only going to talk about a few of the most
+
+23
+00:01:20,160 --> 00:01:21,040
+ common here.
+
+24
+00:01:21,040 --> 00:01:26,320
+ And probably the most common natural non-technical ceramic is silica, silica and oxide,
+
+25
+00:01:26,400 --> 00:01:28,400
+ which you may know as sand.
+
+26
+00:01:28,400 --> 00:01:32,800
+ We use silica for a bunch of different things as an abrasive material and we commonly use it
+
+27
+00:01:32,800 --> 00:01:36,160
+ as a filler as well in both plastics and in cement.
+
+28
+00:01:36,160 --> 00:01:39,920
+ And as you probably know, you use silica when you're making glass.
+
+29
+00:01:39,920 --> 00:01:45,600
+ Interestingly, you can mine very, very pure silica by just driving up to a sand dune or a beach
+
+30
+00:01:45,600 --> 00:01:50,480
+ and scooping it into your truck and this is actually how most silica is captured.
+
+31
+00:01:50,480 --> 00:01:55,520
+ A very common example is zircon sand and it's actually mine very, very close in Newcastle.
+
+32
+00:01:55,520 --> 00:01:59,120
+ Perhaps the next most common natural non-technical ceramic is limestone,
+
+33
+00:01:59,120 --> 00:02:03,040
+ which is usually made up of various different forms of calcium carbonate.
+
+34
+00:02:03,040 --> 00:02:07,040
+ Limestone is made naturally by a bunch of different mechanisms, some of them are biological
+
+35
+00:02:07,040 --> 00:02:11,520
+ even and some of them are not, but it happens over geological time scales and occurs
+
+36
+00:02:11,520 --> 00:02:14,560
+ due to the precipitation of calcium out of water.
+
+37
+00:02:14,560 --> 00:02:18,240
+ We use limestone extensively in the building and construction industry as a brick,
+
+38
+00:02:18,240 --> 00:02:23,040
+ as a material with which we make houses and other buildings, but also as a filler material in
+
+39
+00:02:23,040 --> 00:02:28,000
+ cement. Marble is also a naturally occurring form of limestone that's made when it's subjected
+
+40
+00:02:28,000 --> 00:02:33,120
+ to geological pressures and temperatures. And while descriptions of a limestone building might
+
+41
+00:02:33,120 --> 00:02:38,240
+ conjure up pictures of elegance and extravagance in your mind, limestone is actually surprisingly
+
+42
+00:02:38,240 --> 00:02:43,120
+ cheap to make things out of. Being relatively inexpensive in ubiquitous and having a pretty
+
+43
+00:02:43,120 --> 00:02:47,280
+ high compressive strength kits well suited as a building material as a brick.
+
+44
+00:02:47,280 --> 00:02:51,600
+ Another super interesting natural non-technical ceramic is asbestos,
+
+45
+00:02:51,600 --> 00:02:56,880
+ which occurs as a rock in nature that we mine and has fibers on the inside of it.
+
+46
+00:02:56,880 --> 00:03:01,120
+ Historically asbestos was used quite a lot in textiles and napkins and clothes and a bunch of
+
+47
+00:03:01,120 --> 00:03:05,760
+ other things for its fire resistance, but more recently, saying the last 50-ish years,
+
+48
+00:03:05,760 --> 00:03:10,480
+ it was used extensively as an insulation material in buildings. It was also used pretty
+
+49
+00:03:10,480 --> 00:03:14,960
+ extensively in other thermally demanding applications like lining for fireplaces or even in
+
+50
+00:03:14,960 --> 00:03:19,680
+ brake pads. Of course, these days we now know that asbestos when breathed as a fiber is very,
+
+51
+00:03:19,680 --> 00:03:24,480
+ very carcinogenic and consequently we don't use it very much anymore because of the regulatory
+
+52
+00:03:24,480 --> 00:03:29,200
+ requirements around its use and its disposal. That being said, asbestos still exists in many legacy
+
+53
+00:03:29,200 --> 00:03:34,080
+ products and trace amounts of it are still used in some things today, but this naturally occurring
+
+54
+00:03:34,080 --> 00:03:39,280
+ ceramic is now gradually being phased out of use. The second category of non-technical ceramics are
+
+55
+00:03:39,280 --> 00:03:44,160
+ those which are fired. These non-technical ceramics are not necessarily found in a particularly usable
+
+56
+00:03:44,640 --> 00:03:50,960
+ in nature, but instead are collected up as a powder and turned into a useful solid by firing.
+
+57
+00:03:50,960 --> 00:03:55,600
+ Here, in the same way that some technical ceramics were consolidated as a powder and then
+
+58
+00:03:55,600 --> 00:04:00,320
+ sinted where all of the particles kind of merged together, fired non-technical ceramics when
+
+59
+00:04:00,320 --> 00:04:05,520
+ subjected to high heat also sinted at some degree. Though importantly, the main mechanism behind
+
+60
+00:04:05,520 --> 00:04:10,240
+ densification of these non-technical ceramics is not sintering, but rather a process called
+
+61
+00:04:10,240 --> 00:04:15,200
+ vitrification. Here, at high temperatures contaminants particularly silica that happened to be in
+
+62
+00:04:15,200 --> 00:04:21,120
+ your non-technical ceramic powder melts and form a glassy phase binding together any of the
+
+63
+00:04:21,120 --> 00:04:26,800
+ unsinted and partially-sinted components of your non-technical ceramic. Here, these fired non-technical
+
+64
+00:04:26,800 --> 00:04:32,480
+ ceramics are near 100% theoretical density because all the gaps have been filled in with this glassy
+
+65
+00:04:32,480 --> 00:04:38,000
+ phase. And being largely non-porous starts suffer from the same kind of crack initiation that
+
+66
+00:04:38,480 --> 00:04:43,200
+ technical ceramics do. That being said, fired non-technical ceramics are still relatively weak and
+
+67
+00:04:43,200 --> 00:04:47,760
+ relatively brittle because the glassy phase also has some pretty poor mechanical properties.
+
+68
+00:04:47,760 --> 00:04:52,640
+ Common non-technical ceramics include porcelain and clay, which is what most bricks are made out of,
+
+69
+00:04:52,640 --> 00:04:56,320
+ and while there are many different kinds of clay in the chemistry of its actually pretty
+
+70
+00:04:56,320 --> 00:05:01,520
+ interesting, I might leave it at saying that most clay is composed of oxides of aluminium and
+
+71
+00:05:01,520 --> 00:05:06,080
+ silicon. The final type of non-technical ceramic we're going to talk about are cements.
+
+72
+00:05:06,160 --> 00:05:10,160
+ Cements undergo a process of densification that's a little bit like vitrification of
+
+73
+00:05:10,160 --> 00:05:14,560
+ fired non-technical ceramics except that it happens at room temperature. There are two very,
+
+74
+00:05:14,560 --> 00:05:19,200
+ very common examples that you've probably had some exposure to. Plaster of Paris and Portland
+
+75
+00:05:19,200 --> 00:05:23,120
+ cement. Given its importance to the building industry and the fact that we're not artists,
+
+76
+00:05:23,120 --> 00:05:27,280
+ we're probably going to talk more about Portland cement than we are about Plaster of Paris.
+
+77
+00:05:27,280 --> 00:05:31,680
+ And you should also note that the explanation I'm about to give you is a huge simplification
+
+78
+00:05:31,680 --> 00:05:36,480
+ of what goes on in real life. And while we mechanical in aerospace and mechatronics and medical
+
+79
+00:05:36,480 --> 00:05:41,360
+ engineers like to poke fun a little bit at civil engineers for spending so much time on concrete,
+
+80
+00:05:41,360 --> 00:05:45,600
+ concrete is actually an incredibly complicated and interesting field. That being said,
+
+81
+00:05:45,600 --> 00:05:49,120
+ he comes a simplified explanation. Pongcrete, the stuff that your driveway is made out of,
+
+82
+00:05:49,120 --> 00:05:54,240
+ is a composite of an aggregate material usually crushed up rocks and Portland cement.
+
+83
+00:05:54,240 --> 00:05:57,600
+ Portland cement is itself a pattern that's made up of a couple of different things.
+
+84
+00:05:57,680 --> 00:06:02,000
+ Gypsum and limestone and clay that's been combined together in a rotary kilon at around
+
+85
+00:06:02,000 --> 00:06:08,560
+ 1500 degrees. And Portland cement contains active ingredients that react with water to form a ceramic.
+
+86
+00:06:08,560 --> 00:06:12,800
+ Some of these active ingredients are designed to react very quickly with water to help the cement
+
+87
+00:06:12,800 --> 00:06:17,600
+ set up and take form. And some of these ingredients are designed to react quite slowly with
+
+88
+00:06:17,600 --> 00:06:23,120
+ water to help the cement cure to reach its full strength over a period of time. The strength of
+
+89
+00:06:23,120 --> 00:06:27,440
+ a cement or concrete product is largely dependent on how long you've allowed it to cure and
+
+90
+00:06:27,440 --> 00:06:32,480
+ how moist you've kept it while it's curing because it consumes this water reacts with this water
+
+91
+00:06:32,480 --> 00:06:37,120
+ as it sets as it forms a ceramic. And as you can imagine, there's quite a lot of research around
+
+92
+00:06:37,120 --> 00:06:41,680
+ making sure that a concrete reaches its full strength in as little time and with as little maintenance
+
+93
+00:06:41,680 --> 00:06:46,640
+ of water as possible. And that'll probably bring our discussion of non technical ceramics to a close.
+
+94
+00:06:46,640 --> 00:06:50,400
+ As was the case with technical ceramics, there are many, many more that I didn't mention in this
+
+95
+00:06:50,400 --> 00:06:54,560
+ video. And I encourage you to go and do a little bit of independent research of your iron
+
+96
+00:06:54,560 --> 00:06:58,560
+ and your pack is a good place to start. Otherwise, if you have any questions, you can of course reach
+
+97
+00:06:58,560 --> 00:07:06,320
+ out and we'll talk a little bit more about these in the live stream later this week.

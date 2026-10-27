@@ -1,0 +1,363 @@
+1
+00:00:00,000 --> 00:00:04,400
+ All right, now that we've talked a bit about how the constituents in an FRP are made and
+
+2
+00:00:04,400 --> 00:00:09,440
+ how you select between these and how you design the forms upon which you build your FRP,
+
+3
+00:00:09,440 --> 00:00:13,760
+ we can now actually talk about the layout process. While there are in general many different
+
+4
+00:00:13,760 --> 00:00:18,800
+ approaches to FRP layup, in this video we're only going to briefly touch on two of them,
+
+5
+00:00:18,800 --> 00:00:24,480
+ so-called wet layup and pre-preg layup. And in this video I'm going to provide a very top-level
+
+6
+00:00:24,480 --> 00:00:29,600
+ summary of what is a very complicated and tricky process. My intention here is not to get you to
+
+7
+00:00:29,600 --> 00:00:34,800
+ remember every single aspect of FRP layup or to even know how to lay up an FRP of your own
+
+8
+00:00:34,800 --> 00:00:37,920
+ bit, but to get you thinking about some of the considerations you might need to make in the
+
+9
+00:00:37,920 --> 00:00:41,920
+ design of your parts to try and ease this process a little bit. Throughout this video I'm going
+
+10
+00:00:41,920 --> 00:00:46,720
+ to refer to an insert some clips from a series of other videos made by a channel called Easy
+
+11
+00:00:46,720 --> 00:00:50,480
+ Composites that I encourage you to check out. Those videos are linked in the description and on the
+
+12
+00:00:50,480 --> 00:00:55,120
+ textbook page that accompanies this one and they're very very good. They go into a lot of detail
+
+13
+00:00:55,120 --> 00:00:58,640
+ about 10 to 15 minutes on each process and they hit on a lot of the specifics that I'm going to
+
+14
+00:00:59,280 --> 00:01:04,160
+ gloss over here. But again my intention is to give you that top-level view now and you can delve
+
+15
+00:01:04,160 --> 00:01:08,080
+ into those things if you're interested. All right we're going to start by talking about the so-called
+
+16
+00:01:08,080 --> 00:01:11,920
+ wet layup process which is probably what it immediately comes to mind when you think about
+
+17
+00:01:11,920 --> 00:01:16,400
+ laying up a fiber reinforced polymer. This is the process where we iteratively put down layers of
+
+18
+00:01:16,400 --> 00:01:21,840
+ resin and then carbon fiber or Kevlar or fiberglass fabric and so on and so forth to build up our
+
+19
+00:01:21,840 --> 00:01:27,600
+ geometry over the top of a form, be it a mold or a plug. And in general the process goes a little
+
+20
+00:01:27,600 --> 00:01:32,160
+ bit like this. First by sanding and buffing and polishing our form to the best surface finish that
+
+21
+00:01:32,160 --> 00:01:36,960
+ we can practically get given our resource requirements. We then code it in a release agent of some kind,
+
+22
+00:01:36,960 --> 00:01:41,600
+ usually a wax or a PVA. It's actually common to use a combination of these things and five or
+
+23
+00:01:41,600 --> 00:01:46,400
+ six layers of wax that you kind of wipe on and buff off and then a layer of PVA at the end.
+
+24
+00:01:46,400 --> 00:01:49,920
+ And the purpose of these release agents is to try and provide some separation between the
+
+25
+00:01:49,920 --> 00:01:54,480
+ resin in your part and the form so it's easy to remove one from the other at the end.
+
+26
+00:01:54,480 --> 00:01:57,760
+ At this point depending on the kind of finish that you want on the outside of your part,
+
+27
+00:01:57,760 --> 00:02:01,680
+ you may choose to apply what's called a gel coat. This is simply a colored layer of resonance
+
+28
+00:02:01,680 --> 00:02:06,640
+ applied before any other and allowed to kind of semi cure before you start the layout proper.
+
+29
+00:02:06,640 --> 00:02:10,800
+ And what it does is provide a nice thick colored resin skin on the outside of your part that can
+
+30
+00:02:10,800 --> 00:02:15,760
+ then be easily sanded or polished. But irrespective of whether you choose to use a gel coat or not,
+
+31
+00:02:15,760 --> 00:02:21,440
+ the layout proper begins next. Here you iteratively lay down alternating layers of resin and the
+
+32
+00:02:21,440 --> 00:02:25,760
+ mat of your choice. This process can be a little bit finicky for a bunch of different reasons.
+
+33
+00:02:25,760 --> 00:02:30,160
+ First of all, the resin can be pretty messy and only has a finite pot life. You normally mix up
+
+34
+00:02:30,160 --> 00:02:34,000
+ a bit of resin with some hardener just before you start the layout and you're constantly mixing
+
+35
+00:02:34,000 --> 00:02:37,920
+ new resin and hardener as you use it throughout because it's really important to get good
+
+36
+00:02:37,920 --> 00:02:42,320
+ resin penetration throughout the layers to ensure you don't have dry spots or air bubbles. You'll
+
+37
+00:02:42,320 --> 00:02:46,560
+ normally start with the resin layer, wetting out the form or the inside of the gel coat layer with
+
+38
+00:02:46,560 --> 00:02:51,280
+ a nice thick layer of resin before you put down your first layer of matting. And then using a
+
+39
+00:02:51,280 --> 00:02:55,600
+ a small metal roller or a paintbrush to stipple and pull the resin through the matting and
+
+40
+00:02:55,600 --> 00:02:59,840
+ make sure it's fully soaked. You then repeat this process with all of the different layers of
+
+41
+00:02:59,840 --> 00:03:03,680
+ matting that you'd like to build up your part until you've reached a sufficient thickness.
+
+42
+00:03:03,680 --> 00:03:06,640
+ And throughout this process, you're constantly searching throughout the part to make sure you've
+
+43
+00:03:06,640 --> 00:03:11,280
+ got into all the nooks and crannies and filled all of the air bubbles and see good penetration
+
+44
+00:03:11,280 --> 00:03:15,680
+ of the resin right through from the form to the inside or outside of your part. To help try and
+
+45
+00:03:15,680 --> 00:03:19,280
+ get rid of the air bubbles until encourage good distribution of the resin within the fibers you
+
+46
+00:03:19,280 --> 00:03:23,280
+ might apply pressure in one way or another to the stack up. This can be done if you have the
+
+47
+00:03:23,280 --> 00:03:27,680
+ other half of them all. So you've laid up into a female mold and you take a male plug and
+
+48
+00:03:27,680 --> 00:03:32,000
+ squeeze the thing between the two or it can also be done using vacuum bags. But you put your part
+
+49
+00:03:32,000 --> 00:03:36,320
+ inside of an after pulling your vacuum stitch down on it. If you're using an open mold in other
+
+50
+00:03:36,320 --> 00:03:40,400
+ words, if you haven't come into the back of it with a male plug, you may choose to then lay down
+
+51
+00:03:40,400 --> 00:03:44,720
+ a layer of what's called pure ply. This is a nonstick fabric that you lay down at the very end that
+
+52
+00:03:44,720 --> 00:03:49,200
+ kind of wicks away any extra resin and leaves the back side of your part with a reasonable
+
+53
+00:03:49,200 --> 00:03:52,880
+ surface finish. Once you're done with the layer, you then leave the part to cure and the
+
+54
+00:03:52,880 --> 00:03:57,040
+ curing time is largely a function of the temperature of the environment and the type and amount
+
+55
+00:03:57,040 --> 00:04:00,800
+ of resin that you've used. But it's not uncommon to leave a part to cure for anywhere from 48
+
+56
+00:04:00,800 --> 00:04:04,640
+ hours to a couple of days depending on the hardness that you want. Once the part's cured, you can
+
+57
+00:04:04,640 --> 00:04:08,560
+ then remove the layer of pure ply because it doesn't really stick to the part and then you can
+
+58
+00:04:08,560 --> 00:04:13,040
+ extract the part from the mold or from the plug. Difficult into having this extraction process is
+
+59
+00:04:13,040 --> 00:04:16,800
+ a hundred percent of function of your preparation. If you had a really good service finish in your
+
+60
+00:04:16,800 --> 00:04:20,960
+ mold and your plug and you ensure that you had the adequate amount of draft in the design of it
+
+61
+00:04:20,960 --> 00:04:24,320
+ and you properly prepared it with an appropriate release agent and you'll probably find this
+
+62
+00:04:24,320 --> 00:04:28,400
+ process pretty easy. By applying a bit of pressure to the mold or plug with a twisting force or
+
+63
+00:04:28,400 --> 00:04:32,400
+ putting some wedges in between the part and the mold, you can actually just pop it out without
+
+64
+00:04:32,400 --> 00:04:36,320
+ too much effort. On the other hand, if your preparation wasn't quite as diligent, you might have a
+
+65
+00:04:36,320 --> 00:04:40,640
+ very hard time removing your part from the mold or from the plug and you might end up destroying
+
+66
+00:04:40,640 --> 00:04:44,560
+ one of them in the process. Either way at this point, you can then clean up the part or
+
+67
+00:04:44,560 --> 00:04:49,360
+ removing any excess resin or fibers that are kind of on the edge and trimming it to final size.
+
+68
+00:04:49,360 --> 00:04:52,880
+ As you can imagine, this process dealing with wet resin can be a little bit messy, a little bit
+
+69
+00:04:52,880 --> 00:04:57,360
+ tricky. At production scales, especially when working with carbon fiber, it's more common to use
+
+70
+00:04:57,360 --> 00:05:02,960
+ a product known as pre-preg. Pre-preg or pre-impregnated resin infused matting is a slightly more
+
+71
+00:05:02,960 --> 00:05:06,400
+ sophisticated approach to this problem. Here, your matting consists of fibers that have been
+
+72
+00:05:06,400 --> 00:05:11,760
+ lightly coated in a partially cured and temperature sensitive temperature activated resin. This
+
+73
+00:05:11,760 --> 00:05:15,280
+ matting is still quite flexible and it's lightly tacky, meaning that it can be kind of
+
+74
+00:05:15,280 --> 00:05:20,240
+ cut to shape and laid directly onto the mold or plug with no additional resin required.
+
+75
+00:05:20,240 --> 00:05:24,400
+ And then the entire assembly, the mold or plug with the matting that's laid on top of it is
+
+76
+00:05:24,400 --> 00:05:29,040
+ put into an oven or an order clay, which is kind of like a pressurized oven, and this activates
+
+77
+00:05:29,040 --> 00:05:33,680
+ and wets out the resin that's impregnated in the fibers to make up your part. There are a number of
+
+78
+00:05:33,680 --> 00:05:37,840
+ advantages to pre-preg layup. It's generally a much more precise and accurate process because you
+
+79
+00:05:38,320 --> 00:05:42,960
+ cut out the exact shape and size of the matting that you need, the kind of net of the shape that
+
+80
+00:05:42,960 --> 00:05:48,480
+ you need using a CNC process like a laser cutter or a turret punch. And because the perfect amount
+
+81
+00:05:48,480 --> 00:05:53,360
+ of resin required is already infused in the fibers, the parts you get out generally, the minimum
+
+82
+00:05:53,360 --> 00:05:57,280
+ weight that they can be. This also means that your parts generally tend to have a much higher
+
+83
+00:05:57,280 --> 00:06:01,440
+ dimensional accuracy than if you did a wet layup, for example. Of course, there are downsides to
+
+84
+00:06:01,440 --> 00:06:05,840
+ this process as well. Pre-preg is generally quite a bit more expensive than this, the components
+
+85
+00:06:05,840 --> 00:06:09,840
+ required for a wet layup. On top of that, the equipment required to cure it, especially for large
+
+86
+00:06:09,840 --> 00:06:14,400
+ parts can be exorbitantly expensive. For example, if you'd like to make a very large part using
+
+87
+00:06:14,400 --> 00:06:18,960
+ pre-preg, you need a very large oven or order clay to make this happen. And I might leave it there
+
+88
+00:06:18,960 --> 00:06:22,880
+ for our discussions in FRP layup. Again, the videos from easy composites that I've taken a few
+
+89
+00:06:22,880 --> 00:06:27,520
+ clips from and used in this video are very, very good and worth checking out. They go into a lot
+
+90
+00:06:27,520 --> 00:06:31,440
+ more detail. They're filmed at really high quality and they'll broaden your understanding of this
+
+91
+00:06:31,440 --> 00:06:33,440
+ process. So please go and check them out.

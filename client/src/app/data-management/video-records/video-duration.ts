@@ -3,7 +3,8 @@ import { VideoRecord } from './VideoRecord';
 
 /**
  * How long a video is, from whichever source has an answer: the YouTube export
- * first, then scene stats (OpenCV over the file), then the file in the browser.
+ * first, then scene stats (OpenCV over the file), then the file in the browser,
+ * then audio stats.
  *
  * Each tier is gated on > 0, not merely on being present, so a zero from a probe
  * that opened a file but got nothing useful out of it falls through to the next
@@ -23,6 +24,12 @@ export const recordDurationTiers = (record: VideoRecord): { secs: number; source
       source: 'From video file (scene stats)',
     },
     { secs: record.video_file.duration_secs, source: 'From local video file' },
+    // Last: only a record scanned for audio alone (a model that needs no scene
+    // stats) gets its duration here, and then the speech features need one.
+    {
+      secs: readyData(record.ds_audioStats)?.duration_secs,
+      source: 'From video file (audio stats)',
+    },
   ];
   return candidates.filter(
     (tier): tier is { secs: number; source: string } => (tier.secs ?? 0) > 0,

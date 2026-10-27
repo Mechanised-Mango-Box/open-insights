@@ -1,0 +1,99 @@
+1
+00:00:00,000 --> 00:00:05,360
+ All right, let's talk about our final basic component of electrical systems, the electrical
+
+2
+00:00:05,360 --> 00:00:10,080
+ equivalent of the generalized resistor, and just like capacitors, I've kind of given
+
+3
+00:00:10,080 --> 00:00:14,880
+ the name away in the generalized version, the electrical version of a generalized resistor
+
+4
+00:00:14,880 --> 00:00:20,240
+ is an actual resistor, just like the frictions that we met in other domains, the kind of generalized
+
+5
+00:00:20,240 --> 00:00:26,720
+ resistors we met in other domains, electrical resistors or resistors take the kind of otherwise
+
+6
+00:00:26,720 --> 00:00:30,880
+ usable electric energy and convert it into heat, energy that we can't recover.
+
+7
+00:00:30,880 --> 00:00:36,000
+ We normally draw resistors like this, and we do this to represent resistors that you can buy
+
+8
+00:00:36,000 --> 00:00:40,240
+ a real resistors, maybe the kind that you put on your PCB, surface mount or through a whole
+
+9
+00:00:40,240 --> 00:00:45,280
+ mount or into your circuits, but we also use resistors to measure resistance in electrical
+
+10
+00:00:45,280 --> 00:00:50,320
+ systems from, I don't know, long runs of wire or big coils of wire, particularly when it comes to
+
+11
+00:00:50,320 --> 00:00:56,560
+ motors, kind of the resistance in transmission lines, for example. The CCR for resistors is a really
+
+12
+00:00:56,560 --> 00:01:02,000
+ easy one, it's one that you've probably already met many times, it's ohm's law. The voltage
+
+13
+00:01:02,000 --> 00:01:06,880
+ across a resistor is related to the current kind of through a characteristic we call the resistance
+
+14
+00:01:06,880 --> 00:01:11,600
+ of the resistor, depending on its composition, the cross-sectional area, how long the run is,
+
+15
+00:01:11,600 --> 00:01:16,080
+ whatever, kind of famous example of this and one that's more relatable I think for the mechanical
+
+16
+00:01:16,080 --> 00:01:21,520
+ students is the strain gauge, a component that kind of changes its resistance as you load it.
+
+17
+00:01:21,520 --> 00:01:26,400
+ We use these strain gauges to work out how strained things are so that we can work out how
+
+18
+00:01:26,400 --> 00:01:31,920
+ stressed they are so that we can work out how close they are to failing. They do exist non-omic
+
+19
+00:01:31,920 --> 00:01:36,320
+ resistors, those that kind of don't satisfy this law. If you're dealing with a resistor that
+
+20
+00:01:36,320 --> 00:01:40,000
+ doesn't satisfy ohm's law, you'll normally be told this in the description of a problem,
+
+21
+00:01:40,000 --> 00:01:44,000
+ but in general in this course we're going to pretty much limit ourselves to ohmic resistors that
+
+22
+00:01:44,000 --> 00:01:48,160
+ follow ohm's law. Obviously in the real world it will be up to you to work out kind of what
+
+23
+00:01:48,160 --> 00:01:53,360
+ resist the CCR, what mini model is most appropriate for the resistance that you're trying to capture.
+
+24
+00:01:53,440 --> 00:01:57,680
+ All right let's have a quick talk about some of the SSR's electrical systems and then we'll be
+
+25
+00:01:57,680 --> 00:02:01,280
+ able to have a go at a modeling problem.

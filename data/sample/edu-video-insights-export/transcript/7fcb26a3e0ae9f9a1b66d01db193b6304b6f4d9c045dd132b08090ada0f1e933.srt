@@ -1,0 +1,299 @@
+1
+00:00:00,000 --> 00:00:04,000
+ Alright everybody, well done. You've survived another week.
+
+2
+00:00:04,000 --> 00:00:10,000
+ Look, I know this isn't easy. Nobody likes learning online, and I think you guys all deserve to be congratulated for
+
+3
+00:00:10,000 --> 00:00:16,000
+ kind of getting through this. It's a really tough time. You're doing a great job. I'm really proud of you.
+
+4
+00:00:16,000 --> 00:00:22,000
+ As I promised, it's the end of the week, and we're going to take a step back and look at the big picture again.
+
+5
+00:00:22,000 --> 00:00:26,000
+ In this video, I want to talk about what are called the seven fundamental components.
+
+6
+00:00:26,000 --> 00:00:32,000
+ This week, we met some components that had analogues to the ones we met last week. I hope that you noticed this.
+
+7
+00:00:32,000 --> 00:00:37,000
+ Rotating masses behave very similarly to the translating masses that we met last week.
+
+8
+00:00:37,000 --> 00:00:44,000
+ They had very similar CCRs, the same for torsion and linear springs and friction in both kind of domains.
+
+9
+00:00:44,000 --> 00:00:52,000
+ And I know this is a little bit contrived. You would imagine that springs irrespective of whether they're torsion springs or linear springs would behave the same.
+
+10
+00:00:52,000 --> 00:00:58,000
+ Actually, the reason they behave the same is not because they're both springs. It's because they're both capacitors.
+
+11
+00:00:58,000 --> 00:01:03,000
+ And I know this sounds crazy, right? We haven't even touched electrical systems yet.
+
+12
+00:01:03,000 --> 00:01:10,000
+ And here I am telling you that springs are capacitors, but actually underneath the hood, when you look at things purely in terms of energy,
+
+13
+00:01:10,000 --> 00:01:14,000
+ in reality, there are only seven kind of fundamental components.
+
+14
+00:01:14,000 --> 00:01:21,000
+ In this video, I want to talk about what those things are, how we can recognize them, and why springs and capacitors are the same thing.
+
+15
+00:01:21,000 --> 00:01:26,000
+ To get started, let's talk about what are called generalized inertias.
+
+16
+00:01:26,000 --> 00:01:31,000
+ These are one port components, one power port. Do you remember we talked about power ports last week?
+
+17
+00:01:31,000 --> 00:01:34,000
+ If not, I'll put a link to that video in the description.
+
+18
+00:01:34,000 --> 00:01:38,000
+ These are one port components that relate momentum to flow.
+
+19
+00:01:38,000 --> 00:01:44,000
+ And when I say momentum, I don't mean linear momentum or angular momentum, the specific kinds that we met this week.
+
+20
+00:01:44,000 --> 00:01:51,000
+ I mean generalized momentum. A quantity that's going to permeate through all the domains that we're looking at.
+
+21
+00:01:51,000 --> 00:01:56,000
+ And they do this through a kind of general and potentially nonlinear function that we're going to call Phi.
+
+22
+00:01:56,000 --> 00:02:04,000
+ The only other important thing for me to note at this stage, I think, is that generalized inertias, they store energy in a kind of kinetic form.
+
+23
+00:02:04,000 --> 00:02:10,000
+ You remember last week that I was talking about how you can decompose energy in the system to a kinetic part in a potential part?
+
+24
+00:02:10,000 --> 00:02:13,000
+ These are the elements that store the kinetic part.
+
+25
+00:02:13,000 --> 00:02:22,000
+ And they store it in that they can take it and release it later on in contrast to another kind of element will meet generalized resistors.
+
+26
+00:02:22,000 --> 00:02:30,000
+ These are elements that also have one power port and a CCR that relates effort to flow through a relation like this.
+
+27
+00:02:30,000 --> 00:02:35,000
+ Again, we're using the notation Phi to mean some potentially nonlinear general function.
+
+28
+00:02:35,000 --> 00:02:41,000
+ And for the mechanical system, we've already met these generalized resistors took the form of friction or dampers.
+
+29
+00:02:41,000 --> 00:02:49,000
+ We related velocity to resistive force irrespective of the domain generalized resistors work to remove energy from our systems.
+
+30
+00:02:49,000 --> 00:02:53,000
+ They take what would otherwise be useful energy and they convert into heat.
+
+31
+00:02:53,000 --> 00:02:56,000
+ Generalized capacitors are also one port components.
+
+32
+00:02:56,000 --> 00:03:02,000
+ And these are components that relate generalized displacement, the derivative of flow to effort.
+
+33
+00:03:02,000 --> 00:03:07,000
+ For mechanical systems, we already met generalized capacitors in the form of springs, right?
+
+34
+00:03:07,000 --> 00:03:12,000
+ For the translated mechanical systems, they related displacement, linear displacement to force.
+
+35
+00:03:12,000 --> 00:03:17,000
+ And for rotating mechanical systems, they related angular displacement to torque.
+
+36
+00:03:17,000 --> 00:03:21,000
+ Generalized capacitors just like inertia store energy that we can recover later.
+
+37
+00:03:21,000 --> 00:03:28,000
+ And again, in the context of the discussions we've already had, if you break the energy in a system up to a kind of kinetic part at a potential part,
+
+38
+00:03:28,000 --> 00:03:31,000
+ these are the elements that store the potential part.
+
+39
+00:03:31,000 --> 00:03:40,000
+ Generalized ideal effort sources are one port components that provide a certain effort irrespective of the amount of flow that's required to make that happen.
+
+40
+00:03:40,000 --> 00:03:44,000
+ We met these already as sources of force or torque.
+
+41
+00:03:44,000 --> 00:03:47,000
+ And they're not really a great reflection of reality.
+
+42
+00:03:47,000 --> 00:03:53,000
+ You can imagine that since a generalized effort source will provide whatever flow is required to make that effort happen,
+
+43
+00:03:53,000 --> 00:03:56,000
+ it's possible for these elements to provide infinite power.
+
+44
+00:03:56,000 --> 00:04:09,000
+ This is obviously not the case for real life things, but the closest approximation to this would be some kind of source to your system that's so be so powerful that any effect your system can have on it's going to be negligible.
+
+45
+00:04:09,000 --> 00:04:13,000
+ For example, if you had a huge battery powering a circuit, right?
+
+46
+00:04:13,000 --> 00:04:16,000
+ Huge battery powering a tiny circuit.
+
+47
+00:04:16,000 --> 00:04:27,000
+ Then any kind of current you draw from that battery, which ostensibly we would consider a voltage source is going to be so minimal that the voltage of that battery is probably not going to drop by any substantial amount.
+
+48
+00:04:27,000 --> 00:04:31,000
+ In that case, you could treat the battery as an ideal voltage source.
+
+49
+00:04:31,000 --> 00:04:37,000
+ It'll provide you whatever voltage you want in your circuit irrespective of the current that's required to make that happen.
+
+50
+00:04:37,000 --> 00:04:45,000
+ Generalized ideal flow sources are also one port components, but they provide a certain flow irrespective of what effort is required to make this happen.
+
+51
+00:04:46,000 --> 00:04:50,000
+ Generalized ideal transformers are the first two port element that we should talk about.
+
+52
+00:04:50,000 --> 00:04:57,000
+ And these are things that relate effort import one to the effort import two and the flow import one to the flow import two.
+
+53
+00:04:57,000 --> 00:04:59,000
+ We met one of these this week, right?
+
+54
+00:04:59,000 --> 00:05:01,000
+ The ideal gearbox.
+
+55
+00:05:01,000 --> 00:05:05,000
+ And ideal transformers like the ideal gearbox are nominally lossless.
+
+56
+00:05:05,000 --> 00:05:11,000
+ So this means that all the power you put into port one, you should get back out of port two.
+
+57
+00:05:11,000 --> 00:05:15,000
+ All the gearbox does is change the ratio of effort to flow between the ports.
+
+58
+00:05:15,000 --> 00:05:18,000
+ You might get port one with lots of effort and not much flow.
+
+59
+00:05:18,000 --> 00:05:25,000
+ And port two with lots of flow, but not much effort, but the product of these things at both ports should always be the same.
+
+60
+00:05:25,000 --> 00:05:35,000
+ transformers have this generalized CCR where M is a function we call the modulus of the transformer and M inverse is kind of the inverse function.
+
+61
+00:05:35,000 --> 00:05:42,000
+ You notice that the relationship from port one to port two for effort is the inverse of the relationship from port one to port two of flow.
+
+62
+00:05:42,000 --> 00:05:44,000
+ This is the way the transformers work.
+
+63
+00:05:44,000 --> 00:05:47,000
+ This is the way that they maintain the same power.
+
+64
+00:05:47,000 --> 00:05:53,000
+ Finally, generalized gyrators, our seventh component are also to port elements.
+
+65
+00:05:53,000 --> 00:06:01,000
+ And they're kind of like transformers except they relate the effort import one to the flow import two and the flow import one to the effort import two.
+
+66
+00:06:01,000 --> 00:06:05,000
+ This is kind of the cross pollination I was talking about in the gearbox video.
+
+67
+00:06:05,000 --> 00:06:08,000
+ We haven't met any kind of mechanical gyrators yet.
+
+68
+00:06:08,000 --> 00:06:11,000
+ They're probably a little bit harder to talk about in the mechanical domain.
+
+69
+00:06:11,000 --> 00:06:15,000
+ But we're going to meet our first one next week when we talk about electrical circuits.
+
+70
+00:06:15,000 --> 00:06:23,000
+ The same kind of rules as kind of ideal transformers apply in that all the power you put into port one you need to get out of port two again.
+
+71
+00:06:23,000 --> 00:06:33,000
+ These gyrators again have a generalized CCR it looks like this and of course MFT in this case is again the modulus of the gyrator.
+
+72
+00:06:33,000 --> 00:06:37,000
+ Now that we have the terminology and we understand the big picture a little more.
+
+73
+00:06:37,000 --> 00:06:44,000
+ Next week when we meet electrical systems I'm not going to introduce you to resistors and capacitors and inductors.
+
+74
+00:06:44,000 --> 00:06:56,000
+ Again the introduce you to the generalized resistors and the generalized inertia and the generalized capacitor for electrical systems that just happen to be actual resistors and actual capacitors and inductors.
+
+75
+00:06:56,000 --> 00:07:04,000
+ I know this one was a little bit longer and I understand that big picture things aren't always super interesting so thank you for watching see you next week.

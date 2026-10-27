@@ -1,0 +1,315 @@
+1
+00:00:00,000 --> 00:00:05,800
+ In this video I want to kind of sum up the linearization topic by talking about kind of two
+
+2
+00:00:05,800 --> 00:00:06,800
+ things.
+
+3
+00:00:06,800 --> 00:00:11,720
+ First, the difference between linearizing at an equilibrium point and not linearizing
+
+4
+00:00:11,720 --> 00:00:17,560
+ at an equilibrium point, and second, the kind of vector form of our linearization equation.
+
+5
+00:00:17,560 --> 00:00:23,120
+ So, to kick things off, we kind of talked about the kind of theoretical, the nice physical
+
+6
+00:00:23,120 --> 00:00:27,720
+ difference between linearizing at an equilibration point and linearizing at an equilibrium
+
+7
+00:00:27,720 --> 00:00:28,720
+ point.
+
+8
+00:00:28,880 --> 00:00:32,840
+ And we learned that if your approximation point happens to be an equilibrium point,
+
+9
+00:00:32,840 --> 00:00:34,960
+ you get a whole bunch of extra information.
+
+10
+00:00:34,960 --> 00:00:39,120
+ You can judge the stability of that equilibrium point and you can even tell if your approximation
+
+11
+00:00:39,120 --> 00:00:40,120
+ is any good.
+
+12
+00:00:40,120 --> 00:00:45,000
+ You can kind of work out whether or not the state trajectories of the kind of linear approximation
+
+13
+00:00:45,000 --> 00:00:46,960
+ and the nonlinear system will be similar.
+
+14
+00:00:46,960 --> 00:00:51,640
+ But in terms of a practical difference between linearizing about any old point and linearizing
+
+15
+00:00:51,640 --> 00:00:56,280
+ at an equilibrium point, well, let's take a look at one of our linearization equations.
+
+16
+00:00:56,320 --> 00:01:01,600
+ I have here a kind of linearization for a z1 dot for a system that has kind of two states.
+
+17
+00:01:01,600 --> 00:01:05,200
+ Of course, the concept I'm about to talk about extends to kind of any state derivatives
+
+18
+00:01:05,200 --> 00:01:10,400
+ z2 dot z3 dot for a system with any number of states, 3, 4, 5, or whatever.
+
+19
+00:01:10,400 --> 00:01:11,800
+ The key point is this.
+
+20
+00:01:11,800 --> 00:01:16,720
+ If you linearize about an equilibrium point, by definition, the value of the state derivative
+
+21
+00:01:16,720 --> 00:01:18,480
+ of that point is zero.
+
+22
+00:01:18,480 --> 00:01:23,680
+ And this offset term at the very start of our linearization is also going to be zero.
+
+23
+00:01:23,680 --> 00:01:27,840
+ If you linearize about an equilibrium point, that term will always disappear.
+
+24
+00:01:27,840 --> 00:01:31,800
+ If you linearize about any other approximation point, generally, you can expect that
+
+25
+00:01:31,800 --> 00:01:37,200
+ it won't disappear and that your linear approximation may not end up being linear.
+
+26
+00:01:37,200 --> 00:01:42,720
+ It might end up being what we call affine, almost linear, linear with an offset term.
+
+27
+00:01:42,720 --> 00:01:46,440
+ The other place of an offset term might appear is here where you have kind of the product
+
+28
+00:01:46,440 --> 00:01:51,480
+ of the gradient evaluated at your approximation point, multiplied by that approximation
+
+29
+00:01:51,480 --> 00:01:52,480
+ point.
+
+30
+00:01:52,480 --> 00:01:56,840
+ Having an affine approximation instead of linear approximation, having an offset term,
+
+31
+00:01:56,840 --> 00:01:59,000
+ is not necessarily something to worry about.
+
+32
+00:01:59,000 --> 00:02:02,000
+ And this certainly doesn't mean that you can't linearize about a point which isn't
+
+33
+00:02:02,000 --> 00:02:03,000
+ an equilibrium point.
+
+34
+00:02:03,000 --> 00:02:05,840
+ You're just going to end up with these extra terms.
+
+35
+00:02:05,840 --> 00:02:10,080
+ One potential way to get around it, if you really do want a linear approximation, is to
+
+36
+00:02:10,080 --> 00:02:12,640
+ kind of do a change of states.
+
+37
+00:02:12,640 --> 00:02:16,520
+ Remember I told you right at the start that the state space representation is not unique.
+
+38
+00:02:16,520 --> 00:02:20,200
+ And we kind of learned this when we modeled some systems using, I don't know, same momentum
+
+39
+00:02:20,200 --> 00:02:23,240
+ as a state and we modeled others using velocity as a state.
+
+40
+00:02:23,240 --> 00:02:26,640
+ Well, this concept is actually useful to us here as well.
+
+41
+00:02:26,640 --> 00:02:31,280
+ We can take a kind of state space model that's written in terms of states z and we can
+
+42
+00:02:31,280 --> 00:02:37,800
+ define some new states that look like z minus z a, z minus a kind of approximation point.
+
+43
+00:02:37,800 --> 00:02:41,240
+ If you perform this change of states, you can take what would otherwise be kind of an
+
+44
+00:02:41,240 --> 00:02:45,600
+ affine approximation and turn it into a linear approximation.
+
+45
+00:02:45,600 --> 00:02:49,040
+ Of course, it's not linear in the original states if linear in the new states, but that
+
+46
+00:02:49,040 --> 00:02:52,560
+ might be enough to get you over the line in terms of being able to apply toolboxes
+
+47
+00:02:52,560 --> 00:02:56,480
+ in the design for operating on linear systems, not affine systems.
+
+48
+00:02:56,480 --> 00:02:58,080
+ At the end of the day, it's not a big deal.
+
+49
+00:02:58,080 --> 00:02:59,640
+ It's just something to keep in mind.
+
+50
+00:02:59,640 --> 00:03:04,160
+ The second thing that I wanted to talk about was the kind of vector form of the linearization
+
+51
+00:03:04,160 --> 00:03:05,160
+ formula.
+
+52
+00:03:05,160 --> 00:03:07,760
+ I briefly alluded to this in one of the videos.
+
+53
+00:03:07,760 --> 00:03:13,160
+ We've kind of looked at linearizing each state space equation almost independently, applying
+
+54
+00:03:13,160 --> 00:03:17,160
+ our kind of multivariable linearization formula to each state space equation.
+
+55
+00:03:17,200 --> 00:03:20,040
+ Well, if you'd like to save a little bit of time, if you'd like to be a little bit less
+
+56
+00:03:20,040 --> 00:03:26,520
+ than the both, you can actually write out the linearization formula as a vector equation.
+
+57
+00:03:26,520 --> 00:03:31,120
+ If you do so, you kind of still have an offset term plus a gradient times a distance
+
+58
+00:03:31,120 --> 00:03:35,240
+ for all of the states and a gradient times a distance for all of the inputs.
+
+59
+00:03:35,240 --> 00:03:39,800
+ But that offset term is a vector now, not a kind of scalar.
+
+60
+00:03:39,800 --> 00:03:44,800
+ The gradient is a Jacobian matrix which contains all of the gradients arranged in a particular
+
+61
+00:03:44,800 --> 00:03:45,800
+ way.
+
+62
+00:03:45,880 --> 00:03:50,920
+ The distance is kind of a vector distance between the kind of state z and the approximations
+
+63
+00:03:50,920 --> 00:03:53,360
+ z a and the same for the inputs.
+
+64
+00:03:53,360 --> 00:03:57,080
+ You have gradients of all the inputs with respect to the states multiplied by a distance
+
+65
+00:03:57,080 --> 00:04:02,000
+ between the input vector and kind of the input approximation vector.
+
+66
+00:04:02,000 --> 00:04:05,640
+ How you choose to do this is totally up to you if you want to linearize kind of one state
+
+67
+00:04:05,640 --> 00:04:10,040
+ equation at a time or you want to linearize kind of the entire thing together.
+
+68
+00:04:10,040 --> 00:04:14,000
+ I think for a lot of students, myself included when I was in undergrad, Jacobians didn't
+
+69
+00:04:14,000 --> 00:04:15,720
+ make a whole lot of sense to me.
+
+70
+00:04:15,720 --> 00:04:17,880
+ Long story short, you have a choice.
+
+71
+00:04:17,880 --> 00:04:22,200
+ Apply the kind of vector version of this formula if you like or linearize each state space
+
+72
+00:04:22,200 --> 00:04:25,240
+ equation individually like we talked about earlier this week.
+
+73
+00:04:25,240 --> 00:04:26,240
+ It's totally up to you.
+
+74
+00:04:26,240 --> 00:04:28,480
+ All right, that's all I have for this one.
+
+75
+00:04:28,480 --> 00:04:32,320
+ Next week we're going to briefly talk together about transfer functions, the link between
+
+76
+00:04:32,320 --> 00:04:36,720
+ the modeling problems we've already been doing and the language that control engineers
+
+77
+00:04:36,720 --> 00:04:40,920
+ mostly use to kind of formulate their problems and then I'll hand you off to associate
+
+78
+00:04:40,920 --> 00:04:41,920
+ professor you on.
+
+79
+00:04:41,920 --> 00:04:43,000
+ I'll see you guys then.

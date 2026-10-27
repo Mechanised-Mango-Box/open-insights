@@ -9,8 +9,10 @@ import { MatIcon } from '@angular/material/icon';
 import { MatDivider } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import {
+  AudioStats,
   LOCAL_IMPORT,
   SceneStats,
+  TextStats,
   TranscriptStats,
   computeTranscriptStats,
   isReady,
@@ -25,6 +27,7 @@ import { calculateSha256, VideoRecord } from './VideoRecord';
 import { DatasetActionsService } from './dataset-actions.service';
 import { parseYoutubeAudienceRetentionCsv, parseYoutubeContentCsv } from './youtube-csv-import';
 import { readFileDurationSecs, recordDurationSecs } from './video-duration';
+import { isAcceptedVideoName, notAcceptedMessage, VIDEO_FILE_ACCEPT } from './video-file-types';
 import { parseTranscriptFile } from './transcript-import';
 import {
   STATUS_ICON_STYLES,
@@ -49,7 +52,43 @@ import {
     MatExpansionModule,
   ],
   templateUrl: './edit-video-dialog.component.html',
-  styles: [STATUS_ICON_STYLES],
+  styles: [
+    STATUS_ICON_STYLES,
+    `
+      /* The outline label sits above the field's box, and the scrolling content
+         would otherwise clip it - the divider and <br /> that used to sit above
+         this were doing that job by accident. */
+      .name-field {
+        margin-top: 8px;
+      }
+      .file-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .transcript-segments {
+        max-height: 240px;
+        overflow-y: auto;
+        margin-bottom: 8px;
+      }
+      /* Two columns of the report's numbers rather than one long column of them. */
+      .field-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 0 12px;
+      }
+      .panel-hint {
+        font: var(--mat-sys-body-small);
+        color: var(--mat-sys-on-surface-variant);
+        margin: 0 0 12px;
+        max-width: 60ch;
+      }
+      .panel-hint + button + button {
+        margin-left: 8px;
+      }
+    `,
+  ],
 })
 export class EditVideoDialogComponent {
   readonly dialogRef = inject(MatDialogRef<EditVideoDialogComponent>);
@@ -61,10 +100,13 @@ export class EditVideoDialogComponent {
   readonly YoutubeContent = YoutubeContent;
   readonly YoutubeAudienceRetention = YoutubeAudienceRetention;
   readonly formatTimestamp = formatTimestamp;
+  readonly videoFileAccept = VIDEO_FILE_ACCEPT;
 
   uploadError = signal<string | null>(null);
   transcriptError = signal<string | null>(null);
   sceneStatsError = signal<string | null>(null);
+  textStatsError = signal<string | null>(null);
+  audioStatsError = signal<string | null>(null);
 
   // Pending state and server statuses live in DatasetActionsService, keyed by file hash, so the
   // dialog and the table row behind it always agree about what's in flight.
@@ -73,10 +115,16 @@ export class EditVideoDialogComponent {
     this.datasetActions.sendingTranscript().has(this.localData.video_file.hash);
   sceneStatsPending = () =>
     this.datasetActions.sendingSceneStats().has(this.localData.video_file.hash);
+  textStatsPending = () =>
+    this.datasetActions.sendingTextStats().has(this.localData.video_file.hash);
+  audioStatsPending = () =>
+    this.datasetActions.sendingAudioStats().has(this.localData.video_file.hash);
 
   checkServerStatus = (hash: string) => this.datasetActions.checkServerStatus(hash);
   checkTranscriptStatus = (hash: string) => this.datasetActions.checkTranscriptStatus(hash);
   checkSceneStatsStatus = (hash: string) => this.datasetActions.checkSceneStatsStatus(hash);
+  checkTextStatsStatus = (hash: string) => this.datasetActions.checkTextStatsStatus(hash);
+  checkAudioStatsStatus = (hash: string) => this.datasetActions.checkAudioStatsStatus(hash);
 
   constructor() {
     const hash = this.localData.video_file.hash;
@@ -127,16 +175,59 @@ export class EditVideoDialogComponent {
     );
   }
 
+  get textStatsUploadIcon(): StatusIcon | null {
+    return datasetStateIcon(
+      this.localData.ds_textStats,
+      this.textStatsPending(),
+      this.datasetActions.providerLabel(),
+    );
+  }
+
+  get textStatsPeekIcon(): StatusIcon {
+    return datasetPeekStatusIcon(
+      this.datasetActions.textStatsStatusByHash().get(this.localData.video_file.hash) ?? {
+        status: 'checking',
+      },
+      this.datasetActions.providerLabel(),
+    );
+  }
+
+  get audioStatsUploadIcon(): StatusIcon | null {
+    return datasetStateIcon(
+      this.localData.ds_audioStats,
+      this.audioStatsPending(),
+      this.datasetActions.providerLabel(),
+    );
+  }
+
+  get audioStatsPeekIcon(): StatusIcon {
+    return datasetPeekStatusIcon(
+      this.datasetActions.audioStatsStatusByHash().get(this.localData.video_file.hash) ?? {
+        status: 'checking',
+      },
+      this.datasetActions.providerLabel(),
+    );
+  }
+
   private refreshStatuses(hash: string): void {
     this.checkServerStatus(hash);
     this.checkTranscriptStatus(hash);
     this.checkSceneStatsStatus(hash);
+    this.checkTextStatsStatus(hash);
+    this.checkAudioStatsStatus(hash);
   }
 
   onVideoFileSelected = (event: Event): void => {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
+      // `accept` is only the picker's default filter; "All files" gets past it.
+      if (!isAcceptedVideoName(file.name)) {
+        this.uploadError.set(notAcceptedMessage(file.name));
+        input.value = '';
+        return;
+      }
+      this.uploadError.set(null);
       this.localData.video_file.file = file;
       readFileDurationSecs(file).then((duration) => {
         this.localData.video_file.duration_secs = duration;
@@ -192,7 +283,11 @@ export class EditVideoDialogComponent {
       }
     } catch (error) {
       console.error('Upload failed:', error);
-      this.uploadError.set('Upload failed. See console for details.');
+      // The server's reason when it refused the file ("holds no video", ...); the
+      // console for anything else.
+      this.uploadError.set(
+        error instanceof Error ? error.message : 'Upload failed. See console for details.',
+      );
     }
   }
 
@@ -224,6 +319,34 @@ export class EditVideoDialogComponent {
     }
   }
 
+  async computeTextStatsViaServer(): Promise<void> {
+    this.textStatsError.set(null);
+    if (!this.localData.video_file.hash) {
+      this.textStatsError.set('Select the video file first.');
+      return;
+    }
+    try {
+      await this.datasetActions.fetchTextStats(this.localData);
+    } catch (error) {
+      console.error('Screen text computation failed:', error);
+      this.textStatsError.set('Screen text computation failed. See console for details.');
+    }
+  }
+
+  async computeAudioStatsViaServer(): Promise<void> {
+    this.audioStatsError.set(null);
+    if (!this.localData.video_file.hash) {
+      this.audioStatsError.set('Select the video file first.');
+      return;
+    }
+    try {
+      await this.datasetActions.fetchAudioStats(this.localData);
+    } catch (error) {
+      console.error('Audio stats computation failed:', error);
+      this.audioStatsError.set('Audio stats computation failed. See console for details.');
+    }
+  }
+
   get hasLocalTranscript(): boolean {
     return isReady(this.localData.ds_transcript);
   }
@@ -238,6 +361,22 @@ export class EditVideoDialogComponent {
 
   clearLocalSceneStats(): void {
     this.localData.ds_sceneStats = { state: 'absent' };
+  }
+
+  get textStatsData(): TextStats | null {
+    return readyData(this.localData.ds_textStats);
+  }
+
+  clearLocalTextStats(): void {
+    this.localData.ds_textStats = { state: 'absent' };
+  }
+
+  get audioStatsData(): AudioStats | null {
+    return readyData(this.localData.ds_audioStats);
+  }
+
+  clearLocalAudioStats(): void {
+    this.localData.ds_audioStats = { state: 'absent' };
   }
 
   get transcriptSegments(): TranscriptSegment[] {

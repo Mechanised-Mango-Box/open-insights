@@ -1,0 +1,191 @@
+1
+00:00:00,000 --> 00:00:03,680
+ Alright guys, you're nearly there with this linearization business, right?
+
+2
+00:00:03,680 --> 00:00:06,520
+ We've talked about linearizing kind of 1D functions.
+
+3
+00:00:06,520 --> 00:00:10,960
+ We've talked about linearizing multivariable functions with multiple inputs and one output.
+
+4
+00:00:10,960 --> 00:00:13,760
+ We've talked about linearizing state space models, right?
+
+5
+00:00:13,760 --> 00:00:18,680
+ Which are just kind of collections of multivariable functions.
+
+6
+00:00:18,680 --> 00:00:21,840
+ And now we're going to talk about doing the same for state space models with inputs,
+
+7
+00:00:21,840 --> 00:00:24,920
+ a really minor extension on what we've already done.
+
+8
+00:00:24,920 --> 00:00:29,120
+ You remember from the last video that our linearization formula for a state space equation
+
+9
+00:00:29,120 --> 00:00:33,080
+ looked like kind of an offset term, which was the value of that equation evaluated
+
+10
+00:00:33,080 --> 00:00:36,640
+ at our approximation point, kind of our approximation z.
+
+11
+00:00:36,640 --> 00:00:40,680
+ Plus, a gradient times a distance for each of the states involved.
+
+12
+00:00:40,680 --> 00:00:44,560
+ Well, if you want to linearize a state space model that has inputs as well as states,
+
+13
+00:00:44,560 --> 00:00:50,240
+ so kind of z1 through zn and u1 through un, it's exactly the same process.
+
+14
+00:00:50,240 --> 00:00:54,920
+ You have an offset term plus a gradient times a distance for each state from the approximation.
+
+15
+00:00:54,920 --> 00:00:58,520
+ Plus, a gradient times a distance for each input.
+
+16
+00:00:58,640 --> 00:01:04,040
+ What this means is that our evaluation for the offset term at the start now needs to be in terms of,
+
+17
+00:01:04,040 --> 00:01:08,280
+ kind of, a state approximation point and an input approximation point.
+
+18
+00:01:08,280 --> 00:01:13,560
+ And that we need to calculate distances not just from each state to the kind of state approximation.
+
+19
+00:01:13,560 --> 00:01:16,920
+ But also from each input to the input approximation.
+
+20
+00:01:16,920 --> 00:01:23,200
+ But really, this just shows up as kind of another term for each input in the same way that we had a term for each state.
+
+21
+00:01:23,200 --> 00:01:26,800
+ A approximating state space models with inputs is basically the same procedure.
+
+22
+00:01:26,840 --> 00:01:29,520
+ And it's why I haven't made a big fuss about it until now.
+
+23
+00:01:29,520 --> 00:01:32,240
+ In the next video, we're going to work through a problem when we do that.
+
+24
+00:01:32,240 --> 00:01:34,600
+ But there's one more thing I want to talk about in this video.
+
+25
+00:01:34,600 --> 00:01:40,560
+ And that is writing our linear approximations with all of our inputs in matrix form.
+
+26
+00:01:40,560 --> 00:01:42,800
+ You'll remember back all the way to week two or week three,
+
+27
+00:01:42,800 --> 00:01:46,520
+ where I talked about how we take a linear state space model and write it in matrix form,
+
+28
+00:01:46,520 --> 00:01:52,600
+ kind of a z. equals a z plus b u and y equals c z plus d u.
+
+29
+00:01:52,600 --> 00:01:55,960
+ We can do exactly the same thing for a linearization of a state space model.
+
+30
+00:01:55,960 --> 00:02:01,280
+ Since our linearization is by definition a linear state space model.
+
+31
+00:02:01,280 --> 00:02:10,880
+ When you do this, the kind of matrices, the ABCD matrices of your linearization become really important in doing some analysis on what we call equilibrium points a bit later on.
+
+32
+00:02:10,880 --> 00:02:14,240
+ The topic of the video series that comes immediately after this one.
+
+33
+00:02:14,240 --> 00:02:19,000
+ So all I want to say to you at this point is make sure that when you linearize your state space models,
+
+34
+00:02:19,000 --> 00:02:21,920
+ you also calculate how you would write that in matrix form.
+
+35
+00:02:21,920 --> 00:02:26,680
+ Because nine times out of 10, you're going to want to use those matrices to do some further analysis.
+
+36
+00:02:26,680 --> 00:02:29,600
+ One more kind of quick note at the end of all of this.
+
+37
+00:02:29,600 --> 00:02:34,720
+ You'll notice that I haven't talked about what you do with output equations when you're linearizing.
+
+38
+00:02:34,720 --> 00:02:38,520
+ And that's because you do exactly the same thing as with your state space equations.
+
+39
+00:02:38,520 --> 00:02:41,800
+ You use exactly the same kind of linearization formulas.
+
+40
+00:02:41,800 --> 00:02:45,560
+ You just replace every instance of z something dot with y.
+
+41
+00:02:45,560 --> 00:02:51,880
+ It is literally exactly the same process because in the same way that a state space equation is just a multi variable function.
+
+42
+00:02:52,160 --> 00:02:55,280
+ And we use the multi variable kind of linearization equation.
+
+43
+00:02:55,280 --> 00:02:59,040
+ And output equation is itself just a multi variable function.
+
+44
+00:02:59,040 --> 00:03:01,240
+ And you use the same kind of equation.
+
+45
+00:03:01,240 --> 00:03:02,480
+ That's all I have for this one.
+
+46
+00:03:02,480 --> 00:03:06,880
+ Let's go and work on that problem where we're going to kind of linearize a state space model with inputs.
+
+47
+00:03:06,880 --> 00:03:09,320
+ And then we'll talk about equilibrium points and stability.
+
+48
+00:03:09,320 --> 00:03:12,080
+ The last two topics of the modeling section of this course.

@@ -1,0 +1,359 @@
+1
+00:00:00,000 --> 00:00:03,120
+ Alright, the time has again come to talk about the bigger picture
+
+2
+00:00:03,120 --> 00:00:06,320
+ and relate the stuff that we learned this week to material selection.
+
+3
+00:00:06,320 --> 00:00:09,840
+ At the start of the week, I motivated our study of non-mechanical properties
+
+4
+00:00:09,840 --> 00:00:14,880
+ on the premise that these things are often the make or break in any kind of material selection.
+
+5
+00:00:14,880 --> 00:00:18,480
+ That non-mechanical properties like the thermal and electrical and
+
+6
+00:00:18,480 --> 00:00:21,840
+ biocompatibility and flammability properties we met this week
+
+7
+00:00:21,840 --> 00:00:26,560
+ impose limits and constraints on the problem that rapidly shrink the solution space.
+
+8
+00:00:26,560 --> 00:00:29,920
+ These constraints, these limits help tell the bigger story and
+
+9
+00:00:29,920 --> 00:00:35,360
+ explain why even though it has amazing strength to wait, carbon fiber isn't used in every circumstance.
+
+10
+00:00:35,360 --> 00:00:39,040
+ In this, the big picture video for this week we're going to talk about how you implement these
+
+11
+00:00:39,040 --> 00:00:43,120
+ constraints in your material selection. It's very important that at this juncture we clearly
+
+12
+00:00:43,120 --> 00:00:46,160
+ distinguish between what is an objective and what is a constraint.
+
+13
+00:00:46,160 --> 00:00:50,560
+ In this context, an objective is something that you might characterize with a material index.
+
+14
+00:00:50,560 --> 00:00:54,960
+ It's a quantity or a property or an index that you want to minimize or maximize
+
+15
+00:00:54,960 --> 00:00:59,760
+ in your selection of a material. In this context, a constraint is a baseline, a threshold,
+
+16
+00:00:59,760 --> 00:01:04,240
+ a limit that you want to place on a property or a quality or a material index.
+
+17
+00:01:04,240 --> 00:01:08,960
+ Constraints help bound the problem and rapidly reduce the solution space from all possible
+
+18
+00:01:08,960 --> 00:01:13,600
+ materials to only a subset of these. Engineering design problems are rarely without constraints of
+
+19
+00:01:13,600 --> 00:01:17,760
+ one form or another and sometimes these constraints are really obvious. You might have a client
+
+20
+00:01:17,760 --> 00:01:22,160
+ tell you or common sense might dictate that you need to use a material that's non-flammable
+
+21
+00:01:22,160 --> 00:01:26,960
+ or intrinsically safe for example. Other times, a lot of the time constraints aren't so obvious
+
+22
+00:01:26,960 --> 00:01:32,240
+ and actually fall out as part of the design process. While constraints can be helpful for reducing
+
+23
+00:01:32,240 --> 00:01:37,440
+ the size of the solution space, overly restrictive constraints can sometimes leave no feasible
+
+24
+00:01:37,440 --> 00:01:42,400
+ or economic solutions. Occasionally, in these situations, you may need to rephrase a constraint
+
+25
+00:01:42,400 --> 00:01:46,880
+ as an objective, optimize for it, and kind of make the best of a bad situation.
+
+26
+00:01:46,880 --> 00:01:49,520
+ Pick the one that most closely matches your design intent.
+
+27
+00:01:49,520 --> 00:01:53,520
+ Alright, let's talk about implementing some constraints in edgypack. You do this in the same
+
+28
+00:01:53,520 --> 00:01:58,560
+ section we were playing in last week when we were making charts and ranking materials by an index.
+
+29
+00:01:58,560 --> 00:02:03,520
+ If you click the chart select button at the top here and then instead of chart index like we
+
+30
+00:02:03,520 --> 00:02:08,160
+ had last week you go to limit, you can implement a limit on any of the constraints that are in
+
+31
+00:02:08,160 --> 00:02:12,720
+ the database. For example, if I have a look inside of mechanical properties, I can put constraints
+
+32
+00:02:12,720 --> 00:02:18,560
+ on young's modulus or strength or ductility or hardness. And if I have a look at some non-mechanical
+
+33
+00:02:18,560 --> 00:02:24,400
+ properties like let's say thermal properties, I can put constraints on melting point or service
+
+34
+00:02:24,400 --> 00:02:28,880
+ temperature, thermal conductivity, all of the properties that we kind of met this week.
+
+35
+00:02:28,880 --> 00:02:33,200
+ Let's say you had a client who, like last week, would like you to design some sort of component.
+
+36
+00:02:33,200 --> 00:02:36,640
+ And in that design, he wants you to choose a material that's going to give him the greatest
+
+37
+00:02:36,640 --> 00:02:41,120
+ yield strength for a given weight. But unlike last week, the clients told you they expect the
+
+38
+00:02:41,120 --> 00:02:46,400
+ component to live it. Some temperatures around and above 300 degrees C. In that case, we can limit
+
+39
+00:02:46,480 --> 00:02:51,120
+ the solution space. We can put a constraint on the materials that we use based on maximum service
+
+40
+00:02:51,120 --> 00:02:54,720
+ temperature. If you click maximum service temperature in this list, you get a little pop-up from
+
+41
+00:02:54,720 --> 00:02:59,040
+ edgypack that tells you what to expect. And while we didn't specifically talk about it this
+
+42
+00:02:59,040 --> 00:03:03,680
+ week, this maximum service temperature that's documented here is kind of an indication of where
+
+43
+00:03:03,680 --> 00:03:08,320
+ a material starts to lose all of its nice mechanical properties. So implementing this constraint,
+
+44
+00:03:08,320 --> 00:03:15,360
+ if we go back to edgypack and let's say I want a minimum maximum service temperature of 300 degrees
+
+45
+00:03:15,840 --> 00:03:20,800
+ the wording here is a little confusing. I want any material that I choose to have a maximum
+
+46
+00:03:20,800 --> 00:03:26,960
+ service temperature at least 300 degrees C. In other words, I'm putting a minimum bound on that
+
+47
+00:03:26,960 --> 00:03:32,640
+ maximum service temperature. Okay, let's hit apply. And you can see I've severely reduced the
+
+48
+00:03:32,640 --> 00:03:38,800
+ size of the solution space from 69 materials down to only 21. From here to rank these materials
+
+49
+00:03:38,800 --> 00:03:44,640
+ in terms of an index, the process is exactly the same as last week. If we go to a chart index stage
+
+50
+00:03:44,640 --> 00:03:51,360
+ and on the Y axis, I build my own index. I'm going to have a mechanical property. I'm going
+
+51
+00:03:51,360 --> 00:03:59,760
+ to have yield strength divided by a general property, divided by density, click OK, click OK,
+
+52
+00:04:00,640 --> 00:04:05,360
+ and here we go. I've now got a plot and a ranking of materials according to my index
+
+53
+00:04:05,360 --> 00:04:09,600
+ limited by the constraints that I've put on the problem. There's a nice button at the top here to
+
+54
+00:04:09,600 --> 00:04:13,920
+ hide all the materials that don't meet the constraint. And just like last week, I can kind of mouse
+
+55
+00:04:13,920 --> 00:04:18,800
+ over these materials and put labels on them. And if I go over to the list here on the left,
+
+56
+00:04:18,800 --> 00:04:24,880
+ I can rank these by the index that I care about. As a result, unlike last week where carbon fiber
+
+57
+00:04:24,880 --> 00:04:29,200
+ was seemingly the best option in terms of this index, I now have a totally different material
+
+58
+00:04:29,200 --> 00:04:33,840
+ at the top of the list. Titanium alloys and now the best material for this index,
+
+59
+00:04:33,840 --> 00:04:37,840
+ given the constraints I need to work within. If at some point through the design process,
+
+60
+00:04:37,840 --> 00:04:42,320
+ the client comes up to you and says, Oh my God, I've just realized I have another constraint which
+
+61
+00:04:42,320 --> 00:04:46,960
+ by the way is not out of the ordinary at all. You can just go back up into that first stage
+
+62
+00:04:46,960 --> 00:04:51,280
+ where you put in your limit, your constraint, and you can add some water to other properties.
+
+63
+00:04:51,280 --> 00:04:54,960
+ Say, for example, the client came back to you and said, Well, in addition to picking a material
+
+64
+00:04:54,960 --> 00:04:59,840
+ that gives me the highest strength to weight and on top of that survives above 300 degrees C,
+
+65
+00:04:59,840 --> 00:05:04,720
+ I'd also like the material to be a good electrical insulator. Okay, no problems. Let's go to
+
+66
+00:05:04,720 --> 00:05:10,960
+ electrical properties here. And let's say that we want a good insulator clicking apply and the
+
+67
+00:05:10,960 --> 00:05:15,760
+ results have changed again. Now there's only five of 69 materials that meet the constraint and
+
+68
+00:05:15,760 --> 00:05:20,480
+ these have been ranked according to our material's index. Instead of carbon fiber and instead
+
+69
+00:05:20,480 --> 00:05:25,440
+ of titanium alloys, now it looks like we've got some glasses and some ceramics that perform best
+
+70
+00:05:25,440 --> 00:05:30,320
+ in this circumstance. This isn't hugely surprising. Ceramics are known for their very high operating
+
+71
+00:05:30,320 --> 00:05:34,800
+ temperatures and for generally being good electrical insulators, as well as having reasonably
+
+72
+00:05:34,800 --> 00:05:39,520
+ high strengths. So it's all kind of jilling and passing this handy check. This last constraint,
+
+73
+00:05:39,600 --> 00:05:44,240
+ electrical conductor or insulator should be raising some red flags in your mind right now.
+
+74
+00:05:44,240 --> 00:05:48,560
+ It's quite an ambiguous constraint to put on something calling it a conductor or an insulator.
+
+75
+00:05:48,560 --> 00:05:52,480
+ You'll remember from the electrical properties video that in reality, if you try hard enough,
+
+76
+00:05:52,480 --> 00:05:57,440
+ you can pass a current through an insulator. Consequently, rather than qualitative or categorical
+
+77
+00:05:57,440 --> 00:06:01,600
+ constraints like this one here, you should be asking yourself as a design engineer,
+
+78
+00:06:01,600 --> 00:06:06,960
+ can I use some sort of quantitative constraint? Could I ask my client instead of a conductor
+
+79
+00:06:06,960 --> 00:06:11,600
+ or an insulator? What's the maximum voltage you expect this thing to be able to separate?
+
+80
+00:06:11,600 --> 00:06:14,640
+ And then maybe I could write a constraint in terms of breakdown voltage.
+
+81
+00:06:14,640 --> 00:06:18,960
+ Or perhaps I could ask my client what sort of resistivity you think would be appropriate here?
+
+82
+00:06:18,960 --> 00:06:23,440
+ Or if they don't know, which is also reasonably common, maybe I can rephrase my question in
+
+83
+00:06:23,440 --> 00:06:28,080
+ terms of an experiment that I can run to write what they actually want in terms of some material
+
+84
+00:06:28,080 --> 00:06:32,320
+ properties that are in the database. It's probably also worth asking yourself and asking your
+
+85
+00:06:32,320 --> 00:06:37,200
+ client at this stage. Is this thing that you want actually a constraint? Would you like this
+
+86
+00:06:37,200 --> 00:06:41,200
+ thing to be an insulator for sure? Would you like me to just pick something that has the best
+
+87
+00:06:41,200 --> 00:06:45,280
+ resistivity given the other constraints that are on the problem? That will probably do
+
+88
+00:06:45,280 --> 00:06:49,600
+ it for this week. Go and have a play implementing some limits yourself in edge impact.
+
+89
+00:06:49,600 --> 00:06:53,280
+ I think you'll find this functionality very useful when you're trying to answer the quiz
+
+90
+00:06:53,280 --> 00:07:03,280
+ and the tutorial problems. I'll see you next week.

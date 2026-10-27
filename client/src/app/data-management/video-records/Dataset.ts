@@ -1,4 +1,4 @@
-import { calculateSpeakingRatio, calculateSpeechPaceVariation } from './speech-features';
+import { calculateSpeechPaceVariation } from './speech-features';
 
 /**
  * Where a locally-held dataset value came from, when it does not come from a
@@ -8,6 +8,13 @@ import { calculateSpeakingRatio, calculateSpeechPaceVariation } from './speech-f
  */
 export const LOCAL_IMPORT = 'local-import';
 export const LOCAL_RECOMPUTE = 'local-recompute';
+
+/**
+ * The thresholds and models a value was made with, by name - `{ threshold: 30 }` for scene
+ * stats, say. The server reports its own with every result (the *_SETTINGS in
+ * server/config.py). Absent on values made before results carried them.
+ */
+export type DatasetSettings = Record<string, string | number | boolean>;
 
 /**
  * One dataset value and what is known about it, mirroring the states the server
@@ -28,6 +35,7 @@ export type DatasetState<T> =
       data: T;
       producer: string;
       produced_at?: string;
+      settings?: DatasetSettings;
       /** A regeneration is in flight; the data below is still the current one. */
       refreshing?: 'queued' | 'running';
       /**
@@ -158,16 +166,16 @@ export const transcriptFullText = (transcript: Transcript): string =>
   transcript.segments.map((segment) => segment.text).join(' ');
 
 /**
- * `durationSecs` is what the two speech features are measured against, and it
+ * `durationSecs` is what the speech feature is measured against, and it
  * comes from a different dataset than the transcript does - so it is passed in
  * rather than read here, and is nullable because a transcript can land before
  * any duration source exists.
  */
-export type SpeechFeatures = Pick<TranscriptStats, 'speech_pace_variation' | 'speaking_ratio'>;
+export type SpeechFeatures = Pick<TranscriptStats, 'speech_pace_variation'>;
 
 /**
  * The duration-dependent half of the transcript stats, split out because the
- * server supplies the two counts but not these - so the path that takes a
+ * server supplies the two counts but not this - so the path that takes a
  * server transcript computes only this part, and both paths agree on when the
  * answer is null.
  */
@@ -178,9 +186,8 @@ export const computeSpeechFeatures = (
   durationSecs != null && durationSecs > 0
     ? {
         speech_pace_variation: calculateSpeechPaceVariation(transcript, durationSecs),
-        speaking_ratio: calculateSpeakingRatio(transcript, durationSecs),
       }
-    : { speech_pace_variation: null, speaking_ratio: null };
+    : { speech_pace_variation: null };
 
 export const computeTranscriptStats = (
   transcript: Transcript,
@@ -199,14 +206,13 @@ export interface TranscriptStats {
   count_chars: number;
   count_words: number;
   /**
-   * Both need the video's duration, which a transcript can arrive without - so
+   * Needs the video's duration, which a transcript can arrive without - so
    * null means "not computable yet", kept distinct from a real 0. A 0 is a
    * legitimate measurement here (silence, or a single speech window), and the
-   * speech-features functions return one for missing input too, which is why
-   * the decision is made from the inputs rather than from their result.
+   * speech-features function returns one for missing input too, which is why
+   * the decision is made from the inputs rather than from its result.
    */
   speech_pace_variation: number | null;
-  speaking_ratio: number | null;
 }
 
 export const TranscriptStats: CanCreateEmpty<TranscriptStats> = {
@@ -214,7 +220,6 @@ export const TranscriptStats: CanCreateEmpty<TranscriptStats> = {
     count_chars: 0,
     count_words: 0,
     speech_pace_variation: null,
-    speaking_ratio: null,
   }),
 };
 
@@ -227,5 +232,78 @@ export const SceneStats: CanCreateEmpty<SceneStats> = {
   createEmpty: () => ({
     duration_secs: 0,
     scenes: 0,
+  }),
+};
+
+/**
+ * On-screen text, read by OCR on the server from one frame every few seconds
+ * (server/text_stats.py). The server also returns what each sampled frame said;
+ * only this summary is kept here, since nothing in the app reads the samples and
+ * a lecture's worth of them would sit in IndexedDB for every record.
+ */
+export interface TextStats {
+  sample_count: number;
+  /** Words on screen, averaged over the video - the model's text_density. */
+  mean_words: number;
+  max_words: number;
+  /** The share of the frame covered by text, averaged over the video (0-1). */
+  mean_coverage: number;
+  /** The share of sampled frames with any text on them (0-1). */
+  text_frames_ratio: number;
+}
+
+export const TextStats: CanCreateEmpty<TextStats> = {
+  createEmpty: () => ({
+    sample_count: 0,
+    mean_words: 0,
+    max_words: 0,
+    mean_coverage: 0,
+    text_frames_ratio: 0,
+  }),
+};
+
+/**
+ * How a video sounds, measured on the server (server/audio_stats.py) for two of
+ * Mayer's multimedia principles. The nullable fields are null for a video with
+ * no speech in it, which has no speech level or pitch to report.
+ */
+export interface AudioStats {
+  duration_secs: number;
+  /** Seconds the voice-activity detector found speech in. */
+  speech_secs: number;
+  /** The speech's median loudness, in dBFS. */
+  speech_level_db: number | null;
+  /** Coherence: the share of the video that is sound other than speech -
+   * music or effects no more than 20 dB quieter than the speaker (0-1). */
+  background_sound_ratio: number;
+  median_pitch_hz: number | null;
+  /** Voice: the standard deviation of the speaker's pitch, in semitones. */
+  pitch_variation_st: number;
+  /**
+   * Segmenting: speech and pauses, from a voice-activity pass that ends speech
+   * at a 250 ms silence. Speech heard in the audio, not the time Whisper's
+   * transcript segments cover - those run straight across pauses.
+   *
+   * Optional because results scanned before these existed lack them; such a
+   * result is stale on the server and gains them when scanned again.
+   */
+  speech_ratio?: number;
+  /** Pauses per minute, between the first speech and the last. */
+  pause_rate_per_min?: number;
+  /** Null with fewer than two stretches of speech. */
+  mean_pause_secs?: number | null;
+}
+
+export const AudioStats: CanCreateEmpty<AudioStats> = {
+  createEmpty: () => ({
+    duration_secs: 0,
+    speech_secs: 0,
+    speech_level_db: null,
+    background_sound_ratio: 0,
+    median_pitch_hz: null,
+    pitch_variation_st: 0,
+    speech_ratio: 0,
+    pause_rate_per_min: 0,
+    mean_pause_secs: null,
   }),
 };

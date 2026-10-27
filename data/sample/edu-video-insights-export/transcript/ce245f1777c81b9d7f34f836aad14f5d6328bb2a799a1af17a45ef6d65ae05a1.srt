@@ -1,0 +1,183 @@
+1
+00:00:00,000 --> 00:00:04,880
+ As you're probably already aware, copper is a soft, ductile and malleable engineering metal
+
+2
+00:00:04,880 --> 00:00:10,160
+ that's very well known for its high electrical and thermal conductivity. Copper is one of the very
+
+3
+00:00:10,160 --> 00:00:15,920
+ few so-called native metals that we have in our world, appearing in its pure form in nature.
+
+4
+00:00:15,920 --> 00:00:19,760
+ The reason why copper can be found in its pure form in nature is largely owed to the fact that
+
+5
+00:00:19,760 --> 00:00:24,960
+ it exhibits passivity, just like aluminium for example, and it doesn't corrode particularly easily.
+
+6
+00:00:24,960 --> 00:00:29,680
+ Both because it appears naturally in its pure form and because it can be smelting quite easily,
+
+7
+00:00:29,680 --> 00:00:34,720
+ humans have been working with copper for thousands of years. These days we refined copper on
+
+8
+00:00:34,720 --> 00:00:39,840
+ mass from copper ore and the process is reasonably involved. In some cases, the ore is dumped into
+
+9
+00:00:39,840 --> 00:00:44,880
+ an acid and then the copper is extracted through electrolysis. In other cases, copper is smelted
+
+10
+00:00:44,880 --> 00:00:49,920
+ in a furnace in a similar way to steels and contaminants a drawn away in a flux as slag.
+
+11
+00:00:49,920 --> 00:00:53,520
+ As I mentioned, copper isn't particularly known for having great strength in its pure form.
+
+12
+00:00:53,520 --> 00:00:57,840
+ It's actually quite soft and ductile. It's like most copper incredibly easy to work in
+
+13
+00:00:58,160 --> 00:01:02,560
+ one of the reasons why it was used in early civilization as well as why it's used so extensively
+
+14
+00:01:02,560 --> 00:01:06,960
+ today. Copper, however, is extremely well valued for its non-mechanical properties. It's electrical
+
+15
+00:01:06,960 --> 00:01:12,000
+ and thermal conductivity as well as its passivity. We use pure copper in almost all electronics
+
+16
+00:01:12,000 --> 00:01:16,080
+ in the modern world and it's probably the most common conductor that's used in all of our
+
+17
+00:01:16,080 --> 00:01:21,360
+ components and wires. And copper also has natural antimicrobial properties. For this reason, it's
+
+18
+00:01:21,360 --> 00:01:25,600
+ commonly used on lots of touch surfaces and pipe work. That being said, as an engineer, you're
+
+19
+00:01:25,600 --> 00:01:30,160
+ probably just as if not more likely to run into copper in the form of one of its alloys.
+
+20
+00:01:30,160 --> 00:01:35,120
+ Probably the two most famous copper alloys are brass and bronze, the former containing zinc and the
+
+21
+00:01:35,120 --> 00:01:39,760
+ latter tin. These two alloys have very similar material properties and the differences between them
+
+22
+00:01:39,760 --> 00:01:44,240
+ and to be honest, largely historical. These days, brass is typically used in musical instruments
+
+23
+00:01:44,240 --> 00:01:48,400
+ for example because of their high ductility, meaning they can be formed into odd shapes as well
+
+24
+00:01:48,400 --> 00:01:53,360
+ as their malleability and softness and corrosion resistance and acoustic properties.
+
+25
+00:01:53,440 --> 00:01:57,360
+ But it's also used in places where both corrosion resistance and load friction are needed,
+
+26
+00:01:57,360 --> 00:02:02,480
+ like in door hinges or in bushings. You'll often also see brass used to make pieces of an
+
+27
+00:02:02,480 --> 00:02:06,800
+ assembly that are designed to be sacrificial. For example, brass gears in a lathe. These gears
+
+28
+00:02:06,800 --> 00:02:11,280
+ are normally placed in a reasonably accessible and easily serviced part of a lathe so that
+
+29
+00:02:11,280 --> 00:02:16,240
+ if the capacity of the lathe is ever exceeded, the brass gear will shea first before any of the
+
+30
+00:02:16,240 --> 00:02:20,000
+ steel ones that are in the assembly. This is quite common to have a sacrificial component in an
+
+31
+00:02:20,000 --> 00:02:24,000
+ easy-to-service location so that you shea that one and you replace that one and you can get back
+
+32
+00:02:24,000 --> 00:02:28,480
+ to the job at hand as opposed to breaking part of your gear set and needing to tear a machine down.
+
+33
+00:02:28,480 --> 00:02:32,720
+ And bronze is also used for some of these purposes because it has very similar material properties
+
+34
+00:02:32,720 --> 00:02:37,200
+ to brass. Probably a much more common application for bronze is in sinted bushings. These are
+
+35
+00:02:37,200 --> 00:02:42,000
+ load-bearing elements that are intentionally porous and oil is kind of caked into these components
+
+36
+00:02:42,000 --> 00:02:46,800
+ during manufacture so that as they're in service, as they heat up and as they wear, they start
+
+37
+00:02:46,800 --> 00:02:50,880
+ to release some of this lubrication onto the part that's rotating within them. You might hear these
+
+38
+00:02:50,880 --> 00:02:55,040
+ bushings referred to as self lubricating for this reason. It might surprise you or maybe not
+
+39
+00:02:55,040 --> 00:02:59,280
+ after all the discussions we've had this week, but not all all the alloys of copper are inherently
+
+40
+00:02:59,280 --> 00:03:04,320
+ soft and ductile and weak. In fact, if you mix copper with beryllium, which is an extremely toxic
+
+41
+00:03:04,320 --> 00:03:08,240
+ material that happens to have some really nice mechanical properties, you can make components that
+
+42
+00:03:08,240 --> 00:03:13,200
+ essentially negate all of that toxicity and maintain the excellent mechanical properties of beryllium.
+
+43
+00:03:13,200 --> 00:03:17,840
+ Beryllium copper components are incredibly strong up to 900 megapascals and on top of that,
+
+44
+00:03:17,840 --> 00:03:22,000
+ they're intrinsically safe and non-sparking. In other words, you might often see them used by
+
+45
+00:03:22,000 --> 00:03:25,920
+ underground miners. That'll probably do us for coppers. In the next video, we'll talk about
+
+46
+00:03:25,920 --> 00:03:28,480
+ titanium alloys before wrapping it all up for the week.

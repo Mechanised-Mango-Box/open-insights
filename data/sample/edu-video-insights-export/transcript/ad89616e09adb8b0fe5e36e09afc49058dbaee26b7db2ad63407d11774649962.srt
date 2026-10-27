@@ -1,0 +1,123 @@
+1
+00:00:00,000 --> 00:00:04,240
+ Not all ceramics are made by consolidating a powder under pressure before firing.
+
+2
+00:00:04,240 --> 00:00:08,560
+ In fact, many ceramics are made through a casting process known as slip casting.
+
+3
+00:00:08,560 --> 00:00:14,800
+ In slip casting, a ceramic powder is mixed with a solvent usually water into a slurry that we call slip.
+
+4
+00:00:14,800 --> 00:00:18,720
+ This slip is poured into a mould at which point surface tension and adhesion between the
+
+5
+00:00:18,720 --> 00:00:24,480
+ slip and the walls of the mould allows a very thin layer of it to kind of set on the outside.
+
+6
+00:00:24,480 --> 00:00:29,120
+ The remaining excess slip is poured out of the mould and this leaves only a thin green body
+
+7
+00:00:29,120 --> 00:00:33,440
+ on the inside. After a drying process, usually inside the mould at a lower temperature,
+
+8
+00:00:33,440 --> 00:00:38,240
+ the green body is removed and allowed to fire or center the same as you would any other technical
+
+9
+00:00:38,240 --> 00:00:42,480
+ non-technical ceramic. Because of the way that it works, the casting is primarily and very commonly
+
+10
+00:00:42,480 --> 00:00:47,520
+ used to make hollow geometries and is used extensively for both technical and non-technical ceramics.
+
+11
+00:00:47,520 --> 00:00:51,840
+ At the industrial scale, slip casting is used to make ceramic tubes and pipes and other
+
+12
+00:00:51,840 --> 00:00:56,800
+ standard sections. Much the same as we had in week 4 when we were talking about supply of metals.
+
+13
+00:00:56,800 --> 00:01:00,640
+ Though of course, as you can imagine, owing to the higher material costs and the higher
+
+14
+00:01:00,640 --> 00:01:05,600
+ complexity involved in the need to fire and center these things, the prices of slip cast ceramic
+
+15
+00:01:05,600 --> 00:01:10,400
+ tubes are generally far higher than those of metal ones. Compared to pressing slip cast
+
+16
+00:01:10,400 --> 00:01:14,320
+ components are generally a little bit more porous owing to the fact that they haven't had any
+
+17
+00:01:14,320 --> 00:01:18,960
+ pressure applied to help work out some of those pores. And for this reason, they can be weaker
+
+18
+00:01:18,960 --> 00:01:23,280
+ and a little bit more brittle in service. For higher quality slip cast components, there's a lot
+
+19
+00:01:23,280 --> 00:01:27,440
+ of care that goes into trying to work out some of these pores through higher temperature and
+
+20
+00:01:27,440 --> 00:01:31,680
+ longer sintering. But this level of care and treatment that's required means that these higher
+
+21
+00:01:31,680 --> 00:01:36,400
+ quality slip cast components are much more expensive on average than pressed ones.
+
+22
+00:01:36,400 --> 00:01:40,880
+ Slip casting is not only an industrial technical engineering process, it's also used on the
+
+23
+00:01:40,880 --> 00:01:44,960
+ smaller scale by hobbyists and artists. In this case hobbyists are generally working with
+
+24
+00:01:44,960 --> 00:01:49,440
+ fired non-technical ceramics like borsalins and clays. But some incredibly complicated geometries
+
+25
+00:01:49,440 --> 00:01:53,120
+ can be made this way. To finish up, I'll just note that there's a little bit of a hybrid
+
+26
+00:01:53,120 --> 00:01:58,160
+ between a pressing process and a slip casting process in the production of many fired non-technical
+
+27
+00:01:58,160 --> 00:02:03,840
+ ceramics like bricks. Here, a thick slurry, a thick slip is made and is extruded through a die.
+
+28
+00:02:03,840 --> 00:02:07,680
+ In this case, you need to make considerations both towards pressing and towards slip casting in
+
+29
+00:02:07,680 --> 00:02:12,400
+ the design of a component. But this is very much more a non-technical civil kind of application,
+
+30
+00:02:12,400 --> 00:02:16,000
+ so I might just leave it there. As always, I'd love some more information and resources
+
+31
+00:02:16,000 --> 00:02:20,000
+ about slip casting on the textbook page that accompanies this video. I encourage you to check them out.

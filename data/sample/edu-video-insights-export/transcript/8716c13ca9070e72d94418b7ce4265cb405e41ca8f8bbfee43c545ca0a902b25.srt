@@ -1,0 +1,203 @@
+1
+00:00:00,000 --> 00:00:05,000
+ Alright, let's have a quick chat about classes for Edge 2440 this semester.
+
+2
+00:00:05,000 --> 00:00:13,000
+ As I'm sure you've already noticed, lectures were off the table owing to social distancing requirements in the size of our class.
+
+3
+00:00:13,000 --> 00:00:18,000
+ And so we'll be delivering the lecture content through a series of pre-recorded videos for you just like this one.
+
+4
+00:00:18,000 --> 00:00:21,000
+ The video should be somewhere between five and six minutes long.
+
+5
+00:00:21,000 --> 00:00:27,000
+ And normally what we'll try and do is present one or two videos worth of content and follow that up immediately with a problem.
+
+6
+00:00:27,000 --> 00:00:32,000
+ And we'll rinse and repeat for all of the different kind of concepts that we have to get through every week.
+
+7
+00:00:32,000 --> 00:00:37,000
+ Overall, there should be between an hour and an hour and a half's worth of content for you to watch every week.
+
+8
+00:00:37,000 --> 00:00:44,000
+ This is compared to four hours worth of face to face lectures, but that's because my lectures are normally pretty back and forth, pretty interactive.
+
+9
+00:00:44,000 --> 00:00:49,000
+ I like to talk to you guys, and unfortunately we can't do that over the internet.
+
+10
+00:00:49,000 --> 00:00:54,000
+ If you look at your class timetable, you'll see that Monday session has been scheduled as a lecture
+
+11
+00:00:54,000 --> 00:00:57,000
+ and that it's live for you to watch these videos.
+
+12
+00:00:57,000 --> 00:00:59,000
+ This isn't a real class.
+
+13
+00:00:59,000 --> 00:01:02,000
+ Just to be clear, we asked Timetabling to put this down for you,
+
+14
+00:01:02,000 --> 00:01:06,000
+ so that you'd have the chance to watch these videos on campus if you wanted to.
+
+15
+00:01:06,000 --> 00:01:07,000
+ But it's not required.
+
+16
+00:01:07,000 --> 00:01:08,000
+ You don't have to watch them.
+
+17
+00:01:08,000 --> 00:01:11,000
+ You can watch them at your leisure whenever you like.
+
+18
+00:01:11,000 --> 00:01:18,000
+ That Monday session is just there as an optional slot for you to watch the lectures if you're on campus and you have some time.
+
+19
+00:01:18,000 --> 00:01:25,000
+ The next class on the timetable is Wednesdays, 3-5 pm, and that's our tutorial session, our whiteboard workshop.
+
+20
+00:01:25,000 --> 00:01:31,000
+ Just like any other class at university attendance is in mandatory, but I really, really recommend that you come.
+
+21
+00:01:31,000 --> 00:01:36,000
+ Just like the whiteboard workshops in 11-10 or 11-20, we're going to break you up into small groups,
+
+22
+00:01:36,000 --> 00:01:39,000
+ and together you're going to work through problems on a virtual whiteboard.
+
+23
+00:01:39,000 --> 00:01:44,000
+ We're going to do the voice and video chat through Collaborate and the virtual whiteboards through whiteboardfox.com.
+
+24
+00:01:44,000 --> 00:01:47,000
+ There'll be some more information about the tutorials posted a bit later on.
+
+25
+00:01:47,000 --> 00:01:50,000
+ But what's important to know is that you need some way of capturing your voice,
+
+26
+00:01:50,000 --> 00:01:53,000
+ and you'll need some way of getting your handwriting into the computer.
+
+27
+00:01:53,000 --> 00:01:55,000
+ You can use a phone or a tablet.
+
+28
+00:01:55,000 --> 00:01:58,000
+ If you have one of those, you'll be able to write straight onto the whiteboards,
+
+29
+00:01:58,000 --> 00:02:01,000
+ and you can use a mouse or a trackpad if that's all you have.
+
+30
+00:02:01,000 --> 00:02:04,000
+ I've already mentioned to you you can get these $30 drawing tablets online,
+
+31
+00:02:04,000 --> 00:02:06,000
+ and they seem to work pretty well.
+
+32
+00:02:06,000 --> 00:02:11,000
+ I also have a small number of these that I can land out to you if you can't afford the purchase one of those for yourself.
+
+33
+00:02:11,000 --> 00:02:15,000
+ The final class every week is on Thursday's from 8am until 10am,
+
+34
+00:02:15,000 --> 00:02:18,000
+ and it's the end 2440 live stream.
+
+35
+00:02:18,000 --> 00:02:23,000
+ So in this class, I'm going to try to answer the questions that you send me by email during the week,
+
+36
+00:02:23,000 --> 00:02:25,000
+ and any other questions that you guys have during the session.
+
+37
+00:02:25,000 --> 00:02:27,000
+ One thing that's really important to note,
+
+38
+00:02:27,000 --> 00:02:30,000
+ or you can watch the lecture videos whenever you want,
+
+39
+00:02:30,000 --> 00:02:35,000
+ it's really, really important you finish watching them before the Wednesday tutorial every week.
+
+40
+00:02:35,000 --> 00:02:38,000
+ So in week two, you need to have watched week two lecture videos
+
+41
+00:02:38,000 --> 00:02:42,000
+ before the tutorial on Wednesday, so you can participate in that class.
+
+42
+00:02:42,000 --> 00:02:46,000
+ So to sum up, Monday, not a real class, you don't need to come.
+
+43
+00:02:46,000 --> 00:02:49,000
+ Wednesday, three to five, that's our tutorial, our whiteboard workshop.
+
+44
+00:02:49,000 --> 00:02:53,000
+ It's going to be online through Collaborate and using whiteboardfox.com.
+
+45
+00:02:53,000 --> 00:02:56,000
+ And finally, the Thursday end 2440 live stream.
+
+46
+00:02:56,000 --> 00:02:58,000
+ Again, just like the whiteboard workshops,
+
+47
+00:02:58,000 --> 00:03:01,000
+ it's not compulsory to shop to class, but I recommend you do it.
+
+48
+00:03:01,000 --> 00:03:05,000
+ I'll be answering questions about assessment, about course content,
+
+49
+00:03:05,000 --> 00:03:09,000
+ working through problems, generally just being present,
+
+50
+00:03:09,000 --> 00:03:12,000
+ and then you'll do your quiz at the end of that session every week.
+
+51
+00:03:12,000 --> 00:03:14,000
+ Alright, that's all I have for this one.

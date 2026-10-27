@@ -1,0 +1,279 @@
+1
+00:00:00,000 --> 00:00:04,560
+ Alright, having conquered that modeling problem, let's talk about a slightly more advanced
+
+2
+00:00:04,560 --> 00:00:05,560
+ element.
+
+3
+00:00:05,560 --> 00:00:08,320
+ In this video, I'm going to be talking about gearboxes.
+
+4
+00:00:08,320 --> 00:00:12,040
+ Maybe I should say gear ratios, because the CCRs and the SSIs that we're going to meet
+
+5
+00:00:12,040 --> 00:00:16,360
+ for this element, which we usually give this symbol, are a little bit more general and
+
+6
+00:00:16,360 --> 00:00:18,920
+ might apply to something other than just gears.
+
+7
+00:00:18,920 --> 00:00:23,240
+ It would also apply, for example, to the kind of chain and sprocket combinations you
+
+8
+00:00:23,240 --> 00:00:26,800
+ have on your bike, or maybe a belt and pulleys.
+
+9
+00:00:26,800 --> 00:00:29,680
+ Irrespective of the same kind of concept supply.
+
+10
+00:00:30,680 --> 00:00:37,120
+ These kinds of things we model as elements we call transformers in this course.
+
+11
+00:00:37,120 --> 00:00:41,200
+ Things which take efforts and convert them to efforts and flows and convert them to
+
+12
+00:00:41,200 --> 00:00:42,200
+ flows.
+
+13
+00:00:42,200 --> 00:00:46,080
+ In the case of a real gearbox, it takes an input talk and converts it to an output
+
+14
+00:00:46,080 --> 00:00:50,520
+ talk and takes an input angular velocity and converts it to an output angular velocity.
+
+15
+00:00:50,520 --> 00:00:53,240
+ And I've been really verbose about this for a reason.
+
+16
+00:00:53,240 --> 00:00:55,640
+ There's no kind of cross-pollination.
+
+17
+00:00:55,640 --> 00:00:59,760
+ The output talk doesn't depend on the input angular velocity, for example.
+
+18
+00:00:59,760 --> 00:01:03,480
+ And the output angular velocity doesn't depend on the input talk.
+
+19
+00:01:03,480 --> 00:01:07,320
+ Only the talk depends on the talk and the velocity depends on the velocity.
+
+20
+00:01:07,320 --> 00:01:11,720
+ This might seem kind of straightforward, but it's important to distinguish these kinds
+
+21
+00:01:11,720 --> 00:01:15,680
+ of elements, transformers from the kinds of elements that we'll meet later in the course
+
+22
+00:01:15,680 --> 00:01:21,520
+ that we call gyrators, where the output effort is related to the input flow and vice versa.
+
+23
+00:01:21,560 --> 00:01:27,920
+ Gyrboxes and all transformers work by trading off between these kind of input and output quantities.
+
+24
+00:01:27,920 --> 00:01:31,840
+ You must maintain the same power between the input and the output, but gyrboxes work
+
+25
+00:01:31,840 --> 00:01:34,560
+ by changing the ratio of how that power is delivered.
+
+26
+00:01:34,560 --> 00:01:39,760
+ A common kind of arrangement would be to go from a high speed, low torque input, down
+
+27
+00:01:39,760 --> 00:01:43,200
+ to a low speed, but a high torque output.
+
+28
+00:01:43,200 --> 00:01:45,600
+ Real gears work by meshing teeth.
+
+29
+00:01:45,600 --> 00:01:49,600
+ There are lots of different types, spur gears that are noisy but very efficient or
+
+30
+00:01:49,600 --> 00:01:53,080
+ helical gears, which are a little bit less efficient but much quieter.
+
+31
+00:01:53,080 --> 00:01:56,080
+ The specifics are kind of outside the scope of this course.
+
+32
+00:01:56,080 --> 00:01:58,840
+ If you're a mechanical engineer or an aerospace engineer, you might meet it in your
+
+33
+00:01:58,840 --> 00:02:03,480
+ later design courses, but a simple model for a gearbox that I think everybody can get
+
+34
+00:02:03,480 --> 00:02:06,440
+ behind is this one right here.
+
+35
+00:02:06,440 --> 00:02:11,120
+ We assume that gearboxes in this course are just simple cylinders that roll against each
+
+36
+00:02:11,120 --> 00:02:12,600
+ other without slipping.
+
+37
+00:02:12,600 --> 00:02:16,680
+ Assuming that 100% of the power that we delivered to the input gyr, which let's call
+
+38
+00:02:16,680 --> 00:02:21,640
+ gear one, gets delivered to the output gear without any losses, then we get two CCRs
+
+39
+00:02:21,640 --> 00:02:26,160
+ for gearbox that kind of relate how an input kind of angle change is related to an
+
+40
+00:02:26,160 --> 00:02:30,120
+ output angle change and how an input torque is related to an output torque.
+
+41
+00:02:30,120 --> 00:02:35,640
+ The first CCR, the kind of flow condition comes by examining the kind of criterion that
+
+42
+00:02:35,640 --> 00:02:40,280
+ for these things not to slip, they need to trace out the same arc length at the point
+
+43
+00:02:40,280 --> 00:02:42,320
+ where they meet, the point where they mesh.
+
+44
+00:02:42,320 --> 00:02:46,000
+ You can imagine that if you drew these two circles rubbing against each other or you
+
+45
+00:02:46,000 --> 00:02:49,680
+ mesh out the arc lengths that they trace and you kind of flatten those arc lengths out
+
+46
+00:02:49,680 --> 00:02:52,920
+ again, those distances would need to be the same.
+
+47
+00:02:52,920 --> 00:02:56,680
+ Even though, when this is kind of the point, the angles that those gears trace out are
+
+48
+00:02:56,680 --> 00:02:58,000
+ going to be very different.
+
+49
+00:02:58,000 --> 00:03:00,240
+ One is going to rotate a whole lot more than the other.
+
+50
+00:03:00,240 --> 00:03:05,040
+ By rearranging this expression for the arc lengths, you get your very first CCR for gearboxes.
+
+51
+00:03:05,040 --> 00:03:09,720
+ R1, theta1 is R2, theta2, and if you differentiate that, you get an equivalent expression
+
+52
+00:03:09,720 --> 00:03:11,440
+ on angular velocities.
+
+53
+00:03:11,440 --> 00:03:15,800
+ The second CCR for gearboxes kind of the effort relation comes from another kind of
+
+54
+00:03:15,800 --> 00:03:20,600
+ physical argument, and that is at the point where these things mesh, equal opposite
+
+55
+00:03:20,600 --> 00:03:25,200
+ forces need to be present on the teeth, or I guess in this case, the friction surfaces,
+
+56
+00:03:25,200 --> 00:03:26,800
+ that are meshing.
+
+57
+00:03:26,800 --> 00:03:30,580
+ Since the torque on each gear can be related to the kind of force at the meshing point
+
+58
+00:03:30,580 --> 00:03:35,840
+ by their radius, this expression here for how the torques from say gear 1 are converted
+
+59
+00:03:35,840 --> 00:03:36,840
+ to gear 2.
+
+60
+00:03:36,840 --> 00:03:40,640
+ A really important thing for you to note when you're using these CCRs though, these
+
+61
+00:03:40,640 --> 00:03:43,560
+ are defined for the coordinate system that I've shown here.
+
+62
+00:03:43,560 --> 00:03:46,760
+ If you use a different coordinate system, say where the input and output torque are
+
+63
+00:03:46,760 --> 00:03:50,600
+ in the same direction, or the input and output coordinates are in the same direction, then
+
+64
+00:03:50,600 --> 00:03:54,720
+ you get any different CCR, probably incorporating a negative sign somewhere.
+
+65
+00:03:54,720 --> 00:03:59,160
+ These CCRs have kind of inbuilt sign conventions according to this picture, and you'll need
+
+66
+00:03:59,160 --> 00:04:03,680
+ to adapt them to the circumstances you're dealing with, both in changing the subscripts,
+
+67
+00:04:03,680 --> 00:04:08,720
+ but also in changing possibly the signs depending on how the coordinates are defined.
+
+68
+00:04:08,720 --> 00:04:11,960
+ Just like a whole lot of other things in this course, I think that this concept is probably
+
+69
+00:04:11,960 --> 00:04:12,960
+ the best explained through a problem.
+
+70
+00:04:12,960 --> 00:04:17,200
+ So let's have a go at problem 3.5 and see if we can build some intuition about gear

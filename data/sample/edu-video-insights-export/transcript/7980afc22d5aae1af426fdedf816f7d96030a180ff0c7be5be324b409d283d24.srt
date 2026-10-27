@@ -1,0 +1,243 @@
+1
+00:00:00,000 --> 00:00:07,600
+ All right, we've talked about how you can linearize a state space model about kind of any old point that you like any approximation point
+
+2
+00:00:07,880 --> 00:00:13,320
+ We talked about how you could do that for inputs as well in which case that point was not just an approximation state
+
+3
+00:00:13,320 --> 00:00:17,880
+ But also an approximation input and we've also talked about equilibrium points, right?
+
+4
+00:00:17,960 --> 00:00:24,120
+ Kind of special points in state space special values of the state vector where if the system ever reaches that point
+
+5
+00:00:24,120 --> 00:00:29,000
+ It won't change anymore. It'll be in steady state. The state derivative vector will be zero in this video
+
+6
+00:00:29,000 --> 00:00:37,200
+ I want to talk a little bit about what happens when you take a linear approximation about an equilibrium point when your equilibrium point is the approximation point
+
+7
+00:00:37,240 --> 00:00:47,360
+ There are all sorts of reasons why you might want to linearize about an equilibrium point kind of the most obvious being that you're operating points in reality are probably going to be equilibrium points
+
+8
+00:00:47,720 --> 00:00:51,360
+ Generally, you're going to want your systems to operate at steady state
+
+9
+00:00:52,000 --> 00:00:56,200
+ This is kind of the case for manufacturing processes and many of the control systems
+
+10
+00:00:56,200 --> 00:00:57,760
+ You're going to look at kind of later in this course
+
+11
+00:00:57,760 --> 00:01:04,000
+ They're going to be centered around trying to get the system to operate around an equilibrium point in addition to the kind of physical reasons
+
+12
+00:01:04,000 --> 00:01:06,320
+ Why you might want to linearize about an equilibrium point?
+
+13
+00:01:06,320 --> 00:01:10,480
+ There are also some kind of nice theoretical reasons why you might want to do so as well
+
+14
+00:01:11,160 --> 00:01:15,560
+ Linearizing about an equilibrium point gives us kind of a window into the way that our system behaves
+
+15
+00:01:15,760 --> 00:01:18,960
+ I mean two kind of key areas that we'll talk about in this course
+
+16
+00:01:19,160 --> 00:01:24,440
+ The first is the concept of nonlinear system stability what I'm going to talk a little bit more about in this video
+
+17
+00:01:24,440 --> 00:01:29,480
+ And the second is the concept of state trajectories the video that's going to come after this one
+
+18
+00:01:29,480 --> 00:01:34,440
+ So let's start with a concept of nonlinear system stability or stability of equilibrium points
+
+19
+00:01:35,240 --> 00:01:40,360
+ Stability is a concept you've probably already had some experience with it's kind of the tendency of the system to behave
+
+20
+00:01:40,360 --> 00:01:45,040
+ And there's a really nice minute physics video that I normally play during my lectures to show to my students
+
+21
+00:01:45,040 --> 00:01:49,280
+ I'll put a link to it in the description. You should go and watch it now pause this video and then come back
+
+22
+00:01:49,920 --> 00:01:53,520
+ Because I think it kind of highlights it really well in the minute physics video
+
+23
+00:01:53,760 --> 00:01:56,640
+ Henry talks about kind of balancing a pen on his finger
+
+24
+00:01:56,640 --> 00:01:59,880
+ I'm a problem, which is actually very similar to the inverted pendulum
+
+25
+00:01:59,880 --> 00:02:04,800
+ You're gonna have in your major assignment this year that system has kind of two equilibrium points
+
+26
+00:02:05,080 --> 00:02:10,920
+ One which is the upright position of the pendulum or the pencil and the other is the downwind position of the pendulum or the pencil
+
+27
+00:02:10,920 --> 00:02:16,480
+ When it's kind of on the ground, I guess in the case of a pencil those two equilibrium points are very different, right?
+
+28
+00:02:16,480 --> 00:02:23,440
+ The upright equilibrium point is kind of unstable any deviation any small disturbance from that equilibrium point is
+
+29
+00:02:23,480 --> 00:02:25,920
+ going to send it kind of careening off in the other direction
+
+30
+00:02:26,240 --> 00:02:29,680
+ Whereas the downward one is very stable if you disturb it slightly
+
+31
+00:02:29,680 --> 00:02:32,080
+ It's going to kind of remain there in that position
+
+32
+00:02:32,680 --> 00:02:36,720
+ Stability in general is a pretty broad topic and there's lots of different ways to talk about it
+
+33
+00:02:37,200 --> 00:02:41,700
+ Over the next couple of weeks when you're talking about linear systems in control with associate professor
+
+34
+00:02:41,700 --> 00:02:46,140
+ Young you're going to talk about bebostability found it input bounded output stability
+
+35
+00:02:46,840 --> 00:02:51,600
+ Right now in the context of non-linear systems. I want to talk about two types of stability
+
+36
+00:02:51,960 --> 00:02:57,840
+ Asymptotic stability and the apanov stability if an equilibrium point is asymptotically stable
+
+37
+00:02:57,920 --> 00:03:02,040
+ Then that means that if we disturb the system from the kind of equilibrium estate
+
+38
+00:03:02,280 --> 00:03:05,040
+ By a small amount of small deviation to the state vector
+
+39
+00:03:05,040 --> 00:03:07,920
+ Then it will generally want to try and return to that state
+
+40
+00:03:08,120 --> 00:03:13,120
+ The apanov stability is a pretty similar concept if an equilibrium point is the apanov stable
+
+41
+00:03:13,120 --> 00:03:18,840
+ That means that if you disturb the system slightly from that equilibrium point again a small perturbation in the state vector
+
+42
+00:03:19,480 --> 00:03:22,680
+ Generally, it's going to want to remain in the vicinity of that point
+
+43
+00:03:23,000 --> 00:03:26,440
+ Not necessarily yet driven towards it, but remain in the vicinity of it
+
+44
+00:03:26,440 --> 00:03:30,040
+ I mentioned earlier that when you linearize a system about an equilibrium point
+
+45
+00:03:30,040 --> 00:03:32,920
+ It kind of gives you a window into the stability of that system
+
+46
+00:03:33,080 --> 00:03:36,120
+ We do this in this course using the apanov's first method
+
+47
+00:03:36,280 --> 00:03:40,280
+ A technique that I won't go through the derivation of but will certainly use to our advantage
+
+48
+00:03:40,280 --> 00:03:46,960
+ I'll provide you some reading materials if you like the apanov's first method states that if you linearize a system about an equilibrium point
+
+49
+00:03:47,520 --> 00:03:53,840
+ And you look at the eigenvalues of the amatrix of that linearization since that linearization is a linear state-space model
+
+50
+00:03:54,560 --> 00:03:59,200
+ Those eigenvalues can tell you something about the leapanov stability of that system
+
+51
+00:03:59,520 --> 00:04:04,960
+ If any of these eigenvalues have a positive real part that equilibrium point is said to be unstable
+
+52
+00:04:04,960 --> 00:04:08,960
+ The system if disturbed from that equilibrium point will generally move away from it
+
+53
+00:04:09,360 --> 00:04:14,560
+ If all of the eigenvalues of the amatrix of the linear approximation have negative real part
+
+54
+00:04:14,640 --> 00:04:20,160
+ Then the system is said to be leapanov stable if disturbed from the equilibrium point remain in the vicinity of it
+
+55
+00:04:20,800 --> 00:04:25,760
+ Finally, if there's some combination of eigenvalues that have a negative real part and a zero real part
+
+56
+00:04:25,760 --> 00:04:29,520
+ Then nothing can be said about the stability of that equilibrium point using this technique
+
+57
+00:04:30,080 --> 00:04:32,720
+ There are other methods, but we won't touch them in this course
+
+58
+00:04:33,440 --> 00:04:37,040
+ Basically, leapanov's going to help you out in kind of two out of the three cases
+
+59
+00:04:37,680 --> 00:04:39,440
+ And it's certainly a good starting point
+
+60
+00:04:39,440 --> 00:04:43,920
+ Let's have a go up from 6.6 together and see if we can evaluate the stability of an equilibrium point
+
+61
+00:04:43,920 --> 00:04:45,920
+ Give it an approximation

@@ -1,0 +1,483 @@
+1
+00:00:00,000 --> 00:00:04,480
+ A few weeks ago when we met mechanical properties, I promise that we would come back and talk about
+
+2
+00:00:04,480 --> 00:00:08,800
+ how different materials came to have these properties. Well, now that we've learned a little bit
+
+3
+00:00:08,800 --> 00:00:13,760
+ about crystallography, we can finally do that for metals. We'll kick off by talking about elastic
+
+4
+00:00:13,760 --> 00:00:19,600
+ deformation. In metals, this deformation corresponds to stretching and squishing of the atomic
+
+5
+00:00:19,600 --> 00:00:24,800
+ lattice planes, pulling atoms apart from each other or pushing them in towards each other where
+
+6
+00:00:24,800 --> 00:00:29,040
+ the bonds between the atoms essentially act as the little miniature springs providing a
+
+7
+00:00:29,040 --> 00:00:34,000
+ restoring force. And the analogy of a spring here is quite apt because generally speaking the
+
+8
+00:00:34,000 --> 00:00:38,080
+ strength of the bond, which is a function of exactly which metal you're talking about,
+
+9
+00:00:38,080 --> 00:00:43,120
+ is a large contributor to the elastic modulus of the material. This reason right here is exactly
+
+10
+00:00:43,120 --> 00:00:48,640
+ why families of metals tend to have similar if not exactly the same elastic modular. If you
+
+11
+00:00:48,640 --> 00:00:53,120
+ consider, for example, the family of all steels, irrespective of the small amount of stuff that
+
+12
+00:00:53,120 --> 00:00:58,640
+ we put in there, the differentia between, I don't know, say a low carbon steel and an alloy steel,
+
+13
+00:00:58,640 --> 00:01:03,120
+ both types which we'll meet in a little while, the primary constituent in all steels is pretty much
+
+14
+00:01:03,120 --> 00:01:08,240
+ just iron, mostly iron. And consequently, it's the strength of the metallic bonds in iron that
+
+15
+00:01:08,240 --> 00:01:13,280
+ dictate the elastic modular that most steels have, around 200 gigapascals. If you look at the
+
+16
+00:01:13,280 --> 00:01:17,280
+ family of stressed strain curves for all steels, you'll see that they all have very similar
+
+17
+00:01:17,280 --> 00:01:22,480
+ elastic behavior. They all have the same modular subelasticity, the same slope in the linear region.
+
+18
+00:01:22,560 --> 00:01:26,560
+ All of these steels behave the same way because the elastic behavior is governed by the
+
+19
+00:01:26,560 --> 00:01:31,040
+ elastic modular, which itself is governed by the strength of the atomic bonds, which is governed
+
+20
+00:01:31,040 --> 00:01:36,000
+ by the composition, and they're all just iron. Let's turn now to plastic deformation, which is
+
+21
+00:01:36,000 --> 00:01:40,240
+ a little bit more complicated. While elastic deformation of metals corresponds to stretching and
+
+22
+00:01:40,240 --> 00:01:46,080
+ squishing of atomic lattice planes, plastic deformation corresponds to shearing of these planes.
+
+23
+00:01:46,080 --> 00:01:49,520
+ When you hear the word shearing, you might be picturing in your head that we're only talking
+
+24
+00:01:49,520 --> 00:01:54,160
+ about sheolodes when you're kind of loading the atomic lattice planes parallel to their direction,
+
+25
+00:01:54,160 --> 00:01:59,200
+ but you should note that even when you load something intentional compression, it actually fails,
+
+26
+00:01:59,200 --> 00:02:03,920
+ it actually plastically deforms in shear. It's not like you're ripping the atomic lattice
+
+27
+00:02:03,920 --> 00:02:08,560
+ planes apart from each other. You're sliding them past each other, which requires substantially
+
+28
+00:02:08,560 --> 00:02:13,920
+ less energy. And in actuality, you don't even shear entire planes in a time. To shear an
+
+29
+00:02:13,920 --> 00:02:19,120
+ entire plane like this means breaking every single atomic bond kind of along with the plane.
+
+30
+00:02:19,200 --> 00:02:23,920
+ In reality, some of the lattice defects that we met in the previous video actually aid plastic
+
+31
+00:02:23,920 --> 00:02:29,440
+ deformation. These particular kinds of defect are called dislocations, and they usually manifest
+
+32
+00:02:29,440 --> 00:02:34,400
+ as a vacancy or missing atom in the lattice, or as a mismatch over the lattice. When
+
+33
+00:02:34,400 --> 00:02:38,720
+ plastically deforming, when shearing lattice planes, you no longer need to break every single bond
+
+34
+00:02:38,720 --> 00:02:44,000
+ at the same time. Instead, you can break one bond at a time to shift the plane over because there's
+
+35
+00:02:44,000 --> 00:02:48,400
+ somewhere for the next atom to go. A little bit like past the parcel, one atom moves over and the
+
+36
+00:02:48,480 --> 00:02:53,200
+ next moves to fill its gap and so on and so forth. Rather than talking about atoms moving over
+
+37
+00:02:53,200 --> 00:02:57,280
+ one way, quite a few people will talk about the dislocation that they can see moving over
+
+38
+00:02:57,280 --> 00:03:02,560
+ another way, but it's pretty much the same thing. And consequently, plastic deformation in general
+
+39
+00:03:02,560 --> 00:03:07,840
+ is really just the motion of dislocations. It's really just the shifting of atoms into the
+
+40
+00:03:07,840 --> 00:03:12,480
+ gap provided by dislocation. You should note that generally speaking, the easier it is for
+
+41
+00:03:12,480 --> 00:03:17,280
+ dislocations to move within the lattice, the more ductile or material tends to be, the more plastic
+
+42
+00:03:17,280 --> 00:03:21,840
+ deformation it can withstand. And the opposite is true as well. The harder it is for a dislocation
+
+43
+00:03:21,840 --> 00:03:26,560
+ or move through a lattice, for reasons we'll get into in a moment, the less ductile material tends
+
+44
+00:03:26,560 --> 00:03:31,920
+ to be. You should also note that as plastic deformation occurs, as dislocations migrate through the
+
+45
+00:03:31,920 --> 00:03:36,480
+ lattice, they have a tendency to create more and more of these, messing up the lattice in more and
+
+46
+00:03:36,480 --> 00:03:41,520
+ more different places. And that this creation of dislocations is irreversible. It's not like elastic
+
+47
+00:03:41,520 --> 00:03:45,760
+ deformation where you can let the load off and everything goes back to normal. Usually, the damage
+
+48
+00:03:45,760 --> 00:03:50,640
+ from plastic deformation is cumulative, it keeps adding up. This leads us perfectly into our next
+
+49
+00:03:50,640 --> 00:03:55,280
+ property that's influenced by the crystallography of our material, which is the yield strength.
+
+50
+00:03:55,280 --> 00:03:58,880
+ Remember from week one that the yield strength is the point at which your material stops only
+
+51
+00:03:58,880 --> 00:04:04,080
+ behaving elastically and begins also behaving plastically. Well, this is really just a function of
+
+52
+00:04:04,080 --> 00:04:09,040
+ how easy it is to migrate dislocations in the lattice. The yield strength is really just the
+
+53
+00:04:09,040 --> 00:04:13,600
+ stress that's required to begin shifting these dislocations around. The easier it is for a
+
+54
+00:04:13,600 --> 00:04:17,920
+ dislocation to move through a lattice, the lower the yield strength is, and the harder it is for
+
+55
+00:04:17,920 --> 00:04:22,720
+ dislocation to move through a lattice, the higher the yield strength is. The good news for us as
+
+56
+00:04:22,720 --> 00:04:27,440
+ engineers is that dislocations can't just move unchecked throughout a lattice, otherwise everything
+
+57
+00:04:27,440 --> 00:04:32,080
+ would have a yield strength of zero. There's energy required, this stress that has to be applied
+
+58
+00:04:32,080 --> 00:04:36,880
+ to get the moving in the first place. And even if they start moving, they very quickly reach
+
+59
+00:04:36,880 --> 00:04:41,120
+ obstacles to their motion in the forms of defects, the one that we met at the end of the last
+
+60
+00:04:41,920 --> 00:04:46,400
+ All of the defects we met in the last video act as dislocation blockers. All of them put some kind
+
+61
+00:04:46,400 --> 00:04:52,080
+ of strain or mismatch into the lattice. And because more energy is required to overcome this
+
+62
+00:04:52,080 --> 00:04:57,440
+ strain to shift an atom through this strained area, then to just stay still dislocations when
+
+63
+00:04:57,440 --> 00:05:01,760
+ they encounter one of these obstacles have a tendency to stop. In other words, the yield strength of
+
+64
+00:05:01,760 --> 00:05:07,280
+ your material and inversely the ductility of your material are proportional to the frequency of
+
+65
+00:05:07,280 --> 00:05:12,480
+ these dislocation impeding defects that are present. Let's take a look at each of these in detail.
+
+66
+00:05:12,480 --> 00:05:16,240
+ Grain boundaries, which manifest as a change in the direction of the lattice,
+
+67
+00:05:16,240 --> 00:05:21,200
+ act as obstacles to dislocations. The energy required to cross a grain boundary for a dislocation
+
+68
+00:05:21,200 --> 00:05:26,880
+ to both a change direction and cross this irregular lattice spacing is usually higher than for a
+
+69
+00:05:26,880 --> 00:05:31,920
+ dislocation to just sit still, even under an applied load. Consequently, metals that have a higher
+
+70
+00:05:31,920 --> 00:05:36,480
+ number of grain boundaries, in other words, metals that have smaller grains, tend to have higher
+
+71
+00:05:36,560 --> 00:05:40,960
+ yield strengths than those with larger grains. This phenomena called the grain size effect doesn't
+
+72
+00:05:40,960 --> 00:05:45,680
+ only apply to looking at materials and seeing how big their grains are to work out the yield
+
+73
+00:05:45,680 --> 00:05:50,720
+ strength, but can also be used as a strengthening mechanism by carefully controlling the cooling rate
+
+74
+00:05:50,720 --> 00:05:55,440
+ or by plastically deforming and then heat treading in material, you can actually change the size
+
+75
+00:05:55,440 --> 00:06:00,480
+ of the grains that form. If you do this and on the whole end up with smaller grains end up with
+
+76
+00:06:00,480 --> 00:06:05,280
+ more grain boundaries, you can increase the yield strength of your material. The next mechanism on
+
+77
+00:06:05,280 --> 00:06:09,840
+ our list is a consequence of alloying. If you replace some members of your crystal lattice with
+
+78
+00:06:09,840 --> 00:06:14,160
+ an alloying element with a substitution, this has the effect of straining the lattice because the
+
+79
+00:06:14,160 --> 00:06:18,880
+ alloying atom is very rarely exactly the same size as the one you took out. If it's a little bit
+
+80
+00:06:18,880 --> 00:06:22,720
+ bigger, it has to strain the lattice outwards to fit in, and if it's a little bit smaller,
+
+81
+00:06:22,720 --> 00:06:28,320
+ it has to strain the lattice inwards to pull it all together. The same is true of interstitial alloying.
+
+82
+00:06:28,320 --> 00:06:32,640
+ If instead of replacing one of the parent atoms with your alloying elements, you instead take your
+
+83
+00:06:32,640 --> 00:06:37,440
+ alloying elements and slip them into the gaps between your parent atoms, this also has the
+
+84
+00:06:37,440 --> 00:06:43,040
+ effect of straining the lattice. Interstitial and substitutional solutes are not the only way to
+
+85
+00:06:43,040 --> 00:06:47,680
+ alloy a metal. If you can get enough of an alloying element into one place in your lattice,
+
+86
+00:06:47,680 --> 00:06:51,920
+ say by dumping it all there when you're introduced to it or giving it sufficient motivation in
+
+87
+00:06:51,920 --> 00:06:57,200
+ the form of some temperature and a lot of time to reorganize itself, then your alloying elements
+
+88
+00:06:57,200 --> 00:07:01,600
+ could all migrate together to form a lattice within a lattice in a process called precipitation or
+
+89
+00:07:02,160 --> 00:07:07,920
+ just like a substitutional or interstitial alloyant, a precipitated one, an aged one has the effect
+
+90
+00:07:07,920 --> 00:07:12,720
+ of straining the lattice around it, again blocking motion to dislocations. The final mechanism you
+
+91
+00:07:12,720 --> 00:07:17,840
+ should be aware of is a process known as cold working or strain hardening. I already told you that by
+
+92
+00:07:17,840 --> 00:07:22,240
+ plastically deforming something you have a tendency to create more dislocations that as
+
+93
+00:07:22,240 --> 00:07:26,000
+ dislocations migrate through the lattice they have a tendency to mess it up further.
+
+94
+00:07:26,080 --> 00:07:31,680
+ Well, interestingly, dislocations actually act as blockers to the motion of other dislocations,
+
+95
+00:07:31,680 --> 00:07:36,400
+ and consequently the more that you plastically deform something, the stronger it has a tendency to
+
+96
+00:07:36,400 --> 00:07:40,640
+ get. This is why on most metals on the stress strain curve when you reach the end of the linear
+
+97
+00:07:40,640 --> 00:07:44,800
+ region when you begin plastically deforming them, their strength actually increases the amount of
+
+98
+00:07:44,800 --> 00:07:50,320
+ stress they can bear actually increases. This is entirely down to cold working to strain hardening.
+
+99
+00:07:50,320 --> 00:07:54,960
+ By plastically deforming you've created more dislocations and those dislocations block the
+
+100
+00:07:54,960 --> 00:08:00,080
+ motion of other dislocations and the strength of the thing increases. This effect kind of continues
+
+101
+00:08:00,080 --> 00:08:04,800
+ in a positive feedback loop until you've built up so many dislocations that none of them can move
+
+102
+00:08:04,800 --> 00:08:09,600
+ around anymore and your material ends up being quite brittle and fractures. That all about
+
+103
+00:08:09,600 --> 00:08:14,240
+ doers for this video. In summary, elastic deformation of metals corresponds to stretching and
+
+104
+00:08:14,240 --> 00:08:18,000
+ squishing of the lattice planes. The strength of the bonds between atoms, which is a function of
+
+105
+00:08:18,000 --> 00:08:22,800
+ the composition, the particular metal you're talking about, dictates the young's modulus of a material.
+
+106
+00:08:22,880 --> 00:08:27,280
+ Plastic deformation occurs to shearing of atomic lattice planes and this is usually achieved
+
+107
+00:08:27,280 --> 00:08:32,320
+ through the motion of dislocations. How freely a dislocation can move within your material is
+
+108
+00:08:32,320 --> 00:08:37,200
+ inversely proportional to its yield strength. If dislocations can't move very much, it tends to be
+
+109
+00:08:37,200 --> 00:08:41,680
+ strong. If dislocations can move through with relative ease, it tends to be quite weak.
+
+110
+00:08:41,680 --> 00:08:46,400
+ Defect in the crystal lattice have a tendency to block dislocations by introducing an uneven
+
+111
+00:08:46,400 --> 00:08:51,440
+ spacing or a strain in the lattice. This can take the form of grain boundaries and by growing
+
+112
+00:08:51,440 --> 00:08:54,880
+ smaller grains and introducing more boundaries, you can have a stronger material.
+
+113
+00:08:54,880 --> 00:08:59,120
+ It can also take the form of an alloy and introduce substitutionally or interstitially,
+
+114
+00:08:59,120 --> 00:09:02,800
+ which will have the effect of straining the lattice and blocking the motion of dislocations.
+
+115
+00:09:02,800 --> 00:09:06,800
+ If you get enough of an alloy in into one place, it can form its own lattice within a lattice
+
+116
+00:09:06,800 --> 00:09:12,080
+ inside of material, again straining the global lattice and preventing the motion of dislocations.
+
+117
+00:09:12,080 --> 00:09:17,200
+ And finally, while dislocations begin dislocations, they also block each other's motion,
+
+118
+00:09:17,200 --> 00:09:21,120
+ meaning that the more dislocations that are present in your material, the stronger it gets.
+
+119
+00:09:21,520 --> 00:09:24,960
+ And that's all. At this point, it'd be a good idea for you to write down a summary of these
+
+120
+00:09:24,960 --> 00:09:29,120
+ different mechanisms. It'd be useful to refer back to, I think, as we meet some more metals
+
+121
+00:09:29,120 --> 00:09:31,120
+ later in this chapter.

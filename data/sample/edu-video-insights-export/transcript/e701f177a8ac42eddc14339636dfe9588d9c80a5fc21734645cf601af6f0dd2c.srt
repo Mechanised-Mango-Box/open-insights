@@ -1,0 +1,107 @@
+1
+00:00:00,000 --> 00:00:07,000
+ Alright, let's talk about our first element for fluid power systems, the kind of long pipe or pressure momentum.
+
+2
+00:00:07,000 --> 00:00:13,000
+ Probably not a great one to lead with, I guess, because first of all we don't see this very often.
+
+3
+00:00:13,000 --> 00:00:18,000
+ And second of all, the kind of derivation of the CCRs and SSR is a little bit gross.
+
+4
+00:00:18,000 --> 00:00:24,000
+ So sorry to kind of kick things off with such an unexciting and probably irrelevant element.
+
+5
+00:00:24,000 --> 00:00:33,000
+ But it's worth talking about in this order so that we maintain the same structure I guess between this electrical systems, rotating systems and mechanical systems.
+
+6
+00:00:33,000 --> 00:00:40,000
+ So the generalized inertia for fluid power systems is kind of the momentum of the massive fluid that's in a pipe.
+
+7
+00:00:40,000 --> 00:00:49,000
+ And the reason I say this is irrelevant is because this momentum only really becomes appreciable when you have really, really long pipes or really, really thin pipes.
+
+8
+00:00:49,000 --> 00:00:59,000
+ And here's why. The way we talk about the momentum of a fluid in a pipe comes about from a reasonably long and uninteresting derivation that's in the lecture some reason.
+
+9
+00:00:59,000 --> 00:01:04,000
+ The textbook, if you're interested in reading, but I won't repeat here for the sake of your sanity.
+
+10
+00:01:04,000 --> 00:01:17,000
+ Needless to say, you get something like this where the pressure momentum, kind of the state that energy variable we're interested in, is a function of kind of the density of the fluid, the length of the pipe and the cross-sectional area of the pipe.
+
+11
+00:01:17,000 --> 00:01:26,000
+ And only really becomes appreciable if the density of the fluid is massive. If the length of the pipe is massive, more of the cross-sectional area is tiny.
+
+12
+00:01:26,000 --> 00:01:32,000
+ Otherwise it's something that's just not worth considering. And that's going to be the case for many of our fluid power systems.
+
+13
+00:01:32,000 --> 00:01:43,000
+ Because we're ordinarily going to be modeling kind of hydraulic circuits, maybe the kinds of things that you use to drive actuators or bobcats or whatever, we won't have to deal with this pressure momentum.
+
+14
+00:01:43,000 --> 00:01:53,000
+ Where it might be applicable is something like, I don't know, a pipe delivering really, really high pressure fluid from a dam down to a kind of town or something.
+
+15
+00:01:53,000 --> 00:01:59,000
+ And I think we have a problem similar to that that we'll do later this week. But in the vast majority of cases, you're not going to come across this.
+
+16
+00:01:59,000 --> 00:02:03,000
+ That being said, we should kind of talk about the CCRs to be thorough.
+
+17
+00:02:03,000 --> 00:02:11,000
+ So the first kind of CCR for a long pipe is that the pressure momentum is kind of quantity, we call the inertia of the pipe.
+
+18
+00:02:11,000 --> 00:02:17,000
+ Really, it's just a kind of conglomerate of all of its properties, the density of the fluid, its length and cross-sectional area.
+
+19
+00:02:17,000 --> 00:02:21,000
+ Multiply by the flow rate of fluid going through that pipe.
+
+20
+00:02:21,000 --> 00:02:27,000
+ This obviously looks a lot like the kind of physical momentum we've seen for masses before, right? P equals MV.
+
+21
+00:02:27,000 --> 00:02:34,000
+ Or the electrical equivalent lambda equals Li. And this is for a reason, these things are the same under the hood, right?
+
+22
+00:02:34,000 --> 00:02:41,000
+ But where it's also similar is in the derivative. Just like with a mass, if you took the derivative of momentum, you got net force.
+
+23
+00:02:41,000 --> 00:02:53,000
+ Or with a flux, if you took the derivative, you got kind of voltage. If you take the derivative of a pressure momentum, if you take the derivative of a fluid power momentum, you get the pressure change across that element across that long pipe.
+
+24
+00:02:53,000 --> 00:03:04,000
+ Again, in most cases, you're probably not going to see this element crop up. It kind of goes against our fundamental assumptions that we make in the modeling of fluid power systems, right? High pressures, low flows,
+
+25
+00:03:04,000 --> 00:03:10,000
+ incompressible fluids, we're generally modeling hydraulic circuits. You don't tend to have runs where this is appreciable.
+
+26
+00:03:10,000 --> 00:03:14,000
+ But if it does, we've now got the CCRs and the tools to help you get the job done.
+
+27
+00:03:14,000 --> 00:03:18,000
+ All right, let's go and talk about maybe some more relevant elements.

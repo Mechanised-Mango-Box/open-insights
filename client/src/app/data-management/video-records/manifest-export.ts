@@ -7,7 +7,18 @@ import {
   configure,
 } from '@zip.js/zip.js';
 import { VideoRecord } from './VideoRecord';
-import { Transcript, TranscriptStats, SceneStats, YoutubeContent, readyData } from './Dataset';
+import {
+  AudioStats,
+  DatasetSettings,
+  DatasetState,
+  Transcript,
+  TranscriptStats,
+  SceneStats,
+  TextStats,
+  YoutubeContent,
+  isReady,
+  readyData,
+} from './Dataset';
 
 export interface ManifestRecord {
   id: string;
@@ -16,15 +27,117 @@ export interface ManifestRecord {
   youtube_content: YoutubeContent | null;
   transcript_stats: TranscriptStats | null;
   scene_stats: SceneStats | null;
+  /** Optional because exports made before screen text existed do not carry it. */
+  text_stats?: TextStats | null;
+  /** Optional for the same reason, from before audio stats existed. */
+  audio_stats?: AudioStats | null;
   transcript_path: string | null;
   video_file_path: string | null;
   audience_retention_path: string | null;
+  /**
+   * How each scan result above was made: the producer stamp, when, and the settings
+   * (thresholds, models) it ran with, by dataset kind. Optional because exports made
+   * before it was written do not carry it; a result made before results carried
+   * settings has a producer and no settings.
+   */
+  scan_provenance?: Partial<Record<ProvenanceKind, ScanProvenance>>;
 }
+
+export type ProvenanceKind =
+  'transcript' | 'transcript_stats' | 'scene_stats' | 'text_stats' | 'audio_stats';
+
+export type ScanProvenance = {
+  producer: string;
+  produced_at?: string;
+  settings?: DatasetSettings;
+};
+
+/** The provenance of every ready scan result on a record. */
+export const scanProvenance = (
+  record: VideoRecord,
+): Partial<Record<ProvenanceKind, ScanProvenance>> => {
+  const fields: Record<ProvenanceKind, DatasetState<unknown>> = {
+    transcript: record.ds_transcript,
+    transcript_stats: record.ds_transcriptStats,
+    scene_stats: record.ds_sceneStats,
+    text_stats: record.ds_textStats,
+    audio_stats: record.ds_audioStats,
+  };
+  const out: Partial<Record<ProvenanceKind, ScanProvenance>> = {};
+  for (const [kind, state] of Object.entries(fields) as [ProvenanceKind, DatasetState<unknown>][]) {
+    if (!isReady(state)) continue;
+    out[kind] = {
+      producer: state.producer,
+      ...(state.produced_at ? { produced_at: state.produced_at } : {}),
+      ...(state.settings ? { settings: state.settings } : {}),
+    };
+  }
+  return out;
+};
 
 export interface ExportManifest {
   generated_at: string;
   records: ManifestRecord[];
 }
+
+/**
+ * One record as the manifest carries it: its scalar fields and Scan results, with
+ * every file path null. writeExportZip fills the paths in as it writes the files.
+ */
+export const toManifestRecord = (record: VideoRecord, index: number): ManifestRecord => {
+  const hash = record.video_file.hash || null;
+  return {
+    id: hash || `record-${index}`,
+    sort_name: record.sort_name,
+    video_file: hash
+      ? {
+          hash,
+          exists_on_server: record.video_file.exists_on_server,
+          duration_secs: record.video_file.duration_secs,
+        }
+      : null,
+    youtube_content: record.ds_youtubeContent,
+    transcript_stats: readyData(record.ds_transcriptStats),
+    scene_stats: readyData(record.ds_sceneStats),
+    text_stats: readyData(record.ds_textStats),
+    audio_stats: readyData(record.ds_audioStats),
+    transcript_path: null,
+    video_file_path: null,
+    audience_retention_path: null,
+    scan_provenance: scanProvenance(record),
+  };
+};
+
+/** One record as POST /api/models/train reads it: an export manifest record cut
+ * down to the fields training uses. */
+export type TrainingRecord = Pick<
+  ManifestRecord,
+  'id' | 'transcript_stats' | 'scene_stats' | 'text_stats' | 'audio_stats'
+> & { youtube_content: { average_view_duration_secs: number | null } | null };
+
+/**
+ * The manifest an export of these records would carry, cut down to what the
+ * server trains on: the Scan results and the average view duration. The server
+ * builds its rows from these fields alone (_record_to_row in data_preparation.py),
+ * so the model is the one scripts/train_engagement_model.py would train from the
+ * full export - and titles, channel figures and file hashes stay in the browser,
+ * which matters when the server is a shared one.
+ */
+export const buildTrainingManifest = (records: VideoRecord[]): { records: TrainingRecord[] } => ({
+  records: records.map((record, index) => {
+    const full = toManifestRecord(record, index);
+    return {
+      id: `record-${index}`,
+      youtube_content: full.youtube_content
+        ? { average_view_duration_secs: full.youtube_content.average_view_duration_secs }
+        : null,
+      transcript_stats: full.transcript_stats,
+      scene_stats: full.scene_stats,
+      text_stats: full.text_stats,
+      audio_stats: full.audio_stats,
+    };
+  }),
+});
 
 /**
  * Formats a seconds offset as SRT's "HH:MM:SS,mmm". Not formatTimestamp from Dataset.ts:
@@ -115,23 +228,7 @@ export async function writeExportZip(
   try {
     for (const [index, record] of records.entries()) {
       const hash = record.video_file.hash || null;
-      const manifestRecord: ManifestRecord = {
-        id: hash || `record-${index}`,
-        sort_name: record.sort_name,
-        video_file: hash
-          ? {
-              hash,
-              exists_on_server: record.video_file.exists_on_server,
-              duration_secs: record.video_file.duration_secs,
-            }
-          : null,
-        youtube_content: record.ds_youtubeContent,
-        transcript_stats: readyData(record.ds_transcriptStats),
-        scene_stats: readyData(record.ds_sceneStats),
-        transcript_path: null,
-        video_file_path: null,
-        audience_retention_path: null,
-      };
+      const manifestRecord = toManifestRecord(record, index);
 
       const transcript = readyData(record.ds_transcript);
       if (hash && transcript) {

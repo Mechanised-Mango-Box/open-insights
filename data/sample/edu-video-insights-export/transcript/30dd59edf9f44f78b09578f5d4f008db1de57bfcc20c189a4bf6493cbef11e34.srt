@@ -1,0 +1,351 @@
+1
+00:00:00,000 --> 00:00:03,120
+ To round up and finish off our discussions on engineering composites,
+
+2
+00:00:03,120 --> 00:00:08,000
+ we're going to talk about a third and final kind on the lies somewhere in between the pure
+
+3
+00:00:08,000 --> 00:00:12,880
+ series in parallel macroscopic composites that we already met and the slightly more nebulous
+
+4
+00:00:12,880 --> 00:00:17,440
+ embedded composites that we already met in this video, we're going to talk about fiber reinforced
+
+5
+00:00:17,440 --> 00:00:22,000
+ composites fiber reinforced composites derived some pretty incredible mechanical properties by
+
+6
+00:00:22,000 --> 00:00:26,880
+ realizing the true theoretical strength and stiffness of some otherwise brutal materials like
+
+7
+00:00:27,840 --> 00:00:33,360
+ they do this by utilizing these materials as fibers stiff and strong and crack resistant but
+
+8
+00:00:33,360 --> 00:00:38,800
+ slender and floor free strands in a fiber reinforced composite load is primarily carried by
+
+9
+00:00:38,800 --> 00:00:43,760
+ these fibers but is transferred between them by a matrix material and depending on the size and
+
+10
+00:00:43,760 --> 00:00:48,320
+ arrangement of the fibers these exist on all ends of the spectrum there are fiber reinforced
+
+11
+00:00:48,320 --> 00:00:52,800
+ composites that very closely resemble the embedded composites we just spoke about where the
+
+12
+00:00:52,800 --> 00:00:57,280
+ strands are quite short and act like particles in a particle reinforced composite and there
+
+13
+00:00:57,280 --> 00:01:01,520
+ are fiber reinforced composites with quite long strands that have been arranged into mats and
+
+14
+00:01:01,520 --> 00:01:06,160
+ very much resemble some of the macroscopic pure series and parallel composites that we met
+
+15
+00:01:06,160 --> 00:01:10,960
+ earlier this week and in fact combinations of these geometries arrangements of fibers anywhere
+
+16
+00:01:10,960 --> 00:01:15,280
+ along the spectrum are possible in any case the behavior of fiber reinforced composite is not
+
+17
+00:01:15,280 --> 00:01:18,880
+ entirely straightforward in this video we're going to talk about a few of the pertinent examples
+
+18
+00:01:18,880 --> 00:01:23,120
+ that I'll link you some more resources but this is a very very broad topic that you'll know
+
+19
+00:01:23,120 --> 00:01:27,600
+ that explore in your later courses and later in your career as well irrespective of whether you're
+
+20
+00:01:27,600 --> 00:01:32,240
+ talking about a fiber reinforced composite the more closely resembles an embedded composite with
+
+21
+00:01:32,240 --> 00:01:35,920
+ short strands or you're talking about a fiber reinforced composite the more closely resembles
+
+22
+00:01:35,920 --> 00:01:40,800
+ a structural composite because the strands are longer and woven into mats and then laminated
+
+23
+00:01:40,800 --> 00:01:45,360
+ the role of the fiber and the role of the matrix is largely the same in these two cases
+
+24
+00:01:45,360 --> 00:01:50,240
+ in any fiber reinforced composite the fibers are the primary load bearing constituent of the part
+
+25
+00:01:50,240 --> 00:01:55,120
+ most fiber reinforced composites use slender in other words long relative to their diameter single
+
+26
+00:01:55,120 --> 00:02:00,480
+ crystal ceramics last graphite silicon carbide and alumina are all common examples
+
+27
+00:02:00,480 --> 00:02:05,120
+ when manufactured this way long relative to their diameter slender these single crystal and even
+
+28
+00:02:05,120 --> 00:02:10,320
+ poly crystalline ceramics generally are too small to have any substantial flaws in other words
+
+29
+00:02:10,320 --> 00:02:13,760
+ because they don't have these imperfections and don't have these pores they can live up to the
+
+30
+00:02:13,760 --> 00:02:18,080
+ theoretical strength and stiffness that the ceramic promises though it should be noted that
+
+31
+00:02:18,080 --> 00:02:22,320
+ as you probably expect the properties of these fibers are extremely anisotropic they have
+
+32
+00:02:22,320 --> 00:02:26,800
+ incredible tensile loading capacity along their link but they have to be entombed within a matrix to
+
+33
+00:02:26,800 --> 00:02:31,200
+ make any kind of useful part first of all you need the matrix to effectively transfer load
+
+34
+00:02:31,200 --> 00:02:35,680
+ between the fibers but you also need the matrix to be able to sustain any kind of compressive loads
+
+35
+00:02:35,680 --> 00:02:39,920
+ because the fibers on their own will just buckle under compression finally you need the matrix
+
+36
+00:02:39,920 --> 00:02:44,640
+ material to kind of set the fibers in place and form any kind of bulk geometry but even within a
+
+37
+00:02:44,640 --> 00:02:49,760
+ matrix a fiber reinforced composite is generally quite anisotropic because load has to be carried
+
+38
+00:02:49,760 --> 00:02:54,320
+ in the direction of the fibers starts to get very complicated very quickly and we will talk a
+
+39
+00:02:54,320 --> 00:02:58,720
+ little bit more about direction of fibers next week when we get to manufacturing with these fiber
+
+40
+00:02:58,720 --> 00:03:02,800
+ reinforced composites but generally I note that anisotropy tends to increase with the amount of
+
+41
+00:03:02,800 --> 00:03:06,960
+ order you have in the direction of your fibers the more aligned they are and it also tends to
+
+42
+00:03:06,960 --> 00:03:11,280
+ increase with the longer these fibers get the matrix of a fiber reinforced composite can be made
+
+43
+00:03:11,280 --> 00:03:16,000
+ from a bunch of different materials but he's very very commonly a polymer of one kind or another
+
+44
+00:03:16,000 --> 00:03:20,560
+ polymers as we've already talked about are extremely cheap and easy to manufacture while they
+
+45
+00:03:20,560 --> 00:03:24,320
+ generally have lowest strength and stiffness and temperature resistance then the fibers they're
+
+46
+00:03:24,320 --> 00:03:28,880
+ entombing they do provide some ductility to the part they also much like the matrix in a particle
+
+47
+00:03:28,880 --> 00:03:33,680
+ reinforced or a dispersion strength and composite isolate the fibers from each other and prevent a
+
+48
+00:03:33,680 --> 00:03:38,400
+ crack in one propagating to all of the others there are probably two main families of fiber
+
+49
+00:03:38,400 --> 00:03:42,960
+ reinforced composite and the naming around these is a little bit ambiguous the first I would
+
+50
+00:03:42,960 --> 00:03:47,280
+ probably refer to as embedded fiber reinforced composites there's normally take the form of some
+
+51
+00:03:47,280 --> 00:03:52,880
+ small amount of chopped fiber within usually a thermoplastic matrix these composites generally look
+
+52
+00:03:52,880 --> 00:03:57,680
+ and feel and behave much the same way that the original thermoplastic did but with an increased
+
+53
+00:03:57,680 --> 00:04:02,080
+ strength and an increased stiffness these kinds of embedded fiber reinforced polymers are very
+
+54
+00:04:02,080 --> 00:04:06,560
+ common if you'd like to say injection mold apart there are very few additional considerations you
+
+55
+00:04:06,560 --> 00:04:11,120
+ need to make on top of the original injection molding process and you can get almost 60% fiber
+
+56
+00:04:11,120 --> 00:04:15,680
+ content inside one of these polymers and still have enough flow to get the plastic to make complicated
+
+57
+00:04:15,680 --> 00:04:20,080
+ geometries there are even 3D printed filaments that have small amount of chopped carbon fiber
+
+58
+00:04:20,080 --> 00:04:25,120
+ within that you can now buy and print with onyx for example and of course you can buy fiber reinforced
+
+59
+00:04:25,120 --> 00:04:29,600
+ plastics in a variety of standard sections for machining as well in an embedded fiber reinforced
+
+60
+00:04:29,600 --> 00:04:34,080
+ polymer the fibers are generally kept reasonably short and oriented reasonably randomly to try and
+
+61
+00:04:34,080 --> 00:04:38,800
+ achieve some level of isotropy in terms of properties and is essentially resulting properties that
+
+62
+00:04:38,800 --> 00:04:42,960
+ are a mid ground between the series and parallel behaviors depending on the amount of fiber that's
+
+63
+00:04:42,960 --> 00:04:47,120
+ included occasionally an embedded fiber reinforced composite might have fibers that are aligned
+
+64
+00:04:47,120 --> 00:04:51,920
+ in the particular direction either intentionally or unintentionally as a result of some manufacturing
+
+65
+00:04:51,920 --> 00:04:56,320
+ process in this case the orientation of the fibers works a little bit like preferred orientation
+
+66
+00:04:56,320 --> 00:05:00,400
+ texture in metals and the result could be a little bit like when you forge a metal and you have all
+
+67
+00:05:00,400 --> 00:05:04,320
+ of the grains flowing in a particular direction to give it strength and stiffness in that direction
+
+68
+00:05:04,320 --> 00:05:08,560
+ the other kind of fiber reinforced composite are what we call lay up or laminated composites
+
+69
+00:05:08,560 --> 00:05:13,200
+ here fibers are generally longer and are woven into a matte of some kind and then literally
+
+70
+00:05:13,200 --> 00:05:19,360
+ laid up laminated over a mold or a form with some kind of epoxy resin or vinyl ester resin
+
+71
+00:05:19,360 --> 00:05:23,280
+ but almost always the thermos any resin of some kind this allows you to make very very
+
+72
+00:05:23,280 --> 00:05:28,240
+ complicated geometries with relatively little expenditure in terms of tooling and formwork
+
+73
+00:05:28,240 --> 00:05:32,400
+ you can make bulk lab composites with different combinations of material matting and
+
+74
+00:05:32,400 --> 00:05:37,200
+ orientation of fibers and density of fibers and in this way the properties of lab composites
+
+75
+00:05:37,200 --> 00:05:41,840
+ more closer resemble sandwich structures pure series and parallel behavior than embedded composite
+
+76
+00:05:41,840 --> 00:05:46,800
+ behavior but in general this is a very very complicated and very very interesting field
+
+77
+00:05:46,800 --> 00:05:50,880
+ again an active area of research there are generally different trade-offs in terms of the different
+
+78
+00:05:50,880 --> 00:05:54,720
+ orientations of fiber that you use in your matting and the different materials you use these
+
+79
+00:05:54,720 --> 00:05:58,160
+ are primarily centered around difficulty in manufacturing and we'll talk a little bit more about
+
+80
+00:05:58,160 --> 00:06:02,000
+ that next week to finish up. I'll note that there are fiber reinforced composites all the way
+
+81
+00:06:02,000 --> 00:06:07,120
+ along the spectrum from lab composites through to embedded composites chop strand fiberglass mat
+
+82
+00:06:07,120 --> 00:06:11,280
+ for example is laid up much the same way that for example carbon fabric might be because this
+
+83
+00:06:11,280 --> 00:06:16,640
+ is relatively randomly oriented and short fibers as opposed to the long continuous ones that you see
+
+84
+00:06:16,880 --> 00:06:21,440
+ say carbon matting these trot strands give much more isotropic uniform properties than those
+
+85
+00:06:21,440 --> 00:06:26,320
+ you'd see would say a biaxial carbon fiber weave which will be faster and stronger along the
+
+86
+00:06:26,320 --> 00:06:29,760
+ direction of the fibers that it will between them. That's probably a good place to leave it for now
+
+87
+00:06:29,760 --> 00:06:32,960
+ I'm noting that we are going to pick this up again next week when we talk about manufacturing
+
+88
+00:06:32,960 --> 00:06:40,880
+ with fiber reinforced composites and have a look at a bit of a case study as well.

@@ -1,0 +1,179 @@
+1
+00:00:00,000 --> 00:00:04,480
+ In this video we're going to talk about machining of ceramic components, owing to their incredibly
+
+2
+00:00:04,480 --> 00:00:08,640
+ high hardness and the fact that they're pretty brittle and the fact that they tend to crack
+
+3
+00:00:08,640 --> 00:00:13,120
+ catastrophically when loaded up, ceramic components aren't particularly machinable,
+
+4
+00:00:13,120 --> 00:00:17,440
+ or at least generally aren't machinable by the same single or multi-point cutting operations
+
+5
+00:00:17,440 --> 00:00:21,360
+ that we met back when we were talking about metals. That being said, quite a few ceramics
+
+6
+00:00:21,360 --> 00:00:26,720
+ respond reasonably well to abrasive machining, grinding, and grinding is very commonly used to
+
+7
+00:00:26,720 --> 00:00:31,760
+ clean up, cast, or pressed, or otherwise form ceramic components. Although primarily
+
+8
+00:00:31,760 --> 00:00:36,880
+ motivated by necessity and not so much by economy as was the case with cast metal components that
+
+9
+00:00:36,880 --> 00:00:42,080
+ only had selective faces machined, we do the same kind of thing in ceramics, casting or pressing
+
+10
+00:00:42,080 --> 00:00:46,400
+ the bulk geometry and then grinding or machining the faces of the matter. There are two
+
+11
+00:00:46,400 --> 00:00:50,800
+ primary considerations in the abrasive machining of a ceramic, suitability of the abrasive
+
+12
+00:00:50,800 --> 00:00:55,760
+ for the job and minimization of cutting forces to try and prevent wholesale cracking. Obviously,
+
+13
+00:00:55,760 --> 00:01:00,960
+ machining is ceramic with an abrasive requires an abrasive which is as hard or harder than the
+
+14
+00:01:00,960 --> 00:01:06,400
+ ceramic that you'd like to machine. Often this can be quite hard, no pun intended to achieve.
+
+15
+00:01:06,400 --> 00:01:10,800
+ Many of the abrasives that we would otherwise use to say surface scrying to metals are actually
+
+16
+00:01:10,800 --> 00:01:15,600
+ also ceramics. The ceramics that we'd like to machine could often rival or exceed the hardness
+
+17
+00:01:15,600 --> 00:01:19,760
+ of the abrasives that we would have used in these other circumstances. Consequently,
+
+18
+00:01:19,760 --> 00:01:25,040
+ ceramics are often machined using diamond abrasives and the process is normally very slow going.
+
+19
+00:01:25,040 --> 00:01:29,680
+ We normally only remove a minuscule amount of material at a time and to cool it becomes very
+
+20
+00:01:29,680 --> 00:01:34,320
+ important to keep the dust down and to wash away any debris that forms it could otherwise clog up
+
+21
+00:01:34,320 --> 00:01:38,960
+ the cut and to keep the temperatures low as well. In other words, machining ceramics is usually very
+
+22
+00:01:38,960 --> 00:01:43,760
+ much a finishing process, cleaning up a face or two. We don't hog shapes out of solid
+
+23
+00:01:43,760 --> 00:01:48,320
+ builds of ceramics to say why we would aluminium, for example. Because you're already using an
+
+24
+00:01:48,320 --> 00:01:52,080
+ abrasive technique and because you're already pretty slow going in the way that you machine
+
+25
+00:01:52,080 --> 00:01:56,480
+ to ceramic, you normally get a pretty good surface finish and reasonably accurate result almost
+
+26
+00:01:56,480 --> 00:02:00,560
+ for free. In fact, some of the standard ceramic sections that we met in the last video that have been
+
+27
+00:02:00,560 --> 00:02:06,240
+ slipcaster sometimes put through a grinding process and can get down to sub 10 micron accuracy.
+
+28
+00:02:06,240 --> 00:02:10,080
+ It's not all bad news when it comes to machining ceramics. In fact, the mechanisms that make
+
+29
+00:02:10,080 --> 00:02:14,880
+ ceramics ordinarily quite difficult to machine with conventional processes opens up an entirely
+
+30
+00:02:14,880 --> 00:02:19,920
+ new mechanism of machining for ceramics, crack propagation cutting. Here, a crack is initiated
+
+31
+00:02:19,920 --> 00:02:25,600
+ by scoring or scraping or otherwise marking a ceramic with a sharp hard tool. And then alone
+
+32
+00:02:25,600 --> 00:02:29,680
+ is applied to the bulk ceramic. Because of the stress concentration that was caused by the initial
+
+33
+00:02:29,680 --> 00:02:35,120
+ scoring or marking, the ceramic tends to fail to catastrophically crack along that scored line.
+
+34
+00:02:35,120 --> 00:02:39,280
+ This is used to great effect to shape quite a few different ceramics, most notably glasses,
+
+35
+00:02:39,280 --> 00:02:44,400
+ but also in stone cutting. And the process can be done by hand or with the assistance of stencils
+
+36
+00:02:44,400 --> 00:02:49,840
+ or even CNC controlled. To finish up, I'll talk about some of the edge cases. Not all ceramic
+
+37
+00:02:49,840 --> 00:02:53,520
+ ceramics are inherently unmachineable. There are some ceramics that machine quite nicely.
+
+38
+00:02:53,520 --> 00:02:57,920
+ Graphite, for example, can be machined in much the same way as metals, using standard high-speed
+
+39
+00:02:57,920 --> 00:03:01,680
+ steel or carbide cutting tools. And in fact, due to its lubricating properties,
+
+40
+00:03:01,680 --> 00:03:05,840
+ graphite can actually be quite easy on your tools, easier to machine than some metals.
+
+41
+00:03:05,840 --> 00:03:09,360
+ And there are some ceramics that are specifically designed and formulated to be highly
+
+42
+00:03:09,360 --> 00:03:13,600
+ machinable, make-all, for example, and quite a few max phases, which you should talk to
+
+43
+00:03:13,600 --> 00:03:17,360
+ Dylan about. I've left some video resources on the different types of ceramic machining,
+
+44
+00:03:17,360 --> 00:03:22,080
+ crack propagation cutting, and machining of make-all and grinding of conventional not-so-machineable
+
+45
+00:03:22,080 --> 00:03:33,280
+ ceramics on the textbook page for this video. And I encourage you to check them out.

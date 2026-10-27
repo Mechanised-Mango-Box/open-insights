@@ -1,0 +1,123 @@
+1
+00:00:00,000 --> 00:00:04,240
+ Alright, it's week 5. Time for a new chapter, a new section of the course, and a new family
+
+2
+00:00:04,240 --> 00:00:07,680
+ of materials for us to meet. You might be thinking that I can't possibly have any more
+
+3
+00:00:07,680 --> 00:00:18,880
+ styles of memes to throw at you. Well, you are going to be all about engineering
+
+4
+00:00:18,880 --> 00:00:23,280
+ polymers and entirely new family of materials. As we deal with the last section of the course,
+
+5
+00:00:23,280 --> 00:00:26,880
+ we're going to spend this week talking about the properties and the characteristics
+
+6
+00:00:26,880 --> 00:00:30,720
+ of engineering polymers there, physics and chemistry, and how these things give them their
+
+7
+00:00:30,720 --> 00:00:35,520
+ material properties as well as meeting a couple of specific polymers. And then next week we're going
+
+8
+00:00:35,520 --> 00:00:39,120
+ to talk all about manufacturing with engineering polymers, some of the techniques that you can use
+
+9
+00:00:39,120 --> 00:00:44,080
+ to form and shape these things. We'll kick off with a definition. Engineering polymers are a
+
+10
+00:00:44,080 --> 00:00:49,520
+ family of materials that encompass things like plastics and rubbers and adhesives and paints and
+
+11
+00:00:49,520 --> 00:00:53,760
+ coatings. While there are many different kinds of polymers and their properties do vary,
+
+12
+00:00:53,760 --> 00:00:57,840
+ generally speaking, polymers have reasonably different properties compared to the metals that
+
+13
+00:00:57,840 --> 00:01:01,840
+ we met last week in the week before. If I speak generally about the entire family,
+
+14
+00:01:01,840 --> 00:01:07,360
+ polymers are usually softer and weaker and more ductile than their engineering metal counterparts.
+
+15
+00:01:07,360 --> 00:01:11,360
+ And they have different non-mechanical properties as well. They usually vary poor conductors of
+
+16
+00:01:11,360 --> 00:01:16,400
+ heat and electricity, which makes them good thermal and electrical insulators rather than conductors.
+
+17
+00:01:16,400 --> 00:01:20,640
+ Polymers also don't tend to corrode the same way that metals do, although you can break them down
+
+18
+00:01:20,720 --> 00:01:24,720
+ through other means. And again, while there is some variation amongst the family of polymers,
+
+19
+00:01:24,720 --> 00:01:28,880
+ they generally have much, much lower melting temperatures than their metal counterparts.
+
+20
+00:01:28,880 --> 00:01:32,320
+ These different and interesting properties that polymers have make them useful for
+
+21
+00:01:32,320 --> 00:01:36,560
+ a range of engineering materials design problems. Usually you'll find yourself turning to a
+
+22
+00:01:36,560 --> 00:01:40,800
+ polymer as opposed to a metal when it's not just outright strength or stiffness that you're
+
+23
+00:01:40,800 --> 00:01:45,520
+ interested in, but some non-mechanical property or some aspect of mass-manufacturability that's
+
+24
+00:01:45,520 --> 00:01:49,520
+ crucially important for the problem you're trying to solve. In fact, because of their modest
+
+25
+00:01:49,520 --> 00:01:53,920
+ mechanical and thermal properties and the interaction of these, polymers are extremely
+
+26
+00:01:53,920 --> 00:01:58,000
+ economical to manufacture at scale. This is one of the reasons why you're surrounded by
+
+27
+00:01:58,000 --> 00:02:01,680
+ polymers all of the time. We're obviously going to talk about the manufacture ability of
+
+28
+00:02:01,680 --> 00:02:06,240
+ polymers next week when we get to manufacturing with polymers. But as we talk about the physics
+
+29
+00:02:06,240 --> 00:02:10,320
+ and chemistry and properties of a bunch of different polymers this week, you should keep that in
+
+30
+00:02:10,320 --> 00:02:15,760
+ mind that polymers generally are really, really easy to manufacture. So with all of that said,
+
+31
+00:02:15,760 --> 00:02:25,760
+ we'll kick off by talking about the physics and chemistry of engineering polymers.

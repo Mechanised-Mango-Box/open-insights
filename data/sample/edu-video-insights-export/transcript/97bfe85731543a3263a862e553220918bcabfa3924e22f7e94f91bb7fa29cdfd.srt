@@ -1,0 +1,211 @@
+1
+00:00:00,000 --> 00:00:04,800
+ At low stresses, most engineering materials exhibit what we call elastic behavior.
+
+2
+00:00:04,800 --> 00:00:09,680
+ As a load is applied, they stretch and deform and then as a load is removed, they unstretch
+
+3
+00:00:09,680 --> 00:00:14,640
+ and underform back to their original size and shape. The resistance of a particular object
+
+4
+00:00:14,640 --> 00:00:19,920
+ to deformation, how much it deforms for a given load, is captured by a structural quantity
+
+5
+00:00:19,920 --> 00:00:24,800
+ that we call its stiffness. Stiffer objects deform less for a given load than more
+
+6
+00:00:24,800 --> 00:00:30,080
+ compliant objects, and being a structural property, stiffness depends on both the geometry
+
+7
+00:00:30,080 --> 00:00:35,440
+ and the material of that object. The relationship between a load, the stiffness of a body in the
+
+8
+00:00:35,440 --> 00:00:39,840
+ amount that body deforms is captured through the one-dimensional version of Hook's law.
+
+9
+00:00:39,840 --> 00:00:44,000
+ And you've no doubt seen this relationship before, probably to talk about a spring.
+
+10
+00:00:44,000 --> 00:00:48,560
+ That's exactly the right way to think about this because in reality, all engineering materials,
+
+11
+00:00:48,560 --> 00:00:53,360
+ one way or another, are kind of like springs. Whether you're talking about axial defamation,
+
+12
+00:00:53,360 --> 00:00:57,200
+ kind of stretching something apart or compressing it together, or you're talking about
+
+13
+00:00:57,200 --> 00:01:01,680
+ torsional defamation, twisting something, in all cases, as long as the behavior's linear,
+
+14
+00:01:01,680 --> 00:01:06,080
+ Hook's law applies and the thing is acting pretty much like a spring. Given that this is a
+
+15
+00:01:06,080 --> 00:01:09,440
+ materials course, it shouldn't come as a huge shock to you that we're particularly
+
+16
+00:01:09,440 --> 00:01:14,400
+ interested in the contribution that the material of composition makes to the stiffness of an object.
+
+17
+00:01:14,400 --> 00:01:18,400
+ That contribution is captured through a few material properties that we call the elastic
+
+18
+00:01:18,400 --> 00:01:24,000
+ moduli of a material. Probably the most famous elastic modulus, so much for that it's often
+
+19
+00:01:24,000 --> 00:01:29,120
+ called the modulus of elasticity, even though it's not the only one, is Young's modulus, which we
+
+20
+00:01:29,120 --> 00:01:34,320
+ give the symbol E. Young's modulus describes the intrinsic resistance of a material to being stretched
+
+21
+00:01:34,320 --> 00:01:40,640
+ or compressed. And through a different version of Hook's law, relates stress and strain in this way.
+
+22
+00:01:40,640 --> 00:01:44,320
+ Over the next couple of weeks, as we meet some materials and talk about the physical and
+
+23
+00:01:44,320 --> 00:01:48,880
+ chemical reasons why they elastically deform, it's going to become very obvious to you why the
+
+24
+00:01:48,880 --> 00:01:53,280
+ expression for Hook's law that concerns Young's modulus looks a lot like the expression for Hook's
+
+25
+00:01:53,280 --> 00:01:57,680
+ law that concerns a spring. And the long and the short of it is that at the heart of every
+
+26
+00:01:57,680 --> 00:02:02,960
+ engineering material are some atomic bonds that work just like springs, holding atoms together.
+
+27
+00:02:02,960 --> 00:02:08,560
+ Because Young's modulus relates stress and strain, it also has a unit of pascals. Because for lots
+
+28
+00:02:08,560 --> 00:02:13,040
+ of engineering materials, particularly metals, only a small amount of strain is need to generate
+
+29
+00:02:13,040 --> 00:02:18,320
+ a massive amount of stress, Young's modulus is typically written in gigapascals, billions of
+
+30
+00:02:18,320 --> 00:02:23,520
+ pascals. Because Young's modulus and the mechanism for elastic defamation of engineering materials
+
+31
+00:02:23,520 --> 00:02:28,560
+ has to do with the strength of the atomic bonds, holding the atoms together inside these materials.
+
+32
+00:02:28,560 --> 00:02:32,640
+ It's common for families of materials, in other words, metals, polymers, ceramics,
+
+33
+00:02:32,640 --> 00:02:37,760
+ to have reasonably similar elastic moduli, particularly when their primary constituent is the same,
+
+34
+00:02:37,920 --> 00:02:42,880
+ like, for example, all steels. Another elastic modulus that's important to us in this course
+
+35
+00:02:42,880 --> 00:02:48,080
+ is going to be Poisson's ratio, which we typically give the symbol new. Poisson's ratio describes
+
+36
+00:02:48,080 --> 00:02:53,840
+ the tendency of a material to kind of spill out as you compress it and to thin out as you stretch it.
+
+37
+00:02:53,840 --> 00:02:57,920
+ This phenomena is called a Poisson effect and it's captured for most materials and small
+
+38
+00:02:57,920 --> 00:03:02,000
+ deflections with this expression, which basically says that the amount of defamation you get
+
+39
+00:03:02,000 --> 00:03:07,440
+ perpendicular to a load is some fraction Poisson's ratio of the amount of defamation that you get
+
+40
+00:03:07,440 --> 00:03:12,720
+ in the direction of the load. Most solid materials have a Poisson's ratio around 0.2 or 0.3.
+
+41
+00:03:12,720 --> 00:03:16,800
+ In other words, for some deflection downwards, they'll spill out 20 or 30%,
+
+42
+00:03:16,800 --> 00:03:21,600
+ but this isn't the case for all materials and some actually have negative Poisson's ratios,
+
+43
+00:03:21,600 --> 00:03:26,640
+ meaning that as you squish them downwards, they shrink sideways as well and as you stretch them,
+
+44
+00:03:26,640 --> 00:03:31,920
+ they grow outwards. Young's modulus and Poisson's ratio are probably the two most famous elastic
+
+45
+00:03:31,920 --> 00:03:36,160
+ moduli that you should make yourself familiar with, but you should be aware that there are many
+
+46
+00:03:36,160 --> 00:03:40,320
+ more of these and they're a moduli that describe how materials behave in a bunch of different
+
+47
+00:03:40,320 --> 00:03:45,840
+ loading circumstances. For example, when subject to shear loads rather than axial loads or when subject
+
+48
+00:03:45,840 --> 00:03:50,400
+ to kind of uniform a hydrostatic pressure. This family of elastic moduli are known as
+
+49
+00:03:50,400 --> 00:03:54,400
+ La Mae Constance and the good news is that when you know two of them, provided you're dealing
+
+50
+00:03:54,400 --> 00:03:59,200
+ with some sort of isotropic material, you can quite easily convert to the others. In other words,
+
+51
+00:03:59,200 --> 00:04:03,120
+ for a lot of the materials you're going to care about, provided you know their young's modulus
+
+52
+00:04:03,120 --> 00:04:07,280
+ and their Poisson's ratio, you can calculate any of the other elastic moduli you might
+
+53
+00:04:07,280 --> 00:04:09,280
+ be interested in.

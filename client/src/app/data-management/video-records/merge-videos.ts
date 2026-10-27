@@ -1,6 +1,8 @@
 import {
+  AudioStats,
   DatasetState,
   SceneStats,
+  TextStats,
   Transcript,
   TranscriptStats,
   YoutubeAudienceRetention,
@@ -16,7 +18,9 @@ export type MergeFieldKey =
   | 'ds_youtubeAudienceRetention'
   | 'ds_transcript'
   | 'ds_transcriptStats'
-  | 'ds_sceneStats';
+  | 'ds_sceneStats'
+  | 'ds_textStats'
+  | 'ds_audioStats';
 
 export type MergeOption = { sourceLabel: string; value: unknown };
 
@@ -40,6 +44,8 @@ const MERGE_FIELD_KEYS: MergeFieldKey[] = [
   'ds_transcript',
   'ds_transcriptStats',
   'ds_sceneStats',
+  'ds_textStats',
+  'ds_audioStats',
 ];
 
 const FIELD_LABELS: Record<MergeFieldKey, string> = {
@@ -50,6 +56,8 @@ const FIELD_LABELS: Record<MergeFieldKey, string> = {
   ds_transcript: 'Transcript',
   ds_transcriptStats: 'Transcript Stats',
   ds_sceneStats: 'Scene Stats',
+  ds_textStats: 'Screen Text',
+  ds_audioStats: 'Audio Stats',
 };
 
 const DESCRIBERS: Record<MergeFieldKey, (value: unknown) => string> = {
@@ -76,6 +84,17 @@ const DESCRIBERS: Record<MergeFieldKey, (value: unknown) => string> = {
     const stats = (value as DatasetState<SceneStats> & { state: 'ready' }).data;
     return `${stats.scenes} scenes over ${stats.duration_secs}s`;
   },
+  ds_textStats: (value) => {
+    const stats = (value as DatasetState<TextStats> & { state: 'ready' }).data;
+    return `${stats.mean_words.toFixed(1)} words on screen`;
+  },
+  ds_audioStats: (value) => {
+    const stats = (value as DatasetState<AudioStats> & { state: 'ready' }).data;
+    return (
+      `${(stats.background_sound_ratio * 100).toFixed(1)}% background sound, ` +
+      `pitch varies ${stats.pitch_variation_st.toFixed(2)} st`
+    );
+  },
 };
 
 // video_file compares by hash, not deep-equality: it also carries a raw File
@@ -89,6 +108,8 @@ const EQUALS: Record<MergeFieldKey, (a: unknown, b: unknown) => boolean> = {
   ds_transcript: (a, b) => JSON.stringify(a) === JSON.stringify(b),
   ds_transcriptStats: (a, b) => JSON.stringify(a) === JSON.stringify(b),
   ds_sceneStats: (a, b) => JSON.stringify(a) === JSON.stringify(b),
+  ds_textStats: (a, b) => JSON.stringify(a) === JSON.stringify(b),
+  ds_audioStats: (a, b) => JSON.stringify(a) === JSON.stringify(b),
 };
 
 const recordLabel = (record: VideoRecord, index: number): string =>
@@ -176,5 +197,7 @@ export function resolveMerge(
     ds_transcript: merged.ds_transcript ?? { state: 'absent' },
     ds_transcriptStats: merged.ds_transcriptStats ?? { state: 'absent' },
     ds_sceneStats: merged.ds_sceneStats ?? { state: 'absent' },
+    ds_textStats: merged.ds_textStats ?? { state: 'absent' },
+    ds_audioStats: merged.ds_audioStats ?? { state: 'absent' },
   };
 }

@@ -1,0 +1,291 @@
+1
+00:00:00,000 --> 00:00:03,280
+ In this video we're going to talk about composites that aren't made of constituents that are
+
+2
+00:00:03,280 --> 00:00:07,600
+ aligned nicely next to each other or end to end in parallel or in series.
+
+3
+00:00:07,600 --> 00:00:12,480
+ We're going to talk about embedded composites where one constituent is wholly within another one.
+
+4
+00:00:12,480 --> 00:00:17,200
+ Many of these embedded composites are sometimes called microscopic composites because oftentimes
+
+5
+00:00:17,200 --> 00:00:21,840
+ you can't even tell that the thing you're looking at is a composite. It appears entirely pure
+
+6
+00:00:21,840 --> 00:00:25,840
+ to the naked eye. We typically refer to the constituents of an embedded composite like this
+
+7
+00:00:25,840 --> 00:00:30,640
+ as the dispersed phase and the matrix phase. The smaller amount of one material that's wholly
+
+8
+00:00:30,640 --> 00:00:34,800
+ contained within another. Now in contrast to the macroscopic composites that we met before where
+
+9
+00:00:34,800 --> 00:00:39,680
+ the constituents were wholly in series or wholly in parallel and derived their kind of composite
+
+10
+00:00:39,680 --> 00:00:43,680
+ behavior from this arrangement. Embedded composites don't derive their effective properties
+
+11
+00:00:43,680 --> 00:00:48,560
+ from geometry so much as interaction of the constituents. There are two main types of embedded
+
+12
+00:00:48,560 --> 00:00:52,080
+ composites that we're going to talk about in this course. The first are called dispersion strengthen
+
+13
+00:00:52,080 --> 00:00:56,480
+ and the second are called particle reinforced. The primary difference between these being the size
+
+14
+00:00:56,480 --> 00:01:00,240
+ of the dispersed particles and the mechanisms by which they affect the properties of the bolt
+
+15
+00:01:00,240 --> 00:01:03,920
+ composite. Comments of both of these types of embedded composites however is the fact that
+
+16
+00:01:03,920 --> 00:01:08,480
+ their mechanical and non-mechanical properties can vary substantially from the pure series or
+
+17
+00:01:08,480 --> 00:01:13,120
+ parallel behavior that we met before. And that their behaviors are very much composite specific.
+
+18
+00:01:13,120 --> 00:01:17,440
+ It's hard to draw general conclusions. There are those two broad general statements like
+
+19
+00:01:17,440 --> 00:01:21,600
+ and make that apply to all embedded composites. The first is that their effective properties
+
+20
+00:01:21,600 --> 00:01:26,640
+ be their mechanical or non-mechanical generally depend on a volume fraction of the constituents.
+
+21
+00:01:26,640 --> 00:01:30,480
+ In other words if there's more of constituent one in the material then its properties will tend
+
+22
+00:01:30,480 --> 00:01:35,040
+ to be more toward constituent one. And second of all that the effective properties of an embedded
+
+23
+00:01:35,040 --> 00:01:40,000
+ composite will generally be bounded by the absolute series in the absolute parallel behavior.
+
+24
+00:01:40,000 --> 00:01:43,840
+ In other words if we look at Young's modules for example remember the parallel behavior was a
+
+25
+00:01:43,840 --> 00:01:48,480
+ simple weighted sum of the proportion of the constituents. And the series behavior was a little bit
+
+26
+00:01:48,480 --> 00:01:52,080
+ more complicated depending on a product of the stiffness of the constituents.
+
+27
+00:01:52,080 --> 00:01:56,160
+ Well any embedded composite is going to lie somewhere between these two behaviors
+
+28
+00:01:56,160 --> 00:02:00,480
+ is going to be bounded by these two behaviors. In general though these properties can vary wildly
+
+29
+00:02:00,480 --> 00:02:04,400
+ from one composite to another and calculation of effective properties of embedded
+
+30
+00:02:04,400 --> 00:02:09,200
+ composites is an active area of research. Zooming in now taking a closer look at the two different
+
+31
+00:02:09,200 --> 00:02:14,160
+ kinds of embedded composite, dispersion strength and composites have very very fine particles
+
+32
+00:02:14,160 --> 00:02:18,960
+ in the order of 10 to 100 nanometers. And generally the particles that make up the dispersed
+
+33
+00:02:18,960 --> 00:02:24,320
+ phase in a dispersion strength and composites are randomly and uniformly distributed over the part.
+
+34
+00:02:24,320 --> 00:02:28,880
+ Dispersion strength is very common with metal matrix phases and ceramic dispersed phases.
+
+35
+00:02:28,880 --> 00:02:32,400
+ In this particular arrangement the dispersed phase acts as a blocker for the motion of
+
+36
+00:02:32,400 --> 00:02:37,440
+ dislocations radically improving the strength of the metal. Remember the formation of cementite
+
+37
+00:02:37,440 --> 00:02:42,800
+ Fe3C is ceramic instills as largely responsible for why they have such a high strength.
+
+38
+00:02:42,800 --> 00:02:48,320
+ And to controlling exactly how this Fe3C is distributed either is spheridite or as per light
+
+39
+00:02:48,320 --> 00:02:52,960
+ can have a massive effect on the strength of a metal and its ductility by blocking dislocations.
+
+40
+00:02:52,960 --> 00:02:56,640
+ Dispersion strength thing is used in a wide range of use cases and can give you some pretty
+
+41
+00:02:56,640 --> 00:03:00,560
+ excellent properties that are reasonably isotropic as well. You do need to be a little bit
+
+42
+00:03:00,560 --> 00:03:04,960
+ careful though with dispersion strength and composites because at elevated temperatures or exposure
+
+43
+00:03:04,960 --> 00:03:09,840
+ to some atmospheres you might actually find that you react out any of the dispersed phase and
+
+44
+00:03:09,840 --> 00:03:13,280
+ lose all of that strength you've built up. This can lead to a significant weakening of the
+
+45
+00:03:13,280 --> 00:03:18,480
+ composite in addition to any weakening that you already see of the individual constituents.
+
+46
+00:03:18,480 --> 00:03:22,720
+ Now the other side of this story are particle reinforced embedded composites that generally
+
+47
+00:03:22,720 --> 00:03:28,000
+ involve particles in a dispersed phase being anywhere from 10 to 100 times bigger. Usually greater
+
+48
+00:03:28,000 --> 00:03:32,640
+ than a micron in diameter compared to the 10 or 100 nanometers that we had in dispersion
+
+49
+00:03:32,640 --> 00:03:37,040
+ strength and composites. In a particle reinforced composite any strengthening effect comes not
+
+50
+00:03:37,040 --> 00:03:41,120
+ through blocking the motion of dislocations. The particles are far too large for that but
+
+51
+00:03:41,120 --> 00:03:46,160
+ but instead reinforcement of the matrix by the dispersed phase. Essentially the particles themselves
+
+52
+00:03:46,160 --> 00:03:50,640
+ can distribute and carry some of the load. The level of reinforcement that you get in a particle
+
+53
+00:03:50,640 --> 00:03:54,480
+ reinforced composite depends on a couple of things. The level of adhesion that you can get between
+
+54
+00:03:54,480 --> 00:03:58,640
+ the particles and the matrix. The size and shape of dispersed particles and the distribution
+
+55
+00:03:58,640 --> 00:04:02,320
+ of these sizes and shapes throughout the bulk and the physical distribution of these particles
+
+56
+00:04:02,320 --> 00:04:06,880
+ throughout the bulk. Generally more uniform particles distributed more evenly throughout the bulk
+
+57
+00:04:06,880 --> 00:04:12,080
+ result in a stronger composite with more isotropic properties. You can particle reinforced
+
+58
+00:04:12,080 --> 00:04:17,200
+ metals ceramics and polymers. In fact polymers are almost always particle reinforced through
+
+59
+00:04:17,200 --> 00:04:21,680
+ fillers that are added to tie the chains together. And it can not only improve the strength of
+
+60
+00:04:21,680 --> 00:04:26,080
+ a composite compared to its constituents but also the ductility. Most tungsten carbide cutting
+
+61
+00:04:26,080 --> 00:04:29,760
+ inserts you'll remember the one that we met when we talked about technical ceramics a few weeks
+
+62
+00:04:29,760 --> 00:04:34,800
+ ago are actually not pure ceramics. There are cobalt metal matrix with tungsten carbide
+
+63
+00:04:34,800 --> 00:04:39,280
+ particle reinforcements. The effective copies of parts still has the wear resistance and the
+
+64
+00:04:39,280 --> 00:04:44,080
+ temperature resistance and all of the nice properties that come with the tungsten carbide but
+
+65
+00:04:44,080 --> 00:04:48,480
+ maintains some level of ductility that comes from the cobalt. And this ductility and toughness
+
+66
+00:04:48,480 --> 00:04:52,400
+ that you get from the cobalt helps it sustain some of those intermittent cutting loads.
+
+67
+00:04:52,400 --> 00:04:56,960
+ Metals reinforced by ceramic particles are very common. In fact so common they have their own name,
+
+68
+00:04:56,960 --> 00:05:01,920
+ they're called cermets. And as was the case with cobalt and tungsten carbide they're very often
+
+69
+00:05:01,920 --> 00:05:06,560
+ used to help manage the inherent brittleness of ceramics. By intending ceramic particles within
+
+70
+00:05:06,560 --> 00:05:11,760
+ a metal matrix you increase the ductility of your part both through the metal but also by isolating
+
+71
+00:05:11,760 --> 00:05:16,400
+ the ceramic particles from each other meaning that if one does crack it doesn't lead to whole
+
+72
+00:05:16,400 --> 00:05:20,480
+ sail failure of the part. I think I might leave it there for embedded composites. There are more
+
+73
+00:05:20,480 --> 00:05:30,480
+ resources in the textbook page if you'd like to check them out.

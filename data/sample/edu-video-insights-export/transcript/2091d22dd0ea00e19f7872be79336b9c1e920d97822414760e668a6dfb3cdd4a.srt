@@ -1,0 +1,315 @@
+1
+00:00:00,000 --> 00:00:04,400
+ All right, the last type of ceramic we go in to talk about this week are ceramic glasses.
+
+2
+00:00:04,400 --> 00:00:08,080
+ And because we haven't really talked about glasses very much up until this point,
+
+3
+00:00:08,080 --> 00:00:11,680
+ we're going to start with a little bit of physics and chemistry of glasses in general.
+
+4
+00:00:11,680 --> 00:00:16,080
+ Glasses, if you like, are a little bit like a fourth state of matter, like our liquids and
+
+5
+00:00:16,080 --> 00:00:22,640
+ solids and gases. And you get a glass when you super cool a liquid past its freezing point and
+
+6
+00:00:22,640 --> 00:00:26,880
+ don't give it a chance to solidify and crystallize into the nice crystal structures that we've
+
+7
+00:00:26,880 --> 00:00:32,640
+ met so far. In his context, the term super cooling means cooling so rapidly at such a high
+
+8
+00:00:32,640 --> 00:00:38,160
+ rate that you essentially starve the atoms of the energy they need to form into crystal structures.
+
+9
+00:00:38,160 --> 00:00:42,960
+ Essentially, by doing this, you form a solar that maintains the amorphous structure of bonds
+
+10
+00:00:42,960 --> 00:00:47,600
+ that you had in the liquid state. The properties of a material when it's a glass can differ pretty
+
+11
+00:00:47,600 --> 00:00:52,560
+ substantially from when it's in its crystalline form and not necessarily consistently between
+
+12
+00:00:52,560 --> 00:00:56,960
+ different properties. The only claim that I can probably make across a large family of materials
+
+13
+00:00:56,960 --> 00:01:02,560
+ is that generally in their glass form, most materials have better optical clarity and lower
+
+14
+00:01:02,560 --> 00:01:07,120
+ thermal expansion and lower conductivity. Well, variation in the mechanical properties of many
+
+15
+00:01:07,120 --> 00:01:11,840
+ materials when they're in their glassy state versus in their crystalline state are all over the place.
+
+16
+00:01:11,840 --> 00:01:16,400
+ Some materials are much stronger and harder in their glassy state. Some materials are far more
+
+17
+00:01:16,400 --> 00:01:20,560
+ brittle and weak in their glassy state. Lots of different types of materials can be made into
+
+18
+00:01:20,560 --> 00:01:24,960
+ glasses and generally it's their sensitivity to cooling rate the dictates whether or not it's
+
+19
+00:01:24,960 --> 00:01:30,240
+ possible to make a glass out of a particular material. Polymers, for example, can very easily
+
+20
+00:01:30,240 --> 00:01:35,520
+ form glasses because they're very, very long chains that persist even in the liquid state mean
+
+21
+00:01:35,520 --> 00:01:39,920
+ that they have a lot of inertia behind them and you only need a reasonably slow cooling rate
+
+22
+00:01:39,920 --> 00:01:45,360
+ to catch these out and form a glass. In fact, many polymers at room temperature exist in their
+
+23
+00:01:45,360 --> 00:01:50,160
+ glassy state and we only ever really use them in this state. Many ceramics, particularly those
+
+24
+00:01:50,160 --> 00:01:55,440
+ made from natural materials, especially silica, can be made into glass and this is because of the
+
+25
+00:01:55,440 --> 00:02:00,320
+ relatively low cooling rate that silica will permit. It turns out that you can make a glass out of
+
+26
+00:02:00,320 --> 00:02:04,720
+ most materials if you try hard enough, if it's sufficiently high cooling rate can be achieved.
+
+27
+00:02:04,720 --> 00:02:09,760
+ In fact, some metals can actually also be made into glasses. Alloys of silver, for example,
+
+28
+00:02:09,760 --> 00:02:14,560
+ silver, germanian, or silver copper, but the truth is that to get most metals to turn into a
+
+29
+00:02:14,560 --> 00:02:19,920
+ glass you need an extraordinarily high cooling rate in the order of a million degrees per second.
+
+30
+00:02:20,160 --> 00:02:24,720
+ Most of the time, this just isn't economical or possible. Provided that you can achieve a
+
+31
+00:02:24,720 --> 00:02:29,440
+ cooling rate sufficient to form a glass, the temperature at which it will spontaneously transform
+
+32
+00:02:29,440 --> 00:02:35,440
+ from its liquid state to its glassy state is creatively called its glass transition temperature.
+
+33
+00:02:35,440 --> 00:02:39,120
+ We briefly met this temperature a few weeks ago when we were talking about polymers. Remember,
+
+34
+00:02:39,120 --> 00:02:43,360
+ the glass transition temperature comes with a substantial change of sudden change almost in
+
+35
+00:02:43,360 --> 00:02:47,920
+ properties. Below the glass transition temperature, a lot of materials are reasonably strong and
+
+36
+00:02:47,920 --> 00:02:52,720
+ hard and brittle, and above the glass transition temperature, materials soften considerably and
+
+37
+00:02:52,720 --> 00:02:58,080
+ become a little bit more ductile. Practically, only materials that require a relatively slow cooling
+
+38
+00:02:58,080 --> 00:03:03,280
+ rate will have a relatively low glass transition temperature, or both are usually turned into glasses.
+
+39
+00:03:03,280 --> 00:03:08,800
+ Although you can and we often do add other alloying elements to materials to alter where their glass
+
+40
+00:03:08,800 --> 00:03:13,520
+ transition temperature is, and the cooling rates require to form the glass in the first place.
+
+41
+00:03:13,600 --> 00:03:17,440
+ The glassy phase of material isn't inherently unstable, materials generally want to live in
+
+42
+00:03:17,440 --> 00:03:22,640
+ their crystalline form, and given enough time, every glass will eventually crystallize or
+
+43
+00:03:22,640 --> 00:03:27,680
+ de-ventrify to become a crystalline solid. For example, many of the ancient Egyptian glasses
+
+44
+00:03:27,680 --> 00:03:32,480
+ have now unfortunately crystallized, and this appears as a cloudiness in these artifacts.
+
+45
+00:03:32,480 --> 00:03:35,680
+ Given the context of what we're talking about this week, it's maybe a little bit unsurprising
+
+46
+00:03:35,680 --> 00:03:40,000
+ that the remainder of this video is going to be focused on ceramic glasses, owing to the relatively
+
+47
+00:03:40,000 --> 00:03:43,440
+ cooling rates that are permits and glass transition temperature that it has,
+
+48
+00:03:43,440 --> 00:03:48,800
+ most ceramic glasses are made primarily from silica, silica and oxide. Glasses made from silica
+
+49
+00:03:48,800 --> 00:03:53,120
+ generally have an incredibly low thermal expansion coefficient, which helps them manage thermal
+
+50
+00:03:53,120 --> 00:03:57,280
+ shock. And for this reason, we commonly use them in refractories and other applications that
+
+51
+00:03:57,280 --> 00:04:01,760
+ involve large changes in temperature. For example, crucibles and hot plates and windows and
+
+52
+00:04:01,760 --> 00:04:07,360
+ crockery. Glasses of pure silica, sometimes called vitreous silica or fused quartz are one of
+
+53
+00:04:07,360 --> 00:04:12,880
+ the few examples of a pure ceramic glass that we use in engineering applications. Because of
+
+54
+00:04:12,880 --> 00:04:18,000
+ its purity and compared to other ceramic glasses, vitreous silica has a reasonably high melting
+
+55
+00:04:18,000 --> 00:04:22,640
+ temperature and has reasonably high working temperatures, which makes it a little bit hard to work
+
+56
+00:04:22,640 --> 00:04:28,000
+ with, but results in some incredible high temperature properties. For this reason, vitreous silica
+
+57
+00:04:28,000 --> 00:04:32,800
+ is very commonly used in refractory situations in incredibly high temperature applications.
+
+58
+00:04:32,880 --> 00:04:37,600
+ That being said, for the vast majority of applications, pure vitreous silica is not used.
+
+59
+00:04:37,600 --> 00:04:42,320
+ Instead, other oxides are dissolved into the vitreous silica to help lower its glass
+
+60
+00:04:42,320 --> 00:04:46,800
+ transition temperature and improve its workability. Probably the most common engineering
+
+61
+00:04:46,800 --> 00:04:51,760
+ ceramic glasses in used is silica based. It's called soda line glass and it accounts for about
+
+62
+00:04:51,760 --> 00:04:58,000
+ 90% of global glass production. Soda line glass is about 75% silica with a small amount of
+
+63
+00:04:58,000 --> 00:05:03,120
+ soda, sodium carbonate. Lime, also known as calcium oxide, and a bunch of other oxides like
+
+64
+00:05:03,120 --> 00:05:08,160
+ alumina and magnesium in trace amounts. This particular mixture of ceramics makes soda line glass
+
+65
+00:05:08,160 --> 00:05:12,720
+ extremely economical to manufacture because it lowers its T.G. substantially.
+
+66
+00:05:12,720 --> 00:05:17,760
+ Consequently, soda line glass is used all over the place in bottles and crockery and cups and
+
+67
+00:05:17,760 --> 00:05:22,880
+ phone screens and window panes. Though the particular oxides that are included means it doesn't
+
+68
+00:05:22,880 --> 00:05:27,200
+ handle thermal shock particularly well. And this is why your advice not to put bakeware made
+
+69
+00:05:27,200 --> 00:05:32,320
+ from soda line glass like cheap Pyrex into an oven. This leads us nicely to what I guess is
+
+70
+00:05:32,320 --> 00:05:36,640
+ the other side of the coin of soda line glass, the next most common glass that's used in engineering
+
+71
+00:05:36,640 --> 00:05:42,400
+ applications. It's called boracilica glass and as the name suggests is also primarily composed of
+
+72
+00:05:42,400 --> 00:05:47,520
+ silica. Boracilica glass, however, has a little bit of included boron trioxide which helps it
+
+73
+00:05:47,520 --> 00:05:52,480
+ manage thermal shock through its very, very low thermal expansion coefficient. Boracilica glass,
+
+74
+00:05:52,480 --> 00:05:58,000
+ which you may find and say expensive Pyrex is very commonly used in high-quality bakeware or in
+
+75
+00:05:58,000 --> 00:06:02,400
+ lab equipment which needs to be subjected to rapid changes in temperature and needs to be very,
+
+76
+00:06:02,400 --> 00:06:07,440
+ very chemically resistant. And I might leave it there in our discussion on engineering glasses.
+
+77
+00:06:07,440 --> 00:06:10,480
+ As always, there's a little bit more information on the textual page of the company's
+
+78
+00:06:10,480 --> 00:06:14,160
+ video and I encourage you to do a little bit of your own independent research by
+
+79
+00:06:14,160 --> 00:06:24,160
+ checking out what Ingepack has to say on a few common engineering glasses.

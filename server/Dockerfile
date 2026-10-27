@@ -8,7 +8,10 @@
 # of aarch64 wheels across ctranslate2/onnxruntime/av. The public host is x86-64,
 # where those wheels are better supported still - the pin is what keeps an arm64
 # build working as well. 3.14 has gaps that force source builds.
-FROM python:3.13-slim-bookworm
+#
+# Pinned to a patch release and its digest, not the floating 3.13 tag, so that a
+# rebuild of the same commit starts from the same image. Bump the two together.
+FROM python:3.13.18-slim-bookworm@sha256:93498f36dc7e24ef233bfdf6cc17d4b8bd32d94ee737143e906460d5f5a914c5
 
 # No system ffmpeg: faster-whisper reaches it through `av`, which bundles its own
 # libs, and opencv-python-headless drops the GUI shared libraries that the
@@ -44,6 +47,9 @@ WORKDIR /app
 # Dependencies first, so editing source does not reinstall them.
 COPY --chown=app:app requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
+# rapidocr without its declared dependencies - see requirements-nodeps.txt.
+COPY --chown=app:app requirements-nodeps.txt ./
+RUN pip install --no-cache-dir --no-deps -r requirements-nodeps.txt
 
 USER app
 
@@ -64,9 +70,13 @@ COPY --chown=app:app models.py config.py paths.py ./
 COPY --chown=app:app scripts/ ./scripts/
 RUN python scripts/fetch_whisper_model.py
 
-# The engagement model is not built here: its bundle is committed
-# (engagement_model/) and arrives with the source below, where config.py finds it
-# beside itself at /app/engagement_model.
+# The engagement models are not built here: they are committed in the
+# repository's models/, outside this build context, and arrive through the
+# "models" build context docker-compose.yml names (a bare `docker build` needs
+# --build-context models=../models). All of them are copied; BUILTIN_MODELS
+# decides which the server serves.
+COPY --from=models --chown=app:app . /app/engagement_models/
+ENV ENGAGEMENT_MODEL_DIR=/app/engagement_models
 
 COPY --chown=app:app . .
 

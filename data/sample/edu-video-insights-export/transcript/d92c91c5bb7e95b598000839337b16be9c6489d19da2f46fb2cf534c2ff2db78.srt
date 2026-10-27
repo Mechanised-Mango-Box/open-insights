@@ -1,0 +1,323 @@
+1
+00:00:00,000 --> 00:00:04,000
+ In this video, we're going to talk about the non-mechanical properties of engineering ceramics,
+
+2
+00:00:04,000 --> 00:00:07,600
+ probably kick off by talking about some of the thermal properties of ceramics because these
+
+3
+00:00:07,600 --> 00:00:12,160
+ are quite exceptional, owing to the rigidity of their bonds, the ionic and covalent bonds that
+
+4
+00:00:12,160 --> 00:00:17,280
+ make them up. Ceramics are generally exceptional for non-ic heat conductors, in other words,
+
+5
+00:00:17,280 --> 00:00:22,400
+ atom-bumping, atom-heat conductors. Though, just like polymers, being composed of bonds that
+
+6
+00:00:22,400 --> 00:00:27,840
+ largely tie up all of their electrons, ceramics don't have the electron to atom and electron
+
+7
+00:00:27,840 --> 00:00:32,000
+ to electron method of heat transfer that metals had available to them. Consequently, talking
+
+8
+00:00:32,000 --> 00:00:36,960
+ about the thermal conductivity of ceramics as a whole is a little bit complicated. Some ceramics
+
+9
+00:00:36,960 --> 00:00:41,920
+ are so good at phononic heat transfer at atom-bumping atom-heat transfer that they don't even
+
+10
+00:00:41,920 --> 00:00:46,080
+ care that they're missing the entire mechanism to do with electrons. They're still really good
+
+11
+00:00:46,080 --> 00:00:51,760
+ thermal conductors. Other ceramics aren't as good at phononic heat transfer, and so, as a result,
+
+12
+00:00:51,760 --> 00:00:55,920
+ missing in entire mechanism is actually somewhat important, and they're not particularly good
+
+13
+00:00:56,000 --> 00:00:59,440
+ conductors of heat. Generally speaking, those ceramics which are reasonably good
+
+14
+00:00:59,440 --> 00:01:03,840
+ thermal conductors are the technical ones, the ones that are often used in engineering applications,
+
+15
+00:01:03,840 --> 00:01:08,240
+ and those which are particularly good at conducting heat are the non-technical ones, the ones that are
+
+16
+00:01:08,240 --> 00:01:12,560
+ commonly used in civil and building applications. While we're on the topic of thermal properties
+
+17
+00:01:12,560 --> 00:01:16,800
+ of ceramics, we should mention the fact that most ceramics have an incredibly high
+
+18
+00:01:16,800 --> 00:01:21,520
+ melting temperature, and don't really see any substance who change in their mechanical properties
+
+19
+00:01:21,520 --> 00:01:25,120
+ as a function of temperature, most ceramics don't soften as they're heated,
+
+20
+00:01:25,120 --> 00:01:30,640
+ unlike, let's say, most metals and most polymers. So some ceramics glasses do see a substantial
+
+21
+00:01:30,640 --> 00:01:34,560
+ change in properties at a particular temperature, and we'll talk about those a bit later in the
+
+22
+00:01:34,560 --> 00:01:39,040
+ week. I should note that the variation in thermal properties amongst different ceramics means that
+
+23
+00:01:39,040 --> 00:01:43,520
+ they can be used in a wide range of applications. Some ceramics, for example, being really good
+
+24
+00:01:43,520 --> 00:01:48,560
+ conductors are often used as heat sinks for power electronics, and other ceramics owing to
+
+25
+00:01:48,560 --> 00:01:53,680
+ their low conductivity and low specific heat and low density make really, really good thermal
+
+26
+00:01:53,680 --> 00:01:58,880
+ insulators. In fact, the heat shields, the space shuttle heat shields are made of engineering ceramics.
+
+27
+00:01:58,880 --> 00:02:03,600
+ Being incredibly stiff and reasonably brittle, most engineering ceramics when subjected to a
+
+28
+00:02:03,600 --> 00:02:07,840
+ temperature differential will crack. This phenomenon is called thermal shock, and you see it very
+
+29
+00:02:07,840 --> 00:02:12,320
+ often in, say, cheap glassware. Though issues around thermal shock are largely mitigated by
+
+30
+00:02:12,320 --> 00:02:16,960
+ selecting for applications that involve high temperatures or large changes in temperature,
+
+31
+00:02:16,960 --> 00:02:22,480
+ ceramics that have a very low or near-zero thermal expansion coefficient. Some ceramic glasses
+
+32
+00:02:22,480 --> 00:02:26,480
+ are particularly good for this. Boracillica glass, a glass we're going to meet a bit later in the
+
+33
+00:02:26,480 --> 00:02:31,520
+ week. The glass is commonly used in pyrex containers, for example. Boracillica glass has a very,
+
+34
+00:02:31,520 --> 00:02:36,160
+ very low thermal expansion coefficient, and is for that reason often used in a lot of
+
+35
+00:02:36,160 --> 00:02:41,120
+ ovenware. This is in contrast to the far more common and much cheaper soda line glass that's
+
+36
+00:02:41,680 --> 00:02:47,280
+ used in other cookware, cheaper cookware, and sometimes even other pyrex. Like polymers and owing
+
+37
+00:02:47,280 --> 00:02:52,640
+ to their covalent and ionic bonds that largely tie up all of the electrons that could otherwise be used
+
+38
+00:02:52,640 --> 00:02:58,160
+ for transmission of electricity, ceramics are really, really good electrical insulators.
+
+39
+00:02:58,160 --> 00:03:01,440
+ For this reason, you'll often see ceramics used to insulate, for example,
+
+40
+00:03:01,440 --> 00:03:05,920
+ transmission lines from metal transmission towers or spark plugs from your engine.
+
+41
+00:03:05,920 --> 00:03:09,280
+ In fact, if you're looking for a good electrical insulator at a high temperature,
+
+42
+00:03:09,280 --> 00:03:13,920
+ you're almost always going to be turning to a ceramic, because polymers just can't take the heat.
+
+43
+00:03:13,920 --> 00:03:18,560
+ Literally, can't take the heat. I should note that not all ceramics are perfect insulators.
+
+44
+00:03:18,560 --> 00:03:23,760
+ In fact, some ceramics are alloyed with other elements to intentionally create vacancies through
+
+45
+00:03:23,760 --> 00:03:28,960
+ mismatch of charge. These ceramics in certain circumstances then allow transmission of current
+
+46
+00:03:28,960 --> 00:03:33,760
+ through the migration of ions in the lattice. This process is called doping and it's how many
+
+47
+00:03:33,760 --> 00:03:38,080
+ semiconductors are made. Another interesting feature of ceramics is that they're incredibly
+
+48
+00:03:38,080 --> 00:03:42,720
+ stable and don't tend to suffer from corrosion, at least not the same way that metals do.
+
+49
+00:03:42,720 --> 00:03:46,880
+ Because most ceramics are formed by a chemical reaction between a metal and a non-metal,
+
+50
+00:03:46,880 --> 00:03:52,640
+ very, very commonly a metal and oxygen. In other words, because most ceramics are actually oxides,
+
+51
+00:03:52,640 --> 00:03:57,120
+ they don't really have a chance to oxidize after that, because it's already happened.
+
+52
+00:03:57,120 --> 00:04:02,080
+ In fact, many of the oxides we already talked about in the context of metals corroding are
+
+53
+00:04:02,080 --> 00:04:09,680
+ actually ceramics, alumina, aluminium oxide is a ceramic, and iron oxide rust is also a ceramic.
+
+54
+00:04:09,680 --> 00:04:13,920
+ Because they're very, very chemically stable, even at extremely high temperatures,
+
+55
+00:04:13,920 --> 00:04:17,760
+ they make ceramics a natural choice for things that need to operate in really,
+
+56
+00:04:17,760 --> 00:04:21,760
+ really nasty or corrosive environments or at really, really high temperatures,
+
+57
+00:04:21,760 --> 00:04:25,760
+ like crucibles, for example, in a casting environment. I should note that with sufficient
+
+58
+00:04:25,760 --> 00:04:30,400
+ motivation, you can corrode a ceramic, but usually the barrier to doing this is quite high,
+
+59
+00:04:30,480 --> 00:04:35,120
+ because you first need to break up quite a stable structure to be able to react with anything.
+
+60
+00:04:35,120 --> 00:04:40,160
+ One example of this is acid rain, which can degrade and corrode limestone and sandstone buildings.
+
+61
+00:04:40,160 --> 00:04:43,760
+ Coaches of the fact that we haven't talked a lot about this before in the context of other
+
+62
+00:04:43,760 --> 00:04:48,560
+ materials are will also briefly mention the optical properties of ceramics, because it's one of
+
+63
+00:04:48,560 --> 00:04:52,640
+ their greatest strengths. You probably already know this, but we generally classify
+
+64
+00:04:52,640 --> 00:04:56,240
+ engineering materials as transparent, meaning that you can see entirely through them,
+
+65
+00:04:56,560 --> 00:05:00,640
+ translucent, meaning you can see somewhat through them, or opaque, meaning that you can't see
+
+66
+00:05:00,640 --> 00:05:04,880
+ through them at all. And these definitions span all the different wavelengths of light,
+
+67
+00:05:04,880 --> 00:05:08,560
+ a material which is opaque to visible light, for example, might be totally transparent to
+
+68
+00:05:08,560 --> 00:05:13,360
+ infrared light. Many ceramics, particularly glasses and those grown from a single crystal,
+
+69
+00:05:13,360 --> 00:05:18,160
+ are very, very optically transparent. And, better yet, they couple this wonderful optical
+
+70
+00:05:18,160 --> 00:05:22,800
+ transparency with really, really good mechanical properties. This is one of the reasons why ceramics
+
+71
+00:05:22,800 --> 00:05:26,880
+ often used in watch faces or in phone screens. They're very, very hard, meaning they're
+
+72
+00:05:26,880 --> 00:05:32,720
+ resist scratching on a component that's going to see a lot of wear. And they're very, very optically
+
+73
+00:05:32,720 --> 00:05:37,600
+ clear, very, very optically transparent. Interestingly, most high-end watch faces are made from
+
+74
+00:05:37,600 --> 00:05:42,880
+ alumina, aluminium oxide, which you may know as sapphire. And yes, this is exactly the same
+
+75
+00:05:42,880 --> 00:05:47,600
+ sapphire that you see in gemstones in jewelry. In fact, you might be interested to know that
+
+76
+00:05:47,600 --> 00:05:52,320
+ rubies and sapphires are largely the same thing. They're both alumina, just with different
+
+77
+00:05:52,320 --> 00:05:56,960
+ amounts of other elements added into tint them a little bit. That's probably where I'll leave
+
+78
+00:05:56,960 --> 00:06:00,640
+ it for non-mechanical properties of ceramics. There's a little bit more information about these
+
+79
+00:06:00,640 --> 00:06:04,320
+ on the textbook page for this video that I encourage you to check out. But we're going to talk about
+
+80
+00:06:04,320 --> 00:06:08,480
+ these a little bit more in context as we meet some ceramic materials over the next couple of
+
+81
+00:06:08,480 --> 00:06:10,480
+ videos.

@@ -1,0 +1,107 @@
+1
+00:00:00,000 --> 00:00:07,000
+ Alright, let's talk about how to convert from ODE kind of representation to transfer function representation.
+
+2
+00:00:07,000 --> 00:00:11,000
+ Remember, the transfer function really is just in the class space.
+
+3
+00:00:11,000 --> 00:00:14,000
+ It's the thing that if you multiply it by the input, you get the output.
+
+4
+00:00:14,000 --> 00:00:17,000
+ It's kind of the mapping from input to output.
+
+5
+00:00:17,000 --> 00:00:21,000
+ Which means that getting the transfer function from an ODE is actually a really easy process.
+
+6
+00:00:21,000 --> 00:00:26,000
+ All you have to do is kind of take the Laplace transform of both sides of your ODE,
+
+7
+00:00:26,000 --> 00:00:32,000
+ one side being kind of a function of the outputs and one side kind of being a function of the inputs.
+
+8
+00:00:32,000 --> 00:00:37,000
+ And then rearrange the results so that it looks like output equals something times input.
+
+9
+00:00:37,000 --> 00:00:44,000
+ This should always be possible with ODEs, at least the kinds of ODEs that you want to be looking for transfer functions for anyway.
+
+10
+00:00:44,000 --> 00:00:51,000
+ Remember, transfer functions are kind of defined for linear systems and linear systems that have zero initial conditions.
+
+11
+00:00:51,000 --> 00:00:53,000
+ Those are kind of the two key facts.
+
+12
+00:00:53,000 --> 00:00:58,000
+ If you find that you've tried to take kind of the Laplace transform of an ODE to get a transfer function,
+
+13
+00:00:58,000 --> 00:01:00,000
+ you can't actually get a result.
+
+14
+00:01:00,000 --> 00:01:04,000
+ You're either doing something wrong or kind of a subset of doing something wrong.
+
+15
+00:01:04,000 --> 00:01:10,000
+ You're trying to find the transfer function of a system that it's not defined for a system which doesn't have zero initial conditions
+
+16
+00:01:10,000 --> 00:01:12,000
+ or a system which isn't linear.
+
+17
+00:01:12,000 --> 00:01:16,000
+ A quick fact that will help you on your quest to convert ODEs to transfer functions.
+
+18
+00:01:16,000 --> 00:01:22,000
+ If you want to find the Laplace transform of the derivative of a thing, say the derivative of the function, why?
+
+19
+00:01:22,000 --> 00:01:26,000
+ Well, that's going to be kind of S times the Laplace transform of y.
+
+20
+00:01:26,000 --> 00:01:31,000
+ There's also a term that has to do with initial conditions, but in the context of transfer functions, remember, zero initial conditions.
+
+21
+00:01:31,000 --> 00:01:33,000
+ So those terms kind of disappear.
+
+22
+00:01:33,000 --> 00:01:35,000
+ And the same for every derivative after that.
+
+23
+00:01:35,000 --> 00:01:42,000
+ So a second derivative of y becomes a S squared kind of big y, a third derivative S cubed big y, and so on.
+
+24
+00:01:42,000 --> 00:01:45,000
+ If you have derivatives of u, it's the same kind of deal.
+
+25
+00:01:45,000 --> 00:01:51,000
+ If you have kind of the first derivative of u, it's S times big u, the second derivative of u, it's S squared times big u,
+
+26
+00:01:51,000 --> 00:01:52,000
+ and so on.
+
+27
+00:01:52,000 --> 00:01:57,000
+ Let's have a go at problem 7.1 together and see if we can convert some ODEs to transfer functions.

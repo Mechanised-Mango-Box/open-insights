@@ -1,0 +1,207 @@
+1
+00:00:00,000 --> 00:00:04,720
+ All right, everybody. You made it end of the week. And once again, we're going to talk about the big picture a few weeks ago
+
+2
+00:00:04,720 --> 00:00:10,240
+ I promised that we would continue picking apart the models and assumptions that lie at the heart of everything we've done so far.
+
+3
+00:00:10,240 --> 00:00:14,560
+ And this week, the one we're pulling apart is temperature dependence of material properties.
+
+4
+00:00:14,560 --> 00:00:21,680
+ We've already talked a little bit over the last couple of weeks about how properties change with temperature very much on an ad hoc basis family by family.
+
+5
+00:00:21,680 --> 00:00:29,280
+ At this point, I'd like to take a little bit of a step back and look at how two mechanical properties vary with temperature across families and then talk about how
+
+6
+00:00:29,280 --> 00:00:39,440
+ ad hoc documents, some of this information. I think it should be reasonably intuitive to at this point that most materials see a substantial decrease in some of their mechanical properties as temperature is increased.
+
+7
+00:00:39,440 --> 00:00:46,080
+ For example, the strength of many materials decreases as a function of temperature, many materials soften as they're heated.
+
+8
+00:00:46,080 --> 00:00:51,200
+ And it's probably not a bad idea for us to try and draw some links now between the different families of materials.
+
+9
+00:00:51,280 --> 00:00:59,520
+ Metals, for example, soften considerably when they're heated because the extra vibration in the lattice essentially makes it easier for dislocations to move.
+
+10
+00:00:59,520 --> 00:01:04,320
+ If dislocations can move more easily, then the effective strength of the material is lessened.
+
+11
+00:01:04,320 --> 00:01:12,560
+ In polymers, softening with temperature was largely a function of weakening of the already not particularly great van der Waals bonds in between chains.
+
+12
+00:01:12,560 --> 00:01:16,960
+ And you'll probably remember that this effect was somewhat lessened for polymers that were very heavily crosslinked.
+
+13
+00:01:17,040 --> 00:01:24,240
+ Polymers like thermosets that don't necessarily rely only on van der Waals bonds, but have some covalent bonds in between chains as well.
+
+14
+00:01:24,240 --> 00:01:31,920
+ And I hope you'll remember that this week we talked about how most engineering ceramics don't really see an appreciable loss in strength with increasing temperature.
+
+15
+00:01:31,920 --> 00:01:41,680
+ This is largely because in engineering ceramics that ionic and covalent bonds that make them up so strong and the lattices are so rigid that dislocations can't really move anyway.
+
+16
+00:01:41,680 --> 00:01:52,080
+ Any small amount of softening that we do see with temperature in engineering ceramics is largely related to weakening of the covalent ionic bonds, but because they're so strong to begin with, this effect is pretty small.
+
+17
+00:01:52,080 --> 00:02:04,160
+ Whereas the mechanisms for decreasing strength with temperature increase are largely material family specific, the mechanism governing a decrease in stiffness as a function of temperature is pretty much the same across different families of materials.
+
+18
+00:02:04,160 --> 00:02:09,520
+ In all cases, it's an effective weakening of the atomic bonds between atoms that leads to a decrease in stiffness.
+
+19
+00:02:09,520 --> 00:02:20,000
+ In metals, it's a weakening of the metallic bonds. In polymers, it's largely a weakening of the van der Waals bonds between chains or for heavily crosslinked polymers, some amount of weakening of the covalent bonds between atoms.
+
+20
+00:02:20,000 --> 00:02:27,280
+ And for ceramics, as was the case with strengths, though the effect is very small, it's due to weakening of the covalent and the ionic bonds that make them up.
+
+21
+00:02:27,360 --> 00:02:33,360
+ For stiffness, particularly, there are many models that attempt to capture the decrease in youngs modulus with increasing temperature.
+
+22
+00:02:33,360 --> 00:02:36,800
+ This is a relatively simple linear one that you may choose to use.
+
+23
+00:02:36,800 --> 00:02:43,200
+ And while this model is relatively good for some metals, it doesn't hold particularly true for ceramics or for polymers.
+
+24
+00:02:43,200 --> 00:02:51,360
+ I've left some resources on the textbook page for this video that dove into a little bit more detail as to why that is and what models might be more appropriate there.
+
+25
+00:02:51,360 --> 00:02:59,200
+ And I encourage you to check those out, but don't worry too much about it. At this point, you're kind of on a pimple of a pimple of a pimple on the edge of human knowledge.
+
+26
+00:02:59,200 --> 00:03:04,880
+ The level three database in edgyback does document the variation in some properties as a function of temperature.
+
+27
+00:03:04,880 --> 00:03:14,640
+ If I go to browse, for example, and I look at, let's look at a mild steel. So ferrous, carbon, low carbon will go wrought.
+
+28
+00:03:14,640 --> 00:03:21,520
+ And let's look at AC 10, 10, and kneeled. If I scroll down, I can see, for example, how it strengthens as a function of temperature.
+
+29
+00:03:21,520 --> 00:03:28,400
+ And you can see that that relatively simple model that we put up earlier would probably mostly capture this behavior pretty well.
+
+30
+00:03:28,400 --> 00:03:34,080
+ It also includes some information about how conductivity varies with temperature and how specific heat varies with temperature as well.
+
+31
+00:03:34,080 --> 00:03:38,320
+ Now, not every material in the database has every or any of these curves in it.
+
+32
+00:03:38,320 --> 00:03:41,040
+ In fact, many of them don't have any curves at all.
+
+33
+00:03:41,040 --> 00:03:51,040
+ And while in some cases, for some materials and some properties, you can get away with approximating your material by another one that's got a reasonably similar composition and does have these curves documented.
+
+34
+00:03:51,040 --> 00:03:59,440
+ This isn't always in the case and you need to be a little bit careful because for some materials, you can see a substantial change in properties with only a small change in composition.
+
+35
+00:03:59,440 --> 00:04:09,120
+ I wouldn't be, for example, particularly worried about using the curves variety here for AC 10, 10, and mild steel when trying to compare it to some Australian mild steel, which might have a slightly different composition.
+
+36
+00:04:09,120 --> 00:04:21,200
+ But I would be much more careful about comparing a 7000 series aluminium alloy to make sure that I have exactly the right composition because because that particular material, as we've seen already, this semester changes properties very, very quickly with temperature.
+
+37
+00:04:21,200 --> 00:04:36,720
+ This is one of the reasons why it's important for you to have this deeper level of understanding of engineering materials that we've been trying to cultivate over the last seven weeks, because you need to be able to know when there is an information available, whether it's okay to extrapolate or whether you should steer well clear of doing so.
+
+38
+00:04:36,800 --> 00:04:42,960
+ For particular materials and particular properties, Edgy Pak also has documented property at temperature information.
+
+39
+00:04:42,960 --> 00:04:51,760
+ So if I scroll down, for example, it has Young's modulus with temperature and it's doing this for a particular temperature in this case, 23 degrees right here.
+
+40
+00:04:51,760 --> 00:04:58,800
+ This temperature, like many of the other properties that you set last week when we were looking at manufacturing cost modeling, is set at the project level.
+
+41
+00:04:58,800 --> 00:05:05,600
+ So if I go up to select project settings, parameter values, and scroll down, temperature is right here at the bottom.
+
+42
+00:05:05,600 --> 00:05:13,920
+ So you can set the temperature that you anticipate your component is going to live out here and compare a bunch of different materials on their properties at that temperature.
+
+43
+00:05:13,920 --> 00:05:18,880
+ For example, I might say I need to operate it, I don't know, let's say 200 degrees.
+
+44
+00:05:18,880 --> 00:05:31,680
+ Then what I can do is go to chart select and I can write materials according to, I don't know, let's go, let's go thermal properties and let's maybe do thermal expansion coefficient with temperature.
+
+45
+00:05:31,680 --> 00:05:39,600
+ And now I can see the thermal expansion coefficient for a bunch of different materials at 200 degrees C as opposed to at room temperature when they're normally documented.
+
+46
+00:05:39,600 --> 00:05:51,360
+ It's important to note that not every material has every property at every temperature documented and if a material is missing a particular property or missing a particular property at the temperature you've set, it won't appear in the list here.
+
+47
+00:05:51,360 --> 00:06:07,840
+ For example, only 229 of the 4,181 materials in the database have this information documented at this temperature and a P on the graph in front of us, particularly when you start to get to higher temperatures or more interesting properties, you'll probably find that this information is missing.
+
+48
+00:06:07,840 --> 00:06:13,040
+ In these cases, you may need to go outside of edge impact to get some data and this is actually pretty common.
+
+49
+00:06:13,120 --> 00:06:21,600
+ In these cases, journal articles and books and published lab reports are good places to go to get the information, but the same caveat supply is when using the database.
+
+50
+00:06:21,600 --> 00:06:33,040
+ You should be careful to make sure the composition of the material that's been tested is the same as the composition of the material you plan to use and if they differ, you need to use your engineering materials knowledge know whether you can extrapolate or not.
+
+51
+00:06:33,040 --> 00:06:49,760
+ More and more often these days, high temperature properties and materials are being simulated rather than measured using very, very high fidelity models, but as I hope you've come to appreciate by now predictions based on models are only good as the assumptions that lie at the core of them and you should be aware of these before you go to use any of that data.
+
+52
+00:06:49,760 --> 00:06:58,160
+ As always, if you want to be as close as possible to 100% sure of the properties of your material at a particular temperature, your best bet is to conduct the test yourself.

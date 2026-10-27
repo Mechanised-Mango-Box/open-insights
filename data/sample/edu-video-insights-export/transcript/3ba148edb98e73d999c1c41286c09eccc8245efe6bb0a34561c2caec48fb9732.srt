@@ -1,0 +1,587 @@
+1
+00:00:00,000 --> 00:00:06,200
+ In the last video, we met state space models, a new form of modeling that I was selling
+
+2
+00:00:06,200 --> 00:00:11,760
+ to you as something that would be easier to model and easier to solve and kind of more importantly
+
+3
+00:00:11,760 --> 00:00:16,280
+ would reduce some of the ambiguity associated with what I've been calling first principles
+
+4
+00:00:16,280 --> 00:00:20,400
+ modeling, where it can often feel like you're plugging and chugging until you have enough
+
+5
+00:00:20,400 --> 00:00:23,280
+ equations to cram together and form a solution.
+
+6
+00:00:23,280 --> 00:00:27,360
+ In this video, I'd like to talk about how we're going to do that and while the approach
+
+7
+00:00:27,360 --> 00:00:31,000
+ that I'm going to talk about isn't necessary, there are tons of videos online,
+
+8
+00:00:31,000 --> 00:00:33,600
+ you can watch on how to build state space models.
+
+9
+00:00:33,600 --> 00:00:39,480
+ In this course, we're going to learn a regimented, very strict kind of procedure that
+
+10
+00:00:39,480 --> 00:00:43,120
+ should work irrespective of the domain you're dealing with, mechanical, electrical, fluid
+
+11
+00:00:43,120 --> 00:00:46,480
+ power, thermal, biological, whatever.
+
+12
+00:00:46,480 --> 00:00:49,480
+ The process is always going to be the same.
+
+13
+00:00:49,480 --> 00:00:53,720
+ In this course at least, you should follow this procedure religiously.
+
+14
+00:00:53,720 --> 00:00:56,720
+ By doing so, you're going to make sure that you have all the information you need to
+
+15
+00:00:56,720 --> 00:01:00,080
+ build your state space models, and you're not going to get caught in some kind of
+
+16
+00:01:00,080 --> 00:01:03,960
+ logically where you're looking for an equation to substitute into an equation which
+
+17
+00:01:03,960 --> 00:01:06,240
+ relied on that first equation.
+
+18
+00:01:06,240 --> 00:01:10,280
+ At least now while you're still learning the basics, follow this procedure and I think
+
+19
+00:01:10,280 --> 00:01:13,600
+ you'll find that actually it's going to make your life a whole lot easier.
+
+20
+00:01:13,600 --> 00:01:17,680
+ The other benefit about the procedure that we're going to learn today is that it satisfies
+
+21
+00:01:17,680 --> 00:01:22,200
+ our ethical requirement to make sure that the models we produce don't get used by somebody
+
+22
+00:01:22,200 --> 00:01:26,920
+ when they haven't been validated or used for a purpose they were never intended for.
+
+23
+00:01:26,920 --> 00:01:31,400
+ We're going to, by following this procedure, kind of implicitly lay out all of the assumptions
+
+24
+00:01:31,400 --> 00:01:33,400
+ that we're making when we build our model.
+
+25
+00:01:33,400 --> 00:01:37,600
+ So, here we go, and I recommend that you write these steps down because it's going to
+
+26
+00:01:37,600 --> 00:01:42,120
+ be the same procedure we follow for every one of the 100 models that we're probably
+
+27
+00:01:42,120 --> 00:01:43,720
+ going to build in this course.
+
+28
+00:01:43,720 --> 00:01:45,320
+ All right, step one.
+
+29
+00:01:45,320 --> 00:01:47,800
+ We need to list the inputs to our system.
+
+30
+00:01:47,800 --> 00:01:52,000
+ Now remember that together with initial conditions, inputs are the things that derive
+
+31
+00:01:52,000 --> 00:01:54,120
+ changes to our system.
+
+32
+00:01:54,120 --> 00:01:59,720
+ They can be controllable inputs, things that we can change or uncontrollable inputs, disturbances.
+
+33
+00:01:59,720 --> 00:02:02,160
+ The important thing is this word of warning.
+
+34
+00:02:02,160 --> 00:02:05,360
+ If you're saying something's an input, then you're saying that you can communicate its
+
+35
+00:02:05,360 --> 00:02:08,640
+ value to your model for every point in time.
+
+36
+00:02:08,640 --> 00:02:10,640
+ This is probably because you're measuring it.
+
+37
+00:02:10,640 --> 00:02:14,600
+ If it's not measurable, if you can't know it, then you can't call it an input.
+
+38
+00:02:14,600 --> 00:02:15,600
+ Step two.
+
+39
+00:02:15,600 --> 00:02:19,840
+ We need to now list all of the output variables that our model is going to produce.
+
+40
+00:02:19,840 --> 00:02:22,640
+ Now remember, outputs are just things that you're interested in.
+
+41
+00:02:22,640 --> 00:02:24,840
+ There's nothing special about them.
+
+42
+00:02:24,840 --> 00:02:29,280
+ And since we're state-space modeling, our state vector is going to contain all the information
+
+43
+00:02:29,280 --> 00:02:32,520
+ we need to be able to write any other variable in the system.
+
+44
+00:02:32,520 --> 00:02:37,720
+ So, you can choose any other variable in the system as an output.
+
+45
+00:02:37,720 --> 00:02:41,440
+ What you decide to choose as an output is up to you and will probably depend on the problem
+
+46
+00:02:41,440 --> 00:02:45,840
+ and is you're trying to solve the question you're trying to answer, or maybe more correctly,
+
+47
+00:02:45,840 --> 00:02:48,920
+ the question that your boss wants you to answer.
+
+48
+00:02:48,920 --> 00:02:52,760
+ Outputs are usually the reason you're building the model in the first place.
+
+49
+00:02:52,760 --> 00:02:57,840
+ There's one caveat here, and that is that you don't usually choose states or inputs
+
+50
+00:02:57,840 --> 00:02:58,840
+ as outputs.
+
+51
+00:02:58,840 --> 00:03:01,400
+ There's nothing that says that you can't.
+
+52
+00:03:01,400 --> 00:03:05,840
+ But if you already know it, if it's an input, then there's no real need to communicate
+
+53
+00:03:05,840 --> 00:03:07,520
+ that as an output.
+
+54
+00:03:07,520 --> 00:03:10,960
+ And if it's a state, well, that's something you're going to calculate by solving the
+
+55
+00:03:10,960 --> 00:03:12,840
+ model anyway.
+
+56
+00:03:12,840 --> 00:03:17,480
+ If you're choosing those things as outputs, it's probably more for clarity than anything else.
+
+57
+00:03:17,480 --> 00:03:22,280
+ Step three, after listing our inputs and listing our outputs, we now need to decide which
+
+58
+00:03:22,280 --> 00:03:25,760
+ key variables are going to make up our state vector.
+
+59
+00:03:25,760 --> 00:03:30,160
+ Remember, the set of states has to be sufficient for us to be able to write any other variable
+
+60
+00:03:30,160 --> 00:03:31,160
+ in the system.
+
+61
+00:03:31,160 --> 00:03:35,080
+ In general, the process for choosing these, for knowing which variables you should take
+
+62
+00:03:35,080 --> 00:03:38,280
+ as states, is a little bit complicated.
+
+63
+00:03:38,320 --> 00:03:41,520
+ What we're going to do over the next couple of weeks is we meet the different domains,
+
+64
+00:03:41,520 --> 00:03:45,960
+ mechanical, electrical fluid power, is all introduced to you to some rules of thumb that
+
+65
+00:03:45,960 --> 00:03:48,160
+ will help with this process.
+
+66
+00:03:48,160 --> 00:03:51,480
+ They'll be able to tell you how many states you need to choose and what kind of variables
+
+67
+00:03:51,480 --> 00:03:53,000
+ you should choose as states.
+
+68
+00:03:53,000 --> 00:03:55,800
+ But there is no one rule about how you should do this.
+
+69
+00:03:55,800 --> 00:04:00,440
+ And the state space representation is generally not unique.
+
+70
+00:04:00,440 --> 00:04:03,520
+ What I might choose as a particular set of states in the model, it might not be the
+
+71
+00:04:03,520 --> 00:04:07,240
+ same as what you choose in a set of states in the model, and that's just fine.
+
+72
+00:04:07,240 --> 00:04:09,600
+ Rather than could be equally valid.
+
+73
+00:04:09,600 --> 00:04:10,600
+ Step four.
+
+74
+00:04:10,600 --> 00:04:15,560
+ Now we need to write out the CCRs, the component constitutive relationships.
+
+75
+00:04:15,560 --> 00:04:20,360
+ These are the equations, the little mini models, if you like, to describe how the components
+
+76
+00:04:20,360 --> 00:04:25,200
+ or the elements in our system work irrespective of how they're connected.
+
+77
+00:04:25,200 --> 00:04:31,720
+ For example, in the mass-spring depth system, the CCR for a spring is F equals K delta.
+
+78
+00:04:31,720 --> 00:04:36,360
+ And notice that this equation doesn't tell you anything about how that spring is connected.
+
+79
+00:04:36,360 --> 00:04:40,480
+ It doesn't tell you whether the spring is intention or compression in which way you should
+
+80
+00:04:40,480 --> 00:04:42,880
+ treat the force that the spring is providing.
+
+81
+00:04:42,880 --> 00:04:46,800
+ And it doesn't tell you how you should calculate delta, the deformation of the spring.
+
+82
+00:04:46,800 --> 00:04:50,840
+ It doesn't tell you whether you should consider a positive delta to be a stretch or a
+
+83
+00:04:50,840 --> 00:04:51,840
+ squish.
+
+84
+00:04:51,840 --> 00:04:52,840
+ And that's the point.
+
+85
+00:04:52,840 --> 00:04:54,600
+ CCR should be transferable.
+
+86
+00:04:54,600 --> 00:04:58,600
+ I should be able to take a CCR from one model and move it over to another model that
+
+87
+00:04:58,600 --> 00:05:02,200
+ uses the same component with no loss of generality.
+
+88
+00:05:02,200 --> 00:05:06,000
+ The CCR section is important because here we're communicating to people who might be
+
+89
+00:05:06,000 --> 00:05:10,360
+ reading our model in the future, all of the assumptions that we've made about the components
+
+90
+00:05:10,360 --> 00:05:11,760
+ that we're using.
+
+91
+00:05:11,760 --> 00:05:16,880
+ For example, if you use the linear CCR for a spring, F equals K delta, you're assuming
+
+92
+00:05:16,880 --> 00:05:19,560
+ that that spring can stretch infinitely far.
+
+93
+00:05:19,560 --> 00:05:22,720
+ There's nothing in that equation that prevents the string from stretching to infinity
+
+94
+00:05:22,720 --> 00:05:24,960
+ or providing infinite force.
+
+95
+00:05:24,960 --> 00:05:28,200
+ As we learn about the different domains in this course, I'll introduce you to some basic
+
+96
+00:05:28,200 --> 00:05:30,200
+ components and their CCRs.
+
+97
+00:05:30,200 --> 00:05:34,240
+ And there are a bunch more listed in the Associate Professor Perez's textbook, but in
+
+98
+00:05:34,240 --> 00:05:38,520
+ general CCRs are something that you're going to need to come up with on your own, either
+
+99
+00:05:38,520 --> 00:05:43,160
+ by taking components and running experiments and capturing some data to describe how those
+
+100
+00:05:43,160 --> 00:05:47,440
+ things work or looking at data sheath that manufacturers have provided or looking at
+
+101
+00:05:47,440 --> 00:05:51,720
+ the physics of the problem or consulting a textbook, in general the responsibility is going
+
+102
+00:05:51,720 --> 00:05:52,720
+ to be on you.
+
+103
+00:05:52,720 --> 00:05:54,360
+ All right, step five.
+
+104
+00:05:54,360 --> 00:05:58,360
+ And this I think is probably the most important part of your model, the system structural
+
+105
+00:05:58,360 --> 00:06:00,640
+ relations, the SSRs.
+
+106
+00:06:00,640 --> 00:06:05,840
+ These are relationships that describe how the different components in your system are interconnected.
+
+107
+00:06:05,840 --> 00:06:10,160
+ For example, it's in this section that we would do something like define whether a spring
+
+108
+00:06:10,160 --> 00:06:14,640
+ is intentional compression and by the same token, whether you should consider a stretch
+
+109
+00:06:14,640 --> 00:06:19,480
+ or a squish to be a positive delta and which way the force should be acting on components
+
+110
+00:06:19,480 --> 00:06:21,040
+ that are attached to it.
+
+111
+00:06:21,040 --> 00:06:23,040
+ SSRs are where the real thinking happens.
+
+112
+00:06:23,040 --> 00:06:27,640
+ This is where you're using the physics of the problem to describe how the system works.
+
+113
+00:06:27,640 --> 00:06:31,440
+ As we learn about the different domains over the next couple of weeks, I'm going to teach
+
+114
+00:06:31,440 --> 00:06:36,040
+ you some common SSRs that you might see pop up over and over again and you've probably
+
+115
+00:06:36,040 --> 00:06:41,440
+ already seen these before, things like Newton's laws, free body diagrams, Kirchhoff's current
+
+116
+00:06:41,440 --> 00:06:47,200
+ and Vol'Tidors, which brings us to step six, the state space equations.
+
+117
+00:06:47,200 --> 00:06:48,560
+ This is the reason that we're here.
+
+118
+00:06:48,560 --> 00:06:53,640
+ This is the reason why we've been collecting CCRs in SSRs like Infinity Stones up until
+
+119
+00:06:53,640 --> 00:06:54,640
+ this point.
+
+120
+00:06:54,640 --> 00:06:58,240
+ The state space equations, remember from the last video, are where we write the derivatives
+
+121
+00:06:58,240 --> 00:07:04,640
+ of each state in terms of states, inputs and constants and we do this by carefully substituting
+
+122
+00:07:04,640 --> 00:07:10,240
+ our CCRs and our SSRs into the derivatives of each state.
+
+123
+00:07:10,240 --> 00:07:13,640
+ Sometimes this can feel a little bit like a war of attrition, you're substituting over
+
+124
+00:07:13,640 --> 00:07:20,040
+ and over and over again until the only thing you see are states, inputs and constants.
+
+125
+00:07:20,040 --> 00:07:24,560
+ But if you've listed your CCRs carefully and diligently, then this section
+
+126
+00:07:24,560 --> 00:07:28,760
+ really is just an exercise in bookkeeping and that brings us to the final step, writing
+
+127
+00:07:28,760 --> 00:07:30,920
+ the output equations.
+
+128
+00:07:30,920 --> 00:07:35,000
+ This is where we write the variables that we're interested in by following the same rules
+
+129
+00:07:35,000 --> 00:07:40,400
+ as the state space equations, writing them in terms of states, inputs and constants.
+
+130
+00:07:40,400 --> 00:07:45,040
+ And even though these are identical processes, it's important to realise that outputs
+
+131
+00:07:45,040 --> 00:07:48,840
+ and state space equations play a very different role.
+
+132
+00:07:48,840 --> 00:07:51,920
+ State space equations are crucial for us to be able to solve our model, for us to be
+
+133
+00:07:51,920 --> 00:07:53,880
+ able to simulate our system.
+
+134
+00:07:53,880 --> 00:07:58,080
+ And this is because these things tell us, once we know a state, tell us how to calculate
+
+135
+00:07:58,080 --> 00:08:01,760
+ the derivative, which we then numerically integrate to get a state that we pass into the
+
+136
+00:08:01,760 --> 00:08:05,360
+ state space equations to get a derivative and so on and so forth.
+
+137
+00:08:05,360 --> 00:08:10,920
+ The output equations play no part in this process, they're purely telling us the things
+
+138
+00:08:10,920 --> 00:08:14,360
+ that we're interested in as a function of the states once we know them.
+
+139
+00:08:14,360 --> 00:08:19,160
+ All right, you now have the process, the recipe for building state space models in
+
+140
+00:08:19,160 --> 00:08:20,920
+ the inch 2440.
+
+141
+00:08:20,920 --> 00:08:25,820
+ And the cool thing is that we're about to apply this process to problem 1.3, the mass
+
+142
+00:08:25,820 --> 00:08:30,160
+ free damper system that we already tried to model by first principles and hopefully this
+
+143
+00:08:30,160 --> 00:08:32,240
+ is easier this time.
+
+144
+00:08:32,240 --> 00:08:35,480
+ But that same process that we're about to apply to the mass free damper, we will apply
+
+145
+00:08:35,480 --> 00:08:38,240
+ in five weeks time to the big cohena.
+
+146
+00:08:38,240 --> 00:08:41,120
+ It's going to be an identical procedure.
+
+147
+00:08:41,120 --> 00:08:43,120
+ So let's give the mass free damper a try.

@@ -1,0 +1,187 @@
+1
+00:00:00,000 --> 00:00:05,140
+ All right, this is our very last content video together before I hand you off to associate Professor Young
+
+2
+00:00:05,700 --> 00:00:08,180
+ Guys, it's been really nice having you this semester
+
+3
+00:00:08,180 --> 00:00:15,140
+ I know it wasn't ideal and I hope that this week and last week have helped you kind of see the threads that are gonna link you from modeling to control
+
+4
+00:00:15,340 --> 00:00:19,520
+ See that nonlinear systems and nothing to be scared about we can linearize them
+
+5
+00:00:19,520 --> 00:00:23,760
+ And if we can linearize them we can write them into the language of control engineers transfer functions
+
+6
+00:00:24,040 --> 00:00:29,500
+ Over the next couple weeks you're gonna be talking about how you can use those transfer functions to start to control physical systems
+
+7
+00:00:29,560 --> 00:00:36,700
+ And I really look forward to talking to you guys at the end of semester about how you manage to control some of the systems that we've modeled together in this final video
+
+8
+00:00:36,700 --> 00:00:41,700
+ I want to briefly review the concept of partial fraction something you might have met in your math courses before
+
+9
+00:00:42,100 --> 00:00:47,380
+ But typically find students are a little bit confused about when they get to end 2440 and then in the next video
+
+10
+00:00:47,380 --> 00:00:49,380
+ We'll kind of do a brief example on that point
+
+11
+00:00:50,100 --> 00:00:55,880
+ So if you have a function which is itself a kind of fraction that's a polynomial on the top and a polynomial on the bottom
+
+12
+00:00:55,920 --> 00:01:00,160
+ then kind of the partial fractions decomposition says you can break this kind of
+
+13
+00:01:00,440 --> 00:01:03,280
+ complicated fraction up into the sum of some simpler ones
+
+14
+00:01:03,600 --> 00:01:10,600
+ Providing that you know the roots of the denominator polynomial the decomposition that you get depends entirely on the roots of the denominator
+
+15
+00:01:10,600 --> 00:01:15,080
+ And you get terms showing up in that decomposition depending on the types of roots that they are
+
+16
+00:01:15,200 --> 00:01:19,880
+ So let's say you have a denominator which consists only of kind of real unique roots
+
+17
+00:01:19,880 --> 00:01:24,760
+ So all the roots don't have any imaginary parts. They're not complex and each of them are unique
+
+18
+00:01:25,000 --> 00:01:31,480
+ Them are repeated well for each real unique root. You're going to get a term in your partial fraction which will look like this
+
+19
+00:01:32,360 --> 00:01:36,200
+ Now say you have a denominator which includes some real repeated roots
+
+20
+00:01:36,560 --> 00:01:41,800
+ Well if that's the case you're going to get a term in your partial fraction for each set of repeated roots
+
+21
+00:01:41,800 --> 00:01:48,200
+ That looks like this where that kind of parameter depends on the multiplicity of the root a number of times that it's repeated
+
+22
+00:01:48,760 --> 00:01:51,560
+ Finally after you found all of the other roots of your denominator
+
+23
+00:01:51,800 --> 00:01:55,480
+ If you're left with any of that a complex put those things back into some kind of
+
+24
+00:01:55,640 --> 00:02:01,320
+ infactorable quadratic and then for that infactorable quadratic you get a partial fractions term that looks like this
+
+25
+00:02:01,560 --> 00:02:04,040
+ This works if you have a combination of these things as well
+
+26
+00:02:04,040 --> 00:02:09,640
+ So if you had one real unique root say a pair of repeated roots and a pair of complex roots
+
+27
+00:02:09,800 --> 00:02:16,000
+ Then the final decomposition would look something like a term that corresponds to the real unique root and then some terms
+
+28
+00:02:16,000 --> 00:02:18,320
+ Which correspond to the real repeated roots?
+
+29
+00:02:18,640 --> 00:02:23,600
+ And then one term which corresponds to the irreducible quadratic that's associated with the complex roots
+
+30
+00:02:24,160 --> 00:02:26,960
+ Now here's the key part when you do this decomposition
+
+31
+00:02:27,200 --> 00:02:30,960
+ You end up with a bunch of coefficients at the top of your kind of partial fractions terms
+
+32
+00:02:31,440 --> 00:02:34,240
+ You need to solve for those coefficients and the easiest way
+
+33
+00:02:34,240 --> 00:02:40,240
+ I feel to do that is to look at your kind of original fraction and your partial fractions expansion side by side
+
+34
+00:02:40,720 --> 00:02:43,600
+ Set them equal to each other since that's what we're doing by definition
+
+35
+00:02:43,680 --> 00:02:45,680
+ We're finding something which is equivalent
+
+36
+00:02:45,680 --> 00:02:49,440
+ Multiply both sides by the denominator of the kind of original thing
+
+37
+00:02:49,840 --> 00:02:57,120
+ And then use that kind of equation to generate a bunch of simultaneous equations corresponding to equating coefficients for the different powers
+
+38
+00:02:57,600 --> 00:02:58,800
+ What do I mean by that?
+
+39
+00:02:58,800 --> 00:03:02,720
+ The amount of s terms on the left has to be the same as the amount of s terms on the right
+
+40
+00:03:02,720 --> 00:03:07,040
+ The amount of constant terms on the left has to be the same as the amount of constant terms on the right
+
+41
+00:03:07,600 --> 00:03:12,480
+ Eventually this builds up a set of simultaneous equations associated with these unknown coefficients
+
+42
+00:03:12,720 --> 00:03:15,760
+ And you can solve these using a reduction MATLAB
+
+43
+00:03:16,800 --> 00:03:19,520
+ Maybe elimination and substitution if you're really dedicated
+
+44
+00:03:20,640 --> 00:03:24,960
+ For these coefficients and generate what your partial fractions expansion actually is
+
+45
+00:03:25,440 --> 00:03:27,760
+ This is a concept that's way easy to learn by doing
+
+46
+00:03:27,760 --> 00:03:30,880
+ So that's how we got problem 7.3 together and see if we can kind of
+
+47
+00:03:30,880 --> 00:03:33,920
+ Pull it up this muscle memory together. I guess for the last time

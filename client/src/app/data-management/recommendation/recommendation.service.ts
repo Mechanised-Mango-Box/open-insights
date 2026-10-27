@@ -4,14 +4,146 @@ import { firstValueFrom } from 'rxjs';
 import { ServerConfigService } from '../server-config.service';
 import { VideoFeatures } from '../analysis/analysis.service';
 import { FeatureRecommendation } from '../analysis/recommendations';
+import { AnalysisFeatureColumn } from '../analysis/stats';
+import { TrainingRecord } from '../video-records/manifest-export';
 
 /**
  * Built as a plain function so it can be tested without standing up HttpClient -
  * no spec in this repo mocks HTTP, and the part worth pinning down is the path,
  * not Angular's request machinery.
  */
-export const recommendationUrl = (serverUrl: string, hash: string): string =>
-  `${serverUrl}/api/videos/${hash}/recommendation`;
+export const recommendationUrl = (serverUrl: string, hash: string, modelId?: string): string =>
+  `${serverUrl}/api/videos/${hash}/recommendation` +
+  (modelId ? `?model=${encodeURIComponent(modelId)}` : '');
+
+export const modelsUrl = (serverUrl: string): string => `${serverUrl}/api/models`;
+
+export const trainModelUrl = (serverUrl: string): string => `${serverUrl}/api/models/train`;
+
+/** Held-out accuracy of one of a model's two halves. */
+export type ModelMetrics = { rmse: number; r2: number };
+
+/** np.histogram's output: edges has one more entry than counts. */
+export type TrainingHistogram = {
+  edges: number[];
+  counts: number[];
+};
+
+/** One feature's spread across a model's training videos. The viewing quartiles
+ * are per bin, and null where too few videos share the bin to show them. */
+export type FeatureDistribution = {
+  quantiles: number[];
+  histogram: TrainingHistogram & {
+    target_p25: (number | null)[];
+    target_median: (number | null)[];
+    target_p75: (number | null)[];
+  };
+};
+
+/**
+ * Where a model's training videos sat, in aggregates only. Mirrors
+ * summarise_training_data() in server/model_training/training_distribution.py.
+ */
+export type TrainingDistribution = {
+  rows: number;
+  bins: number;
+  min_videos_per_bin: number;
+  quantile_levels: number[];
+  features: Record<string, FeatureDistribution>;
+  target: { quantiles: number[]; histogram: TrainingHistogram };
+};
+
+/**
+ * What a model is, as its provider describes it. Mirrors build_card() in
+ * server/model_training/model_card.py. Read from plain JSON on the server, so it
+ * describes a model without the server having to load it.
+ */
+export type ModelCard = {
+  format_version: number;
+  id: string;
+  name: string;
+  version: string;
+  created_at: string;
+  description: string;
+  provider: { name: string; url: string };
+  notes: string;
+  model_type: {
+    predictor: string;
+    predictor_role: string;
+    feedback: string;
+    feedback_role: string;
+  };
+  hyperparameters: Record<string, string | number | boolean | null>;
+  features: string[];
+  feature_definitions: Record<string, string>;
+  target: string;
+  target_definition: string;
+  training: {
+    dataset: string | null;
+    rows: number;
+    train_rows: number;
+    test_rows: number;
+    test_size: number;
+    random_state: number;
+    split: string;
+  };
+  metrics: { random_forest?: ModelMetrics; linear_regression?: ModelMetrics };
+  feature_importances: Record<string, number>;
+  coefficients: Record<string, number>;
+  intercept: number;
+  recommendation_threshold: number;
+  framework: Record<string, string>;
+  /** Absent from models trained before it was added. */
+  training_distribution?: TrainingDistribution;
+};
+
+/** One model the server holds. Mirrors ModelRegistry.entries() in server/model_registry.py. */
+export type ModelEntry = {
+  id: string;
+  source: 'builtin' | 'added';
+  default: boolean;
+  installed_at?: string | null;
+  origin?: string | null;
+  /** Null only when its model.json could not be read - and then it is not compatible. */
+  card: ModelCard | null;
+  compatible: boolean;
+  problems: string[];
+};
+
+export type ModelList = {
+  default: string;
+  models: ModelEntry[];
+  /** Where to find more models to add. Absent from servers before it was added. */
+  more_models_url?: string;
+  /** Whether POST /api/models/train is on. Absent from servers that cannot train. */
+  can_train?: boolean;
+};
+
+/** What a new model's card says about it, as the person training it puts it.
+ * The rest of the card the server fills in from the training run. */
+export type TrainModelMeta = {
+  id: string;
+  name: string;
+  description?: string;
+  notes?: string;
+  provider?: { name?: string; url?: string };
+};
+
+/** The body of POST /api/models/train. Mirrors ModelRegistry.train() in server/model_registry.py. */
+export type TrainModelRequest = {
+  manifest: { records: TrainingRecord[] };
+  features: AnalysisFeatureColumn[];
+  meta: TrainModelMeta;
+};
+
+export type TrainModelResult = {
+  /** The new model, as GET /api/models lists it. */
+  model: ModelEntry;
+  /** How many of the records sent it learned from. */
+  used_rows: number;
+  /** Why the others were left out, by reason. */
+  skipped: Record<string, number>;
+};
 
 /** Which way a feature would have to move to sit where the training data sees
  * higher viewing. "keep" means it already does; "none" means the relationship
@@ -28,19 +160,31 @@ export type Suggestion = 'increase' | 'decrease' | 'keep' | 'none';
 export type VideoFeatureAssessment = FeatureRecommendation & {
   value: number;
   training_mean: number;
+  /** Population SD of the training rows; z_score = (value - training_mean) / training_sd. */
+  training_sd?: number;
   z_score: number;
   /** Points of average percentage viewed this value moves the linear estimate
    * away from an average training video. Negative is costing views. */
   contribution: number;
   suggestion: Suggestion;
   advice: string;
+  /** Roughly what percentage of the training videos sit below this value. This
+   * and expected_curve are absent when the model's card has no training_distribution. */
+  training_percentile?: number;
+  /** The model's prediction for this video with only this feature moved across
+   * its training range. Passes through value at exactly the prediction. */
+  expected_curve?: { x: number[]; apv: number[] };
 };
 
 export type VideoRecommendation = {
   /** The random forest's prediction, in percent. Not clipped to 0-100. */
   average_percentage_viewed: number;
+  /** Where the prediction sits among the APVs the training videos actually got. */
+  target_percentile?: number;
   threshold: number;
   features: Record<string, VideoFeatureAssessment>;
+  /** The model that answered. Absent from servers older than model selection. */
+  model?: { id: string; name: string | null; version: string | null };
 };
 
 /**
@@ -51,9 +195,9 @@ export type VideoRecommendation = {
  * a single video to a model the server already holds.
  *
  * The features travel in the body rather than being read back on the server:
- * two of them are only ever computed in the browser, and a Scan may have run on
- * local compute. One request and wait, rather than the POST -> 202 -> poll the
- * dataset kinds use - inference is a single forest evaluation, not a job.
+ * two of them are only ever computed in the browser. One request and wait,
+ * rather than the POST -> 202 -> poll the dataset kinds use - inference is a
+ * single forest evaluation, not a job.
  */
 @Injectable({ providedIn: 'root' })
 export class RecommendationService {
@@ -68,13 +212,36 @@ export class RecommendationService {
     return key ? { 'X-API-Key': key } : {};
   }
 
-  async request(hash: string, features: VideoFeatures): Promise<VideoRecommendation> {
+  /** Without a model id the server's default answers. */
+  async request(
+    hash: string,
+    features: Partial<VideoFeatures>,
+    modelId?: string,
+  ): Promise<VideoRecommendation> {
     return await firstValueFrom(
       this.http.post<VideoRecommendation>(
-        recommendationUrl(this.serverConfig.serverUrl(), hash),
+        recommendationUrl(this.serverConfig.serverUrl(), hash, modelId),
         features,
         { headers: this.authHeaders() },
       ),
+    );
+  }
+
+  async listModels(): Promise<ModelList> {
+    return await firstValueFrom(
+      this.http.get<ModelList>(modelsUrl(this.serverConfig.serverUrl()), {
+        headers: this.authHeaders(),
+      }),
+    );
+  }
+
+  /** Trains a model on the server from these records and keeps it there. One
+   * request and wait: a few hundred records train in about a second. */
+  async trainModel(request: TrainModelRequest): Promise<TrainModelResult> {
+    return await firstValueFrom(
+      this.http.post<TrainModelResult>(trainModelUrl(this.serverConfig.serverUrl()), request, {
+        headers: this.authHeaders(),
+      }),
     );
   }
 }

@@ -2,7 +2,6 @@ import { Injectable, signal } from '@angular/core';
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { VideoRecord } from './VideoRecord';
 import { DatasetState, LOCAL_IMPORT, computeSpeechFeatures, isReady } from './Dataset';
-import { DatasetKind } from '../providers/dataset-provider';
 import { readFileDurationSecs, recordDurationSecs } from './video-duration';
 
 /** The pre-v3 stored shape, kept only so the upgrade can read it. */
@@ -42,34 +41,11 @@ function migrateCacheable(stored: unknown): DatasetState<unknown> {
   }
 }
 
-/**
- * One computed dataset, keyed by kind and content hash.
- *
- * `producer` stamps what made it - the model, the threshold, whatever else
- * could move the numbers - so a row produced under different parameters reads
- * as absent and gets recomputed, rather than mixing into a corpus made by
- * something else. Same rule the server applies in db.py's dataset_state().
- *
- * Kept as one store rather than the server's two tables: those differ only in
- * their columns, which a payload of its own kind does not need.
- */
-export type StoredDatasetResult = {
-  kind: DatasetKind;
-  file_hash: string;
-  producer: string;
-  produced_at: string;
-  payload: unknown;
-};
-
 interface VideoDBSchema extends DBSchema {
   videos: {
     key: number;
     value: VideoRecord;
     indexes: { by_file_hash: string };
-  };
-  dataset_results: {
-    key: [DatasetKind, string];
-    value: StoredDatasetResult;
   };
 }
 
@@ -85,19 +61,8 @@ export class VideoDatabaseService {
     this.loadInitialVideos();
   }
 
-  /**
-   * The shared database handle.
-   *
-   * ResultCacheService writes to a store in this same database rather than
-   * opening one of its own: two `openDB` calls means two upgrade functions, and
-   * the version they disagree on is the one that corrupts a library.
-   */
-  database(): Promise<IDBPDatabase<VideoDBSchema>> {
-    return this.dbPromise;
-  }
-
   private initDB = async () => {
-    return openDB<VideoDBSchema>('video-library-db', 4, {
+    return openDB<VideoDBSchema>('video-library-db', 7, {
       upgrade(db, oldVersion, _newVersion, tx) {
         // `upgrade` runs on every version increase, not just on first creation, so the
         // initial schema is gated on the version that introduced it - re-running
@@ -124,14 +89,47 @@ export class VideoDatabaseService {
             for (const field of ['ds_transcript', 'ds_transcriptStats', 'ds_sceneStats']) {
               record[field] = migrateCacheable(record[field]);
             }
+            // v5's and v6's fields as well: this cursor is already rewriting every
+            // record, and a second one over the same store could race it (see below).
+            record['ds_textStats'] ??= { state: 'absent' };
+            record['ds_audioStats'] ??= { state: 'absent' };
             return cursor.update(record as VideoRecord).then(() => cursor.continue().then(migrate));
           });
         }
-        // v4 adds the cache for datasets computed in this browser. Nothing to
-        // migrate: before this there was nowhere for a local result to live, so
-        // an existing library simply has none yet.
-        if (oldVersion < 4) {
-          db.createObjectStore('dataset_results', { keyPath: ['kind', 'file_hash'] });
+        // v5 adds ds_textStats and v6 ds_audioStats. A stored record has no such
+        // field, and every reader of a dataset field expects a DatasetState there -
+        // 'absent' is the honest value for a record nobody has scanned for it yet.
+        // One cursor for both, so a v3 or v4 library does not have two over the
+        // same store; a library older than v3 gets both from the v3 pass above
+        // instead, for the same reason.
+        if (oldVersion >= 3 && oldVersion < 6) {
+          const store = tx.objectStore('videos');
+          store.openCursor().then(function addDatasets(cursor): unknown {
+            if (!cursor) return undefined;
+            const record = cursor.value as Partial<VideoRecord>;
+            if (record.ds_textStats && record.ds_audioStats) {
+              return cursor.continue().then(addDatasets);
+            }
+            return cursor
+              .update({
+                ...record,
+                ds_textStats: record.ds_textStats ?? { state: 'absent' },
+                ds_audioStats: record.ds_audioStats ?? { state: 'absent' },
+              } as VideoRecord)
+              .then(() => cursor.continue().then(addDatasets));
+          });
+        }
+        // v4 held a cache of datasets computed in this browser, which v7 removes
+        // along with the browser compute that filled it. Dropped rather than
+        // left behind: nothing reads it, and its rows are stamped with producers
+        // that no longer exist, so they could never be served again anyway.
+        // `contains` because v4 is where the store appeared - a library older
+        // than that never had one.
+        // Reached through the untyped handle because the name is deliberately
+        // no longer in VideoDBSchema - a store only an upgrade still mentions.
+        const untyped = db as unknown as IDBDatabase;
+        if (oldVersion < 7 && untyped.objectStoreNames.contains('dataset_results')) {
+          untyped.deleteObjectStore('dataset_results');
         }
       },
     });
@@ -142,6 +140,7 @@ export class VideoDatabaseService {
       this.videoRecords.set(records);
       await this.backfillFileDurations(records);
       await this.backfillSpeechFeatures(records);
+      await this.dropSpeakingRatio(records);
     } catch (error) {
       console.error('Failed to load initial videos into signal:', error);
     }
@@ -210,6 +209,26 @@ export class VideoDatabaseService {
       }
     }
   };
+  /**
+   * Removes the transcript's speaking_ratio from records stored while it was
+   * still computed. It was replaced by audio stats' speech_ratio, and left in
+   * place it would keep riding along into every export. Same one-shot shape as
+   * the backfills above, and like them no schema bump: nothing reads the field.
+   */
+  private dropSpeakingRatio = async (records: VideoRecord[]): Promise<void> => {
+    for (const record of records) {
+      const stats = record.ds_transcriptStats;
+      if (!isReady(stats) || !('speaking_ratio' in stats.data)) continue;
+
+      delete (stats.data as Partial<Record<'speaking_ratio', unknown>>).speaking_ratio;
+      try {
+        await this.updateVideo(record);
+      } catch (error) {
+        console.error('Failed to drop speaking ratio for', record.sort_name, error);
+      }
+    }
+  };
+
   async addVideo(record: Omit<VideoRecord, '__id'>): Promise<number> {
     const db = await this.dbPromise;
     // Insert into IndexedDB

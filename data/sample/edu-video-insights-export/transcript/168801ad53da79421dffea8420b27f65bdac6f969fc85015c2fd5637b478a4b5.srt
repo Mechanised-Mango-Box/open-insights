@@ -1,0 +1,451 @@
+1
+00:00:00,000 --> 00:00:03,520
+ In this video, we're going to talk about laser, plasma, and water jet cutting.
+
+2
+00:00:03,520 --> 00:00:07,040
+ As the name suggests, these are techniques for through cutting of engineering materials,
+
+3
+00:00:07,040 --> 00:00:10,640
+ and this week will be focused on the application of these techniques to metals.
+
+4
+00:00:10,640 --> 00:00:14,320
+ These techniques are typically used on plate and sheet products, though you can use them on
+
+5
+00:00:14,320 --> 00:00:19,840
+ tube and pipe as well. And ordinarily, laser, plasma, and water jet cutting are CNC processes,
+
+6
+00:00:19,840 --> 00:00:24,480
+ computing numerically controlled processes. In other words, the path of the torch or the path
+
+7
+00:00:24,480 --> 00:00:29,680
+ of the nozzle of the plasma cutter or laser cutter or water cutter is controlled by a computer,
+
+8
+00:00:29,680 --> 00:00:33,840
+ and as a result, you can get incredibly accurate results from these techniques.
+
+9
+00:00:33,840 --> 00:00:38,160
+ I'm a fan of laser cutting and plasma cutting and water jet cutting for a bunch of different reasons.
+
+10
+00:00:38,160 --> 00:00:42,320
+ They're an extremely economical way to get very accurate parts of the kind of low volumes
+
+11
+00:00:42,320 --> 00:00:46,080
+ that you and I might be working at. Unlike casting or forging where you need to be making
+
+12
+00:00:46,080 --> 00:00:50,400
+ tens of thousands of parts for the process to become economical, or like machining where you can
+
+13
+00:00:50,400 --> 00:00:54,720
+ make one-off parts, but they're quite expensive because you need to pay for an extremely qualified
+
+14
+00:00:54,720 --> 00:00:59,120
+ tradesperson to manufacture your components. Laser cutting and plasma cutting and water jet cutting
+
+15
+00:00:59,120 --> 00:01:04,080
+ are reasonably simple and straightforward processes. Because these processes typically only involve
+
+16
+00:01:04,080 --> 00:01:08,960
+ cutting out a 2D section on a flat bit of sheet or plate, you generally only need to provide a
+
+17
+00:01:08,960 --> 00:01:13,200
+ reasonably simple drawing of the profile that you'd like to a laser cutter or a plasma cutter.
+
+18
+00:01:13,200 --> 00:01:16,560
+ They then load this drawing that you've given them into their CAM program, which
+
+19
+00:01:16,560 --> 00:01:21,040
+ converts your drawing into some machine instructions that tell it how to move the torch or nozzle
+
+20
+00:01:21,040 --> 00:01:24,960
+ and when to turn the thing on. And it goes away and cuts your shape for you.
+
+21
+00:01:24,960 --> 00:01:28,160
+ While generally speaking, these processes are limited to cutting out 2D profiles,
+
+22
+00:01:28,160 --> 00:01:32,160
+ there are some more sophisticated laser cutters that can kind of tilt the torch to be able
+
+23
+00:01:32,160 --> 00:01:36,160
+ to do some more complicated things. Or laser cutters that are specifically designed for cutting
+
+24
+00:01:36,160 --> 00:01:41,280
+ out tube or pipe. You can build up complicated 3D geometries from 2D profiles as a worldman.
+
+25
+00:01:41,280 --> 00:01:44,720
+ This is where processes like laser cutting and plasma cutting and water jet cutting really
+
+26
+00:01:44,720 --> 00:01:49,280
+ come into their own. You can design quite complicated profiles with interlocking features that
+
+27
+00:01:49,280 --> 00:01:54,480
+ essentially jigged together only one way and self-square. Then your boiler maker or fabricate
+
+28
+00:01:54,480 --> 00:01:57,840
+ or whoever's putting together the part for, you really just have to snap over the pieces
+
+29
+00:01:57,840 --> 00:02:02,480
+ together like a Lego kitten, welled away. These techniques are also quite powerful when you pair
+
+30
+00:02:02,480 --> 00:02:07,200
+ them with other rapid production processes like folding or forming or bending. You can cut a batch
+
+31
+00:02:07,200 --> 00:02:11,520
+ of blanks with incredible accuracy and in some cases like when laser cutting, you can actually
+
+32
+00:02:11,520 --> 00:02:16,080
+ turn down the power of the laser to etch on some bend lines, send it off to somewhere else to get
+
+33
+00:02:16,080 --> 00:02:20,320
+ bent. And build up reasonably complicated shapes extremely quickly. In this video I'm going to talk
+
+34
+00:02:20,320 --> 00:02:24,240
+ about these 3 different processes, laser cutting, plasma cutting and water jet cutting and
+
+35
+00:02:24,240 --> 00:02:28,560
+ why you might choose one over the other and what particular circumstances each is best suited.
+
+36
+00:02:28,560 --> 00:02:32,000
+ And in a case study later this week we're going to look at a reasonably complicated component that
+
+37
+00:02:32,000 --> 00:02:37,840
+ was made very economically using this combination of processes. Laser cutters work by focusing and
+
+38
+00:02:37,840 --> 00:02:42,800
+ directing a high powered laser beam onto a job. Upon reaching the job this laser beam then
+
+39
+00:02:42,800 --> 00:02:48,240
+ melts or burns or vaporizes the material that it encounters and sometimes an assist gases also
+
+40
+00:02:48,240 --> 00:02:52,880
+ pass through the torch to help blow away molten metal. This all sounds quite messy but actually
+
+41
+00:02:52,880 --> 00:02:57,200
+ laser cutting is a reasonably clean process. Because the impression of the laser on the material
+
+42
+00:02:57,200 --> 00:03:01,440
+ is so finely focused and because the people who run these machines generally have their settings
+
+43
+00:03:01,440 --> 00:03:05,520
+ pretty well tuned to the materials and the thicknesses that they're working with, the surface
+
+44
+00:03:05,520 --> 00:03:10,480
+ finished from a laser cut edge is actually pretty impressive. Additionally very little slag or
+
+45
+00:03:10,480 --> 00:03:15,040
+ draw or molten metal is left behind in a laser cutting process meaning that generally speaking with
+
+46
+00:03:15,040 --> 00:03:19,440
+ no further clean up parts of a laser cutter can be held in handwood by people without any worry
+
+47
+00:03:19,440 --> 00:03:23,920
+ about them cutting or hurting themselves. Laser cutters vary wildly in capacity owing to the
+
+48
+00:03:23,920 --> 00:03:28,240
+ power required to drive the laser in the size of the bed and the associated equipment that's
+
+49
+00:03:28,240 --> 00:03:32,800
+ required to move a torch around. On one side you can buy reasonably cheap desktop laser cutters
+
+50
+00:03:32,800 --> 00:03:37,680
+ that can cut MDF and on the other side you can buy $100,000 laser cutters that can cut up to
+
+51
+00:03:37,680 --> 00:03:42,000
+ $10,15 mil thick steel. For the most part laser cutting is one of those services that you'll
+
+52
+00:03:42,000 --> 00:03:46,560
+ outsource. There are businesses in Newcastle who all they do is laser cut jobs for other people.
+
+53
+00:03:46,640 --> 00:03:50,320
+ And this works out pretty well for everybody. The upfront investment for a laser cutter can be
+
+54
+00:03:50,320 --> 00:03:54,480
+ up to $100,000 and the cost for you to only get a couple of components cut can be very,
+
+55
+00:03:54,480 --> 00:03:59,040
+ very affordable 10, 20, 30 bucks. Generally speaking when you're looking to get a job made you'll
+
+56
+00:03:59,040 --> 00:04:03,040
+ speak to these suppliers about the capabilities of their machine both in terms of the size of the
+
+57
+00:04:03,040 --> 00:04:06,800
+ bed depending on the size of the pipe you want to make and the thickness of material that they can
+
+58
+00:04:06,800 --> 00:04:10,800
+ cut as well as how long it will take the do that of course and how much is going to cost you.
+
+59
+00:04:10,800 --> 00:04:14,960
+ While of the three processes laser plasma and water jet cutting laser cutting is probably my
+
+60
+00:04:15,520 --> 00:04:19,120
+ favorite. It gives you the nicest kind of surface finish on the types of materials that I tend to
+
+61
+00:04:19,120 --> 00:04:24,000
+ work with. It isn't compatible with all materials. Some plastics give off toxic fumes when they cut
+
+62
+00:04:24,000 --> 00:04:28,160
+ and this compose a risk to operate is end to machinery and in the case of these kinds of materials
+
+63
+00:04:28,160 --> 00:04:32,320
+ one of the other processes is probably more appropriate. Plasma cutters are a little bit like
+
+64
+00:04:32,320 --> 00:04:37,120
+ laser cutters but instead of focusing and directing a laser onto a material they strike an arc
+
+65
+00:04:37,120 --> 00:04:42,640
+ and direct a jet of hot plasma upon a material. To generate this plasma they normally pass a compressed
+
+66
+00:04:42,640 --> 00:04:47,040
+ air through a torch and and after striking an electrical arc between the torch and the job kind
+
+67
+00:04:47,040 --> 00:04:51,680
+ of the same way you would as if you were welding. This compressed air is vaporized and turned into a
+
+68
+00:04:51,680 --> 00:04:56,880
+ plasma. This super duper hot plasma then meets the job and melts it away leaving behind a cut edge
+
+69
+00:04:56,880 --> 00:05:01,280
+ and by virtue of the way that it works both the resulting product and the use cases for plasma
+
+70
+00:05:01,280 --> 00:05:05,520
+ cutting are different to those for laser cutting. Plasma cutting requires striking of an electrical
+
+71
+00:05:05,520 --> 00:05:09,600
+ arc and as a result you can only really use it on conductive materials on metals and because
+
+72
+00:05:09,600 --> 00:05:14,560
+ it imparts a jet of plasma upon the material it's a bit dirtier of a process the laser cutting is.
+
+73
+00:05:14,560 --> 00:05:18,480
+ The result is at the back end of a cut from a plasma cutter is usually left with a
+
+74
+00:05:18,480 --> 00:05:23,120
+ bullet up of dress it's called a kind of cool residue of this molten material that was blasted
+
+75
+00:05:23,120 --> 00:05:27,440
+ out of the way and as a result some clean-up work of plasma cut components is typically required.
+
+76
+00:05:27,440 --> 00:05:31,520
+ The tolerance on plasma cut parts is also usually a little bit worse the laser cut parts
+
+77
+00:05:31,520 --> 00:05:35,680
+ though you can get quite small plasma cutting nozzles but generally speaking plasma cutting is a
+
+78
+00:05:35,680 --> 00:05:39,360
+ a process that's value not so much for its accuracy compared to laser cutting but rather it's
+
+79
+00:05:39,360 --> 00:05:44,400
+ cost. For a machine of comparable cutting capacity in terms of thickness in steel, plasma cutters
+
+80
+00:05:44,400 --> 00:05:49,120
+ can be almost an order of magnitude cheaper than laser cutters and there's certainly not an order
+
+81
+00:05:49,120 --> 00:05:53,440
+ of magnitude less accurate meaning that for home hobbyists and many low volume production shops
+
+82
+00:05:53,440 --> 00:05:58,080
+ plasma cutters are perfectly suitable for the task at hand. A good option for both conductive
+
+83
+00:05:58,080 --> 00:06:02,240
+ and non-conductive materials particularly if they can't be cut by laser cutting because they're
+
+84
+00:06:02,240 --> 00:06:07,040
+ very reflective or because they give off toxic fumes is water jet cutting. Here a high pressure
+
+85
+00:06:07,040 --> 00:06:11,520
+ blast of water is fed through a nozzle on a machine that operates largely like a plasma cutter
+
+86
+00:06:11,520 --> 00:06:15,520
+ or a laser cutter wood. This jet of water carries with it an abrasive media and this typically has
+
+87
+00:06:15,520 --> 00:06:20,640
+ the effect of eating away the material and leaving behind a reasonably nice edge. Water cutting
+
+88
+00:06:20,640 --> 00:06:24,560
+ can be used on a wide variety of materials though it does struggle with some very hard ones like say
+
+89
+00:06:24,560 --> 00:06:29,040
+ tempered glass but it also shouldn't be used to laminated materials like fiberglass or carbon fiber
+
+90
+00:06:29,040 --> 00:06:33,840
+ where the abrasive particles can get in and under and in between layers. Depending very much on
+
+91
+00:06:33,840 --> 00:06:38,560
+ the machine but broadly speaking water jet cutting isn't quite as accurate as laser cutting but
+
+92
+00:06:38,560 --> 00:06:42,320
+ it's probably a little bit more accurate than plasma cutting and it's typically favorite over
+
+93
+00:06:42,320 --> 00:06:46,640
+ these techniques because it doesn't impart a huge amount of heat onto the job. Particularly if
+
+94
+00:06:46,640 --> 00:06:50,320
+ you're working with something like a high carbon steel and you're very worried about imparting extra
+
+95
+00:06:50,320 --> 00:06:54,560
+ heat and heat treating it or a very thin section and you're worried about extra heat causing some
+
+96
+00:06:54,560 --> 00:06:59,040
+ kind of deformation. Water cutting can be a good option and like laser cutting while the initial
+
+97
+00:06:59,040 --> 00:07:03,280
+ investment in the machine can be quite expensive there are a bunch of local suppliers who are quite
+
+98
+00:07:03,280 --> 00:07:08,400
+ happily cut your jobs for a reasonable fee. With very specialized equipment it's possible to laser
+
+99
+00:07:08,400 --> 00:07:13,600
+ and plasma and water jet cut not only flat profiles but also more complicated geometries.
+
+100
+00:07:13,600 --> 00:07:18,400
+ Some laser and water jet cutters have a tilting head to be able to put slight bevels on cuts on flat
+
+101
+00:07:18,400 --> 00:07:23,520
+ materials and others are designed to cut tubular sections as well. This can be very economical if you're
+
+102
+00:07:23,520 --> 00:07:27,520
+ looking to build something like a framework component especially if you're working with round tubes
+
+103
+00:07:27,520 --> 00:07:32,080
+ where you need to notch or profile them to be able to fit together so that you can weld them.
+
+104
+00:07:32,080 --> 00:07:35,840
+ And where these techniques really come into their own is if you have a very large number of
+
+105
+00:07:35,840 --> 00:07:40,480
+ tubes to cut sometimes with features that need to be taken out of the sidewall. In a single
+
+106
+00:07:40,480 --> 00:07:44,320
+ operation one of these machines can cut the end of a pipe put a bunch of features into the
+
+107
+00:07:44,320 --> 00:07:49,040
+ sidewall roll it forward through the chuck and cut it again repeating the process until it's
+
+108
+00:07:49,040 --> 00:07:52,880
+ right out of material. This can cut a bunch of steps out of your manufacturing pipeline and
+
+109
+00:07:52,880 --> 00:07:57,040
+ minimize the number of errors that can be made by double the handling of all of these components.
+
+110
+00:07:57,040 --> 00:08:00,480
+ As I said these are some of my favorite techniques and I'm more than happy to have a chat about
+
+111
+00:08:00,480 --> 00:08:04,320
+ them any time. We use these techniques quite extensively in new teams and interact with local
+
+112
+00:08:04,320 --> 00:08:07,680
+ suppliers all of the time so if you'd like some advice about any of these things when you're
+
+113
+00:08:07,680 --> 00:08:17,680
+ sending a design off please feel free to reach out and get in touch.

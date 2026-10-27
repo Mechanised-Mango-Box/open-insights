@@ -1,0 +1,111 @@
+1
+00:00:00,000 --> 00:00:05,240
+ Alright, in this video, I want to talk about state trajectories and why what we've been
+
+2
+00:00:05,240 --> 00:00:10,160
+ doing is called state space modeling. Between the labs and maybe some systems that you've
+
+3
+00:00:10,160 --> 00:00:14,000
+ I don't know simulated for fun after you've modeled them in this course. Yeah, right,
+
+4
+00:00:14,000 --> 00:00:18,240
+ I know. You've probably grown pretty familiar with the concept of a kind of time trace
+
+5
+00:00:18,240 --> 00:00:23,920
+ for a state, looking at how that state varies as a function of time. When I say state
+
+6
+00:00:23,920 --> 00:00:28,600
+ space, all I'm talking about doing is plotting the states against each other. For a two
+
+7
+00:00:28,600 --> 00:00:34,040
+ state system, you can kind of do this on a 2D plane. You know, z1 is x and z2 is y. And you can
+
+8
+00:00:34,040 --> 00:00:40,360
+ actually watch how a system evolves by following the position of the state in state space. The
+
+9
+00:00:40,360 --> 00:00:45,160
+ path that traces out is called the state trajectory. And this concept extends to higher dimensions
+
+10
+00:00:45,160 --> 00:00:50,840
+ as well. I mean 3D, you can imagine a point kind of tracing out a path in 3D space. In higher
+
+11
+00:00:50,840 --> 00:00:54,920
+ dimensions, it gets a little bit harder to visualize, but the concept is still there. Your state
+
+12
+00:00:54,920 --> 00:01:00,680
+ vector traces out a trajectory in kind of an end dimensional state space. That's why it's called
+
+13
+00:01:00,680 --> 00:01:05,720
+ state space modeling. If we want to judge how good a linear approximation is to kind of a nonlinear
+
+14
+00:01:05,720 --> 00:01:09,960
+ state space model, then all we have to do is kind of compare the trajectories between the linear
+
+15
+00:01:09,960 --> 00:01:13,800
+ approximation and the nonlinear system. If we're going to say that linear approximation is any
+
+16
+00:01:13,800 --> 00:01:18,760
+ good, then we should expect that at least near the point where approximating the trajectories of
+
+17
+00:01:18,760 --> 00:01:23,640
+ the nonlinear system and the kind of linear approximation should be similar. I promised you in the
+
+18
+00:01:23,640 --> 00:01:28,360
+ last kind of content video that if you happen to linearize about an equilibrium point, rather than
+
+19
+00:01:28,360 --> 00:01:32,760
+ any old approximation point, you'd get kind of a window into whether that approximation was
+
+20
+00:01:32,760 --> 00:01:37,400
+ any good. Well, this is the mechanism by which we do it. You do this using what is known as
+
+21
+00:01:37,400 --> 00:01:41,240
+ Hartman and Gromman's theorem. Hartman and Gromman's theorem states that if you look at the
+
+22
+00:01:41,240 --> 00:01:45,240
+ eigenvalues of a linear approximation about an equilibrium point to a nonlinear system,
+
+23
+00:01:45,880 --> 00:01:51,320
+ then provide that none of those eigenvalues have a real part that is zero. Then the approximation
+
+24
+00:01:51,400 --> 00:01:55,720
+ nonlinear system will have similar trajectories near that equilibrium point. In other words,
+
+25
+00:01:55,720 --> 00:02:00,280
+ the approximation will be good. Note that this theorem doesn't say anything about the sign of
+
+26
+00:02:00,280 --> 00:02:05,240
+ the real parts of these unlikely epinose first method, but it only requires that these things
+
+27
+00:02:05,240 --> 00:02:10,040
+ are nonzero in their real part. This is a pretty straightforward one to apply. Let's have a
+
+28
+00:02:10,040 --> 00:02:12,040
+ a go from 6.7 together and give it a go.

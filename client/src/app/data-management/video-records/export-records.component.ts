@@ -30,50 +30,53 @@ const formatBytes = (bytes: number): string => {
 @Component({
   selector: 'export-records',
   template: `
-    <section class="card actions-column">
-      <mat-slide-toggle
-        [checked]="includeVideoFiles()"
-        (change)="includeVideoFiles.set($event.checked)"
-      >
-        Include video files
-      </mat-slide-toggle>
-
-      @if (videoFiles().count > 0) {
-        <p class="action-hint">
-          {{ videoFiles().count }} of the {{ selectionService.selectedCount() }} selected record(s)
-          have their video file in this browser, totalling {{ formatBytes(videoFiles().bytes) }}.
-        </p>
-      }
-      @if (includeVideoFiles() && !canStream && videoFiles().bytes > inMemoryWarningBytes) {
-        <p class="action-hint">
-          This browser can't stream downloads (a private window, for instance), so the zip has to be
-          built in memory - exporting this much video may run out of it. Leave the video files out,
-          or export from a normal window.
-        </p>
-      }
-
-      <div class="actions">
-        <button
-          mat-raised-button
-          color="primary"
-          [disabled]="selectionService.isEmpty() || pending()"
-          (click)="exportSelected()"
+    <div class="view-stack">
+      <section class="card actions-column">
+        <mat-slide-toggle
+          [checked]="includeVideoFiles()"
+          (change)="includeVideoFiles.set($event.checked)"
         >
-          <mat-icon>download</mat-icon>
-          Export Selected
-        </button>
-        @if (status()) {
-          <p class="action-status">{{ status() }}</p>
-        }
-      </div>
+          Include video files
+        </mat-slide-toggle>
 
-      <!-- After the button, not before: this explains why it is greyed out, which is
+        @if (videoFiles().count > 0) {
+          <p class="action-hint">
+            {{ videoFiles().count }} of the {{ selectionService.selectedCount() }} selected
+            record(s) have their video file in this browser, totalling
+            {{ formatBytes(videoFiles().bytes) }}.
+          </p>
+        }
+        @if (includeVideoFiles() && !canStream && videoFiles().bytes > inMemoryWarningBytes) {
+          <p class="action-hint">
+            This browser can't stream downloads (a private window, for instance), so the zip has to
+            be built in memory - exporting this much video may run out of it. Leave the video files
+            out, or export from a normal window.
+          </p>
+        }
+
+        <div class="actions">
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="selectionService.isEmpty() || pending()"
+            (click)="exportSelected()"
+          >
+            <mat-icon>download</mat-icon>
+            Export Selected
+          </button>
+          @if (status()) {
+            <p class="action-status">{{ status() }}</p>
+          }
+        </div>
+
+        <!-- After the button, not before: this explains why it is greyed out, which is
            read having already found it greyed out. The toggle and its size hint go
            above because they change what the button will do. -->
-      @if (selectionService.isEmpty()) {
-        <p class="action-hint">Tick the records you want in the table below.</p>
-      }
-    </section>
+        @if (selectionService.isEmpty()) {
+          <p class="action-hint">Tick the records you want in the table below.</p>
+        }
+      </section>
+    </div>
   `,
   imports: [MatButtonModule, MatIcon, MatSlideToggleModule],
 })

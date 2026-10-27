@@ -9,10 +9,10 @@ import {
   untracked,
 } from '@angular/core';
 import { DatasetKind, DatasetProvider, SourceResolver } from '../providers/dataset-provider';
-import { ComputeConfigService } from '../compute-config.service';
 import { ServerConfigService } from '../server-config.service';
 import { VideoRecord } from './VideoRecord';
 import {
+  DatasetSettings,
   DatasetState,
   LOCAL_RECOMPUTE,
   computeSpeechFeatures,
@@ -21,6 +21,13 @@ import {
 } from './Dataset';
 import { recordDurationSecs } from './video-duration';
 import { DatasetPeekResult, ServerStatus } from './dataset-status';
+import { describeSettings, TRANSCRIPT_STATS_SETTINGS } from './dataset-settings';
+
+/** A scan's console line, with the settings it ran under when the result reported any. */
+const withSettings = (outcome: string, settings: DatasetSettings | undefined): string => {
+  const described = describeSettings(settings);
+  return described ? `${outcome}; ${described}` : outcome;
+};
 
 /** How often a hash still in a non-terminal state gets re-peeked in the background. */
 const STATUS_REFRESH_INTERVAL_MS = 5000;
@@ -58,22 +65,24 @@ type CheckOptions = {
 export class DatasetActionsService {
   private provider = inject(DatasetProvider);
   private serverConfig = inject(ServerConfigService);
-  private computeConfig = inject(ComputeConfigService);
   private destroyRef = inject(DestroyRef);
 
-  /** Where work currently goes, for badge wording - the badges say "on X", and X
-   * is no longer always a server. */
+  /** Where work currently goes, for badge wording - the badges say "on X". */
   readonly providerLabel = computed(() => this.provider.label());
 
   // In-flight actions, keyed by file hash.
   uploadingFile = signal<Set<string>>(new Set());
   sendingTranscript = signal<Set<string>>(new Set());
   sendingSceneStats = signal<Set<string>>(new Set());
+  sendingTextStats = signal<Set<string>>(new Set());
+  sendingAudioStats = signal<Set<string>>(new Set());
 
   // Last-known server state, keyed by file hash.
   serverStatusByHash = signal<Map<string, ServerStatus>>(new Map());
   transcriptStatusByHash = signal<Map<string, DatasetPeekResult>>(new Map());
   sceneStatsStatusByHash = signal<Map<string, DatasetPeekResult>>(new Map());
+  textStatsStatusByHash = signal<Map<string, DatasetPeekResult>>(new Map());
+  audioStatsStatusByHash = signal<Map<string, DatasetPeekResult>>(new Map());
 
   // Hashes currently on screen. Only these are kept fresh - a record that leaves the table
   // stops being polled and drops its cached status.
@@ -84,14 +93,11 @@ export class DatasetActionsService {
   private refreshing = new Set<string>();
 
   constructor() {
-    // Every cached status is an answer from one specific place, so changing where the
-    // question goes invalidates all of them at once - whether that is a different server
-    // or a kind moving between the server and this browser. Harmless on the first run,
-    // when nothing is tracked yet.
+    // Every cached status is an answer from one specific server, so pointing the
+    // question at a different one invalidates all of them at once. Harmless on
+    // the first run, when nothing is tracked yet.
     effect(() => {
       this.serverConfig.serverUrl();
-      this.computeConfig.targets();
-      this.computeConfig.experimental();
       untracked(() => this.recheckAll());
     });
 
@@ -131,7 +137,15 @@ export class DatasetActionsService {
     return this.checkDatasetStatus('scene_stats', this.sceneStatsStatusByHash, hash, options);
   }
 
-  /** One body for both kinds: they differ only in which signal they write to.
+  checkTextStatsStatus(hash: string, options: CheckOptions = {}): Promise<void> {
+    return this.checkDatasetStatus('text_stats', this.textStatsStatusByHash, hash, options);
+  }
+
+  checkAudioStatsStatus(hash: string, options: CheckOptions = {}): Promise<void> {
+    return this.checkDatasetStatus('audio_stats', this.audioStatsStatusByHash, hash, options);
+  }
+
+  /** One body for every kind: they differ only in which signal they write to.
    * The provider has already folded "no such video" into 'absent', so the only
    * thing left to distinguish here is not being able to ask at all. */
   private async checkDatasetStatus(
@@ -215,12 +229,9 @@ export class DatasetActionsService {
     try {
       // Segments and their stats arrive in one payload; the record models them
       // as two separately cacheable fields, so split here.
-      const { segments, count_chars, count_words, producer } = await this.provider.request(
-        'transcript',
-        hash,
-        this.sourceFor(record),
-      );
-      record.ds_transcript = { state: 'ready', data: { segments }, producer };
+      const { segments, count_chars, count_words, producer, settings } =
+        await this.provider.request('transcript', hash, this.sourceFor(record));
+      record.ds_transcript = { state: 'ready', data: { segments }, producer, settings };
       // The counts come from the producer; the speech features do not, and are
       // computed here against whatever duration is known. Null until one is.
       record.ds_transcriptStats = {
@@ -231,8 +242,9 @@ export class DatasetActionsService {
           ...computeSpeechFeatures({ segments }, recordDurationSecs(record)),
         },
         producer,
+        settings: { ...settings, ...TRANSCRIPT_STATS_SETTINGS },
       };
-      outcome = `${count_words} words, ${segments.length} segments`;
+      outcome = withSettings(`${count_words} words, ${segments.length} segments`, settings);
     } catch (error) {
       // A failed refresh over a good value keeps the value and records why -
       // losing an eleven-minute transcript to a network blip would be worse
@@ -264,13 +276,18 @@ export class DatasetActionsService {
 
     this.sendingSceneStats.update((set) => new Set(set).add(hash));
     try {
-      const { duration_secs, scenes, producer } = await this.provider.request(
+      const { duration_secs, scenes, producer, settings } = await this.provider.request(
         'scene_stats',
         hash,
         this.sourceFor(record),
       );
-      record.ds_sceneStats = { state: 'ready', data: { duration_secs, scenes }, producer };
-      outcome = `${scenes} scenes over ${duration_secs.toFixed(1)}s`;
+      record.ds_sceneStats = {
+        state: 'ready',
+        data: { duration_secs, scenes },
+        producer,
+        settings,
+      };
+      outcome = withSettings(`${scenes} scenes over ${duration_secs.toFixed(1)}s`, settings);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       record.ds_sceneStats = this.markRefreshFailure(record.ds_sceneStats, message);
@@ -283,6 +300,113 @@ export class DatasetActionsService {
         return next;
       });
       void this.checkSceneStatsStatus(hash);
+      finished(outcome);
+    }
+  }
+
+  /** Reads the video's on-screen text. */
+  async fetchTextStats(record: VideoRecord): Promise<void> {
+    const hash = record.video_file.hash;
+    if (!hash) throw new Error('No file hash for this record.');
+
+    const finished = this.logScan('text_stats', record);
+    let outcome = 'failed';
+
+    this.sendingTextStats.update((set) => new Set(set).add(hash));
+    try {
+      // The server also sends every sampled frame's reading; only the summary is
+      // kept (see TextStats in Dataset.ts).
+      const {
+        sample_count,
+        mean_words,
+        max_words,
+        mean_coverage,
+        text_frames_ratio,
+        producer,
+        settings,
+      } = await this.provider.request('text_stats', hash, this.sourceFor(record));
+      record.ds_textStats = {
+        state: 'ready',
+        data: { sample_count, mean_words, max_words, mean_coverage, text_frames_ratio },
+        producer,
+        settings,
+      };
+      outcome = withSettings(
+        `${mean_words.toFixed(1)} words on screen over ${sample_count} samples`,
+        settings,
+      );
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      record.ds_textStats = this.markRefreshFailure(record.ds_textStats, message);
+      outcome = `failed - ${message}`;
+      throw error;
+    } finally {
+      this.sendingTextStats.update((set) => {
+        const next = new Set(set);
+        next.delete(hash);
+        return next;
+      });
+      void this.checkTextStatsStatus(hash);
+      finished(outcome);
+    }
+  }
+
+  /** Measures background sound and pitch variation. */
+  async fetchAudioStats(record: VideoRecord): Promise<void> {
+    const hash = record.video_file.hash;
+    if (!hash) throw new Error('No file hash for this record.');
+
+    const finished = this.logScan('audio_stats', record);
+    let outcome = 'failed';
+
+    this.sendingAudioStats.update((set) => new Set(set).add(hash));
+    try {
+      const {
+        duration_secs,
+        speech_secs,
+        speech_level_db,
+        background_sound_ratio,
+        median_pitch_hz,
+        pitch_variation_st,
+        speech_ratio,
+        pause_rate_per_min,
+        mean_pause_secs,
+        producer,
+        settings,
+      } = await this.provider.request('audio_stats', hash, this.sourceFor(record));
+      record.ds_audioStats = {
+        state: 'ready',
+        data: {
+          duration_secs,
+          speech_secs,
+          speech_level_db,
+          background_sound_ratio,
+          median_pitch_hz,
+          pitch_variation_st,
+          speech_ratio,
+          pause_rate_per_min,
+          mean_pause_secs,
+        },
+        producer,
+        settings,
+      };
+      outcome = withSettings(
+        `${(background_sound_ratio * 100).toFixed(1)}% background sound, ` +
+          `pitch varies ${pitch_variation_st.toFixed(2)} st`,
+        settings,
+      );
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      record.ds_audioStats = this.markRefreshFailure(record.ds_audioStats, message);
+      outcome = `failed - ${message}`;
+      throw error;
+    } finally {
+      this.sendingAudioStats.update((set) => {
+        const next = new Set(set);
+        next.delete(hash);
+        return next;
+      });
+      void this.checkAudioStatsStatus(hash);
       finished(outcome);
     }
   }
@@ -319,6 +443,7 @@ export class DatasetActionsService {
       state: 'ready',
       data: computeTranscriptStats(record.ds_transcript.data, recordDurationSecs(record)),
       producer: LOCAL_RECOMPUTE,
+      settings: TRANSCRIPT_STATS_SETTINGS,
     };
   }
 
@@ -327,6 +452,8 @@ export class DatasetActionsService {
       this.checkServerStatus(hash, options),
       this.checkTranscriptStatus(hash, options),
       this.checkSceneStatsStatus(hash, options),
+      this.checkTextStatsStatus(hash, options),
+      this.checkAudioStatsStatus(hash, options),
     ]);
   }
 
@@ -335,6 +462,8 @@ export class DatasetActionsService {
     this.serverStatusByHash.set(new Map());
     this.transcriptStatusByHash.set(new Map());
     this.sceneStatsStatusByHash.set(new Map());
+    this.textStatsStatusByHash.set(new Map());
+    this.audioStatsStatusByHash.set(new Map());
     this.refreshing.clear();
     for (const hash of this.trackedHashes) this.checkAll(hash);
   }
@@ -348,11 +477,13 @@ export class DatasetActionsService {
     this.serverStatusByHash.update(without);
     this.transcriptStatusByHash.update(without);
     this.sceneStatsStatusByHash.update(without);
+    this.textStatsStatusByHash.update(without);
+    this.audioStatsStatusByHash.update(without);
     for (const hash of hashes) this.refreshing.delete(hash);
   }
 
   /**
-   * Re-peeks the three states that can still change with no input from this browser: a job the
+   * Re-peeks the states that can still change with no input from this browser: a job the
    * server is running (nothing else will tell us it finished - only the caller that started it
    * polls, and it may have been started from another tab or by the Scan tab in a previous
    * session), a hash whose last check couldn't reach the server (which recovers on its own
@@ -373,7 +504,15 @@ export class DatasetActionsService {
     const serverStatuses = this.serverStatusByHash();
     const transcriptStatuses = this.transcriptStatusByHash();
     const sceneStatsStatuses = this.sceneStatsStatusByHash();
-    const busy = [this.uploadingFile(), this.sendingTranscript(), this.sendingSceneStats()];
+    const textStatsStatuses = this.textStatsStatusByHash();
+    const audioStatsStatuses = this.audioStatsStatusByHash();
+    const busy = [
+      this.uploadingFile(),
+      this.sendingTranscript(),
+      this.sendingSceneStats(),
+      this.sendingTextStats(),
+      this.sendingAudioStats(),
+    ];
 
     for (const hash of this.trackedHashes) {
       // An action already in flight writes its own result when it lands.
@@ -392,13 +531,17 @@ export class DatasetActionsService {
       const server = serverStatuses.get(hash) === 'error';
       const transcript = isStale(transcriptStatuses.get(hash));
       const sceneStats = isStale(sceneStatsStatuses.get(hash));
-      if (!server && !transcript && !sceneStats) continue;
+      const textStats = isStale(textStatsStatuses.get(hash));
+      const audioStats = isStale(audioStatsStatuses.get(hash));
+      if (!server && !transcript && !sceneStats && !textStats && !audioStats) continue;
 
       this.refreshing.add(hash);
       Promise.all([
         server ? this.checkServerStatus(hash, { quiet: true }) : null,
         transcript ? this.checkTranscriptStatus(hash, { quiet: true }) : null,
         sceneStats ? this.checkSceneStatsStatus(hash, { quiet: true }) : null,
+        textStats ? this.checkTextStatsStatus(hash, { quiet: true }) : null,
+        audioStats ? this.checkAudioStatsStatus(hash, { quiet: true }) : null,
       ]).finally(() => this.refreshing.delete(hash));
     }
   }

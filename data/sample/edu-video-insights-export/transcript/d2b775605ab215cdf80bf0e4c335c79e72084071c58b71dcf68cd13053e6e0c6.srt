@@ -1,0 +1,147 @@
+1
+00:00:00,000 --> 00:00:05,760
+ All right, the final component we need to meet in this three-part series is friction and
+
+2
+00:00:06,240 --> 00:00:12,120
+ I use component inverted commas because of course friction is all around us. Sometimes friction is useful
+
+3
+00:00:12,120 --> 00:00:14,480
+ It's the thing that lets us walk along the ground
+
+4
+00:00:14,480 --> 00:00:18,720
+ But in the context of end 2440 in the context of things we're going to be modeling
+
+5
+00:00:19,280 --> 00:00:25,240
+ Friction is usually just an unfortunate fact of life that sucks away the efficiencies of our machines and converts
+
+6
+00:00:25,240 --> 00:00:27,560
+ What would otherwise be useful energy into heat?
+
+7
+00:00:27,800 --> 00:00:31,080
+ There are lots of different models for friction depending on the application
+
+8
+00:00:31,400 --> 00:00:37,480
+ One model that you might be familiar with you might have seen in your prior courses is the cool and friction model here
+
+9
+00:00:37,480 --> 00:00:41,560
+ The friction we're talking about depends on a dimensionless coefficient of friction
+
+10
+00:00:41,960 --> 00:00:49,160
+ That's usually tabulated for different materials. For example, the coefficient of friction for steel on ice is pretty low
+
+11
+00:00:49,880 --> 00:00:55,640
+ The coefficient of friction for rubber on tarmac is pretty high. Pool and friction also depends on the normal force
+
+12
+00:00:55,640 --> 00:00:57,960
+ The force that's pushing the two surfaces together
+
+13
+00:00:58,600 --> 00:01:04,520
+ This is why heavier objects are hard to slide or why formula one cars make huge amounts of down force
+
+14
+00:01:04,760 --> 00:01:08,680
+ It so they can get more friction more grip to allow them to go around the corners faster
+
+15
+00:01:08,680 --> 00:01:11,640
+ Another popular friction model is viscous friction
+
+16
+00:01:12,440 --> 00:01:17,160
+ Here the friction forces proportional to something called the viscous damping coefficient B
+
+17
+00:01:18,040 --> 00:01:21,320
+ And the relative velocity between the two sliding surfaces
+
+18
+00:01:21,400 --> 00:01:26,680
+ The coefficient B can sometimes be non-parametric and will be characterized in something like a look-up table
+
+19
+00:01:26,840 --> 00:01:31,720
+ In the rule world, it's going to be up to you, the engineer to the side of which friction model is best for your application
+
+20
+00:01:32,280 --> 00:01:35,720
+ A book like Schigley's mechanical engineering design might be able to give you an idea
+
+21
+00:01:36,440 --> 00:01:40,600
+ But in this course at least we're always going to use linear viscous friction
+
+22
+00:01:40,600 --> 00:01:42,280
+ Which has this CCR
+
+23
+00:01:42,280 --> 00:01:48,040
+ And just like when we were dealing with springs, this CCR doesn't tell us anything about how v-rail should be calculated
+
+24
+00:01:48,040 --> 00:01:52,200
+ How you calculate v-rail is actually the SSR for friction elements
+
+25
+00:01:52,200 --> 00:01:54,760
+ And it depends a little bit on what kind of friction we're talking about
+
+26
+00:01:54,760 --> 00:01:58,280
+ If I have a body sliding over a surface that's stationary
+
+27
+00:01:58,280 --> 00:02:01,160
+ Then the v-rail is simply the velocity of the body
+
+28
+00:02:01,160 --> 00:02:04,280
+ And the friction has to be drawn to oppose the motion of the body
+
+29
+00:02:05,000 --> 00:02:08,680
+ It's slightly more complicated if you're talking about something like a damper, a dashpot
+
+30
+00:02:08,680 --> 00:02:13,400
+ Where you have an inner surface and an outer surface and one is sliding relative to the other
+
+31
+00:02:14,120 --> 00:02:18,200
+ In that case, what you need to do is calculate the relative velocity as a difference between
+
+32
+00:02:18,200 --> 00:02:20,520
+ the right hand side and the left hand side for example
+
+33
+00:02:21,160 --> 00:02:24,600
+ And make sure that you draw the friction force to oppose that relative motion
+
+34
+00:02:24,600 --> 00:02:28,200
+ Be it extension of the damper or compression of the damper
+
+35
+00:02:29,080 --> 00:02:31,000
+ Just like with springs, this is non-trivial
+
+36
+00:02:31,000 --> 00:02:33,800
+ And I think probably the best way to explain this through an example
+
+37
+00:02:33,800 --> 00:02:37,160
+ So let's do problem 2.4 together and see if we can get some intuition about this

@@ -1,0 +1,347 @@
+1
+00:00:00,000 --> 00:00:04,320
+ This video is all about fire and the flammability properties of engineering materials.
+
+2
+00:00:04,320 --> 00:00:08,800
+ You might be surprised to learn that fire and corrosion are actually the same chemical
+
+3
+00:00:08,800 --> 00:00:12,880
+ process, a redox reaction, just on wildly different timescales.
+
+4
+00:00:12,880 --> 00:00:18,080
+ In a combustion redox reaction, a fire, a fuel reacts with oxygen in the presence of heat.
+
+5
+00:00:18,080 --> 00:00:22,160
+ The susceptibility of a material to combustion and the behavior of that material once it's
+
+6
+00:00:22,160 --> 00:00:24,560
+ a light, it's governed by its flammability properties.
+
+7
+00:00:24,560 --> 00:00:28,240
+ As engineers, you're more than likely to design components that are going to leave near
+
+8
+00:00:28,240 --> 00:00:32,320
+ hot things, and as a result, you're concerned with the flammability properties of materials
+
+9
+00:00:32,320 --> 00:00:34,480
+ to make sure that your designs don't catch fire.
+
+10
+00:00:34,480 --> 00:00:38,640
+ Now, fortunately for us, most engineering materials are not inherently flammable.
+
+11
+00:00:38,640 --> 00:00:42,720
+ Ceramics and glasses don't really burn at all, and metals, unless they're dispersed
+
+12
+00:00:42,720 --> 00:00:45,360
+ into a very fine power, are also pretty inert.
+
+13
+00:00:45,360 --> 00:00:49,600
+ That being said, a lot of polymers and plastics in organic materials like timbers
+
+14
+00:00:49,600 --> 00:00:50,640
+ are very flammable.
+
+15
+00:00:50,640 --> 00:00:54,480
+ You should be aware that even if your design plans to utilize non flammable materials,
+
+16
+00:00:54,480 --> 00:00:59,680
+ like metals or ceramics, flammable ones can still creep in in the form of adhesives or glues
+
+17
+00:00:59,680 --> 00:01:00,720
+ or coatings.
+
+18
+00:01:00,720 --> 00:01:05,360
+ Prevention and extinguishing of fires is reliant on breaking what's called the fire tetrahedron,
+
+19
+00:01:05,360 --> 00:01:10,640
+ generally speaking all, and usually most of these four elements are needed for a fire to sustain.
+
+20
+00:01:10,640 --> 00:01:14,560
+ Fuel, oxygen, heat, and an underlying chain reaction.
+
+21
+00:01:14,560 --> 00:01:18,480
+ The exact mechanism that you use to prevent or extinguish a fire depends a little bit
+
+22
+00:01:18,480 --> 00:01:21,040
+ on the nature of the fire that you're talking about.
+
+23
+00:01:21,120 --> 00:01:25,360
+ For example, water might be used to cool a fire, and firefighting foam will come under oxide
+
+24
+00:01:25,360 --> 00:01:28,320
+ might be used to smother a fire and depleted of oxygen.
+
+25
+00:01:28,320 --> 00:01:31,840
+ You need to be a little bit careful though, because there are some cases, metal fires,
+
+26
+00:01:31,840 --> 00:01:37,040
+ battery fires, where the combustion reaction is actually more volatile with water than with air,
+
+27
+00:01:37,040 --> 00:01:40,240
+ and so pouring water on the fire can actually make matters worse.
+
+28
+00:01:40,240 --> 00:01:44,800
+ For this reason, we don't usually just wing it or rely on rules of thumb when we're trying to
+
+29
+00:01:44,800 --> 00:01:48,000
+ design around prevention of fires or fight fires.
+
+30
+00:01:48,000 --> 00:01:51,200
+ Instead, we refer to what's called a material safety data sheet,
+
+31
+00:01:51,200 --> 00:01:54,240
+ MSDS for the materials that we'd like to use.
+
+32
+00:01:54,240 --> 00:01:58,080
+ These data sheets, which look something like this, generally contain information about the
+
+33
+00:01:58,080 --> 00:02:01,280
+ types of fires that might form and how you should fight these.
+
+34
+00:02:01,280 --> 00:02:05,120
+ This can get a little bit complicated if your design is a composite of several materials
+
+35
+00:02:05,120 --> 00:02:07,840
+ and these have different firefighting requirements.
+
+36
+00:02:07,840 --> 00:02:12,400
+ Broadly speaking, the approach is to consult the data sheets and to have a plan for what to do
+
+37
+00:02:12,400 --> 00:02:14,320
+ before a fire even breaks out.
+
+38
+00:02:14,320 --> 00:02:17,520
+ There are a few key temperatures relating to the vapors of materials
+
+39
+00:02:17,520 --> 00:02:20,240
+ that we need to keep in mind when designing around them.
+
+40
+00:02:20,240 --> 00:02:24,320
+ The flash point of a material is the lowest temperature at which its vapors will ignite
+
+41
+00:02:24,320 --> 00:02:26,160
+ when provided a source of ignition.
+
+42
+00:02:26,160 --> 00:02:29,920
+ The flame point of a material is the lowest temperature at which vapors will ignite
+
+43
+00:02:29,920 --> 00:02:33,600
+ and sustain a flame even when that source of ignition is removed.
+
+44
+00:02:33,600 --> 00:02:37,360
+ These temperatures can be quite sensitive to the environmental conditions the pressure
+
+45
+00:02:37,360 --> 00:02:42,080
+ around the material you're dealing with and they're normally documented at atmospheric pressure.
+
+46
+00:02:42,160 --> 00:02:45,760
+ Over the two, flash point is usually the metric that we use to categorize materials
+
+47
+00:02:45,760 --> 00:02:50,400
+ as either combustible, meaning that they can burn and flammable, meaning that they're easily
+
+48
+00:02:50,400 --> 00:02:52,560
+ ignitable at ambient conditions.
+
+49
+00:02:52,560 --> 00:02:56,160
+ There's a third important temperature that you need to consider when you're thinking about
+
+50
+00:02:56,160 --> 00:02:59,680
+ flammability of materials, the auto-ignition temperature.
+
+51
+00:02:59,680 --> 00:03:03,680
+ As the name suggests, this is the lowest temperature at which the vapors of a material will
+
+52
+00:03:03,680 --> 00:03:08,560
+ not only ignite in air when given a source of flame and not only ignite in air when given a source
+
+53
+00:03:08,560 --> 00:03:13,120
+ of flame and maintain that flame when it's removed, but will self-ignite in air.
+
+54
+00:03:13,120 --> 00:03:16,720
+ Like the others, auto-ignition temperature is normally documented at standard conditions,
+
+55
+00:03:16,720 --> 00:03:21,600
+ in other words, pressure-wide atmosphere and oxygen at atmospheric concentration.
+
+56
+00:03:21,600 --> 00:03:26,240
+ But at higher oxygen concentrations and at higher pressures, this temperature decreases
+
+57
+00:03:26,240 --> 00:03:28,560
+ in things auto-ignite more easily.
+
+58
+00:03:28,560 --> 00:03:33,040
+ You need to be careful about this if you're designing components to live in a highly oxygenated
+
+59
+00:03:33,040 --> 00:03:36,880
+ environment or if you're designing components to live in a highly pressurized environment.
+
+60
+00:03:36,960 --> 00:03:41,200
+ There are a range of tests that we use to characterize the flammability of engineering materials.
+
+61
+00:03:41,200 --> 00:03:45,440
+ They all generally involve trying to light your material with a bunch of burner or a cigarette or
+
+62
+00:03:45,440 --> 00:03:50,320
+ something and recording whether that material ignited at all and if so how easy it was to do that,
+
+63
+00:03:50,320 --> 00:03:54,560
+ whether and how quickly the flame is spread, whether the material had any self-extinguishing
+
+64
+00:03:54,560 --> 00:03:58,400
+ capabilities, the rate at which heat was released from the burning material, whether
+
+65
+00:03:58,400 --> 00:04:02,400
+ or not the material melted or charred, potentially shedding flaming parts of itself,
+
+66
+00:04:02,400 --> 00:04:05,440
+ whether you're burning material let off any toxic smoke or gas,
+
+67
+00:04:05,520 --> 00:04:09,680
+ and whether any of these properties change burning in material vertically versus horizontally.
+
+68
+00:04:09,680 --> 00:04:15,280
+ For example, UL94 is a standard test for checking the flammability of engineering plastics.
+
+69
+00:04:15,280 --> 00:04:19,120
+ In this test you expose a sample of your material to a bunch of burner and you check to see
+
+70
+00:04:19,120 --> 00:04:25,200
+ if it ignites, whether it's self-extinguishes and whether as it burns it drips any flaming material.
+
+71
+00:04:25,200 --> 00:04:30,560
+ It makes sense in the same context talking about flammability to mention intrinsically safe materials.
+
+72
+00:04:30,560 --> 00:04:34,000
+ There are many dangerous environments that you might find yourself working or supporting
+
+73
+00:04:34,000 --> 00:04:39,280
+ as an engineer where the ambient atmosphere has a higher concentration of flammable gases.
+
+74
+00:04:39,280 --> 00:04:41,680
+ A very common example of this is underground mining.
+
+75
+00:04:41,680 --> 00:04:45,440
+ I did a little bit of time working as a Christmas beetle and underground mine for my placement in
+
+76
+00:04:45,440 --> 00:04:49,920
+ undergrad. In these environments the higher concentrations of flammable gases in the atmosphere
+
+77
+00:04:49,920 --> 00:04:55,280
+ coupled with other risk factors like limited egress, poor visibility, risk of caving,
+
+78
+00:04:55,280 --> 00:04:59,680
+ demands that materials are used that don't have the capability to start a fire.
+
+79
+00:04:59,760 --> 00:05:02,640
+ These materials and equipment are termed intrinsically safe.
+
+80
+00:05:02,640 --> 00:05:06,800
+ We expect intrinsically safe materials and equipment not to be able to deliver a spark to
+
+81
+00:05:06,800 --> 00:05:09,200
+ a assumedly hazardous atmosphere.
+
+82
+00:05:09,200 --> 00:05:13,360
+ There are standards that govern the classification and design of intrinsically safe materials and
+
+83
+00:05:13,360 --> 00:05:17,840
+ components and if you're an engineer working in a design role in the Newcastle region it's
+
+84
+00:05:17,840 --> 00:05:22,400
+ more than likely that some of your customers will be demanding intrinsically safe products.
+
+85
+00:05:22,400 --> 00:05:27,120
+ For now you should be aware that even seemingly innocuous objects like aluminium foil on
+
+86
+00:05:27,120 --> 00:05:32,160
+ pill wrappers or brushed power tools like drills can deliver a spark in these environments
+
+87
+00:05:32,160 --> 00:05:37,120
+ and for that reason a forbidden wherein intrinsically safe materials and equipment are required.

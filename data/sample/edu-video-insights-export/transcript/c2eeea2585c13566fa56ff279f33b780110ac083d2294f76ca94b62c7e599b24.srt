@@ -1,0 +1,487 @@
+1
+00:00:00,000 --> 00:00:03,840
+ In this video, we're going to talk about some of the non-mechanical properties of engineering
+
+2
+00:00:03,840 --> 00:00:07,520
+ polymers. We'll kick off with the thermal ones and this is going to be pretty straightforward
+
+3
+00:00:07,520 --> 00:00:12,080
+ because engineering polymers generally have pretty modest thermal properties compared to
+
+4
+00:00:12,080 --> 00:00:16,320
+ same metals. While the thermal properties of any specific polymer are going to be a function of
+
+5
+00:00:16,320 --> 00:00:21,360
+ its monomacamistry and whether or not and how much it's crosslinked, generally speaking,
+
+6
+00:00:21,360 --> 00:00:26,720
+ all polymers can be considered to be reasonably poor conductors of heat and to have reasonably
+
+7
+00:00:26,720 --> 00:00:31,200
+ low melting temperatures if they melted all. You'll remember from two weeks ago when we were
+
+8
+00:00:31,200 --> 00:00:35,440
+ talking about metals and the week before that when we were talking about thermal conduction in general,
+
+9
+00:00:35,440 --> 00:00:39,840
+ that there are really two mechanisms by which heat is conducted inside of a material.
+
+10
+00:00:39,840 --> 00:00:44,400
+ There's the kind of vibration that goes on between atoms of the material, what we call phononic heat
+
+11
+00:00:44,400 --> 00:00:49,600
+ transfer. And there's heat transfer vibration that occurs by electrons bumping into things.
+
+12
+00:00:49,600 --> 00:00:53,760
+ Part of what made metals such good conductors of heat was that they had both of these mechanisms
+
+13
+00:00:53,760 --> 00:00:57,680
+ available and they were pretty good at both of these mechanisms. Part of what makes
+
+14
+00:00:57,680 --> 00:01:02,320
+ polymers reasonably poor at conducting heat is that they only have one of these mechanisms
+
+15
+00:01:02,320 --> 00:01:07,280
+ available and they're not even very good at that. Polymer chains are held together by covalent bonds
+
+16
+00:01:07,280 --> 00:01:11,200
+ which means that there are no free electrons floating around to help transfer heat.
+
+17
+00:01:11,200 --> 00:01:15,600
+ And when it comes to phononic heat transfer, atom to atom vibration, they're not particularly
+
+18
+00:01:15,600 --> 00:01:20,400
+ great at this either because their structures are highly unordered, highly amorphous. Unlike
+
+19
+00:01:20,400 --> 00:01:24,320
+ metals which are reasonably ordered and ceramics which are very very well ordered,
+
+20
+00:01:24,320 --> 00:01:29,200
+ polymers aren't very ordered at all. Heat transfer has to happen along chains and then
+
+21
+00:01:29,200 --> 00:01:34,000
+ between chains at the points where they touch. On top of this these chains can be very very
+
+22
+00:01:34,000 --> 00:01:38,240
+ very long meaning that there's quite a long way for these vibrations to have to travel before
+
+23
+00:01:38,240 --> 00:01:42,480
+ they can transfer any appreciable amount of heat. There are some polymers which are better at
+
+24
+00:01:42,480 --> 00:01:46,800
+ conducting heat than others. The ones which are highly cross linked which actually do provide
+
+25
+00:01:46,800 --> 00:01:51,680
+ some sort of direct link between one chain and another tend to be better at conducting heat than
+
+26
+00:01:51,680 --> 00:01:56,480
+ those which aren't. But broadly speaking they're all pretty bad at it and polymers as a result
+
+27
+00:01:56,480 --> 00:02:01,600
+ are generally thought of as thermal insulators as opposed to conductors. In terms of melting,
+
+28
+00:02:01,600 --> 00:02:06,240
+ most polymers generally have a much much lower melting temperature than the metals that we used
+
+29
+00:02:06,240 --> 00:02:10,320
+ to talking about. While most of the metals that we used to dealing with remote anywhere from say
+
+30
+00:02:10,320 --> 00:02:15,280
+ 500 to 600 degrees C all the way up to several thousand degrees C, a polymers generally
+
+31
+00:02:15,280 --> 00:02:21,040
+ melt only around 100 or 150 degrees higher than room temperature. This reality is actually endlessly
+
+32
+00:02:21,040 --> 00:02:26,400
+ convenient for manufacturing polymers and is one of the reasons why they're so economical to produce.
+
+33
+00:02:26,400 --> 00:02:31,040
+ And interestingly when you melt a polymer it's a physical rather than a chemical process that
+
+34
+00:02:31,040 --> 00:02:35,920
+ occurs. The polymer chains are not themselves broken they just get a little bit more unordered.
+
+35
+00:02:35,920 --> 00:02:40,160
+ After polymerization barring some other process coming along in slicing chains or
+
+36
+00:02:40,160 --> 00:02:45,120
+ across linking chains, generally speaking they don't usually change. When you melt a polymer the
+
+37
+00:02:45,120 --> 00:02:49,440
+ very same chains exist in the liquid state as existed in the solid state and when you cool it
+
+38
+00:02:49,440 --> 00:02:53,920
+ again those same chains exist in the solid state that we're in the liquid state. This is true of
+
+39
+00:02:53,920 --> 00:02:57,680
+ all polymers that melt though you should note that there are a class of polymers which don't.
+
+40
+00:02:57,680 --> 00:03:01,920
+ You should also note that unlike metals which experience a reasonably smooth and continuous
+
+41
+00:03:01,920 --> 00:03:07,440
+ and predictable and kind of linear change in properties with temperature polymers do not.
+
+42
+00:03:07,520 --> 00:03:11,920
+ Some polymers often considerably and see substantial changes in other properties as well with
+
+43
+00:03:11,920 --> 00:03:17,760
+ increasing temperature in a highly nonlinear way. In fact some polymers see a near instantaneous
+
+44
+00:03:17,760 --> 00:03:22,080
+ change in properties at a particular temperature called their glass transition temperature.
+
+45
+00:03:22,080 --> 00:03:25,840
+ Modeling the behavior of polymers is an extremely complicated topic that you're going to talk a
+
+46
+00:03:25,840 --> 00:03:30,080
+ little bit more about in materials too. It's not one way going to talk a lot about in this course
+
+47
+00:03:30,080 --> 00:03:33,600
+ though I will point you to woods and resources on the textbook page for this video if you're
+
+48
+00:03:33,600 --> 00:03:38,320
+ interested. In terms of electrical performance polymers are pretty bad as well. In fact polymers are
+
+49
+00:03:38,320 --> 00:03:42,800
+ far worse electrical conductors than they are thermal ones. While the thermal conductivity of
+
+50
+00:03:42,800 --> 00:03:47,760
+ most polymers will generally be one or two orders of magnitude smaller than most metals,
+
+51
+00:03:47,760 --> 00:03:52,960
+ the electrical conductivity of most polymers is like 18 or 20 orders of magnitude smaller than
+
+52
+00:03:52,960 --> 00:03:58,240
+ most metals. Polymers are comically poor conductors of electricity and for this reason they make
+
+53
+00:03:58,240 --> 00:04:03,120
+ amazing electrical insulators. Now like most things in life if you try hard enough you can
+
+54
+00:04:03,120 --> 00:04:07,680
+ succeed you can pass a current through a polymer if you provide a sufficiently high voltage,
+
+55
+00:04:07,680 --> 00:04:12,560
+ a breakdown voltage. But you should be aware that most polymers have a breakdown voltage in the
+
+56
+00:04:12,560 --> 00:04:17,920
+ order of tens of megavolts per meter of insulation. To give you a point of reference in terms
+
+57
+00:04:17,920 --> 00:04:23,440
+ of scale the transmission lines that carry our electricity at around 66 kilovolts. In other words
+
+58
+00:04:23,440 --> 00:04:28,720
+ you need to provide a breakdown voltage 230 times that of a transmission line to overcome a
+
+59
+00:04:29,200 --> 00:04:33,760
+ insulation provided by a polymer. Earlier in the week I told you that polymers don't corrode and
+
+60
+00:04:33,760 --> 00:04:38,240
+ this is sort of true. Polymers don't corrode the same way that metals do through a redox reaction.
+
+61
+00:04:38,240 --> 00:04:43,360
+ But polymers do naturally break down. They do naturally corrode through a couple of different mechanisms.
+
+62
+00:04:43,360 --> 00:04:48,400
+ The first mechanism chain-sision occurs where some sort of external impetus works to
+
+63
+00:04:48,400 --> 00:04:53,040
+ break the polymer chains apart. This could be a mechanical process due to wear or load or a
+
+64
+00:04:53,040 --> 00:04:57,520
+ chemical process exposure to some sort of solvent or acid or something. But it can also occur as a
+
+65
+00:04:57,520 --> 00:05:01,920
+ result of exposure to UV light or to heat. And it's one of the reasons why polymers exposed to
+
+66
+00:05:01,920 --> 00:05:06,960
+ these intense stimuli have a tendency to break down. Chain-sision slices polymer chains and
+
+67
+00:05:06,960 --> 00:05:11,600
+ results in an effective overall average shortening of all the polymer chains in the bulk.
+
+68
+00:05:11,600 --> 00:05:15,920
+ We've already talked about how shorter chains generally result in poorer mechanical properties.
+
+69
+00:05:15,920 --> 00:05:20,080
+ The longer a chain is, the more tendency it has to get knotted up and the stiffer it can become.
+
+70
+00:05:20,080 --> 00:05:23,200
+ The longer the chain is, the more likely it is to touch other chains and
+
+71
+00:05:23,200 --> 00:05:27,280
+ for Van der Wauss bonds to hold the whole thing together. There's another kind of polar opposite
+
+72
+00:05:27,280 --> 00:05:32,400
+ form of corrosion of polymers, which is in-service photopolymerization. That's a lot of big
+
+73
+00:05:32,400 --> 00:05:37,360
+ words to put in one sentence, so let's break it down. Essentially, in-service exposure to UV light
+
+74
+00:05:37,360 --> 00:05:42,880
+ can lead to the formation of additional cross links in a polymer through extra polymerization.
+
+75
+00:05:42,880 --> 00:05:46,800
+ This can lead to over curing of some polymers and essentially results in embrittlement.
+
+76
+00:05:46,800 --> 00:05:50,320
+ It's one of the reasons why host fittings left out in the sun for so long end up being so
+
+77
+00:05:50,320 --> 00:05:55,040
+ terrible. These days additives are included in the polymerization process that are designed to absorb
+
+78
+00:05:55,040 --> 00:06:00,560
+ UV light to prevent a lot of in-service photopolymerization. Tires are one example of this.
+
+79
+00:06:00,560 --> 00:06:05,280
+ We're going to talk about elastomers in a few videos time, but essentially for tires and a bunch
+
+80
+00:06:05,280 --> 00:06:09,520
+ of other polymers, the amount of cross-leaking that you have is extremely important. It's
+
+81
+00:06:09,520 --> 00:06:14,640
+ tightly controlled. And if extra photopolymerization would occur on that tire in-service,
+
+82
+00:06:14,640 --> 00:06:18,240
+ it would probably result in embrittlement and an effective worsening of its life.
+
+83
+00:06:18,240 --> 00:06:22,800
+ So, in tires they include carbon black, which does the job of absorbing the UV light and
+
+84
+00:06:22,800 --> 00:06:26,720
+ essentially protecting the tires from additional in-service photopolymerization.
+
+85
+00:06:26,720 --> 00:06:31,920
+ Moving on now to flammability, unlike metals, polymers are inherently flammable.
+
+86
+00:06:31,920 --> 00:06:35,280
+ At sufficiently high temperatures, you can break the bonds of a polymer and release some
+
+87
+00:06:35,280 --> 00:06:39,840
+ nasties that are particularly good fuel to burn. The decomposition of polymers in this way
+
+88
+00:06:39,840 --> 00:06:43,360
+ is extremely complicated, and I've left a really good resource for you in the textbook.
+
+89
+00:06:43,360 --> 00:06:47,040
+ But if you're going to know one thing, it should probably be that these days we tend to include
+
+90
+00:06:47,040 --> 00:06:51,840
+ fire retardants in the manufacturer of polymers. These retardants typically have the job of
+
+91
+00:06:51,840 --> 00:06:56,400
+ reducing the likelihood that a fire will even start on a polymer that a fire will even catch.
+
+92
+00:06:56,400 --> 00:07:00,800
+ And second to that, they have the job of imbuing the polymer with self-extinguishing characteristics
+
+93
+00:07:00,800 --> 00:07:05,520
+ or anti-drip characteristics. There are many flammability tests for polymers, and some of these
+
+94
+00:07:05,520 --> 00:07:09,840
+ need to be passed by components that are going to be solid in particular jurisdictions.
+
+95
+00:07:09,840 --> 00:07:14,240
+ UO94 is quite a famous one, and we looked at it briefly a couple of weeks ago in flammability
+
+96
+00:07:14,240 --> 00:07:18,480
+ properties. To finish up, I'm going to very briefly talk about environmental properties.
+
+97
+00:07:18,480 --> 00:07:21,840
+ Now, if you guys are quite fortunate, I think you've grown up in a world that's generally
+
+98
+00:07:21,840 --> 00:07:26,000
+ pretty cognizant of the effect that plastics have on our environment. And so I probably
+
+99
+00:07:26,000 --> 00:07:29,440
+ don't need to go into a huge amount of detail here. It's probably sufficient for me to say
+
+100
+00:07:29,440 --> 00:07:34,080
+ that polymers don't naturally break down the same way that metals and other organic materials
+
+101
+00:07:34,080 --> 00:07:38,240
+ do, or at least they don't on the same kinds of sensible timeframes. And that plastics
+
+102
+00:07:38,240 --> 00:07:42,640
+ which haven't been disposed of appropriately can have a significant impact on our environment,
+
+103
+00:07:42,640 --> 00:07:48,560
+ particularly our oceans. Of the 270ish million tons of plastic that are produced every year,
+
+104
+00:07:48,560 --> 00:07:53,600
+ nearly 8 million tons make their way into the oceans. This happens for a whole bunch of terrible
+
+105
+00:07:53,600 --> 00:07:58,400
+ reasons, but a large contributed to the problem is that unlike with metals where there's both an
+
+106
+00:07:58,400 --> 00:08:03,600
+ ethical as well as an economical impetus to recycle, because recycling of metals is generally
+
+107
+00:08:03,600 --> 00:08:08,880
+ cheaper than making new metals. With plastics, this isn't always or even usually the case.
+
+108
+00:08:08,880 --> 00:08:12,320
+ Recycling of plastics can be quite an expensive process because just like metals,
+
+109
+00:08:12,400 --> 00:08:15,520
+ you don't really want to mix and match different things when you're recycling them.
+
+110
+00:08:15,520 --> 00:08:19,600
+ And sorting of plastics, especially small bits of plastic that are kind of amongst a bunch of
+
+111
+00:08:19,600 --> 00:08:24,320
+ other rubbish isn't particularly easy to do. On top of that, only a subset of plastic can actually
+
+112
+00:08:24,320 --> 00:08:28,880
+ be remelted and turned into other shapes. Some plastics, some polymers, the best we can hope
+
+113
+00:08:28,880 --> 00:08:33,840
+ for is to shred them down and use them in an aggregate or a playground mix or something.
+
+114
+00:08:33,840 --> 00:08:37,600
+ We're going to talk more about recyclability when we meet some specific plastics over the next
+
+115
+00:08:37,600 --> 00:08:41,920
+ couple of videos, but for now what you should be aware of is that most plastic products in most
+
+116
+00:08:41,920 --> 00:08:47,120
+ parts of the world are mandated to have a recycle mark stamped onto them. Generally speaking,
+
+117
+00:08:47,120 --> 00:08:51,840
+ as the number on this recycle mark increases, the recyclability tends to decrease.
+
+118
+00:08:51,840 --> 00:08:55,840
+ A recycle mark of one like what I have on this bottle here corresponds to polyethylene,
+
+119
+00:08:55,840 --> 00:09:01,120
+ which is very recyclable. A recycle mark of seven corresponds to other and is a catch-all for a
+
+120
+00:09:01,120 --> 00:09:05,280
+ bunch of plastics that are generally not very recyclable. As we meet some specific
+
+121
+00:09:05,280 --> 00:09:09,200
+ polymers over the next few videos, we'll talk about their relative recyclability and
+
+122
+00:09:09,200 --> 00:09:11,200
+ whether or not it's done at scale.

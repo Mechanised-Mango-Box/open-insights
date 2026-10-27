@@ -1,0 +1,287 @@
+1
+00:00:00,000 --> 00:00:03,960
+ Mathematical models come in all shapes and sizes and in this video we're
+
+2
+00:00:03,960 --> 00:00:07,520
+ going to talk about some of the different classifications for these. Now I
+
+3
+00:00:07,520 --> 00:00:11,040
+ know what you'll probably be thinking oh my god a definitions video I better
+
+4
+00:00:11,040 --> 00:00:14,640
+ skip this one and I don't blame you definitions are ordinarily pretty
+
+5
+00:00:14,640 --> 00:00:18,960
+ boring but if we're going to go on and develop 30, 40, 50 of these models
+
+6
+00:00:18,960 --> 00:00:21,440
+ together over the next couple of weeks then it's really important we
+
+7
+00:00:21,440 --> 00:00:24,520
+ understand how to classify them and the differences between the different
+
+8
+00:00:24,520 --> 00:00:28,640
+ types. A bit of the challenge for you. Write some of these down and over the next
+
+9
+00:00:28,720 --> 00:00:32,440
+ couple of weeks as we start to develop models you should be able to work out
+
+10
+00:00:32,440 --> 00:00:36,160
+ which of these classifications apply to the types of models that we've made. To
+
+11
+00:00:36,160 --> 00:00:40,440
+ kick things off let's talk about continuous time models. These are mathematical
+
+12
+00:00:40,440 --> 00:00:44,600
+ models that are defined for all time instance in a period of interest. An
+
+13
+00:00:44,600 --> 00:00:48,160
+ example of this would be something like an analytical solution to an ODE.
+
+14
+00:00:48,160 --> 00:00:52,480
+ What you get back is an equation that no matter what time you plug in it's always
+
+15
+00:00:52,480 --> 00:00:57,600
+ defined. Kind of the antithesis to this is a discrete time model. A discrete
+
+16
+00:00:57,600 --> 00:01:01,680
+ time model is only defined for particular instance of time in a period of
+
+17
+00:01:01,680 --> 00:01:05,760
+ interest. An example of this would be something like a numerical solution to an
+
+18
+00:01:05,760 --> 00:01:10,120
+ ODE where you start from an initial position and you step forward in time and
+
+19
+00:01:10,120 --> 00:01:14,320
+ kind of discrete increments. The short fall of a model like this is that if
+
+20
+00:01:14,320 --> 00:01:17,640
+ you're interested in a period of time in between where the discrete time
+
+21
+00:01:17,640 --> 00:01:21,360
+ model might be defined you'll have to do something like interpolate or
+
+22
+00:01:21,360 --> 00:01:25,440
+ possibly reevaluate the model with that particular time instance included in
+
+23
+00:01:25,520 --> 00:01:29,080
+ the values that you're solving for. Parametric models as the name suggests are
+
+24
+00:01:29,080 --> 00:01:34,080
+ those which can be defined entirely in terms of a finite set of parameters. An
+
+25
+00:01:34,080 --> 00:01:38,160
+ example to this would be something like let's say a curve fit. I'm just a noisy
+
+26
+00:01:38,160 --> 00:01:43,040
+ data. So in this case the parameters would be the coefficients of the x,
+
+27
+00:01:43,040 --> 00:01:47,040
+ x squared, x cubed and so on terms that you used to fit the data that you're
+
+28
+00:01:47,040 --> 00:01:52,560
+ seeing. The kind of evil twin is the non parametric model. These are those
+
+29
+00:01:52,560 --> 00:01:57,160
+ which can't be described by a finite set of parameters. An example to this
+
+30
+00:01:57,160 --> 00:02:00,360
+ would be doing something like building an interpolant to some noisy data.
+
+31
+00:02:00,360 --> 00:02:04,480
+ Where at each time instance if you're in between those discrete data points
+
+32
+00:02:04,480 --> 00:02:07,960
+ you need to go and look up what the value would be by doing some sort of
+
+33
+00:02:07,960 --> 00:02:11,800
+ interpolation. In the context of models we're going to do it in this course and
+
+34
+00:02:11,800 --> 00:02:14,880
+ when they become non parametric either by inclusion of some kind of
+
+35
+00:02:14,880 --> 00:02:19,160
+ interpolation or maybe a lookup table to describe some sort of relationship
+
+36
+00:02:19,160 --> 00:02:22,960
+ within the model. Typically they go in and end up being slower to simulate.
+
+37
+00:02:22,960 --> 00:02:27,400
+ Deterministic models are those which neglect any uncertainty in the model or
+
+38
+00:02:27,400 --> 00:02:32,240
+ uncertainty in the input and give you an answer that's defined entirely determined
+
+39
+00:02:32,240 --> 00:02:37,040
+ entirely by those inputs and the model. Deterministic models can't tell us
+
+40
+00:02:37,040 --> 00:02:40,680
+ anything about how good the predictions are and it's up to us in this case the
+
+41
+00:02:40,680 --> 00:02:44,160
+ engineer is to look at the predictions and apply an appropriate factor of
+
+42
+00:02:44,160 --> 00:02:48,720
+ safety to cover for uncertainty in the inputs or uncertainty in the model itself
+
+43
+00:02:48,720 --> 00:02:52,080
+ and how well we know the parameters or how well we've actually captured what's
+
+44
+00:02:52,080 --> 00:02:56,720
+ going on in reality. Probabilistic models are those which build in the confidence
+
+45
+00:02:56,720 --> 00:03:00,760
+ that we have in the input and confidence that we have in our model. Perhaps I
+
+46
+00:03:00,760 --> 00:03:03,960
+ should say uncertainty we have in the input and uncertainty we have in the model
+
+47
+00:03:03,960 --> 00:03:07,880
+ and use that as part of the modeling process to also determine some sort of
+
+48
+00:03:07,880 --> 00:03:12,080
+ confidence beyond on the output on the estimate. Probabilistic models are able to
+
+49
+00:03:12,080 --> 00:03:15,920
+ give us some sort of idea of when the model is predicting something accurately
+
+50
+00:03:15,920 --> 00:03:19,480
+ and when it's predicting something maybe not so well though the
+
+51
+00:03:19,480 --> 00:03:22,440
+ responsibility is still on us the engineers to interpret this information
+
+52
+00:03:22,440 --> 00:03:26,160
+ appropriately. Sanctuary models have parameters that don't vary with time.
+
+53
+00:03:26,160 --> 00:03:30,720
+ Non-stationary or time-variing models have parameters that do vary with time.
+
+54
+00:03:30,720 --> 00:03:35,280
+ The classic example of this is something like a rocket ship whose mass decreases
+
+55
+00:03:35,280 --> 00:03:40,000
+ as time goes on as we burn the fuel. Static models are in a sense not time
+
+56
+00:03:40,000 --> 00:03:44,600
+ sensitive. The current values of the predictions only depend on the current
+
+57
+00:03:44,600 --> 00:03:48,160
+ values of the inputs. An example of this would be something like a finite
+
+58
+00:03:48,160 --> 00:03:51,720
+ element static structural model where you're predicting the stresses in a beam
+
+59
+00:03:51,720 --> 00:03:55,840
+ for example. And finally a dynamic model is kind of the opposite of this.
+
+60
+00:03:55,840 --> 00:04:00,680
+ Current values of the output depend on not only the present but also the
+
+61
+00:04:00,680 --> 00:04:05,640
+ past values of the input things evolve with time. In this course we're largely
+
+62
+00:04:05,640 --> 00:04:09,360
+ going to develop continuous time models though when we simulate them the
+
+63
+00:04:09,360 --> 00:04:13,040
+ results will likely be discrete time because we won't get analytical solutions
+
+64
+00:04:13,080 --> 00:04:17,000
+ to our models. We'll probably get numerical ones. The relationships that we use
+
+65
+00:04:17,000 --> 00:04:20,760
+ to build our models will probably be parametric but there may be some cases
+
+66
+00:04:20,760 --> 00:04:24,240
+ where we have to use non-parametric relationships and as a result the model
+
+67
+00:04:24,240 --> 00:04:26,920
+ ends up being non-parametric. We're only going to look at the
+
+68
+00:04:26,920 --> 00:04:31,080
+ domestic models in this course but if you're doing aerospace or electrical or
+
+69
+00:04:31,080 --> 00:04:35,320
+ megatronics engineering you'll know that see probabilistic models of further
+
+70
+00:04:35,320 --> 00:04:38,720
+ running your degree. And while our focus our interest is going to be on building
+
+71
+00:04:38,720 --> 00:04:42,080
+ dynamic models in this course we might take a look at one or two static ones as
+
+72
+00:04:42,080 --> 00:04:44,320
+ well.

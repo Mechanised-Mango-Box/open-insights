@@ -1,0 +1,327 @@
+1
+00:00:00,000 --> 00:00:04,560
+ This might not be something you're used to hearing, but I want every single
+
+2
+00:00:04,560 --> 00:00:10,080
+ student to HDMI course and I've come to realize over the years not that it was a
+
+3
+00:00:10,080 --> 00:00:13,720
+ secret that there are many different kinds of learners and that people learn
+
+4
+00:00:13,720 --> 00:00:18,160
+ differently and to that end I've done my best to develop resources to cater
+
+5
+00:00:18,160 --> 00:00:22,080
+ to all different kinds of learners and in this video I'd like to briefly talk
+
+6
+00:00:22,080 --> 00:00:25,360
+ about all of the different resources that are available to help you succeed in
+
+7
+00:00:25,360 --> 00:00:29,200
+ end 2040. By and large your first port of call for any question you have
+
+8
+00:00:29,200 --> 00:00:32,560
+ about the course should be the course over the use spreadsheet. I'll put a link
+
+9
+00:00:32,560 --> 00:00:36,120
+ to this spreadsheet up now and you can access it irrespective of whether you're
+
+10
+00:00:36,120 --> 00:00:39,840
+ logged into Blackboard. This spreadsheet lists every topic we cover in the
+
+11
+00:00:39,840 --> 00:00:44,080
+ lectures every problem we're going to do in the tutorials. Everything I expect you
+
+12
+00:00:44,080 --> 00:00:48,240
+ to do is assign reading from the textbook. Every problem that I expect you to do
+
+13
+00:00:48,240 --> 00:00:52,200
+ is homework and by doing these things you're almost going to guarantee that you'll
+
+14
+00:00:52,200 --> 00:00:56,400
+ be ready to hedge to the course. It also lists your lab assignments when they're
+
+15
+00:00:56,400 --> 00:00:59,880
+ out and when they're due and the other weekly assessments that you'll do
+
+16
+00:00:59,880 --> 00:01:03,640
+ through Blackboard. I am concerned with your ability to understand the course
+
+17
+00:01:03,640 --> 00:01:08,040
+ content not to be organized, although I can see that it is an important skill for
+
+18
+00:01:08,040 --> 00:01:11,880
+ an engineer to have. So this spreadsheet I've designed to help you with the
+
+19
+00:01:11,880 --> 00:01:19,440
+ latter so that you can excel at the former. I use dropbox links for all my files
+
+20
+00:01:19,680 --> 00:01:22,480
+ so you'll always have the latest version if you're downloading something from the
+
+21
+00:01:22,480 --> 00:01:25,600
+ course over the use spreadsheet or from Blackboard. There are two textbooks
+
+22
+00:01:25,600 --> 00:01:29,200
+ available for this course for those who like to read. The first written by
+
+23
+00:01:29,200 --> 00:01:33,280
+ Associate Professor Tristan Perez here at Newcastle is available for free for you
+
+24
+00:01:33,280 --> 00:01:36,880
+ to download on Blackboard. This should be considered the definitive resource.
+
+25
+00:01:36,880 --> 00:01:41,360
+ This is your Bible. Everything I say, everything I do in the lectures is
+
+26
+00:01:41,360 --> 00:01:45,200
+ summarizing what's written in the textbook and I've prescribed to readings for
+
+27
+00:01:45,200 --> 00:01:49,120
+ you every week to get the full picture from that textbook. The second half of the
+
+28
+00:01:49,120 --> 00:01:53,280
+ course utilizes modern control systems by Dorphin Bishop. This one unfortunately
+
+29
+00:01:53,280 --> 00:01:56,960
+ isn't free but it is an excellent resource and you probably won't regret buying it
+
+30
+00:01:56,960 --> 00:02:00,560
+ and having it in your library. Of course if you're going to have trouble purchasing
+
+31
+00:02:00,560 --> 00:02:04,800
+ that I understand I was a student not so long ago. There are copies available
+
+32
+00:02:04,800 --> 00:02:08,640
+ to borrow from the University Library. As you've already interacted with and
+
+33
+00:02:08,640 --> 00:02:12,720
+ you're interacting with right now all of our course lecture videos are being
+
+34
+00:02:12,720 --> 00:02:16,400
+ uploaded via YouTube. I've seen some research recently that suggests that
+
+35
+00:02:16,400 --> 00:02:19,440
+ students engage better with things that are uploaded on this platform
+
+36
+00:02:19,440 --> 00:02:22,800
+ and YouTube certainly seems to handle some things that our
+
+37
+00:02:22,800 --> 00:02:28,400
+ in-built panopto system doesn't so well like for example if you're watching on a mobile device.
+
+38
+00:02:28,400 --> 00:02:31,840
+ It also gives me some statistics about how you're engaging with the video
+
+39
+00:02:31,840 --> 00:02:35,840
+ which can help me tune the videos to make them more appropriate for you.
+
+40
+00:02:35,840 --> 00:02:38,880
+ If you have some sort of accessibility problem with YouTube we're embedding the
+
+41
+00:02:38,880 --> 00:02:42,560
+ videos inside of Blackboard and of course I'm happy to provide them to you as
+
+42
+00:02:42,560 --> 00:02:45,680
+ MP4 files and what any other way that we can to support you
+
+43
+00:02:45,680 --> 00:02:50,720
+ learning just get in touch and let me know. To accompany the videos I've made a set of
+
+44
+00:02:50,720 --> 00:02:55,040
+ cliff notes I guess lecture summaries. These were born out of the notes that I
+
+45
+00:02:55,040 --> 00:02:59,040
+ taught when I did what became this course many years ago.
+
+46
+00:02:59,040 --> 00:03:02,000
+ They shouldn't be considered definitive resource if anything they're just
+
+47
+00:03:02,000 --> 00:03:05,520
+ prompt for me but they're good as the summary and kind of highlight the key
+
+48
+00:03:05,520 --> 00:03:09,280
+ points that are important from each lecture. So in addition to watching the video
+
+49
+00:03:09,280 --> 00:03:12,320
+ and reading the textbook if you're just looking for a quick summary
+
+50
+00:03:12,320 --> 00:03:16,640
+ on the cliff notes of the way to go. The end 2440 problem booklet is also
+
+51
+00:03:16,640 --> 00:03:20,320
+ available for download for free on Blackboard and this is a collection of
+
+52
+00:03:20,320 --> 00:03:23,520
+ over 100 problems that were either written specifically for this course
+
+53
+00:03:23,520 --> 00:03:27,600
+ or carefully curated for this course. In most cases a work solution is
+
+54
+00:03:27,600 --> 00:03:31,440
+ available and annotated and and in some cases problems will even have a
+
+55
+00:03:31,440 --> 00:03:35,280
+ walkthrough video uploaded to Blackboard. You'll be able to tell what kind of
+
+56
+00:03:35,280 --> 00:03:38,240
+ resources are available for each problem and whether they're also covered
+
+57
+00:03:38,240 --> 00:03:42,560
+ in a lecture or a tutorial by the marking next to each problem that indicates
+
+58
+00:03:42,560 --> 00:03:46,080
+ whether it's a lecture problem or tutorial problem has a worked example
+
+59
+00:03:46,080 --> 00:03:49,680
+ etc. Solving problems really is the best way to learn
+
+60
+00:03:49,680 --> 00:03:52,800
+ and every problem in the problem booklet has been included for a reason. It
+
+61
+00:03:52,800 --> 00:03:55,840
+ meets a specific learning outcome. The more problems you complete
+
+62
+00:03:55,840 --> 00:03:58,800
+ either on your own or with the assistance of the videos the better you're
+
+63
+00:03:58,800 --> 00:04:02,080
+ going to be at the course content. We've also started the process of
+
+64
+00:04:02,080 --> 00:04:05,360
+ building some kinesthetic learning aids for those of you who prefer to
+
+65
+00:04:05,360 --> 00:04:08,560
+ learn by working with your hands. And one of these has to do with
+
+66
+00:04:08,560 --> 00:04:12,160
+ sign conventions around rotating systems so please feel free to reach out
+
+67
+00:04:12,160 --> 00:04:15,520
+ and let me know if you'd like to have a play with that. By and large the most
+
+68
+00:04:15,520 --> 00:04:19,440
+ accessible resource however is going to be access to myself
+
+69
+00:04:19,440 --> 00:04:22,960
+ associate professor young and doctorate in there but all you need to do is
+
+70
+00:04:22,960 --> 00:04:25,760
+ reach out and we'll be more than happy to meet with you.
+
+71
+00:04:25,760 --> 00:04:29,680
+ In most cases probably due to the COVID situation by Zoom.
+
+72
+00:04:29,680 --> 00:04:33,200
+ I certainly am looking after elderly parents and won't be able to meet face-to-face
+
+73
+00:04:33,200 --> 00:04:36,640
+ but Zoom discord however you want to communicate.
+
+74
+00:04:36,640 --> 00:04:39,920
+ We'll make an effort to try and meet you where you are. If you'd like you should
+
+75
+00:04:39,920 --> 00:04:43,280
+ feel free to send an email outside of business hours or on the weekend.
+
+76
+00:04:43,280 --> 00:04:45,920
+ You might get lucky and I'll be with my phone and answer it.
+
+77
+00:04:45,920 --> 00:04:49,680
+ It's certainly worth a try. I won't be offended if you send me an email on a weekend.
+
+78
+00:04:49,680 --> 00:04:51,840
+ If you are going to send me an email please include
+
+79
+00:04:51,840 --> 00:04:56,640
+ age 2440 one word in the subject line because I have a filter set up my email
+
+80
+00:04:56,640 --> 00:05:00,320
+ program to make sure that those don't go to clutter or spam or
+
+81
+00:05:00,320 --> 00:05:04,400
+ any of the other silly mailboxes. And that's it. I hope these resources help you
+
+82
+00:05:04,400 --> 00:05:09,040
+ learn and if there's anything else you need please feel free to get in touch.

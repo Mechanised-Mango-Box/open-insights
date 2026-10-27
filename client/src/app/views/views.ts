@@ -3,9 +3,22 @@
  * and HomeComponent (whose instructions link straight to a step). Kept out of both
  * components so neither has to import the other.
  */
-export type ViewId = 'home' | 'import' | 'scan' | 'export' | 'analysis' | 'recommend' | 'settings';
+export type ViewId =
+  | 'home'
+  | 'import'
+  | 'scan'
+  | 'export'
+  | 'analysis'
+  | 'recommend'
+  | 'recommend-model'
+  | 'recommend-results'
+  | 'settings';
 
-export type View = { id: ViewId; label: string; icon: string; blurb: string };
+/**
+ * A view with subpages is never shown itself: the sidebar lists the subpages beneath it,
+ * and going to the parent lands on whichever of them was open last.
+ */
+export type View = { id: ViewId; label: string; icon: string; blurb: string; subpages?: View[] };
 
 /** Reached by clicking the app name at the top of the sidebar, not by a nav item. */
 export const HOME: View = {
@@ -24,13 +37,15 @@ export const WORKFLOW: View[] = [
     id: 'import',
     label: 'Import',
     icon: 'add',
-    blurb: 'Create records, or bring them in from a YouTube content export or video files.',
+    blurb:
+      'Bring in YouTube reports, video files or an earlier export, with a guide to getting each.',
   },
   {
     id: 'scan',
     label: 'Scan',
     icon: 'search',
-    blurb: 'Extract transcripts and scene stats across the selected records.',
+    blurb:
+      'Extract transcripts, scene stats, screen text and audio stats across the selected records.',
   },
   {
     id: 'export',
@@ -42,13 +57,27 @@ export const WORKFLOW: View[] = [
     id: 'analysis',
     label: 'Analysis',
     icon: 'insert_chart',
-    blurb: 'Correlations and distributions across the whole dataset.',
+    blurb: 'Correlations and distributions across your records, or just the selected ones.',
   },
   {
     id: 'recommend',
     label: 'Recommend',
     icon: 'online_prediction',
-    blurb: "Ask the server's model what it makes of a single video.",
+    blurb: "Choose one of the server's models and ask what it makes of a single video.",
+    subpages: [
+      {
+        id: 'recommend-model',
+        label: 'Model',
+        icon: 'model_training',
+        blurb: "Choose which of the server's models to ask, and read what its card says about it.",
+      },
+      {
+        id: 'recommend-results',
+        label: 'Results',
+        icon: 'query_stats',
+        blurb: 'Pick one video and read what the chosen model makes of it.',
+      },
+    ],
   },
 ];
 
@@ -56,7 +85,7 @@ export const SETTINGS: View = {
   id: 'settings',
   label: 'Settings',
   icon: 'settings',
-  blurb: 'Choose which dataset server this browser talks to.',
+  blurb: 'Choose which server this browser talks to, and check that it answers.',
 };
 
 /**

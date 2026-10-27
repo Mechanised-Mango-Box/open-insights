@@ -1,0 +1,251 @@
+1
+00:00:00,000 --> 00:00:05,000
+ Alright, we're going to spend a few videos talking about the basics of linearization.
+
+2
+00:00:05,000 --> 00:00:10,000
+ I know this might seem dry or might seem like revision, but I think it's extremely important.
+
+3
+00:00:10,000 --> 00:00:18,000
+ Linearizing a state-space model, keeping in mind that state-space models are kind of multi-variable vector equations, is a non-trivial task.
+
+4
+00:00:18,000 --> 00:00:20,000
+ It's actually pretty difficult.
+
+5
+00:00:20,000 --> 00:00:23,000
+ So what we're going to do is kind of walk through the different levels of complexity.
+
+6
+00:00:23,000 --> 00:00:29,000
+ We're going to start with linearizing scalar functions, and then we're going to move on to linearizing multi-variable functions.
+
+7
+00:00:29,000 --> 00:00:34,000
+ Finally, we'll get to linearizing state-space models.
+
+8
+00:00:34,000 --> 00:00:45,000
+ I'm going to try and draw some analogs between these things so that hopefully you start to see that there's a pattern underneath all of it that linearization, kind of irrespective of the dimension, always kind of works the same way.
+
+9
+00:00:45,000 --> 00:00:51,000
+ And maybe in contrast to your previous studies, I'm not going to do this strictly from the perspective of the Taylor series.
+
+10
+00:00:51,000 --> 00:00:53,000
+ I'm going to try and do it a little bit graphically.
+
+11
+00:00:53,000 --> 00:00:57,000
+ So in this video, we're going to talk about 1D linearization.
+
+12
+00:00:57,000 --> 00:01:01,000
+ Say that I have a function, f of x, that looks like this.
+
+13
+00:01:01,000 --> 00:01:07,000
+ And that I want to build a linearization to that function about some point xa at a approximation point.
+
+14
+00:01:07,000 --> 00:01:12,000
+ Depending on where xa is in the function, that linearization is going to look pretty different, right?
+
+15
+00:01:12,000 --> 00:01:14,000
+ If it's over here, it's quite steep.
+
+16
+00:01:14,000 --> 00:01:16,000
+ If it's over here, it's quite shallow.
+
+17
+00:01:16,000 --> 00:01:22,000
+ But in general, it's a straight line that it's tangent to the function at the point where I'm approximating.
+
+18
+00:01:22,000 --> 00:01:25,000
+ kind of a key thing to note is our approximation.
+
+19
+00:01:25,000 --> 00:01:28,000
+ Our linear approximation is perfect at the point where we approximate.
+
+20
+00:01:28,000 --> 00:01:30,000
+ This is kind of by definition.
+
+21
+00:01:30,000 --> 00:01:34,000
+ And it gets worse the further away from where we approximated.
+
+22
+00:01:34,000 --> 00:01:41,000
+ So given some nonlinear function f and an approximation point xa for approximation,
+
+23
+00:01:41,000 --> 00:01:46,000
+ our goal is to build a linear approximation to this function, which we're going to call f tilde,
+
+24
+00:01:46,000 --> 00:01:51,000
+ that will allow us to evaluate it for some other x, some query point,
+
+25
+00:01:51,000 --> 00:01:57,000
+ maybe I'll call it xq, to work out what f tilde or xq is.
+
+26
+00:01:57,000 --> 00:02:01,000
+ And there's a somewhat unsatisfying kind of explanation for how this works.
+
+27
+00:02:01,000 --> 00:02:03,000
+ If you look at it from the perspective of the Taylor series,
+
+28
+00:02:03,000 --> 00:02:07,000
+ you can start with the kind of higher order terms and boil it down to a linear term.
+
+29
+00:02:07,000 --> 00:02:10,000
+ And that'll give you the equation for your linearization.
+
+30
+00:02:10,000 --> 00:02:14,000
+ But I've never really been wholly satisfied with how that works.
+
+31
+00:02:14,000 --> 00:02:16,000
+ So here's the graphical approach.
+
+32
+00:02:16,000 --> 00:02:21,000
+ If I want to know f tilde at xq, the value of my approximation at the query point,
+
+33
+00:02:21,000 --> 00:02:28,000
+ the all I need to do is kind of work out the value of the function at my approximation point and add the difference, right?
+
+34
+00:02:28,000 --> 00:02:29,000
+ What is that difference?
+
+35
+00:02:29,000 --> 00:02:32,000
+ Well, our approximation is a straight line, right?
+
+36
+00:02:32,000 --> 00:02:34,000
+ And remember what we know about straight lines.
+
+37
+00:02:34,000 --> 00:02:37,000
+ If you know its rise and you know its run, you can calculate its gradient.
+
+38
+00:02:37,000 --> 00:02:39,000
+ Or set another way.
+
+39
+00:02:39,000 --> 00:02:42,000
+ If you know its gradient and you know its run,
+
+40
+00:02:42,000 --> 00:02:46,000
+ the kind of distance in the horizontal direction, you can calculate the rise.
+
+41
+00:02:46,000 --> 00:02:49,000
+ And that's exactly the approach we take in with building our linearization.
+
+42
+00:02:49,000 --> 00:02:53,000
+ The value of our approximation at the query point, f tilde at xq,
+
+43
+00:02:53,000 --> 00:02:57,000
+ is just the value of the function at our approximation point plus the difference.
+
+44
+00:02:57,000 --> 00:03:03,000
+ Plus the gradient of our approximation times the distance from our approximation to the query point.
+
+45
+00:03:03,000 --> 00:03:05,000
+ What is the gradient of this line?
+
+46
+00:03:05,000 --> 00:03:09,000
+ Well, by definition, since it's a straight line, the gradient is the derivative.
+
+47
+00:03:09,000 --> 00:03:11,000
+ The derivative of the nonlinear function.
+
+48
+00:03:11,000 --> 00:03:14,000
+ Let me say that again and be a little bit more general this time.
+
+49
+00:03:14,000 --> 00:03:16,000
+ If I have some nonlinear function f,
+
+50
+00:03:16,000 --> 00:03:20,000
+ and I want to take a linear approximation to that function about the point xa,
+
+51
+00:03:20,000 --> 00:03:22,000
+ the approximation point,
+
+52
+00:03:22,000 --> 00:03:26,000
+ then all I need to do is kind of work out the value of the function at xa
+
+53
+00:03:26,000 --> 00:03:29,000
+ and add to that kind of the gradient of my approximation,
+
+54
+00:03:29,000 --> 00:03:32,000
+ the derivative of the function at the approximation point,
+
+55
+00:03:32,000 --> 00:03:36,000
+ multiplied by the distance from my approximation to the point x that I care about.
+
+56
+00:03:36,000 --> 00:03:39,000
+ These two concepts, the kind of graphical approach,
+
+57
+00:03:39,000 --> 00:03:45,000
+ but also the fact that a linearization is just kind of a function value plus a gradient times the distance.
+
+58
+00:03:45,000 --> 00:03:51,000
+ They're going to keep coming up whether we're talking about 1D linearization or multi-variable linearization,
+
+59
+00:03:51,000 --> 00:03:56,000
+ or multi-variable vector linearization or linearization of state-space models.
+
+60
+00:03:56,000 --> 00:03:58,000
+ So we'll see it again in a couple of videos time.
+
+61
+00:03:58,000 --> 00:04:02,000
+ But before we do, I think it's wise for us to work through a 1D problem.
+
+62
+00:04:02,000 --> 00:04:05,000
+ Just so we build up a little bit of muscle memory and get some intuition.
+
+63
+00:04:05,000 --> 00:04:08,000
+ Let's have a go at problem 6.1 together.

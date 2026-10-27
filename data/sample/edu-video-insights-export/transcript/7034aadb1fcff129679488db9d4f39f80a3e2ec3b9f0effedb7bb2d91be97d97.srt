@@ -1,0 +1,303 @@
+1
+00:00:00,000 --> 00:00:03,760
+ At the end of every week, we're going to take a step back and look at the bigger picture,
+
+2
+00:00:03,760 --> 00:00:08,560
+ a material selection, how you choose between different materials and different manufacturing
+
+3
+00:00:08,560 --> 00:00:12,800
+ processes based on the stuff that we've learned. Given that this week we've been talking about
+
+4
+00:00:12,800 --> 00:00:17,280
+ material properties, it makes perfect sense that the first thing we're talking about in the
+
+5
+00:00:17,280 --> 00:00:24,000
+ context of material selection is a material's index. But simply, a material's index is a characteristic
+
+6
+00:00:24,000 --> 00:00:29,440
+ or a property that you'd like to minimize or maximize in your design by your choice of material.
+
+7
+00:00:29,440 --> 00:00:34,720
+ Material indices can be quite simple or very, very complex. I think maybe the simplest
+
+8
+00:00:34,720 --> 00:00:40,000
+ material index is simply a property, one property that you would like to minimize or maximize.
+
+9
+00:00:40,000 --> 00:00:44,640
+ Say for example, I'm designing a component and the most important thing, maybe the only
+
+10
+00:00:44,640 --> 00:00:50,480
+ important thing to me, is that this component never yields. What I want irrespective of all of the
+
+11
+00:00:50,480 --> 00:00:56,080
+ other properties, weight, cost, stiffness, whatever, is to make sure that my component is never
+
+12
+00:00:56,080 --> 00:01:01,040
+ going to plastically deform. I don't care how much it elastically deforms, I don't want it to
+
+13
+00:01:01,040 --> 00:01:07,040
+ plastically deform. In that case, I would set my materials index, which I normally give the letter M,
+
+14
+00:01:07,040 --> 00:01:12,480
+ to be equal to the yield strength of a material. And what I want to do in my selection of material
+
+15
+00:01:12,480 --> 00:01:19,120
+ from the pool of all materials that exist is maximize this index, maximize M, maximize the yield
+
+16
+00:01:19,120 --> 00:01:24,720
+ strength. Edgy Pak makes it really easy to rank materials by some sort of material index.
+
+17
+00:01:24,800 --> 00:01:28,160
+ When you open the program up, the first thing you'll see is a welcome screen that
+
+18
+00:01:28,160 --> 00:01:33,440
+ asks you to select which database you'd like to use. Edgy Pak has three levels of database
+
+19
+00:01:33,440 --> 00:01:38,640
+ in kind of increasing complexity and increasing completeness. For now, let's have a look at the
+
+20
+00:01:38,640 --> 00:01:44,560
+ level one database, which is kind of like the Hasbro, my first materials database. Later on,
+
+21
+00:01:44,560 --> 00:01:49,600
+ we'll talk about using the level three database, which contains not just one entry for steel,
+
+22
+00:01:49,600 --> 00:01:54,320
+ but entries for every single possible steel that you might want to use in your designs.
+
+23
+00:01:54,400 --> 00:01:58,400
+ Once you're inside of a database, you can browse for individual materials and take a look
+
+24
+00:01:58,400 --> 00:02:02,880
+ through when you can imagine going through each of these and one by one noting down what your material
+
+25
+00:02:02,880 --> 00:02:07,040
+ index for each one is, in this case, the yield strength, making a big listing comparing them,
+
+26
+00:02:07,040 --> 00:02:12,000
+ but Edgy Pak has a built-in functionality to make this easy. If you hit the chart select button
+
+27
+00:02:12,000 --> 00:02:17,520
+ and the chart index stage, you can then plot for every material in the database the index
+
+28
+00:02:17,520 --> 00:02:21,760
+ you're interested in. When your index is just a single property, it's very easy to select that
+
+29
+00:02:22,240 --> 00:02:26,160
+ from the dropdown. If the property you want isn't in the dropdown, you might need to go to one
+
+30
+00:02:26,160 --> 00:02:30,160
+ of those more advanced databases that we talked about. Once you've selected the property,
+
+31
+00:02:30,160 --> 00:02:34,880
+ Edgy Pak will then give you this beautiful graph of all the materials in the database with respect
+
+32
+00:02:34,880 --> 00:02:39,840
+ to the index that you've defined. Every bar that you see on this plot is an individual material,
+
+33
+00:02:39,840 --> 00:02:45,440
+ and the height of that bar represents some variation in this index for that material. As you can
+
+34
+00:02:45,440 --> 00:02:50,320
+ imagine, not all mild seals have the same yield strength, not all carbon fibers have the same yield
+
+35
+00:02:50,320 --> 00:02:54,400
+ yield strength, and as a result, there's some variation in that property that corresponds to
+
+36
+00:02:54,400 --> 00:02:58,880
+ categorizing these things in this way. You can click any of these materials to add a label,
+
+37
+00:02:58,880 --> 00:03:03,200
+ and over on the left-hand side, there's a little box where you can see all of these materials,
+
+38
+00:03:03,200 --> 00:03:07,280
+ and you can rank them by the index you're interested in. Ranking materials by an index,
+
+39
+00:03:07,280 --> 00:03:11,040
+ which is a single property's kind of boring, it's the smooth brain approach to this problem.
+
+40
+00:03:11,040 --> 00:03:15,120
+ What you want to be doing is the galaxy brain approach to this problem, and often in materials
+
+41
+00:03:15,120 --> 00:03:18,880
+ engineering design, you're trying to deal with some kind of trade-off. You might want the highest
+
+42
+00:03:18,880 --> 00:03:23,680
+ yield strength for a particular weight, for example. If that was the case, you build a material
+
+43
+00:03:23,680 --> 00:03:29,360
+ index that looks like yield strength divided by density, since this quantity incentivizes a higher
+
+44
+00:03:29,360 --> 00:03:34,160
+ yield stress and penalizes a higher density. If we go back to edgy pack and you right-click the
+
+45
+00:03:34,160 --> 00:03:39,040
+ stage where we'd previously set out index to be just yield strength, and in the advanced button,
+
+46
+00:03:39,040 --> 00:03:44,080
+ we build our own index, which looks like strength divided by density. What we'll see is a very
+
+47
+00:03:44,080 --> 00:03:49,200
+ different looking plot, one that captures both of these objectives. Now, instead of low alloy
+
+48
+00:03:49,200 --> 00:03:53,760
+ steel is being the best material for our index, a carbon fiber has reached the top of the list,
+
+49
+00:03:53,760 --> 00:03:58,000
+ because it gives us the best strength with respect to weight. And so by building an index,
+
+50
+00:03:58,000 --> 00:04:02,240
+ the captures both of these properties were able to make a decision that incorporates information
+
+51
+00:04:02,240 --> 00:04:07,520
+ about both of these things. If you have two potentially competing objectives, another way that you
+
+52
+00:04:07,520 --> 00:04:12,800
+ can visualize them in edgy pack is by putting one on each axis. If we go back and edit our stage,
+
+53
+00:04:12,800 --> 00:04:17,520
+ make the x-axis density and make the y-axis yield strength, then what we'll see now in
+
+54
+00:04:17,520 --> 00:04:22,400
+ edgy pack are bubbles corresponding to every material, just how like with one variable a bar
+
+55
+00:04:22,400 --> 00:04:27,120
+ was needed to capture variation of a property within a particular material. When you're plotting
+
+56
+00:04:27,120 --> 00:04:31,360
+ one property against another, bubbles are needed to capture variation in the kind of property on
+
+57
+00:04:31,360 --> 00:04:36,400
+ the y-axis and the property on the x-axis. Just like with the bar plot, you can click individual
+
+58
+00:04:36,400 --> 00:04:40,400
+ bubbles to put labels on materials, and there's actually a button to put family envelopes over
+
+59
+00:04:40,400 --> 00:04:44,960
+ the bubbles so you can see, for example, how all metals behave on this kind of graph. The key
+
+60
+00:04:44,960 --> 00:04:49,520
+ point when looking at one property versus another is identifying which parts of the graph represent
+
+61
+00:04:49,520 --> 00:04:55,200
+ your best materials. In this case, because we have yield strength on the y-axis, our best materials
+
+62
+00:04:55,200 --> 00:05:00,000
+ are those toward the top. Because we have density on the x-axis and we generally want lightweight
+
+63
+00:05:00,000 --> 00:05:04,640
+ designs, our best materials are those which are on the left. Thus, if there were a material in
+
+64
+00:05:04,640 --> 00:05:08,400
+ the top left of the graph, that would probably be the one we're after. In this case,
+
+65
+00:05:08,400 --> 00:05:13,520
+ there doesn't seem to be any particular standout material. Instead, for every possible x-point,
+
+66
+00:05:13,520 --> 00:05:18,560
+ for every possible density, there is a material which provides the best possible yield strength.
+
+67
+00:05:18,560 --> 00:05:22,480
+ Those materials, the ones which in this case happen to lie along the top of the graph,
+
+68
+00:05:22,480 --> 00:05:27,680
+ are said to be on the paretto frontier. And if you like, they're all equally optimal in that
+
+69
+00:05:27,680 --> 00:05:32,000
+ for a particular density, they give you the best possible yield strength. Of course, if you
+
+70
+00:05:32,000 --> 00:05:36,560
+ would plot a straight line on this graph corresponding to yield strength divided by density,
+
+71
+00:05:36,560 --> 00:05:40,880
+ you'd very quickly identify the same results as we had in the previous approach to this
+
+72
+00:05:40,880 --> 00:05:45,200
+ problem, where carbon fiber reinforced polymer provides the best bang for your buck.
+
+73
+00:05:45,200 --> 00:05:48,400
+ With those fundamentals out of the way, that will probably do us for this week.
+
+74
+00:05:48,400 --> 00:05:52,000
+ Open up eduapack and have a go for yourself. There are some homework problems centered around
+
+75
+00:05:52,000 --> 00:05:56,000
+ that this week. And you'll probably find that eduapack is quite useful in helping you solve the
+
+76
+00:05:56,000 --> 00:06:06,400
+ tutorial problem for next week. Good luck!

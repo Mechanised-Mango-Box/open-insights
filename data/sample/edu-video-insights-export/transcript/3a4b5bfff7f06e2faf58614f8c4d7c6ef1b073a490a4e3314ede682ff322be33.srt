@@ -1,0 +1,327 @@
+1
+00:00:00,000 --> 00:00:04,240
+ In this video, we're going to talk about the other kind of engineering polymer thermosetting
+
+2
+00:00:04,240 --> 00:00:08,960
+ polymers. Thermosetting polymers, unlike thermoplastic polymers, are characterized by the fact that
+
+3
+00:00:08,960 --> 00:00:14,320
+ they don't soften or melt upon being heated. The mechanism behind this interesting behavior
+
+4
+00:00:14,320 --> 00:00:18,800
+ is also responsible for a lot of the mechanical properties of thermosetting polymers.
+
+5
+00:00:18,800 --> 00:00:23,360
+ It's cross-linking. A few videos ago, we already talked about how cross-linking can increase the
+
+6
+00:00:23,360 --> 00:00:27,840
+ stiffness and the strength and the melting temperature of an engineering polymer.
+
+7
+00:00:27,840 --> 00:00:32,720
+ Well, thermosetting polymers, upon being initially polymerized or cured, develop cross-links
+
+8
+00:00:32,720 --> 00:00:38,240
+ between 10 to 50% of their chains. This high degree of cross-linking sometimes results in a
+
+9
+00:00:38,240 --> 00:00:42,560
+ structure of these polymer chains, sometimes quarter and network. And generally means that
+
+10
+00:00:42,560 --> 00:00:47,520
+ thermosetting polymers are ordinary, a little bit more stiff, a little bit more strong and much more
+
+11
+00:00:47,520 --> 00:00:52,080
+ temperature resistant than their thermoplastic cousins. In fact, the degree of cross-linking
+
+12
+00:00:52,080 --> 00:00:56,960
+ and thermosetting polymers is so great that the energy required, the temperature required to
+
+13
+00:00:56,960 --> 00:01:02,160
+ melt them is actually more than what is required to break the bonds on the polymer chains.
+
+14
+00:01:02,160 --> 00:01:04,960
+ A few videos ago, we talked about how breaking bonds on these chains
+
+15
+00:01:04,960 --> 00:01:09,120
+ releases are fuel that makes these polymers quite flammable and consequently,
+
+16
+00:01:09,120 --> 00:01:14,240
+ thermosetting polymers will burn before they melt. Because they can't be melted back down,
+
+17
+00:01:14,240 --> 00:01:18,560
+ unlike thermoplastic polymers, thermosetting polymers are kind of a one and done.
+
+18
+00:01:18,640 --> 00:01:22,720
+ After the initial curing, after the initial formation of cross-links between the polymer chains,
+
+19
+00:01:22,720 --> 00:01:28,400
+ they can't really be reshaped. Consequently, curing of thermosetting polymers development of cross-links
+
+20
+00:01:28,400 --> 00:01:32,720
+ ordinarily needs to happen as part of whatever manufacturing process is going to give them
+
+21
+00:01:32,720 --> 00:01:37,680
+ their shape. Curing of thermosetting polymers can be kick-started by a variety of different mechanisms,
+
+22
+00:01:37,680 --> 00:01:42,480
+ that introduction of heat or illumination by UV light, and they can also be kick-started through
+
+23
+00:01:42,480 --> 00:01:47,520
+ introduction of some sort of catalyst or hardener. Thermosets are typically used over thermoplastics
+
+24
+00:01:47,520 --> 00:01:51,600
+ in situations where higher temperature resistance is called for. And particularly,
+
+25
+00:01:51,600 --> 00:01:55,360
+ we're maintaining their mechanical properties at these higher temperatures is important.
+
+26
+00:01:55,360 --> 00:01:58,880
+ Unlike thermoplastic, which have varying degrees of recyclability,
+
+27
+00:01:58,880 --> 00:02:03,600
+ thermosets typically aren't very recyclable at all. Because they can't be melted down and
+
+28
+00:02:03,600 --> 00:02:08,240
+ easily reshaped, recycling of thermosetting plastics normally entails shredding them up and
+
+29
+00:02:08,240 --> 00:02:11,680
+ using them in some sort of, I don't know, construction aggregate, for example.
+
+30
+00:02:11,680 --> 00:02:15,600
+ The world of thermosetting polymers is quite broad, and I'd say the differences between
+
+31
+00:02:15,600 --> 00:02:20,400
+ individual thermosetting polymers is slightly more nuanced, slightly more technical than that
+
+32
+00:02:20,400 --> 00:02:25,200
+ between the thermoplastic ones we've already met this week. And for that reason, I'm only going to
+
+33
+00:02:25,200 --> 00:02:30,640
+ talk about two different types of thermosetting polymer thermosetting resin here. I encourage you
+
+34
+00:02:30,640 --> 00:02:34,640
+ do a little bit of your own independent research, both by searching granted and consulting the
+
+35
+00:02:34,640 --> 00:02:39,280
+ resources that I've provided for you on the textbook pages for your thermosetting polymers.
+
+36
+00:02:39,280 --> 00:02:43,440
+ Because it's likely that if you're going to turn to a particular thermosetting polymer over
+
+37
+00:02:44,080 --> 00:02:48,880
+ the specifics of that situation are going to be very important. That being said, I would like to
+
+38
+00:02:48,880 --> 00:02:54,720
+ introduce you to two thermosetting polymers, polyester and epoxy. These thermosetting polymers are
+
+39
+00:02:54,720 --> 00:02:59,520
+ both what we call thermosetting resins, and they're very commonly used in the production of engineering
+
+40
+00:02:59,520 --> 00:03:04,400
+ composites. Many of these composites, which we will talk about in later weeks, consist of a fabric,
+
+41
+00:03:04,400 --> 00:03:10,240
+ which is in tuned in a polymer matrix, very often a polyester or an epoxy matrix.
+
+42
+00:03:10,320 --> 00:03:13,920
+ Polyester is one of these polymers, and it's likely one you've heard of before.
+
+43
+00:03:13,920 --> 00:03:18,880
+ Lots of clothing is made out of polyester, but it has a wide range of uses, including in the
+
+44
+00:03:18,880 --> 00:03:24,320
+ holes of boats, for example, that are made out of fiberglass. Polyester resins are usually cast or
+
+45
+00:03:24,320 --> 00:03:30,720
+ set or cured from a liquid state into a solar through the use of a catalyst. Liquid polyester
+
+46
+00:03:30,720 --> 00:03:37,200
+ resin consists of pre polymerized, unlinked chains of polyester dissolved in a styrene solution,
+
+47
+00:03:37,440 --> 00:03:43,520
+ styrene being a monomer here. To make a bulk polyester product, a catalyst is added to this mixture
+
+48
+00:03:43,520 --> 00:03:49,200
+ of styrene monomer and polyester chains, and the styrene monomer begins to polymerize
+
+49
+00:03:49,200 --> 00:03:54,400
+ forming crosslinks between the polyester chains. As the name suggests, the catalyst is really
+
+50
+00:03:54,400 --> 00:04:00,880
+ just an initiator here, a common catalyst for example is MEKP, methyl ethyl ketone peroxide,
+
+51
+00:04:00,880 --> 00:04:05,040
+ which by the way is super duper dangerous and you need to be very careful with.
+
+52
+00:04:05,120 --> 00:04:09,360
+ The catalyst initializes the reaction, which is exothermic, it generates heat.
+
+53
+00:04:09,360 --> 00:04:14,240
+ These heat kickstarts other reactions, and eventually all of the styrene monomer is consumed
+
+54
+00:04:14,240 --> 00:04:19,840
+ to form crosslinks between the polyester chains, forming a very highly crosslink structure.
+
+55
+00:04:19,840 --> 00:04:24,400
+ Many other thermosetting resin products work in a similar way, a catalyst is introduced to
+
+56
+00:04:24,400 --> 00:04:29,920
+ kickstarter reaction that forms crosslinks. But polyester is among the most commonly used,
+
+57
+00:04:29,920 --> 00:04:34,880
+ largely because it's so economical to produce. While compared to other thermosetting
+
+58
+00:04:34,880 --> 00:04:39,360
+ resins, polyester is not quite as stiff and not quite as strong and not quite as temperature
+
+59
+00:04:39,360 --> 00:04:44,800
+ resistant, the fact that it is so economical means that it's widely used. And where slightly
+
+60
+00:04:44,800 --> 00:04:48,560
+ more favorable properties are required, these are usually addressed through the introduction of
+
+61
+00:04:48,560 --> 00:04:52,240
+ additives to the polyester product or by changing the geometry of the part.
+
+62
+00:04:52,240 --> 00:04:56,320
+ The other type of thermosetting resin that I'd like to introduce you to is epoxy resin.
+
+63
+00:04:56,320 --> 00:05:00,800
+ Epoxy resins are generally a little bit nicer to work with than polyester or vinyl
+
+64
+00:05:00,880 --> 00:05:05,680
+ resins. And after curing typically have slightly more favorable mechanical properties and
+
+65
+00:05:05,680 --> 00:05:09,920
+ slightly better temperature resistance than their polyester counterparts, for example.
+
+66
+00:05:09,920 --> 00:05:14,240
+ The way that epoxy resin is cured is different than vinylester and probably a little bit too
+
+67
+00:05:14,240 --> 00:05:19,440
+ technical for me to get into here. But what I will say is that unlike vinylester where a catalyst
+
+68
+00:05:19,440 --> 00:05:25,680
+ is used, a hardener instead is used in epoxy resins, which is far less toxic to humans.
+
+69
+00:05:25,680 --> 00:05:29,680
+ Now I'm not suggesting you get epoxy resin or hardener on your skin or in your eyes,
+
+70
+00:05:29,680 --> 00:05:34,000
+ but generally it's a little bit less dangerous to work with epoxy resins than it is to work
+
+71
+00:05:34,000 --> 00:05:38,560
+ with vinylester resins, for example. And this is one of the reasons why epoxy resins being
+
+72
+00:05:38,560 --> 00:05:43,440
+ much more expensive than polyester resins are used, because they're a little bit more biocompatible.
+
+73
+00:05:43,440 --> 00:05:48,080
+ Epoxy resins are also commonly used in circumstances where say you're laying up a composite
+
+74
+00:05:48,080 --> 00:05:53,200
+ and the mold or the plug that you're using for that composite is sensitive to vinylester resin will
+
+75
+00:05:53,200 --> 00:05:58,560
+ dissolve upon being exposed to vinylester resin. If that mold is made out of polystyrene, for example.
+
+76
+00:05:58,640 --> 00:06:03,200
+ Finally, epoxy resins are also commonly used as an adhesive. In fact, many of the two part
+
+77
+00:06:03,200 --> 00:06:07,440
+ of adhesive you purchase from bindings or any other hardware store are usually just epoxy
+
+78
+00:06:07,440 --> 00:06:12,480
+ resins and a hardener that you mix together and eventually set. Epoxy resins generally have a
+
+79
+00:06:12,480 --> 00:06:17,680
+ little bit more sticking power than vinylester ones. I might leave it there for thermosets. I'm
+
+80
+00:06:17,680 --> 00:06:22,320
+ aware I haven't dove too deep, but that was very much intentional. I encourage you to go and
+
+81
+00:06:22,320 --> 00:06:26,720
+ do a little bit independent research on some thermosetting plastics. And I'll note that we will talk
+
+82
+00:06:26,720 --> 00:06:39,360
+ a little bit more about thermosetting resins next week when we get to resin 3-day printing.

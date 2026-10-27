@@ -2,10 +2,34 @@
 
 A video analysis tool for audio/video features and audience engagement.
 
+## Overview
+
+```mermaid
+block-beta
+  columns 1
+  L1["<b>1 · Data Collection / Storage</b><br/>Import reports, videos, transcripts and retention data"]
+  space
+  L2["<b>2 · Feature Extraction</b><br/>Scan videos for transcripts, scene changes,<br/>on-screen text and audio"]
+  space
+  L3["<b>3 · Data Analysis</b><br/>Find links between video features and engagement<br/>Train engagement models"]
+  space
+  L4["<b>4 · Insights & Feedback</b><br/>Charts, engagement predictions and<br/>recommendations for each video"]
+  L1 --> L2
+  L2 --> L3
+  L3 --> L4
+```
+
 ## Quickstart
 
 1. Go to https://open-insights-ccx.pages.dev/
-2. Download the server and run it locally.
+2. Choose where scanning runs. The shared public server needs nothing installed but is
+   rate limited; for a whole dataset, download a server from
+   [Releases](https://github.com/Mechanised-Mango-Box/open-insights/releases), run it, and
+   point Settings at `http://localhost:5000`.
+3. Work down the sidebar: **Import** your videos and YouTube reports (see [Import](#import)),
+   **Scan** them, then **Export**, **Analysis** or **Recommend**.
+
+Your records stay in your browser. Only Scan and Recommend talk to the server.
 
 ### Export
 
@@ -28,20 +52,39 @@ audience_retention/
 - Simple data will be stored within the `manifest.json`
 - Complex/large data will be given a sub-directory, `manifest.json` will link to it instead
 
-An export is also what the engagement model is trained on - see [Server](#server).
+An export is also what the engagement models are trained on - see [Engagement models](#engagement-models).
 
 ### Import
 
-The output `.zip` can be similarly imported back into the app.
+The Import step takes four kinds of file, and has a guide to getting each one:
 
-### Browser compute (experimental)
+| Source | Creates | Gives |
+|---|---|---|
+| YouTube content report (`Table data.csv`) | a record per video | title, duration, average view duration (the engagement measure) |
+| Video files (`.mp4`, `.mov`, `.mkv`, `.webm`, `.avi`) | a record per file | what Scan measures |
+| An export `.zip` | missing records, and missing results on existing ones | everything it was exported with |
+| Nothing | an empty record | for filling in by hand |
 
-Run certain jobs on the browser instead
+The report and the videos create separate records. **Auto-Merge**, above the record
+table, pairs them by name and length; **Merge Selected** joins any it misses. A record's
+**Edit** button also takes a per-video audience retention CSV and an SRT/VTT transcript.
 
-- Transcription needs WebGPU
-- Scene stats read MP4 and MOV only
+Getting the files from YouTube Studio:
 
-> It is unstable and may be slow. Off by default
+- **Content report:** Analytics → Advanced mode → Content tab → set the date range → make
+  sure *Duration* and *Average view duration* are shown → Export current view → CSV.
+  Unzip it and import `Table data.csv`.
+- **Videos:** Content → ⋮ on a video → Download (an MP4, at most 720p). The original
+  files are better if you have them, because on-screen text is easier to read at full
+  resolution.
+- **Audience retention:** the video's Analytics → Engagement → Audience retention → See
+  more → Export current view → CSV.
+- **Captions:** the video's Subtitles → ⋮ beside the language → Download → `.srt`.
+
+Sample reports, and a ready-made export to import, are in `data/sample/`; its
+[README](data/sample/README.md) walks through a full test with them.
+`server/scripts/build_export.py` builds the same export from a server's database and
+Studio reports, without the browser.
 
 ## For Developers/Hosts
 
@@ -64,62 +107,190 @@ Fetch the transcription model once before the first run, and again whenever `WHI
 ```sh
 cd ./server
 pip install -r requirements.txt
+pip install --no-deps -r requirements-nodeps.txt
 python scripts/fetch_whisper_model.py
 python main.py
 ```
 
-The engagement model needs no setup step: its trained bundle is committed at
-`server/engagement_model/`, and the Docker image and portable build ship it as-is.
-Regenerate it, and commit the result, whenever there is a better export to learn from,
-the scikit-learn, numpy, pandas or joblib pins in `requirements.txt` change (a
-scikit-learn pickle does not load under another version) or anything in
-`model_training/` that shapes the models changes:
+The second install is RapidOCR, which reads on-screen text. It goes in without its
+declared dependencies because one of them is the full `opencv-python`, which would
+replace the headless OpenCV the server uses; the rest are pinned in `requirements.txt`.
+Its OCR models ship inside the package, so there is nothing to fetch for it.
+
+Audio stats measure two of Mayer's multimedia principles. Coherence is the share of the
+video that is sound other than speech (music, effects) no more than 20 dB quieter than the
+speaker. Voice is how much the speaker's pitch varies, in semitones. A second, finer
+speech pass gives the two the engagement models use: speech ratio (seconds of speech ÷
+duration) and mean pause (the average gap between stretches of speech). Speech is found
+by the Silero VAD model that ships with faster-whisper, and pitch by Praat
+(`praat-parselmouth`), so there is nothing to fetch for these either.
+
+Uploads must be `.mp4`, `.mov`, `.mkv`, `.webm` or `.avi`, and the server checks that the
+file really is a video in that container before storing it; anything else is refused with
+a 415 that says why. AV1 videos work too: the OpenCV wheels decode AV1 only with hardware
+support, so where they cannot, scene stats and screen text decode through PyAV instead.
+
+#### Engagement models
+
+The Recommend step asks one of the server's engagement models about a single video. Each
+model is a random forest that predicts average percentage viewed, plus a linear regression
+on standardised features that explains which way each feature leans. Four are committed
+in the repository's top-level `models/`, trained on different feature sets:
+
+| Model | Features | Scans it needs | Ships in the server |
+|---|---|---|---|
+| `lite` (default) | duration, speaking speed, speech pace variation, mean pause | transcript, audio | yes |
+| `all` | all nine, scene count among them | scene, transcript, screen text, audio | yes |
+| `video` | duration, scene change rate, text density | scene, screen text | no - add it |
+| `audio` | duration, transcript and audio features | transcript, audio | no - add it |
+
+`BUILTIN_MODELS` (default `all,lite`) names the ones a server serves without being
+added; `ENGAGEMENT_MODEL_DEFAULT` (default `lite`) must be one of them. The portable build
+packs only those. The Docker image copies all of `models/` in through a second build
+context (`additional_contexts` in `docker-compose.yml`, which needs Compose 2.17+; a bare
+`docker build` needs `--build-context models=../models`), and `BUILTIN_MODELS` decides
+what is served.
+
+`lite` keeps the four features that improved predictions in testing. Over 5-fold
+cross-validation repeated 10 times on the training export, it beat all nine for both
+models (forest RMSE 8.60 against 8.86, linear regression 8.23 against 8.38), and dropping
+any one of the four made both worse. It leaves out word count, which is duration × speaking
+speed and correlates 0.99 with duration, so the regression split one effect into opposing
+coefficients. It also leaves out text density and scene change rate, which added noise, and
+speech ratio, which mean pause already covers (correlation −0.82). That also means it never
+needs the two slowest scans: on 1080p lecture video, on a 16-core CPU, OCR took about 7 s
+per minute of video and scene stats 4.3 s, against 1.3 s for transcription and 0.3 s for
+audio stats.
+
+Each model is a directory with `model.joblib` (the pickled models) and `model.json` (its
+**model card**). The card records the provider, notes, when it was trained, the
+hyperparameters, the feature definitions, the training export and split, held-out RMSE and
+R², feature importances and the package versions. The server lists the cards at
+`GET /api/models` without unpickling anything, and the Recommend step shows the selected
+one on its Model tab. `?model=<id>` on the recommendation request picks a model;
+the response names the model that answered.
+
+**Adding a model.** Open the server's own page (`http://localhost:5000/`) in a browser on
+the same machine. Under *Engagement models* you can upload a package, or download one from
+an `https://` URL with an optional SHA-256. The page and the client's Model tab both link to
+where more models can be found (`MORE_MODELS_URL`, by default this repository's Releases
+page).
+
+A **model package** is a `.zip` holding exactly `model.json` and `model.joblib`. The server
+reads the card, checks that this server can compute its features and has the same
+scikit-learn version, loads the model once to make sure it works, and only then keeps it.
+Added models live in a `models` directory beside the data directory: `models/` next to
+`data/` beside a portable executable, `data/models/` in a checkout (`MODELS_DIR` overrides
+it). They can be deleted from the same page; built-in ones cannot.
+
+**Sharing a model.** Package a committed model without retraining, and publish the zip
+(on a release, say) with the SHA-256 it prints:
 
 ```sh
 cd ./server
-python scripts/train_engagement_model.py path/to/open-insights-export-<timestamp>.zip
+python scripts/package_model.py ../models/video    # writes dist/models/video.zip
 ```
+
+> A model file is a pickle, and loading one runs whatever code its author put in it. Only
+> add models from providers you trust. Because of that, the page's forms answer only a
+> browser on the server's own machine: the connection must come from loopback, with a
+> loopback `Host`, no forwarding header, a same-origin `Origin` and the page's per-process
+> token. `MODEL_MANAGEMENT=0` turns adding models off entirely, and `docker-compose.yml`
+> sets it, so a public server answers with its built-in models only. `MODEL_MAX_BYTES`
+> caps a package (default 200 MB).
+
+**Training a model.** The models are committed under `models/<id>/`, and the Docker
+image and portable build ship them as-is. Regenerate them, and commit the result,
+whenever there is a better export to learn from, the scikit-learn, numpy, pandas or
+joblib pins in `requirements.txt` change (a scikit-learn pickle does not load under
+another version) or anything in `model_training/` that shapes the models changes:
+
+```sh
+cd ./server
+for set in all lite video audio; do
+  python scripts/train_engagement_model.py path/to/export.zip --feature-set $set
+done
+```
+
+Each lands in `models/<feature set>/`. `--id`, `--name`, `--version`, `--description`,
+`--provider`, `--provider-url` and `--notes` fill in the card, and `--package FILE.zip`
+also writes a package.
 
 It trains on a client [export](#export) - the zip, or the zip unpacked into a folder.
 Only `manifest.json` is read, so exporting without video files is enough. A record
-becomes a training row when Scan has produced its transcript stats and scene stats
-and a YouTube content report supplied its average view duration; the script prints
-how many records it kept and why it skipped the rest. The six features are computed
-exactly as the Analysis page computes them, and the target is average view duration
-÷ duration × 100 (see `model_training/data_preparation.py`). There is no built-in
-dataset to fall back on: the script refuses to run without an export.
+becomes a training row when Scan has produced the results its feature set comes from and
+a YouTube content report supplied its average view duration; the script prints how many
+records it kept and why it skipped the rest. The features are computed exactly as the
+client computes them, and the target is average view duration ÷ duration × 100. Duration
+comes from scene stats, or from audio stats for a feature set with no scene feature (see
+`model_training/data_preparation.py`). There is no built-in dataset to fall back on: the
+script refuses to run without an export.
 
 Training is seeded, so the same export, code and pins produce the same model. The
-export itself is not committed, so the bundle records what it learned from:
+export itself is not committed, so the card records what it learned from:
 
 ```sh
-python -c "import joblib; print(joblib.load('engagement_model/engagement_model_inference.joblib')['trained_on'])"
+python -c "import json; print(json.load(open('../models/all/model.json'))['training'])"
 ```
+
+#### How results are calculated
+
+Every scan result carries the settings it was made with, and `/status` reports each
+kind's settings and a description of its method (`*_SETTINGS` and `*_METHOD` in
+`server/config.py`). The Scan step shows them under "How Scan calculates its data", the
+Analysis step explains its techniques and constants and how many records it left out and
+why, and the Recommend step shows the workings behind each result. An export records
+each result's producer and settings in `manifest.json` (`scan_provenance`), and an
+analysis export includes a `methods.json`.
+
+A result's producer names the OCR, transcription and pitch packages with their versions,
+and the server serves a cached result only when its producer matches its own. If the
+server cannot read one of those versions, it stamps the package as `missing`, prints a
+warning at startup, and lists the package under `unversioned_packages` in `/status`.
+On a healthy server that list is empty. A non-empty list means this server cannot use
+results made by other servers, and other servers cannot use its results.
 
 The exploration scripts in `model_training/` take an export the same way (install
 `requirements-training.txt` first for their plots), e.g.
 `python -m model_training.data_analysis <export>` for histograms, correlations and
 LOESS curves, or `python -m model_training.train <export>` for a dry run that saves
-nothing.
+nothing. `python -m model_training.compare_upstream <export>` sets an export of the
+EduVideo Insights lecture set beside that project's paper and data; the results are
+written up in `data/sample/edu-video-insights/COMPARISON.md`.
 
 ## Build and deploy your own
 
 ### A portable executable
 
-A single file with the transcription weights inside. No Python, no pip, no network.
+A single file with every model it needs inside: the transcription weights, the OCR and
+speech-detection models, and the built-in engagement models. Running it needs no Python,
+no pip and no network.
 
 ```sh
 cd ./server
-python scripts/build_portable.py    # --install fetches what is missing
+python scripts/build_portable.py    # --install-deps pip-installs what is missing
 ```
+
+Building needs the network once, to download the transcription weights into
+`build/models/`. `--skip-model` reuses them on later builds, and `--clean` discards
+PyInstaller's cached analysis. Build with Python 3.13, which the Dockerfile pins; other
+versions may work but are untested. The build stops if a required package is missing,
+including `requests`, which OCR needs at runtime.
+
 Leaves `dist/open-insights-server-<platform>-x86_64`. Run it anywhere: it keeps
-its database and uploads in a `data` directory beside itself, and prints how to
+its database and uploads in a `data` directory and added models in a `models` directory
+beside itself, and prints how to
 point a client at it. Set `SHOW_INSTRUCTIONS=0` to silence that.
 
 - Build it on the platform you will run it on. PyInstaller cannot cross-compile,
   and a Linux build will not run on an older distribution than the one that built it.
 - Binds `127.0.0.1` only, unlike `python main.py`. Set `SERVER_HOST=0.0.0.0` to expose it.
 - Unpacks itself on every launch, so startup takes a few seconds.
+- Check `http://localhost:5000/status` after a build: `unversioned_packages` should be
+  empty (see [How results are calculated](#how-results-are-calculated)).
+- `data/db.sqlite` can be copied to another server, and its results are served there as
+  long as the two servers' producers match. The videos stay behind in `data/uploads/`,
+  so the client re-uploads a video the first time a new scan needs it.
 
 ### A public server
 
@@ -164,3 +335,30 @@ Set in `docker-compose.yml`.
   scene stats are kept, so a deleted video costs one re-upload.
 - `MAX_BODY_SIZE` - Caddy's own cap. Keep it at or above `PUBLIC_MAX_UPLOAD_BYTES`
   or uploads fail at the proxy.
+
+### On AWS
+
+[`deploy/aws/`](deploy/aws/) deploys the same compose stack to one EC2 host in
+`ap-southeast-2`, from whatever commit you have checked out. Everything that decides what
+runs is committed: the commit, the AMI, the Python and Caddy image digests, and the Compose
+and buildx versions with their checksums. Needs the `aws` CLI and `jq`.
+
+```sh
+aws login
+deploy/aws/deploy.sh pin-ami        # once; commit params.ap-southeast-2
+deploy/aws/deploy.sh secrets        # once per account: the API keys into SSM
+deploy/aws/deploy.sh budget-check   # once per account: billing is visible to budgets
+ALERT_EMAIL=you@example.com deploy/aws/deploy.sh up
+DUCKDNS_TOKEN=... deploy/aws/deploy.sh dns
+```
+
+- **Updating or rolling back:** check out the commit, push it, then run `deploy.sh up`
+  again. `up` refuses an uncommitted tree or a commit missing from `origin`, because the
+  host clones from there.
+- **Data:** the DB, uploads and Caddy's certificates are on their own EBS volume. They
+  survive the instance being replaced, and deleting the stack leaves a snapshot.
+- **Access:** no SSH. `deploy.sh status` and `logs` go through SSM, and so does
+  `aws ssm start-session --target <instance-id>` for a shell.
+- **Cost:** about US$28/month on a t3.small. The stack adds a US$50/month budget for the
+  whole account, tax included. It emails at 50% and 80% and when the forecast passes 100%,
+  and at 90% it stops the instance. `deploy.sh start` brings it back.

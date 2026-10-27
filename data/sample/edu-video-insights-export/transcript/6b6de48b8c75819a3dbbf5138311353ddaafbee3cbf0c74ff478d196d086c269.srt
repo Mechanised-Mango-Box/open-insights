@@ -1,0 +1,151 @@
+1
+00:00:00,000 --> 00:00:04,320
+ Well, if you're still watching, you made it, where he with the last engineering medal of the week,
+
+2
+00:00:04,320 --> 00:00:08,080
+ titanium alloys, the creme de la creme of engineering medals.
+
+3
+00:00:08,080 --> 00:00:11,360
+ Titanium alloys are really something special. They're incredibly strong and hard,
+
+4
+00:00:11,360 --> 00:00:16,160
+ they have great corrosion resistance, even at incredibly high temperatures, and they're half the
+
+5
+00:00:16,160 --> 00:00:20,640
+ weight of steel. Of course, nothing in this world is free, and all these nice properties that
+
+6
+00:00:20,640 --> 00:00:25,040
+ titanium alloys have come at a cost. And I don't even mean that metaphorically, they come at a
+
+7
+00:00:25,040 --> 00:00:30,480
+ huge physical cost. Titanium alloys are generally quite expensive. The cost associated with
+
+8
+00:00:30,480 --> 00:00:35,760
+ mining and extracting and refining and bulk manufacturing and later subsequent manufacturing of
+
+9
+00:00:35,760 --> 00:00:40,640
+ titanium alloys means that they're only really used in highly specialized applications.
+
+10
+00:00:40,640 --> 00:00:44,560
+ Places where generally speaking no other solution can give you that cross-section of
+
+11
+00:00:44,560 --> 00:00:48,320
+ incredible properties. Maybe it's needing to put something with great mechanical properties
+
+12
+00:00:48,320 --> 00:00:53,520
+ and excellent corrosion resistance inside of the nasty corrosive environment of the human body.
+
+13
+00:00:53,520 --> 00:00:57,280
+ Or maybe it's designing a component for an aerospace or a motorsport application that needs to
+
+14
+00:00:57,280 --> 00:01:02,400
+ be incredibly light while also being strong and stiff and reasonably ductile. In any case,
+
+15
+00:01:02,400 --> 00:01:07,200
+ there's usually a reasonably high barrier entry involved in using titanium, both in the cost
+
+16
+00:01:07,200 --> 00:01:11,600
+ associated with getting a hold of it, but also in the skills required and the costs involved
+
+17
+00:01:11,600 --> 00:01:16,160
+ in working and in manufacturing it. While of course it's possible to work and form in machine
+
+18
+00:01:16,160 --> 00:01:21,280
+ and weld titanium, all of these things are reasonably challenging and usually require specialized
+
+19
+00:01:21,280 --> 00:01:25,360
+ equipment or specialized training. We'll talk about some of the reasons why working with titanium
+
+20
+00:01:25,360 --> 00:01:29,360
+ is such a pain in the arse next week when we get to manufacturing with metals. It's kind of the
+
+21
+00:01:29,360 --> 00:01:33,520
+ same reason that stainless steels are also a little bit difficult to machine, both have a tendency
+
+22
+00:01:33,520 --> 00:01:38,080
+ to work hard ahead of the tip of your tool. There are some great resources that show how titanium
+
+23
+00:01:38,080 --> 00:01:42,480
+ is commonly used and some of the challenges associated with working it linked on the textbook page
+
+24
+00:01:42,480 --> 00:01:46,160
+ for this video. For now, all I'd really like to note is that like a lot of the other engineering
+
+25
+00:01:46,160 --> 00:01:50,480
+ metals we've already met this week, titanium comes in a variety of grades. Grade one,
+
+26
+00:01:50,480 --> 00:01:55,440
+ titanium alloys are the softest and most ductile, providing the most chance for workability.
+
+27
+00:01:55,440 --> 00:01:59,920
+ Grade two is widely available and reasonably versatile, giving you a good mixture between
+
+28
+00:01:59,920 --> 00:02:04,160
+ workability and weldability and strength. Grade three is slightly less common and
+
+29
+00:02:04,160 --> 00:02:08,000
+ used more in places where corrosion resistance is one of the more important properties.
+
+30
+00:02:08,000 --> 00:02:12,000
+ Corrosion resistance is also quite important for grade four. Very commonly used
+
+31
+00:02:12,000 --> 00:02:16,160
+ medical grade titanium. Grade five, however, is probably the titanium you're going to spend most
+
+32
+00:02:16,160 --> 00:02:20,720
+ of your time encountering. Grade five, titanium is the most commonly produced titanium in the
+
+33
+00:02:20,720 --> 00:02:24,480
+ world because it has a nice cross section of properties that make it suitable for the
+
+34
+00:02:24,480 --> 00:02:28,800
+ engineering applications that we tend to run into. Grade five, titanium is used in the aerospace
+
+35
+00:02:28,800 --> 00:02:33,360
+ and medical industries as well as in motorsport and automotive applications and in other
+
+36
+00:02:33,360 --> 00:02:37,600
+ performance critical environments like turbine blades. Again, there are some more examples and some
+
+37
+00:02:37,600 --> 00:02:41,920
+ extra information on the textbook page for this video as well as some information on titanium
+
+38
+00:02:41,920 --> 00:02:45,920
+ compounds, carbides and oxides of titanium in their typical use cases.

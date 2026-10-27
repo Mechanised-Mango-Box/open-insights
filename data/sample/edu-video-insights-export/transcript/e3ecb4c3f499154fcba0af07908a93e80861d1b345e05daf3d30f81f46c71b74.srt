@@ -1,0 +1,251 @@
+1
+00:00:00,000 --> 00:00:03,520
+ For quite a long time, though it's been in the spotlight a lot lately,
+
+2
+00:00:03,520 --> 00:00:07,920
+ we humans have had a pretty good understanding of the awesome impact that we can have on our
+
+3
+00:00:07,920 --> 00:00:13,520
+ environment. Of course, here by awesome, I don't mean great, I mean, or striking.
+
+4
+00:00:13,520 --> 00:00:17,600
+ When I was a kid, when I was in primary school, the big environmental deal was the whole
+
+5
+00:00:17,600 --> 00:00:23,680
+ in the ozone layer. As you probably know, this ozone layer protects us from very dangerous UV rays.
+
+6
+00:00:23,680 --> 00:00:28,800
+ In the decades before I, and most of you guys were born, we humans were quite fond of a
+
+7
+00:00:28,800 --> 00:00:34,880
+ family of manufactured chemicals known as CFCs. These CFCs, primarily used in refrigerants and
+
+8
+00:00:34,880 --> 00:00:39,600
+ aerosol sprays, were for a long time released into the environment with gay abandon.
+
+9
+00:00:39,600 --> 00:00:44,400
+ When eventually the CFCs reached the upper atmosphere and dissociated, they released chlorine,
+
+10
+00:00:44,400 --> 00:00:49,600
+ chlorine, catalyzes, and breaks down ozone. In the mid 1980s, it was discovered that a
+
+11
+00:00:49,600 --> 00:00:54,080
+ sizeable hole was forming in the ozone layer and it didn't take very long for us to work out
+
+12
+00:00:54,080 --> 00:00:58,640
+ that we humans were causing it. Now, thankfully, we as a global society pulled our head
+
+13
+00:00:58,640 --> 00:01:04,320
+ in pretty quickly and with the help of some legislation stopped using CFCs. Now, some 30 years
+
+14
+00:01:04,320 --> 00:01:09,040
+ later, the ozone layer hole is well on its way to recovery, reaching its smaller size last year's
+
+15
+00:01:09,040 --> 00:01:14,400
+ since its discovery in 1985. Over the past two decades, scientists have reached consensus around
+
+16
+00:01:14,400 --> 00:01:19,840
+ the broader impact of our industrial way of life on the planet Earth. To very broadly summarize
+
+17
+00:01:19,840 --> 00:01:25,040
+ a very complicated topic, in short, release of greenhouse gases like carbon dioxide from modern
+
+18
+00:01:25,040 --> 00:01:29,920
+ manufacturing in agriculture that get trapped in the atmosphere and lock heat into the Earth,
+
+19
+00:01:29,920 --> 00:01:34,080
+ has led to a rise in the global mean temperature and a phenomena that we're now calling climate
+
+20
+00:01:34,080 --> 00:01:39,840
+ change. As you've no doubt heard, climate change has the potential to severely impact our way of life.
+
+21
+00:01:39,840 --> 00:01:44,800
+ Increased frequency of severe weather events, severe wildfires, spread of deadly disease,
+
+22
+00:01:44,800 --> 00:01:49,680
+ food and water shortages, rising sea levels, these are the potential and real impacts of
+
+23
+00:01:49,680 --> 00:01:54,000
+ climate change that are coming for us. Given what's at stake, modern engineers are actually very
+
+24
+00:01:54,000 --> 00:01:58,160
+ concerned about the environmental impact of their designs. In this video, we're going to talk about
+
+25
+00:01:58,160 --> 00:02:02,960
+ some of the properties associated with that impact. Carbon footprint is the first such property.
+
+26
+00:02:02,960 --> 00:02:08,480
+ Define is the total greenhouse gas emissions associated with the delivery of a product or a service,
+
+27
+00:02:08,480 --> 00:02:14,320
+ usually reporting equivalent tons of CO2. In the 150 years that preceded the turn of the century,
+
+28
+00:02:14,320 --> 00:02:19,760
+ humans added about 1,000 gigatons of CO2 equivalent greenhouse gases to the atmosphere.
+
+29
+00:02:19,840 --> 00:02:27,200
+ Between 2000 and 2015, we added another 500. We currently add about 35 gigatons every year,
+
+30
+00:02:27,200 --> 00:02:31,600
+ and it's predicted that we can only add about 10 times that before we will substantially
+
+31
+00:02:31,600 --> 00:02:35,760
+ and irreversibly alter the climate of the planet. Carbon footprint is perhaps the most
+
+32
+00:02:35,760 --> 00:02:39,120
+ approachable of all the environmental properties we're going to talk about in this video,
+
+33
+00:02:39,120 --> 00:02:44,640
+ because it allows you to compare the direct impact of your design to the total budget that
+
+34
+00:02:44,640 --> 00:02:49,840
+ we humans have left to spend. Edgy back in other materials databases can show you the carbon
+
+35
+00:02:49,840 --> 00:02:55,200
+ footprint associated with a range of manufacturing processes and primary production of materials
+
+36
+00:02:55,200 --> 00:03:00,320
+ usually reported in CO2 equivalent. The units of this metric are typically kilograms per kilogram,
+
+37
+00:03:00,320 --> 00:03:05,040
+ in other words kilograms of CO2 released for one kilogram of material produce.
+
+38
+00:03:05,040 --> 00:03:10,000
+ And in terms of this metric, most engineering materials lie between one and 100 kilogram of
+
+39
+00:03:10,960 --> 00:03:16,320
+ another important environmental property is embodied energy. This measure is normally a cradle to
+
+40
+00:03:16,320 --> 00:03:22,240
+ grave account of all the energy required to extract and refine raw materials, transport these
+
+41
+00:03:22,240 --> 00:03:27,440
+ raw materials, manufacture with these raw materials, ship products to a user, install those products,
+
+42
+00:03:27,440 --> 00:03:32,240
+ use those products, disassemble those products and finally deconstructs or decompose
+
+43
+00:03:32,240 --> 00:03:37,360
+ or recycle those products. You can and should compare embodied energy between different materials
+
+44
+00:03:37,680 --> 00:03:42,160
+ and make design decisions based on the amount of embodied energy required. This information is
+
+45
+00:03:42,160 --> 00:03:46,960
+ documented in Edgy back though there are other databases that you may rely on. One such database,
+
+46
+00:03:46,960 --> 00:03:51,520
+ the environmental performance and construction epic database was developed at Melbourne University
+
+47
+00:03:51,520 --> 00:03:55,760
+ and provides estimates of embodied energy for many engineering construction materials.
+
+48
+00:03:55,760 --> 00:04:00,640
+ The truth is that most materials utilize more energy in their creation, in their extraction and
+
+49
+00:04:00,640 --> 00:04:05,840
+ refinement and bulk shaping than they ever will in their lifetime. In addition to selecting materials
+
+50
+00:04:05,840 --> 00:04:10,320
+ that don't require as much energy to refine in manufacture, you can also reduce the embodied
+
+51
+00:04:10,320 --> 00:04:15,280
+ energy of your designs by opting to use local materials that require less transport or sustainable
+
+52
+00:04:15,280 --> 00:04:19,920
+ resources that can be repurposed or recycled after use. The final property we're going to talk about
+
+53
+00:04:19,920 --> 00:04:25,440
+ is recycled fraction. Some materials are far more easy and economical to recycle than others and
+
+54
+00:04:25,440 --> 00:04:30,400
+ some materials cost a whole lot less and use a whole lot less energy to recycle than to
+
+55
+00:04:30,400 --> 00:04:37,600
+ refine from raw materials and manufacture new. Recycled aluminium for example uses 95% less energy
+
+56
+00:04:37,600 --> 00:04:42,640
+ than refining virgin aluminium from alumina. Recycling is one of the few examples where what is
+
+57
+00:04:42,640 --> 00:04:48,240
+ environmentally good and what is economically good often come together and for this reason 75% of
+
+58
+00:04:48,240 --> 00:04:53,120
+ aluminium that's ever been refined is still in circulation today. The recycle fraction of a
+
+59
+00:04:53,120 --> 00:04:58,000
+ component is the proportion of materials in that component that can be economically and easily
+
+60
+00:04:58,000 --> 00:05:03,040
+ recycled. Generally speaking materials which can be melted down or shredded are easily recycled
+
+61
+00:05:03,040 --> 00:05:08,800
+ like metals and thermoplastics. Well other materials that cannot generally are not like ceramics
+
+62
+00:05:08,800 --> 00:05:12,880
+ and thermosetting plastics. We'll talk a little bit more about the environmental properties and
+
+63
+00:05:12,880 --> 00:05:16,880
+ materials and the recyclability when we make them in the coming weeks.

@@ -1,0 +1,491 @@
+1
+00:00:00,000 --> 00:00:02,240
+ In this video, we're going to talk about how engineering
+
+2
+00:00:02,240 --> 00:00:04,480
+ polymers get their mechanical properties.
+
+3
+00:00:04,480 --> 00:00:07,920
+ Interestingly, polymers don't exhibit the same elastoplastic
+
+4
+00:00:07,920 --> 00:00:09,520
+ behavior that metals do.
+
+5
+00:00:09,520 --> 00:00:11,600
+ They behave in an entirely different way,
+
+6
+00:00:11,600 --> 00:00:14,160
+ unlike metals, which deform elastically for a little while,
+
+7
+00:00:14,160 --> 00:00:16,240
+ and then elastically and plastically together
+
+8
+00:00:16,240 --> 00:00:18,080
+ after that up until fracture,
+
+9
+00:00:18,080 --> 00:00:20,320
+ polymers deform elastically and plastically
+
+10
+00:00:20,320 --> 00:00:23,440
+ from very low stresses, pretty much immediately.
+
+11
+00:00:23,440 --> 00:00:26,880
+ This process is typically called visco-elasticity or viscous flow,
+
+12
+00:00:26,880 --> 00:00:28,640
+ and it's quite a complicated topic.
+
+13
+00:00:28,640 --> 00:00:31,040
+ We're only going to touch on the fundamentals of it in this video,
+
+14
+00:00:31,040 --> 00:00:33,360
+ and I'll leave some resources for you if you'd like to learn more,
+
+15
+00:00:33,360 --> 00:00:36,480
+ but you will talk about it some more in engineering materials too.
+
+16
+00:00:36,480 --> 00:00:38,640
+ I'll go into approach to this the same way that I did with metals,
+
+17
+00:00:38,640 --> 00:00:41,520
+ talking about the mechanism that governs the elastic component of
+
+18
+00:00:41,520 --> 00:00:45,440
+ deformation, and then talking about the mechanism that governs the plastic component.
+
+19
+00:00:45,440 --> 00:00:47,680
+ But of course, you should note that in polymers,
+
+20
+00:00:47,680 --> 00:00:51,520
+ the elastic component and the plastic component occur at the same time,
+
+21
+00:00:51,520 --> 00:00:54,720
+ from very low stresses, completely unlike metals.
+
+22
+00:00:54,720 --> 00:00:58,480
+ Elastic deformation of engineering polymers occurs through two mechanisms.
+
+23
+00:00:58,480 --> 00:01:01,600
+ The first mechanism is kind of analogous to the way that metals worked.
+
+24
+00:01:01,600 --> 00:01:05,520
+ It's stretching of the polymer chains along their backbones.
+
+25
+00:01:05,520 --> 00:01:08,400
+ Here, the same way that atomic lattice planes were stretched apart
+
+26
+00:01:08,400 --> 00:01:11,200
+ in engineering metals under load and the metallic bonds
+
+27
+00:01:11,200 --> 00:01:13,280
+ provided some sort of restoring force.
+
+28
+00:01:13,280 --> 00:01:16,800
+ In an engineering polymer, the backbone elements are stretched apart,
+
+29
+00:01:16,800 --> 00:01:19,840
+ and their covalent bonds provide a restoring force.
+
+30
+00:01:19,840 --> 00:01:22,960
+ If load can be carried this way in a polymer through the chains,
+
+31
+00:01:22,960 --> 00:01:26,400
+ directly through the chains, they have a tendency to be quite stiff.
+
+32
+00:01:26,400 --> 00:01:28,800
+ This is because covalent bonds are relatively powerful,
+
+33
+00:01:28,800 --> 00:01:31,440
+ even compared to the metallic bonds that we saw in metals.
+
+34
+00:01:31,440 --> 00:01:35,120
+ Unlike metals, however, there's a second mechanism of elastic deformation
+
+35
+00:01:35,120 --> 00:01:36,880
+ that polymers have as well.
+
+36
+00:01:36,880 --> 00:01:40,320
+ Slip, elastic slip of the polymer chains pass each other.
+
+37
+00:01:40,320 --> 00:01:43,680
+ Remember in the last video, we talked about how polymer chains themselves are held
+
+38
+00:01:43,680 --> 00:01:46,960
+ together with covalent bonds, but the chains are held to each other
+
+39
+00:01:46,960 --> 00:01:50,560
+ primarily through van der Waals bonds, extremely weak bonds,
+
+40
+00:01:50,560 --> 00:01:53,920
+ kind of electrostatic wet pasta stickiness bonds.
+
+41
+00:01:53,920 --> 00:01:56,720
+ In order for any load to be carried through the bulk of a polymer,
+
+42
+00:01:56,720 --> 00:02:00,800
+ it needs to travel yes through each chain, but also between chains.
+
+43
+00:02:00,800 --> 00:02:04,000
+ And just like how stretching of covalent bonds inside of a chain provides
+
+44
+00:02:04,000 --> 00:02:06,240
+ a restoring force provides a stiffness,
+
+45
+00:02:06,240 --> 00:02:09,920
+ well, the van der Waals bonds between chains also provide a restoring force,
+
+46
+00:02:09,920 --> 00:02:12,560
+ also provide a stiffness, just a much weaker one.
+
+47
+00:02:12,560 --> 00:02:15,200
+ You should note that this elastic slip of the chains are recoverable.
+
+48
+00:02:15,200 --> 00:02:18,400
+ The same is the kind of stretch of the backbones of the polymer.
+
+49
+00:02:18,400 --> 00:02:21,200
+ The thing will return to its original length if you let the load off.
+
+50
+00:02:21,200 --> 00:02:23,840
+ But this is only true for sufficiently low loads.
+
+51
+00:02:23,840 --> 00:02:26,160
+ Because those van der Waals bonds are quite weak,
+
+52
+00:02:26,160 --> 00:02:29,760
+ they can only provide this restoring force for a very short amount of time
+
+53
+00:02:29,760 --> 00:02:32,800
+ before they overcome and plastic slip occurs.
+
+54
+00:02:32,800 --> 00:02:36,800
+ Talking only about elasticity though, these two mechanisms stretching over the chains
+
+55
+00:02:36,800 --> 00:02:42,240
+ and elastic slip over the chains work together to give you the box stiffness of the polymer.
+
+56
+00:02:42,240 --> 00:02:45,520
+ And because load needs to be carried through both the covalent bonds in a chain
+
+57
+00:02:45,520 --> 00:02:48,880
+ and the van der Waals bonds between chains, these two bonds,
+
+58
+00:02:48,880 --> 00:02:52,880
+ these two stiffnesses essentially act like springs in series.
+
+59
+00:02:52,880 --> 00:02:56,160
+ In this arrangement, the effectiveness, the box stiffness of the polymer,
+
+60
+00:02:56,160 --> 00:02:59,600
+ is highly dependent on its weakest sleeve, the van der Waals bonds.
+
+61
+00:02:59,600 --> 00:03:03,760
+ To put it another way, you can't utilize the fact that the covalent bonds that hold the carbon
+
+62
+00:03:03,760 --> 00:03:08,400
+ backbones of a polymer together are extremely stiff if the bonds between the polymer chains
+
+63
+00:03:08,400 --> 00:03:10,880
+ are weak. Those ones are just going to stretch first.
+
+64
+00:03:10,880 --> 00:03:14,160
+ This is one of the reasons why quite a lot of polymers aren't very stiff
+
+65
+00:03:14,160 --> 00:03:17,280
+ because they're mostly comprised of van der Waals bonds between chains
+
+66
+00:03:17,280 --> 00:03:19,440
+ and these van der Waals bonds aren't very stiff.
+
+67
+00:03:19,440 --> 00:03:22,560
+ That being said, there are some polymers which are reasonably stiff
+
+68
+00:03:22,560 --> 00:03:25,040
+ and this is largely owed to cross linking.
+
+69
+00:03:25,040 --> 00:03:28,880
+ In polymers that are highly cross linked, the van der Waals bonds are essentially taken
+
+70
+00:03:28,880 --> 00:03:32,800
+ out of the equation. Now, as before, load is carried through the covalently bonded
+
+71
+00:03:32,800 --> 00:03:36,000
+ backbones of the polymer strands, but it's also transferred
+
+72
+00:03:36,000 --> 00:03:39,760
+ between polymer strands through covalently bonded backbones.
+
+73
+00:03:39,760 --> 00:03:43,200
+ As a result, by increasing the amount of cross linking in your polymer,
+
+74
+00:03:43,200 --> 00:03:47,760
+ you essentially increase its stiffness. You take those van der Waals bonds out of the equation.
+
+75
+00:03:47,760 --> 00:03:52,000
+ While elasticity is complicated, plasticity of polymers is reasonably straightforward.
+
+76
+00:03:52,000 --> 00:03:56,960
+ Plastic defamation of engineering polymers corresponds to relative slip of the polymer chains,
+
+77
+00:03:56,960 --> 00:04:00,240
+ past what the van der Waals bonds can provide a restoring force to.
+
+78
+00:04:00,240 --> 00:04:04,800
+ Because these van der Waals bonds are so weak, this plastic defamation occurs pretty much immediately.
+
+79
+00:04:04,800 --> 00:04:08,960
+ It doesn't take very much load to overcome the van der Waals bonds and for the chains to begin
+
+80
+00:04:08,960 --> 00:04:12,480
+ slipping past each other. This is why, generally speaking, the yield strength of an
+
+81
+00:04:12,480 --> 00:04:16,400
+ engineering polymer is so low, essentially zero, why most engineering
+
+82
+00:04:16,400 --> 00:04:21,520
+ polymers begin plastically deforming alongside their elastic deformation immediately from very
+
+83
+00:04:21,520 --> 00:04:25,440
+ low stresses. Again, though there are exceptions to this rule, there are engineering
+
+84
+00:04:25,440 --> 00:04:30,320
+ polymers which do have a non-zero yield stress which do put up somewhat of a fight to plastic
+
+85
+00:04:30,320 --> 00:04:34,480
+ deformation. And again, these are polymers which are highly cross linked.
+
+86
+00:04:34,480 --> 00:04:37,760
+ While cross linking chains together, you essentially prevent this relative slip,
+
+87
+00:04:37,760 --> 00:04:40,400
+ you increase the yield strength of the polymer.
+
+88
+00:04:40,400 --> 00:04:44,560
+ And it turns out that very highly cross linked polymers actually begin to exhibit
+
+89
+00:04:44,560 --> 00:04:49,360
+ behavior that is somewhat elastoplastic. Because they're highly cross linked, these polymers
+
+90
+00:04:49,360 --> 00:04:53,040
+ end up having a reasonably high yield strength that don't begin plastically deforming
+
+91
+00:04:53,040 --> 00:04:57,680
+ until you begin to break these cross links. And consequently, you get some elastic behavior
+
+92
+00:04:57,680 --> 00:05:02,400
+ for a little while which can be quite stiff because again, cross links also increase stiffness
+
+93
+00:05:02,400 --> 00:05:07,440
+ before finally kind of overcoming these cross links in beginning to plastically deform the polymer.
+
+94
+00:05:07,440 --> 00:05:11,520
+ If you like cross links are a little bit like the strengthening mechanisms we met in metals,
+
+95
+00:05:11,520 --> 00:05:15,920
+ you essentially trade off ductility, you trade off capacity for plastic deformation
+
+96
+00:05:15,920 --> 00:05:22,000
+ in order to increase your strength. But unlike metals, doing so also increases stiffness.
+
+97
+00:05:22,000 --> 00:05:26,000
+ We made a big song and dance in the early weeks about stiffness and strength not really being
+
+98
+00:05:26,000 --> 00:05:30,320
+ related, but cross linked polymers are an exception to that. The same mechanism which
+
+99
+00:05:30,320 --> 00:05:35,920
+ increases their stiffness cross linking also increases their strength and reduces their ductility.
+
+100
+00:05:35,920 --> 00:05:40,080
+ As a final point, I'll just note that I haven't told you the whole story. This behavior is
+
+101
+00:05:40,080 --> 00:05:44,640
+ actually a lot more complicated. Like metals, the mechanical properties of a polymer can change
+
+102
+00:05:44,640 --> 00:05:49,360
+ substantially under temperature, essentially corresponding to a weakening of these vendor walls bonds
+
+103
+00:05:49,360 --> 00:05:54,000
+ again. But in addition to that, the mechanical properties of a polymer can also change substantially
+
+104
+00:05:54,000 --> 00:05:59,520
+ as a function of whether or not a load is applied and how substantial that load is and how quickly
+
+105
+00:05:59,520 --> 00:06:04,480
+ that load is being applied as well. We generally call this strain and strain rate dependence of
+
+106
+00:06:04,480 --> 00:06:09,680
+ mechanical properties and it basically corresponds to two things. Number one, under load,
+
+107
+00:06:09,680 --> 00:06:14,560
+ the reasonably amorphous blob of polymer chains have a tendency to align with the direction
+
+108
+00:06:14,560 --> 00:06:19,600
+ of the load and carry more and more load along their carbon backbones. When this happens,
+
+109
+00:06:19,600 --> 00:06:24,000
+ when the polymers effectively become textured, more and more load is carried by the backbones
+
+110
+00:06:24,000 --> 00:06:28,560
+ and less and less through vendor walls bonds. This means that the polymers increase substantially
+
+111
+00:06:28,560 --> 00:06:32,960
+ in both stiffness and strength. The rate of load application matters as well,
+
+112
+00:06:33,040 --> 00:06:37,440
+ when loads are applied quickly, the random amorphous mess of polymer chains doesn't have time
+
+113
+00:06:37,440 --> 00:06:43,120
+ to nice and slowly unravel instead getting nodded and tied up. The net result is similar to cross
+
+114
+00:06:43,120 --> 00:06:47,760
+ linking. Again, vendor walls bonds are taken out of the equation. You'll talk about this a lot
+
+115
+00:06:47,760 --> 00:06:51,360
+ more in materials too. But if there's one thing you're going to take away from this, it should be
+
+116
+00:06:51,360 --> 00:06:56,160
+ that the mechanical properties of a polymer are highly sensitive to their loading conditions
+
+117
+00:06:56,160 --> 00:07:00,880
+ and their temperature. And that while a database like Edu Pak might quote some values for the
+
+118
+00:07:00,880 --> 00:07:04,880
+ stiffness and the yield strength of a polymer, it's extremely important you understand
+
+119
+00:07:04,880 --> 00:07:09,040
+ at what conditions those values were captured. And whether those differ from the conditions
+
+120
+00:07:09,040 --> 00:07:14,080
+ that you intend to use this polymer at, it is always a good idea. It's always best practice to do
+
+121
+00:07:14,080 --> 00:07:18,880
+ some physical testing of the polymer you plan to use in the conditions you plan to use it.
+
+122
+00:07:18,880 --> 00:07:22,720
+ That way you can be sure that when you put it in service, it's not substantially weaker or
+
+123
+00:07:22,720 --> 00:07:32,720
+ more compliant than you need or stronger and more brittle than you need.

@@ -1,0 +1,183 @@
+1
+00:00:00,000 --> 00:00:04,400
+ Polyethylene is the first thermoplastic on our list, and it's for good reason.
+
+2
+00:00:04,400 --> 00:00:09,600
+ Polyethylene is the most commonly used, most commonly produced thermoplastic in the world,
+
+3
+00:00:09,600 --> 00:00:13,360
+ accounting for nearly 30% of global plastic use and production.
+
+4
+00:00:13,360 --> 00:00:17,520
+ If you like, polyethylene is to plastics what mild steel is to metals.
+
+5
+00:00:17,520 --> 00:00:21,520
+ It's the characteristic plastic. When you think about the properties of a plastic,
+
+6
+00:00:21,520 --> 00:00:26,320
+ you're probably actually thinking about the properties of polyethylene because it's everywhere.
+
+7
+00:00:26,320 --> 00:00:31,280
+ The reasons why polyethylene are so widespread as similar to the reasons why mild steel
+
+8
+00:00:31,280 --> 00:00:36,080
+ is so widespread. Largely through inertia, but also through the tunability of its properties,
+
+9
+00:00:36,080 --> 00:00:42,080
+ polyethylene is extremely cheap to produce. As the name suggests, polyethylene is polymerized
+
+10
+00:00:42,080 --> 00:00:47,520
+ from the ethylene monomer, one that's derived from fossil fuels. A polyethylene chain consists
+
+11
+00:00:47,520 --> 00:00:52,720
+ of a carbon backbone, its organic, and it has hydrogen fingers. And a range of variants
+
+12
+00:00:52,720 --> 00:00:57,520
+ of polyethylene have been developed for a bunch of different design circumstances. So-called
+
+13
+00:00:57,520 --> 00:01:05,200
+ low-density polyethylene, LDPE is formed by inducing polyethylene chains to branch without cross-linking.
+
+14
+00:01:05,200 --> 00:01:09,040
+ This branching makes the chains spread out and essentially reduces their density.
+
+15
+00:01:09,040 --> 00:01:12,240
+ And in doing so, weakens the effective strength of the Van der Waals bonds,
+
+16
+00:01:12,240 --> 00:01:17,520
+ reduced to the contact area over which they can act. The result is that LDPE is quite a flexible
+
+17
+00:01:17,520 --> 00:01:22,320
+ product, and for that reason it's used in shopping bags and snap-on lids. A variation on this
+
+18
+00:01:22,320 --> 00:01:28,720
+ particular flavor called linear low-density polyethylene, LLDPE, also is very flexible,
+
+19
+00:01:28,720 --> 00:01:34,080
+ is extremely flexible, owing to the extremely short branches that it makes. You'll often see
+
+20
+00:01:34,080 --> 00:01:39,600
+ LLDPE used in places that require exceptional ductility, exceptional flexibility,
+
+21
+00:01:39,600 --> 00:01:45,200
+ things like cling wrap, for example. Finally, high-density polyethylene, HDPE is
+
+22
+00:01:45,200 --> 00:01:49,920
+ kind of as the name suggests where the chains don't form any branches at all, and as a result
+
+23
+00:01:49,920 --> 00:01:54,880
+ can pack reasonably densely. This dense packing of polymer chains means that the Van der Waals
+
+24
+00:01:54,880 --> 00:02:00,880
+ bonds of HDPE have essentially more surface area to act over, and this makes it both stronger and
+
+25
+00:02:00,880 --> 00:02:05,760
+ stiffer than its low-density counterparts. For this reason, you'll normally see HDPE used in places
+
+26
+00:02:05,760 --> 00:02:10,400
+ that require a little bit more strength or stiffness, things like pipe work and fuel tanks.
+
+27
+00:02:10,400 --> 00:02:15,280
+ Now, I've used the word density throughout here in inverted commas, because while the density of
+
+28
+00:02:15,280 --> 00:02:20,560
+ the chains in the different flavours of polyethylene changes, the packing density changes,
+
+29
+00:02:20,560 --> 00:02:25,680
+ the effective density of the bulk polymers actually remains the same. The reasons behind this are a
+
+30
+00:02:25,680 --> 00:02:29,840
+ little complicated, but essentially it turns out that irrespective of the way you pack it,
+
+31
+00:02:29,840 --> 00:02:33,920
+ polyethylene, as a bulk, is going to have roughly the same density no matter what.
+
+32
+00:02:33,920 --> 00:02:38,560
+ And this is just one of the many examples where somebody somewhere has co-opted a word that had
+
+33
+00:02:38,560 --> 00:02:44,080
+ a very specific meaning in engineering and introduced some ambiguity that now we all have to live with.
+
+34
+00:02:44,080 --> 00:02:48,160
+ Importantly, these different flavours of polyethylene don't necessarily arise because of
+
+35
+00:02:48,160 --> 00:02:52,560
+ differences in the chemistry of the polymer. Instead, they arise as a result of different
+
+36
+00:02:52,560 --> 00:02:57,120
+ manufacturing processes that it's put through. Low-density polyethylene and linear low-density
+
+37
+00:02:57,120 --> 00:03:01,600
+ polyethylene are normally made at low temperatures and high pressures through processes like
+
+38
+00:03:01,600 --> 00:03:06,640
+ extrusion. And high-density polyethylene is normally made low pressures and high temperatures,
+
+39
+00:03:06,640 --> 00:03:11,120
+ where the high temperature provides sufficient energy and motivation and vibration for all of
+
+40
+00:03:11,200 --> 00:03:16,560
+ the chains to pack more densely. Being the most common plastic, polyethylene is also the most
+
+41
+00:03:16,560 --> 00:03:22,400
+ commonly recycled plastic. In fact, most manufacturing facilities are set up to only recycled
+
+42
+00:03:22,400 --> 00:03:28,960
+ polyethylene. For this reason, HDPE, LDP, and another variant, P-E-T, polyethylene, to wrap
+
+43
+00:03:28,960 --> 00:03:33,840
+ for it are normally carefully separated from other plastics for the purpose of being recycled.
+
+44
+00:03:33,840 --> 00:03:37,760
+ After separation, these plastics are normally separated from each other before being shredded
+
+45
+00:03:37,760 --> 00:03:42,400
+ and melted down into noodles for recycling into other products. We'll talk more about
+
+46
+00:03:42,400 --> 00:03:47,760
+ the implications of this when we meet some other plastics in the following videos.

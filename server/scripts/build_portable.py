@@ -29,7 +29,7 @@ BUILD_DIR = SERVER_DIR / "build"
 WORK_DIR = BUILD_DIR / "pyinstaller"
 MODEL_STAGE_DIR = BUILD_DIR / "models"
 # Committed, not staged: packed into the bundle exactly as it is in the repo.
-ENGAGEMENT_MODEL_DIR = SERVER_DIR / "engagement_model"
+ENGAGEMENT_MODEL_DIR = SERVER_DIR.parent / "models"
 HF_CACHE_DIR = BUILD_DIR / "hf-cache"
 DIST_DIR = SERVER_DIR / "dist"
 SPEC = SERVER_DIR / "open-insights.spec"
@@ -45,11 +45,20 @@ TESTED_PYTHON = (3, 13)
 REQUIRED_PACKAGES = {
     "PyInstaller": "pyinstaller",
     "faster_whisper": "faster-whisper",
+    "av": "av",
     "cv2": "opencv-python-headless",
     "flask": "flask",
     "joblib": "joblib",
     "pandas": "pandas",
     "sklearn": "scikit-learn",
+    "rapidocr": "rapidocr",
+    # rapidocr imports it at module level (utils/load_image.py), and nothing in
+    # requirements.txt brings it transitively any more - see the note there. A
+    # bundle built without it starts fine and fails every OCR scan.
+    "requests": "requests",
+    "shapely": "shapely",
+    "pyclipper": "pyclipper",
+    "parselmouth": "praat-parselmouth",
 }
 
 
@@ -81,12 +90,14 @@ def check_environment(install: bool) -> None:
             "Missing build dependencies: "
             + ", ".join(missing)
             + "\n\nInstall them with:\n"
-            "    pip install -r requirements.txt pyinstaller\n\n"
+            "    pip install -r requirements.txt pyinstaller\n"
+            "    pip install --no-deps -r requirements-nodeps.txt\n\n"
             "or re-run this script with --install-deps."
         )
 
     print(f"Installing build dependencies: {', '.join(missing)}")
     run([sys.executable, "-m", "pip", "install", "-r", "requirements.txt", "pyinstaller"])
+    run([sys.executable, "-m", "pip", "install", "--no-deps", "-r", "requirements-nodeps.txt"])
 
 
 def run(command: list[str]) -> None:
@@ -140,19 +151,24 @@ def stage_model() -> None:
 
 
 def check_engagement_model() -> None:
-    """Refuse to build without the committed engagement model bundle.
+    """Refuse to build without the committed built-in engagement models.
 
-    Nothing trains it here: the bundle is committed, and the spec packs
-    engagement_model/ as it is. A checkout without it would build cleanly and
-    then die at startup on the user's machine, which is the failure stage_model()
-    guards against for the weights.
+    Nothing trains them here: they are committed in the repository's models/,
+    and the spec packs the BUILTIN_MODELS ones as they are. A checkout without
+    them would build cleanly and then die at startup on the user's machine, which
+    is the failure stage_model() guards against for the weights.
     """
-    bundle = ENGAGEMENT_MODEL_DIR / "engagement_model_inference.joblib"
-    if not bundle.is_file():
-        raise SystemExit(
-            f"{bundle} is missing - refusing to build.\n"
-            "Regenerate it with: python scripts/train_engagement_model.py <export>"
-        )
+    builtins = [m.strip() for m in os.environ.get("BUILTIN_MODELS", "all,lite").split(",") if m.strip()]
+    default = os.environ.get("ENGAGEMENT_MODEL_DEFAULT", "lite")
+    if default not in builtins:
+        raise SystemExit(f"The default model '{default}' is not in BUILTIN_MODELS ({', '.join(builtins)}).")
+    for model in builtins:
+        for required in ("model.joblib", "model.json"):
+            if not (ENGAGEMENT_MODEL_DIR / model / required).is_file():
+                raise SystemExit(
+                    f"{ENGAGEMENT_MODEL_DIR / model / required} is missing - refusing to build.\n"
+                    "Regenerate it with: python scripts/train_engagement_model.py <export>"
+                )
 
 
 def artifact_name() -> str:
