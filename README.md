@@ -335,3 +335,30 @@ Set in `docker-compose.yml`.
   scene stats are kept, so a deleted video costs one re-upload.
 - `MAX_BODY_SIZE` - Caddy's own cap. Keep it at or above `PUBLIC_MAX_UPLOAD_BYTES`
   or uploads fail at the proxy.
+
+### On AWS
+
+[`deploy/aws/`](deploy/aws/) deploys the same compose stack to one EC2 host in
+`ap-southeast-2`, from whatever commit you have checked out. Everything that decides what
+runs is committed: the commit, the AMI, the Python and Caddy image digests, and the Compose
+and buildx versions with their checksums. Needs the `aws` CLI and `jq`.
+
+```sh
+aws login
+deploy/aws/deploy.sh pin-ami        # once; commit params.ap-southeast-2
+deploy/aws/deploy.sh secrets        # once per account: the API keys into SSM
+deploy/aws/deploy.sh budget-check   # once per account: billing is visible to budgets
+ALERT_EMAIL=you@example.com deploy/aws/deploy.sh up
+DUCKDNS_TOKEN=... deploy/aws/deploy.sh dns
+```
+
+- **Updating or rolling back:** check out the commit, push it, then run `deploy.sh up`
+  again. `up` refuses an uncommitted tree or a commit missing from `origin`, because the
+  host clones from there.
+- **Data:** the DB, uploads and Caddy's certificates are on their own EBS volume. They
+  survive the instance being replaced, and deleting the stack leaves a snapshot.
+- **Access:** no SSH. `deploy.sh status` and `logs` go through SSM, and so does
+  `aws ssm start-session --target <instance-id>` for a shell.
+- **Cost:** about US$28/month on a t3.small. The stack adds a US$50/month budget for the
+  whole account, tax included. It emails at 50% and 80% and when the forecast passes 100%,
+  and at 90% it stops the instance. `deploy.sh start` brings it back.

@@ -1,0 +1,313 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >-
+  Open Insights public API server - docker-compose.yml (gunicorn + Caddy) on one EC2
+  host, with its data on a separate EBS volume and a US$50/month budget that stops the
+  instance at 90%. Driven by deploy/aws/deploy.sh; see the README's "Deploying to AWS".
+
+# One host, not ECS/Fargate/App Runner, for the reasons the GCP move ruled out Cloud
+# Run: db.py needs SQLite WAL on a real local filesystem, and app.py starts daemon
+# threads whose work carries on after the response has gone.
+
+Parameters:
+  GitRepo:
+    Type: String
+    Default: https://github.com/Mechanised-Mango-Box/open-insights.git
+  GitRef:
+    Type: String
+    Description: Full commit SHA to run. deploy.sh passes `git rev-parse HEAD`.
+    AllowedPattern: "[0-9a-f]{40}"
+  ImageId:
+    Type: AWS::EC2::Image::Id
+    Description: >-
+      An explicit Amazon Linux 2023 x86_64 AMI, pinned in params.<region> rather than
+      resolved from the "latest" SSM alias, so the same commit gets the same OS.
+  InstanceType:
+    Type: String
+    Default: t3.small
+    AllowedValues: [t3.small, t3.medium]
+  CpuCredits:
+    Type: String
+    Default: standard
+    AllowedValues: [standard, unlimited]
+    Description: >-
+      standard throttles to baseline when credits run out instead of billing surplus
+      credits, which is what keeps the worst case a flat, known price.
+  RootVolumeSize:
+    Type: Number
+    Default: 20
+  DataVolumeSize:
+    Type: Number
+    Default: 30
+    Description: Must stay comfortably above UPLOAD_DIR_MAX_BYTES (20GB by default).
+  AlertEmail:
+    Type: String
+    Description: Where budget alerts go. Passed by deploy.sh from ALERT_EMAIL, never committed.
+    AllowedPattern: ".+@.+"
+  MonthlyBudgetUsd:
+    Type: Number
+    Default: 50
+
+Resources:
+  # --- Network: its own, so nothing depends on the account still having a default VPC.
+  # No NAT gateway - the one subnet is public and the instance has its own address.
+
+  Vpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.20.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags: [{ Key: Name, Value: !Ref AWS::StackName }]
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  GatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref Vpc
+      InternetGatewayId: !Ref InternetGateway
+
+  Subnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.20.0.0/24
+      # The data volume is created in the same AZ - an EBS volume cannot attach across
+      # zones.
+      AvailabilityZone: !Select [0, !GetAZs ""]
+      Tags: [{ Key: Name, Value: !Ref AWS::StackName }]
+
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref Vpc
+
+  DefaultRoute:
+    Type: AWS::EC2::Route
+    DependsOn: GatewayAttachment
+    Properties:
+      RouteTableId: !Ref RouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  SubnetRouteTable:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref Subnet
+      RouteTableId: !Ref RouteTable
+
+  # Caddy is the only thing facing the internet. 80 stays open for the HTTP-01
+  # challenge and the redirect to 443. No 22: a shell is `aws ssm start-session`.
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Open Insights - HTTP and HTTPS to Caddy only
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - { IpProtocol: tcp, FromPort: 80, ToPort: 80, CidrIp: 0.0.0.0/0 }
+        - { IpProtocol: tcp, FromPort: 443, ToPort: 443, CidrIp: 0.0.0.0/0 }
+
+  # --- What bootstrap.sh reads at run time. In SSM rather than UserData so that moving
+  # to another commit is a parameter change, not an instance stop/start or replacement.
+
+  GitRefParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub /${AWS::StackName}/git-ref
+      Type: String
+      Value: !Ref GitRef
+
+  DataVolumeIdParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub /${AWS::StackName}/data-volume-id
+      Type: String
+      Value: !Ref DataVolume
+
+  # --- The host.
+
+  InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: { Service: ec2.amazonaws.com }
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        # Session Manager and Run Command - how deploy.sh reaches the box at all.
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Policies:
+        - PolicyName: read-config
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              # The private key is a SecureString under the AWS-managed aws/ssm key,
+              # whose key policy already lets the account's principals decrypt through
+              # SSM - no kms: statement is needed for it.
+              - Effect: Allow
+                Action: ssm:GetParameter
+                Resource:
+                  - !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*
+                  # The API keys, from `deploy.sh secrets`. Shared by every stack, so a
+                  # throwaway one serves with the same keys.
+                  - !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/open-insights/*
+
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles: [!Ref InstanceRole]
+
+  Instance:
+    Type: AWS::EC2::Instance
+    DependsOn: DefaultRoute
+    Properties:
+      ImageId: !Ref ImageId
+      InstanceType: !Ref InstanceType
+      CreditSpecification:
+        CPUCredits: !Ref CpuCredits
+      IamInstanceProfile: !Ref InstanceProfile
+      SubnetId: !Ref Subnet
+      SecurityGroupIds: [!Ref SecurityGroup]
+      # IMDSv2 only, and a hop limit of 1 so the containers cannot reach the instance
+      # role's credentials through the metadata service.
+      MetadataOptions:
+        HttpTokens: required
+        HttpPutResponseHopLimit: 1
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp3
+            VolumeSize: !Ref RootVolumeSize
+            Encrypted: true
+            DeleteOnTermination: true
+      Tags: [{ Key: Name, Value: !Ref AWS::StackName }]
+      # Only enough to get the repository onto the box: everything else is
+      # bootstrap.sh, which is versioned with the code it deploys and is re-run by
+      # deploy.sh for every update.
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -euo pipefail
+          exec >>/var/log/open-insights-bootstrap.log 2>&1
+          dnf install -y git
+          ref=$(aws ssm get-parameter --region ${AWS::Region} \
+            --name /${AWS::StackName}/git-ref --query Parameter.Value --output text)
+          if [ ! -d /opt/open-insights/src/.git ]; then
+            git clone ${GitRepo} /opt/open-insights/src
+          fi
+          git -C /opt/open-insights/src checkout --detach "$ref"
+          bash /opt/open-insights/src/deploy/aws/bootstrap.sh ${AWS::StackName} ${AWS::Region}
+
+  # The database, uploads, trained models and Caddy's certificates. Apart from the root
+  # volume so that they outlive the instance; snapshotted rather than lost if the stack
+  # is deleted or this volume is ever replaced.
+  DataVolume:
+    Type: AWS::EC2::Volume
+    DeletionPolicy: Snapshot
+    UpdateReplacePolicy: Snapshot
+    Properties:
+      AvailabilityZone: !GetAtt Subnet.AvailabilityZone
+      VolumeType: gp3
+      Size: !Ref DataVolumeSize
+      Encrypted: true
+      Tags: [{ Key: Name, Value: !Sub "${AWS::StackName}-data" }]
+
+  DataVolumeAttachment:
+    Type: AWS::EC2::VolumeAttachment
+    Properties:
+      InstanceId: !Ref Instance
+      VolumeId: !Ref DataVolume
+      Device: /dev/xvdf
+
+  # SITE_ADDRESS must resolve here for Caddy's HTTP-01 challenge; `deploy.sh dns` points
+  # the DuckDNS name at it.
+  ElasticIp:
+    Type: AWS::EC2::EIP
+    DependsOn: GatewayAttachment
+    Properties:
+      Domain: vpc
+
+  ElasticIpAssociation:
+    Type: AWS::EC2::EIPAssociation
+    Properties:
+      AllocationId: !GetAtt ElasticIp.AllocationId
+      InstanceId: !Ref Instance
+
+  # --- The US$50/month ceiling. AWS has no hard spending cap, so this is the nearest
+  # thing: alerts on the way up, then the instance - the only cost that scales with
+  # time running - is stopped at 90%. Stopped, the stack costs only its disks and
+  # address (~US$8.50/mo). The budget is for the whole account, tax included.
+
+  Budget:
+    Type: AWS::Budgets::Budget
+    Properties:
+      Budget:
+        BudgetName: !Sub ${AWS::StackName}-monthly
+        BudgetType: COST
+        TimeUnit: MONTHLY
+        BudgetLimit: { Amount: !Ref MonthlyBudgetUsd, Unit: USD }
+        CostTypes: { IncludeTax: true }
+      NotificationsWithSubscribers:
+        - Notification: { NotificationType: ACTUAL, ComparisonOperator: GREATER_THAN, Threshold: 50, ThresholdType: PERCENTAGE }
+          Subscribers: [{ SubscriptionType: EMAIL, Address: !Ref AlertEmail }]
+        - Notification: { NotificationType: ACTUAL, ComparisonOperator: GREATER_THAN, Threshold: 80, ThresholdType: PERCENTAGE }
+          Subscribers: [{ SubscriptionType: EMAIL, Address: !Ref AlertEmail }]
+        - Notification: { NotificationType: FORECASTED, ComparisonOperator: GREATER_THAN, Threshold: 100, ThresholdType: PERCENTAGE }
+          Subscribers: [{ SubscriptionType: EMAIL, Address: !Ref AlertEmail }]
+
+  BudgetActionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: { Service: budgets.amazonaws.com }
+            Action: sts:AssumeRole
+            Condition:
+              StringEquals: { aws:SourceAccount: !Ref AWS::AccountId }
+      Policies:
+        - PolicyName: stop-this-instance
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              # The action runs the AWS-StopEC2Instance automation as this role.
+              - Effect: Allow
+                Action: ssm:StartAutomationExecution
+                Resource: "*"
+              - Effect: Allow
+                Action: [ec2:DescribeInstances, ec2:DescribeInstanceStatus]
+                Resource: "*"
+              - Effect: Allow
+                Action: ec2:StopInstances
+                Resource: !Sub arn:${AWS::Partition}:ec2:${AWS::Region}:${AWS::AccountId}:instance/${Instance}
+
+  BudgetStopAction:
+    Type: AWS::Budgets::BudgetsAction
+    Properties:
+      BudgetName: !Ref Budget
+      NotificationType: ACTUAL
+      ActionType: RUN_SSM_DOCUMENTS
+      ActionThreshold: { Type: PERCENTAGE, Value: 90 }
+      ApprovalModel: AUTOMATIC
+      ExecutionRoleArn: !GetAtt BudgetActionRole.Arn
+      Definition:
+        SsmActionDefinition:
+          Subtype: STOP_EC2_INSTANCES
+          Region: !Ref AWS::Region
+          InstanceIds: [!Ref Instance]
+      Subscribers:
+        - { Type: EMAIL, Address: !Ref AlertEmail }
+
+Outputs:
+  InstanceId:
+    Value: !Ref Instance
+  PublicIp:
+    Value: !Ref ElasticIp
+  DataVolumeId:
+    Value: !Ref DataVolume
+  BudgetName:
+    Value: !Ref Budget

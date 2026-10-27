@@ -23,11 +23,6 @@ services:
         # change models. config.py's comment has the sizes: ~75MB for tiny.en,
         # ~1.6GB for turbo.
         WHISPER_MODEL: ${WHISPER_MODEL:-tiny.en}
-
-      # Off. Adding a model unpickles it, which runs its code; a public server
-      # answers with its built-in models only. (The page's forms also refuse
-      # anyone not on the server's own machine, but this needs no such argument.)
-      MODEL_MANAGEMENT: "0"
     restart: unless-stopped
     expose:
       - "5000"
