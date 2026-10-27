@@ -1,0 +1,155 @@
+1
+00:00:00,000 --> 00:00:04,160
+ Welcome back for another week of materials. I'm aware that some of you might be getting a little
+
+2
+00:00:04,160 --> 00:00:08,720
+ bit tired of my Star Wars memes at the start of every week. And to those people, I have only
+
+3
+00:00:08,720 --> 00:00:13,840
+ one thing to say. So uncivilized. This week is going to be a little bit more laid back than last
+
+4
+00:00:13,840 --> 00:00:17,840
+ week was and this is generally going to be the case for the content in the rest of the course.
+
+5
+00:00:17,840 --> 00:00:22,080
+ We'll have a big week where we introduce a family of materials and then we'll have a little bit
+
+6
+00:00:22,080 --> 00:00:27,280
+ calmer of a week where we talk about manufacturing those materials, working them into shapes and
+
+7
+00:00:27,280 --> 00:00:31,680
+ parts that we might want to use in our designs to solve engineering problems. This week is
+
+8
+00:00:31,680 --> 00:00:35,840
+ all that manufacturing engineering metals. We're going to talk a little bit about how you purchase
+
+9
+00:00:35,840 --> 00:00:40,720
+ these metals, the kind of standard sections and form factors and lengths and sizes that they come in
+
+10
+00:00:40,720 --> 00:00:45,440
+ and the standard grade that you can buy and the places that you get these from. And we're also going
+
+11
+00:00:45,440 --> 00:00:48,960
+ to talk a little bit about the different processes that are available to you as an engineer to shape
+
+12
+00:00:48,960 --> 00:00:53,280
+ and form these into the components that you want to use in your designs. We're going to talk about
+
+13
+00:00:53,280 --> 00:00:57,520
+ some very approachable, accessible, low volume processes, things that you might be able to do in
+
+14
+00:00:57,520 --> 00:01:02,480
+ your own backyard or in shed or jobs that you might be able to send out to like a local manufacturer
+
+15
+00:01:02,480 --> 00:01:07,200
+ to make for you. And we're also going to talk about some larger scale production processes casting
+
+16
+00:01:07,200 --> 00:01:11,920
+ and forging to give you an appreciation for how a lot of the standard components that you buy that
+
+17
+00:01:11,920 --> 00:01:16,400
+ you're implementing your designs may be made. Obviously we're not going to talk about every single
+
+18
+00:01:16,400 --> 00:01:20,720
+ manufacturing process for metals that are out there. There's just not enough time in this course and
+
+19
+00:01:20,720 --> 00:01:24,960
+ there are a lot of manufacturing processes in the world. But as was the case with material
+
+20
+00:01:24,960 --> 00:01:28,960
+ properties and as was the case when we were meeting engineering metals last week, our goal is to
+
+21
+00:01:28,960 --> 00:01:33,120
+ give you just enough exposure to these that you'll be able to walk out and apply this knowledge
+
+22
+00:01:33,120 --> 00:01:37,280
+ when you're learning about new processes in the future in industry. As a bit of a side note,
+
+23
+00:01:37,280 --> 00:01:41,360
+ just before we begin, you should be aware that while this week's topic is manufacturing with
+
+24
+00:01:41,360 --> 00:01:45,760
+ engineering metals, a lot of the processes that we're going to talk about can also be used on
+
+25
+00:01:45,760 --> 00:01:49,840
+ non-metals on other engineering materials. And we'll highlight this a little more when we meet
+
+26
+00:01:49,840 --> 00:01:53,520
+ some of those materials in the coming weeks. But you should be aware that when we talk about
+
+27
+00:01:53,520 --> 00:01:58,720
+ things like, I don't know, machining, for example, machining of plastics and other materials is
+
+28
+00:01:58,720 --> 00:02:03,120
+ also possible. It's not only a technique for manufacturing metals, it's just that it's probably more
+
+29
+00:02:03,120 --> 00:02:07,200
+ likely you'll use this when you're working with metals than not. Finally, you should also note that
+
+30
+00:02:07,200 --> 00:02:11,760
+ some of the processes that we're going to meet this week share a name with other manufacturing
+
+31
+00:02:11,760 --> 00:02:16,400
+ processes that are designed for other materials. For example, welding is a process we'll meet
+
+32
+00:02:16,400 --> 00:02:20,640
+ this week in the context of working with metals, but there's an equivalent similar process
+
+33
+00:02:20,640 --> 00:02:26,320
+ called plastic welding that's used on engineering polymers. While the two share a name and kind of
+
+34
+00:02:26,320 --> 00:02:30,960
+ describe the same thing, they're entirely different processes and work in entirely different ways.
+
+35
+00:02:30,960 --> 00:02:35,040
+ And generally speaking, you can't use the equipment and the techniques that you use for plastic
+
+36
+00:02:35,040 --> 00:02:39,680
+ welding to weld metals and vice versa. As always, we're going to finish up our discussions this
+
+37
+00:02:39,680 --> 00:02:44,400
+ week by talking about material selection, the bigger picture. And this week our focus is going to be
+
+38
+00:02:44,400 --> 00:02:48,960
+ on how you implement constraints that arise from manufacturing processes in your selection
+
+39
+00:02:48,960 --> 00:02:56,960
+ of the material. So sit back, relax and enjoy the videos for this week.

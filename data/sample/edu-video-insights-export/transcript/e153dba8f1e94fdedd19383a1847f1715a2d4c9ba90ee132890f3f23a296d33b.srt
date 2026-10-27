@@ -1,0 +1,159 @@
+1
+00:00:00,000 --> 00:00:05,280
+ In the first video of this mini-series I hinted at a topic that I'm going to be calling
+
+2
+00:00:05,280 --> 00:00:07,560
+ System Equivalence.
+
+3
+00:00:07,560 --> 00:00:12,240
+ In that video by recognizing that there was a force in parallel with the spring, we worked
+
+4
+00:00:12,240 --> 00:00:16,480
+ out that we could delete that spring and end up with a system that potentially could
+
+5
+00:00:16,480 --> 00:00:20,760
+ still give us all the information we wanted if we modeled it would be far easier for
+
+6
+00:00:20,760 --> 00:00:22,800
+ us to model than the original one.
+
+7
+00:00:22,800 --> 00:00:27,120
+ System Equivalence is a broader topic than just the simplifications we can make from series
+
+8
+00:00:27,120 --> 00:00:28,120
+ or parallel below.
+
+9
+00:00:28,760 --> 00:00:32,800
+ It's a lens that lets us do things like move components from one side of a gearbox
+
+10
+00:00:32,800 --> 00:00:38,760
+ to another by finding the equivalent spring or friction or inertia that kind of stores
+
+11
+00:00:38,760 --> 00:00:43,000
+ the same amount of energy or imparts the same forces, but one that's original location
+
+12
+00:00:43,000 --> 00:00:45,680
+ but might be far easier for us to model.
+
+13
+00:00:45,680 --> 00:00:49,000
+ The classic example that I like to use is actually what are your homework problems for
+
+14
+00:00:49,000 --> 00:00:50,000
+ this week.
+
+15
+00:00:50,000 --> 00:00:55,000
+ It's a system that has three masses and two gearboxes but if you use what you know about
+
+16
+00:00:55,000 --> 00:01:00,280
+ System Equivalence, you can boil it down to one mass on one shaft which is way easier
+
+17
+00:01:00,280 --> 00:01:01,280
+ to model.
+
+18
+00:01:01,280 --> 00:01:05,720
+ There are two primary ways that we approach the search for equivalent components through
+
+19
+00:01:05,720 --> 00:01:07,720
+ effort and through energy.
+
+20
+00:01:07,720 --> 00:01:11,880
+ The effort formulation which I find particularly useful when I'm trying to move springs or
+
+21
+00:01:11,880 --> 00:01:17,000
+ frictions around essentially involves working out if I move this component, what effort
+
+22
+00:01:17,000 --> 00:01:21,280
+ does it need to produce to be equivalent to the one that I saw before.
+
+23
+00:01:21,280 --> 00:01:24,800
+ In the case of a friction, you can imagine moving it from the slow to a fast side of
+
+24
+00:01:24,800 --> 00:01:25,800
+ a gearbox.
+
+25
+00:01:25,800 --> 00:01:29,680
+ If it's on the fast side of the gearbox, ostensibly it should give us a higher torque
+
+26
+00:01:29,680 --> 00:01:32,440
+ since torque is B times omega.
+
+27
+00:01:32,440 --> 00:01:36,880
+ So what you need to do is adjust the B of the equivalent friction so that the new friction
+
+28
+00:01:36,880 --> 00:01:41,960
+ on the faster shaft produces the same torque on any kind of attached inertia as the old
+
+29
+00:01:41,960 --> 00:01:44,120
+ one would have on the slower shaft.
+
+30
+00:01:44,120 --> 00:01:48,360
+ The energy formulation though is one that I find particularly useful for rotating masses
+
+31
+00:01:48,360 --> 00:01:50,080
+ for inertia.
+
+32
+00:01:50,080 --> 00:01:53,940
+ In this case we work out how much kinetic energy the mass was storing in its kind of
+
+33
+00:01:53,940 --> 00:01:58,680
+ older arrangement and then we look at its new arrangement and work out how much kinetic
+
+34
+00:01:58,680 --> 00:02:00,240
+ energy is storing there.
+
+35
+00:02:00,240 --> 00:02:04,440
+ We adjust the mass or the mass moment of inertia accordingly so that these two things
+
+36
+00:02:04,440 --> 00:02:06,440
+ store the same amount of energy.
+
+37
+00:02:06,440 --> 00:02:10,880
+ This concept is a little bit more open-ended than our kind of very regimented states
+
+38
+00:02:10,880 --> 00:02:14,560
+ face modeling procedure and I think it's deserving of its own problem.
+
+39
+00:02:14,560 --> 00:02:18,680
+ So let's have a got problem 3.8 together and see if we can kind of get a grasp of this
+
+40
+00:02:18,680 --> 00:02:25,680
+ reasonably difficult concept.

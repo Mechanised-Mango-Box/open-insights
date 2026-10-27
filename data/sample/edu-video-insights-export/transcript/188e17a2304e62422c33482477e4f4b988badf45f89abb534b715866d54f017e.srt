@@ -1,0 +1,359 @@
+1
+00:00:00,000 --> 00:00:03,040
+ All right, you made it to the end of the week again. Well done. I heard this week that there
+
+2
+00:00:03,040 --> 00:00:07,360
+ was some interest in seeing what other features Edge backpack has to offer. And so in the big
+
+3
+00:00:07,360 --> 00:00:11,680
+ picture video this week, I'm very happy to oblige. Edge backpack is not only a material's database,
+
+4
+00:00:11,680 --> 00:00:16,640
+ it has tons of other resources built in that you'll probably find quite useful in selecting
+
+5
+00:00:16,640 --> 00:00:20,880
+ materials for engineering design problems and in selecting manufacturing processes for
+
+6
+00:00:20,880 --> 00:00:24,880
+ engineering design problems and just broadly for extending your knowledge about the stuff that
+
+7
+00:00:24,880 --> 00:00:28,480
+ we've learned in this course. I'll say from the outset that some of the resources that
+
+8
+00:00:28,480 --> 00:00:31,920
+ they've documented here in Edge backpack are probably above your level at the moment.
+
+9
+00:00:31,920 --> 00:00:35,760
+ They're covering content that you haven't talked about in your courses yet and some of these
+
+10
+00:00:35,760 --> 00:00:38,880
+ are well outside the scope of this course. But I'm going to walk you through a handful of these
+
+11
+00:00:38,880 --> 00:00:42,560
+ to show you where they live in. That way you'll know you could always refer back to them as you
+
+12
+00:00:42,560 --> 00:00:47,040
+ learn some of this content in your future courses. You can access these resources at any level of
+
+13
+00:00:47,040 --> 00:00:50,560
+ the database. I like to work in level three, so I'm just going to start there. And we're going to
+
+14
+00:00:50,560 --> 00:00:55,120
+ spend most of our time here at the Learn button. Now, by default, this Learn button opens up a
+
+15
+00:00:55,120 --> 00:01:00,640
+ web browser to the online repository of this information, but there isn't offline version as well.
+
+16
+00:01:00,640 --> 00:01:06,240
+ If you head to the settings and you go to connection, always use the offline version,
+
+17
+00:01:06,240 --> 00:01:10,640
+ you'll get exactly the same thing, but in a version that's kind of contained within the program
+
+18
+00:01:10,640 --> 00:01:14,160
+ that doesn't rely on a website. The web version is a little bit prettier than the built-in
+
+19
+00:01:14,160 --> 00:01:18,080
+ version and has a slightly more powerful search function, but I'm going to stay within the
+
+20
+00:01:18,080 --> 00:01:21,840
+ offline version for the purpose of this video. The first place I'd like to start are in the
+
+21
+00:01:21,840 --> 00:01:26,000
+ science notes. You've probably read one or two of these before. These are the bits of information
+
+22
+00:01:26,000 --> 00:01:30,160
+ that pop up when you click one of the little bubbles next to a material property, for example.
+
+23
+00:01:30,160 --> 00:01:34,080
+ In here, you'll find information about pretty much all of the properties of the database,
+
+24
+00:01:34,080 --> 00:01:38,320
+ as well as some information about stuff that's maybe a bit outside the scope of the course.
+
+25
+00:01:38,320 --> 00:01:42,320
+ If, for example, I look at the property electrical resistivity at 300 Kelvin,
+
+26
+00:01:42,320 --> 00:01:45,040
+ I get a little bit of information about resistivity in general, and then I can
+
+27
+00:01:45,040 --> 00:01:49,120
+ follow the bouncy ball here to learn a bit about how resistivity varies with temperature.
+
+28
+00:01:49,200 --> 00:01:54,560
+ The next important resource that Edgy Pak has built in are tables of standard material indices.
+
+29
+00:01:54,560 --> 00:01:58,400
+ These are incredibly useful because as we discovered only a few weeks ago,
+
+30
+00:01:58,400 --> 00:02:02,720
+ derivation of a materials index is a pretty involved and pretty complicated and pretty
+
+31
+00:02:02,720 --> 00:02:07,920
+ time-consuming process. In Edgy Pak, you can look up pre-derived tables of materials
+
+32
+00:02:07,920 --> 00:02:12,560
+ indices for a bunch of different functions and objectives. For example, I can look at a
+
+33
+00:02:12,560 --> 00:02:17,200
+ stiffness limited problem, and I can find a material index which optimizes for mass,
+
+34
+00:02:17,200 --> 00:02:21,760
+ and it talks about this for a whole bunch of different loading scenarios. I could also look at
+
+35
+00:02:21,760 --> 00:02:26,880
+ a strength limited case and optimize for something like embodying energy. Here, I also get a bunch
+
+36
+00:02:26,880 --> 00:02:31,440
+ of different loading scenarios. These built-in material indices you can then utilize in your
+
+37
+00:02:31,440 --> 00:02:36,080
+ chart or ranking stage, but they're actually built into Edgy Pak for you to use there as well.
+
+38
+00:02:36,080 --> 00:02:42,560
+ If I go over to chart select and I go chart index, instead of going here and doing my own
+
+39
+00:02:42,560 --> 00:02:48,080
+ thing under advance, what I can do is performance index finder and select a component, so I kind of
+
+40
+00:02:48,080 --> 00:02:53,680
+ loading scenario. I don't know, let's choose a simple tie rod intention. I can choose what my free
+
+41
+00:02:53,680 --> 00:02:58,000
+ variables in the problem are. I can choose what my fixed variables in the problem are, my limiting
+
+42
+00:02:58,000 --> 00:03:02,800
+ constraints, so stiffness or strength, and I can optimize for volume or for cost or for mass or
+
+43
+00:03:02,800 --> 00:03:07,600
+ for embodied energy. And Edgy Pak will give me the correct index for that particular problem
+
+44
+00:03:07,600 --> 00:03:11,280
+ right here. If I do the example that we worked on together a couple of weeks ago, the
+
+45
+00:03:11,280 --> 00:03:15,840
+ column in compression will be optimized for mass. Let's go here, column in compression,
+
+46
+00:03:16,560 --> 00:03:21,680
+ free variables are section area. That's fine. Let's optimize for strength because we said it was
+
+47
+00:03:21,680 --> 00:03:27,520
+ going to fail by squashing and let's optimize for mass. And I get the same result we got before,
+
+48
+00:03:27,520 --> 00:03:30,960
+ row on the yield strength. In this case, the yield strength in compression. So use these
+
+49
+00:03:30,960 --> 00:03:34,720
+ built-in material indices and certainly when you're driving material indices for yourself, it helps to
+
+50
+00:03:34,720 --> 00:03:39,280
+ have a really good understanding of the underlying solid mechanics, the physics, the statics, right?
+
+51
+00:03:39,280 --> 00:03:43,760
+ And while I understand that many of you haven't done MEC 2430 mechanics of solids and some of
+
+52
+00:03:43,760 --> 00:03:47,680
+ you don't even have this in your program, the most you're ever going to do is civil 1100. It
+
+53
+00:03:47,680 --> 00:03:51,520
+ can obviously be really helpful to know which equations govern the behavior of a structure.
+
+54
+00:03:51,520 --> 00:03:54,800
+ Either as a revision tool, if you've already done mechanics of solid or you're going to do it
+
+55
+00:03:54,800 --> 00:04:00,240
+ later in your degree, or as a kicking off point for any kind of independent study, Edgy Pak has
+
+56
+00:04:00,240 --> 00:04:05,280
+ solutions to a bunch of standard solids problems documented in the database. If I go down here
+
+57
+00:04:05,280 --> 00:04:09,520
+ as solutions to standard problems, I can see constituent equations for mechanical response,
+
+58
+00:04:09,520 --> 00:04:14,400
+ moments of sections, elastic banding of beams, and many, many more of these. If I choose, I don't
+
+59
+00:04:14,400 --> 00:04:18,960
+ know, let's say, torsion of shafts, so I have a shaft that I'm putting a torque on. Then I can see
+
+60
+00:04:18,960 --> 00:04:22,960
+ all of the governing equations for this behavior and I can use these in my derivation of
+
+61
+00:04:22,960 --> 00:04:27,040
+ a materials index. Or to understand how one of the pre-derived materials indices that
+
+62
+00:04:27,040 --> 00:04:32,000
+ built into Edgy Pak came about. Sometimes though derivation of a materials index can all seem
+
+63
+00:04:32,000 --> 00:04:36,080
+ like a little bit too much. And particularly when you've got complex problems, it can be hard to
+
+64
+00:04:36,080 --> 00:04:40,480
+ know where to start. Thankfully, Edgy Pak has a bunch of case studies documented where they've already
+
+65
+00:04:40,480 --> 00:04:45,280
+ gone through the material selection or the manufacturing technique selection process. And you can see
+
+66
+00:04:45,280 --> 00:04:49,600
+ how they arrived at a particular solution. If I head over to the case studies button here,
+
+67
+00:04:49,600 --> 00:04:53,360
+ I could look at some material selection case study or some manufacturing process selection case
+
+68
+00:04:53,360 --> 00:04:57,600
+ studies. Maybe I'll have a look at a material selection case study and I might do a mechanical
+
+69
+00:04:57,600 --> 00:05:02,240
+ example. So I might do, I don't know, let's say, materials for flywheels. That sounds pretty
+
+70
+00:05:02,240 --> 00:05:07,040
+ interesting. And so here they talk about a simple model for a flywheel. They work out what the
+
+71
+00:05:07,040 --> 00:05:12,160
+ function statement is and what the objective is. They put a constraint here as well. They build up a
+
+72
+00:05:12,160 --> 00:05:16,320
+ mechanical model for this thing. And they derive a material index for the maximum amount of
+
+73
+00:05:16,320 --> 00:05:20,800
+ kinetic energy that a flywheel can store as a function of its mass. These case studies can be a
+
+74
+00:05:20,800 --> 00:05:25,040
+ really good starting point, especially if you've got a complicated material selection problem to look
+
+75
+00:05:25,040 --> 00:05:28,880
+ for something related and then try to adapt it to the problem you're trying to solve. And you'll
+
+76
+00:05:28,880 --> 00:05:31,920
+ probably find these quite useful as you're working through your tutorial debate problems for the
+
+77
+00:05:31,920 --> 00:05:35,120
+ rest of the semester. To finish up, I'm just going to talk about some of the resources you can
+
+78
+00:05:35,120 --> 00:05:39,920
+ get on the web version of this Learn page as opposed to the built-in version. So if I go back to
+
+79
+00:05:39,920 --> 00:05:45,840
+ settings and I go connection, don't always use the offline version. And then I click Learn,
+
+80
+00:05:45,840 --> 00:05:50,640
+ I'll get the website. And on this website, in addition to all the things we've already spoken about,
+
+81
+00:05:50,640 --> 00:05:54,400
+ there are a bunch of other resources that will probably be useful in your preparation and revision
+
+82
+00:05:54,400 --> 00:05:59,680
+ for the quizzes in this course. If I go to the introduction of materials page, there's a glossary
+
+83
+00:05:59,680 --> 00:06:03,920
+ of key terms that are commonly used. And there's a bunch of flashcards and quizzes that you can take
+
+84
+00:06:03,920 --> 00:06:08,320
+ to help build up your understanding. There's also on this page, a bunch of material property
+
+85
+00:06:08,320 --> 00:06:11,920
+ definitions, which can be quite useful if you've got that one or two properties, the edge you
+
+86
+00:06:11,920 --> 00:06:16,560
+ pack that aren't explicitly defined, particularly well, things like thermal shock resistance,
+
+87
+00:06:16,560 --> 00:06:21,200
+ for example, as well as a bunch of documented crystallography information and phase diagrams.
+
+88
+00:06:21,200 --> 00:06:25,120
+ This is only kind of scratching the surface of what edge you pack can do. It's an incredibly
+
+89
+00:06:25,120 --> 00:06:29,600
+ versatile and robust and useful program. I hope you found this interesting and useful and that
+
+90
+00:06:29,600 --> 00:06:38,000
+ this is a catalyst for you now to explore some of the other things that edge you pack can do.

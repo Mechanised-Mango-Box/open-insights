@@ -1,0 +1,111 @@
+1
+00:00:00,000 --> 00:00:02,640
+ In this video, I want to talk about equilibrium points.
+
+2
+00:00:03,520 --> 00:00:08,720
+ Equilibrium points are just places in kind of state space, kind of values of the state vector,
+
+3
+00:00:09,440 --> 00:00:14,800
+ where if a system ever reaches that point, it won't change again unless acted on by some sort of
+
+4
+00:00:14,800 --> 00:00:19,440
+ external stimulus. Fun fact, this is kind of where the term steady state comes from.
+
+5
+00:00:20,000 --> 00:00:23,920
+ If your system reaches an equilibrium point, if it reaches a kind of value of the state
+
+6
+00:00:23,920 --> 00:00:27,760
+ vector where it's no longer changing, it's said to have reached steady state.
+
+7
+00:00:28,480 --> 00:00:33,600
+ The state vector remains steady. To be a little bit more mathematical, a little bit more rigorous
+
+8
+00:00:33,600 --> 00:00:38,960
+ in our definition of what an equilibrium point is. Generally, we say that equilibrium points occur
+
+9
+00:00:38,960 --> 00:00:44,000
+ at places where the state derivative vector is zero. This kind of makes sense, right? If something's
+
+10
+00:00:44,000 --> 00:00:48,720
+ not changing anymore, then it's derivative is zero. And not just zero for some of the states,
+
+11
+00:00:48,720 --> 00:00:54,000
+ but zero for all of the states. At equilibrium points, none of the states are changing anymore.
+
+12
+00:00:54,560 --> 00:00:58,320
+ Linear systems, those which are characterized by kind of linear state space models,
+
+13
+00:00:58,320 --> 00:01:03,360
+ are able to have kind of one equilibrium point or infinitely many of them that are kind of not
+
+14
+00:01:03,360 --> 00:01:08,480
+ isolated from each other. Nonlinear systems, though, are pretty interesting in that you can actually
+
+15
+00:01:08,480 --> 00:01:13,920
+ have multiple isolated equilibrium points in a nonlinear system that each have their own kind of
+
+16
+00:01:13,920 --> 00:01:18,880
+ unique, interesting behavior. I mentioned to you already that equilibrium points occur when the
+
+17
+00:01:18,880 --> 00:01:23,600
+ state derivative vector is zero, where the system is unchanging. And actually, this is the technique
+
+18
+00:01:23,600 --> 00:01:29,040
+ by which we find equilibrium points of a system. We set each state space equation equal to zero,
+
+19
+00:01:29,040 --> 00:01:33,840
+ and then we solve the kind of resulting set of simultaneous equations for the values of the state
+
+20
+00:01:33,840 --> 00:01:38,480
+ vector, the values of each set that are going to make this true. For systems without inputs,
+
+21
+00:01:38,480 --> 00:01:43,280
+ this is a pretty straightforward process. For systems that do have inputs, well, you need to find
+
+22
+00:01:43,280 --> 00:01:48,480
+ equilibrium points that correspond to a particular set of inputs. Each set of inputs may have a
+
+23
+00:01:48,480 --> 00:01:53,600
+ different or no equilibrium points associated with them. Equilibrium points also provide us a window
+
+24
+00:01:53,600 --> 00:01:58,400
+ and there's some pretty interesting properties of a nonlinear systems. If we take a linearization
+
+25
+00:01:58,400 --> 00:02:03,440
+ about an equilibrium point, instead of just about any old ordinary point, we can learn something
+
+26
+00:02:03,440 --> 00:02:07,600
+ about that nonlinear system. And that's going to be the topic of the kind of couple of videos that
+
+27
+00:02:07,600 --> 00:02:11,440
+ follow this one. But I guess before we jump into that, let's make sure we have the
+
+28
+00:02:11,440 --> 00:02:16,400
+ process of finding equilibrium points under our belt. We'll do that at 6.5.

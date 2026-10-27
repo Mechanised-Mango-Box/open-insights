@@ -1,0 +1,235 @@
+1
+00:00:00,000 --> 00:00:06,120
+ Alright, let's have a quick chat about system structure relations for electrical systems.
+
+2
+00:00:06,120 --> 00:00:09,560
+ In contrast to previous weeks, I haven't introduced these as we've met the different
+
+3
+00:00:09,560 --> 00:00:10,560
+ elements.
+
+4
+00:00:10,560 --> 00:00:14,040
+ I've left them into a separate video and that's because I feel like the skills we're
+
+5
+00:00:14,040 --> 00:00:18,240
+ about to learn are a bit more general and kind of have application even outside of our
+
+6
+00:00:18,240 --> 00:00:19,240
+ modeling problems.
+
+7
+00:00:19,240 --> 00:00:24,320
+ So in this video, I want to talk about the two kind of fundamental SSRs for electrical
+
+8
+00:00:24,320 --> 00:00:29,240
+ systems, a Kirchhoff's voltage and current laws, KVL and KCL.
+
+9
+00:00:29,240 --> 00:00:31,960
+ Some of you might be sitting on the edge of your seat with your finger on the mouse
+
+10
+00:00:31,960 --> 00:00:36,320
+ button at the moment, getting ready to skip this video because KVL and KCL are concepts
+
+11
+00:00:36,320 --> 00:00:39,400
+ that you would probably talk already in e-lect for their teen 10.
+
+12
+00:00:39,400 --> 00:00:42,200
+ And if you already have a good grasp of them, then fair enough.
+
+13
+00:00:42,200 --> 00:00:47,520
+ But for some of you, and certainly this was my experience, KVL and KCL and non-trivial,
+
+14
+00:00:47,520 --> 00:00:49,560
+ they're pretty difficult topics.
+
+15
+00:00:49,560 --> 00:00:52,760
+ And it doesn't help that there's some ambiguity around these things and the procedure that
+
+16
+00:00:52,760 --> 00:00:55,120
+ you should take to perform them.
+
+17
+00:00:55,120 --> 00:01:00,440
+ For example, I remember being in e-lect 1300 and hearing mixed messages between the different
+
+18
+00:01:00,440 --> 00:01:04,880
+ teaching stuff about how exactly I should be performing KVL.
+
+19
+00:01:04,880 --> 00:01:08,840
+ In some cases I was told, well, the direction you go around the loop matters and you
+
+20
+00:01:08,840 --> 00:01:12,800
+ should be careful to make sure you always go clockwise and other times I was told I should
+
+21
+00:01:12,800 --> 00:01:16,880
+ mix it up and sometimes go clockwise and sometimes go counterclockwise.
+
+22
+00:01:16,880 --> 00:01:20,960
+ I was told that I should worry about components to the shared between two circuits and
+
+23
+00:01:20,960 --> 00:01:24,520
+ that if I went clockwise through at one time and counterclockwise through at the other time
+
+24
+00:01:24,520 --> 00:01:30,120
+ I need to include a negative sign in the voltage, but in reality none of this is true.
+
+25
+00:01:30,120 --> 00:01:35,480
+ KVL really couldn't be more simple provided you follow for regimented steps.
+
+26
+00:01:35,480 --> 00:01:41,720
+ So here we go, recognizing that KVL as a law is a rule that says that the sum of voltages
+
+27
+00:01:41,720 --> 00:01:45,520
+ around a loop, a closed loop must equal zero.
+
+28
+00:01:45,520 --> 00:01:46,880
+ Here's what we have to do.
+
+29
+00:01:46,880 --> 00:01:50,760
+ Step one, draw polarities for all of the elements that are in your circuit.
+
+30
+00:01:50,760 --> 00:01:55,000
+ Step two, pick any point you like in a given loop and begin to work your way around that
+
+31
+00:01:55,000 --> 00:01:57,200
+ loop either clockwise or anticlockwise.
+
+32
+00:01:57,200 --> 00:01:59,600
+ It doesn't matter which way.
+
+33
+00:01:59,600 --> 00:02:04,520
+ Step three, as you run into individual elements and you kind of traverse through them,
+
+34
+00:02:04,520 --> 00:02:08,840
+ write that thing down as part of your sum of voltages and if you go through an element
+
+35
+00:02:08,840 --> 00:02:12,600
+ into its positive terminal and out of its negative terminal then you should take that
+
+36
+00:02:12,600 --> 00:02:14,640
+ as a positive voltage and vice versa.
+
+37
+00:02:14,640 --> 00:02:18,760
+ If you go into the negative terminal you should take that as a negative voltage.
+
+38
+00:02:18,760 --> 00:02:22,880
+ Only step four, when you get back to where you started, set this thing equal to zero
+
+39
+00:02:22,880 --> 00:02:25,480
+ and rearrange for the voltages that you're interested in.
+
+40
+00:02:25,480 --> 00:02:29,320
+ It doesn't matter if you went around clockwise and then anticlockwise, it doesn't matter
+
+41
+00:02:29,320 --> 00:02:34,120
+ if you went through in one loop an element one time and then another loop another time.
+
+42
+00:02:34,120 --> 00:02:38,360
+ It doesn't matter if an element is shared between two or three or four different loops.
+
+43
+00:02:38,360 --> 00:02:42,240
+ It doesn't matter if you go against a current sometimes, the way a current has been indicated.
+
+44
+00:02:42,240 --> 00:02:45,400
+ All that matters is the polarity of the elements and whether you've entered a positive
+
+45
+00:02:45,400 --> 00:02:47,000
+ or a negative terminal.
+
+46
+00:02:47,000 --> 00:02:51,720
+ KCL, Kirchhoff's current law is also really, really simple.
+
+47
+00:02:51,720 --> 00:02:55,680
+ All we need to do is make sure that the amount of current going into a node is the same
+
+48
+00:02:55,680 --> 00:02:58,280
+ as the amount of current going out of a node.
+
+49
+00:02:58,280 --> 00:03:01,360
+ This is in essence is what this kind of law is prescribing, right?
+
+50
+00:03:01,360 --> 00:03:03,160
+ What goes in must come out.
+
+51
+00:03:03,160 --> 00:03:09,040
+ In N2440, the way that we kind of make this easy for ourselves is by drawing a node diagram.
+
+52
+00:03:09,040 --> 00:03:13,640
+ Just an indication, a picture of the node with all of the currents going in as arrows pointed
+
+53
+00:03:13,640 --> 00:03:18,160
+ toward the node and all of the currents going out as arrows pointed away from the node
+
+54
+00:03:18,160 --> 00:03:22,720
+ and anything pointed in goes on one side of the KCL and everything going out goes on the
+
+55
+00:03:22,720 --> 00:03:26,480
+ other side of the KCL and we set these things equal to each other.
+
+56
+00:03:26,480 --> 00:03:29,480
+ Then of course you can rearrange it for the current you were interested in in the first
+
+57
+00:03:29,480 --> 00:03:30,480
+ place.
+
+58
+00:03:30,480 --> 00:03:33,960
+ I've written a new problem for this year, problem 4.2, that hopefully should allow
+
+59
+00:03:33,960 --> 00:03:37,840
+ us to burn this concept into our mind, so let's go and have a go with that one.

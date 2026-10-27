@@ -1,0 +1,591 @@
+1
+00:00:00,000 --> 00:00:04,000
+ We're going to kick off our discussions on manufacturing processes for metals by talking about
+
+2
+00:00:04,000 --> 00:00:07,440
+ casting and forging, some of the oldest techniques for metalworking.
+
+3
+00:00:07,440 --> 00:00:10,400
+ Interestingly, these techniques are still extensively used today,
+
+4
+00:00:10,400 --> 00:00:13,360
+ both in the production of standard sections of the kinds of steel's
+
+5
+00:00:13,360 --> 00:00:15,600
+ and aluminiums that you can buy to make things out of,
+
+6
+00:00:15,600 --> 00:00:19,200
+ but also in the large scale production of engineering components.
+
+7
+00:00:19,200 --> 00:00:23,440
+ Casting is a manufacturing technique where molten metal is poured into a mould,
+
+8
+00:00:23,440 --> 00:00:27,040
+ which is a hollow cavity of the geometry that you'd like to make.
+
+9
+00:00:27,040 --> 00:00:29,920
+ After the molten metal is poured, it's allowed to cool and solidify
+
+10
+00:00:29,920 --> 00:00:32,080
+ inside of the mould, and when the mould is removed,
+
+11
+00:00:32,080 --> 00:00:35,360
+ you're left with a solid positive of the part that you're looking for.
+
+12
+00:00:35,360 --> 00:00:37,200
+ While you can cast lots of different materials,
+
+13
+00:00:37,200 --> 00:00:39,200
+ and we'll talk a little bit more about casting of, say,
+
+14
+00:00:39,200 --> 00:00:41,120
+ engineering polymers in two weeks' time,
+
+15
+00:00:41,120 --> 00:00:44,400
+ this video's going to be primarily focused on casting of metals.
+
+16
+00:00:44,400 --> 00:00:47,760
+ There are all sorts of unique challenges that need to be overcome when casting metals,
+
+17
+00:00:47,760 --> 00:00:50,080
+ not least of which is that you need to heat your metals up,
+
+18
+00:00:50,080 --> 00:00:52,240
+ pretty hot to get them liquid in the first place.
+
+19
+00:00:52,240 --> 00:00:55,280
+ But we've gotten pretty good at it over the last 7,000 years,
+
+20
+00:00:55,280 --> 00:00:57,840
+ some of the earliest metals to be cast being copper alloys,
+
+21
+00:00:57,840 --> 00:01:02,240
+ owing to their low melting temperatures and their relative good behaviour in the liquid state,
+
+22
+00:01:02,240 --> 00:01:04,960
+ and the ease by which copper can be mined and refined.
+
+23
+00:01:04,960 --> 00:01:07,920
+ Casting can be a very economical way to produce metal parts,
+
+24
+00:01:07,920 --> 00:01:09,200
+ especially at volume.
+
+25
+00:01:09,200 --> 00:01:12,160
+ Depending on the quality and durability of the mould that you're using,
+
+26
+00:01:12,160 --> 00:01:16,000
+ you can generally pull many, many parts from a single upfront investment.
+
+27
+00:01:16,000 --> 00:01:18,560
+ You can make really complicated geometries using this technique
+
+28
+00:01:18,560 --> 00:01:21,440
+ with very little additional machining or clean-up required.
+
+29
+00:01:21,440 --> 00:01:23,600
+ You waste very little material in this process
+
+30
+00:01:23,600 --> 00:01:25,840
+ because it's kind of an additive process.
+
+31
+00:01:25,840 --> 00:01:27,840
+ You put in as much material as you need.
+
+32
+00:01:27,840 --> 00:01:29,680
+ You never really need to remove any.
+
+33
+00:01:29,680 --> 00:01:31,600
+ And because you're working with the liquid metal,
+
+34
+00:01:31,600 --> 00:01:34,560
+ you can perform casting at the point of refinement if you like,
+
+35
+00:01:34,560 --> 00:01:36,240
+ reducing transport costs.
+
+36
+00:01:36,240 --> 00:01:37,520
+ This isn't the only way to do it.
+
+37
+00:01:37,520 --> 00:01:40,000
+ A bulk metals can be cast into ingots and often are,
+
+38
+00:01:40,000 --> 00:01:43,040
+ and then sent off to specific casting plants to be remelted
+
+39
+00:01:43,040 --> 00:01:45,120
+ and casting to their final geometries.
+
+40
+00:01:45,120 --> 00:01:48,960
+ Broadly speaking, casting processes are classified as expendable or non-expendable,
+
+41
+00:01:48,960 --> 00:01:52,480
+ and really this comes down to the expected lifetime of the mould.
+
+42
+00:01:52,480 --> 00:01:57,200
+ There are some processes like sand casting that have very expendable single-use moulds.
+
+43
+00:01:57,200 --> 00:01:59,360
+ Here, the negative mould is constructed from sand
+
+44
+00:01:59,360 --> 00:02:01,920
+ around the positive geometry of the part you'd like to make.
+
+45
+00:02:01,920 --> 00:02:05,840
+ This can be quite economical as you don't need to invest a lot of money into making a mould.
+
+46
+00:02:05,840 --> 00:02:09,600
+ While you do need a positive of the part to be able to make a mould when sand casting,
+
+47
+00:02:09,600 --> 00:02:14,000
+ this positive doesn't need to be the same material as what you want your final finished product to be.
+
+48
+00:02:14,000 --> 00:02:17,520
+ You could, for example, 3D print a positive of the geometry that you'd like.
+
+49
+00:02:17,520 --> 00:02:20,160
+ Use this to make the negative in the sand casting mould,
+
+50
+00:02:20,160 --> 00:02:22,560
+ and then pour your moulds and metal into the mould.
+
+51
+00:02:22,560 --> 00:02:25,760
+ The final result, the product you pull from the mould, will be a metal product,
+
+52
+00:02:25,760 --> 00:02:28,480
+ even though you started with a plastic positive to begin with.
+
+53
+00:02:28,480 --> 00:02:31,760
+ Now, by their very nature, the moulds when sand casting are expendable,
+
+54
+00:02:31,760 --> 00:02:35,680
+ they're destroyed when you remove the part from them, but they're reasonably easy to produce.
+
+55
+00:02:35,680 --> 00:02:39,360
+ Though there is obviously a labor cost involved in producing the mould every time,
+
+56
+00:02:39,360 --> 00:02:42,640
+ this means that for low volume run, sand casting makes a lot of sense.
+
+57
+00:02:42,640 --> 00:02:46,160
+ When you want to make thousands or tens of thousands or millions of parts, however,
+
+58
+00:02:46,160 --> 00:02:49,440
+ you're probably going to reach for a non-expendable casting process.
+
+59
+00:02:49,440 --> 00:02:54,000
+ For example, die casting involves injecting molten metal into a very expensive,
+
+60
+00:02:54,000 --> 00:02:57,680
+ machined, super duper accurate, hardened steel mould.
+
+61
+00:02:57,680 --> 00:03:00,080
+ The upfront investment costs for this process are much higher,
+
+62
+00:03:00,080 --> 00:03:03,040
+ both in the infrastructure that you need to be able to inject the molten metal,
+
+63
+00:03:03,040 --> 00:03:05,280
+ but also in the production of these dies.
+
+64
+00:03:05,280 --> 00:03:08,800
+ Unlike sand casting, where you can just take a positive geometry that could be, for example,
+
+65
+00:03:08,800 --> 00:03:11,600
+ 3D printed and you impress this into some sand.
+
+66
+00:03:11,600 --> 00:03:15,040
+ When die casting, you need to machine the mould ahead of time.
+
+67
+00:03:15,040 --> 00:03:18,720
+ While generally speaking, the end result from die casting is likely to be much nicer than that
+
+68
+00:03:18,720 --> 00:03:22,160
+ from sand casting, both in terms of the surface finish and the quality and the
+
+69
+00:03:22,160 --> 00:03:27,840
+ dimensional accuracy, but also in terms of the lack of inclusions and air bubbles that you might get.
+
+70
+00:03:27,840 --> 00:03:30,240
+ This comes at a cost, a real physical cost.
+
+71
+00:03:30,240 --> 00:03:33,760
+ Die casting is normally much, much more expensive than sand casting.
+
+72
+00:03:33,760 --> 00:03:36,000
+ Of course, at the production scales that you're working at,
+
+73
+00:03:36,000 --> 00:03:40,160
+ this upfront cost is recovered reasonably quickly compared to having to remake the mould
+
+74
+00:03:40,160 --> 00:03:41,760
+ every time when sand casting.
+
+75
+00:03:41,760 --> 00:03:45,760
+ Casting is a very diverse process, and there are many, many metals that can be cast.
+
+76
+00:03:45,840 --> 00:03:50,000
+ So you do need to be a little bit careful about the thermal diffusivity of a metal when casting.
+
+77
+00:03:50,000 --> 00:03:52,720
+ As we talked about last week, particularly for ions and steels,
+
+78
+00:03:52,720 --> 00:03:56,000
+ the cooling rate can have a significant effect on the microstructures that form.
+
+79
+00:03:56,000 --> 00:03:59,200
+ This means you need to be very careful about the choice of material for your mould,
+
+80
+00:03:59,200 --> 00:04:02,800
+ the choice of material that you're casting, the temperatures that you perform the casting
+
+81
+00:04:02,800 --> 00:04:05,680
+ process at and the conditions in the ambient environment.
+
+82
+00:04:05,680 --> 00:04:09,120
+ Casting is still too quickly might result in a product which is hard and brittle.
+
+83
+00:04:09,120 --> 00:04:12,480
+ Casting it too slowly might result in a product that's far too soft for use.
+
+84
+00:04:12,480 --> 00:04:16,240
+ Of course, many steel products you can heat treat after casting to achieve your desired
+
+85
+00:04:16,240 --> 00:04:17,200
+ microstructure.
+
+86
+00:04:17,200 --> 00:04:20,880
+ Design of moulds and dies and casting processes is obviously a field of its own,
+
+87
+00:04:20,880 --> 00:04:22,640
+ and we won't get too much detail here.
+
+88
+00:04:22,640 --> 00:04:26,480
+ What you should be aware of is that the word casting encompasses processes which are relatively
+
+89
+00:04:26,480 --> 00:04:31,040
+ simple that you can do in your backyard, all the way up to processes that are well and truly
+
+90
+00:04:31,040 --> 00:04:36,000
+ outside the reach of most engineers and only really make sense at large production scales.
+
+91
+00:04:36,000 --> 00:04:39,520
+ That brings us nicely to talking about forging, which is also kind of an umbrella term
+
+92
+00:04:39,520 --> 00:04:42,000
+ for a bunch of different manufacturing processes.
+
+93
+00:04:42,000 --> 00:04:44,880
+ The thing that they all have in common is that they generally involve working a metal
+
+94
+00:04:44,880 --> 00:04:46,320
+ to shape under compression.
+
+95
+00:04:46,320 --> 00:04:50,640
+ Very often forging is aided by the application of heat which temporarily reduces the yield
+
+96
+00:04:50,640 --> 00:04:52,880
+ strength of a material and makes it more pliable.
+
+97
+00:04:52,880 --> 00:04:56,320
+ And like casting, forging operates at both ends of the spectrum.
+
+98
+00:04:56,320 --> 00:04:59,600
+ On the one hand, when I say forging, you might be picturing a blacksmith,
+
+99
+00:04:59,600 --> 00:05:01,600
+ striking a piece of hot metal with a hammer.
+
+100
+00:05:01,600 --> 00:05:03,360
+ And this is certainly an example of forging.
+
+101
+00:05:03,360 --> 00:05:05,440
+ Many early forge parts were made this way.
+
+102
+00:05:05,440 --> 00:05:09,200
+ On the other hand, when I say forging, you might be picturing a humongous hydraulic press,
+
+103
+00:05:09,200 --> 00:05:11,360
+ working massive pieces of steel into shape.
+
+104
+00:05:11,440 --> 00:05:14,160
+ While there are still modern blacksmiths who forge things by hand,
+
+105
+00:05:14,160 --> 00:05:17,120
+ these days usually aided with hydraulic power hammers.
+
+106
+00:05:17,120 --> 00:05:20,000
+ If you're designing an engineering component to be forged, it's likely this is going to
+
+107
+00:05:20,000 --> 00:05:23,280
+ happen as part of some automated or semi-automated process.
+
+108
+00:05:23,280 --> 00:05:26,960
+ Typically, engineering components are forged using a die, which has a similar meaning in this
+
+109
+00:05:26,960 --> 00:05:30,320
+ context as that for casting and negative of the geometry that you'd like.
+
+110
+00:05:30,320 --> 00:05:33,040
+ Usually, the metals are heated up and then pressed into a die,
+
+111
+00:05:33,040 --> 00:05:36,400
+ or the die is pressed over them to force them into shape.
+
+112
+00:05:36,400 --> 00:05:40,480
+ Obviously, making the solar metal flow like this into the shape of the die requires a tremendous
+
+113
+00:05:40,480 --> 00:05:44,640
+ amount of force, and this process is normally aided by hydraulic powered machines
+
+114
+00:05:44,640 --> 00:05:46,880
+ and application of heat on the metals to soften them.
+
+115
+00:05:46,880 --> 00:05:49,840
+ But generally speaking, the amount of power that you require, the size of the machine you
+
+116
+00:05:49,840 --> 00:05:52,320
+ require depends on the size of the part you'd like to make.
+
+117
+00:05:52,320 --> 00:05:55,440
+ The complexity of the geometry and the difference between that geometry and the shape that
+
+118
+00:05:55,440 --> 00:05:58,160
+ you're starting with, the material properties of the metal that you're forging,
+
+119
+00:05:58,160 --> 00:06:00,000
+ particularly its yield strength and temperature,
+
+120
+00:06:00,000 --> 00:06:02,720
+ and the speed at which you want to conduct a forging process.
+
+121
+00:06:02,720 --> 00:06:07,120
+ Generally speaking, as you forge larger jobs that are further in their final geometry than
+
+122
+00:06:07,120 --> 00:06:11,600
+ they're starting geometry that are of higher strength or hardness at lower temperatures,
+
+123
+00:06:11,600 --> 00:06:16,160
+ and more quickly, the more and more power that you require on your machine to make this happen.
+
+124
+00:06:16,160 --> 00:06:20,160
+ For this reason, the scale of some forging machines is just absolutely wild.
+
+125
+00:06:20,160 --> 00:06:24,000
+ Not all forging processes are performed hot, in fact many fasteners, for example,
+
+126
+00:06:24,000 --> 00:06:25,120
+ are forged cold.
+
+127
+00:06:25,120 --> 00:06:28,720
+ With only a large initial investment required to make the die and set up the tooling in the
+
+128
+00:06:28,720 --> 00:06:32,560
+ machinery, this process can be highly automated and is one of the reasons why fasteners
+
+129
+00:06:32,560 --> 00:06:33,360
+ are so cheap.
+
+130
+00:06:33,360 --> 00:06:36,400
+ You should be aware that while casting and forging are talked about in the same context
+
+131
+00:06:36,480 --> 00:06:40,000
+ and they're both suitable for large-scale production, there's a significant difference
+
+132
+00:06:40,000 --> 00:06:42,080
+ in the types of microstructures that they form.
+
+133
+00:06:42,080 --> 00:06:45,920
+ Casting, by virtue of starting at the liquid state and allowing the metal to cool inside of
+
+134
+00:06:45,920 --> 00:06:50,400
+ the mold, generally results in a reasonably homogenous and randomized grain structure.
+
+135
+00:06:50,400 --> 00:06:54,560
+ Forging, on the other hand, has the tendency to deform grains and introduce a significant texture
+
+136
+00:06:54,560 --> 00:06:56,400
+ in the materials that you're working with.
+
+137
+00:06:56,400 --> 00:06:59,760
+ This might sound bad, but actually, generally speaking, the texture that you induce
+
+138
+00:06:59,760 --> 00:07:02,400
+ ends up being the shape of the part you're trying to make.
+
+139
+00:07:02,400 --> 00:07:05,920
+ And in most applications, this actually results in a strengthening of the geometry of
+
+140
+00:07:05,920 --> 00:07:08,160
+ that part in the directions you care about.
+
+141
+00:07:08,160 --> 00:07:12,320
+ As a result, forged components are typically very anisotropic and usually this is actually a
+
+142
+00:07:12,320 --> 00:07:12,800
+ good thing.
+
+143
+00:07:12,800 --> 00:07:16,480
+ They're effectively much stronger and stiffer in the direction that they're intended to be loaded.
+
+144
+00:07:16,480 --> 00:07:18,080
+ I'll leave it there for casting and forging.
+
+145
+00:07:18,080 --> 00:07:22,240
+ I've left some links to some excellent how it's made videos on both casting and forging
+
+146
+00:07:22,240 --> 00:07:23,520
+ in the textbook page for this one.
+
+147
+00:07:23,520 --> 00:07:26,560
+ And I strongly encourage you to check them out because it'll tie everything we've just
+
+148
+00:07:26,560 --> 00:07:29,280
+ talked about together and you'll see it done on an actual part.

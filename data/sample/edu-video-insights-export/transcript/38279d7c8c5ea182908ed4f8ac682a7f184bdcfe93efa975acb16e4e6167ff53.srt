@@ -1,0 +1,431 @@
+1
+00:00:00,000 --> 00:00:04,320
+ In this video, we're going to talk about some of the mechanical properties of engineering ceramics.
+
+2
+00:00:04,320 --> 00:00:08,400
+ From a very top level, I should probably recognize that in terms of mechanical properties,
+
+3
+00:00:08,400 --> 00:00:12,240
+ ceramics represent the true midmax of engineering materials.
+
+4
+00:00:12,240 --> 00:00:16,080
+ Owing to their incredibly robust covalent and ionic bonds,
+
+5
+00:00:16,080 --> 00:00:19,920
+ engineering ceramics have some ridiculously good mechanical properties,
+
+6
+00:00:19,920 --> 00:00:24,480
+ incredible strength, incredible stiffness, even at really high temperatures.
+
+7
+00:00:24,480 --> 00:00:26,960
+ But despite having these incredible properties,
+
+8
+00:00:26,960 --> 00:00:31,440
+ ceramics have a fatal flaw, a literal flaw, a flaw in their lattice.
+
+9
+00:00:32,640 --> 00:00:36,080
+ The porosity of the results from the way that most engineering ceramics in manufactured
+
+10
+00:00:36,080 --> 00:00:40,400
+ means that they have a really substantial archiliz heel. They're just not very ductile,
+
+11
+00:00:40,400 --> 00:00:44,720
+ and they tend to fail pretty catastrophically if they're loaded in a way that you don't expect and
+
+12
+00:00:44,720 --> 00:00:48,960
+ don't plan for. Consequently, it's important you have a really good understanding of both the
+
+13
+00:00:48,960 --> 00:00:54,400
+ properties of ceramics and also any intended load cases you have for them before you put them into
+
+14
+00:00:54,400 --> 00:00:59,200
+ service, because if you get these things wrong, they can fail quite extraordinarily.
+
+15
+00:00:59,200 --> 00:01:02,560
+ As we deal with metals, we're going to begin by talking about the elastic behavior of
+
+16
+00:01:02,560 --> 00:01:06,320
+ engineering ceramics, and then we'll have a little bit of a chat about their plastic behavior.
+
+17
+00:01:06,320 --> 00:01:10,080
+ Unlike polymers, which were quite complicated and that they had two mechanisms contributing
+
+18
+00:01:10,080 --> 00:01:14,480
+ to their elasticity, ceramics are reasonably simple, because just like metals,
+
+19
+00:01:14,480 --> 00:01:19,840
+ elasticity of ceramics corresponds to stretching and squishing of the atomic lattice planes.
+
+20
+00:01:19,920 --> 00:01:24,880
+ Interestingly, though, unlike metals which rely on comparatively weak metallic bonds,
+
+21
+00:01:24,880 --> 00:01:29,360
+ ceramics owing to their ionic and covalent bonds are far more stiff.
+
+22
+00:01:29,360 --> 00:01:33,440
+ Quite a few ceramics are many times stiffer than even the stiffest metals.
+
+23
+00:01:33,440 --> 00:01:38,080
+ And again, owing to the robustness of their bonds and the very, very ordered crystal structures
+
+24
+00:01:38,080 --> 00:01:43,920
+ that they tend to form, ceramics have very, very isotropic and very, very linear behavior when
+
+25
+00:01:43,920 --> 00:01:48,480
+ loaded elastically. These reasons collectively also mean that ceramics have reasonably good
+
+26
+00:01:48,480 --> 00:01:52,400
+ fatigue performance when they're loaded below their elastic limit, though you do need to be
+
+27
+00:01:52,400 --> 00:01:57,520
+ careful because any application of an unintended load above this limit can lead to some pretty
+
+28
+00:01:57,520 --> 00:02:02,800
+ catastrophic failure. And that point, catastrophic failure segues nicely into a discussion about
+
+29
+00:02:02,800 --> 00:02:07,040
+ the plastic properties of ceramics, about their strength. You'll remember from our discussions
+
+30
+00:02:07,040 --> 00:02:12,320
+ a few weeks ago that in metals, plastic deformation corresponded to the motion of dislocations
+
+31
+00:02:12,320 --> 00:02:16,560
+ in the lattice, and the strength of a metal was largely a function of how many obstacles,
+
+32
+00:02:16,560 --> 00:02:21,200
+ how many impedances you can put in the way of these dislocations. In ceramics, because of
+
+33
+00:02:21,200 --> 00:02:25,440
+ the types of crystal structures that they form, and because of how incredibly rigid lattice structure
+
+34
+00:02:25,440 --> 00:02:31,040
+ is, dislocations don't really have any ability to move anyway. This means that most ceramics
+
+35
+00:02:31,040 --> 00:02:35,440
+ have an incredibly high theoretical yield strength. It's kind of like having a metal which you've
+
+36
+00:02:35,440 --> 00:02:38,960
+ quenched and quenched and quenched and quenched and quenched and made stronger and stronger and
+
+37
+00:02:38,960 --> 00:02:43,680
+ stronger and stronger. Of course, this comes at a cost, having no ability to plastically
+
+38
+00:02:43,680 --> 00:02:49,440
+ to form, having no way for dislocations to move means that most ceramics are incredibly brittle.
+
+39
+00:02:49,440 --> 00:02:53,520
+ This trade-off largely arises from the porosity of ceramics, a consequence of the way that
+
+40
+00:02:53,520 --> 00:02:58,320
+ they're manufactured. Because of how rigid the lattice structure is in a ceramic, where you have a
+
+41
+00:02:58,320 --> 00:03:03,440
+ poor, it tends to act as a stress riser, a stress concentration. Now, if this is something you're
+
+42
+00:03:03,440 --> 00:03:08,000
+ going to talk more about in your later courses, it is one of the reasons why you try to avoid
+
+43
+00:03:08,000 --> 00:03:13,520
+ sharp corners on any of your designs. But to give you the TLDR, the really, really basic version,
+
+44
+00:03:13,520 --> 00:03:18,000
+ if you have a stress riser in your design, it means that the expected stress at a particular
+
+45
+00:03:18,000 --> 00:03:25,360
+ location can be amplified anywhere from 10 to 1000 times. Pause and other floors and ceramics tend
+
+46
+00:03:25,360 --> 00:03:30,720
+ to act as stress risers and when they're loaded under tension, they open up and form a crack.
+
+47
+00:03:30,720 --> 00:03:34,880
+ What ensues after this is a little bit of a positive feedback loop. The tip of the crack
+
+48
+00:03:34,880 --> 00:03:39,280
+ acts itself as a stress riser, increasing the stress in that area and causing the crack to open
+
+49
+00:03:39,280 --> 00:03:44,320
+ up further and the tip of that crack opens up further and so on and so forth until eventually this
+
+50
+00:03:44,320 --> 00:03:50,080
+ leads to catastrophic failure of the part. Notably, it's only tensile loads placed on pores that tend
+
+51
+00:03:50,080 --> 00:03:54,960
+ to initiate cracking. And for this reason, most ceramics are much, much weaker in tension than
+
+52
+00:03:54,960 --> 00:03:59,040
+ they are in compression. When loaded in tension, all the pores and other floors and ceramics
+
+53
+00:03:59,040 --> 00:04:03,200
+ act as stress risers and cause cracking. When loaded in compression, these pores don't open up,
+
+54
+00:04:03,200 --> 00:04:07,520
+ they instead tend to close and this means that ceramics can rely on the strength of their crystal
+
+55
+00:04:07,520 --> 00:04:12,400
+ lattice. That being said, due to the Poisson effect, when you put one part of a ceramic under
+
+56
+00:04:12,400 --> 00:04:16,880
+ compression, another part of it, the perpendicular direction is going to be loaded in tension. It's
+
+57
+00:04:16,880 --> 00:04:22,160
+ just the way that things work and consequently, even under compressive loads, ceramics can eventually
+
+58
+00:04:22,160 --> 00:04:27,120
+ fail by cracking. Though because these tensile Poisson stresses are only usually a fraction of an
+
+59
+00:04:27,120 --> 00:04:31,680
+ applied compressive stress, it means that ceramics are far, far stronger in compression than they
+
+60
+00:04:31,680 --> 00:04:36,560
+ are in tension, even if they fail the same way. It is possible to strengthen ceramics though
+
+61
+00:04:36,560 --> 00:04:41,040
+ because they brittle fail and don't ductile fail, the mechanism for doing so is very different
+
+62
+00:04:41,040 --> 00:04:45,520
+ than it was in metals. Remember, to strengthen metals, all we had to do was place obstacles for
+
+63
+00:04:45,520 --> 00:04:49,680
+ the motion of dislocations. In ceramics, the aluminum factor is crack growth and that's what we
+
+64
+00:04:49,680 --> 00:04:54,240
+ need to reduce. There are a bunch of different ways that you can prevent crack growth in ceramics.
+
+65
+00:04:54,240 --> 00:04:59,280
+ I guess the first and most obvious one being, reduce the number of potential sites where cracks
+
+66
+00:04:59,280 --> 00:05:03,520
+ can grow, reduce the number of pores that you have in your ceramic. And even this reasonably
+
+67
+00:05:03,520 --> 00:05:07,520
+ simple approach can be achieved in a bunch of different ways. You can start with finer and more
+
+68
+00:05:07,520 --> 00:05:12,160
+ refined ceramic powders. You can consolidate these powders far more tightly at much, much higher
+
+69
+00:05:12,160 --> 00:05:17,440
+ pressures. And you can send to these powders at much higher temperatures and for much longer times,
+
+70
+00:05:17,440 --> 00:05:22,800
+ all in an effort to try and reduce porosity. You should note that achieving 100% full theoretical
+
+71
+00:05:22,800 --> 00:05:27,440
+ density in a ceramic, eliminating all of the pores is pretty challenging and usually
+
+72
+00:05:27,440 --> 00:05:32,240
+ uneconomical to do. It would require ridiculous pressures or would require centering at very,
+
+73
+00:05:32,320 --> 00:05:36,800
+ very high temperatures for a very, very long time. And most of the time, this just doesn't make
+
+74
+00:05:36,800 --> 00:05:42,080
+ any economical sense. You can also strengthen ceramics by applying a compressive preload before
+
+75
+00:05:42,080 --> 00:05:47,280
+ they put into service. This is very commonly done for concrete and for tempered glass, for example.
+
+76
+00:05:47,280 --> 00:05:52,640
+ Here, by one mechanism or another, you apply a compressive load to the ceramic that has to be overcome
+
+77
+00:05:52,640 --> 00:05:57,520
+ by any tensile load you expect to see in service. Because ceramics are much stronger in compression,
+
+78
+00:05:57,520 --> 00:06:01,760
+ than they are in tension, this means you can put a substantial amount of compressive preload
+
+79
+00:06:01,760 --> 00:06:06,400
+load on there and essentially increase their tensile loading capacity. The final ceramic
+
+80
+00:06:06,400 --> 00:06:10,080
+ strengthening technique is one that we'll try and pick apart in the live stream a little bit this
+
+81
+00:06:10,080 --> 00:06:14,320
+ week because it's super duper interesting. It's called transformation toughening. Essentially,
+
+82
+00:06:14,320 --> 00:06:19,040
+ by carefully tuning the chemical composition, you construct a ceramic that, when subject to a
+
+83
+00:06:19,040 --> 00:06:24,960
+ high stress, changes phase and expands. Consequently, if a crack ever forms and there's a stress
+
+84
+00:06:24,960 --> 00:06:31,040
+ concentration at the crack tip, the ceramic expands in that area and acts to close the crack up.
+
+85
+00:06:31,120 --> 00:06:34,640
+ Again, this is a super interesting topic and we are going to pick it apart, but if you'd like
+
+86
+00:06:34,640 --> 00:06:38,960
+ to learn more between now and then Google search partially stabilise the cornea. To close this
+
+87
+00:06:38,960 --> 00:06:42,560
+ video out, I'm going to quickly talk about property testing of ceramics because it's not quite
+
+88
+00:06:42,560 --> 00:06:46,800
+ as simple as it was for metals. Whereas there were a range of tests to determine the mechanical
+
+89
+00:06:46,800 --> 00:06:50,640
+ properties of metals, say you could do a tensile test and learn a whole bunch of different things
+
+90
+00:06:50,640 --> 00:06:55,120
+ about a metal or you could do a relatively simple hardness test to learn about its hardness.
+
+91
+00:06:55,120 --> 00:06:59,200
+ And one of these tests aren't really compatible with ceramics. The combination of their very
+
+92
+00:06:59,200 --> 00:07:03,360
+ high strength and hardness that makes it hard to machine dog bones out of a ceramic.
+
+93
+00:07:03,360 --> 00:07:06,800
+ And the fact that they're quite brittle, which makes it really hard to grab them in the
+
+94
+00:07:06,800 --> 00:07:11,920
+ jaws of a tensile testing machine, means that running a tensile test of a ceramic sample is pretty
+
+95
+00:07:11,920 --> 00:07:16,560
+ much impossible. Britleness is also a problem for hardness testing of a ceramic because when you
+
+96
+00:07:16,560 --> 00:07:21,200
+ puncture them with an indenter under load, they have a tendency to crack around the indentation.
+
+97
+00:07:21,200 --> 00:07:25,520
+ For these reasons, we normally talk about the mechanical properties of ceramics as derived by
+
+98
+00:07:25,520 --> 00:07:31,120
+ a bend test, a three or a four point bend test. Here we use supporting and loading pins to apply
+
+99
+00:07:31,120 --> 00:07:35,440
+ a bending load to the ceramic rather than a tensile one. This arrangement is we never need to grab
+
+100
+00:07:35,440 --> 00:07:39,600
+ or otherwise hold the ceramic, which is quite convenient. And the effective strength that you see
+
+101
+00:07:39,600 --> 00:07:44,880
+ in a bend test, sometimes called the flexural strength or the modulus of rupture, is largely analogous
+
+102
+00:07:44,880 --> 00:07:48,880
+ to the ultimate tensile strength of a ceramic. By measuring the deflection that you see in a
+
+103
+00:07:48,880 --> 00:07:53,360
+ three or a four point bend test, you can also find an analogue for the young's modulus of a ceramic
+
+104
+00:07:53,360 --> 00:07:57,040
+ called the flexural modulus. I've left some equations that will help you calculate the
+
+105
+00:07:57,040 --> 00:08:01,760
+ flexural modulus of a ceramic or the modulus of rupture of a ceramic from a three point bend test
+
+106
+00:08:01,760 --> 00:08:05,920
+ on the textbook page for this video. I've also left for you as reading some resources on
+
+107
+00:08:05,920 --> 00:08:10,000
+ property testing of ceramics because it's quite a complicated and interesting topic. I hope
+
+108
+00:08:10,000 --> 00:08:25,280
+ you enjoy them.

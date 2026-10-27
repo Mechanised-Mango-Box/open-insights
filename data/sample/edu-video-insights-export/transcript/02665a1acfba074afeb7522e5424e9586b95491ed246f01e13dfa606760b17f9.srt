@@ -1,0 +1,399 @@
+1
+00:00:00,000 --> 00:00:05,360
+ In this video, we're going to talk about the design of forms for manufacturing FRP composites.
+
+2
+00:00:05,360 --> 00:00:08,880
+ While there are lots of different processes you can use to lay out fiber reinforced polymers,
+
+3
+00:00:08,880 --> 00:00:14,400
+ all of them rely on a form, a geometry, a rock upon which you build your FRP.
+
+4
+00:00:14,400 --> 00:00:18,640
+ We generally refer to positive or male forms as plugs or bucks,
+
+5
+00:00:18,640 --> 00:00:22,480
+ and we generally refer to female or negative forms as molds.
+
+6
+00:00:22,480 --> 00:00:27,280
+ But in either case, a well executed FRP layup is going to see a part made that replicates
+
+7
+00:00:27,280 --> 00:00:29,840
+ the form geometry and surface finish perfectly.
+
+8
+00:00:29,840 --> 00:00:32,640
+ And so ensuring that the geometry and the surface finish of your form
+
+9
+00:00:32,640 --> 00:00:37,200
+ faithfully represent the geometry and the surface finish that you'd like to make is critically important.
+
+10
+00:00:37,200 --> 00:00:41,200
+ But on top of that, there are two key considerations you need to make in the design of a form.
+
+11
+00:00:41,200 --> 00:00:45,440
+ The first is ensuring that the form geometry or the part geometry that informs the form
+
+12
+00:00:45,440 --> 00:00:50,000
+ geometry doesn't have any features that would mean that the part is trapped or entombed
+
+13
+00:00:50,000 --> 00:00:53,120
+ within the form and can't be removed after it's cured.
+
+14
+00:00:53,120 --> 00:00:55,600
+ And the second is ensuring that the preparation of the form,
+
+15
+00:00:55,600 --> 00:00:59,200
+ both the surface finish and the application of any kind of release agent,
+
+16
+00:00:59,200 --> 00:01:03,120
+ is such that the part doesn't become stuck to the form and can't be removed.
+
+17
+00:01:03,120 --> 00:01:06,800
+ We'll begin by talking about geometry, because when you lay up an FRP,
+
+18
+00:01:06,800 --> 00:01:12,240
+ the ingredients that you put in are all kind of discontinuous and relatively soft and flexible
+
+19
+00:01:12,240 --> 00:01:16,080
+ in terms of the fibers or illiquid in terms of the resin, it's actually very much possible
+
+20
+00:01:16,080 --> 00:01:21,600
+ to lay up a part inside of a mold or over a plug that once cured can't be removed.
+
+21
+00:01:21,680 --> 00:01:25,120
+ This happens if the form has what we call reentrant geometry where it kind of
+
+22
+00:01:25,120 --> 00:01:26,960
+ goes in on itself and back out again.
+
+23
+00:01:26,960 --> 00:01:31,280
+ Because generally speaking, there's no way to get the part up and over and outside of the form
+
+24
+00:01:31,280 --> 00:01:34,880
+ after it's cured without damage to either the form or the part.
+
+25
+00:01:34,880 --> 00:01:38,240
+ Now, this isn't always the case. Sometimes the part or the form are flexible enough that
+
+26
+00:01:38,240 --> 00:01:42,880
+ you can just squeeze them by, but generally speaking, we try to avoid re-entrant
+
+27
+00:01:42,880 --> 00:01:46,080
+ geometries in the design of parts that are going to be made this way.
+
+28
+00:01:46,080 --> 00:01:49,040
+ In fact, we normally go the other way, ensuring there's a little bit of what we call
+
+29
+00:01:49,040 --> 00:01:53,760
+ draft on our parts, a taper towards the outside of the mold or the outside of the form,
+
+30
+00:01:53,760 --> 00:01:57,440
+ where a re-entrant geometry can't be avoided, so you've got some shape that you need to make
+
+31
+00:01:57,440 --> 00:02:01,280
+ and you can't compromise on that shape for the sake of manufacturing convenience.
+
+32
+00:02:01,280 --> 00:02:04,080
+ Then you might elect to use something like a two-part mold.
+
+33
+00:02:04,080 --> 00:02:07,680
+ Here, two independent halves come together to make up the full geometry in their
+
+34
+00:02:07,680 --> 00:02:10,640
+ clamped or glued or bolted together for the sake of layup.
+
+35
+00:02:10,640 --> 00:02:14,000
+ After the part is cured inside of the mold, for example, it can be unbolted and pulled
+
+36
+00:02:14,000 --> 00:02:15,600
+ apart and the part can be removed.
+
+37
+00:02:15,600 --> 00:02:18,960
+ This can be quite convenient, but obviously comes with the initial complexity and design
+
+38
+00:02:18,960 --> 00:02:23,840
+ and manufacture initially to make a two-part form. If you're not careful, you can also get
+
+39
+00:02:23,840 --> 00:02:27,120
+ a bit of a witness line where the two molds came together.
+
+40
+00:02:27,120 --> 00:02:30,880
+ The second key consideration for your forms is ensuring that they're adequately prepared
+
+41
+00:02:30,880 --> 00:02:34,880
+ to make sure that the part doesn't stick to the form and can't be removed.
+
+42
+00:02:34,880 --> 00:02:38,400
+ To be able to actually remove a part from a form, you need to kind of break the seal
+
+43
+00:02:38,400 --> 00:02:42,800
+ between the part and the form, between the resin that's used in the part and the form.
+
+44
+00:02:42,800 --> 00:02:47,440
+ And all thermosany resins by their very nature provide some level of adhesion.
+
+45
+00:02:47,440 --> 00:02:50,800
+ In fact, this adhesion is what allows our parts to take the shape of the form.
+
+46
+00:02:50,800 --> 00:02:53,200
+ To make sure you get clean separation between the part and the form,
+
+47
+00:02:53,200 --> 00:02:54,560
+ there are a couple of things you need to do.
+
+48
+00:02:54,560 --> 00:02:58,720
+ The first is ensure that the form has as good a surface finish as you can afford before you
+
+49
+00:02:58,720 --> 00:03:03,040
+ lay up your parts. In doing so, you knock down all of the surface roughness that provides
+
+50
+00:03:03,040 --> 00:03:06,880
+ a nice place for all of that resin to bite and you make releasing the part a bit easier,
+
+51
+00:03:06,880 --> 00:03:09,200
+ as well as improving the surface finish of that part.
+
+52
+00:03:09,200 --> 00:03:13,120
+ The second is carefully preparing the form with some kind of release agent before lay up.
+
+53
+00:03:13,120 --> 00:03:16,880
+ Wax that's kind of polished on and PVA that's slightly brushed or sprayed on a common
+
+54
+00:03:16,880 --> 00:03:21,920
+ example is in both of these provide some level of separation between the resin and the form
+
+55
+00:03:21,920 --> 00:03:24,320
+ such that it's easy to remove one from the other.
+
+56
+00:03:24,320 --> 00:03:28,080
+ You can make forms for FRP lay up out of a variety of different materials.
+
+57
+00:03:28,080 --> 00:03:31,920
+ At the hobbyist or single-use level, it's common to see forms made from timber and
+
+58
+00:03:31,920 --> 00:03:36,480
+ polystyrene foam and bits of sheet aluminium. And even at this production scale without the
+
+59
+00:03:36,480 --> 00:03:41,520
+ help of CNC machining tools, you can make some pretty organic, complicated 3D geometries with
+
+60
+00:03:41,520 --> 00:03:46,000
+ a reasonable level of accuracy. You can do this for example by building up skeleton templates
+
+61
+00:03:46,000 --> 00:03:50,720
+ out of timber and filling them with polystyrene foam. Then cutting this foam with a hot wire cutter
+
+62
+00:03:50,720 --> 00:03:54,560
+ and bogging and sanding and polishing until you get that mirror finish.
+
+63
+00:03:54,560 --> 00:03:58,560
+ Of course, in this approach, the dimensional accuracy of the form and the quality of the finish
+
+64
+00:03:58,560 --> 00:04:02,640
+ you get is largely a function of the skill and the patience of the operator.
+
+65
+00:04:02,640 --> 00:04:06,160
+ And to be honest, production of quality forms this way can be a little bit of an art.
+
+66
+00:04:06,160 --> 00:04:10,640
+ People who are really good at it, for example, have generally practiced for years and years.
+
+67
+00:04:10,640 --> 00:04:13,680
+ At the other end of the spectrum, for production scale parts or even for
+
+68
+00:04:13,680 --> 00:04:17,120
+ one-off parts that need to be a little bit more accurate or one-off parts that you don't want to
+
+69
+00:04:17,120 --> 00:04:21,440
+ invest all of the time and effort in building a form for. It's very common, for example, to use
+
+70
+00:04:21,440 --> 00:04:26,880
+ a CNC machine to mill out some polystyrene or modeling foam to make up a mold or a plug.
+
+71
+00:04:26,880 --> 00:04:30,080
+ These can be quite a bit more expensive, but the results kind of speak for themselves.
+
+72
+00:04:30,080 --> 00:04:34,160
+ You can get results that are as accurate as any other machining process. And while it is a little
+
+73
+00:04:34,160 --> 00:04:38,480
+ bit slow going, because you're cutting foam, you can run at pretty high feeds and speeds.
+
+74
+00:04:38,480 --> 00:04:42,400
+ Now, whether you aim to use a form that is a mold or a plug, it's largely a function of the
+
+75
+00:04:42,400 --> 00:04:46,640
+ geometry that you'd like to make and how important it is that the surface finish is good on
+
+76
+00:04:46,640 --> 00:04:50,960
+ particular faces on that geometry. Generally speaking, you'll get a better surface finish on the
+
+77
+00:04:50,960 --> 00:04:55,680
+ side of your lab that's touching the form, whether that be a mold or a plug. In other words,
+
+78
+00:04:55,680 --> 00:05:00,160
+ if you're using a mold, then when you pull your part out, the outside of that part is going to
+
+79
+00:05:00,160 --> 00:05:04,000
+ have a better surface finish. And if you're using a plug, when you pull the part off the plug,
+
+80
+00:05:04,000 --> 00:05:08,800
+ the inside of the part is going to have a better surface finish. In any case, the side of your lab
+
+81
+00:05:08,800 --> 00:05:13,200
+ that doesn't touch the form, the backside generally has a poorer surface finish. And balancing
+
+82
+00:05:13,200 --> 00:05:17,280
+ this consideration of trying to maintain a good surface finish on the side of your part that you
+
+83
+00:05:17,280 --> 00:05:22,400
+ care about alongside the difficulty associated with manufacturer form is a complicated one.
+
+84
+00:05:22,400 --> 00:05:26,560
+ By that, I mean that it's generally easier to sand and work and refine a positive geometry,
+
+85
+00:05:26,560 --> 00:05:31,360
+ a plug than it is to try and refine a negative geometry because sanding a concave shape is
+
+86
+00:05:31,360 --> 00:05:35,680
+ generally harder than sanding a convex shape. But if you want the outside of your part to have a
+
+87
+00:05:35,680 --> 00:05:40,800
+ good surface finish, then you generally want a mold, a negative geometry over a positive one.
+
+88
+00:05:40,800 --> 00:05:44,960
+ In these circumstances, it's actually quite common to build a plug form, a positive geometry,
+
+89
+00:05:44,960 --> 00:05:50,480
+ and lay up a mold over the top of that plug. In other words, make your mold out of an FRP.
+
+90
+00:05:50,480 --> 00:05:55,280
+ Then once that mold's removed from the plug, it can be very, very lightly refined before finally
+
+91
+00:05:55,280 --> 00:06:00,000
+ laying the part up inside the mold to get a good surface finish on the outside of the part.
+
+92
+00:06:00,000 --> 00:06:04,400
+ In some cases, if you end up with both a male plug and a female mold and the geometry permits,
+
+93
+00:06:04,400 --> 00:06:08,880
+ you can actually use both of these together to try and get a good surface finish on both sides
+
+94
+00:06:08,880 --> 00:06:12,800
+ of your part. Here, you kind of lay up on the inside of the female mold and then bring the
+
+95
+00:06:12,800 --> 00:06:18,080
+ male plug in behind to sand which you'll lay up between two sides of a nice surface.
+
+96
+00:06:18,080 --> 00:06:22,480
+ Obviously, in these circumstances, to ensure that the parts actually fit up, you need to adjust
+
+97
+00:06:22,480 --> 00:06:27,760
+ the sizes of your male and female molds and plugs respectively to account for the thickness of your
+
+98
+00:06:27,760 --> 00:06:32,160
+ layout. I've left some really, really good videos that talk more about this on the textbook page
+
+99
+00:06:32,160 --> 00:06:36,800
+ for this one. Videos that talk about building molds and plugs out of 3D prints, as well as videos
+
+100
+00:06:36,800 --> 00:06:40,960
+ that talk about doing it kind of the old-fashioned way with skeleton structures. I hope you enjoy them.

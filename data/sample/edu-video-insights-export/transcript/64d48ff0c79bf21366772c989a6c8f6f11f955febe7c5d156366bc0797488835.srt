@@ -1,0 +1,267 @@
+1
+00:00:00,000 --> 00:00:04,280
+ There's a famous quote that floats around which is attributed to British
+
+2
+00:00:04,280 --> 00:00:08,680
+ mathematician George Box and it goes something like all models are wrong but
+
+3
+00:00:08,680 --> 00:00:13,360
+ some models are useful and as cliche as that quotes become I've kind of
+
+4
+00:00:13,360 --> 00:00:16,720
+ included it now because it's something that's really important for you to
+
+5
+00:00:16,720 --> 00:00:21,480
+ understand. Every model that you build is just that a model and a
+
+6
+00:00:21,480 --> 00:00:25,160
+ approximation to reality and it's only as good as the assumptions you've made
+
+7
+00:00:25,160 --> 00:00:28,120
+ when you're building the model and the confidence that you have in the
+
+8
+00:00:28,120 --> 00:00:32,000
+ inputs that you're feeding it. Remember we build models to help us make
+
+9
+00:00:32,000 --> 00:00:36,680
+ decisions that would otherwise be too costly or too time intensive for us to
+
+10
+00:00:36,680 --> 00:00:42,080
+ guess and check but obviously with infinite time and infinite money the best
+
+11
+00:00:42,080 --> 00:00:46,120
+ case scenario is to test the components you plan to use in the situation you
+
+12
+00:00:46,120 --> 00:00:51,880
+ plan to use them. This isn't always or even usually possible and as a result
+
+13
+00:00:51,880 --> 00:00:55,920
+ we're here as engineers constructing these models these approximations to
+
+14
+00:00:55,920 --> 00:01:00,000
+ reality to help us make some of these decisions. Our job is to build these
+
+15
+00:01:00,000 --> 00:01:04,080
+ models close enough to reality that we can draw some meaningful conclusions
+
+16
+00:01:04,080 --> 00:01:07,520
+ from them. In order for us to have this confidence we need to perform a process
+
+17
+00:01:07,520 --> 00:01:11,160
+ known as model validation. This usually entails feeding our model and
+
+18
+00:01:11,160 --> 00:01:16,000
+ known input and comparing the output the predictions to either experimental
+
+19
+00:01:16,000 --> 00:01:20,400
+ measurements or sometimes theoretical predictions based on the physics of the
+
+20
+00:01:20,400 --> 00:01:24,600
+ problem. Sometimes you can't physically validate your model for the exact set of
+
+21
+00:01:24,680 --> 00:01:28,080
+ conditions or the exact group of components that you're interested in. When
+
+22
+00:01:28,080 --> 00:01:31,120
+ something like this happens you need to validate and unit test as many
+
+23
+00:01:31,120 --> 00:01:34,760
+ components as you can in as many environments as you can. To give an
+
+24
+00:01:34,760 --> 00:01:38,480
+ example for the Mars Rover they unit tested all of the components and then
+
+25
+00:01:38,480 --> 00:01:41,760
+ did full system testing conditions that they believe would be similar to Mars
+
+26
+00:01:41,760 --> 00:01:45,720
+ out in the desert. Another example when I was a final year project student a few
+
+27
+00:01:45,720 --> 00:01:50,040
+ years ago now I was part of the Formula SA team here at the University which by
+
+28
+00:01:50,040 --> 00:01:53,200
+ the way I now supervise in a couple of years when you're final year project
+
+29
+00:01:53,200 --> 00:01:55,760
+ students please feel free to come and talk to me I'd be very happy to have
+
+30
+00:01:55,760 --> 00:01:59,800
+ you. When I was a final year project student a few of my colleagues were working
+
+31
+00:01:59,800 --> 00:02:02,000
+ in the aerodynamics package for our car. It was the first
+
+32
+00:02:02,000 --> 00:02:06,080
+ area kit that we designed for a car here at Newcastle. In this package the two
+
+33
+00:02:06,080 --> 00:02:09,640
+ wings in the under-trailer design using a technique called computational fluid
+
+34
+00:02:09,640 --> 00:02:14,560
+ dynamics CFD. This in itself is a model which simulates the airflow over a
+
+35
+00:02:14,560 --> 00:02:20,640
+ body. Now CFD is notoriously sensitive to your inputs and to the quality of the
+
+36
+00:02:20,640 --> 00:02:24,320
+ model that you're feeding it and so validation is crucially important to make
+
+37
+00:02:24,320 --> 00:02:29,000
+ sure the results you're getting out of it aren't garbage. Now we don't have a
+
+38
+00:02:29,000 --> 00:02:32,920
+ wind tunnel that can fit a car here at Newcastle. In fact I think the nearest
+
+39
+00:02:32,920 --> 00:02:36,720
+ one that was suitable would be down in Melbourne in Monash and we couldn't get
+
+40
+00:02:36,720 --> 00:02:40,800
+ access to it. So to perform our validation we did a combination of small-scale
+
+41
+00:02:40,800 --> 00:02:45,440
+ wind tunnel testing and we also performed some large-scale drag testing by
+
+42
+00:02:45,440 --> 00:02:49,680
+ using an analog. We made a bit of plywood that we calculated would provide about as
+
+43
+00:02:49,680 --> 00:02:53,440
+ much drag as our CFD predicted the error kit would make. We
+
+44
+00:02:53,440 --> 00:02:56,880
+ extracted to the car and we did some testing and we measured that drag using
+
+45
+00:02:56,880 --> 00:03:00,040
+ the information we had available. I think in that case we used other fuel
+
+46
+00:03:00,040 --> 00:03:03,560
+ level and the amount of fuel consumption. And through that testing we were able
+
+47
+00:03:03,560 --> 00:03:07,080
+ to validate the results we were getting out of CFD were in the realm of reality.
+
+48
+00:03:07,080 --> 00:03:11,080
+ In our case it was a bit of a contrived example. No one was going to die if we
+
+49
+00:03:11,080 --> 00:03:14,240
+ didn't validate the model that our race car wings were making as much downforce
+
+50
+00:03:14,240 --> 00:03:17,920
+ and drag as we were expecting. But this is crucially important in the real
+
+51
+00:03:17,920 --> 00:03:22,200
+ world. Your models have the potential to kill people and it's really really
+
+52
+00:03:22,200 --> 00:03:25,120
+ important that you validate that the predictions that you're making are correct.
+
+53
+00:03:25,120 --> 00:03:29,680
+ Just like me and the SAE team in 2016 you won't always have the ability to
+
+54
+00:03:29,680 --> 00:03:33,280
+ conduct full one-to-one-scale validation in the circumstances that are
+
+55
+00:03:33,280 --> 00:03:37,000
+ perfectly representative of the situation that your predictions are
+
+56
+00:03:37,000 --> 00:03:41,560
+ going to be used in. But the ethical responsibility is on you the modeler to
+
+57
+00:03:41,560 --> 00:03:45,120
+ make sure that people are using your model correctly. Part of this is about
+
+58
+00:03:45,200 --> 00:03:48,360
+ disclosing the assumptions you've made clearly at the top of your model. And
+
+59
+00:03:48,360 --> 00:03:51,360
+ this is a process that we're going to talk about in this course when we start
+
+60
+00:03:51,360 --> 00:03:55,000
+ building mathematical models. And part of it is making sure that the model is
+
+61
+00:03:55,000 --> 00:03:59,400
+ validated before anybody uses it to make predictions. Validation is an art of its
+
+62
+00:03:59,400 --> 00:04:01,720
+ own and it's not something we're going to talk about a great deal in this
+
+63
+00:04:01,720 --> 00:04:05,800
+ course. But I'd just like you to go forward with a warning. A model which hasn't
+
+64
+00:04:05,800 --> 00:04:10,360
+ been validated shouldn't be used to make predictions or make decisions. People's
+
+65
+00:04:10,360 --> 00:04:14,200
+ lives can depend on this. It's your responsibilities the engineer to come up
+
+66
+00:04:14,240 --> 00:04:16,960
+ with an experiment that will allow you to validate your model and have some
+
+67
+00:04:16,960 --> 00:04:20,600
+ confidence in the predictions that you're making.

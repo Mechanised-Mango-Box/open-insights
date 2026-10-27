@@ -1,0 +1,691 @@
+1
+00:00:00,000 --> 00:00:03,440
+ In the context of the manufacturing techniques that we're talking about this week,
+
+2
+00:00:03,440 --> 00:00:06,800
+ welding and braising are processes for joining metals.
+
+3
+00:00:06,800 --> 00:00:11,440
+ While both welding and braising involve melting some kind of film metal to attach to
+
+4
+00:00:11,440 --> 00:00:15,760
+ other metals together, the key difference between these is that welding also involves
+
+5
+00:00:15,760 --> 00:00:19,440
+ melting the base metal, the parent metals, while braising does not.
+
+6
+00:00:19,440 --> 00:00:23,200
+ In this video we're going to talk about both welding and braising. The differences between these
+
+7
+00:00:23,200 --> 00:00:27,520
+ are when you might choose to use one technique over the other. We'll kick off by talking about
+
+8
+00:00:27,520 --> 00:00:30,880
+ welding, and you should note that there are many, many different processes that you can
+
+9
+00:00:30,880 --> 00:00:35,680
+ use to weld two materials together. Generally speaking, all of these techniques kind of work
+
+10
+00:00:35,680 --> 00:00:40,240
+ the same way. They involve injecting a huge amount of heat into a specific area where you'd
+
+11
+00:00:40,240 --> 00:00:44,960
+ like two metals to be joined. And by melting both of these parent metals and by adding some kind
+
+12
+00:00:44,960 --> 00:00:50,240
+ of extra film metal, you create an incredibly strong joint by bonding these things together.
+
+13
+00:00:50,240 --> 00:00:54,800
+ Welding is an incredibly robust way of attaching metals because the net result is that the two
+
+14
+00:00:54,800 --> 00:00:59,360
+ actually become one. A good weld is said to achieve deep penetration and the net result of this
+
+15
+00:00:59,360 --> 00:01:03,840
+ is that if you cut through a weld, generally speaking you can't tell where one metal ends and the
+
+16
+00:01:03,840 --> 00:01:08,400
+ next begins. There are a few considerations that you need to make when welding components.
+
+17
+00:01:08,400 --> 00:01:12,800
+ Up first of all, you should be aware that the intense heat is generated when welding rapidly
+
+18
+00:01:12,800 --> 00:01:17,600
+ accelerates corrosion in and around the site of the weld. As a result, most welding processes
+
+19
+00:01:17,600 --> 00:01:22,480
+ tend to incorporate some sort of shielding gas or flux or other protectant to insulate the
+
+20
+00:01:22,480 --> 00:01:26,400
+ weld site from the rest of the atmosphere and protect the world from corrosion. In most cases,
+
+21
+00:01:26,400 --> 00:01:30,640
+ welding without some sort of protection will not only result in rapid corrosion over the weld area
+
+22
+00:01:30,640 --> 00:01:35,520
+ but will also result in a pretty terrible weld. Exposure to oxygen has a tendency to introduce
+
+23
+00:01:35,520 --> 00:01:40,400
+ cracks and porosity and other kinds of crap into your welds. These contaminated welds in
+
+24
+00:01:40,400 --> 00:01:44,560
+ addition to looking pretty horrible have a tendency not to be very strong. You also need to be
+
+25
+00:01:44,560 --> 00:01:48,880
+ a little bit careful because different metals have different amounts of weldability. This pseudo
+
+26
+00:01:48,880 --> 00:01:53,520
+ property kind of describes the likelihood of a metal to behave when it's welded. Some materials
+
+27
+00:01:53,520 --> 00:01:57,920
+ are quite well behaved. A low carbon steel mild steel for example doesn't really mind being welded.
+
+28
+00:01:57,920 --> 00:02:01,920
+ It doesn't experience a substantial change in properties or microstructure as a result of the
+
+29
+00:02:01,920 --> 00:02:06,000
+ intense heat and the resultant cooling that happens when you weld it. But other materials can be
+
+30
+00:02:06,000 --> 00:02:10,800
+ quite sensitive. High carbon steel is an alloy steels for example need to be welded very carefully.
+
+31
+00:02:10,800 --> 00:02:14,960
+ High carbon steels for example when rapidly heated and cooled as a result of the welding process
+
+32
+00:02:14,960 --> 00:02:18,480
+ have a tendency to fall on martin site. And the corresponding change in properties that you get
+
+33
+00:02:18,480 --> 00:02:22,720
+ from areas that are close to the weld that have undergone this kind of unintentional heat treatment
+
+34
+00:02:22,720 --> 00:02:26,320
+ compared to those that have further away can lead to brittleness and cracking.
+
+35
+00:02:26,320 --> 00:02:30,480
+ Alloys steels which derive many of their nice properties from the inclusion of specific amounts
+
+36
+00:02:30,480 --> 00:02:34,960
+ of alloy elements are also very sensitive to welding. In this case partially as a result of the
+
+37
+00:02:34,960 --> 00:02:39,920
+ heat that you apply but also as a result of the composition of any filler metal that you might use.
+
+38
+00:02:39,920 --> 00:02:43,920
+ Generally speaking it's quite important that the materials you select for a particular job are
+
+39
+00:02:43,920 --> 00:02:47,920
+ compatible with any process you intend to put them through especially if you're welding.
+
+40
+00:02:47,920 --> 00:02:51,600
+ The weldability of carbon steels typically decreases with carbon content and the
+
+41
+00:02:51,600 --> 00:02:56,000
+ weldability of alloy steels typically decreases with increasing amounts of alloying elements
+
+42
+00:02:56,000 --> 00:03:00,720
+ and of some particular alloying elements. And aluminiums can be quite temperamental to welding as
+
+43
+00:03:00,720 --> 00:03:05,360
+ well. For aluminiums weldability is largely related to the tendency of a particular grade to
+
+44
+00:03:05,360 --> 00:03:10,400
+ hot crack. Here the aluminiums can actually tear open as a result of the rapid expansion and
+
+45
+00:03:10,880 --> 00:03:14,640
+ subsequent cooling that happens when you weld them. This is why some grades of aluminium that have
+
+46
+00:03:14,640 --> 00:03:19,360
+ particular alloying elements are reasonably tolerant of welding and others like 7000 series
+
+47
+00:03:19,360 --> 00:03:23,120
+ aluminium for example really shouldn't be welded. There's a common misconception that floats
+
+48
+00:03:23,120 --> 00:03:27,440
+ around the welds are the weakest part of an assembly and it's actually the opposite that's true.
+
+49
+00:03:27,440 --> 00:03:31,440
+ Weld material actually has the tendency to usually be stronger than the surrounding metal.
+
+50
+00:03:31,440 --> 00:03:35,200
+ This is both because the filler metals typically used for welding have a higher strength than
+
+51
+00:03:35,200 --> 00:03:39,120
+ those of the parent metal. And because the heat treatment is introduced by welding has a tendency
+
+52
+00:03:39,200 --> 00:03:44,000
+ to strengthen these areas. If you look closely most weld failures actually happen in the areas
+
+53
+00:03:44,000 --> 00:03:48,560
+ surrounding a weld not at the weld itself. This area around the weld that's been affected by the
+
+54
+00:03:48,560 --> 00:03:53,520
+ heat provided by welding is creatively called the heat affected zone. And the parent metal in the
+
+55
+00:03:53,520 --> 00:03:58,240
+ heat affected zone is where you see a lot of weld failures occur. This happens because of unintentional
+
+56
+00:03:58,240 --> 00:04:02,240
+ weakening of these areas because of the heat that's been applied or embrittlement of these areas
+
+57
+00:04:02,240 --> 00:04:05,520
+ and the subsequent cracking that occurs because of the heat treatments that have been applied.
+
+58
+00:04:05,520 --> 00:04:09,120
+ These have all been reasonably broad statements and that's intentional. The weldability of
+
+59
+00:04:09,120 --> 00:04:13,600
+ a material is a very specific property and generally speaking it pays to check the data sheet for
+
+60
+00:04:13,600 --> 00:04:18,240
+ that specific material before you try to weld it. Sometimes no further work is required after
+
+61
+00:04:18,240 --> 00:04:22,640
+ welding to restore the strength of a material and other times you may require significant
+
+62
+00:04:22,640 --> 00:04:27,440
+ pre and post heat treatments to make a material suitable to weld. The final general point that I
+
+63
+00:04:27,440 --> 00:04:31,840
+ should make about welding is that generally you use it to attach like metals. By this I mean
+
+64
+00:04:31,840 --> 00:04:36,320
+ metals that are from the same family and usually even the same grade. Some metals are more tolerant
+
+65
+00:04:36,320 --> 00:04:40,720
+ than others of mixing and matching. For example you can generally weld stainless steel to
+
+66
+00:04:40,720 --> 00:04:45,040
+ mild steel without too many adverse effects if you carefully follow the instructions outlined
+
+67
+00:04:45,040 --> 00:04:48,320
+ under the data sheet for both of these materials. But there are other combinations other
+
+68
+00:04:48,320 --> 00:04:52,800
+ materials that really can't be welded together steel and aluminium for example. Consulting the
+
+69
+00:04:52,800 --> 00:04:56,480
+ data sheets and a little bit of experience will generally indicate to you whether it's sensible to
+
+70
+00:04:56,480 --> 00:05:01,040
+ weld to materials together but generally speaking if they're not like material if they're not from
+
+71
+00:05:01,040 --> 00:05:05,200
+ the same family it's probably not a good bit. I'm now going to walk through a couple of common
+
+72
+00:05:05,200 --> 00:05:09,040
+ welding processes. I don't expect you to memorize these and I certainly don't expect you to
+
+73
+00:05:09,040 --> 00:05:12,640
+ be a welder by the end of this video but it's probably important that if you're going to have
+
+74
+00:05:12,640 --> 00:05:16,640
+ a conversation with a tradesperson about manufacturing a part you have an understanding of the
+
+75
+00:05:16,640 --> 00:05:21,280
+ processes that are used to do it and when one is typically used over another. For low volume
+
+76
+00:05:21,280 --> 00:05:26,160
+ production most of the welding you're going to see and maybe do is going to be arc welding.
+
+77
+00:05:26,160 --> 00:05:30,960
+ This is an electrical process by generating a huge voltage between an electrode and your job
+
+78
+00:05:30,960 --> 00:05:35,280
+ you strike an arc and electrical arc between the two. These arc is intensely hot and melt
+
+79
+00:05:35,280 --> 00:05:39,840
+ the metal allowing you to weld it. Arc welding can be achieved with both DC and AC electricity
+
+80
+00:05:39,840 --> 00:05:43,600
+ although the latter is typically reserved for aluminium and we'll talk about why that is in just a
+
+81
+00:05:43,600 --> 00:05:46,800
+ moment. And there are three main processes that fall under the banner of arc welding you're
+
+82
+00:05:46,800 --> 00:05:51,840
+ likely to be exposed to that all have quite a similar names. Stick welding, T-gulding and
+
+83
+00:05:51,840 --> 00:05:58,080
+ MiG welding. Stick welding sometimes referred to as shielded metal arc welding or SMAW welding is
+
+84
+00:05:58,080 --> 00:06:02,560
+ probably the most agricultural and messiest of the welding processes we're going to talk about.
+
+85
+00:06:02,560 --> 00:06:07,040
+ Here after connecting one side of an electrical circuit to your job and the other side to a hand
+
+86
+00:06:07,040 --> 00:06:11,600
+ held torch an electrode is inserted into that torch and an arc is struck between the electrode
+
+87
+00:06:11,600 --> 00:06:17,600
+ and the job. In stick welding this electrode is also the filler metal and is consumed as you welds.
+
+88
+00:06:17,600 --> 00:06:22,240
+ Around the electrode is a powdered flux that as the electrodes consumed gets deposited onto the
+
+89
+00:06:22,240 --> 00:06:27,120
+ job and shields it from the environment protecting it from corrosion. This flux settles and cools
+
+90
+00:06:27,120 --> 00:06:31,440
+ as a solid slag over the molten weld bead as you go and when you're done you normally come back
+
+91
+00:06:31,440 --> 00:06:35,600
+ and chip it off take it away. Because of the slag and the sparks that get spat everywhere this
+
+92
+00:06:35,600 --> 00:06:40,240
+ tends to be quite a messy process a bit of an agricultural process. Though to its credit stick
+
+93
+00:06:40,240 --> 00:06:43,920
+ welding is probably the least involved and most portable of all the welding techniques we're going
+
+94
+00:06:43,920 --> 00:06:48,320
+ to talk about in this section. To stick weld all you need is a power supply and some consumable
+
+95
+00:06:48,320 --> 00:06:52,560
+ electrodes you don't need to carry a shielding gas or a filler metal with you. It's also not
+
+96
+00:06:52,560 --> 00:06:56,640
+ particularly sensitive to the cleanliness of the job. You can stick weld rusty steel pretty much
+
+97
+00:06:56,640 --> 00:07:01,120
+ just fine. For this reason stick welding is quite popular out in the field. A slightly more
+
+98
+00:07:01,120 --> 00:07:06,480
+ civilized process is MiG welding metal inert gas welding. Just like with stick welding when MiG
+
+99
+00:07:06,480 --> 00:07:10,800
+ welding you still attach one side of your electrical circuit to your job and the other side gets
+
+100
+00:07:10,800 --> 00:07:14,480
+ attached to an electrode. But in this case the electrode is a piece of wire that's fed up
+
+101
+00:07:14,480 --> 00:07:18,320
+ through a torch and is constantly consumed throughout the job. Unlike stick welding
+
+102
+00:07:18,320 --> 00:07:21,920
+ shielding of the molten weld pool when MiG welding is typically achieved through some kind of
+
+103
+00:07:21,920 --> 00:07:26,240
+ gas that's also passed through the torch. And this is normally a mixture of argon and other
+
+104
+00:07:26,240 --> 00:07:30,400
+ inert gases like SEGO2. MiG welding is a little bit more of a controlled process than stick
+
+105
+00:07:30,400 --> 00:07:34,160
+ welding. The operator can hold the torch a fixed distance from the job because the electrode
+
+106
+00:07:34,160 --> 00:07:39,360
+ is kind of constantly provided fed through the torch as opposed to consumed at the end of the torch.
+
+107
+00:07:39,360 --> 00:07:42,640
+ And it's generally a little bit cleaner as well because you don't have all this slag coming off
+
+108
+00:07:42,640 --> 00:07:46,880
+ of the job. That being said some sparks and other small bits of molten metal are typically
+
+109
+00:07:46,880 --> 00:07:51,440
+ ejected from the weld pool when you're MiG welding and so it's still a little bit of a dirty process.
+
+110
+00:07:51,440 --> 00:07:55,040
+ MiG welding is typically used in production environments not so much in the field because
+
+111
+00:07:55,040 --> 00:08:00,080
+ generally you need a gas bottle nearby. You can buy flux cord MiG wire which means that like
+
+112
+00:08:00,080 --> 00:08:04,000
+ stick welding you can go ahead and weld without needing to carry a gas bottle around with you.
+
+113
+00:08:04,000 --> 00:08:07,600
+ But typically the result isn't quite as nice as if you had a shielding gas. Like stick
+
+114
+00:08:07,600 --> 00:08:12,560
+ welding MiG welding is also reasonably tolerant of rust and mill scale and other contaminants on
+
+115
+00:08:12,560 --> 00:08:16,720
+ your steel but generally it's considered best practice to thoroughly clean your steel and grind
+
+116
+00:08:16,720 --> 00:08:20,960
+ down to fresh bare shiny metal before you do any kind of welding on it.
+
+117
+00:08:21,040 --> 00:08:25,680
+ The final type of welding is probably my favorite TIG welding tungsten inert gas welding.
+
+118
+00:08:25,680 --> 00:08:29,680
+ I really like TIG welding because it separates all of the core functionalities of welding.
+
+119
+00:08:29,680 --> 00:08:33,760
+ Unlike stick welding where all of the functionality is a kind of rolled into one on one stick you
+
+120
+00:08:33,760 --> 00:08:38,720
+ have an electrode and a flux and a filler metal and MiG welding which was kind of one step further
+
+121
+00:08:38,720 --> 00:08:43,040
+ where you separated out the flux by means of some sort of inert gas but still relied on
+
+122
+00:08:43,040 --> 00:08:47,840
+ a filler metal which was also the electrode. When TIG welding all three functionalities are served
+
+123
+00:08:48,320 --> 00:08:51,760
+ by different pieces of equipment. The operator has a handheld torch which releases a
+
+124
+00:08:51,760 --> 00:08:57,040
+ shielding gas that kind of protects the arc. Inside of this torch there's a non consumable tungsten
+
+125
+00:08:57,040 --> 00:09:01,440
+ electrode which strikes the arc and in the other hand typically they have a rod of filler metal
+
+126
+00:09:01,440 --> 00:09:06,080
+ that they themselves deposit onto the whirlpool. This independence of these functionalities gives
+
+127
+00:09:06,080 --> 00:09:10,960
+ the operator a lot of control and as a result TIG welding is typically used in jobs that require
+
+128
+00:09:10,960 --> 00:09:15,600
+ a little bit more finesse. It's also much cleaner process than MiG or stick welding. If you have
+
+129
+00:09:15,600 --> 00:09:19,360
+ things coming out of your TIG welding puddle as you're welding you've probably done something wrong.
+
+130
+00:09:19,360 --> 00:09:23,760
+ Though this cleanliness and control comes at a cost, joints that are to be TIG welded need to be
+
+131
+00:09:23,760 --> 00:09:28,160
+ prepared very carefully. Generally speaking this involves grinding back any mill scale or rust that's
+
+132
+00:09:28,160 --> 00:09:32,000
+ formed on your materials and wiping down all the surfaces that are going to be welded with some
+
+133
+00:09:32,000 --> 00:09:36,560
+ acetone to get rid of any oil or other contaminants. And for these reasons you very rarely see TIG
+
+134
+00:09:36,560 --> 00:09:40,560
+ welding done out in the field. It's normally done on a welding table by somebody who's quite
+
+135
+00:09:40,560 --> 00:09:45,120
+ comfortable with a torch and a filler rod and a carefully prepared and jigged up job.
+
+136
+00:09:45,200 --> 00:09:48,640
+ It's also a little bit slower going than MiG or stick welding because of the care that needs to
+
+137
+00:09:48,640 --> 00:09:53,920
+ be taken when welding. Or generally stick welding is a DC process. Both MiG and TIG welding can be
+
+138
+00:09:53,920 --> 00:09:59,200
+ performed using AC. AC electricity is typically used when welding aluminium because the oxide layer
+
+139
+00:09:59,200 --> 00:10:02,800
+ of aluminium actually has a much higher melting temperature than the base metal. The AC
+
+140
+00:10:02,800 --> 00:10:06,880
+ electricity constantly switching polarity between positive and negative has a tendency to break up
+
+141
+00:10:06,880 --> 00:10:12,480
+ this oxide layer and allow the metal to be welded. Or you can weld both steel and aluminium using MiG
+
+142
+00:10:12,480 --> 00:10:16,560
+ and TIG processes. TIG is far more common if you'd like to weld something a little bit more
+
+143
+00:10:16,560 --> 00:10:20,800
+ unusual. Because of the control that's offered by having all of the functionality separate and
+
+144
+00:10:20,800 --> 00:10:24,720
+ because you can buy small volumes of filler rod to use, if you'll find yourself eating to
+
+145
+00:10:24,720 --> 00:10:28,400
+ weld something like copper or titanium you're probably going to lean more towards TIG than you
+
+146
+00:10:28,400 --> 00:10:32,800
+ would MiG. All of these techniques relied on striking an arc between an electrode and the job,
+
+147
+00:10:32,800 --> 00:10:37,280
+ but arc welding isn't the only kind of welding. Spot welders for example are commonly used to
+
+148
+00:10:37,280 --> 00:10:41,920
+ fuse two panels of sheet metal together and they work by making direct contact with the sheet metal.
+
+149
+00:10:41,920 --> 00:10:45,120
+ You might be surprised to learn that most of your car is probably held together with lots of
+
+150
+00:10:45,120 --> 00:10:49,600
+ little spot welds because it's a very economical process. It doesn't require any shielding.
+
+151
+00:10:49,600 --> 00:10:52,640
+ And there are other kinds of welding that I won't talk about in this video but I've left a little
+
+152
+00:10:52,640 --> 00:10:58,000
+ bit of information on the textbook page. ERWc welding and friction stir welding for example.
+
+153
+00:10:58,000 --> 00:11:01,600
+ To finish up this video I'll know that you don't always need to melt the parent metals to
+
+154
+00:11:01,600 --> 00:11:05,520
+ join two things together. And melting only a filler metal and relying on the mechanical
+
+155
+00:11:05,520 --> 00:11:09,760
+ bond between this filler metal and some parent metals is the foundation of a process known as
+
+156
+00:11:09,760 --> 00:11:13,520
+ braising. There are lots of different ways that you can braise two materials together.
+
+157
+00:11:13,520 --> 00:11:17,120
+ Really all you need is some sort of heat source to melt the filler metal.
+
+158
+00:11:17,120 --> 00:11:21,520
+ And generally speaking, far less heat is required to be input into the job when braising compared
+
+159
+00:11:21,520 --> 00:11:25,200
+ to welding because the filler metals generally have a much lower melting temperature.
+
+160
+00:11:25,200 --> 00:11:29,280
+ In fact, this is usually the motivation for braising something in the first place where you want
+
+161
+00:11:29,280 --> 00:11:33,760
+ to minimize heat input into say a machined part that you don't want to distort. Braising can
+
+162
+00:11:33,760 --> 00:11:38,720
+ and classically was achieved using a gas torch, although you can also braise using a TIG torch.
+
+163
+00:11:38,720 --> 00:11:42,560
+ In both cases it's a careful balance of making sure you input enough heat to melt the filler
+
+164
+00:11:42,560 --> 00:11:46,560
+ metal but not enough heat to melt the parent metals. You should know that soldering the kind that
+
+165
+00:11:46,560 --> 00:11:50,240
+ you do on your electronics is also a form of braising. It just happens in a much much lower
+
+166
+00:11:50,240 --> 00:11:54,800
+ temperature. In fact soldering happens at such a low temperature you can do it with a handheld iron.
+
+167
+00:11:54,800 --> 00:11:58,800
+ Very generally speaking the strength of a braised joint is much less than that of a welded joint
+
+168
+00:11:58,800 --> 00:12:03,440
+ but this depends very much on the geometry of the weld. In some cases a correctly designed
+
+169
+00:12:03,440 --> 00:12:07,760
+ braised joint say one with a nice big fat filler on it can actually be stronger than a poorly
+
+170
+00:12:07,760 --> 00:12:11,360
+ welded joint. That all that do is for welding and braising. You should note that of course I've
+
+171
+00:12:11,360 --> 00:12:15,360
+ only touched on a subset of all of the possible welding and braising techniques that are out there
+
+172
+00:12:15,360 --> 00:12:19,120
+ and I encourage you to go and take a look at some more. There's some data in edgy pack you may
+
+173
+00:12:19,120 --> 00:12:24,240
+ wish to check out and there's some more data on the textbook page for this video.

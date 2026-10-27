@@ -1,0 +1,163 @@
+1
+00:00:00,000 --> 00:00:05,720
+ All right, let's have a chat about our final basic component for fluid power systems.
+
+2
+00:00:05,720 --> 00:00:10,840
+ The kind of generalized resistor for fluid power systems and I say basic component but
+
+3
+00:00:10,840 --> 00:00:15,360
+ there are a few of them because this final component is really all of the different types
+
+4
+00:00:15,360 --> 00:00:18,600
+ of resistance that we might see in our hydraulic circuits.
+
+5
+00:00:18,600 --> 00:00:23,400
+ Some of these kind of resistances are physical, porous plugs, valves and some of them
+
+6
+00:00:23,400 --> 00:00:27,200
+ are just kind of due to the friction of the fluid moving through the system through your
+
+7
+00:00:27,200 --> 00:00:31,920
+ pipes or your hydraulic lines whenever there's kind of a step change or some other kind
+
+8
+00:00:31,920 --> 00:00:36,440
+ of change in the diameter or kind of skin friction with the walls or you know, drag
+
+9
+00:00:36,440 --> 00:00:39,440
+ it, you encounter by flowing over an obstruction.
+
+10
+00:00:39,440 --> 00:00:42,920
+ The different resistances that we talk about in this course, they tend to have different
+
+11
+00:00:42,920 --> 00:00:46,280
+ CCRs because they all kind of act pretty differently.
+
+12
+00:00:46,280 --> 00:00:49,280
+ The one thing that they do have in common though is that they all provide some sort
+
+13
+00:00:49,280 --> 00:00:53,240
+ of pressure drop as a function of the flow going through that element.
+
+14
+00:00:53,240 --> 00:00:57,160
+ To give you an example, when you see this guy here, I'm usually talking about some kind
+
+15
+00:00:57,160 --> 00:01:01,320
+ of linear resistance where the pressure drop is some resistance are times the flow.
+
+16
+00:01:01,320 --> 00:01:05,320
+ If you're thinking this looks a lot like ohms a little, well it does because remember
+
+17
+00:01:05,320 --> 00:01:10,760
+ deep down resistances in fluid power systems resist stores in electrical systems, frictions
+
+18
+00:01:10,760 --> 00:01:14,560
+ in mechanical systems that are all really the same thing.
+
+19
+00:01:14,560 --> 00:01:17,440
+ If you see a symbol that looks like this, however, I'm probably talking about some kind
+
+20
+00:01:17,440 --> 00:01:21,560
+ of nonlinear resistance and there are different formulas for these depending on whether
+
+21
+00:01:21,560 --> 00:01:25,760
+ you're talking about kind of flow through a pipe in laminar or tubular conditions and
+
+22
+00:01:25,760 --> 00:01:29,520
+ you're trying to capture friction, whether you're talking about kind of, I don't know,
+
+23
+00:01:29,520 --> 00:01:34,160
+ highly complicated shuttle valves, like the one that you'll see in the big kahuna problem.
+
+24
+00:01:34,160 --> 00:01:38,160
+ In general, if we don't know any better, if we haven't really got a good idea for what
+
+25
+00:01:38,160 --> 00:01:43,680
+ CCR we should be using, we're going to use this notation, kind of pressure is some nonlinear
+
+26
+00:01:43,680 --> 00:01:48,600
+ function or I should say potentially nonlinear function, potentially nonlinear arbitrary
+
+27
+00:01:48,600 --> 00:01:54,160
+ function called phi of the flow and oftentimes we'll put some sort of subscript on
+
+28
+00:01:54,160 --> 00:01:57,520
+ the phi to indicate that we're talking about, for example, valve 1 instead of valve 2
+
+29
+00:01:57,520 --> 00:02:02,320
+ and whatever, but that's the kind of general notation, pressure is some function of flow.
+
+30
+00:02:02,320 --> 00:02:05,800
+ And then we're kind of kicking the can down the road here, we're leaving it up to whoever
+
+31
+00:02:05,800 --> 00:02:09,920
+ is job is to validate this model to go out and work out what that particular model
+
+32
+00:02:09,920 --> 00:02:14,760
+ is in a process that we call system identification, CCRD.
+
+33
+00:02:14,760 --> 00:02:19,600
+ So in this course, if you see this symbol, you can use linear CCR, if you see pretty much
+
+34
+00:02:19,600 --> 00:02:24,040
+ any other symbol used to represent a valve, it's probably some nonlinear function and
+
+35
+00:02:24,040 --> 00:02:27,480
+ unless you know that you go, oh, right, I've done some experiments and I know that this
+
+36
+00:02:27,480 --> 00:02:32,200
+ particular valve should have this relationship between pressure drop and flow rate, then
+
+37
+00:02:32,200 --> 00:02:35,560
+ I'd probably leave it to whoever's job it is to validate the model to come back and
+
+38
+00:02:35,560 --> 00:02:36,560
+ fill it in.
+
+39
+00:02:36,560 --> 00:02:39,840
+ All right, having talked about all of the basic elements, I think we're ready to go and
+
+40
+00:02:39,840 --> 00:02:40,840
+ do a modeling problem.
+
+41
+00:02:40,840 --> 00:02:42,720
+ That's how we got problem 5.2 together.

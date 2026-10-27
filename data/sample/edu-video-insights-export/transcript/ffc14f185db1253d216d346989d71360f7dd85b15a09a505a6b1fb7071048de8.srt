@@ -1,0 +1,1503 @@
+1
+00:00:00,000 --> 00:00:03,240
+ In this video, we're going to talk about FDM 3D printing,
+
+2
+00:00:03,240 --> 00:00:05,120
+ one of my favorite manufacturing processes
+
+3
+00:00:05,120 --> 00:00:06,400
+ for working with plastic.
+
+4
+00:00:06,400 --> 00:00:08,760
+ I am a massive fan of FDM 3D printers
+
+5
+00:00:08,760 --> 00:00:10,000
+ for a bunch of different reasons
+
+6
+00:00:10,000 --> 00:00:12,000
+ that'll become apparent over the course of this video,
+
+7
+00:00:12,000 --> 00:00:14,040
+ but probably the most important reason,
+
+8
+00:00:14,040 --> 00:00:16,080
+ the reason why I'm so enamored with them
+
+9
+00:00:16,080 --> 00:00:19,400
+ is that FDM 3D printers have largely democratized
+
+10
+00:00:19,400 --> 00:00:21,080
+ manufacturing with plastic.
+
+11
+00:00:21,080 --> 00:00:23,120
+ These days, using an FDM 3D printer,
+
+12
+00:00:23,120 --> 00:00:25,360
+ you can make incredibly complicated shapes
+
+13
+00:00:25,360 --> 00:00:29,200
+ with basically no effort and very, very little cost.
+
+14
+00:00:29,240 --> 00:00:30,720
+ It used to be the case 10 years ago
+
+15
+00:00:30,720 --> 00:00:33,000
+ when I started undergrad that very few people
+
+16
+00:00:33,000 --> 00:00:37,800
+ had access to or had even used an FDM 3D printer before.
+
+17
+00:00:37,800 --> 00:00:40,200
+ Whereas these days, I think it's relatively uncommon
+
+18
+00:00:40,200 --> 00:00:42,520
+ if you get to university and do an engineering degree
+
+19
+00:00:42,520 --> 00:00:45,720
+ and you haven't had some experience with a 3D printer.
+
+20
+00:00:45,720 --> 00:00:48,200
+ You probably already know what it is and how it works.
+
+21
+00:00:48,200 --> 00:00:50,720
+ And most of you probably have had some experience
+
+22
+00:00:50,720 --> 00:00:53,840
+ using one at a school or a make space or a library
+
+23
+00:00:53,840 --> 00:00:56,360
+ or in your own house if you happen to own one.
+
+24
+00:00:56,360 --> 00:00:57,960
+ Nevertheless, given their ubiquity
+
+25
+00:00:57,960 --> 00:01:00,040
+ and the extreme affordability of this
+
+26
+00:01:00,040 --> 00:01:03,520
+ as a manufacturing technique for low-to-mid volume parts
+
+27
+00:01:03,520 --> 00:01:05,680
+ and certainly as a prototyping tool,
+
+28
+00:01:05,680 --> 00:01:06,920
+ we're going to spend a little bit of time
+
+29
+00:01:06,920 --> 00:01:09,000
+ in this video talking about how they work
+
+30
+00:01:09,000 --> 00:01:11,080
+ and some of the considerations that you need to make
+
+31
+00:01:11,080 --> 00:01:13,120
+ in your selection of a material for 3D printing
+
+32
+00:01:13,120 --> 00:01:14,920
+ and some of the considerations you need to make
+
+33
+00:01:14,920 --> 00:01:17,240
+ in designing components to be 3D printed.
+
+34
+00:01:17,240 --> 00:01:19,720
+ So we'll kick off by talking about some of the mechanics
+
+35
+00:01:19,720 --> 00:01:21,280
+ of how this all works.
+
+36
+00:01:21,280 --> 00:01:24,240
+ FDM is short for fused deposition modeling
+
+37
+00:01:24,240 --> 00:01:27,120
+ and the way it works is kind of given away in the name.
+
+38
+00:01:27,120 --> 00:01:30,120
+ Through a CNC process, a little bit like an old inkjet printer
+
+39
+00:01:30,120 --> 00:01:33,360
+ and FDM 3D printer works by tracing out a path
+
+40
+00:01:33,360 --> 00:01:37,240
+ in 3D space and depositing a layer of molten thermoplastic
+
+41
+00:01:37,240 --> 00:01:38,440
+ over this path.
+
+42
+00:01:38,440 --> 00:01:42,160
+ In practice, FDM 3D printers typically travel on 2D parts,
+
+43
+00:01:42,160 --> 00:01:44,440
+ tracing out layer by layer the cross section
+
+44
+00:01:44,440 --> 00:01:46,200
+ of whatever complicated shape it is
+
+45
+00:01:46,200 --> 00:01:47,960
+ that you'd like to 3D print.
+
+46
+00:01:47,960 --> 00:01:49,480
+ After completing a particular layer,
+
+47
+00:01:49,480 --> 00:01:52,280
+ the 3D printer will move the extruder away
+
+48
+00:01:52,280 --> 00:01:54,120
+ from that previously deposited layer
+
+49
+00:01:54,120 --> 00:01:55,360
+ and lay down the next one,
+
+50
+00:01:55,360 --> 00:01:58,320
+ whatever the next cross section along your part happens to be.
+
+51
+00:01:58,320 --> 00:02:00,800
+ Because the motion that an FDM 3D printer performs
+
+52
+00:02:00,800 --> 00:02:02,000
+ are reasonably straightforward,
+
+53
+00:02:02,000 --> 00:02:04,200
+ working layer by layer and stepping up
+
+54
+00:02:04,200 --> 00:02:06,440
+ and then working layer by layer and stepping up,
+
+55
+00:02:06,440 --> 00:02:08,200
+ they usually relatively straightforward
+
+56
+00:02:08,200 --> 00:02:10,760
+ and as a result have become very, very affordable.
+
+57
+00:02:10,760 --> 00:02:12,320
+ This affordability of the machines,
+
+58
+00:02:12,320 --> 00:02:14,800
+ coupled with the affordability of the 3D printer filament,
+
+59
+00:02:14,800 --> 00:02:17,480
+ which is usually just a cheap thermoplastic,
+
+60
+00:02:17,480 --> 00:02:19,880
+ coupled with the gain with the lack of complexity involved
+
+61
+00:02:19,880 --> 00:02:22,200
+ in writing the tool parts for these 3D printers
+
+62
+00:02:22,200 --> 00:02:24,600
+ because the movements are so simple,
+
+63
+00:02:24,600 --> 00:02:26,120
+ means that 3D printers have become
+
+64
+00:02:26,120 --> 00:02:27,800
+ pretty much an every man tool.
+
+65
+00:02:27,800 --> 00:02:30,280
+ And as a result, I've found favor amongst both those
+
+66
+00:02:30,280 --> 00:02:32,200
+ looking to rapid prototype their components
+
+67
+00:02:32,200 --> 00:02:34,440
+ and people looking to make finished parts
+
+68
+00:02:34,440 --> 00:02:36,200
+ at low to medium volume.
+
+69
+00:02:36,200 --> 00:02:38,960
+ To give you one example in NUT which is a pretty small
+
+70
+00:02:38,960 --> 00:02:40,960
+ engineering organization when you think about it,
+
+71
+00:02:40,960 --> 00:02:42,720
+ we have a small 3D print farm
+
+72
+00:02:42,720 --> 00:02:45,520
+ and we rapid prototype pretty much every component
+
+73
+00:02:45,520 --> 00:02:47,600
+ before it goes out for final manufacture.
+
+74
+00:02:47,600 --> 00:02:49,400
+ This means for a few cents worth of filament
+
+75
+00:02:49,400 --> 00:02:50,720
+ and a couple of hours of print time,
+
+76
+00:02:50,720 --> 00:02:52,920
+ we can hold in our hands a prototype of the part
+
+77
+00:02:52,920 --> 00:02:54,880
+ that we're about to get CNC machined
+
+78
+00:02:54,880 --> 00:02:56,720
+ or welded or otherwise manufactured
+
+79
+00:02:56,720 --> 00:02:58,600
+ that would probably cost a lot of money.
+
+80
+00:02:58,600 --> 00:03:00,840
+ And we can offer that up to the car or the boat
+
+81
+00:03:00,840 --> 00:03:02,440
+ or the rocket and check for fitment
+
+82
+00:03:02,440 --> 00:03:05,200
+ and check for other manufacturing and assembly issues.
+
+83
+00:03:05,200 --> 00:03:06,760
+ On a larger scale, there are some companies
+
+84
+00:03:06,760 --> 00:03:09,080
+ that maintain print farms to make finished components
+
+85
+00:03:09,080 --> 00:03:11,800
+ where they can't justify the initial upfront cost
+
+86
+00:03:11,800 --> 00:03:14,080
+ to get something injective moulded, for example.
+
+87
+00:03:14,080 --> 00:03:16,040
+ Prusa, a company who makes 3D printers
+
+88
+00:03:16,040 --> 00:03:18,160
+ incidentally the company who makes the 3D printers
+
+89
+00:03:18,160 --> 00:03:20,840
+ that we own down in TA for new teams.
+
+90
+00:03:20,840 --> 00:03:22,360
+ Prusa makes their 3D printers
+
+91
+00:03:22,360 --> 00:03:25,400
+ by printing components on other 3D printers.
+
+92
+00:03:25,400 --> 00:03:26,760
+ There's an excellent video with a tour
+
+93
+00:03:26,760 --> 00:03:27,720
+ through the Prusa factory
+
+94
+00:03:27,720 --> 00:03:29,080
+ where they take a look at their print farm
+
+95
+00:03:29,080 --> 00:03:31,240
+ at something like four or 500 printers
+
+96
+00:03:31,240 --> 00:03:32,560
+ that they use to print components
+
+97
+00:03:32,560 --> 00:03:36,200
+ for the thousands of printers that they ship out every week.
+
+98
+00:03:36,200 --> 00:03:37,840
+ And while this process is slower
+
+99
+00:03:37,840 --> 00:03:39,640
+ and doesn't provide the economic benefits
+
+100
+00:03:39,640 --> 00:03:42,640
+ at scale that other ones like say injection moulding might,
+
+101
+00:03:42,640 --> 00:03:44,400
+ this means that every time there's a design revision,
+
+102
+00:03:44,400 --> 00:03:46,560
+ Prusa doesn't need to again pay that upfront cost
+
+103
+00:03:46,560 --> 00:03:47,920
+ to have a new diamond in factured
+
+104
+00:03:47,920 --> 00:03:50,080
+ to have components injection moulded.
+
+105
+00:03:50,080 --> 00:03:52,120
+ In addition to convenience of this technique
+
+106
+00:03:52,120 --> 00:03:55,080
+ and accessibility of this technique for the every man
+
+107
+00:03:55,080 --> 00:03:57,200
+ and in addition to the low upfront costs
+
+108
+00:03:57,200 --> 00:03:58,720
+ in manufacturing with this technique
+
+109
+00:03:58,720 --> 00:04:00,760
+ and the kind of flexibility it gives you
+
+110
+00:04:00,760 --> 00:04:04,040
+ in rapid design and prototyping and updating of components.
+
+111
+00:04:04,040 --> 00:04:05,880
+ 3D printing I think is particularly useful
+
+112
+00:04:05,880 --> 00:04:07,600
+ because it allows you to make some components
+
+113
+00:04:07,600 --> 00:04:09,920
+ that would otherwise be completely impossible
+
+114
+00:04:09,920 --> 00:04:13,480
+ or impractical and economical to make otherwise.
+
+115
+00:04:13,480 --> 00:04:16,520
+ This is true of both FDM 3D printed parts here in plastic
+
+116
+00:04:16,520 --> 00:04:18,640
+ but also of the metal 3D printed parts
+
+117
+00:04:18,640 --> 00:04:20,440
+ we talked about a few weeks ago.
+
+118
+00:04:20,480 --> 00:04:22,240
+ Some designs, particularly those made
+
+119
+00:04:22,240 --> 00:04:25,000
+ with new age design methods like topology optimization
+
+120
+00:04:25,000 --> 00:04:27,840
+ or generative design that look very organic,
+
+121
+00:04:27,840 --> 00:04:30,160
+ those parts are really hard to make using a technique
+
+122
+00:04:30,160 --> 00:04:32,520
+ like CNC machining or casting for example
+
+123
+00:04:32,520 --> 00:04:35,560
+ because they're so organic, they're so interesting,
+
+124
+00:04:35,560 --> 00:04:36,880
+ they're so weird.
+
+125
+00:04:36,880 --> 00:04:38,960
+ 3D printing eats these designs up.
+
+126
+00:04:38,960 --> 00:04:40,520
+ All right, we've talked about the mechanics
+
+127
+00:04:40,520 --> 00:04:41,840
+ of how a 3D printer works
+
+128
+00:04:41,840 --> 00:04:43,560
+ and we've talked about some of the motivations
+
+129
+00:04:43,560 --> 00:04:46,520
+ for why you might 3D printer component in the first place.
+
+130
+00:04:46,520 --> 00:04:48,280
+ Let's talk about the actual process,
+
+131
+00:04:48,280 --> 00:04:50,520
+ how you go from a design that's in your head
+
+132
+00:04:50,520 --> 00:04:52,600
+ to a part that's going to be 3D printed.
+
+133
+00:04:52,600 --> 00:04:54,920
+ Like some forms of machining and laser cutting
+
+134
+00:04:54,920 --> 00:04:58,080
+ and plasma cutting, 3D printing is a CNC process,
+
+135
+00:04:58,080 --> 00:05:00,240
+ a computer numerically controlled process
+
+136
+00:05:00,240 --> 00:05:02,000
+ which means to 3D printer component,
+
+137
+00:05:02,000 --> 00:05:04,280
+ you need to start with some sort of 3D model
+
+138
+00:05:04,280 --> 00:05:05,800
+ of the thing you'd like to print.
+
+139
+00:05:05,800 --> 00:05:07,240
+ Oftentimes as a design engineer,
+
+140
+00:05:07,240 --> 00:05:09,160
+ you'll be making these models yourself, right?
+
+141
+00:05:09,160 --> 00:05:10,640
+ These will be the designs of the things
+
+142
+00:05:10,640 --> 00:05:12,000
+ that you want to put into service
+
+143
+00:05:12,000 --> 00:05:14,240
+ but occasionally especially if it's a standard component
+
+144
+00:05:14,240 --> 00:05:16,120
+ or an off-the-shelf and OEM component
+
+145
+00:05:16,120 --> 00:05:18,240
+ that you plan to incorporate into one of your designs,
+
+146
+00:05:18,240 --> 00:05:20,920
+ you may go find you can download a CAD file,
+
+147
+00:05:20,920 --> 00:05:23,160
+ a step file or an eye-just file of the component
+
+148
+00:05:23,160 --> 00:05:25,000
+ you'd like to print online.
+
+149
+00:05:25,000 --> 00:05:27,320
+ Irrespective of how you've come to have a CAD file
+
+150
+00:05:27,320 --> 00:05:28,800
+ of the thing that you'd like to print,
+
+151
+00:05:28,800 --> 00:05:30,560
+ the first tip is to convert this CAD file
+
+152
+00:05:30,560 --> 00:05:32,440
+ into a universal generic format
+
+153
+00:05:32,440 --> 00:05:34,760
+ that all 3D printer programs accept
+
+154
+00:05:34,760 --> 00:05:36,920
+ and STL, a stereo-lithy refile.
+
+155
+00:05:36,920 --> 00:05:38,840
+ STLs are approximations of your geometry,
+
+156
+00:05:38,840 --> 00:05:41,560
+ they're faceted solids, they're basically just a text file
+
+157
+00:05:41,560 --> 00:05:45,000
+ with a list of vertices and corresponding face information.
+
+158
+00:05:45,000 --> 00:05:47,640
+ And they allow you to package up complicated CAD geometry
+
+159
+00:05:47,640 --> 00:05:50,360
+ made up of extrudes and revolves and blends
+
+160
+00:05:50,360 --> 00:05:53,120
+ and other features into a reasonably simple approximation,
+
+161
+00:05:53,120 --> 00:05:55,160
+ what essentially amounts to a point cloud.
+
+162
+00:05:55,160 --> 00:05:57,080
+ To write the toolpaths, to tell the 3D printer
+
+163
+00:05:57,080 --> 00:05:59,280
+ how to move the head and when to extrude
+
+164
+00:05:59,280 --> 00:06:01,480
+ molten thermoplastic onto the job,
+
+165
+00:06:01,480 --> 00:06:03,440
+ use a program called a slicer.
+
+166
+00:06:03,440 --> 00:06:05,000
+ A slicer which you run in your computer
+
+167
+00:06:05,000 --> 00:06:07,000
+ takes an STL file as an input
+
+168
+00:06:07,000 --> 00:06:09,160
+ and allows you to control all sorts of settings
+
+169
+00:06:09,160 --> 00:06:12,400
+ about the print before finally converting this into G-code,
+
+170
+00:06:12,400 --> 00:06:14,400
+ the language that the printer is expecting
+
+171
+00:06:14,400 --> 00:06:15,920
+ that tells it how to move the head
+
+172
+00:06:15,920 --> 00:06:19,080
+ and how to move its axes to make up the path that you want.
+
+173
+00:06:19,080 --> 00:06:20,280
+ Most slicer softwares,
+
+174
+00:06:20,280 --> 00:06:21,880
+ even the reasonably straightforward ones
+
+175
+00:06:21,880 --> 00:06:23,560
+ that are included with some printers,
+
+176
+00:06:23,560 --> 00:06:25,120
+ will let you control a bunch of settings
+
+177
+00:06:25,120 --> 00:06:27,080
+ to do with the way that the thing is printed.
+
+178
+00:06:27,080 --> 00:06:28,840
+ For example, they'll let you control the layer height
+
+179
+00:06:28,840 --> 00:06:31,320
+ of the print, how much thermoplastic you dump out
+
+180
+00:06:31,320 --> 00:06:33,800
+ on each cross section and how far you move up
+
+181
+00:06:33,800 --> 00:06:35,320
+ between each cross section.
+
+182
+00:06:35,320 --> 00:06:37,720
+ As you can imagine, printing with corsa layer heights,
+
+183
+00:06:37,720 --> 00:06:39,440
+ thicker layer heights will result in a part
+
+184
+00:06:39,440 --> 00:06:41,360
+ with a maybe a porous surface finish
+
+185
+00:06:41,360 --> 00:06:43,880
+ and usually also some poorer mechanical properties,
+
+186
+00:06:43,880 --> 00:06:45,400
+ but we'll print much more quickly
+
+187
+00:06:45,400 --> 00:06:46,880
+ because there'll be far fewer layers
+
+188
+00:06:46,880 --> 00:06:48,200
+ for it to print in total.
+
+189
+00:06:48,200 --> 00:06:49,840
+ 3D printers also let you control
+
+190
+00:06:49,840 --> 00:06:52,920
+ whether and how much infill is used in your prints.
+
+191
+00:06:52,920 --> 00:06:54,440
+ Especially when you're rapid prototyping,
+
+192
+00:06:54,440 --> 00:06:57,040
+ you may not want the inside of your print to be solid.
+
+193
+00:06:57,040 --> 00:06:59,400
+ You may not be putting any load on this prototype, for example,
+
+194
+00:06:59,400 --> 00:07:01,160
+ you may just be using to check fitment.
+
+195
+00:07:01,160 --> 00:07:03,120
+ In these cases, you may opt to print your part
+
+196
+00:07:03,120 --> 00:07:05,280
+ nearly hollow with only a few supports
+
+197
+00:07:05,280 --> 00:07:08,840
+ needed inside to kind of maintain the out of structure of it.
+
+198
+00:07:08,840 --> 00:07:10,440
+ In other cases, particularly if your part
+
+199
+00:07:10,440 --> 00:07:13,200
+ is a production part that is going to be put under some load,
+
+200
+00:07:13,200 --> 00:07:15,840
+ you may print closer to a solid geometry.
+
+201
+00:07:15,840 --> 00:07:17,640
+ Most slicer softwares will let you control
+
+202
+00:07:17,640 --> 00:07:19,480
+ not only the percentage of infill
+
+203
+00:07:19,480 --> 00:07:20,720
+ that you'd like in your part,
+
+204
+00:07:20,720 --> 00:07:22,680
+ what density you'd like your part to have, basically,
+
+205
+00:07:22,680 --> 00:07:24,120
+ but will also let you control
+
+206
+00:07:24,120 --> 00:07:26,640
+ what particular pattern it uses for the infill.
+
+207
+00:07:26,640 --> 00:07:29,600
+ Some of the most common being hexagonal patterns, for example.
+
+208
+00:07:29,600 --> 00:07:31,800
+ 3D printers slicer softwares will also allow you
+
+209
+00:07:31,800 --> 00:07:33,920
+ to control the orientation of your part
+
+210
+00:07:33,920 --> 00:07:37,360
+ and whether or not any support material is printed as well.
+
+211
+00:07:37,360 --> 00:07:38,800
+ You can imagine, for some geometries,
+
+212
+00:07:38,800 --> 00:07:41,160
+ say a model of a person with their arms out,
+
+213
+00:07:41,160 --> 00:07:42,800
+ there'll be large areas of this print
+
+214
+00:07:42,800 --> 00:07:45,520
+ which are unsupported if you print from bottom to top.
+
+215
+00:07:45,520 --> 00:07:48,200
+ In this case, the arms of the person have no geometry,
+
+216
+00:07:48,200 --> 00:07:49,640
+ no material underneath them,
+
+217
+00:07:49,640 --> 00:07:51,920
+ and the 3D printer can't print on air.
+
+218
+00:07:51,920 --> 00:07:54,000
+ Consequently, 3D printing slicer softwares
+
+219
+00:07:54,000 --> 00:07:56,800
+ will detect unsupported areas of your print
+
+220
+00:07:56,800 --> 00:07:58,760
+ and offered to put in support material.
+
+221
+00:07:58,760 --> 00:08:01,120
+ Usually thin columns of plastic that will originate
+
+222
+00:08:01,120 --> 00:08:02,680
+ from the ground plane and come up
+
+223
+00:08:02,680 --> 00:08:04,000
+ to the thing you'd like to print.
+
+224
+00:08:04,000 --> 00:08:06,320
+ While these support materials are intentionally engineered
+
+225
+00:08:06,320 --> 00:08:08,480
+ to be easy to remove from the finished part,
+
+226
+00:08:08,480 --> 00:08:10,800
+ they can have somewhat of an impact on the strength
+
+227
+00:08:10,800 --> 00:08:12,120
+ of anything you're trying to print
+
+228
+00:08:12,120 --> 00:08:13,320
+ and the surface finish.
+
+229
+00:08:13,320 --> 00:08:15,320
+ So generally, it's considered good practice
+
+230
+00:08:15,320 --> 00:08:17,400
+ to try and minimize the amount of support material
+
+231
+00:08:17,400 --> 00:08:19,320
+ that's required when you're printing a part.
+
+232
+00:08:19,320 --> 00:08:21,160
+ Largely, you do this by altering the geometry
+
+233
+00:08:21,160 --> 00:08:23,520
+ to make sure you don't have large, overhanging areas,
+
+234
+00:08:23,520 --> 00:08:25,320
+ maybe by putting a gusset in, for example,
+
+235
+00:08:25,320 --> 00:08:27,640
+ but sometimes this isn't always possible.
+
+236
+00:08:27,640 --> 00:08:30,280
+ It can be addressed, however, by changing the orientation
+
+237
+00:08:30,280 --> 00:08:31,880
+ in which you print your part.
+
+238
+00:08:31,880 --> 00:08:33,880
+ A part printed in a particular orientation
+
+239
+00:08:33,880 --> 00:08:35,840
+ may require substantial support material
+
+240
+00:08:35,840 --> 00:08:38,000
+ to compensate for areas that are unsupported,
+
+241
+00:08:38,000 --> 00:08:39,840
+ but a simple rotation of this part
+
+242
+00:08:39,840 --> 00:08:41,360
+ to print in a different direction
+
+243
+00:08:41,360 --> 00:08:43,760
+ to use a different side of it as the ground plane
+
+244
+00:08:43,760 --> 00:08:46,680
+ might mean that no support material is needed at all.
+
+245
+00:08:46,680 --> 00:08:48,880
+ Now, selection of orientation to minimize
+
+246
+00:08:48,880 --> 00:08:50,440
+ the amount of support material required
+
+247
+00:08:50,440 --> 00:08:52,560
+ is quite often a trade-off in comparison
+
+248
+00:08:52,560 --> 00:08:56,160
+ to anisotropy introduced by the printing process.
+
+249
+00:08:56,160 --> 00:08:59,200
+ FDM 3D printed parts, because they constructed in layers,
+
+250
+00:08:59,200 --> 00:09:01,200
+ generally have a tendency to be stronger
+
+251
+00:09:01,200 --> 00:09:04,440
+ along a layer than they do to be across layers.
+
+252
+00:09:04,440 --> 00:09:07,640
+ This anisotropy occurs because in FDM 3D printing,
+
+253
+00:09:07,640 --> 00:09:09,680
+ a single layer is deposited in cools,
+
+254
+00:09:09,720 --> 00:09:11,360
+ roughly on the same time frame,
+
+255
+00:09:11,360 --> 00:09:12,960
+ whereas it's usually a substantial weight
+
+256
+00:09:12,960 --> 00:09:15,320
+ in between different layers that are deposited.
+
+257
+00:09:15,320 --> 00:09:17,640
+ Consequently, the plastic within a single layer
+
+258
+00:09:17,640 --> 00:09:19,720
+ is held together by reasonably strong bonds
+
+259
+00:09:19,720 --> 00:09:22,560
+ and the plastics between layers not so much.
+
+260
+00:09:22,560 --> 00:09:24,360
+ This means that when 3D printing a component
+
+261
+00:09:24,360 --> 00:09:26,480
+ which is going to be placed under some kind of load,
+
+262
+00:09:26,480 --> 00:09:29,080
+ you may wish to orient it when printing such that
+
+263
+00:09:29,080 --> 00:09:32,320
+ the load direction is in line with the layers
+
+264
+00:09:32,320 --> 00:09:35,400
+ of the print as opposed to perpendicular to the layers.
+
+265
+00:09:35,400 --> 00:09:37,440
+ Thus, the trade-off becomes apparent, right?
+
+266
+00:09:37,440 --> 00:09:39,320
+ There are some orientations which are particularly
+
+267
+00:09:39,360 --> 00:09:41,000
+ to printing because they minimise the amount
+
+268
+00:09:41,000 --> 00:09:42,520
+ of support material you need,
+
+269
+00:09:42,520 --> 00:09:44,400
+ and there are probably some other orientations
+
+270
+00:09:44,400 --> 00:09:46,040
+ which are quite good to printing because it means
+
+271
+00:09:46,040 --> 00:09:48,960
+ the layers of your 3D print end up oriented
+
+272
+00:09:48,960 --> 00:09:50,880
+ with the loads that you expect to see.
+
+273
+00:09:50,880 --> 00:09:53,400
+ Usually it's not the case that these two orientations
+
+274
+00:09:53,400 --> 00:09:54,240
+ are the same.
+
+275
+00:09:54,240 --> 00:09:56,200
+ When you need to deal with these competing objectives,
+
+276
+00:09:56,200 --> 00:09:58,600
+ you might look to turn the other knobs in the problem
+
+277
+00:09:58,600 --> 00:10:01,280
+ to try and achieve some sort of overall balance
+
+278
+00:10:01,280 --> 00:10:03,280
+ between strength and surface finish.
+
+279
+00:10:03,280 --> 00:10:05,160
+ You might, for example, print with your layers
+
+280
+00:10:05,160 --> 00:10:06,880
+ in the direction you expect the load to see,
+
+281
+00:10:06,880 --> 00:10:08,640
+ but to make up for the poor surface finish,
+
+282
+00:10:08,640 --> 00:10:10,200
+ you get from any support material,
+
+283
+00:10:10,200 --> 00:10:13,040
+ you might choose to print with finer layers to begin with.
+
+284
+00:10:13,040 --> 00:10:15,560
+ Or you might subject your 3D print as some sort of post-treatment
+
+285
+00:10:15,560 --> 00:10:17,280
+ to improve the surface finish.
+
+286
+00:10:17,280 --> 00:10:20,320
+ In general, design for 3D printing is an extremely broad field
+
+287
+00:10:20,320 --> 00:10:22,680
+ and we've only really scratched the surface here.
+
+288
+00:10:22,680 --> 00:10:24,920
+ You'll probably talk about it a little bit more in materials too,
+
+289
+00:10:24,920 --> 00:10:27,200
+ and hopefully in your later year design courses as well.
+
+290
+00:10:27,200 --> 00:10:29,880
+ But we also do a ton of 3D printing in a new team.
+
+291
+00:10:29,880 --> 00:10:31,440
+ So if you're interested in learning more,
+
+292
+00:10:31,440 --> 00:10:33,760
+ feel free to sign up and our 3D printing experts
+
+293
+00:10:33,760 --> 00:10:35,360
+ will be happy to talk to you about it.
+
+294
+00:10:35,360 --> 00:10:37,000
+ To close this video out, I might talk about some
+
+295
+00:10:37,040 --> 00:10:38,960
+ of the common FDM 3D printer filaments
+
+296
+00:10:38,960 --> 00:10:40,360
+ that you're likely to run into.
+
+297
+00:10:40,360 --> 00:10:41,560
+ We didn't talk about these last week
+
+298
+00:10:41,560 --> 00:10:43,000
+ when we met engineering plastics,
+
+299
+00:10:43,000 --> 00:10:45,240
+ but you should note that all of the FDM 3D printer
+
+300
+00:10:45,240 --> 00:10:46,480
+ filaments that you're likely to meet
+
+301
+00:10:46,480 --> 00:10:47,880
+ are going to be thermoplastics,
+
+302
+00:10:47,880 --> 00:10:49,760
+ because they need to be initially polymerized
+
+303
+00:10:49,760 --> 00:10:51,920
+ and then put onto a spool so that you can then
+
+304
+00:10:51,920 --> 00:10:53,880
+ melt them down at your extruder head.
+
+305
+00:10:53,880 --> 00:10:55,720
+ You can get FDM 3D printer filaments
+
+306
+00:10:55,720 --> 00:10:57,120
+ in a range of different flavors.
+
+307
+00:10:57,120 --> 00:10:59,560
+ There are tens of hundreds of different types of filament
+
+308
+00:10:59,560 --> 00:11:02,880
+ you can buy, including the thermoplastics we met last week.
+
+309
+00:11:02,880 --> 00:11:04,680
+ That being said, here's a brief recap
+
+310
+00:11:04,680 --> 00:11:06,240
+ of the three most common.
+
+311
+00:11:06,240 --> 00:11:09,880
+ Ostensibly the most common is polylactic acid PLA.
+
+312
+00:11:09,880 --> 00:11:12,160
+ PLA is quite favorable for a bunch of different reasons,
+
+313
+00:11:12,160 --> 00:11:13,960
+ particularly it's low melting temperature,
+
+314
+00:11:13,960 --> 00:11:16,080
+ which means you don't need a particularly expensive
+
+315
+00:11:16,080 --> 00:11:18,680
+ or capable 3D printer to be able to melt it.
+
+316
+00:11:18,680 --> 00:11:19,840
+ And it's also quite nice
+
+317
+00:11:19,840 --> 00:11:21,560
+ because it doesn't give off any nasty fumes
+
+318
+00:11:21,560 --> 00:11:23,680
+ when it's printing, meaning that you can have a printer
+
+319
+00:11:23,680 --> 00:11:26,200
+ indoors around humans while it's going.
+
+320
+00:11:26,200 --> 00:11:28,760
+ PLA is quite a good starter material for 3D printing
+
+321
+00:11:28,760 --> 00:11:31,560
+ and even for rapid prototyping, I'd say it's a good choice.
+
+322
+00:11:31,560 --> 00:11:33,960
+ It's quite affordable, though it is a little bit brittle
+
+323
+00:11:33,960 --> 00:11:36,040
+ and tends to soften around 60 degrees C,
+
+324
+00:11:36,040 --> 00:11:38,000
+ so not particularly great for components
+
+325
+00:11:38,000 --> 00:11:39,600
+ that need to be added in temperature.
+
+326
+00:11:39,600 --> 00:11:42,360
+ ABS, a Krillo nitrile butadiene styrene,
+
+327
+00:11:42,360 --> 00:11:44,480
+ is another common 3D printer filament.
+
+328
+00:11:44,480 --> 00:11:46,280
+ It's been used in 3D printers for a long time,
+
+329
+00:11:46,280 --> 00:11:48,360
+ even before they were as mainstream as they are now.
+
+330
+00:11:48,360 --> 00:11:50,360
+ And you might recognize the name ABS
+
+331
+00:11:50,360 --> 00:11:52,880
+ because it's in a lot of other plastics as well.
+
+332
+00:11:52,880 --> 00:11:54,720
+ A really famous one is Lego bricks.
+
+333
+00:11:54,720 --> 00:11:56,800
+ ABS generally has slightly better mechanical
+
+334
+00:11:56,800 --> 00:11:58,520
+ and thermal performance than PLA.
+
+335
+00:11:58,520 --> 00:11:59,960
+ It holds up at higher temperatures
+
+336
+00:11:59,960 --> 00:12:01,160
+ and it's a little bit stiffer
+
+337
+00:12:01,160 --> 00:12:02,800
+ and a little bit stronger than PLA.
+
+338
+00:12:02,800 --> 00:12:04,680
+ But this is a bit of a two-edged sword.
+
+339
+00:12:04,680 --> 00:12:06,160
+ It has a higher service temperature
+
+340
+00:12:06,160 --> 00:12:07,320
+ and a higher melting temperature,
+
+341
+00:12:07,320 --> 00:12:10,400
+ but this also means you need a more substantial 3D printer
+
+342
+00:12:10,400 --> 00:12:11,840
+ to be able to melt it.
+
+343
+00:12:11,840 --> 00:12:13,960
+ And because there's a higher temperature between
+
+344
+00:12:13,960 --> 00:12:15,480
+ when it's molten and laid down
+
+345
+00:12:15,480 --> 00:12:17,520
+ and when it cools to room temperature,
+
+346
+00:12:17,520 --> 00:12:20,040
+ there's also quite a bit more thermal contraction
+
+347
+00:12:20,040 --> 00:12:22,800
+ and resulting distortion of your parts when you print them.
+
+348
+00:12:22,800 --> 00:12:25,200
+ The final common filament I'll touch on is Pet G,
+
+349
+00:12:25,200 --> 00:12:27,080
+ which is a glycol-modified version
+
+350
+00:12:27,080 --> 00:12:28,960
+ of the polyethylene terat bullet
+
+351
+00:12:28,960 --> 00:12:30,480
+ that we met last week when we talked
+
+352
+00:12:30,480 --> 00:12:31,960
+ about plastic water bottles.
+
+353
+00:12:32,000 --> 00:12:34,680
+ Pet G, like ABS, also has higher operating
+
+354
+00:12:34,680 --> 00:12:35,680
+ and melting temperatures
+
+355
+00:12:35,680 --> 00:12:37,960
+ and that requires a slightly hotter extruder
+
+356
+00:12:37,960 --> 00:12:39,120
+ and bed to deal with this.
+
+357
+00:12:39,120 --> 00:12:41,400
+ But it's a bit less prone to distortion than ABS
+
+358
+00:12:41,400 --> 00:12:42,920
+ as well as being a little bit stronger
+
+359
+00:12:42,920 --> 00:12:44,200
+ and a little bit stiffer.
+
+360
+00:12:44,200 --> 00:12:46,720
+ As I said, there are many, many different filaments available.
+
+361
+00:12:46,720 --> 00:12:49,840
+ And if you're going outside of PLA or ABS or Pet G,
+
+362
+00:12:49,840 --> 00:12:51,440
+ you've probably got a pretty good reason.
+
+363
+00:12:51,440 --> 00:12:53,440
+ For FDM 3D printers, you can buy filaments
+
+364
+00:12:53,440 --> 00:12:55,640
+ that are really, really strong and really, really stiff.
+
+365
+00:12:55,640 --> 00:12:58,120
+ You can buy filaments that have little bits of carbon fiber
+
+366
+00:12:58,120 --> 00:12:59,880
+ or fiberglass chopped up into them.
+
+367
+00:12:59,920 --> 00:13:01,880
+ You can buy filaments which are very, very elastic,
+
+368
+00:13:01,880 --> 00:13:03,080
+ very, very flexible.
+
+369
+00:13:03,080 --> 00:13:05,320
+ And because of the huge variety of different filaments
+
+370
+00:13:05,320 --> 00:13:07,640
+ that are available, I won't touch on all of them here.
+
+371
+00:13:07,640 --> 00:13:09,560
+ Instead, I've left some really good resources
+
+372
+00:13:09,560 --> 00:13:11,280
+ for you on the textbook page for this video.
+
+373
+00:13:11,280 --> 00:13:14,000
+ And I hope that this is just the start of your journey
+
+374
+00:13:14,000 --> 00:13:15,640
+ when it comes to FDM 3D printing
+
+375
+00:13:15,640 --> 00:13:18,240
+ because it's very likely you're gonna use this technique
+
+376
+00:13:18,240 --> 00:13:20,480
+ very, very often as a design engineer.

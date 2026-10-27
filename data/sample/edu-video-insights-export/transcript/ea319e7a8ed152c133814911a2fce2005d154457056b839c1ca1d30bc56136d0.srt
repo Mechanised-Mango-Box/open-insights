@@ -1,0 +1,303 @@
+1
+00:00:00,000 --> 00:00:04,400
+ In a big picture video last week, we talked about implementing limit stages in your material selection
+
+2
+00:00:04,400 --> 00:00:08,960
+ process. In the limit stage, by applying constraints to our problem, we managed to reduce the size
+
+3
+00:00:08,960 --> 00:00:14,160
+ of the solution space down to only a subset of all possible materials. These constraints
+
+4
+00:00:14,160 --> 00:00:17,360
+ were talked about in terms of material properties. For example, we might have said,
+
+5
+00:00:17,360 --> 00:00:21,680
+ I only want to see things which are good conductors, or I only want to see things with a yield
+
+6
+00:00:21,680 --> 00:00:25,360
+ strength above a particular number. Many times there are constraints placed on your materials
+
+7
+00:00:25,360 --> 00:00:28,960
+ design problem that aren't related to the properties of a particular material, but rather it's
+
+8
+00:00:28,960 --> 00:00:32,480
+ availability to you. We're quite fortunate here in Newcastle that there are a range of different
+
+9
+00:00:32,480 --> 00:00:36,800
+ suppliers for both steel and aluminium, and we'll talk a little bit more about supply of metals
+
+10
+00:00:36,800 --> 00:00:42,000
+ next week. But when it comes to some specialty metals, say alloys of copper or titanium,
+
+11
+00:00:42,000 --> 00:00:46,320
+ availability becomes a little bit tricky. And so it can be quite important to build these constraints
+
+12
+00:00:46,320 --> 00:00:50,960
+ around availability into your material selection design process so that you choose an optimal
+
+13
+00:00:50,960 --> 00:00:54,880
+ solution with respect to the materials that you actually have access to.
+
+14
+00:00:54,880 --> 00:00:58,480
+ Edgy Pak makes placing constraints on the size of the solution space by
+
+15
+00:00:58,480 --> 00:01:02,720
+ individually limiting families of materials to only grades that are available locally to you
+
+16
+00:01:02,720 --> 00:01:07,200
+ reasonably easy. I've got the level one database open here at Edgy Pak, and if I head over to
+
+17
+00:01:07,200 --> 00:01:11,280
+ the chart select button, the same place we've been doing all of our material selection processes.
+
+18
+00:01:11,280 --> 00:01:15,840
+ Instead of using a chart index tool to optimize to rank materials with respect to any index,
+
+19
+00:01:15,840 --> 00:01:19,840
+ or a limit stage, which we talked about last week to place a constraint on a problem,
+
+20
+00:01:19,840 --> 00:01:24,640
+ I can open up a tree stage and directly select which family of materials I'd like to
+
+21
+00:01:24,640 --> 00:01:30,160
+ allow in my material selection process. I can say, for example, show me all metals and alloys,
+
+22
+00:01:30,160 --> 00:01:34,720
+ and then any solution that I optimize for, any solution that I limit within is going to be a strict
+
+23
+00:01:34,720 --> 00:01:39,280
+ subset of only metals and alloys. And if I do that, for example, you can see that the only
+
+24
+00:01:39,280 --> 00:01:44,720
+ materials left in the stage, 18 of the 69, only the ones which are categorized as metals,
+
+25
+00:01:44,720 --> 00:01:50,560
+ or I can delete that stage, and instead place a tree on maybe a specific family of metals.
+
+26
+00:01:50,560 --> 00:01:56,400
+ So I could say, show me only ferrous metals, or I could say, show me only this particular entry
+
+27
+00:01:56,400 --> 00:02:02,240
+ for cast irons, and this particular entry for steels, and this particular entry for Stano, and
+
+28
+00:02:02,240 --> 00:02:06,960
+ maybe I'll also have some aluminium. And now my solution space, my list of possible materials
+
+29
+00:02:06,960 --> 00:02:11,280
+ that I can optimize within is only those which I've selected. Now you might be thinking to yourself,
+
+30
+00:02:11,280 --> 00:02:15,120
+ Alex, aren't you putting the cart before the horse here? How am I supposed to know what material I
+
+31
+00:02:15,120 --> 00:02:18,640
+ want to use for this problem? That's why I'm going through a material selection process.
+
+32
+00:02:18,720 --> 00:02:22,320
+ Well, the purpose of using a tree stage like this is when you've already developed a shortlist
+
+33
+00:02:22,320 --> 00:02:26,560
+ of possible materials because you have some sort of external constraint. For example, I could say,
+
+34
+00:02:26,560 --> 00:02:30,320
+ well, I'm only going to use these particular grades of steel because that's what my local
+
+35
+00:02:30,320 --> 00:02:34,720
+ store has in stock, and I need to get this job done really quickly. Or, and this is very common,
+
+36
+00:02:34,720 --> 00:02:38,400
+ you might have a boss who says to you, you need to make this thing out of this material,
+
+37
+00:02:38,400 --> 00:02:42,240
+ or this material, or this material, because these are our preferred stockists. She might say,
+
+38
+00:02:42,240 --> 00:02:46,160
+ for example, you can make this out of anything that one steel supplies and anything that
+
+39
+00:02:46,160 --> 00:02:49,920
+ or rich aluminium supplies, two of our local supplies here in Newcastle. In that case,
+
+40
+00:02:49,920 --> 00:02:53,760
+ you would pull up the catalogs from one steel and from all rich aluminium and see what grades
+
+41
+00:02:53,760 --> 00:02:57,600
+ and materials they have available. And then you would come back into edu-pack and create a tree
+
+42
+00:02:57,600 --> 00:03:02,160
+ stage that includes only those materials. Now, there's likely to be a mismatch of specificity
+
+43
+00:03:02,160 --> 00:03:06,240
+ here between the database that you're using and the information your suppliers give you.
+
+44
+00:03:06,240 --> 00:03:10,160
+ It's very likely that the supplies will tell you the exact grade of steel or aluminium
+
+45
+00:03:10,160 --> 00:03:14,400
+ they own and provide. And at least in the level one database of edu-pack, we've got things like
+
+46
+00:03:14,400 --> 00:03:19,920
+ low carbon steel and low alloy steel, a big family of materials or clump together into one entry.
+
+47
+00:03:19,920 --> 00:03:23,600
+ If you go to the more advanced databases, say the level three database,
+
+48
+00:03:23,600 --> 00:03:28,160
+ so that's over here on the right. Now, there are significantly more materials in the database,
+
+49
+00:03:28,160 --> 00:03:34,400
+ 4,181. And if I go to implement a tree stage and I look at, let's say, metals, ferris,
+
+50
+00:03:35,120 --> 00:03:39,680
+ and already this is more complicated, but let's go into carbon steels, low carbon steels.
+
+51
+00:03:39,680 --> 00:03:43,280
+ I can have cast or wrought. I'm going to work with a wrought one because it's going to show up in some
+
+52
+00:03:43,840 --> 00:03:48,240
+ standard section. And even within there, you can see that there are all of these different grades
+
+53
+00:03:48,240 --> 00:03:53,200
+ of low carbon steel. Now, another thing to note is that the particular brand name or the particular
+
+54
+00:03:53,200 --> 00:03:57,840
+ grade that a supplier might call a steel here in Australia is unlikely to be exactly the same as
+
+55
+00:03:57,840 --> 00:04:01,600
+ the grade or brand name that's been documented in edu-pack. And so what you might need to do is
+
+56
+00:04:01,600 --> 00:04:05,360
+ look at the data sheet that you've been given by the supplier and look at a particular grade
+
+57
+00:04:05,360 --> 00:04:10,000
+ that's here in edu-pack and find the closest one, match up to the closest one. So, for example,
+
+58
+00:04:10,000 --> 00:04:14,960
+ if I was looking for a 250 grade or a 350 grade mild steel from one steel, it's probably going to be
+
+59
+00:04:14,960 --> 00:04:19,360
+ pretty close to something like an AZ-1010. And if you want, I can open that up and have a look at
+
+60
+00:04:19,360 --> 00:04:24,880
+ its record. And actually, listed in the record here are a bunch of different standards for
+
+61
+00:04:24,880 --> 00:04:28,800
+ different countries and different suppliers. Worst comes to worst. You can always compare the
+
+62
+00:04:28,800 --> 00:04:33,280
+ composition of a database entry to the composition given to you in the database for the steel
+
+63
+00:04:33,280 --> 00:04:37,440
+ that you're planning to buy from one steel. But this is where your kind of engineering materials
+
+64
+00:04:37,440 --> 00:04:41,680
+ design knowledge comes in. A low carbon steel and a low carbon steel are generally going to be
+
+65
+00:04:41,680 --> 00:04:45,200
+ pretty much the same. But you do need to be careful if, for example, it's something like a
+
+66
+00:04:45,200 --> 00:04:49,440
+ high carbon steel to make sure it's been delivered in the same state of quench and temper as
+
+67
+00:04:49,440 --> 00:04:54,800
+ what you're looking at in the database. So, just to recap, tree stages allow you to place constraints
+
+68
+00:04:54,800 --> 00:04:59,360
+ on your engineering materials design problems in the form of limiting the set of all possible
+
+69
+00:04:59,360 --> 00:05:03,680
+ materials down to a strict subset of that that corresponds to perhaps the materials that you can
+
+70
+00:05:03,680 --> 00:05:08,560
+ get easily or on short notice from local suppliers. Tree stages in a japan can also be quite useful
+
+71
+00:05:08,560 --> 00:05:13,440
+ for just exploring the database. With 4,000 entries in the level three database, it's easy to get
+
+72
+00:05:13,440 --> 00:05:18,000
+ carried away or overwhelmed by the sheer amount of information that's there. But a tree stage,
+
+73
+00:05:18,000 --> 00:05:22,640
+ for example, makes comparing one or two properties within a family of materials a little bit more
+
+74
+00:05:22,640 --> 00:05:26,880
+ approachable. So, with that said, I'm going to call it for the week. Good job sticking through
+
+75
+00:05:26,880 --> 00:05:31,120
+ all the videos. This was definitely a content heavy week. Our next week is going to be a little bit
+
+76
+00:05:31,120 --> 00:05:41,120
+ less stressful as we start to talk about manufacturing of engineering metals.

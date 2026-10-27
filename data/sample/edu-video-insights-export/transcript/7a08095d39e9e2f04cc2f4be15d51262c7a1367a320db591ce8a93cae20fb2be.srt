@@ -1,0 +1,215 @@
+1
+00:00:00,000 --> 00:00:07,200
+ All right. You've made it to the end of the second week. Congratulations. Remember this week we met one domain,
+
+2
+00:00:07,200 --> 00:00:13,040
+ translating mechanical systems. The first of one, two, three, four that we're going to meet over the
+
+3
+00:00:13,040 --> 00:00:19,600
+ course of the modeling part of edge 2440. And I made big promises to you last week about how
+
+4
+00:00:19,600 --> 00:00:23,920
+ all of these different domains are interconnected and that once we're able to see how they're
+
+5
+00:00:23,920 --> 00:00:28,720
+ connected, things are going to get a lot easier. Well, at the end of each week we're going to stop
+
+6
+00:00:28,720 --> 00:00:32,880
+ for a little bit and we're going to talk about the big picture, how these things relate to
+
+7
+00:00:32,880 --> 00:00:40,000
+ each other. This is the first in that series of videos and today I want to talk about power ports,
+
+8
+00:00:40,000 --> 00:00:45,520
+ power variables and energy variables. As I've already kind of alluded to this week,
+
+9
+00:00:45,520 --> 00:00:50,240
+ physical components interact with each other by exchanging energy and that's the lens through
+
+10
+00:00:50,240 --> 00:00:54,800
+ which we look at things in edge 2440. For example, if I have a mass spring damper,
+
+11
+00:00:54,800 --> 00:00:59,920
+ our favorite translating mechanical system, and I take it to an initial position where the
+
+12
+00:00:59,920 --> 00:01:05,600
+ spring is initially stretched and I let go, then all that elastic potential energy in the spring
+
+13
+00:01:05,600 --> 00:01:10,880
+ is transferred into kinetic energy of the mass and eventually dissipated as heat energy through
+
+14
+00:01:10,880 --> 00:01:16,160
+ the damper. This exchange of energy happens at the point of interaction between two components
+
+15
+00:01:16,160 --> 00:01:21,760
+ and at this point of interaction, any two components are going to share two variables that when
+
+16
+00:01:21,760 --> 00:01:27,280
+ you multiply them together, you get power for rate at which energy is being exchanged and
+
+17
+00:01:27,280 --> 00:01:32,240
+ commensurate with that, we call these points of interaction power ports of our components.
+
+18
+00:01:32,240 --> 00:01:37,520
+ Now some components only have one power port and some have more. It's not something we're going
+
+19
+00:01:37,520 --> 00:01:41,360
+ to talk about a great deal in this course, but it is something that's going to be pretty
+
+20
+00:01:41,360 --> 00:01:44,640
+ important for you if you're a mechatronics engineer, for example, and you go on to study
+
+21
+00:01:44,640 --> 00:01:50,080
+ bond graphs in your later courses. What is important for all of us is recognizing that the two
+
+22
+00:01:50,080 --> 00:01:55,600
+ variables that multiply together to give power at the power port are creatively called
+
+23
+00:01:55,600 --> 00:02:00,640
+ the power variables of the system. These power variables depend a little bit on the domain you're
+
+24
+00:02:00,640 --> 00:02:06,880
+ talking about, but in general, we call them a generalized effort and a generalized flow. The
+
+25
+00:02:06,880 --> 00:02:12,160
+ form where we give the symbol E of t and the latter F of t. And by definition, if you take the
+
+26
+00:02:12,160 --> 00:02:18,400
+ product of effort and flow in any domain at any power port, you will find the power, the rate
+
+27
+00:02:18,480 --> 00:02:24,720
+ which energy is being transferred for translating mechanical systems, the domain we met this week,
+
+28
+00:02:24,720 --> 00:02:30,960
+ the generalized effort variable is force net force. And the generalized flow variable is linear
+
+29
+00:02:30,960 --> 00:02:36,480
+ velocity. And if you take the product of force and velocity, what you get back is work per second
+
+30
+00:02:36,480 --> 00:02:42,480
+ or power. As a brief aside, our state space models give us a window into these variables,
+
+31
+00:02:42,480 --> 00:02:46,800
+ we can choose the net force acting on a mass and the velocity of a mass, for example,
+
+32
+00:02:46,800 --> 00:02:52,240
+ as outputs. And by taking those two outputs, we can calculate the power that is being transferred
+
+33
+00:02:52,240 --> 00:02:56,800
+ to or from that mass at any point in time by simply taking the product of these.
+
+34
+00:02:56,800 --> 00:03:02,320
+ The final thing that I want to touch on in this end of week chat are energy variables.
+
+35
+00:03:02,320 --> 00:03:06,800
+ Irrespective of the domain you're talking about, mechanical, electrical, fluid power, whatever,
+
+36
+00:03:07,520 --> 00:03:12,960
+ the energy inside that domain can usually be decomposed into two kind of fundamental components,
+
+37
+00:03:12,960 --> 00:03:18,720
+ a kinetic component, which depends on a generalized momentum and a potential component,
+
+38
+00:03:18,720 --> 00:03:24,640
+ which relies on a generalized displacement. This generalized momentum is the integral of the
+
+39
+00:03:24,640 --> 00:03:28,720
+ effort variable for the domain we're talking about. And the generalized displacement is the
+
+40
+00:03:28,720 --> 00:03:33,840
+ integral of the flow variable we're talking about. This shouldn't be hugely shocking to you
+
+41
+00:03:33,840 --> 00:03:39,360
+ that integrating the power variables gives us the energy variable since energy is the integral
+
+42
+00:03:39,360 --> 00:03:44,080
+ of power. And now closing the loop, bringing this back to the translating mechanical systems
+
+43
+00:03:44,080 --> 00:03:49,520
+ we met this week. If our power variables were net force and linear velocity, what do you think
+
+44
+00:03:49,520 --> 00:03:53,840
+ the energy variables for these systems are? And pause the video and have a go at this if you want.
+
+45
+00:03:58,640 --> 00:04:02,720
+ If you said linear momentum p, the integral of force and linear displacement,
+
+46
+00:04:02,720 --> 00:04:08,480
+ x or delta, the integral of velocity, you'd be right. And here it comes. This is why we choose
+
+47
+00:04:08,560 --> 00:04:13,680
+ those things as states. In general, no matter what the domain, we are always going to choose
+
+48
+00:04:13,680 --> 00:04:19,040
+ energy variables as states. And what we're going to see over the next couple of weeks is that our
+
+49
+00:04:19,040 --> 00:04:23,760
+ energy variables have analogues in the different domains. The momentum in the mechanical
+
+50
+00:04:23,760 --> 00:04:29,040
+ translate domain has a beautiful analog when it comes to rotating mechanical systems and electrical
+
+51
+00:04:29,040 --> 00:04:34,000
+ systems and fluid power systems and the same for our other energy variable position.
+
+52
+00:04:34,000 --> 00:04:38,160
+ Of course, now that we've met these concepts, I'll be sure to discuss our state selection
+
+53
+00:04:38,160 --> 00:04:42,080
+ in terms of energy variables over the next couple of weeks. So keep your eye out for that
+
+54
+00:04:42,080 --> 00:04:46,880
+ as we start to learn about the different domains that we're going to be modeling in this course.

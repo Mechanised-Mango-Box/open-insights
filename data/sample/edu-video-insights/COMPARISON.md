@@ -335,12 +335,25 @@ for a pause in speech research.
 From `server/`, with the training requirements installed:
 
 ```sh
-python -m model_training.compare_upstream path/to/open-insights-export-<timestamp>
+python -m model_training.compare_upstream ../data/sample/edu-video-insights-export
 ```
 
 The export must carry screen text (`text_stats`) and audio stats (`audio_stats`), which an export
 made after a Scan's "Extract Screen Text" and "Extract Audio Stats" does. The numbers here are
 from `open-insights-export-2026-09-17T10_51_24.250Z-text-audio`.
+
+`../edu-video-insights-export/` is that export, rebuilt without video files and committed: the
+app's results for the 144 videos. The YouTube Studio reports it was made from are in
+`../edu-video-insights-recreated_raw/`. `server/scripts/build_export.py` rebuilds it from the
+server's database without the browser, given the videos (gitignored, in
+`data/local/edu-video-insights/input/`; `videos.csv` beside this file says which is which), and
+the rebuild gives this comparison unchanged:
+
+```sh
+python scripts/build_export.py ../data/sample/edu-video-insights-export \
+    --videos-csv ../data/sample/edu-video-insights/videos.csv \
+    --youtube ../data/sample/edu-video-insights-recreated_raw/*/*/"Table data.csv"
+```
 
 This prints every table above and writes them to `server/build/comparison/`, which is gitignored:
 

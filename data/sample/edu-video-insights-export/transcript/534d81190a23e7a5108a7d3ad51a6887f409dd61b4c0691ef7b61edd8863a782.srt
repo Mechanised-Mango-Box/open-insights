@@ -1,0 +1,179 @@
+1
+00:00:00,000 --> 00:00:04,000
+ In this video, I'm going to talk about the third and final type of engineering
+
+2
+00:00:04,000 --> 00:00:07,920
+ polymer. It's not quite a thermoplastic and it's not quite a thermo set.
+
+3
+00:00:07,920 --> 00:00:11,040
+ Though it is probably a little bit closer to the second than the first.
+
+4
+00:00:11,040 --> 00:00:14,160
+ This type of plastic is called an elastomer.
+
+5
+00:00:14,160 --> 00:00:17,760
+ Elastomers, as the name suggests, are very elastic.
+
+6
+00:00:17,760 --> 00:00:21,120
+ Unlike thermoplastics, which don't have any crosslinks at all.
+
+7
+00:00:21,120 --> 00:00:24,400
+ And unlike thermo sets, which have many, many crosslinks that
+
+8
+00:00:24,400 --> 00:00:27,200
+ make them quite stiff, but also a little bit brittle.
+
+9
+00:00:27,200 --> 00:00:31,200
+ Elastomers have a very finely tuned amount of crosslinks,
+
+10
+00:00:31,200 --> 00:00:36,320
+ reasonably few crosslinks that allow them to unravel like coiled up springs
+
+11
+00:00:36,320 --> 00:00:39,520
+ and provide some sort of restoring force, without experiencing
+
+12
+00:00:39,520 --> 00:00:44,400
+ visco-elasticity, without experiencing plastic slip of chains.
+
+13
+00:00:44,400 --> 00:00:48,800
+ True to their namesake, Elastomers are typically used in circumstances that require
+
+14
+00:00:48,800 --> 00:00:53,040
+ elasticity, that require a little bit of flexibility, a little bit of give.
+
+15
+00:00:53,040 --> 00:00:58,000
+ circumstances like gaskets and earrings and seals and rubbers and tires.
+
+16
+00:00:58,000 --> 00:01:00,080
+ And elastomers are really good at this.
+
+17
+00:01:00,080 --> 00:01:03,520
+ Some of them being able to stretch 700% their original length
+
+18
+00:01:03,520 --> 00:01:06,240
+ elastically, without plastically deforming.
+
+19
+00:01:06,240 --> 00:01:09,360
+ Some of the earliest elastomers were made from natural products.
+
+20
+00:01:09,360 --> 00:01:13,920
+ A natural rubber, for example, was made by vulcanizing or crosslinking
+
+21
+00:01:13,920 --> 00:01:17,840
+ latex, which is a product from the rubber tree, the sap of the rubber tree.
+
+22
+00:01:17,840 --> 00:01:20,800
+ And the amount of crosslinking, the amount of vulcanization,
+
+23
+00:01:20,800 --> 00:01:26,160
+ has for a long time been controlled by the amount of sulfur that is added to this latex.
+
+24
+00:01:26,160 --> 00:01:30,400
+ These days, natural rubber products have largely been succeeded by synthetic rubbers,
+
+25
+00:01:30,400 --> 00:01:33,120
+ rubbers not made from the rubber tree sap.
+
+26
+00:01:33,120 --> 00:01:37,760
+ And this is because synthetic rubbers, like the most popular one, styrene butadiene,
+
+27
+00:01:37,760 --> 00:01:41,120
+ allow us to carefully control and chew the properties.
+
+28
+00:01:41,120 --> 00:01:43,520
+ I'm not going to talk about every elastomer that's out there,
+
+29
+00:01:43,520 --> 00:01:48,560
+ but I will introduce you to one more family, the family of silicone elastomers.
+
+30
+00:01:48,640 --> 00:01:52,960
+ Silicone elastomers, as the name suggests, are largely composed of silicon.
+
+31
+00:01:52,960 --> 00:01:57,120
+ The backbone of a silicone polymer alternates between silicon and oxygen atoms,
+
+32
+00:01:57,120 --> 00:01:58,880
+ and these serve an important purpose.
+
+33
+00:01:58,880 --> 00:02:03,280
+ The inorganic nature of this backbone means that silicone generally have much higher operating
+
+34
+00:02:03,280 --> 00:02:04,880
+ temperatures than other polymers.
+
+35
+00:02:04,880 --> 00:02:09,280
+ And partly owing to this, but also owing to the liquid repelling properties of these
+
+36
+00:02:09,280 --> 00:02:14,560
+ polymers due to the combination of their inorganic backbone and their usually organic fingers,
+
+37
+00:02:14,560 --> 00:02:18,800
+ means that they make really, really good gaskets and seals and o-rings.
+
+38
+00:02:18,800 --> 00:02:21,520
+ I'm going to leave it there for elastomers, and I'm conscious that I haven't
+
+39
+00:02:21,520 --> 00:02:24,320
+ dealt particularly deep here for the same reasons that I didn't
+
+40
+00:02:24,320 --> 00:02:27,280
+ dealt particularly deep when we were talking about thermosets.
+
+41
+00:02:27,280 --> 00:02:30,480
+ If you're going to be looking for an elastomer to solve a particular problem,
+
+42
+00:02:30,480 --> 00:02:35,360
+ the type of elastomer you choose is largely going to be a function of the specifics of that problem.
+
+43
+00:02:35,360 --> 00:02:39,600
+ What I encourage you to do, just like with thermosets, is a little bit of independent research.
+
+44
+00:02:39,600 --> 00:02:42,720
+ Have a look at edge packet, the different types of elastomers that are documented,
+
+45
+00:02:42,720 --> 00:02:47,200
+ and I'll leave a little bit more information about elastomers on the textbook page for this video.

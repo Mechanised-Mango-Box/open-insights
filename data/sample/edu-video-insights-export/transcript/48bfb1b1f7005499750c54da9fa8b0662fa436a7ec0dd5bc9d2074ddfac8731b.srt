@@ -1,0 +1,131 @@
+1
+00:00:00,000 --> 00:00:06,000
+ Alright, let's recap. We've learnt how to linearize kind of 1D scalar functions. We've
+
+2
+00:00:06,000 --> 00:00:11,000
+ learnt how to linearize kind of scalar multi variable functions, so things in multiple inputs,
+
+3
+00:00:11,000 --> 00:00:16,160
+ but a single kind of scalar output. I think it's now time for us to do the hard one to talk
+
+4
+00:00:16,160 --> 00:00:20,960
+ about linearizing state-space models. But the kind of good news for us is that really this
+
+5
+00:00:20,960 --> 00:00:25,080
+ is exactly the same as what we've already done. Remember, a state-space model is really
+
+6
+00:00:25,080 --> 00:00:30,040
+ just a set of equations, right? Each one relating the derivative of a state to other
+
+7
+00:00:30,040 --> 00:00:34,440
+ states inputs and constants. In this video, I want to focus on the case where it's only a function
+
+8
+00:00:34,440 --> 00:00:39,480
+ of kind of other states and perhaps constants, but not inputs. We'll talk about inputs in the
+
+9
+00:00:39,480 --> 00:00:43,160
+ kind of video that comes after this one, but I promise it's going to be a really minor
+
+10
+00:00:43,160 --> 00:00:48,200
+ extension on what we're doing here. So here's the kind of point, right? Each equation,
+
+11
+00:00:48,200 --> 00:00:53,320
+ each state-space equation, is itself a kind of scalar function with multi variable inputs,
+
+12
+00:00:53,800 --> 00:00:58,680
+ the function is the derivative of the state. And it's some function of the other states
+
+13
+00:00:58,680 --> 00:01:03,080
+ which are kind of the input variables. And so linearizing a state-space model is really just a
+
+14
+00:01:03,080 --> 00:01:07,160
+ matter of linearizing each state-space equation according to the multi variable linearization
+
+15
+00:01:07,160 --> 00:01:11,080
+ for a mill we've already dealt with. And the same kind of principle applies for each
+
+16
+00:01:11,080 --> 00:01:15,560
+ state-space equation. The linear approximation looks like an offset term that is kind of the
+
+17
+00:01:15,560 --> 00:01:20,200
+ value of that state derivative evaluated at your approximation point. This approximation point
+
+18
+00:01:20,200 --> 00:01:26,120
+ be a state in this case and approximation state. Plus, a gradient times the distance for each
+
+19
+00:01:26,120 --> 00:01:30,040
+ of the different states that are involved. So you'll take the gradient of that state equation with
+
+20
+00:01:30,040 --> 00:01:35,720
+ respect to z1, a multiply by the distance from z1 to z1 approximation. And then you'll take the
+
+21
+00:01:35,720 --> 00:01:40,520
+ gradient of that state-space equation with respect to z2 and multiply that by the distance between
+
+22
+00:01:40,520 --> 00:01:44,840
+ z2 and the z2 of the approximation point and so on for every state that's involved.
+
+23
+00:01:44,840 --> 00:01:49,000
+ So really the only difference is between linearizing a state-space model and linearizing kind of
+
+24
+00:01:49,000 --> 00:01:54,440
+ multi variable scalar functions, things with multiple inputs and one output is that number one,
+
+25
+00:01:54,440 --> 00:01:59,640
+ there's a slight change in notation because we're going from you know kind of f of x to z dot
+
+26
+00:01:59,640 --> 00:02:04,760
+ of z or maybe x dot of x. But that's okay. We can deal with change in notation where
+
+27
+00:02:05,560 --> 00:02:10,280
+ really sophisticated modeling engineers. And two, we have to repeat this process for each kind of
+
+28
+00:02:10,280 --> 00:02:14,600
+ state-space equation. Each is a separate function, each requires its own linearization. There is a
+
+29
+00:02:14,600 --> 00:02:19,320
+ kind of more succinct way of doing this kind of in one go, writing it as a vector equation and
+
+30
+00:02:19,320 --> 00:02:23,640
+ using a Jacobian. That's the way we've kind of taught it the last couple of years and I found that
+
+31
+00:02:23,640 --> 00:02:27,880
+ generally it tends to confuse students. I hope that this kind of more graphical approach in doing
+
+32
+00:02:27,880 --> 00:02:32,120
+ it equation by equation makes a little bit more sense. So let's go and have a go at problem 6.3
+
+33
+00:02:32,120 --> 00:02:34,520
+ together and see if we can kind of get the skill under our belt.

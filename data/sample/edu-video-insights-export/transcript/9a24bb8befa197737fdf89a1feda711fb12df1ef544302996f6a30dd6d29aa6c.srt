@@ -1,0 +1,247 @@
+1
+00:00:00,000 --> 00:00:04,320
+ We don't only manufacture ceramics for use as pure ceramic products, in fact we
+
+2
+00:00:04,320 --> 00:00:10,160
+ very, very often decode other materials in ceramics or gross ceramics inside of other materials.
+
+3
+00:00:10,160 --> 00:00:15,360
+ We typically refer to the former as thin film ceramic formation and the latter as embedded ceramic
+
+4
+00:00:15,360 --> 00:00:20,320
+ formation and those will be the topic of this video. We've actually already met a couple of thin
+
+5
+00:00:20,320 --> 00:00:25,840
+ film ceramics, a lumina, aluminium oxide for example is a thin film ceramic that naturally occurs,
+
+6
+00:00:25,840 --> 00:00:30,640
+ naturally grows on the outside of pure aluminium when it's exposed to oxygen. And I've already
+
+7
+00:00:30,640 --> 00:00:34,560
+ talked a couple of times about the wonderful properties that alumina imbues the surface of
+
+8
+00:00:34,560 --> 00:00:39,280
+ aluminium with corrosion and chemical resistance and a little bit higher hardness and scratch
+
+9
+00:00:39,280 --> 00:00:44,560
+ resistance. But while some ceramic thin films naturally occur naturally grow on same metals,
+
+10
+00:00:44,560 --> 00:00:49,760
+ they're not only naturally occurring products, we often intentionally coat materials in thin
+
+11
+00:00:49,760 --> 00:00:55,520
+ films either mechanically by depositing them on there or chemically by growing them on there.
+
+12
+00:00:55,600 --> 00:01:00,080
+ We often rely on thin films to supplement the mechanical or non-mechanical properties of another
+
+13
+00:01:00,080 --> 00:01:05,280
+ engineering material. For example, some hard ceramic thin films are grown or deposited on the
+
+14
+00:01:05,280 --> 00:01:09,920
+ outside of an engineering metal to improve its wear resistance while still maintaining a nice
+
+15
+00:01:09,920 --> 00:01:15,360
+ soft ductile core. And other ceramic thin films are deposited on, say, glasses to block
+
+16
+00:01:15,360 --> 00:01:20,800
+ certain wavelengths of radiation, UV or infrared for example. There are some very mechanical ways
+
+17
+00:01:20,800 --> 00:01:25,520
+ of depositing thin films on engineering materials. For example, you can suspend a ceramic
+
+18
+00:01:25,520 --> 00:01:30,960
+ in a liquid polymer and literally paint it onto an engineering metal to improve its wear resistance.
+
+19
+00:01:30,960 --> 00:01:35,280
+ But commonly, especially if you want really good adhesion of your ceramic thin film to the metal
+
+20
+00:01:35,280 --> 00:01:40,400
+ underneath, you'll put it on using a process known as PVD, physical vapor deposition. Here,
+
+21
+00:01:40,400 --> 00:01:46,240
+ you vaporise your ceramic and sputter it onto your material as a plasma. A very common example of this
+
+22
+00:01:46,240 --> 00:01:51,040
+ which you've seen and probably held is titanium nitride, which is applied through PVD to many
+
+23
+00:01:51,040 --> 00:01:55,520
+ drill bits. It's that yellow coating you see on the end of your drill bits and cutting tools as well.
+
+24
+00:01:55,520 --> 00:02:00,640
+ I've left two excellent videos on how the PVD process works and how it's applied to tooling
+
+25
+00:02:00,640 --> 00:02:04,320
+ on the textbook page for this video. But there's a second process, another interesting
+
+26
+00:02:04,320 --> 00:02:09,520
+ process that I should mention, and that's CVD chemical vapor deposition. Here, instead of
+
+27
+00:02:09,520 --> 00:02:14,800
+ sputtering on a pre-made ceramic to the outside of a metal, you grow a ceramic on the outside
+
+28
+00:02:14,800 --> 00:02:19,360
+ of a metal through a chemical process. This process is a little bit like natural formation of ceramic
+
+29
+00:02:19,360 --> 00:02:24,720
+ thin films, but it's typically very, very tightly controlled in a reaction chamber. By exchanging
+
+30
+00:02:24,720 --> 00:02:29,200
+ different atmospheres and controlling the exact temperatures and times at which this process is conducted,
+
+31
+00:02:29,200 --> 00:02:34,960
+ we can get very, very specific compositions of a ceramic growing on the outside of say a metal.
+
+32
+00:02:34,960 --> 00:02:40,640
+ And despite the name thin film with both PVD and CVD, you can build up reasonably thick layers
+
+33
+00:02:40,640 --> 00:02:45,600
+ of a ceramic oxide on a component. In fact, this same process is actually used to make many
+
+34
+00:02:45,600 --> 00:02:50,800
+ pure ceramic products, synthetic diamonds are made using CVD, for example. Selecting between these
+
+35
+00:02:50,800 --> 00:02:55,520
+ two processes, PVD and CVD is largely a function of the material you'd like to coat and the
+
+36
+00:02:55,520 --> 00:02:59,200
+ material you'd like to coat it with. The thickness of the layer you want to grow and the desired
+
+37
+00:02:59,200 --> 00:03:03,280
+ wear and temperature resistance of the layer at the end. I've also left a video on the textbook
+
+38
+00:03:03,280 --> 00:03:06,880
+ page that addresses selecting between these two materials that you may want to check out.
+
+39
+00:03:06,880 --> 00:03:11,360
+ We don't only grow and deposit ceramics on the outside of other engineering materials, but we
+
+40
+00:03:11,360 --> 00:03:16,880
+ actually grow ceramics quite often inside of engineering materials as well, what we're calling embedded
+
+41
+00:03:16,880 --> 00:03:21,520
+ ceramic formation. And just like thin films, we've actually met some of these before as well.
+
+42
+00:03:21,520 --> 00:03:26,720
+ Iron carbide, Fe3C for example, was a ceramic that we met all the way back in week three.
+
+43
+00:03:26,720 --> 00:03:32,480
+ And as I hope you remember, Iron carbide, Fe3C cementite, had a huge impact on the mechanical
+
+44
+00:03:32,480 --> 00:03:37,200
+ properties of a steel. By controlling wear and how iron carbide formed on the inside of a steel,
+
+45
+00:03:37,200 --> 00:03:41,920
+ we could impact the motion of dislocations and improve its strength at the cost of ductility.
+
+46
+00:03:41,920 --> 00:03:46,560
+ And just like Fe3C, many kinds of ceramics are grown in many types of engineering materials
+
+47
+00:03:46,560 --> 00:03:50,720
+ for the same reason. Vanadium carbide, for example, is intentionally grown inside of many low
+
+48
+00:03:50,720 --> 00:03:55,200
+ alloy steels to improve its properties. And many expensive European knives you'll see have
+
+49
+00:03:55,200 --> 00:04:00,640
+ stamped or written on them a V for Vanadium. But I should also probably point out that formation
+
+50
+00:04:00,640 --> 00:04:05,600
+ of ceramics inside of metals isn't uniformly a good thing. In fact, we met an example of where
+
+51
+00:04:05,600 --> 00:04:10,400
+ this can be troublesome already. In stainless steels, for example, formation of chromium carbide,
+
+52
+00:04:10,400 --> 00:04:14,800
+ because it precipitates at grain boundaries and provides a very brittle path through which cracks
+
+53
+00:04:14,800 --> 00:04:19,360
+ can propagate is very troublesome. And a lot of time and effort and pain goes into the production
+
+54
+00:04:19,360 --> 00:04:23,280
+ of stainless steels are trying to prevent the formation of chromium carbide. Either by
+
+55
+00:04:23,280 --> 00:04:27,280
+ stripping out a lot of the carbon from your stainless steel to essentially starve the chromium
+
+56
+00:04:27,280 --> 00:04:32,080
+ of the ability to make chromium carbide, or by including in other elements that preferentially
+
+57
+00:04:32,080 --> 00:04:36,480
+ form carbides before the chromium has a chance to. In general, like many of the things in this
+
+58
+00:04:36,480 --> 00:04:41,200
+ course, the process of forming ceramics inside of other materials is complicated and should be
+
+59
+00:04:41,200 --> 00:04:45,680
+ done with care. And that's probably a good note to end on for this video. Again, I encourage you
+
+60
+00:04:45,680 --> 00:04:49,120
+ to check out the resources I've linked on the textbook page. Like everything else this week,
+
+61
+00:04:49,120 --> 00:04:52,800
+ it's going to give you a little bit more information, a little bit more depth than what I can convey
+
+62
+00:04:52,800 --> 00:04:54,800
+ in a short video.

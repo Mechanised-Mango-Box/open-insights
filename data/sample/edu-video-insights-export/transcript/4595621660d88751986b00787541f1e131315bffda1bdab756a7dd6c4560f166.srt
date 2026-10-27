@@ -1,0 +1,143 @@
+1
+00:00:00,000 --> 00:00:05,760
+ This next property is going to be quite a quick one to explain, because we've already met all of the constituents that make it up.
+
+2
+00:00:05,760 --> 00:00:11,920
+ The focus of this video, toughness, is the ability of a material to withstand a sudden intense impact.
+
+3
+00:00:11,920 --> 00:00:16,960
+ We typically talk about toughness in terms of energy, the amount of energy that a material can withstand,
+
+4
+00:00:16,960 --> 00:00:21,680
+ and it's formally defined this way as an integral of a stress over a strain.
+
+5
+00:00:21,680 --> 00:00:23,920
+ This can be kind of confusing the first time that you see it.
+
+6
+00:00:23,920 --> 00:00:26,800
+ I think stress and strain are reasonably new concepts to you at this point,
+
+7
+00:00:26,800 --> 00:00:30,000
+ and integrating one with respect to another doesn't make a whole lot of sense,
+
+8
+00:00:30,000 --> 00:00:36,000
+ but it makes a little bit more sense if you think about it the same way that work is a force times a distance, right?
+
+9
+00:00:36,000 --> 00:00:40,240
+ If you have a force applied over a distance and kind of imparts some amount of energy,
+
+10
+00:00:40,240 --> 00:00:45,040
+ well here, if you have a stress applied over some sort of strain, it imparts some sort of energy,
+
+11
+00:00:45,040 --> 00:00:50,400
+ and a stress is kind of like a force, and a strain is kind of like a distance, and the analogs are there.
+
+12
+00:00:50,400 --> 00:00:54,080
+ Because it's an integral of stress, which has units of pasticles with respect to strain,
+
+13
+00:00:54,080 --> 00:00:59,120
+ which doesn't have any units at all, technically speaking, toughness also has units of pasticles,
+
+14
+00:00:59,120 --> 00:01:04,320
+ but usually it's talked about in terms of duals per cubic meter, which makes sense when you think
+
+15
+00:01:04,320 --> 00:01:08,720
+ about its energy-based definition, right? Toughness is the amount of energy a material can kind of
+
+16
+00:01:08,720 --> 00:01:13,760
+ absorb in an impact, and it does that over a distance. Generally speaking, because toughness is
+
+17
+00:01:13,760 --> 00:01:17,760
+ essentially a product of stress and strain, an integral of stress with respect to strain,
+
+18
+00:01:17,760 --> 00:01:21,280
+ it depends on both the strength of a material, the most stress it can withstand,
+
+19
+00:01:21,280 --> 00:01:25,600
+ and the ductility of that material, how much strain it can withstand. A material's which
+
+20
+00:01:25,600 --> 00:01:30,960
+ are very ductile can have a high toughness because you're essentially multiplying by a big ductility.
+
+21
+00:01:30,960 --> 00:01:35,120
+ Materials which are very strong can also have a high toughness because you're multiplying by a high
+
+22
+00:01:35,120 --> 00:01:40,000
+ strength. The way they achieve this toughness is different. Very ductile materials have a lot of
+
+23
+00:01:40,000 --> 00:01:44,720
+ energy absorption capability because they deform a long way. Very strong materials have a high
+
+24
+00:01:44,720 --> 00:01:49,520
+ energy absorption capability because they can take a lot of load before they eventually start to fail.
+
+25
+00:01:49,520 --> 00:01:53,920
+ Because both of these mechanisms contribute to toughness, you can have very tough materials which are
+
+26
+00:01:53,920 --> 00:01:58,640
+ strong and very tough materials which are ductile and very tough materials which are both strong
+
+27
+00:01:58,640 --> 00:02:03,040
+ and ductile. An example of a material which is quite tough and derives this toughness from its
+
+28
+00:02:03,040 --> 00:02:08,640
+ strength would be something like carbon fiber. It's very strong, it can absorb a surface impact
+
+29
+00:02:08,640 --> 00:02:13,360
+ quite well. And typically materials which derive their toughness from their strength do this through
+
+30
+00:02:13,360 --> 00:02:18,400
+ some sort of elastic deformation. An example of a material that's quite tough but isn't very strong,
+
+31
+00:02:18,400 --> 00:02:23,120
+ but is rather very ductile would be something like play dough. You can kind of punch play dough
+
+32
+00:02:23,120 --> 00:02:27,840
+ really hard and it will plastically deform quite a lot but it will absorb all of that energy.
+
+33
+00:02:27,840 --> 00:02:31,680
+ Toughness of a material is quite important when you're trying to design a component that
+
+34
+00:02:31,680 --> 00:02:36,720
+ you expect is going to be subject to some amount of sudden intense defamation. For example,
+
+35
+00:02:36,720 --> 00:02:41,840
+ crash structures in cars or crash barriers on the road need to be very very tough to absorb that
+
+36
+00:02:41,840 --> 00:02:46,480
+ impact and prolong the deceleration of the car to make sure that the occupants aren't injured.

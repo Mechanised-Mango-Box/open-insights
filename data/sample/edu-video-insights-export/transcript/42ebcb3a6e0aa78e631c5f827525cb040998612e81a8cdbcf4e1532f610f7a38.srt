@@ -1,0 +1,187 @@
+1
+00:00:00,000 --> 00:00:04,720
+ The next few videos are going to be part of the mini-series that I'm calling system
+
+2
+00:00:04,720 --> 00:00:05,720
+ arrangements.
+
+3
+00:00:05,720 --> 00:00:10,840
+ I've already told you a couple of times, actually, that as we go on to model the different
+
+4
+00:00:10,840 --> 00:00:14,720
+ domains in this course, you're going to start to recognize patterns between the analogs.
+
+5
+00:00:14,720 --> 00:00:18,480
+ And I hope that there are some that you've already seen between translating mechanical
+
+6
+00:00:18,480 --> 00:00:21,800
+ systems and rotating mechanical systems.
+
+7
+00:00:21,800 --> 00:00:26,400
+ But there are actually patterns, even within the domains, kind of arrangements of components
+
+8
+00:00:26,400 --> 00:00:30,800
+ that we should kind of see and recognize and understand, because doing so is going
+
+9
+00:00:30,800 --> 00:00:33,360
+ to help us model those a whole lot easier.
+
+10
+00:00:33,360 --> 00:00:37,360
+ In this video, I want to talk about how components can sometimes be arranged in one of
+
+11
+00:00:37,360 --> 00:00:39,200
+ two special ways.
+
+12
+00:00:39,200 --> 00:00:42,160
+ We call these ways series and parallel.
+
+13
+00:00:42,160 --> 00:00:45,880
+ And you're probably thinking to yourself, why on earth is Alex talking about series and
+
+14
+00:00:45,880 --> 00:00:50,880
+ parallel on the week where we're trying to learn about rotating mechanical systems.
+
+15
+00:00:50,880 --> 00:00:53,720
+ This is a concept that you probably learn in high school physics or physics or physics
+
+16
+00:00:53,720 --> 00:00:57,720
+ 12-time when you were talking about electricity, and if not, it's certainly a concept
+
+17
+00:00:57,720 --> 00:01:00,920
+ you would have learned about in the year like 13, 10 and first year.
+
+18
+00:01:00,920 --> 00:01:02,320
+ Why is it here?
+
+19
+00:01:02,320 --> 00:01:06,920
+ Well, while series and parallel concepts you might have learned about in electricity, they
+
+20
+00:01:06,920 --> 00:01:10,680
+ actually apply to all of the domains that we're going to study in this course.
+
+21
+00:01:10,680 --> 00:01:13,720
+ And so I think it's really important that we sit down and understand what these things
+
+22
+00:01:13,720 --> 00:01:16,400
+ mean and recognize when they're happening.
+
+23
+00:01:16,400 --> 00:01:21,200
+ To say that two components of a range in series is to say that those things share flow.
+
+24
+00:01:21,200 --> 00:01:24,800
+ in the translating and rotating mechanical systems we've already met.
+
+25
+00:01:24,800 --> 00:01:28,160
+ That would mean that they're sharing velocity either linear or angular.
+
+26
+00:01:28,160 --> 00:01:32,560
+ To say that two components are arranged in parallel is to say that they're sharing effort.
+
+27
+00:01:32,560 --> 00:01:37,280
+ Again, to use the example of the domains we've already met, that would be force or talk.
+
+28
+00:01:37,280 --> 00:01:40,520
+ I understand that doing this might be giving you a bit of a sneak peek into what the
+
+29
+00:01:40,520 --> 00:01:44,360
+ effort and flow, the power variables are for electrical systems that we're going to meet
+
+30
+00:01:44,360 --> 00:01:45,360
+ next week, but that's okay.
+
+31
+00:01:45,360 --> 00:01:48,640
+ If you guys can work that out, write them down and see if you're right when we get to
+
+32
+00:01:48,640 --> 00:01:49,640
+ that next week.
+
+33
+00:01:49,640 --> 00:01:54,000
+ I think it's important to formalize what series in parallel mean now, because some
+
+34
+00:01:54,000 --> 00:01:57,800
+ story is a tricky, for example, look at this system.
+
+35
+00:01:57,800 --> 00:02:02,400
+ Do you think the two springs are arranged in series or in parallel?
+
+36
+00:02:02,400 --> 00:02:05,920
+ Okay, what about this system?
+
+37
+00:02:05,920 --> 00:02:10,040
+ The springs in the first system were actually in parallel and the springs in the second
+
+38
+00:02:10,040 --> 00:02:14,800
+ system were actually in series, even though looking at them at first plus you might think,
+
+39
+00:02:14,800 --> 00:02:19,280
+ yeah, no, that first one was definitely in series and the second was definitely in parallel.
+
+40
+00:02:19,280 --> 00:02:23,480
+ Meaning these concepts is important because it helps us make simplifications to our model.
+
+41
+00:02:23,480 --> 00:02:26,440
+ For example, consider this system here.
+
+42
+00:02:26,440 --> 00:02:32,120
+ In this case, the spring and the source of force are actually in parallel, they share effort.
+
+43
+00:02:32,120 --> 00:02:35,440
+ As a result, that spring isn't actually doing anything.
+
+44
+00:02:35,440 --> 00:02:38,880
+ The force gets transmitted directly through the spring and onto the mass.
+
+45
+00:02:38,880 --> 00:02:43,640
+ The spring, as far as we're concerned, in our modeling might as well not even be there.
+
+46
+00:02:43,640 --> 00:02:47,640
+ Let's take a look at problem 3.7 and see if we can identify whether some systems are connected
+
+47
+00:02:47,640 --> 00:02:51,640
+ in series in parallel and if there are any simplifications we can make.

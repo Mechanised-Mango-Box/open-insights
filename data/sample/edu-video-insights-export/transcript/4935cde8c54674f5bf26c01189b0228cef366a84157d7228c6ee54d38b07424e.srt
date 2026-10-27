@@ -1,0 +1,251 @@
+1
+00:00:00,000 --> 00:00:03,920
+ Problem 1.2 might have left you feeling a little bit confused or anxious.
+
+2
+00:00:03,920 --> 00:00:05,760
+ And that's okay.
+
+3
+00:00:05,760 --> 00:00:09,760
+ What I've been calling first principles modeling can often feel like that.
+
+4
+00:00:10,560 --> 00:00:16,000
+ I remember way back when I was an undergrad student in e-lect 1300, which is now
+
+5
+00:00:16,000 --> 00:00:17,120
+ called e-lect 1310.
+
+6
+00:00:17,760 --> 00:00:21,760
+ Whenever they talked about nodal or mesh analysis to build models of systems,
+
+7
+00:00:21,760 --> 00:00:23,040
+ I was totally lost.
+
+8
+00:00:23,680 --> 00:00:26,800
+ It can often feel, I think, when you're out of your depth,
+
+9
+00:00:26,800 --> 00:00:30,880
+ like you're sitting there trying to generate equations and there's no end in sight.
+
+10
+00:00:30,880 --> 00:00:33,120
+ You have no idea of the direction you're going.
+
+11
+00:00:33,120 --> 00:00:36,400
+ You have no idea why it is you're looking for the equations you are.
+
+12
+00:00:36,400 --> 00:00:38,080
+ It can all be pretty unstructured.
+
+13
+00:00:39,760 --> 00:00:41,680
+ There are two primary issues, I think.
+
+14
+00:00:42,400 --> 00:00:48,000
+ Number one, it's hard to know exactly how many in which equations you need to generate your model.
+
+15
+00:00:48,800 --> 00:00:51,920
+ And this can be even harder when your systems interact between domains.
+
+16
+00:00:52,720 --> 00:00:57,040
+ Number two, it can be hard to formulate these models in a way that's nice to solve.
+
+17
+00:00:58,480 --> 00:01:02,560
+ The mass-free damper, the nicest possible physical system, the
+
+18
+00:01:02,560 --> 00:01:05,200
+ hello world of physical systems, our favorite system.
+
+19
+00:01:06,640 --> 00:01:13,280
+ Even that system gave us a second order non homogenous only in for certain choices of FFT.
+
+20
+00:01:13,280 --> 00:01:15,680
+ That model doesn't have an analytical solution.
+
+21
+00:01:16,560 --> 00:01:20,880
+ If the mass-free damper, if the hello world of physical systems has these problems,
+
+22
+00:01:20,880 --> 00:01:23,680
+ how on the world are we meant to be able to model something like this?
+
+23
+00:01:24,320 --> 00:01:27,600
+ This is the problem I've been calling the big governor for the last couple of years.
+
+24
+00:01:27,600 --> 00:01:31,600
+ And fun fact, by the end of the modeling part of this course six weeks from now,
+
+25
+00:01:31,600 --> 00:01:33,440
+ you will be able to model the system.
+
+26
+00:01:33,440 --> 00:01:39,360
+ The good news is that in N2440, we're going to teach you a regimented procedure for modeling,
+
+27
+00:01:39,360 --> 00:01:45,600
+ centered around a regime known as state-space modeling that are allowed to get around these issues.
+
+28
+00:01:45,600 --> 00:01:50,560
+ In state-space modeling, we're trying to solve for a fundamental core set of variables
+
+29
+00:01:50,560 --> 00:01:53,280
+ that represent what we call the state of the system.
+
+30
+00:01:54,720 --> 00:01:58,800
+ By definition, once you know the state of a system, you should be able to write
+
+31
+00:01:58,800 --> 00:02:00,720
+ any other variable in terms of these.
+
+32
+00:02:01,440 --> 00:02:05,440
+ In state-space modeling, we normally represent the state of the system or the variables that
+
+33
+00:02:05,440 --> 00:02:10,160
+ make up the state of a system in a vector that creatively we call the state vector.
+
+34
+00:02:11,120 --> 00:02:13,840
+ We typically represent this with a z or an x.
+
+35
+00:02:13,840 --> 00:02:18,880
+ I prefer a z because x is something we use for coordinates and these sometimes get mixed up.
+
+36
+00:02:18,880 --> 00:02:22,320
+ And we should be aware that this language isn't fixed in place and that some people will
+
+37
+00:02:22,320 --> 00:02:24,480
+ be using x's and some people will be using z's.
+
+38
+00:02:25,040 --> 00:02:31,520
+ And somewhat confusingly, we also refer to the individual variables in the state vector as states.
+
+39
+00:02:31,520 --> 00:02:36,400
+ So to get our terminology right, the state of the system is kind of the fundamental set of
+
+40
+00:02:36,400 --> 00:02:40,080
+ variables that we need to write any other variable in the system.
+
+41
+00:02:40,080 --> 00:02:44,720
+ When we put those all together, we get the state vector, the individual elements of which,
+
+42
+00:02:44,720 --> 00:02:49,680
+ variables of which are known as the states of the system, z1 through zn.
+
+43
+00:02:50,400 --> 00:02:55,440
+ Since, by definition, the state vector has enough information to write any other variable in the
+
+44
+00:02:55,440 --> 00:03:00,480
+ system. Our goal when we're state-space modeling is to find the value of this vector for every
+
+45
+00:03:00,480 --> 00:03:05,280
+ point in time. And then any output we're interested in, we should be able to write as a function
+
+46
+00:03:05,280 --> 00:03:11,200
+ of this vector and the inputs. In practice, we achieve this by constructing what is called a state
+
+47
+00:03:11,280 --> 00:03:15,280
+ space model. And it is a very, very strict set of rules that we need to follow.
+
+48
+00:03:15,280 --> 00:03:20,160
+ We need to write the derivatives of each variable in the state vector as a function of the states,
+
+49
+00:03:20,720 --> 00:03:26,080
+ inputs and constants. And this means that instead of generating complicated second, third,
+
+50
+00:03:26,080 --> 00:03:32,320
+ fourth, fifth, whatever order ODEs or PDEs, instead we're generating systems of coupled
+
+51
+00:03:32,320 --> 00:03:38,640
+ first order differential equations. And this form lends itself to numerical solution extremely well.
+
+52
+00:03:38,640 --> 00:03:43,120
+ And there's a suite of analysis software designed for analyzing state-space models.
+
+53
+00:03:43,840 --> 00:03:48,080
+ All we need to do is to find the value of the state vector at time equals zero and our initial
+
+54
+00:03:48,080 --> 00:03:52,560
+ condition. And our state-space model can use that to work out the value of the derivatives at this
+
+55
+00:03:52,560 --> 00:03:57,360
+ point in time. It can then use those derivatives to step forward in time and use that to work out the
+
+56
+00:03:57,360 --> 00:04:02,720
+ value of the state at that t equals one, for example. Then it can use that to work out the derivatives
+
+57
+00:04:02,720 --> 00:04:08,000
+ and step forward in time and so on and so on and so on. Now, relationships in this form,
+
+58
+00:04:08,000 --> 00:04:13,040
+ our state derivatives as a function of states, inputs and constants, they don't tend to show up
+
+59
+00:04:13,040 --> 00:04:17,840
+ naturally. You won't see these in the governing equations for how spring works, for example.
+
+60
+00:04:17,840 --> 00:04:22,640
+ So your job when you're constructing a state-space model, the difficulty is associated in
+
+61
+00:04:22,640 --> 00:04:26,880
+ forming the state-space models and constructing these derivatives. Thankfully, we have a
+
+62
+00:04:26,880 --> 00:04:32,480
+ regiment procedure for doing this in age 2440 and it works irrespective of the domain, mechanical,
+
+63
+00:04:32,480 --> 00:04:43,440
+ electrical, fluid power, whatever. And that'll be the topic of the next video.

@@ -1,0 +1,359 @@
+1
+00:00:00,000 --> 00:00:04,720
+ In this video, we're going to talk about machining and umbrella term for a range of manufacturing techniques that
+
+2
+00:00:04,720 --> 00:00:09,120
+ remove material from a work piece in a controlled fashion. There are dozens of different machining
+
+3
+00:00:09,120 --> 00:00:12,880
+ techniques and we're only going to touch on probably the most common ones in this video.
+
+4
+00:00:12,880 --> 00:00:16,160
+ And of course, many of these techniques will be applicable to materials other than metals,
+
+5
+00:00:16,160 --> 00:00:19,680
+ but as with everything else this week, our focus is going to be on the application of these
+
+6
+00:00:19,680 --> 00:00:23,840
+ techniques to engineering metals. While the realm of all machining techniques is generally
+
+7
+00:00:23,840 --> 00:00:28,560
+ quite broad, they all have some similar characteristics. Machining techniques vary from roughing
+
+8
+00:00:28,560 --> 00:00:32,560
+ to finishing processes, but generally speaking, they're probably closer to the second than the
+
+9
+00:00:32,560 --> 00:00:37,120
+ first. You can achieve remarkable accuracy and surface finishes with machining techniques.
+
+10
+00:00:37,120 --> 00:00:40,960
+ Unlike some manufacturing techniques that are quite democratized, say like 3D printing,
+
+11
+00:00:40,960 --> 00:00:45,280
+ machining is typically performed by a trained, trained person. These tradespeople study and
+
+12
+00:00:45,280 --> 00:00:49,280
+ practice to become machinists for quite a long time and are experts in their field. We typically
+
+13
+00:00:49,280 --> 00:00:53,600
+ call them fidders and machinists here in Australia or sometimes fidders and turners. And these days,
+
+14
+00:00:53,600 --> 00:00:57,120
+ machining techniques can be manually operated, computing numerically controlled, or some
+
+15
+00:00:57,200 --> 00:01:01,280
+ combination of the two. We generally categorize machining techniques by the way that they work,
+
+16
+00:01:01,280 --> 00:01:06,400
+ either as single point cutting operations, multi point cutting operations, or abrasive operations.
+
+17
+00:01:06,400 --> 00:01:09,440
+ We're going to talk about each of these techniques in turn, but before we do, there are some
+
+18
+00:01:09,440 --> 00:01:14,080
+ common principles that we need to discuss. Generally speaking, the machine ability of a material is
+
+19
+00:01:14,080 --> 00:01:18,880
+ kind of like a pseudo property related to its yield strength and its ductility and its hardness,
+
+20
+00:01:18,880 --> 00:01:22,800
+ and describes the relative ease by which you can machine it. Very hard materials can be quite
+
+21
+00:01:22,800 --> 00:01:27,440
+ tricky to machine because you need very hard tooling and you need very strong and stiff and
+
+22
+00:01:27,440 --> 00:01:31,600
+ powerful machines to be able to do this. And the thermal properties of material play role in
+
+23
+00:01:31,600 --> 00:01:35,520
+ its machinability as well. Some machining techniques can generate quite a lot of heat, and this
+
+24
+00:01:35,520 --> 00:01:40,320
+ heat can impact the resulting surface finish and accuracy of a part that you make. Generally speaking,
+
+25
+00:01:40,320 --> 00:01:44,560
+ and I'm oversimplifying here to control heat and achieve a good surface finish, it's extremely
+
+26
+00:01:44,560 --> 00:01:48,720
+ important to make sure that the material breaks away in small chips when you're machining it.
+
+27
+00:01:48,720 --> 00:01:52,000
+ This is of course a function of the properties of the material that you're dealing with,
+
+28
+00:01:52,160 --> 00:01:56,240
+ it's also a function of the geometry of the tool that you're using and the relative surface
+
+29
+00:01:56,240 --> 00:02:00,640
+ speed of the tool on the material and the relative thickness of the cut that you're taking.
+
+30
+00:02:00,640 --> 00:02:04,400
+ One of the many challenges that machinists have to deal with is matching the so-called feeds and
+
+31
+00:02:04,400 --> 00:02:08,800
+ speeds and depth of cut of the process to the material that they're working with. Generally
+
+32
+00:02:08,800 --> 00:02:13,280
+ speaking, machineable materials tend to have a sweet spot in terms of feed and speed and depth of
+
+33
+00:02:13,280 --> 00:02:17,200
+ cut that means that they'll break away into small chips, taking a lot of the heat with them.
+
+34
+00:02:17,200 --> 00:02:21,040
+ It's important that you as the engineer understand the relative machine ability of any material
+
+35
+00:02:21,040 --> 00:02:25,040
+ that you put forward to be machined and that you go in with realistic expectations given the
+
+36
+00:02:25,040 --> 00:02:29,440
+ constraints that material is going to put on the manufacturing process. Let's turn our attention
+
+37
+00:02:29,440 --> 00:02:34,160
+ out of some specific machining processes. We'll start with single point cutting. As the name suggests,
+
+38
+00:02:34,160 --> 00:02:39,040
+ in this regime you traverse a single sharp pointed tool across the surface of a job.
+
+39
+00:02:39,040 --> 00:02:43,040
+ This relative motion of the tool in the job can be achieved in one of two ways. In some cases,
+
+40
+00:02:43,040 --> 00:02:47,200
+ like when working on a lathe, for example, the job will be rotated and the tool moved across the
+
+41
+00:02:47,200 --> 00:02:51,200
+ the job. But in other cases, say, for example, in a milling machine when using a boring bar,
+
+42
+00:02:51,200 --> 00:02:55,920
+ the job is held stationary and the tool is rotated. Rotation provides a convenient way to achieve
+
+43
+00:02:55,920 --> 00:03:00,400
+ the high surface speeds that are required to generate the forces to make materials chip.
+
+44
+00:03:00,400 --> 00:03:04,560
+ But there are linear single point cutting operations as well, for example, shapers.
+
+45
+00:03:04,560 --> 00:03:09,200
+ In any case, irrespective of the process, the mechanism is kind of the same. The incredibly sharp
+
+46
+00:03:09,200 --> 00:03:14,400
+ and hard tip of the material generates a high force ahead of it and she is material away,
+
+47
+00:03:14,480 --> 00:03:18,720
+ chips material away from the surface of the job. Single point cutting tools are typically made
+
+48
+00:03:18,720 --> 00:03:23,200
+ out of a high speed steel, a hardened tool steel, or a tungsten carbide, a ceramic that we're going
+
+49
+00:03:23,200 --> 00:03:27,360
+ to meet in a couple of weeks. And in these tools, because of the incredible forces and temperatures
+
+50
+00:03:27,360 --> 00:03:31,760
+ that are generated at the cutting tip, hardness, toughness, wear resistance, strength,
+
+51
+00:03:31,760 --> 00:03:36,240
+ and temperature resistance are all important qualities. Multi-point cutting operations work the
+
+52
+00:03:36,240 --> 00:03:40,720
+ same way as single point cutting operations. They just, as the name suggests, have more points to
+
+53
+00:03:41,280 --> 00:03:44,800
+ cut with. Sometimes these manifests as a tool that has a bunch of distinct single point cut is
+
+54
+00:03:44,800 --> 00:03:49,040
+ kind of attached all the way around, like on a face cutter, for example. And other times,
+
+55
+00:03:49,040 --> 00:03:52,720
+ the cutting action is a little bit more continuous, like on an end mill with spiral flutes.
+
+56
+00:03:52,720 --> 00:03:55,520
+ While single point cutting is probably a little bit more common on a lathe,
+
+57
+00:03:55,520 --> 00:03:59,680
+ multi-point cutting is probably a little bit more common on a milling machine. And while on a
+
+58
+00:03:59,680 --> 00:04:03,600
+ lathe single point cutting is generally used to make round parts, parts that you could probably
+
+59
+00:04:03,600 --> 00:04:07,280
+ imagine as a revolve if you were drawing them in CAD. Multi-point cutting on a milling
+
+60
+00:04:07,280 --> 00:04:11,520
+ machine is used to make all sorts of complicated geometries. The other type of machining that I
+
+61
+00:04:11,520 --> 00:04:15,600
+ promise to talk about is abrasive machining. Embrasive techniques, as the name suggests,
+
+62
+00:04:15,600 --> 00:04:19,920
+ generally involve using tiny little abrasive particles that have been formed into a wheel or a
+
+63
+00:04:19,920 --> 00:04:24,880
+ tool or a disc to cut or otherwise machine a component. The particular abrasive particles that
+
+64
+00:04:24,880 --> 00:04:29,840
+ you use are normally extremely hard, some kind of ceramic or diamond even. And often you'll turn
+
+65
+00:04:29,840 --> 00:04:33,360
+ to an abrasive machining technique when you're trying to shape an extremely hard metal.
+
+66
+00:04:33,360 --> 00:04:37,040
+ Now, when I say abrasive machining, you might be picturing in your mind an angle grinder with a
+
+67
+00:04:37,040 --> 00:04:41,760
+ flap disc or a belt sander. While the principles behind angle grinding with a flap disc and abrasive
+
+68
+00:04:41,760 --> 00:04:45,920
+ machining are kind of the same, the two techniques could not be further from each other in terms
+
+69
+00:04:45,920 --> 00:04:51,040
+ of application. A abrasive machining, for example, surface grinding, is typically the very last step
+
+70
+00:04:51,040 --> 00:04:56,080
+ in a long line of manufacturing processes. Removing only a puffteenth of material and used to
+
+71
+00:04:56,080 --> 00:05:00,960
+ achieve an exceptionally flat and beautifully surface-finished part. There are other non-mechanical
+
+72
+00:05:00,960 --> 00:05:05,360
+ machining techniques you should be aware of like wire EDM, for example. I won't talk about that
+
+73
+00:05:05,360 --> 00:05:09,360
+ a lot in this video, but there is some more information about those and a lot more information
+
+74
+00:05:09,360 --> 00:05:13,840
+ about machining in general on the textbook page that accompanies this video. To sum up on note that
+
+75
+00:05:13,840 --> 00:05:17,680
+ generally there are very few limits in terms of what you can machine, almost anything you dream
+
+76
+00:05:17,680 --> 00:05:22,640
+ can be machined and not only machined but machined with incredible accuracy and incredible surface
+
+77
+00:05:22,640 --> 00:05:26,480
+ finishes. But you'll probably need to be a little bit selective in your use of this technique.
+
+78
+00:05:26,480 --> 00:05:30,560
+ Machining owing to the fact that it's quite a time-intensive process and requires an extremely
+
+79
+00:05:30,560 --> 00:05:35,760
+ skilled operator to do can generally be quite expensive. And for this reason it's quite common to
+
+80
+00:05:35,760 --> 00:05:40,880
+ relegate machining to the final step in a long line of other cheaper manufacturing processes.
+
+81
+00:05:40,880 --> 00:05:45,280
+ Lots of suspension components, for example, in your car that need to very precisely fit together and
+
+82
+00:05:45,280 --> 00:05:50,240
+ also take a lot of high loads are generally actually cast and then only machined on the mating
+
+83
+00:05:50,240 --> 00:05:55,120
+ faces. This can be a very economical approach to get the bulk geometry to get most of what you
+
+84
+00:05:55,120 --> 00:05:59,520
+ want out of a casting process and then through some sort of automated machine process, clean up
+
+85
+00:05:59,520 --> 00:06:03,600
+ only the faces that are going to be interfacing, only the faces that actually matter.
+
+86
+00:06:03,600 --> 00:06:07,280
+ We're very fortunate here in engineering that we have trained and qualified and
+
+87
+00:06:07,280 --> 00:06:12,400
+ experienced machinists on staff to help manufacture parts for finding your project students and for
+
+88
+00:06:12,400 --> 00:06:15,760
+ new team students. I hope that at some stage you have the opportunity to speak to these
+
+89
+00:06:15,760 --> 00:06:19,920
+ machinists because they are a wealth of knowledge both in the manufacturing but also in the
+
+90
+00:06:19,920 --> 00:06:29,920
+ design of engineered components.

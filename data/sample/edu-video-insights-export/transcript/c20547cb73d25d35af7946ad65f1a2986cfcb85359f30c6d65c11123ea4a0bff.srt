@@ -1,0 +1,219 @@
+1
+00:00:00,000 --> 00:00:05,080
+ Alright, let's have a chat about our first advanced component in fluid power systems,
+
+2
+00:00:05,080 --> 00:00:07,080
+ the piston cylinder assembly.
+
+3
+00:00:07,080 --> 00:00:11,400
+ This is also the first transformer element for fluid power systems we're going to meet.
+
+4
+00:00:11,400 --> 00:00:15,280
+ Piston cylinder assemblies you've probably seen out in the real world, maybe even close
+
+5
+00:00:15,280 --> 00:00:20,120
+ up kind of heavy machinery, bobcat, bulldozers, whatever, whatever you need to kind of lift
+
+6
+00:00:20,120 --> 00:00:21,120
+ something heavy.
+
+7
+00:00:21,120 --> 00:00:25,480
+ There's usually a piston cylinder there to transfer hydraulic pressure into a force to
+
+8
+00:00:25,480 --> 00:00:27,040
+ do that.
+
+9
+00:00:27,040 --> 00:00:31,640
+ Using equipment, for example, airplanes and kind of spacecraft to kind of move the control
+
+10
+00:00:31,640 --> 00:00:34,160
+ surfaces around as well.
+
+11
+00:00:34,160 --> 00:00:38,920
+ These things work by a pretty simple principle that if you put a kind of force on one side
+
+12
+00:00:38,920 --> 00:00:42,640
+ of a piston cylinder on the plunger, that you'll get a pressure out on the fluid on the
+
+13
+00:00:42,640 --> 00:00:47,120
+ other side, right, as that piston has to kind of disperse that force over the fluid that
+
+14
+00:00:47,120 --> 00:00:49,000
+ acts on it, and vice versa.
+
+15
+00:00:49,000 --> 00:00:52,920
+ If you have a pressure kind of in a cylinder acting on a piston, well that's going to produce
+
+16
+00:00:52,920 --> 00:00:56,480
+ a force on that piston to maybe move a mass.
+
+17
+00:00:56,480 --> 00:01:00,720
+ And this gives rise to the first CCR for kind of piston cylinder assemblies, that the force
+
+18
+00:01:00,720 --> 00:01:04,800
+ you get on a plunger is equal to the kind of pressure in the fluid times the area of
+
+19
+00:01:04,800 --> 00:01:05,800
+ the piston.
+
+20
+00:01:05,800 --> 00:01:09,120
+ There are different types of these depending on the different pistons you're dealing
+
+21
+00:01:09,120 --> 00:01:10,120
+ with.
+
+22
+00:01:10,120 --> 00:01:14,600
+ If you kind of have regular kind of piston cylinders, then it's kind of force times area.
+
+23
+00:01:14,600 --> 00:01:17,840
+ If you are fluid on both sides, pressure on both sides, well then you need to kind of take
+
+24
+00:01:17,840 --> 00:01:21,240
+ a difference, right, because you're going to have pressure kind of acting down on one
+
+25
+00:01:21,240 --> 00:01:22,840
+ and up on the other.
+
+26
+00:01:22,840 --> 00:01:26,680
+ You might have circumstances where the kind of area of the piston on the top is different
+
+27
+00:01:26,680 --> 00:01:30,160
+ to the area of the piston on the bottom because of the plunger.
+
+28
+00:01:30,160 --> 00:01:33,320
+ All of these circumstances are kind of covered in the textbook and the lecture summary
+
+29
+00:01:33,320 --> 00:01:37,360
+ for this week, and there's a slightly different CCR for all of them, but the kind of fundamental
+
+30
+00:01:37,360 --> 00:01:41,560
+ principle that you're turning a pressure into a force is the same amongst all of these.
+
+31
+00:01:41,560 --> 00:01:45,960
+ There's a kind of second CCR, a flow CCR for this transformer as well, and it has to do
+
+32
+00:01:45,960 --> 00:01:48,240
+ with the amount of volume that you displace.
+
+33
+00:01:48,240 --> 00:01:52,720
+ You can imagine that if a piston is to move a distance, say delta x, then the amount
+
+34
+00:01:52,720 --> 00:01:55,800
+ of volume that it's going to trace out, or the fluid that it's going to displace is going
+
+35
+00:01:55,800 --> 00:01:59,520
+ to be its kind of face area multiplied by that delta x.
+
+36
+00:01:59,520 --> 00:02:02,640
+ You can of course differentiate this if you want to to kind of get a relationship between
+
+37
+00:02:02,640 --> 00:02:07,960
+ an input velocity and a flow rate, but this flow CCR is basically saying for a given distance
+
+38
+00:02:07,960 --> 00:02:09,520
+ you trace out this much volume.
+
+39
+00:02:09,520 --> 00:02:13,680
+ I think the difficult thing about piston cylinder assemblies is the SSR, and that's that
+
+40
+00:02:13,680 --> 00:02:19,040
+ making sure that the way you define kind of your CCRs agrees with the way that you draw any
+
+41
+00:02:19,040 --> 00:02:21,720
+ net forces or pressures that are acting.
+
+42
+00:02:21,760 --> 00:02:26,000
+ For example, pressure inside of a cylinder should always be acting kind of, they call it
+
+43
+00:02:26,000 --> 00:02:30,240
+ hydrostatically, right, pushing outwards on all of the surfaces that it's touching.
+
+44
+00:02:30,240 --> 00:02:33,480
+ So if you have pressure in a cylinder acting on a piston wall and the force on that
+
+45
+00:02:33,480 --> 00:02:38,000
+ piston should be such that it's being pushed away from the fluid.
+
+46
+00:02:38,000 --> 00:02:42,920
+ In terms of flow, the SSR is that if your coordinate is kind of pointed positive say
+
+47
+00:02:42,920 --> 00:02:47,440
+ over to the right, then that piston as it transfers over to the right should create a flow
+
+48
+00:02:47,440 --> 00:02:49,720
+ that goes right.
+
+49
+00:02:49,720 --> 00:02:51,480
+ And those flow rates need to be defined accordingly.
+
+50
+00:02:51,480 --> 00:02:55,040
+ If you wanted to find the flow going kind of the opposite way to what it should according
+
+51
+00:02:55,040 --> 00:02:59,080
+ to the coordinate, then what you need to do is make sure that in the CCR you include
+
+52
+00:02:59,080 --> 00:03:01,200
+ a negative sign to account for that.
+
+53
+00:03:01,200 --> 00:03:04,080
+ Like many others in this course, I think this is a concept that's best explained through
+
+54
+00:03:04,080 --> 00:03:05,080
+ a problem.
+
+55
+00:03:05,080 --> 00:03:06,600
+ So let's have a go at problem 5.4 together.

@@ -1,0 +1,403 @@
+1
+00:00:00,000 --> 00:00:02,400
+ All right, welcome to week four.
+
+2
+00:00:02,400 --> 00:00:05,880
+ Having conquered translating and rotating mechanical systems,
+
+3
+00:00:05,880 --> 00:00:09,200
+ this week we're gonna take a look at electrical circuits.
+
+4
+00:00:09,200 --> 00:00:12,120
+ Now, I can already hear the screams of those of you
+
+5
+00:00:12,120 --> 00:00:14,000
+ who struggled in the 11, 13, 10.
+
+6
+00:00:14,000 --> 00:00:16,080
+ Don't worry, I was one of you, in my case,
+
+7
+00:00:16,080 --> 00:00:19,200
+ it was the 11,300, but look, don't stress.
+
+8
+00:00:19,200 --> 00:00:22,200
+ Our approach in this course is going to be sufficiently different
+
+9
+00:00:22,200 --> 00:00:24,520
+ that you might actually come to enjoy modeling
+
+10
+00:00:24,520 --> 00:00:26,720
+ electrical circuits by the end of it.
+
+11
+00:00:26,720 --> 00:00:28,920
+ It turns out when you understand a few basic rules
+
+12
+00:00:28,920 --> 00:00:31,760
+ about how these things work, that modeling these systems
+
+13
+00:00:31,760 --> 00:00:33,240
+ is really, really easy.
+
+14
+00:00:33,240 --> 00:00:35,920
+ And in some ways, it's easier to see the flow of energy
+
+15
+00:00:35,920 --> 00:00:38,760
+ in an electrical circuit than it is in even a mechanical system.
+
+16
+00:00:38,760 --> 00:00:41,320
+ So, those of you who are mechanical engineers,
+
+17
+00:00:41,320 --> 00:00:43,920
+ you might actually come to enjoy modeling electrical circuits
+
+18
+00:00:43,920 --> 00:00:45,520
+ over the course of this week.
+
+19
+00:00:45,520 --> 00:00:48,200
+ So, let's start by talking about how we choose
+
+20
+00:00:48,200 --> 00:00:50,680
+ our states in electrical systems.
+
+21
+00:00:50,680 --> 00:00:52,680
+ Just like last week, where I didn't introduce you
+
+22
+00:00:52,680 --> 00:00:54,640
+ to just some random variables and tell you
+
+23
+00:00:54,640 --> 00:00:56,320
+ that's what we choose as states.
+
+24
+00:00:56,320 --> 00:00:58,760
+ I'm gonna now introduce you to the energy variables
+
+25
+00:00:58,760 --> 00:01:00,080
+ for this domain.
+
+26
+00:01:00,080 --> 00:01:02,640
+ And just like last week, those energy variables
+
+27
+00:01:02,640 --> 00:01:04,840
+ are gonna be what we choose as states.
+
+28
+00:01:04,840 --> 00:01:08,000
+ So, kind of as an analog to what we've already seen,
+
+29
+00:01:08,000 --> 00:01:11,600
+ the energy variables for electrical systems are charged
+
+30
+00:01:11,600 --> 00:01:13,640
+ and linked flux.
+
+31
+00:01:13,640 --> 00:01:16,120
+ Charge is a property you've probably already met before
+
+32
+00:01:16,120 --> 00:01:17,400
+ in your physics courses.
+
+33
+00:01:17,400 --> 00:01:19,560
+ It's like a fundamental property of the matter
+
+34
+00:01:19,560 --> 00:01:21,040
+ that makes up our world.
+
+35
+00:01:21,040 --> 00:01:22,480
+ And it kind of gives you a description
+
+36
+00:01:22,480 --> 00:01:25,280
+ of the presence or absence of electrons,
+
+37
+00:01:25,280 --> 00:01:27,280
+ things which have an excess of electrons
+
+38
+00:01:27,280 --> 00:01:28,920
+ that are called negatively charged,
+
+39
+00:01:28,920 --> 00:01:30,720
+ things which have a deficiency of electrons
+
+40
+00:01:30,720 --> 00:01:32,320
+ are called positively charged.
+
+41
+00:01:32,320 --> 00:01:35,360
+ And the opposite is true for protons.
+
+42
+00:01:35,360 --> 00:01:38,160
+ Things which have like charges have a tendency to repel
+
+43
+00:01:38,160 --> 00:01:40,200
+ and things with unlike charges,
+
+44
+00:01:40,200 --> 00:01:43,120
+ opposite charges have a tendency to attract.
+
+45
+00:01:44,200 --> 00:01:48,120
+ Flux though is a slightly more complicated topic.
+
+46
+00:01:48,120 --> 00:01:49,920
+ It's a quantity that kind of describes
+
+47
+00:01:49,920 --> 00:01:53,200
+ the strength or presence of a magnetic field.
+
+48
+00:01:53,200 --> 00:01:54,680
+ We'll talk a little bit more about this one.
+
+49
+00:01:54,680 --> 00:01:56,160
+ We go on to meet inductors,
+
+50
+00:01:56,160 --> 00:02:00,120
+ the component, the element for which this is most relevant.
+
+51
+00:02:00,120 --> 00:02:02,920
+ Either way, these are the things that we choose as states.
+
+52
+00:02:02,920 --> 00:02:05,480
+ The linked flux of any inductors in our systems
+
+53
+00:02:05,480 --> 00:02:09,000
+ and the charge stored in any capacitors in our systems.
+
+54
+00:02:09,000 --> 00:02:10,360
+ There's a nice kind of rule of thumb
+
+55
+00:02:10,360 --> 00:02:12,600
+ for how you choose states in electrical systems,
+
+56
+00:02:12,600 --> 00:02:14,160
+ how many you need.
+
+57
+00:02:14,160 --> 00:02:16,080
+ It's a little bit different to the one we met last week
+
+58
+00:02:16,080 --> 00:02:17,880
+ in the week before from mechanical systems
+
+59
+00:02:17,880 --> 00:02:20,760
+ where we had twice the number of degrees of freedom.
+
+60
+00:02:20,760 --> 00:02:22,600
+ That concept doesn't make a whole lot of sense
+
+61
+00:02:22,600 --> 00:02:23,680
+ for electrical circuits.
+
+62
+00:02:23,680 --> 00:02:25,200
+ So instead what we say is,
+
+63
+00:02:25,200 --> 00:02:29,560
+ we need one state for every energy storing element in the system.
+
+64
+00:02:29,560 --> 00:02:30,880
+ And by energy storing element,
+
+65
+00:02:30,880 --> 00:02:32,720
+ I don't mean things like sources.
+
+66
+00:02:32,720 --> 00:02:35,240
+ I don't mean resistors that dissipate energy.
+
+67
+00:02:35,240 --> 00:02:37,560
+ I mean inductors and capacitors.
+
+68
+00:02:37,560 --> 00:02:39,000
+ And to be more specific,
+
+69
+00:02:39,000 --> 00:02:42,120
+ I mean disconnected inductors and capacitors.
+
+70
+00:02:42,120 --> 00:02:43,840
+ Just as how in mechanical systems,
+
+71
+00:02:43,840 --> 00:02:47,560
+ we could sometimes have masses that were said to be connected
+
+72
+00:02:47,560 --> 00:02:49,240
+ and would count as one degree of freedom
+
+73
+00:02:49,240 --> 00:02:51,560
+ when we could kind of describe the position of one
+
+74
+00:02:51,560 --> 00:02:54,360
+ as a static function of the position of the other.
+
+75
+00:02:54,360 --> 00:02:56,160
+ This can also happen in electrical circuits
+
+76
+00:02:56,160 --> 00:02:57,800
+ for our inductors and capacitors.
+
+77
+00:02:57,800 --> 00:03:01,520
+ And we can end up with connected energy storing elements.
+
+78
+00:03:01,520 --> 00:03:04,320
+ So in general, if you see two or three or four
+
+79
+00:03:04,320 --> 00:03:06,360
+ in the capacitors in parallel
+
+80
+00:03:06,360 --> 00:03:09,520
+ or two or three or four inductors in series,
+
+81
+00:03:09,520 --> 00:03:12,880
+ those things should be treated as a single energy story element.
+
+82
+00:03:12,880 --> 00:03:16,080
+ And capacitors in parallel is one energy storing element.
+
+83
+00:03:16,080 --> 00:03:19,800
+ And any inductors in series is one energy storing element.
+
+84
+00:03:19,840 --> 00:03:21,920
+ When I say series in parallel here,
+
+85
+00:03:21,920 --> 00:03:23,960
+ I do actually mean the series in parallel
+
+86
+00:03:23,960 --> 00:03:25,640
+ that you met in the elect 13, 10,
+
+87
+00:03:25,640 --> 00:03:28,520
+ but more specifically, I mean the series in parallel
+
+88
+00:03:28,520 --> 00:03:31,000
+ that we met last week, the general definitions,
+
+89
+00:03:31,000 --> 00:03:34,680
+ the sharing of effort or sharing of flow.
+
+90
+00:03:34,680 --> 00:03:36,040
+ Speaking of effort and flow,
+
+91
+00:03:36,040 --> 00:03:38,040
+ we should probably talk about the power variables
+
+92
+00:03:38,040 --> 00:03:40,120
+ for this domain as well.
+
+93
+00:03:40,120 --> 00:03:42,760
+ Effort in the electrical domain is voltage,
+
+94
+00:03:42,760 --> 00:03:45,240
+ kind of the derivative of flux.
+
+95
+00:03:45,240 --> 00:03:48,600
+ And flow is current, kind of the derivative of charge,
+
+96
+00:03:48,600 --> 00:03:50,920
+ the motion of charged particles.
+
+97
+00:03:50,920 --> 00:03:53,120
+ All right, now that we understand the basics,
+
+98
+00:03:53,120 --> 00:03:55,040
+ I think we're okay to go on and see
+
+99
+00:03:55,040 --> 00:03:56,480
+ if we can count up some states
+
+100
+00:03:56,480 --> 00:03:57,680
+ and then move on to learning
+
+101
+00:03:57,680 --> 00:03:59,560
+ about some fundamental components.

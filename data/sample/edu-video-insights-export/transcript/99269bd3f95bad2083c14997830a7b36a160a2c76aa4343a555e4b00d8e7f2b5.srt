@@ -1,0 +1,1139 @@
+1
+00:00:00,000 --> 00:00:01,400
+ Having talked about stainless steel,
+
+2
+00:00:01,400 --> 00:00:03,600
+ we've now met all of the ions and seals
+
+3
+00:00:03,600 --> 00:00:05,280
+ that we're going to in this course.
+
+4
+00:00:05,280 --> 00:00:06,880
+ And while those materials,
+
+5
+00:00:06,880 --> 00:00:09,560
+ while ions and steels are probably the first ones
+
+6
+00:00:09,560 --> 00:00:12,520
+ you're going to turn to in an engineering design problem
+
+7
+00:00:12,520 --> 00:00:15,960
+ for reasons of availability and ubiquity and economy,
+
+8
+00:00:15,960 --> 00:00:17,720
+ they're not all of the metals in the world.
+
+9
+00:00:17,720 --> 00:00:19,920
+ And there are some engineering design problems
+
+10
+00:00:19,920 --> 00:00:22,800
+ that mandate the use of non-ferrous metals.
+
+11
+00:00:22,800 --> 00:00:23,840
+ In the same way that last week,
+
+12
+00:00:23,840 --> 00:00:26,560
+ we motivated our study of non-mechanical material properties
+
+13
+00:00:26,560 --> 00:00:29,600
+ by saying that these properties often place constraints
+
+14
+00:00:29,600 --> 00:00:32,640
+ on the problem that mean that the obvious solution
+
+15
+00:00:32,640 --> 00:00:34,920
+ in terms of a mechanical property wasn't necessarily
+
+16
+00:00:34,920 --> 00:00:37,200
+ the right solution when you take all of these factors
+
+17
+00:00:37,200 --> 00:00:38,240
+ into account.
+
+18
+00:00:38,240 --> 00:00:40,120
+ Here, you'll often find yourself turning
+
+19
+00:00:40,120 --> 00:00:42,320
+ to a non-ferrous metal when the problem often
+
+20
+00:00:42,320 --> 00:00:45,080
+ has an element that involves not just how much strength
+
+21
+00:00:45,080 --> 00:00:48,000
+ can I get per dollar or how easily can I duck down
+
+22
+00:00:48,000 --> 00:00:50,120
+ to one steel and buy a standard section
+
+23
+00:00:50,120 --> 00:00:52,280
+ that has the mechanical properties I'm after.
+
+24
+00:00:52,280 --> 00:00:54,840
+ Oftentimes the choice to use a non-ferrous metal
+
+25
+00:00:54,840 --> 00:00:57,040
+ in an engineering design problem is motivated
+
+26
+00:00:57,040 --> 00:00:58,800
+ by non-mechanical properties
+
+27
+00:00:58,800 --> 00:01:01,120
+ or other constraints that are placed on the problem.
+
+28
+00:01:01,120 --> 00:01:02,920
+ Perhaps you can't get away with using a steel
+
+29
+00:01:02,920 --> 00:01:04,440
+ because you'd like something that has a higher
+
+30
+00:01:04,440 --> 00:01:07,600
+ electrical conductivity or a higher thermal conductivity
+
+31
+00:01:07,600 --> 00:01:09,040
+ or a higher melting temperature
+
+32
+00:01:09,040 --> 00:01:10,960
+ or what needs to live inside of the human body
+
+33
+00:01:10,960 --> 00:01:13,520
+ or some other really nasty corrosive environment.
+
+34
+00:01:13,520 --> 00:01:14,800
+ Over this in the next few videos,
+
+35
+00:01:14,800 --> 00:01:17,360
+ we're going to meet a handful of non-ferrous metals.
+
+36
+00:01:17,360 --> 00:01:18,200
+ Like the fairest ones,
+
+37
+00:01:18,200 --> 00:01:20,280
+ we're not going to talk about every single metal in the world.
+
+38
+00:01:20,280 --> 00:01:22,000
+ We're talking about a subset of these
+
+39
+00:01:22,000 --> 00:01:23,240
+ so that you can take that knowledge
+
+40
+00:01:23,240 --> 00:01:24,960
+ and apply it to all of the metals
+
+41
+00:01:24,960 --> 00:01:27,760
+ you're not going to meet in this course or in materials too.
+
+42
+00:01:27,760 --> 00:01:29,600
+ Our first family of non-ferrous metals
+
+43
+00:01:29,600 --> 00:01:31,160
+ are aluminium alloys.
+
+44
+00:01:31,160 --> 00:01:33,280
+ Probably the very next thing you'll turn to
+
+45
+00:01:33,280 --> 00:01:36,200
+ after a steel to solve an engineering design problem.
+
+46
+00:01:36,200 --> 00:01:38,400
+ Aluminium alloys or aluminum alloys,
+
+47
+00:01:38,400 --> 00:01:40,880
+ if you find yourself on the other side of the world,
+
+48
+00:01:40,880 --> 00:01:44,280
+ as the name suggests, primarily composed of aluminium.
+
+49
+00:01:44,280 --> 00:01:45,560
+ These alloys are generally known
+
+50
+00:01:45,560 --> 00:01:48,640
+ for being quite good conductors and for being non-magnetic.
+
+51
+00:01:48,640 --> 00:01:50,040
+ And they're also generally known
+
+52
+00:01:50,040 --> 00:01:52,360
+ for having material properties, mechanical properties,
+
+53
+00:01:52,360 --> 00:01:54,800
+ density and stiffness and strength
+
+54
+00:01:54,800 --> 00:01:57,000
+ about one third of mild steel.
+
+55
+00:01:57,000 --> 00:01:59,400
+ That being said, aluminium is a probably best known
+
+56
+00:01:59,400 --> 00:02:00,800
+ for having passivity.
+
+57
+00:02:00,800 --> 00:02:04,080
+ Like many of the other passivating metals we've talked about so far,
+
+58
+00:02:04,080 --> 00:02:06,520
+ aluminiums have a self-healing oxide layer
+
+59
+00:02:06,520 --> 00:02:09,360
+ that seals and protects them from further corrosion.
+
+60
+00:02:09,360 --> 00:02:11,320
+ Production of aluminium is quite complicated
+
+61
+00:02:11,320 --> 00:02:12,840
+ and very energy intensive.
+
+62
+00:02:12,840 --> 00:02:14,320
+ It begins with a mining of boxite,
+
+63
+00:02:14,320 --> 00:02:16,040
+ which is a clay-like soil.
+
+64
+00:02:16,040 --> 00:02:17,400
+ And after some refinement,
+
+65
+00:02:17,400 --> 00:02:21,040
+ alumina or aluminium oxide is extracted from the boxite.
+
+66
+00:02:21,040 --> 00:02:22,920
+ This alumina gets filtered and heated
+
+67
+00:02:22,920 --> 00:02:25,360
+ and eventually smelted using electrolysis
+
+68
+00:02:25,360 --> 00:02:26,720
+ to form aluminium.
+
+69
+00:02:26,720 --> 00:02:28,960
+ This smelting process is quite energy intensive
+
+70
+00:02:28,960 --> 00:02:31,560
+ and is one of the reasons why recycling aluminium
+
+71
+00:02:31,560 --> 00:02:34,480
+ is so much more economical than making new aluminium.
+
+72
+00:02:34,480 --> 00:02:36,600
+ And the smelted aluminium is then typically used
+
+73
+00:02:36,600 --> 00:02:38,120
+ in one of two applications.
+
+74
+00:02:38,120 --> 00:02:41,000
+ A direct casting and the family of those aluminiums
+
+75
+00:02:41,000 --> 00:02:43,400
+ are called, unsurprisingly, casting aluminiums
+
+76
+00:02:43,400 --> 00:02:46,120
+ or wrought aluminiums where they're initially cast
+
+77
+00:02:46,120 --> 00:02:48,000
+ from the liquid state, but then further worked
+
+78
+00:02:48,000 --> 00:02:50,720
+ into sheets or extrusions or other shapes
+
+79
+00:02:50,720 --> 00:02:53,120
+ that you might like to build things from as an engineer.
+
+80
+00:02:53,120 --> 00:02:55,200
+ In a similar way to ions and steels,
+
+81
+00:02:55,200 --> 00:02:57,560
+ the material properties of an aluminium alloy
+
+82
+00:02:57,560 --> 00:02:59,760
+ are highly dependent on the quantity
+
+83
+00:02:59,760 --> 00:03:02,520
+ and the types of alloying element that you include.
+
+84
+00:03:02,520 --> 00:03:05,040
+ And while a lot of our discussions for ions and steels
+
+85
+00:03:05,040 --> 00:03:08,040
+ about alloying with carbon and building up microstructures
+
+86
+00:03:08,040 --> 00:03:10,720
+ with phase changes don't really apply to aluminiums
+
+87
+00:03:10,720 --> 00:03:13,000
+ because it doesn't really alloy with carbon,
+
+88
+00:03:13,000 --> 00:03:14,160
+ particularly well.
+
+89
+00:03:14,160 --> 00:03:15,880
+ There are some aspects of this initial discussion
+
+90
+00:03:15,880 --> 00:03:17,080
+ that's still apply.
+
+91
+00:03:17,080 --> 00:03:19,840
+ You can't precipitation harden, aluminium alloys,
+
+92
+00:03:19,840 --> 00:03:22,320
+ age, aluminium alloys by holding it temperature
+
+93
+00:03:22,320 --> 00:03:24,840
+ and providing an impetus for all the alloying elements
+
+94
+00:03:24,840 --> 00:03:26,720
+ to collect together as a precipitate.
+
+95
+00:03:26,720 --> 00:03:29,040
+ And of course, by interstitially or substitutionally
+
+96
+00:03:29,040 --> 00:03:30,320
+ alloying with different elements
+
+97
+00:03:30,320 --> 00:03:31,560
+ and different amounts of elements,
+
+98
+00:03:31,560 --> 00:03:33,880
+ you can provide obstructions to these locations
+
+99
+00:03:33,880 --> 00:03:36,680
+ that increase the strength of an aluminium alloy.
+
+100
+00:03:36,680 --> 00:03:38,120
+ As I mentioned, generally speaking,
+
+101
+00:03:38,120 --> 00:03:40,480
+ aluminium alloys have a stiffness about one-third
+
+102
+00:03:40,480 --> 00:03:42,200
+ that of steel and in many cases,
+
+103
+00:03:42,200 --> 00:03:44,800
+ a strength one-third that of an equivalent steel.
+
+104
+00:03:44,800 --> 00:03:47,120
+ It turns out they also have about one-third the density,
+
+105
+00:03:47,120 --> 00:03:48,160
+ one-third the weight.
+
+106
+00:03:48,160 --> 00:03:49,640
+ On the face of it, it might seem like this is a bit
+
+107
+00:03:49,640 --> 00:03:52,440
+ of a zero-sum game that if all you care about is weight
+
+108
+00:03:52,440 --> 00:03:55,000
+ that it's equally good to go for a steel or an aluminium,
+
+109
+00:03:55,000 --> 00:03:56,880
+ but there are actually very good reasons
+
+110
+00:03:56,880 --> 00:03:58,800
+ why you might prefer one over the other
+
+111
+00:03:58,800 --> 00:04:00,280
+ in a design circumstance.
+
+112
+00:04:00,280 --> 00:04:02,600
+ For example, if your design involves some sort of volume
+
+113
+00:04:02,600 --> 00:04:04,880
+ constraint, if you only have a fixed amount of space
+
+114
+00:04:04,880 --> 00:04:07,480
+ to put your part, then you may want to go with a steel.
+
+115
+00:04:07,480 --> 00:04:09,840
+ With an equivalent strength to weight ratio as an aluminium,
+
+116
+00:04:09,840 --> 00:04:11,520
+ you'll generally require less space
+
+117
+00:04:11,520 --> 00:04:13,000
+ to package a steel component.
+
+118
+00:04:13,000 --> 00:04:15,360
+ You'll deflect a steel component of equivalent size
+
+119
+00:04:15,360 --> 00:04:17,840
+ less under load than you wouldn't aluminium one.
+
+120
+00:04:17,840 --> 00:04:19,880
+ That being said, if weight is your primary concern
+
+121
+00:04:19,880 --> 00:04:21,360
+ and volume not so much,
+
+122
+00:04:21,360 --> 00:04:22,720
+ if you have the ability to spill out
+
+123
+00:04:22,720 --> 00:04:24,400
+ in volume one way or another,
+
+124
+00:04:24,400 --> 00:04:26,320
+ then you may want to go with an aluminium.
+
+125
+00:04:26,320 --> 00:04:28,480
+ As you'll soon talk about in civil 1100,
+
+126
+00:04:28,480 --> 00:04:30,400
+ bending loads are highly sensitive
+
+127
+00:04:30,400 --> 00:04:32,160
+ to the thickness of a material
+
+128
+00:04:32,160 --> 00:04:33,960
+ in the direction a load is applied.
+
+129
+00:04:33,960 --> 00:04:35,320
+ Think of the cross-section of a part
+
+130
+00:04:35,320 --> 00:04:36,760
+ is the less it tends to bend.
+
+131
+00:04:36,760 --> 00:04:39,680
+ And this is actually very much not a linear relationship.
+
+132
+00:04:39,680 --> 00:04:42,920
+ Bending stiffness actually grows with the cube of thickness.
+
+133
+00:04:42,920 --> 00:04:44,960
+ What this means is that if you use a lighter material,
+
+134
+00:04:44,960 --> 00:04:47,080
+ a less dense material like aluminium,
+
+135
+00:04:47,080 --> 00:04:48,880
+ for the same weight in your design,
+
+136
+00:04:48,880 --> 00:04:50,520
+ you can actually have a lot more of it.
+
+137
+00:04:50,520 --> 00:04:52,920
+ You can actually make a much thicker cross-section.
+
+138
+00:04:52,920 --> 00:04:55,040
+ And because stiffness grows with thickness cubed
+
+139
+00:04:55,040 --> 00:04:57,440
+ and weight only grows linearly with thickness,
+
+140
+00:04:57,440 --> 00:04:59,240
+ this means that generally you can have a much,
+
+141
+00:04:59,240 --> 00:05:01,720
+ much stiffer product if you make it out of aluminium
+
+142
+00:05:01,720 --> 00:05:03,600
+ because you can fit more aluminium in there
+
+143
+00:05:03,600 --> 00:05:04,600
+ for the same weight.
+
+144
+00:05:04,600 --> 00:05:07,120
+ As you can imagine, the intersection of all of these variables,
+
+145
+00:05:07,120 --> 00:05:09,880
+ the statics, the mechanics of how the problem works
+
+146
+00:05:09,880 --> 00:05:11,760
+ alongside the material properties changing
+
+147
+00:05:11,760 --> 00:05:13,920
+ and accounting for density and thickness
+
+148
+00:05:13,920 --> 00:05:16,280
+ can start to get really, really complicated.
+
+149
+00:05:16,280 --> 00:05:17,920
+ Thankfully, there is a way to account
+
+150
+00:05:17,920 --> 00:05:20,240
+ for these loading scenarios in the derivation
+
+151
+00:05:20,240 --> 00:05:22,680
+ of a material's index and it's something we'll be talking
+
+152
+00:05:22,680 --> 00:05:24,480
+ about over the next couple of weeks.
+
+153
+00:05:24,480 --> 00:05:25,960
+ For now, it's sufficient for us to say
+
+154
+00:05:25,960 --> 00:05:27,560
+ that there are actually circumstances
+
+155
+00:05:27,560 --> 00:05:29,840
+ load-based circumstances where you may prefer
+
+156
+00:05:29,840 --> 00:05:31,680
+ an aluminium over a steel.
+
+157
+00:05:31,680 --> 00:05:33,480
+ Another important point to make in the context
+
+158
+00:05:33,480 --> 00:05:36,440
+ of talking about aluminiums is with regards to fatigue.
+
+159
+00:05:36,440 --> 00:05:38,640
+ Unlike steels, aluminiums don't tend to have
+
+160
+00:05:38,640 --> 00:05:39,680
+ an endurance limit.
+
+161
+00:05:39,680 --> 00:05:41,720
+ In other words, they will fail by fatigue
+
+162
+00:05:41,720 --> 00:05:45,320
+ even for very small loadings if subjected to enough cycles.
+
+163
+00:05:45,320 --> 00:05:47,800
+ In other words, fatigue loading should be front of your mind
+
+164
+00:05:47,800 --> 00:05:50,560
+ any time you're designing a component out of aluminium.
+
+165
+00:05:50,560 --> 00:05:52,600
+ It's one of the reasons why you see a lot of cracked
+
+166
+00:05:52,600 --> 00:05:54,800
+ aluminium car trailers on the road.
+
+167
+00:05:54,800 --> 00:05:56,520
+ Whoever designed them or more likely
+
+168
+00:05:56,520 --> 00:05:58,320
+ just welded them together in their shed
+
+169
+00:05:58,320 --> 00:06:00,280
+ hadn't thought about all of the small vibrations
+
+170
+00:06:00,280 --> 00:06:02,360
+ that add up when a thing is bouncing along the road
+
+171
+00:06:02,360 --> 00:06:04,880
+ all of the time and very quickly those vibrations
+
+172
+00:06:04,880 --> 00:06:06,520
+ add up to give you a fatigue loading
+
+173
+00:06:06,520 --> 00:06:08,480
+ that ends up failing the part.
+
+174
+00:06:08,480 --> 00:06:10,760
+ As with steels, there are many, many different flavors
+
+175
+00:06:10,760 --> 00:06:12,120
+ of aluminium that you can get
+
+176
+00:06:12,120 --> 00:06:14,800
+ and these all have slightly different material properties.
+
+177
+00:06:14,800 --> 00:06:16,800
+ In general, of course, your best bet is to consult
+
+178
+00:06:16,800 --> 00:06:19,240
+ materials database, but here in this video,
+
+179
+00:06:19,240 --> 00:06:22,200
+ I'm going to very quickly go over the seven most common types,
+
+180
+00:06:22,200 --> 00:06:24,480
+ the seven most common series you're likely to encounter
+
+181
+00:06:24,480 --> 00:06:25,520
+ as an engineer.
+
+182
+00:06:25,520 --> 00:06:27,120
+ The seven different series of aluminiums
+
+183
+00:06:27,120 --> 00:06:29,760
+ are named according to an international designation system
+
+184
+00:06:29,760 --> 00:06:32,320
+ that I'll leave a link for in the video description.
+
+185
+00:06:32,320 --> 00:06:34,360
+ And I certainly don't expect you to know or memorize
+
+186
+00:06:34,360 --> 00:06:36,720
+ every single particular grade of aluminium.
+
+187
+00:06:36,720 --> 00:06:38,560
+ These are the kinds of things that you see once
+
+188
+00:06:38,560 --> 00:06:40,280
+ and you remember the general gist over
+
+189
+00:06:40,280 --> 00:06:42,280
+ and then you go back and you look it up later
+
+190
+00:06:42,280 --> 00:06:43,680
+ when you need the information.
+
+191
+00:06:43,680 --> 00:06:45,120
+ Though I will admit, it is quite helpful
+
+192
+00:06:45,120 --> 00:06:46,280
+ to have a general understanding
+
+193
+00:06:46,280 --> 00:06:48,560
+ that this particular series of aluminium,
+
+194
+00:06:48,560 --> 00:06:51,400
+ X000 series of aluminium has these general properties,
+
+195
+00:06:51,400 --> 00:06:53,280
+ especially when you're having a conversation
+
+196
+00:06:53,280 --> 00:06:55,840
+ with a tradesperson who's manufacturing your part, for example.
+
+197
+00:06:55,840 --> 00:06:57,880
+ Really quickly walking through these series,
+
+198
+00:06:57,880 --> 00:07:01,480
+ 1,000 series aluminiums are mostly just pure aluminium,
+
+199
+00:07:01,480 --> 00:07:03,840
+ usually a purity above 99%.
+
+200
+00:07:03,840 --> 00:07:06,400
+ They have very little to any additional alloying elements
+
+201
+00:07:06,400 --> 00:07:08,640
+ and for that reason, our excellent thermal
+
+202
+00:07:08,640 --> 00:07:10,480
+ and electrical conductors and are usually used
+
+203
+00:07:10,480 --> 00:07:13,640
+ for this purpose and they have incredible ductility as well.
+
+204
+00:07:13,640 --> 00:07:15,640
+ Obviously, having very few alloying elements
+
+205
+00:07:15,640 --> 00:07:17,800
+ that don't put up much of a fight to these locations
+
+206
+00:07:17,800 --> 00:07:21,640
+ and for this reason, they also tend to have reasonably low strengths.
+
+207
+00:07:21,640 --> 00:07:24,000
+ 1,000 series aluminiums are typically used in places
+
+208
+00:07:24,000 --> 00:07:26,200
+ where really high workability is required,
+
+209
+00:07:26,200 --> 00:07:28,320
+ like armature wire or in places where you need
+
+210
+00:07:28,320 --> 00:07:31,080
+ excellent electrical conductivity like transmission lines.
+
+211
+00:07:31,080 --> 00:07:33,760
+ 2,000 series aluminiums are still mostly aluminium
+
+212
+00:07:33,760 --> 00:07:35,320
+ but they're alloyed with copper.
+
+213
+00:07:35,320 --> 00:07:37,240
+ This alloying with copper means they can be aged,
+
+214
+00:07:37,240 --> 00:07:39,400
+ precipitation hardened to have yield strengths
+
+215
+00:07:39,400 --> 00:07:41,760
+ above that even of low carbon steels.
+
+216
+00:07:41,760 --> 00:07:43,360
+ Of course, the introduced copper by virtue
+
+217
+00:07:43,360 --> 00:07:45,080
+ of providing a block of for dislocations
+
+218
+00:07:45,120 --> 00:07:48,200
+ and increasing strength also reduces ductility.
+
+219
+00:07:48,200 --> 00:07:50,360
+ These aluminiums have a tendency to crack when weld
+
+220
+00:07:50,360 --> 00:07:52,360
+ and we'll talk about some of the mechanisms for that
+
+221
+00:07:52,360 --> 00:07:54,040
+ when we talk about welding next week
+
+222
+00:07:54,040 --> 00:07:56,520
+ but you should be aware that 2,000 series aluminiums
+
+223
+00:07:56,520 --> 00:07:58,960
+ generally are not considered to be particularly weldable.
+
+224
+00:07:58,960 --> 00:08:00,920
+ These 2,000 series alloys were quite common
+
+225
+00:08:00,920 --> 00:08:02,720
+ for a long time in the aerospace industry
+
+226
+00:08:02,720 --> 00:08:04,760
+ because of their excellent mechanical properties
+
+227
+00:08:04,760 --> 00:08:06,800
+ and relative ease by which you can machine them.
+
+228
+00:08:06,800 --> 00:08:09,280
+ In fact, one particular 2,000 series aluminium,
+
+229
+00:08:09,280 --> 00:08:13,400
+ 2,0001 aluminium is actually called free machining aluminium.
+
+230
+00:08:13,400 --> 00:08:14,840
+ It's called this because it has a tendency
+
+231
+00:08:14,840 --> 00:08:16,600
+ to form small chips when it's machined
+
+232
+00:08:16,600 --> 00:08:19,520
+ and these chips have a tendency to draw heat away
+
+233
+00:08:19,520 --> 00:08:20,560
+ from the job.
+
+234
+00:08:20,560 --> 00:08:22,760
+ There are other variants of 2,000 series aluminium
+
+235
+00:08:22,760 --> 00:08:24,080
+ that are easier to weld
+
+236
+00:08:24,080 --> 00:08:26,160
+ but generally speaking, if you're looking for weldability
+
+237
+00:08:26,160 --> 00:08:28,640
+ at 2,000 series aluminium is probably not for you.
+
+238
+00:08:28,640 --> 00:08:31,200
+ 3,000 series aluminiums are particularly noteworthy.
+
+239
+00:08:31,200 --> 00:08:32,880
+ They have a little bit of manganese in them.
+
+240
+00:08:32,880 --> 00:08:34,240
+ They generally have pretty high strength
+
+241
+00:08:34,240 --> 00:08:36,640
+ as well as good corrosion resistance and ductility
+
+242
+00:08:36,640 --> 00:08:39,200
+ and they're often used in things like heat exchangers.
+
+243
+00:08:39,200 --> 00:08:41,720
+ 4,000 series aluminiums have a lot of silicon in them.
+
+244
+00:08:41,760 --> 00:08:44,000
+ The purpose of which is to reduce the melting temperature
+
+245
+00:08:44,000 --> 00:08:47,680
+ and increase their fluidity when it's in its kind of liquid state.
+
+246
+00:08:47,680 --> 00:08:49,880
+ These 4,000 series aluminiums that you can buy
+
+247
+00:08:49,880 --> 00:08:52,760
+ more closely resemble the kind of casting aluminiums
+
+248
+00:08:52,760 --> 00:08:53,960
+ that you might produce.
+
+249
+00:08:53,960 --> 00:08:55,520
+ And for this reason, you'll quite often see them
+
+250
+00:08:55,520 --> 00:08:57,680
+ in welding filler rods, for example.
+
+251
+00:08:57,680 --> 00:09:00,320
+ 5,000 series aluminiums have a little bit of magnesium
+
+252
+00:09:00,320 --> 00:09:02,960
+ in them which increases their strength and formability.
+
+253
+00:09:02,960 --> 00:09:04,760
+ They generally have pretty good corrosion resistance
+
+254
+00:09:04,760 --> 00:09:06,400
+ and can be quite happily welded.
+
+255
+00:09:06,400 --> 00:09:09,000
+ For these reasons, you'll usually see 5,000 series aluminiums
+
+256
+00:09:09,000 --> 00:09:10,480
+ using places where you need something
+
+257
+00:09:10,480 --> 00:09:12,320
+ that's both structural and light.
+
+258
+00:09:12,320 --> 00:09:14,360
+ For example, on a boat or a car-body panel
+
+259
+00:09:14,360 --> 00:09:15,560
+ or as part of a bridge.
+
+260
+00:09:15,560 --> 00:09:18,320
+ 6,000 series aluminiums are also alloyed with magnesium
+
+261
+00:09:18,320 --> 00:09:20,600
+ but also tend to have a little bit of silicon in them.
+
+262
+00:09:20,600 --> 00:09:23,360
+ You'll probably quite often lean on a 6,000 series aluminium
+
+263
+00:09:23,360 --> 00:09:24,800
+ for general purpose fabrication
+
+264
+00:09:24,800 --> 00:09:26,600
+ because they can be readily formed
+
+265
+00:09:26,600 --> 00:09:28,720
+ and worked and machined and welded.
+
+266
+00:09:28,720 --> 00:09:31,160
+ 6,000, 6,000, 1 aluminium is a common grade
+
+267
+00:09:31,160 --> 00:09:32,320
+ that you're likely to run into
+
+268
+00:09:32,320 --> 00:09:34,200
+ over the course of your engineering career.
+
+269
+00:09:34,200 --> 00:09:37,760
+ Finally, 7,000 series aluminiums are kind of the cream of the crop.
+
+270
+00:09:37,760 --> 00:09:40,200
+ Sometimes these are referred to as aerospace alloys
+
+271
+00:09:40,200 --> 00:09:42,760
+ because they give you incredible strength to wait
+
+272
+00:09:42,760 --> 00:09:45,120
+ and while they can be machined and formed to shape,
+
+273
+00:09:45,120 --> 00:09:47,320
+ they're not quite as workable as their colleagues.
+
+274
+00:09:47,320 --> 00:09:49,880
+ The trade-off that comes with their incredible mechanical properties,
+
+275
+00:09:49,880 --> 00:09:52,640
+ their incredible strengths that are better than many steels
+
+276
+00:09:52,640 --> 00:09:55,520
+ is that 7,000 series aluminiums have a tendency
+
+277
+00:09:55,520 --> 00:09:56,880
+ to crack when welded.
+
+278
+00:09:56,880 --> 00:09:59,120
+ If you weld 7,000 series aluminium,
+
+279
+00:09:59,120 --> 00:10:00,800
+ you're gonna have a bad time.
+
+280
+00:10:00,800 --> 00:10:03,640
+ That's probably all I wanna say about aluminiums at this stage.
+
+281
+00:10:03,640 --> 00:10:06,040
+ There is an entire other family of aluminiums,
+
+282
+00:10:06,040 --> 00:10:08,760
+ casting aluminiums that I'll put some information about
+
+283
+00:10:08,760 --> 00:10:10,280
+ in the textbook page for this video,
+
+284
+00:10:10,280 --> 00:10:12,400
+ but it's probably a little bit outside the scope
+
+285
+00:10:12,400 --> 00:10:14,440
+ of the lecture content for this course.

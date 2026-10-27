@@ -1,0 +1,79 @@
+1
+00:00:00,000 --> 00:00:05,360
+ Polyvinyl chloride, PVC is the third on our list of engineering thermoplastics that we're going to talk about,
+
+2
+00:00:05,360 --> 00:00:12,240
+ and it's also the third most commonly produced thermoplastic in the world, accounting for around 10% of global plastic production.
+
+3
+00:00:12,240 --> 00:00:18,160
+ We may PVC these days in a range of different flavours as a hard stiff polymer for pipework, for example,
+
+4
+00:00:18,160 --> 00:00:21,600
+ and as a soft stretchy one for upholstery and clothing.
+
+5
+00:00:21,600 --> 00:00:28,040
+ We polymerize PVC from the vinyl chloride monomer, which also looks an awful lot like the ethylene monomer.
+
+6
+00:00:28,040 --> 00:00:33,760
+ Like how in polypropylene, we only substituted one in every 400 in fingers to change the monomer.
+
+7
+00:00:33,760 --> 00:00:39,360
+ We do the same thing here with vinyl chloride, replacing one in every 400 with a chlorine atom.
+
+8
+00:00:39,360 --> 00:00:44,840
+ Pure PVC is a reasonably cheap and stiff thermoplastic that we often use in pipework.
+
+9
+00:00:44,840 --> 00:00:52,880
+ It's quite well suited to this application because it's reasonably resistant to acids and grimes and other nasties that you can imagine you'd find in your pipework.
+
+10
+00:00:52,880 --> 00:00:59,600
+ But pure PVC is not particularly UV or heat tolerant, meaning that it's not often used outdoors or to carry hot water, for example.
+
+11
+00:00:59,600 --> 00:01:06,720
+ There is a variant called CPVC, chlorinated PVC that has a little bit more chlorine in it, and generally is a little bit more heat tolerant.
+
+12
+00:01:06,720 --> 00:01:12,880
+ But, broadly speaking, if you're after a thermoplastic which is tolerant at high temperatures, you're probably not after PVC.
+
+13
+00:01:12,880 --> 00:01:22,440
+ By introducing additives called plasticizers in the manufacturer of PVC, we can essentially weaken the vander walls bonds of them to the point where they become very, very flexible.
+
+14
+00:01:22,440 --> 00:01:30,320
+ Confusingly, we also sometimes call plasticized PVC vinyl, and it's commonly used as a leather substitute in clothing or in a poll street.
+
+15
+00:01:30,320 --> 00:01:38,320
+ Because there are many different kinds of PVC with different amounts of plasticizer added for different particular applications, recycling over can be a bit tricky.
+
+16
+00:01:38,320 --> 00:01:51,040
+ It's difficult to know whether piece of PVC that you'd like to recycle exactly what the plasticizer content is, and mixing and matching a bunch of different PVCs with different plasticizer contents can result in one with a totally unknown plasticizer content,
+
+17
+00:01:51,280 --> 00:01:53,840
+ totally unpredictable material properties.
+
+18
+00:01:53,840 --> 00:01:57,360
+ For this reason, when we do recycle it, which isn't particularly often,
+
+19
+00:01:57,360 --> 00:02:04,480
+ Recycle PVC is typically used in lower quality applications in places where strength and stiffness isn't safety critical.
+
+20
+00:02:04,480 --> 00:02:12,560
+ When no one is at risk of dying, for example, because the plasticizer content and thus the material properties of the recycle product are particularly well known.

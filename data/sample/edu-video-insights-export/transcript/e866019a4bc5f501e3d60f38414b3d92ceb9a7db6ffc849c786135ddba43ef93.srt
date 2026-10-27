@@ -1,0 +1,303 @@
+1
+00:00:00,000 --> 00:00:03,760
+ Having already conquered all of the difficult content, the remainder of the videos for the week
+
+2
+00:00:03,760 --> 00:00:07,600
+ are going to be short and snappy. One by one, we go into meet some of the most common
+
+3
+00:00:07,600 --> 00:00:11,760
+ engineering metals that you're likely to meet in your designs, starting with in this video,
+
+4
+00:00:11,760 --> 00:00:16,720
+ plain carbon steels. Plain carbon steels, which are sometimes just called carbon steels,
+
+5
+00:00:16,720 --> 00:00:21,680
+ and confusingly sometimes just called steels, are those which mostly consist of iron with
+
+6
+00:00:21,680 --> 00:00:26,320
+ just a little bit of carbon, anywhere from around a quarter of a percent up to around one and a
+
+7
+00:00:26,320 --> 00:00:31,520
+ half percent. And they usually contain very little other alloy elements. Plain carbon steel
+
+8
+00:00:31,520 --> 00:00:35,920
+ should probably be what first come to mind when somebody says the word steel to you, because
+
+9
+00:00:35,920 --> 00:00:40,240
+ generally speaking, plain carbon steels have a range of material properties that are suitable
+
+10
+00:00:40,240 --> 00:00:45,760
+ for most engineering applications. Because of how economical they are to produce and how ubiquitous
+
+11
+00:00:45,760 --> 00:00:50,320
+ and easy they are to access in a range of different standard sections, plain carbon steel is
+
+12
+00:00:50,320 --> 00:00:53,920
+ a probably what you'll turn to in the majority of your engineering design problems. These
+
+13
+00:00:53,920 --> 00:00:59,280
+ steels come in three kind of distinct flavors, a low medium and high carbon. And generally speaking,
+
+14
+00:00:59,280 --> 00:01:04,240
+ with an increase in carbon content, these steels also see an increase in strength and a decrease
+
+15
+00:01:04,240 --> 00:01:08,480
+ in ductility. Having just spent a lot of time talking about microstructures and heat treatment,
+
+16
+00:01:08,480 --> 00:01:13,600
+ the reasons behind this should be apparent to you. At low carbon contents, pure ferrite and
+
+17
+00:01:13,600 --> 00:01:19,120
+ perlite grains are reasonably common. And as you ramp up the carbon content in a carbon steel,
+
+18
+00:01:19,120 --> 00:01:23,600
+ you have more and more martensite that can form after quenching. This martensite brings with it
+
+19
+00:01:23,600 --> 00:01:28,160
+ an increase in strength, of course, at the cost of ductility. Though, as we talked about, you can
+
+20
+00:01:28,160 --> 00:01:32,560
+ temper some of this strength back and restore some of the ductility. Let's talk about each of the
+
+21
+00:01:32,560 --> 00:01:37,200
+ three flavors of carbon steel in a little bit more detail. Low carbon steel, which we generally
+
+22
+00:01:37,200 --> 00:01:42,000
+ refer to as mild steel here in Australia, generally has a carbon content less than a quarter
+
+23
+00:01:42,000 --> 00:01:46,320
+ of a percent. Some of the most common structural steels that we have here in Australia that you'll
+
+24
+00:01:46,320 --> 00:01:51,040
+ find, for example, when you go down to one steel to buy a piece of RHS full into this category.
+
+25
+00:01:51,040 --> 00:01:55,040
+ Though, depending on the supplier, they might use a slightly different name for it. Most of them
+
+26
+00:01:55,040 --> 00:02:00,560
+ have a brand name associated with their mild steel and some just refer to it as 250 or 350 grade
+
+27
+00:02:00,560 --> 00:02:04,720
+ steel corresponding to the nominal yield strength of that steel and megapascals. Because of the
+
+28
+00:02:04,720 --> 00:02:09,120
+ low carbon content in low carbon steels and the relatively slow cooling rates that they
+
+29
+00:02:09,120 --> 00:02:14,080
+ manage to achieve in bulk production, most low carbon steels consist of ferritic and
+
+30
+00:02:14,080 --> 00:02:18,960
+ poetic microstructures with very little to no martensite present. There's just not enough carbon
+
+31
+00:02:18,960 --> 00:02:22,560
+ around and the cooling rate just isn't fast enough to form any. Because they're mostly
+
+32
+00:02:22,560 --> 00:02:27,040
+ pure ferrite and pearlite, low carbon steel strike a good balance between strength and ductility.
+
+33
+00:02:27,040 --> 00:02:31,360
+ And because they're not particularly sensitive to forming martensite, low carbon steels are very
+
+34
+00:02:31,360 --> 00:02:35,760
+ commonly used where fabrication is required, where heat might be applied in the manufacturing
+
+35
+00:02:35,760 --> 00:02:40,560
+ of a component by, I don't know, forging or cutting or grinding or welding. We'll talk a little
+
+36
+00:02:40,560 --> 00:02:44,400
+ bit more about these processes next week. You can purchase low carbon steels in a variety of
+
+37
+00:02:44,400 --> 00:02:49,120
+ standard sections and build up complicated shapes by fabricating these sections together.
+
+38
+00:02:49,120 --> 00:02:54,720
+ And for reasons of ubiquity and economy and convenience, many problems that could otherwise be solved
+
+39
+00:02:54,720 --> 00:02:59,840
+ with grace, in other words, are more suitable material, are rather just solved with more steel
+
+40
+00:02:59,840 --> 00:03:04,720
+ or steel welded to steel. While it's inability to form martensite is quite a nice feature of mild
+
+41
+00:03:04,720 --> 00:03:08,640
+ steel, meaning that can be worked in fabricated in lots of different ways. It's also a little
+
+42
+00:03:08,640 --> 00:03:12,800
+ bit of a drawback. You can't heat treat a mild steel to improve its strength, for example.
+
+43
+00:03:12,880 --> 00:03:16,800
+ Though, of course, you can do this through other means, like cold working or alloying.
+
+44
+00:03:16,800 --> 00:03:20,560
+ The next flavor of carbon steel, as you ratchet up the amount of carbon that you're putting
+
+45
+00:03:20,560 --> 00:03:25,040
+ in there, is creatively called medium carbon steel. Medium carbon steels have a carbon
+
+46
+00:03:25,040 --> 00:03:29,280
+ content somewhere between a quarter of a percent all the way up to 0.7 of a percent,
+
+47
+00:03:29,280 --> 00:03:33,280
+ so kind of picking up where low carbon steels left off. The microstructure of a medium carbon
+
+48
+00:03:33,280 --> 00:03:37,440
+ steel has a high proportion of pearlite to ferrite grains, meaning that in general, they're a
+
+49
+00:03:37,440 --> 00:03:41,520
+ little bit stronger and a little bit harder and a little bit less ductile than their low carbon
+
+50
+00:03:41,520 --> 00:03:45,520
+ counterparts. And because there's a little bit of carbon around, they can also be somewhat
+
+51
+00:03:45,520 --> 00:03:49,360
+ strengthened by heat treating. You can form some martensite with them. And they're still relatively
+
+52
+00:03:49,360 --> 00:03:53,200
+ workable. You can heat them up and form them in weld them with a little bit of care.
+
+53
+00:03:53,200 --> 00:03:57,440
+ Medium carbon steels are typically used in some higher grade structural steels in buildings,
+
+54
+00:03:57,440 --> 00:04:01,040
+ for example. But they're also very commonly used in body panels for cars, where there's a
+
+55
+00:04:01,040 --> 00:04:06,080
+ compromise, a trade-off between strength and cost and weight. If you ratchet up one step further
+
+56
+00:04:06,080 --> 00:04:10,800
+ in terms of carbon content, now in the range of 0.7 all the way up to around one and a half
+
+57
+00:04:10,800 --> 00:04:15,760
+ percent, you reach high carbon steels. These steels, as supplied, are generally entirely
+
+58
+00:04:15,760 --> 00:04:20,560
+ politic. All the grains of pearlite, this very little pure ferrite left in the microstructure.
+
+59
+00:04:20,560 --> 00:04:24,480
+ And because of the large amount of carbon present, they're very easy to heat treat.
+
+60
+00:04:24,480 --> 00:04:29,520
+ After shaping a high carbon steel in the as supplied reasonably soft, mostly polityx state,
+
+61
+00:04:29,520 --> 00:04:33,600
+ you'll then usually quench and temper it to form martensite to make sure that it's nice and
+
+62
+00:04:33,600 --> 00:04:37,760
+ strong while still maintaining some level of ductility. High carbon steel is generally used in
+
+63
+00:04:37,760 --> 00:04:42,800
+ places where strength is more important than ductility, for example, in knives and blades and
+
+64
+00:04:42,800 --> 00:04:47,360
+ other cutting instruments. A cousin, if you like, of high carbon steels, called tool steels,
+
+65
+00:04:47,360 --> 00:04:52,720
+ have an extremely high carbon content in the order of 1.7 to 2%. This extremely high carbon
+
+66
+00:04:52,720 --> 00:04:58,080
+ content allows for the formation of lots of martensite and an extremely strong and hard product.
+
+67
+00:04:58,080 --> 00:05:02,320
+ As the name suggests, tool steels are often used in the fabrication of tools for cutting and
+
+68
+00:05:02,320 --> 00:05:07,520
+ shaping other metals. For example, a tool steel cord high speed steel is quite often used to make
+
+69
+00:05:07,520 --> 00:05:12,560
+ drill bits and end mills and cutting tools and threading tools that are used to shape other metals,
+
+70
+00:05:12,560 --> 00:05:17,360
+ including steels. Because of how hard and brittle tool steels can be, they're often shaped
+
+71
+00:05:17,360 --> 00:05:22,400
+ in an annealed state and then heat treat it afterwards to form martensite and bring their hardness up,
+
+72
+00:05:22,400 --> 00:05:27,280
+ or they're shaped using an abrasive grinding process that involves a ceramic that's much harder.
+
+73
+00:05:27,280 --> 00:05:31,360
+ While we're talking about tool steels, you should take note that the fact that you can use a
+
+74
+00:05:31,360 --> 00:05:36,160
+ steel to machine and shape other steels should give you some idea of just how broad the term
+
+75
+00:05:36,160 --> 00:05:40,320
+ steel is and how important it needs to be specific about the type of steel you're talking about
+
+76
+00:05:40,320 --> 00:05:44,320
+ when you speak to a colleague or a supplier or a customer or a client.

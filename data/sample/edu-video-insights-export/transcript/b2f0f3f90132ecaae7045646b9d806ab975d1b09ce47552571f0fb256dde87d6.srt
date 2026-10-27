@@ -1,0 +1,283 @@
+1
+00:00:00,000 --> 00:00:05,160
+ Well, the way that we make most ceramics inherently results in a polycrystalline material,
+
+2
+00:00:05,160 --> 00:00:08,840
+ for example, if you press and center ceramic, you're likely to get grain boundaries,
+
+3
+00:00:08,840 --> 00:00:12,480
+ at least near the boundaries of where the particles were to begin with.
+
+4
+00:00:12,480 --> 00:00:16,480
+ Some ceramics are grown as single crystals, perfectly crystalline bodies throughout their
+
+5
+00:00:16,480 --> 00:00:20,080
+ entire bog, with no grain boundaries whatsoever.
+
+6
+00:00:20,080 --> 00:00:23,480
+ We talked a little bit about single crystals last week, but just to recap, they have some
+
+7
+00:00:23,480 --> 00:00:25,360
+ pretty exceptional properties.
+
+8
+00:00:25,360 --> 00:00:29,120
+ They can live up to the promised amazing mechanical properties of ceramics because they don't
+
+9
+00:00:29,120 --> 00:00:34,000
+ have any pores or floors inside of them that could otherwise act as stress raises.
+
+10
+00:00:34,000 --> 00:00:37,600
+ They have brilliant optical properties owing to the fact that there are no grain boundaries.
+
+11
+00:00:37,600 --> 00:00:41,600
+ They can have extremely high thermal conductivity, and for some single crystal ceramics,
+
+12
+00:00:41,600 --> 00:00:44,400
+ they can have really, really good electrical conductivity,
+
+13
+00:00:44,400 --> 00:00:47,520
+ or at least very, very tunable electrical conductivity.
+
+14
+00:00:47,520 --> 00:00:50,000
+ Last week, we talked about how during this entering process,
+
+15
+00:00:50,000 --> 00:00:52,800
+ if held at temperature long enough, you see grain growth,
+
+16
+00:00:52,800 --> 00:00:57,680
+ kind of absorption of the grains into each other in a ceramic to form larger and larger ones.
+
+17
+00:00:57,760 --> 00:01:01,920
+ And I implied that if you could hold at a high enough temperature for a long enough time,
+
+18
+00:01:01,920 --> 00:01:06,320
+ you could eventually work out all of the porosity and work out all of the grain boundaries
+
+19
+00:01:06,320 --> 00:01:08,400
+ and reach single crystal behavior.
+
+20
+00:01:08,400 --> 00:01:12,480
+ Well, it's perhaps theoretically possible to anneal a ceramic to the point where it's a single
+
+21
+00:01:12,480 --> 00:01:13,040
+ crystal.
+
+22
+00:01:13,040 --> 00:01:17,600
+ It's really not practical or economical to do so, and we don't tend to make single crystals
+
+23
+00:01:17,600 --> 00:01:18,240
+ this way.
+
+24
+00:01:18,240 --> 00:01:22,800
+ Perm scales involved to make an appreciably sized single crystal this way are literally geological.
+
+25
+00:01:22,800 --> 00:01:26,880
+ And in fact, we see quite a few large single crystals in nature that have had
+
+26
+00:01:26,960 --> 00:01:29,200
+ geological time scales to grow.
+
+27
+00:01:29,200 --> 00:01:33,200
+ We instead tend to manufacture single crystals by growing them from the liquid state by
+
+28
+00:01:33,200 --> 00:01:35,760
+ tightly controlling the cooling process.
+
+29
+00:01:35,760 --> 00:01:39,760
+ You'll remember from our discussions on metals all those weeks ago that when metals were cast
+
+30
+00:01:39,760 --> 00:01:44,560
+ in the liquid state, we tended to have crystals grow in multiple locations as dendrites from
+
+31
+00:01:44,560 --> 00:01:45,440
+ seed points.
+
+32
+00:01:45,440 --> 00:01:50,400
+ Well, single crystal ceramics are grown by only allowing one seed point and having the crystal
+
+33
+00:01:50,400 --> 00:01:52,000
+ grow outward from there.
+
+34
+00:01:52,000 --> 00:01:56,240
+ This process is typically achieved by taking a very, very pure single crystal of a ceramic
+
+35
+00:01:56,240 --> 00:02:01,600
+ and dipping it into a liquid molten bed of ceramic, and then slowly drawing it out, allowing
+
+36
+00:02:01,600 --> 00:02:05,840
+ the molten ceramic to cool and crystallize from that single seed point.
+
+37
+00:02:05,840 --> 00:02:10,400
+ As you can imagine, growing single crystals this way requires incredible control of quite a
+
+38
+00:02:10,400 --> 00:02:11,400
+ few variables.
+
+39
+00:02:11,400 --> 00:02:15,280
+ The purity of both the single crystal and the molten ceramic, because any impurities or
+
+40
+00:02:15,280 --> 00:02:19,200
+ inclusions could act as seed points for further grain growth, as well as the temperature
+
+41
+00:02:19,200 --> 00:02:23,280
+ of both the single crystal and the molten ceramic, and the cooling rate of these things,
+
+42
+00:02:23,280 --> 00:02:26,680
+ and how quickly the single crystal is pulled out of the molten bed.
+
+43
+00:02:26,680 --> 00:02:30,600
+ Any cold spots or temperature variations could also act as nucleation points and lead to
+
+44
+00:02:30,600 --> 00:02:31,600
+ grain growth.
+
+45
+00:02:31,600 --> 00:02:34,600
+ Consequently, this process is quite energy and time intensive.
+
+46
+00:02:34,600 --> 00:02:38,840
+ You need to hold it very high temperatures in excess of 2,000 degrees C is quite common,
+
+47
+00:02:38,840 --> 00:02:43,560
+ and you can only draw the single crystal out reasonably slowly, about an inch per hour.
+
+48
+00:02:43,560 --> 00:02:47,840
+ In other words, forming appreciably large single crystals is a process that can take days.
+
+49
+00:02:47,840 --> 00:02:52,080
+ Purity is required for both the seed crystal and the molten ceramic are actually insane.
+
+50
+00:02:52,080 --> 00:02:58,200
+ The commonly gross silicon, for example, has a single crystal to purities of 99.99%.
+
+51
+00:02:58,200 --> 00:03:01,600
+ These represent some of the purest materials that we as humans make, and some of the
+
+52
+00:03:01,600 --> 00:03:04,320
+ purest materials that are even known to exist.
+
+53
+00:03:04,320 --> 00:03:08,000
+ And while all of these complexities might imply that this process is niche and not often
+
+54
+00:03:08,000 --> 00:03:10,320
+ practiced, this couldn't be further from the truth.
+
+55
+00:03:10,320 --> 00:03:14,520
+ Single crystal manufacturer is performed on an industrial scale, almost all integrated
+
+56
+00:03:14,520 --> 00:03:18,960
+ circuits and computer chips and solar panels use single crystals of silicon.
+
+57
+00:03:19,040 --> 00:03:24,080
+ The MOSFET, a transistor, is the most frequently manufactured device in history.
+
+58
+00:03:24,080 --> 00:03:28,280
+ We also make a bunch of other single crystal products that are very, very commonly used.
+
+59
+00:03:28,280 --> 00:03:33,200
+ Single crystal alumina sapphire for watch faces and for lenses and lasers and other optically
+
+60
+00:03:33,200 --> 00:03:35,000
+ intensive applications, for example.
+
+61
+00:03:35,000 --> 00:03:38,280
+ To finish up, I'll just note that single crystals tend to respond really, really well
+
+62
+00:03:38,280 --> 00:03:42,560
+ to crack propagation cutting, because they have no grain boundaries, and thus there's no
+
+63
+00:03:42,560 --> 00:03:45,800
+ tendency for the crack to wonder within the crystal.
+
+64
+00:03:45,800 --> 00:03:50,920
+ You can score a single crystal and snap it and basically get a perfectly cut edge along
+
+65
+00:03:50,920 --> 00:03:52,280
+ the atomic lattice plane.
+
+66
+00:03:52,280 --> 00:03:56,160
+ The net result is a beautiful surface finish and a very, very straight cut.
+
+67
+00:03:56,160 --> 00:04:00,160
+ Although you do need to be careful, you can only do this along the direction of the atomic
+
+68
+00:04:00,160 --> 00:04:03,880
+ lattice plane, so some thought has to be given to the direction in which you grow the
+
+69
+00:04:03,880 --> 00:04:04,880
+ single crystal.
+
+70
+00:04:04,880 --> 00:04:08,440
+ I might leave it there for this one, but as always, there are plenty of juicy resources
+
+71
+00:04:08,440 --> 00:04:11,080
+ on the textbook page for this video that I encourage you to check out.

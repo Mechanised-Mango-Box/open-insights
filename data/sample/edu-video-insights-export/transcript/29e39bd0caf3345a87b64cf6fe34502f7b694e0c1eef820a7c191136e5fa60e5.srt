@@ -1,0 +1,235 @@
+1
+00:00:00,000 --> 00:00:05,400
+ You might notice I'm wearing a different jacket this week and this isn't
+
+2
+00:00:05,400 --> 00:00:08,820
+ something I ordinarily talk about but I think it's important to mention for
+
+3
+00:00:08,820 --> 00:00:13,520
+ two reasons. Number one, I always did better in courses where I felt like I got
+
+4
+00:00:13,520 --> 00:00:18,480
+ to know what the lecturer was into and I got to know them as a person and I'm
+
+5
+00:00:18,480 --> 00:00:22,740
+ gonna formulate one nerd so you'll get to know me in that sense but number two
+
+6
+00:00:22,740 --> 00:00:26,840
+ and more importantly what's been going on with Ferrari lately is an awesome
+
+7
+00:00:26,840 --> 00:00:30,720
+ example of model validation going wrong and I can't pass up this opportunity
+
+8
+00:00:30,720 --> 00:00:35,360
+ to talk about it. Formula One is almost entirely about aerodynamics. These cars
+
+9
+00:00:35,360 --> 00:00:39,680
+ because they're traveling at such incredible speeds often upwards of 300 kilometres
+
+10
+00:00:39,680 --> 00:00:44,600
+ an hour are largely dominated by their ability to cut through the air with low
+
+11
+00:00:44,600 --> 00:00:48,400
+ drag and then also to provide huge amounts of downforce to get around the
+
+12
+00:00:48,400 --> 00:00:54,160
+ corners as fast as they can. Ferrari I've been having some troubles partly last
+
+13
+00:00:54,160 --> 00:00:58,720
+ year but particularly this year and many pundits have put it down to a
+
+14
+00:00:58,720 --> 00:01:02,560
+ lack of ability for them to correlate what they're seeing in the real world
+
+15
+00:01:02,560 --> 00:01:06,680
+ but experimental data they're capturing with what their CFD models, their
+
+16
+00:01:06,680 --> 00:01:10,480
+ computational fluid dynamics models are predicting. This isn't the first time
+
+17
+00:01:10,480 --> 00:01:14,960
+ we've seen this in Formula One quite famously the Williams F1 team has had
+
+18
+00:01:14,960 --> 00:01:18,760
+ issues for quite a few years now trying to get their wind tunnel results to line
+
+19
+00:01:18,760 --> 00:01:22,400
+ up with their CFD results to line up with their on track testing results. This
+
+20
+00:01:22,400 --> 00:01:26,600
+ all came to a head a few years ago when Williams was seen pretty late in the
+
+21
+00:01:26,600 --> 00:01:30,800
+ season putting a paint called flowvis on the car to help them look at the
+
+22
+00:01:30,800 --> 00:01:34,400
+ streamlines so they could compare that to their CFD results. This is something
+
+23
+00:01:34,400 --> 00:01:37,960
+ that teams rarely do because it kind of gives away the game to other teams on
+
+24
+00:01:37,960 --> 00:01:41,960
+ what they're designing but also it's something that's usually only done in
+
+25
+00:01:41,960 --> 00:01:45,880
+ testing at the very start of the year. Williams were having such big trouble
+
+26
+00:01:45,880 --> 00:01:50,400
+ correlating their CFD and their wind tunnel and their real world results that
+
+27
+00:01:50,400 --> 00:01:55,120
+ they had to perform this procedure you know seven eight nine ten races into
+
+28
+00:01:55,120 --> 00:01:59,040
+ the season. All of this is to just re-emphasize to you how important model
+
+29
+00:01:59,040 --> 00:02:04,240
+ validation is. In this case it's costing big teams like Ferrari millions of
+
+30
+00:02:04,240 --> 00:02:08,560
+ dollars in lost prize money and that's obviously a real world consequence. Now
+
+31
+00:02:08,560 --> 00:02:12,280
+ look no one's dying as a result of this except maybe Sebastian Vettel's career
+
+32
+00:02:12,280 --> 00:02:16,320
+ but it's something for you to keep in mind that even in Formula One
+
+33
+00:02:16,400 --> 00:02:20,880
+ ostensibly the best engineers in the world they sometimes get it wrong and
+
+34
+00:02:20,880 --> 00:02:24,680
+ model validation comparing your predictions to experimental
+
+35
+00:02:24,680 --> 00:02:27,880
+ measurements is more important than ever. All right having done that little
+
+36
+00:02:27,880 --> 00:02:30,720
+ aside let's talk about what the next few weeks are going to look like in
+
+37
+00:02:30,720 --> 00:02:36,320
+ age 2440. So last week we met the state space modeling procedure and now we
+
+38
+00:02:36,320 --> 00:02:41,200
+ have an idea of how it is we're going to approach problems. We even did a
+
+39
+00:02:41,200 --> 00:02:45,000
+ state space model together but it was very structured. I told you what states to
+
+40
+00:02:45,000 --> 00:02:49,400
+ use. I gave you all the CCRs and SSRs you can't be expected to just know
+
+41
+00:02:49,400 --> 00:02:53,280
+ these and I'm not going to be with you over the next 30-40 years of your career to
+
+42
+00:02:53,280 --> 00:02:56,480
+ help you build your models. So we're going to need to talk a little bit now
+
+43
+00:02:56,480 --> 00:03:00,920
+ about each of the different domains some of the components you might see how
+
+44
+00:03:00,920 --> 00:03:06,280
+ you connect those things up and how you build your models. So every week from
+
+45
+00:03:06,280 --> 00:03:11,040
+ now until week five I'm going to introduce a new domain to you. This week it's
+
+46
+00:03:11,040 --> 00:03:14,520
+ going to be translating mechanical systems. Next week it'll be rotating
+
+47
+00:03:14,520 --> 00:03:17,360
+ systems the week after it'll be electrical systems the week after that it'll
+
+48
+00:03:17,360 --> 00:03:22,320
+ be full of power systems and each week I'm going to start by introducing some
+
+49
+00:03:22,320 --> 00:03:25,280
+ of the core assumptions about that domain and that we make it our modeling
+
+50
+00:03:25,280 --> 00:03:29,600
+ procedure. We're going to talk about how you select the states the variables that
+
+51
+00:03:29,600 --> 00:03:33,680
+ go into your state vector. I'm going to introduce some basic components to you
+
+52
+00:03:33,680 --> 00:03:37,640
+ for those for those systems and then we're going to talk about some of the SSRs
+
+53
+00:03:37,640 --> 00:03:42,080
+ that might come up over and over again. Things like Newton's laws or KBL or KCL.
+
+54
+00:03:42,080 --> 00:03:45,720
+ After that little bit of content it's pretty much just going to be worked
+
+55
+00:03:45,720 --> 00:03:48,840
+ examples. We're going to work through problems together until we kind of build
+
+56
+00:03:48,840 --> 00:03:53,280
+ up that muscle memory of how we should be modeling physical systems. And my
+
+57
+00:03:53,280 --> 00:03:58,360
+ hope my desire is that you guys by the end of week five are able to model not
+
+58
+00:03:58,360 --> 00:04:03,200
+ only the big cohena but also the invented pendulum the first half of your
+
+59
+00:04:03,200 --> 00:04:07,640
+ major assignment. So let's get started with translating mechanical systems.

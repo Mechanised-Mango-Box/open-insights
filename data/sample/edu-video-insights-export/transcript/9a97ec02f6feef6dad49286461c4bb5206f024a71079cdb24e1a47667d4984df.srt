@@ -1,0 +1,163 @@
+1
+00:00:00,000 --> 00:00:04,320
+ In the last video on our series of FRPs we're going to talk briefly about embedded fiber
+
+2
+00:00:04,320 --> 00:00:08,880
+ reinforced plastics. These plastics are made by variety of techniques, some of them very similar
+
+3
+00:00:08,880 --> 00:00:13,840
+ or completely identical to the manufacturing processes we talked about for plastics all of those
+
+4
+00:00:13,840 --> 00:00:18,400
+ weeks ago and some of them were unique to fiber reinforced variants. On one end of this spectrum
+
+5
+00:00:18,400 --> 00:00:23,440
+ some finished fiber reinforced plastic parts are made using injection moulding. Here small,
+
+6
+00:00:23,440 --> 00:00:28,480
+ chopped and reasonably randomly oriented fibers are distributed within a thermoplastic matrix and
+
+7
+00:00:28,480 --> 00:00:32,400
+ injected into a mould to form a part. The considerations for doing so in the machinery
+
+8
+00:00:32,400 --> 00:00:36,240
+ required are pretty much the same as regular injection moulding. Though there is a practical
+
+9
+00:00:36,240 --> 00:00:40,240
+ limitation on how much fiber contact can be present in your plastic for flowability of the
+
+10
+00:00:40,240 --> 00:00:45,440
+ plastic into the mould usually about 60%. Though it's not only a function of volume as longer
+
+11
+00:00:45,440 --> 00:00:49,440
+ fibers tend to cause more problems than shorter ones. Any point in consideration when injection
+
+12
+00:00:49,440 --> 00:00:54,480
+ moulding fiber reinforced plastics is accidental or intentional alignment of the fibers with the
+
+13
+00:00:54,480 --> 00:00:58,720
+ direction of flow. Particularly for smaller fibers that you get kind of carried away with the
+
+14
+00:00:58,720 --> 00:01:03,280
+ current you sometimes see alignment of these fibers in the direction that plastic flows within the
+
+15
+00:01:03,280 --> 00:01:06,880
+ mould. And the result of this can be a little bit like the texture that you see in some forged
+
+16
+00:01:06,880 --> 00:01:11,360
+ metal components resulting in an effective stiffening and strengthening of the part in the
+
+17
+00:01:11,360 --> 00:01:15,680
+ direction of the fibers in the direction of flow. This obviously results in anisotropy of the
+
+18
+00:01:15,680 --> 00:01:20,000
+ properties which can sometimes be beneficial and sometimes be detrimental. On the other end of the
+
+19
+00:01:20,000 --> 00:01:24,320
+ spectrum there exist manufacturing processes that are very much specific to fiber reinforced
+
+20
+00:01:24,320 --> 00:01:29,280
+ plastics. For example many fiber reinforced plastic standard sections like bars and rods are made
+
+21
+00:01:29,280 --> 00:01:34,720
+ through a process known as protrusion. Here in a process very similar to extrusion plastic is
+
+22
+00:01:34,720 --> 00:01:39,120
+ forced through a die though in this case fibers are also pulled through the die at the same time.
+
+23
+00:01:39,120 --> 00:01:43,040
+ Parts that are made by protrusion tend to be quite anisotropic in the direction of the
+
+24
+00:01:43,040 --> 00:01:47,440
+ major axis of the part because all the fibers which are themselves quite long end up aligned
+
+25
+00:01:47,440 --> 00:01:50,880
+ with this direction. These can be quite beneficial if you plan to use these plastics in an
+
+26
+00:01:50,880 --> 00:01:55,200
+ axial or bending loading scenario but can be quite detrimental otherwise and you need to be a
+
+27
+00:01:55,200 --> 00:01:58,880
+ little bit careful. Whether they're injection mould with small fibers or they're protruded with
+
+28
+00:01:58,880 --> 00:02:03,600
+ long fibers many fiber reinforced plastics can be machined the same as regular plastics.
+
+29
+00:02:03,600 --> 00:02:07,520
+ There is some additional care required here though because some of the fibers can be quite
+
+30
+00:02:07,520 --> 00:02:12,240
+ hard you may see an unexpected amount of toolware when machining these compared to same machining
+
+31
+00:02:12,240 --> 00:02:16,160
+ regular plastics that don't put up much of a fight at all. And depending on the particular
+
+32
+00:02:16,160 --> 00:02:20,560
+ type of FRP and the tooling that you're using in your feeds and speeds you may also find that
+
+33
+00:02:20,560 --> 00:02:25,280
+ in machining you pull out some fibers that ruin the surface finish and introduce the stress
+
+34
+00:02:25,280 --> 00:02:29,280
+ raises on your part. On top of that machining these parts and releasing all the small bits of
+
+35
+00:02:29,280 --> 00:02:33,520
+ fiber into the air can be quite dangerous for both the machine and the operators so appropriate
+
+36
+00:02:33,520 --> 00:02:37,520
+ PPE is required. I guess the general message is that it's a little bit more complicated and you
+
+37
+00:02:37,520 --> 00:02:41,280
+ need to be a little bit more careful but it can be done and there are some FRP's that are
+
+38
+00:02:41,280 --> 00:02:44,960
+ specifically designed for machining ability. And that's where I might leave it bringing this little
+
+39
+00:02:44,960 --> 00:02:48,880
+ mini-series to a close. I hope you enjoyed it. I know it's a little bit more in depth than we've
+
+40
+00:02:48,880 --> 00:02:53,040
+ got in the past in some manufacturing techniques but it should give you a pretty good appreciation
+
+41
+00:02:53,040 --> 00:03:04,800
+ for some of the different approaches you have when manufacturing with fiber reinforced polymers.

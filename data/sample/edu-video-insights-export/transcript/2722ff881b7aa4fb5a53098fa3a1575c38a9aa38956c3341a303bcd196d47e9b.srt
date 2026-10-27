@@ -1,0 +1,151 @@
+1
+00:00:00,000 --> 00:00:04,680
+ For the kinds of large motor generating you see in industry, at least when we're talking
+
+2
+00:00:04,680 --> 00:00:10,680
+ about the DC kind, it's not always possible to kind of source or economically viable
+
+3
+00:00:10,680 --> 00:00:16,220
+ to source permanent magnets and you may actually wish to have control over the permanent
+
+4
+00:00:16,220 --> 00:00:18,200
+ magnetic field.
+
+5
+00:00:18,200 --> 00:00:22,240
+ In these cases, particularly where you want huge amounts of torque, it's pretty common
+
+6
+00:00:22,240 --> 00:00:26,040
+ to have an externally excited DC motor.
+
+7
+00:00:26,040 --> 00:00:31,160
+ Sometimes it's called separately excited DC motors have this CCR and it's pretty
+
+8
+00:00:31,160 --> 00:00:35,320
+ similar to the one we've seen before except that here there's a product of the kind
+
+9
+00:00:35,320 --> 00:00:39,640
+ of effects of the field and armature windings, the armature windings being the ones we
+
+10
+00:00:39,640 --> 00:00:43,280
+ saw before, the kind of windings that are spinning, and the field windings being the
+
+11
+00:00:43,280 --> 00:00:47,560
+ ones that are now kind of doing the job of generating a magnetic field to take the
+
+12
+00:00:47,560 --> 00:00:49,680
+ place of the permanent magnets.
+
+13
+00:00:49,680 --> 00:00:52,560
+ In reality, it's going to be pretty easy to tell the difference between a permanent
+
+14
+00:00:52,560 --> 00:00:57,080
+ magnet at DC motor and an externally or separately excited DC motor and you'll
+
+15
+00:00:57,080 --> 00:01:01,600
+ know which to model based on data sheets and conversations and purchase orders and people
+
+16
+00:01:01,600 --> 00:01:06,120
+ you've spoken to and common sense, but in this course it can be a little tricky to tell
+
+17
+00:01:06,120 --> 00:01:07,120
+ them apart.
+
+18
+00:01:07,120 --> 00:01:10,880
+ In general, if you see a problem where you can clearly identify field and armature
+
+19
+00:01:10,880 --> 00:01:14,720
+ windings, you're probably talking about an externally excited DC motor.
+
+20
+00:01:14,720 --> 00:01:19,040
+ If you can't see those, you're almost always talking about a permanent magnet DC motor.
+
+21
+00:01:19,080 --> 00:01:23,880
+ There are two kind of typical arrangements for these externally excited DC motors, placing
+
+22
+00:01:23,880 --> 00:01:29,360
+ the armature windings in series with the field windings, creatively called the series
+
+23
+00:01:29,360 --> 00:01:30,520
+ arrangement.
+
+24
+00:01:30,520 --> 00:01:34,400
+ This configuration produces a huge amount of torque because you kind of end up with a
+
+25
+00:01:34,400 --> 00:01:37,760
+ square of the current, the product of the field and the armature windings if they're
+
+26
+00:01:37,760 --> 00:01:41,040
+ the same current ends up being a square.
+
+27
+00:01:41,040 --> 00:01:44,200
+ The alternative is to do something called a shunt arrangement where you kind of have those
+
+28
+00:01:44,200 --> 00:01:46,960
+ two windings in parallel with each other.
+
+29
+00:01:47,000 --> 00:01:51,000
+ It's like with our permanent magnet DC motors, these CCRs represent an ideal dry
+
+30
+00:01:51,000 --> 00:01:52,000
+ radar.
+
+31
+00:01:52,000 --> 00:01:56,640
+ When we want to model the kind of energy storage of the windings or losses because of the
+
+32
+00:01:56,640 --> 00:02:01,840
+ resistance of the windings or the inertia of the rotating parts or the friction in any of
+
+33
+00:02:01,840 --> 00:02:02,840
+ the bearings.
+
+34
+00:02:02,840 --> 00:02:06,720
+ We're going to do that by placing these elements to the side of our primary dry radar
+
+35
+00:02:06,720 --> 00:02:07,720
+ element.
+
+36
+00:02:07,720 --> 00:02:11,880
+ Let's have a go at problem 4.6 together, modeling a shunt connected DC motor.
+
+37
+00:02:11,880 --> 00:02:14,920
+ I think for the tutorial this week I've left you a series connected one, so you'll get
+
+38
+00:02:14,920 --> 00:02:15,920
+ a bit of both.

@@ -1,0 +1,239 @@
+1
+00:00:00,000 --> 00:00:05,800
+ Let's talk about assessments in the end 2440. Our course uses what's called a progressive
+
+2
+00:00:05,800 --> 00:00:12,100
+ or a scaffolded assessment structure and partly because of coronavirus and partly because
+
+3
+00:00:12,100 --> 00:00:16,720
+ research shows it's the best way to assess people and we've moved towards using lots
+
+4
+00:00:16,720 --> 00:00:22,120
+ of smaller assessments rather than fewer larger ones. There are three types of assessment
+
+5
+00:00:22,120 --> 00:00:28,000
+ in the course. The first is a weekly quiz. The second is a fortnightly lab assignment
+
+6
+00:00:28,000 --> 00:00:33,680
+ and the third is a Viva Verche or a talk. The weekly quizzes are worth 5% each and there
+
+7
+00:00:33,680 --> 00:00:38,720
+ are 12 of them which means that 60% of the course will come from this type of assessment.
+
+8
+00:00:38,720 --> 00:00:41,440
+ These quizzes are going to summarize what you learn throughout the week and they also
+
+9
+00:00:41,440 --> 00:00:45,960
+ act as natural bookends for each week's worth of content. So if you're following along
+
+10
+00:00:45,960 --> 00:00:49,440
+ you've been watching the lecture videos, you've been coming to class, you have no trouble
+
+11
+00:00:49,440 --> 00:00:53,360
+ completing these assessments. They'll be done online through Blackboard and will be a
+
+12
+00:00:53,360 --> 00:00:58,160
+ combination of model choice and short answer and kind of connect the dots. The purpose
+
+13
+00:00:58,160 --> 00:01:01,640
+ is because it's mainly to keep you on track and give you an idea of whether or not you're
+
+14
+00:01:01,640 --> 00:01:05,680
+ understanding the content. The lab assignments will be slightly less frequent on average
+
+15
+00:01:05,680 --> 00:01:10,400
+ about once a fortnight. These will involve writing MATLAB code and using a program called
+
+16
+00:01:10,400 --> 00:01:15,840
+ Simulink to simulate the models that we build in this course of physical systems. Now if
+
+17
+00:01:15,840 --> 00:01:19,400
+ you're not a MATLAB wizard, don't worry. This course isn't about programming. It's about
+
+18
+00:01:19,400 --> 00:01:23,320
+ using these tools to help you solve problems and we're going to provide you plenty of support
+
+19
+00:01:23,320 --> 00:01:27,880
+ to help you do that. Partly so that you can complete these assignments at your own leisure and
+
+20
+00:01:27,880 --> 00:01:32,040
+ partly because we want you to be able to have instant feedback and partly because there are a
+
+21
+00:01:32,040 --> 00:01:36,280
+ lot of you and we need to be able to scale the course to suit the nearly 300 students that we have
+
+22
+00:01:36,280 --> 00:01:41,720
+ in 2020. These assignments are going to be marked mostly automatically through a combination
+
+23
+00:01:41,720 --> 00:01:46,920
+ of some offline code that we've written and an online service that we use called MATLAB Greater.
+
+24
+00:01:47,000 --> 00:01:50,200
+ Some more information about this will be posted a little bit later but all you need to know
+
+25
+00:01:50,200 --> 00:01:54,440
+ for now is that number one, the assignments to your own and we do have plagiarism detection
+
+26
+00:01:54,440 --> 00:01:58,840
+ systems in place. We do encourage group thinking and we'd like you to sit down with your friends
+
+27
+00:01:58,840 --> 00:02:03,240
+ and work for these assignments together but every bit of work that you submit must be your own.
+
+28
+00:02:03,240 --> 00:02:07,640
+ Number two, these are one of my own marking schemes only work as well as we've programmed them
+
+29
+00:02:07,640 --> 00:02:11,320
+ to. And while we do our best to try and make sure that we can think of all the different ways
+
+30
+00:02:11,320 --> 00:02:15,320
+ people can answer problems sometimes it stumps us. So if you find that you've answered something
+
+31
+00:02:15,320 --> 00:02:18,920
+ you think correctly but you've been marked incorrectly please reach out and we'll modify the
+
+32
+00:02:18,920 --> 00:02:23,960
+ marking scheme hopefully to catch that new and ingenious way that you've come up with to solve the
+
+33
+00:02:23,960 --> 00:02:29,800
+ problem. And number three, mistakes sometimes get made so please reach out and let us know at the
+
+34
+00:02:29,800 --> 00:02:33,240
+ end of the day a human is always going to be happy to sit down and take a look at your assignment
+
+35
+00:02:33,240 --> 00:02:37,640
+ if that's what you'd like. I said before that the assessments in age 2440 are scaffolded and
+
+36
+00:02:37,640 --> 00:02:42,520
+ what that means is the lab assignments build on each other to give you skills that collectively
+
+37
+00:02:42,520 --> 00:02:47,160
+ are going to let you complete the Viva Voche assignment. Like I mentioned in the very first video
+
+38
+00:02:47,160 --> 00:02:52,520
+ for this course that assignment is going to involve modeling, simulating and controlling an inverted
+
+39
+00:02:52,520 --> 00:02:57,080
+ pendulum system. And so one of your lab assignments is going to involve modeling that system,
+
+40
+00:02:57,080 --> 00:03:00,360
+ one of the lab assignments going to involve linearizing that system, one of the lab assignments
+
+41
+00:03:00,360 --> 00:03:04,200
+ is going to involve designing a controller for that system. And when you bring all of those
+
+42
+00:03:04,200 --> 00:03:08,280
+ lab assignments together you'll have everything you need to complete the Viva Voche.
+
+43
+00:03:08,280 --> 00:03:12,040
+ How exactly that final assessment runs is probably going to depend a little bit on what the
+
+44
+00:03:12,040 --> 00:03:16,600
+ COVID situation in Australia is like toward the end of semester. Things are reasonably good,
+
+45
+00:03:16,600 --> 00:03:21,880
+ we might be able to do it face to face otherwise it might be over zoom or through some kind of
+
+46
+00:03:21,880 --> 00:03:27,720
+ preset questions that you answer through written text. Hopefully it's the former. I really like
+
+47
+00:03:27,720 --> 00:03:31,160
+ getting to speak to you guys and it's generally a pretty nice experience to be able to talk to
+
+48
+00:03:31,160 --> 00:03:35,240
+ about how you brought all of those skills together but we'll have to wait and see on that one.
+
+49
+00:03:35,240 --> 00:03:39,640
+ So to sum up, every week you'll have a quiz on Blackboard that's worth 5%
+
+50
+00:03:40,120 --> 00:03:43,320
+ and if you've been following along with the lectures and you've attended the tutorial
+
+51
+00:03:43,320 --> 00:03:48,040
+ that quiz should really be a piece of cake. The nominally fortnightly lab assignments are also worth
+
+52
+00:03:48,040 --> 00:03:52,840
+ 5% each and the due dates for these will be posted in the course overview spreadsheet.
+
+53
+00:03:52,840 --> 00:03:57,160
+ The major assignment the Viva is worth 10% is at the end of the course and if you've been
+
+54
+00:03:57,160 --> 00:04:00,920
+ following along and doing the lab should really just entail putting those things together and then
+
+55
+00:04:00,920 --> 00:04:05,160
+ having a chat with us about the way that you did it. And that's it. Look we've tried to design
+
+56
+00:04:05,160 --> 00:04:10,280
+ assessments to suit a wide variety of people. I know that not everybody does well in exam conditions
+
+57
+00:04:11,000 --> 00:04:15,000
+ and in fact I think that exams are generally a pretty poor way to assess people anyway.
+
+58
+00:04:15,000 --> 00:04:20,360
+ So we have a combination of take home assignments, a combination of weekly quizzes and some sort of
+
+59
+00:04:20,360 --> 00:04:25,240
+ discussion chat at the end to bring it all together and hopefully give you a chance to demonstrate
+
+60
+00:04:25,240 --> 00:04:35,000
+ a deeper level of understanding. That's it!

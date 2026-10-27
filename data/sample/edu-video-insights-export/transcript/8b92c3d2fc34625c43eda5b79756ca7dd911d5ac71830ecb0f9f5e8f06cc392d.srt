@@ -1,0 +1,155 @@
+1
+00:00:00,000 --> 00:00:04,880
+ Well we don't often use the conventional working techniques like forging and forming on most engineering
+
+2
+00:00:04,880 --> 00:00:10,240
+ ceramics. We do very commonly use them to manufacture glasses. Glasses like metals and polymers
+
+3
+00:00:10,240 --> 00:00:14,880
+ can tolerate quite a lot of plastic deformation when they're very hot. And this opens the door
+
+4
+00:00:14,880 --> 00:00:18,640
+ for a range of processes for shaping glasses that we're going to talk about in this video.
+
+5
+00:00:18,640 --> 00:00:22,080
+ While we already talked a little bit about how some technical and non-technical ceramics could be
+
+6
+00:00:22,080 --> 00:00:28,320
+ slipcast, glasses can be genuinely cast exactly the same way that metals were by melting them
+
+7
+00:00:28,320 --> 00:00:32,960
+ down and pouring them as a liquid and allowing them to set into a solid. There are lots of
+
+8
+00:00:32,960 --> 00:00:37,760
+ different glass products that are made by melting down some sort of silicon mixture and casting.
+
+9
+00:00:37,760 --> 00:00:42,880
+ But perhaps the most common in the most obvious are flat glass panes. Because it's very important
+
+10
+00:00:42,880 --> 00:00:47,360
+ for glass panes to be extremely flat so as not to mess with their optical properties,
+
+11
+00:00:47,360 --> 00:00:52,960
+ they're actually cast onto a bed of molten tin. The glass being lighter than tin rests atop
+
+12
+00:00:52,960 --> 00:00:58,800
+ this bed of molten metal and settles to an extremely uniform flat thickness. Because the
+
+13
+00:00:58,800 --> 00:01:02,960
+ freezing point of glass is so much higher than that of tin, the glass can set to a solid
+
+14
+00:01:02,960 --> 00:01:07,680
+ completely while still atop the bed of molten metal. The majority of glass products, however, are not
+
+15
+00:01:07,680 --> 00:01:13,280
+ formed in the liquid state but rather as a viscous amorphous solid. Here, by raising the glass
+
+16
+00:01:13,280 --> 00:01:17,280
+ above its glass transition temperature, its softened considerably and can be worked much the
+
+17
+00:01:17,280 --> 00:01:22,000
+ same way that metals and plastics were. Some glasses are forged exactly the same way we saw with
+
+18
+00:01:22,000 --> 00:01:27,600
+ metals. The hot viscous glass is extruded or cast into a slug which is called a globin,
+
+19
+00:01:27,600 --> 00:01:32,400
+ that is the technical term for it, and loaded into a dye and subjected to an immense pressure by
+
+20
+00:01:32,400 --> 00:01:37,120
+ crushing. This forces it into shape and this is how many jars and cups and bowls and other
+
+21
+00:01:37,120 --> 00:01:42,000
+ kind of hollow geometries are made. Other glasses are molded, much the same way that plastics were.
+
+22
+00:01:42,000 --> 00:01:46,880
+ Here, a hollow glass paracin is made, it's loaded into a dye clamped on one end and a high
+
+23
+00:01:46,880 --> 00:01:51,600
+ pressure is injected inside to force it out against the walls of the dye. This process is called
+
+24
+00:01:51,600 --> 00:01:56,000
+ blow molding and it's not only achieved on an industrial scale to make engineering components,
+
+25
+00:01:56,000 --> 00:02:00,640
+ but it's also practiced by artisans and hobbyists. I've looked a brilliant video from the
+
+26
+00:02:00,640 --> 00:02:04,320
+ Chrysler Museum of Art on the textbook page for this one that I encourage you to check out.
+
+27
+00:02:04,320 --> 00:02:09,040
+ It's focused more on the artistic human-centered glass blowing, but many of the considerations
+
+28
+00:02:09,040 --> 00:02:13,600
+ that apply to us as engineers with working with glasses on a large scale are neatly summed up in
+
+29
+00:02:13,600 --> 00:02:17,840
+ that video, so I encourage you to check it out. A key consideration in working with glasses,
+
+30
+00:02:17,840 --> 00:02:23,120
+ irrespective of the particular processes, careful control of temperature. The phase and viscosity
+
+31
+00:02:23,120 --> 00:02:27,200
+ of a glass is highly dependent on temperature. By hitting it up substantially, you can work with
+
+32
+00:02:27,200 --> 00:02:31,840
+ glass as a liquid. At lower temperatures, you can work with it as a viscous solid and anywhere in
+
+33
+00:02:31,840 --> 00:02:36,080
+ between. And the composition of a glass is critically important as well for tuning which
+
+34
+00:02:36,080 --> 00:02:40,800
+ temperatures these different phases occur at. Solar lime glass is so commonly used to make
+
+35
+00:02:40,800 --> 00:02:46,160
+ so many different glass components because it has a relatively low working in glass transition
+
+36
+00:02:46,640 --> 00:02:50,880
+ temperature. The energy input that's required to heat the glass up to work with it and to maintain
+
+37
+00:02:50,880 --> 00:02:54,560
+ it at this temperature as it moves through all the different stages in the production process
+
+38
+00:02:54,560 --> 00:02:58,960
+ is much lower. That'll probably do us talking about glasses. Again, there are some more resources
+
+39
+00:02:58,960 --> 00:03:02,080
+ on the technical page for this video that I encourage you to check out.

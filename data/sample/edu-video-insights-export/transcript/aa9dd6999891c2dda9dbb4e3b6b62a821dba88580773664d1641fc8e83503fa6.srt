@@ -1,0 +1,327 @@
+1
+00:00:00,000 --> 00:00:06,100
+ The second component in our three-part series on basic elements that make up
+
+2
+00:00:06,100 --> 00:00:10,440
+ translating mechanical systems is the ideal spring. In this course you generally
+
+3
+00:00:10,440 --> 00:00:14,840
+ see ideal springs represented by this symbol here which I should mention looks a
+
+4
+00:00:14,840 --> 00:00:18,280
+ lot like a resistor so in multi-domain systems we have both of those things
+
+5
+00:00:18,280 --> 00:00:22,320
+ of present. You need to rely on the context of the things around this element to
+
+6
+00:00:22,320 --> 00:00:26,440
+ tell whether it's a spring or whether it's a resistor. Spring show often
+
+7
+00:00:26,480 --> 00:00:31,160
+ translating mechanical systems is actual springs just like the tension or
+
+8
+00:00:31,160 --> 00:00:35,240
+ compression springs you can go out and buy it by things but they also show up to
+
+9
+00:00:35,240 --> 00:00:39,640
+ represent elasticity in general. I mean in the real world everything is a
+
+10
+00:00:39,640 --> 00:00:43,800
+ spring everything has some flex and sometimes we use linear ideal springs to
+
+11
+00:00:43,800 --> 00:00:48,640
+ model elasticity in beams or other members for example. Just like with masses
+
+12
+00:00:48,640 --> 00:00:51,800
+ there are some fundamental assumptions we make about these elements that you
+
+13
+00:00:51,800 --> 00:00:56,200
+ need to be aware of. First of all ideal springs are treated as though they
+
+14
+00:00:56,200 --> 00:01:00,160
+ have no mass. So if you want to model the mass of an ideal spring you'll
+
+15
+00:01:00,160 --> 00:01:04,440
+ usually do that by lumping it to one side of the spring with an attached mass.
+
+16
+00:01:04,440 --> 00:01:08,560
+ Secondly ideal springs only store energy through elastic
+
+17
+00:01:08,560 --> 00:01:12,880
+ defamation they can't plastically deform. You might have heard this referred to as
+
+18
+00:01:12,880 --> 00:01:17,480
+ taking a set. If you have a real spring and you stretch it too far it ends up
+
+19
+00:01:17,480 --> 00:01:21,400
+ being longer than when you started once you let go that spring said to have
+
+20
+00:01:21,400 --> 00:01:25,520
+ taken a set to have plastically deformed. Ideal springs can't do that. There's
+
+21
+00:01:25,560 --> 00:01:28,800
+ nothing in the model that we're using that allows for that. Of course you could
+
+22
+00:01:28,800 --> 00:01:31,380
+ build that complexity in but then you wouldn't be talking about an ideal
+
+23
+00:01:31,380 --> 00:01:35,840
+ spring anymore. Either springs we also assume can stretch to any length. At
+
+24
+00:01:35,840 --> 00:01:39,600
+ no stage are we ever assuming they're going to break or reach the extensive
+
+25
+00:01:39,600 --> 00:01:44,160
+ variability to stretch. This is obviously also not true. If you take a real
+
+26
+00:01:44,160 --> 00:01:48,240
+ spring and you stretch it past the point where it can elastically support
+
+27
+00:01:48,240 --> 00:01:51,320
+ itself it's first of all we're going to plastically deform and then it's going to
+
+28
+00:01:51,320 --> 00:01:55,440
+ snap. Again you can build these things into your model but for an ideal spring
+
+29
+00:01:55,440 --> 00:02:00,000
+ it can deform as much as it needs to and it can provide infinite force. The
+
+30
+00:02:00,000 --> 00:02:04,320
+ CCR for an ideal spring is linear and relates force and defamation by a constant.
+
+31
+00:02:04,320 --> 00:02:08,040
+ Now which constant you choose to use probably depends a little bit on what kind
+
+32
+00:02:08,040 --> 00:02:11,600
+ of engineer you are. In the real world you're probably most commonly come up
+
+33
+00:02:11,600 --> 00:02:15,480
+ against the spring stiffness K. When you go out to buy a spring from
+
+34
+00:02:15,480 --> 00:02:18,640
+ bunnings it'll certainly talk about the spring constant being the stiffness and
+
+35
+00:02:18,640 --> 00:02:23,240
+ this is how much force you get for a certain amount of defamation. In this
+
+36
+00:02:23,240 --> 00:02:28,120
+ course we're primarily going to talk about the spring compliance C. Now C and
+
+37
+00:02:28,120 --> 00:02:31,400
+ K are closely related the inverses of each other and in a sense it doesn't
+
+38
+00:02:31,400 --> 00:02:33,720
+ matter whether you're talking about the stiffness or talking about the
+
+39
+00:02:33,720 --> 00:02:37,400
+ compliance. When you have one you only need to take one on that to get the
+
+40
+00:02:37,400 --> 00:02:41,640
+ other one. But we talk about compliance in this course because it has some nice
+
+41
+00:02:41,640 --> 00:02:44,920
+ analogues to other elements we're going to meet in other domains,
+
+42
+00:02:44,920 --> 00:02:49,560
+ electrical fluid power. In a sense it doesn't really matter but just be aware
+
+43
+00:02:49,560 --> 00:02:53,400
+ that when I say compliance or one on C I'm really talking about the same
+
+44
+00:02:53,400 --> 00:02:59,560
+ thing as stiffness K. Springs also have an associated SSR and that SSR is how you
+
+45
+00:02:59,560 --> 00:03:04,600
+ define Delta. Note that the CCR doesn't say anything about the way that the
+
+46
+00:03:04,600 --> 00:03:09,480
+ spring is attached. Delta isn't characterized at all and this is because the
+
+47
+00:03:09,480 --> 00:03:12,760
+ way that you calculate Delta will depend on the way the systems are arranged and
+
+48
+00:03:12,760 --> 00:03:16,360
+ the way your coordinate systems are set up. Sometimes your coordinate system is
+
+49
+00:03:16,840 --> 00:03:19,960
+ measured from what's called the free or equilibrium position of a mass
+
+50
+00:03:19,960 --> 00:03:24,360
+ meaning that any change in the coordinate x actually is Delta is the
+
+51
+00:03:24,360 --> 00:03:28,360
+ deformation of the spring. Sometimes your coordinates are measured from a fixed
+
+52
+00:03:28,360 --> 00:03:31,960
+ reference point like a wall in which case you need to account for the natural
+
+53
+00:03:31,960 --> 00:03:35,880
+ length l naught of the spring the unstretched length the length of it when you put
+
+54
+00:03:35,880 --> 00:03:42,040
+ on your desk in the calculation of Delta. Now here is the really important part.
+
+55
+00:03:42,040 --> 00:03:45,400
+ When you model a spring you need to assume whether that spring is
+
+56
+00:03:45,400 --> 00:03:49,560
+ intention or compression. Now don't worry you're always going to be wrong
+
+57
+00:03:49,560 --> 00:03:53,160
+ some of the time and this doesn't matter what you're assuming is only
+
+58
+00:03:53,160 --> 00:03:57,480
+ deciding whether you call tension positive or compression positive.
+
+59
+00:03:57,480 --> 00:04:00,520
+ The only time this is going to make a difference is if you choose something
+
+60
+00:04:00,520 --> 00:04:04,360
+ like spring force as an output and whether you care that that output is
+
+61
+00:04:04,360 --> 00:04:07,640
+ positive when it's tensile being stretched or positive when it's
+
+62
+00:04:07,640 --> 00:04:11,480
+ compressive being squished. What does matter however is that your
+
+63
+00:04:11,480 --> 00:04:15,160
+ assumption of tension or compression agrees with what you choose for
+
+64
+00:04:15,160 --> 00:04:19,800
+ Delta and how you draw that spring force on any attached mass.
+
+65
+00:04:19,800 --> 00:04:24,120
+ So for example if I have a spring and I'm saying that I want to stretch it
+
+66
+00:04:24,120 --> 00:04:28,440
+ I need to choose my Delta such that it's positive when the spring is being stretched.
+
+67
+00:04:28,440 --> 00:04:32,280
+ Correspondingly if I have a mass attached to either side of that spring
+
+68
+00:04:32,280 --> 00:04:35,000
+ then those masses should be feeling a force pulling them
+
+69
+00:04:35,000 --> 00:04:37,320
+ inwards because that spring is being stretched
+
+70
+00:04:37,320 --> 00:04:40,760
+ outwards. In general if you want to assume that the spring is
+
+71
+00:04:40,760 --> 00:04:44,840
+ intention you should be taking the new length minus the natural length
+
+72
+00:04:44,840 --> 00:04:47,160
+ and if you want to assume that a spring is in compression
+
+73
+00:04:47,160 --> 00:04:50,920
+ you should be taking the natural length minus the new length.
+
+74
+00:04:50,920 --> 00:04:54,040
+ Kind of anecdotally I've found over the last couple of years that people
+
+75
+00:04:54,040 --> 00:04:57,160
+ prefer to generally assume springs to be intention
+
+76
+00:04:57,160 --> 00:05:00,760
+ I'm not sure why but if you find it helpful I would suggest that you
+
+77
+00:05:00,760 --> 00:05:03,160
+ pick a particular assumption and you stick with that
+
+78
+00:05:03,160 --> 00:05:06,920
+ over the entire course. For something that's ostensibly an easy concept
+
+79
+00:05:06,920 --> 00:05:09,080
+ this can actually be pretty difficult to grasp.
+
+80
+00:05:09,080 --> 00:05:11,640
+ So let's work through problem 3.3 together and see if we can
+
+81
+00:05:11,640 --> 00:05:14,520
+ build up some intuition about tension, compression,
+
+82
+00:05:14,520 --> 00:05:22,840
+ which way to draw forces and how to define Delta.

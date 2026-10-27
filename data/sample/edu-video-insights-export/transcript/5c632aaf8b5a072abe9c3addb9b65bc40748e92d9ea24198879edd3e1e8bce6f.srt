@@ -1,0 +1,107 @@
+1
+00:00:00,000 --> 00:00:22,600
+ And then let him burn his star in the future, looking to be on track towards their respective
+
+2
+00:00:22,600 --> 00:00:46,520
+ Hello and welcome to Edge 2440 Modeling Control. My name is Alex and I'll be your lecturer
+
+3
+00:00:46,520 --> 00:00:51,400
+ for the first half of the course and what you've just seen is probably my favorite video
+
+4
+00:00:51,400 --> 00:00:58,040
+ on the internet. What blows my mind about that video is not only do we have the knowledge
+
+5
+00:00:58,040 --> 00:01:04,360
+ and the understanding and the hubris to launch something into space but we now have the ability to
+
+6
+00:01:04,360 --> 00:01:10,360
+ safely and autonomously recover the first stage of a rocket by modeling the system,
+
+7
+00:01:10,360 --> 00:01:14,920
+ understanding the physics and designing controllers to influence it. And while we won't be
+
+8
+00:01:14,920 --> 00:01:19,720
+ dabbling in spaceflight, developing those skills is what Edge 2440 is all about.
+
+9
+00:01:20,840 --> 00:01:25,080
+ If spaceflight doesn't get you going then motivation for why you should study this stuff is all
+
+10
+00:01:25,080 --> 00:01:30,120
+ around you. Whether it's something mundane that you take for granted like the controllers that
+
+11
+00:01:30,120 --> 00:01:35,720
+ are in your fridge or your recognition or traffic lights or more cutting edge like autonomous robots
+
+12
+00:01:35,720 --> 00:01:41,800
+ or drones or stuff that was previously cutting edge but is now becoming commonplace like autonomous
+
+13
+00:01:42,760 --> 00:01:49,480
+ once a feature limited to reasonably expensive Tesla's but now adaptive cruise control at least
+
+14
+00:01:49,480 --> 00:01:54,840
+ can be found in even Hyundai's. The concepts we're going to talk about in this course aren't
+
+15
+00:01:54,840 --> 00:02:01,800
+ just limited to tech. They're a little bit more broad and in fact the situation that we all
+
+16
+00:02:01,800 --> 00:02:06,680
+ find ourselves in at the moment dealing with COVID can be thought of as one big modeling and control
+
+17
+00:02:07,160 --> 00:02:13,960
+ problem. By understanding the physics of the situation the epidemiology our governments are putting
+
+18
+00:02:13,960 --> 00:02:19,160
+ in place restrictions to try and limit the spread in doing so they and we are acting as controllers
+
+19
+00:02:19,160 --> 00:02:23,800
+ for this gigantic biological system. In this course we're going to discuss a framework
+
+20
+00:02:23,800 --> 00:02:29,160
+ for building mathematical models of physical systems irrespective of the domain be they mechanical
+
+21
+00:02:29,160 --> 00:02:35,160
+ electrical fluid power thermal biological it doesn't really matter and then we're going to talk
+
+22
+00:02:35,160 --> 00:02:41,160
+ about how design controls for these systems. I like to start my courses off by showing you where
+
+23
+00:02:41,160 --> 00:02:46,760
+ you're going to be at the end so here is a picture of an inverted pendulum system. It's a pendulum
+
+24
+00:02:46,760 --> 00:02:51,000
+ driven through a gearbox by a DC motor and by the end of this course you're going to have all
+
+25
+00:02:51,000 --> 00:02:55,640
+ the knowledge and skills that you need to model this system design a controller to make it
+
+26
+00:02:55,640 --> 00:03:01,560
+ hold that pendulum about its inherently unstable upright position even in the presence of disturbances
+
+27
+00:03:01,560 --> 00:03:11,560
+ sorry let's get started.

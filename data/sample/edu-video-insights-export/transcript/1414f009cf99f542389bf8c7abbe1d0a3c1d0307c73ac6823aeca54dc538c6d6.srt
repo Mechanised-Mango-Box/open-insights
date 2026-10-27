@@ -1,0 +1,311 @@
+1
+00:00:00,000 --> 00:00:03,280
+ as has been the case with every other family of materials in this course.
+
+2
+00:00:03,280 --> 00:00:06,880
+ Over the next few videos, we're going to talk about how composites derive their
+
+3
+00:00:06,880 --> 00:00:10,880
+ mechanical and non-mechanical properties. In this video, as a precursor to that,
+
+4
+00:00:10,880 --> 00:00:14,560
+ we're going to talk a little bit about how composites derive their properties in general.
+
+5
+00:00:14,560 --> 00:00:19,520
+ Because a composite isn't itself a pure material, it's instead an amalgam of other materials
+
+6
+00:00:19,520 --> 00:00:23,920
+ that we've already spoken about. We tend not to speak about the material properties
+
+7
+00:00:23,920 --> 00:00:28,720
+ of a composite so much as the effective material properties of a composite.
+
+8
+00:00:28,800 --> 00:00:31,920
+ And these effective properties depend on a couple of different things.
+
+9
+00:00:31,920 --> 00:00:36,160
+ Very broadly speaking, the properties of the constituents that make up the composite
+
+10
+00:00:36,160 --> 00:00:39,680
+ and the relative proportions of these constituents in the composite,
+
+11
+00:00:39,680 --> 00:00:42,480
+ as well as the way that these constituents are arranged.
+
+12
+00:00:42,480 --> 00:00:47,840
+ Now, that last point is a huge departure from everything we've already discussed in this course.
+
+13
+00:00:47,840 --> 00:00:50,480
+ We've largely neglected geometry in all of our discussions,
+
+14
+00:00:50,480 --> 00:00:52,640
+ and we've focused more on material properties.
+
+15
+00:00:52,640 --> 00:00:55,360
+ But because a composite isn't amalgam of other materials,
+
+16
+00:00:55,360 --> 00:00:58,800
+ and its properties depend on the way you arrange those materials,
+
+17
+00:00:58,800 --> 00:01:02,400
+ on its geometry, we can no longer separate these things.
+
+18
+00:01:02,400 --> 00:01:06,000
+ So in this video, we're going to talk from a very top level about the
+
+19
+00:01:06,000 --> 00:01:09,440
+ different ways you can arrange constituents in a composite and the effect that this
+
+20
+00:01:09,440 --> 00:01:10,960
+ tends to have on their properties.
+
+21
+00:01:10,960 --> 00:01:14,080
+ Before we delve specifically into how mechanical properties
+
+22
+00:01:14,080 --> 00:01:18,320
+ and non-mechanical properties evolve as a result of this over the next few videos.
+
+23
+00:01:18,320 --> 00:01:22,320
+ From the outside, I'll also note or warn you that the same disclaimers as everything
+
+24
+00:01:22,320 --> 00:01:26,240
+ else in this course apply here, but perhaps even more so.
+
+25
+00:01:26,240 --> 00:01:30,000
+ One, it's complicated, and two, be careful.
+
+26
+00:01:30,000 --> 00:01:33,680
+ In studying composites, we stack all of the assumptions and simplifications
+
+27
+00:01:33,680 --> 00:01:36,480
+ about the materials that we've already studied, the materials that are
+
+28
+00:01:36,480 --> 00:01:40,080
+ going to make up our composite alongside some assumptions and simplifications
+
+29
+00:01:40,080 --> 00:01:42,320
+ about how these things are going to interact.
+
+30
+00:01:42,320 --> 00:01:45,200
+ This means that maybe more so than for pure materials,
+
+31
+00:01:45,200 --> 00:01:49,360
+ as we move away from the simple cases and examples we get to talk about this week,
+
+32
+00:01:49,360 --> 00:01:52,880
+ the behavior of a composite might diverge quite rapidly.
+
+33
+00:01:52,880 --> 00:01:56,080
+ And subject to the complexities and the realities of the real world,
+
+34
+00:01:56,080 --> 00:02:00,000
+ you might find that some of the analyses we make this week start to break down.
+
+35
+00:02:00,000 --> 00:02:02,720
+ This is only the start of your studies in engineering composites,
+
+36
+00:02:02,720 --> 00:02:07,040
+ and you will talk about these some more in your later courses, so don't worry too much.
+
+37
+00:02:07,040 --> 00:02:10,560
+ But the same counterpoint or exit strategy applies as with every other
+
+38
+00:02:10,560 --> 00:02:12,480
+ material family we've studied in this course.
+
+39
+00:02:12,480 --> 00:02:15,520
+ If you want to be really, really confident about the properties of the
+
+40
+00:02:15,520 --> 00:02:17,840
+ composite in this case you'd like to work with,
+
+41
+00:02:17,840 --> 00:02:19,680
+ going to conduct a test for yourself.
+
+42
+00:02:19,680 --> 00:02:23,520
+ All right, with all of that said, we can begin to talk about some arrangements.
+
+43
+00:02:23,520 --> 00:02:26,720
+ Now, there are lots of different ways that you can arrange different materials to make
+
+44
+00:02:26,720 --> 00:02:32,640
+ up a composite, but really these all boil down to two key fundamental arrangements.
+
+45
+00:02:32,640 --> 00:02:34,720
+ And you've met these before in your other courses.
+
+46
+00:02:34,720 --> 00:02:36,640
+ They're called series and parallel.
+
+47
+00:02:36,640 --> 00:02:39,120
+ The former being where you arrange two constituents
+
+48
+00:02:39,120 --> 00:02:41,440
+ end to end with respect to some stimulus.
+
+49
+00:02:41,440 --> 00:02:43,840
+ And the latter being where you arrange two constituents
+
+50
+00:02:43,840 --> 00:02:46,800
+ side by side with respect to some stimulus.
+
+51
+00:02:46,800 --> 00:02:51,120
+ I've been intentionally broad here in my use of the term stimulus because it turns out that
+
+52
+00:02:51,120 --> 00:02:53,840
+ this definition is consistent whether you're talking about
+
+53
+00:02:53,840 --> 00:02:58,240
+ an applied force or an applied voltage difference or an applied temperature difference.
+
+54
+00:02:58,240 --> 00:03:01,280
+ Whether you're talking about working in a kind of mechanical domain
+
+55
+00:03:01,280 --> 00:03:04,080
+ or an electrical domain or a thermal domain.
+
+56
+00:03:04,080 --> 00:03:07,440
+ The effective properties of a composite irrespective of the domain
+
+57
+00:03:07,440 --> 00:03:11,040
+ basically depend on whether a stimulus has to travel through the constituents
+
+58
+00:03:11,040 --> 00:03:15,040
+ one by one or can travel through the constituents all at once.
+
+59
+00:03:15,040 --> 00:03:19,920
+ Now, series and parallel arrangements of constituents describe a very, very broad range of
+
+60
+00:03:19,920 --> 00:03:20,480
+ composites.
+
+61
+00:03:20,480 --> 00:03:22,960
+ Most of the macroscopic composites, for example,
+
+62
+00:03:22,960 --> 00:03:25,600
+ fiber reinforced polymers and sandwich structures.
+
+63
+00:03:25,600 --> 00:03:27,200
+ But they're not all encompassing.
+
+64
+00:03:27,200 --> 00:03:30,560
+ There are some edge cases, some circumstances that aren't perfectly
+
+65
+00:03:30,560 --> 00:03:31,920
+ modeled by this behavior.
+
+66
+00:03:31,920 --> 00:03:35,920
+ Where, for example, you have small amounts of one material distributed and embedded
+
+67
+00:03:35,920 --> 00:03:39,840
+ within another or where a stimulus isn't perfectly oriented with one of the
+
+68
+00:03:39,840 --> 00:03:42,000
+ principle directions of a composite.
+
+69
+00:03:42,000 --> 00:03:46,480
+ In these cases, the effective behavior of a composite isn't exactly series or parallel,
+
+70
+00:03:46,480 --> 00:03:49,120
+ but it's actually somewhere in between these things.
+
+71
+00:03:49,120 --> 00:03:52,880
+ And he's generally bounded by the series behavioral on one side
+
+72
+00:03:52,880 --> 00:03:55,520
+ and the parallel behavior on the other side.
+
+73
+00:03:55,520 --> 00:03:59,440
+ Over the next few videos, as we talk about derivation of effective mechanical
+
+74
+00:03:59,440 --> 00:04:01,600
+ properties and non mechanical properties of composites,
+
+75
+00:04:01,600 --> 00:04:04,800
+ we're going to focus on series and parallel behavior because these
+
+76
+00:04:04,800 --> 00:04:07,280
+ kind of represent the two ends of the spectrum.
+
+77
+00:04:07,280 --> 00:04:11,360
+ But we will talk about some of these more complicated examples in context
+
+78
+00:04:11,360 --> 00:04:15,360
+ as we meet some of those special types of composites later in the week.

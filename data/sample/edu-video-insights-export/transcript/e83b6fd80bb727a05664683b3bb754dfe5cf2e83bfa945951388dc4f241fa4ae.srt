@@ -1,0 +1,79 @@
+1
+00:00:00,000 --> 00:00:05,280
+ Thermoforming as a process is kind of like the polymer equivalent to forging of metals.
+
+2
+00:00:05,280 --> 00:00:11,520
+ In thermoforming we heat a sheet of a thermoplastic polymer until it's nice and soft and pliable
+
+3
+00:00:11,520 --> 00:00:15,760
+ and then pull that sheet down over a positive of the shape that we'd like to make.
+
+4
+00:00:15,760 --> 00:00:19,840
+ There are a couple of different types of thermoforming but they're all kind of the same thing.
+
+5
+00:00:19,840 --> 00:00:23,520
+ Where the process is different slightly is in the application of pressure,
+
+6
+00:00:23,520 --> 00:00:29,200
+ whether there is any and what direction it acts into either push or suck the thermoplastic
+
+7
+00:00:29,200 --> 00:00:34,640
+ onto the part you'd like to make. In vacuum thermoforming, sometimes called vacuum forming
+
+8
+00:00:34,640 --> 00:00:40,800
+ and negative pressure is used to suck the soft pliable hot thermoplastic onto a negative
+
+9
+00:00:40,800 --> 00:00:44,880
+ a mould or a positive called a plug of the geometry that you'd like to make.
+
+10
+00:00:44,880 --> 00:00:48,240
+ In pressure thermoforming, sometimes just called pressure forming,
+
+11
+00:00:48,240 --> 00:00:54,560
+ a positive pressure is used to force the soft hot pliable thermoplastic over the shape you'd like to make.
+
+12
+00:00:54,640 --> 00:00:59,040
+ Thermoforming is quite an interesting process in that it's economical at both very small and
+
+13
+00:00:59,040 --> 00:01:03,520
+ very large scales. Hobbyists can purchase thermoforming machines that they can set up in their own
+
+14
+00:01:03,520 --> 00:01:08,320
+ homes for less than $1,000. And on the other end of the spectrum, thermoforming machines are often
+
+15
+00:01:08,320 --> 00:01:13,280
+ used to make very large thin parts that otherwise would be quite expensive to manufacture,
+
+16
+00:01:13,280 --> 00:01:18,240
+ say by injection molding or by blow molding. Components like the bodies of pools and spas, for example.
+
+17
+00:01:18,240 --> 00:01:22,240
+ I've left some excellent videos on thermoforming for you on the textbook page that's
+
+18
+00:01:22,240 --> 00:01:27,280
+ associated with this one. A video from Adam Savage talking about some hobbyist grade thermoforming
+
+19
+00:01:27,280 --> 00:01:32,400
+ machines and a video from how it's made talking about the manufacturing of pools and spas using
+
+20
+00:01:32,400 --> 00:01:38,160
+ thermoforming. I hope you enjoy them.

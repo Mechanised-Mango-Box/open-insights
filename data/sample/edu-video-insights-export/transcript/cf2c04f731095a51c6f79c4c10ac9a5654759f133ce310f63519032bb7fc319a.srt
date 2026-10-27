@@ -1,0 +1,279 @@
+1
+00:00:00,000 --> 00:00:03,840
+ In this video, we're going to talk about powder metallurgy and metal 3D printing.
+
+2
+00:00:03,840 --> 00:00:08,000
+ Powder metallurgy is an umbrella term for a range of manufacturing processes that,
+
+3
+00:00:08,000 --> 00:00:11,680
+ as the name suggests, all involve making components from metal powders.
+
+4
+00:00:11,680 --> 00:00:14,080
+ These processes all kind of work the same way.
+
+5
+00:00:14,080 --> 00:00:17,920
+ A first, a metal powder is loaded into a dye and usually compressed.
+
+6
+00:00:17,920 --> 00:00:21,280
+ The constituent granules that make up this powder can all be of a single metal
+
+7
+00:00:21,280 --> 00:00:24,160
+ or could be a mixture of a bunch of different discrete metals.
+
+8
+00:00:24,160 --> 00:00:27,600
+ Or they could be granules, particles that themselves are alloys of metals.
+
+9
+00:00:27,600 --> 00:00:30,960
+ In either case, this powder is loaded into the dye with fillers and binders
+
+10
+00:00:30,960 --> 00:00:35,360
+ and other additives and then compressed under pressure to consolidate it into shape.
+
+11
+00:00:35,360 --> 00:00:38,320
+ This pressure lightly binds all of the powder particles together
+
+12
+00:00:38,320 --> 00:00:40,400
+ for me what's called a green component.
+
+13
+00:00:40,400 --> 00:00:43,760
+ And while the component that comes out of the dye looks an awful lot like a finished part,
+
+14
+00:00:43,760 --> 00:00:48,080
+ the granules, the particles that make it up are only lightly held together by electrostatic
+
+15
+00:00:48,080 --> 00:00:49,360
+ and friction forces.
+
+16
+00:00:49,360 --> 00:00:52,400
+ This is where the second step of powder metallurgy processes come in.
+
+17
+00:00:52,400 --> 00:00:56,400
+ The green components are loaded into an oven and underheat all of the particles
+
+18
+00:00:56,400 --> 00:01:00,240
+ melt together and form a continuous reasonably homogenous solid.
+
+19
+00:01:00,240 --> 00:01:02,960
+ Because the powder is forced into the exact shape of the dye,
+
+20
+00:01:02,960 --> 00:01:06,720
+ high dimensional accuracy and service finishes can be achieved through powder metallurgy.
+
+21
+00:01:06,720 --> 00:01:08,720
+ This process is very efficient at scale.
+
+22
+00:01:08,720 --> 00:01:11,840
+ It can be highly automated and there's very little wastage of material.
+
+23
+00:01:11,840 --> 00:01:15,920
+ And complicated dimension critical features like teeth on spurge is for example
+
+24
+00:01:15,920 --> 00:01:20,800
+ that would otherwise need to be machined can be built into this process with no additional cost.
+
+25
+00:01:20,800 --> 00:01:24,480
+ Powder metallurgy processes are limited largely by the mechanisms involved in
+
+26
+00:01:24,560 --> 00:01:27,360
+ loading the dye and then opening it up to get the party out again.
+
+27
+00:01:27,360 --> 00:01:31,920
+ For this reason some complicated or re-entrant features can't be made using this technique.
+
+28
+00:01:31,920 --> 00:01:34,880
+ There's also considerations that have to be made to achieve in the pressure required
+
+29
+00:01:34,880 --> 00:01:36,880
+ to consolidate powder metallurgy parts.
+
+30
+00:01:36,880 --> 00:01:39,840
+ For this reason very large parts can't usually be made by this technique
+
+31
+00:01:39,840 --> 00:01:42,560
+ because you require enormous pressures to consolidate them.
+
+32
+00:01:42,560 --> 00:01:45,840
+ And geometries which vary a lot in the direction of pressing can be tricky as well
+
+33
+00:01:45,840 --> 00:01:49,920
+ because you need to try and achieve a uniform, roughly uniform distribution of pressure
+
+34
+00:01:49,920 --> 00:01:51,680
+ throughout the part when you consolidate it.
+
+35
+00:01:51,680 --> 00:01:55,200
+ Getting any of these things wrong and sometimes even if you get all of these things right
+
+36
+00:01:55,200 --> 00:01:57,360
+ can lead to porosity inside of the part.
+
+37
+00:01:57,360 --> 00:02:01,440
+ Here even after centering there remain pores, vacancies left inside of the part.
+
+38
+00:02:01,440 --> 00:02:04,800
+ These like the pores in some ceramics act as nice places for cracks to grow
+
+39
+00:02:04,800 --> 00:02:08,800
+ particularly with load and intention and so generally the kind of thing you want to avoid.
+
+40
+00:02:08,800 --> 00:02:12,320
+ Generally speaking issues around porosity are managed by making parts using this technique
+
+41
+00:02:12,320 --> 00:02:16,240
+ that don't vary a whole lot in the z direction and working with reasonably thin parts
+
+42
+00:02:16,240 --> 00:02:20,240
+ so you can achieve a roughly equal and sufficiently high pressure distribution inside
+
+43
+00:02:20,560 --> 00:02:23,280
+ to consolidate it together without introducing porosity.
+
+44
+00:02:23,280 --> 00:02:27,040
+ A related manufacturing process that's really picked up steam over the last couple of years
+
+45
+00:02:27,040 --> 00:02:30,240
+ is metal 3D printing or selective laser centering.
+
+46
+00:02:30,240 --> 00:02:34,560
+ Here a bit of powder is laid down and a laser is used to selectively trace out a cross section
+
+47
+00:02:34,560 --> 00:02:36,880
+ of the shape you'd like to build over the surface.
+
+48
+00:02:36,880 --> 00:02:40,960
+ This process is a little bit like how an old CRT TV worked or a cathode ray oscilloscope.
+
+49
+00:02:40,960 --> 00:02:44,160
+ The laser kind of moves across the powder drawing out the cross section you like
+
+50
+00:02:44,160 --> 00:02:46,960
+ and in doing so kind of bonds that to the layer before.
+
+51
+00:02:46,960 --> 00:02:49,920
+ Upon finishing one cross section a new layer of powder is laid down
+
+52
+00:02:50,160 --> 00:02:51,440
+ the process is repeated.
+
+53
+00:02:51,440 --> 00:02:54,240
+ As with regular powder metallurgy this is a two step process.
+
+54
+00:02:54,240 --> 00:02:58,320
+ At the end of the selective laser centering phase you need to then take your component and put it
+
+55
+00:02:58,320 --> 00:03:02,240
+ in an oven and center it for real to get all the granules to melt together and there are a bunch
+
+56
+00:03:02,240 --> 00:03:06,400
+ of other considerations that you need to keep in mind when metal 3D printing apart particularly
+
+57
+00:03:06,400 --> 00:03:10,800
+ around anisotropy. These considerations are largely analogous to those for plastic 3D printing
+
+58
+00:03:10,800 --> 00:03:14,800
+ and so we'll talk about all of this together when we meet that technique in a couple of weeks time.
+
+59
+00:03:14,800 --> 00:03:18,560
+ For now what you should remember is that powder metallurgy is an excellent technique for making
+
+60
+00:03:18,560 --> 00:03:23,760
+ small parts very very accurately very very economically and that metal 3D printing can be used
+
+61
+00:03:23,760 --> 00:03:27,920
+ to achieve some really complex and interesting geometries but has some considerations that you need
+
+62
+00:03:27,920 --> 00:03:30,880
+ to think about and again we'll talk about those in a couple of weeks.
+
+63
+00:03:30,880 --> 00:03:34,720
+ In the video description I'll link to a particular good video by Papa darkest Racing talking
+
+64
+00:03:34,720 --> 00:03:38,480
+ about building up an incandale exhaust header using metal 3D printing.
+
+65
+00:03:38,480 --> 00:03:42,720
+ They talk about all the considerations for the design process from 3D scanning the engine bay
+
+66
+00:03:42,720 --> 00:03:46,560
+ to CAD modeling the exhaust headers to the limitations that conventional manufacturing would
+
+67
+00:03:46,560 --> 00:03:50,080
+ place to the freedom from these limitations that metal 3D printing provides and some of the
+
+68
+00:03:50,080 --> 00:03:53,680
+ considerations that have to be made when you do it. If you ask me that video was really a master
+
+69
+00:03:53,680 --> 00:03:56,880
+ class in terms of engineering design it's got a little bit of everything and so I think it's
+
+70
+00:03:56,880 --> 00:03:57,840
+ definitely worth a watch.

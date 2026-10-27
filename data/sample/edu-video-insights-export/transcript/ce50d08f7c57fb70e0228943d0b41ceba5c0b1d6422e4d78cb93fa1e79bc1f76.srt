@@ -1,0 +1,147 @@
+1
+00:00:00,000 --> 00:00:03,760
+ The next interesting metal that we're going to meet this week are alloy steels.
+
+2
+00:00:03,760 --> 00:00:08,160
+ alloy steels are pretty similar to the plain carbon steels that we met a few videos ago.
+
+3
+00:00:08,160 --> 00:00:11,760
+ The key difference being that whereas plain carbon steel is typically derived
+
+4
+00:00:11,760 --> 00:00:16,160
+ their nice mechanical properties by the addition of more and more carbon to be able to form
+
+5
+00:00:16,160 --> 00:00:21,280
+ martensite, alloy steels derive their nice mechanical properties by precipitation hardening or
+
+6
+00:00:21,280 --> 00:00:24,720
+ interstitial alloying. And it's not just mechanical properties either.
+
+7
+00:00:24,720 --> 00:00:28,720
+ By incorporating substantial amounts of all sorts of different alloying elements you can
+
+8
+00:00:28,720 --> 00:00:34,160
+ significantly change the strength and the ductility but also corrosion resistance and
+
+9
+00:00:34,160 --> 00:00:39,840
+ electrical conductivity and thermal conductivity and melting point and many other properties of
+
+10
+00:00:39,840 --> 00:00:44,240
+ alloy steels. On the textbook page for this video I've included a table of common alloy
+
+11
+00:00:44,240 --> 00:00:48,160
+ elements and the reasons that they're usually in their the effects that they have on material
+
+12
+00:00:48,160 --> 00:00:52,880
+ properties. And I won't get into too much detail here because the family of alloy steels is
+
+13
+00:00:52,880 --> 00:00:57,760
+ as wide and diverse as the field of alloying itself. Again on the textbook page attached to this
+
+14
+00:00:57,760 --> 00:01:02,000
+ video there are a few examples that you may want to check out. One that I will talk about,
+
+15
+00:01:02,000 --> 00:01:08,320
+ a very very common alloy steel that you're likely to run into is called chromoly. Chromoly is a
+
+16
+00:01:08,320 --> 00:01:13,280
+ medium carbon alloy steel that has as the name suggests substantial amounts of chromium and
+
+17
+00:01:13,280 --> 00:01:18,000
+ malibdenum added. In this alloy the addition of chromium normally aids with corrosion resistance
+
+18
+00:01:18,000 --> 00:01:21,840
+ for reasons that we'll talk about a little bit more in the next video actually when we get to
+
+19
+00:01:21,840 --> 00:01:26,080
+ stainless steels. And malibdenum which significantly improves the strength and the hardness of the
+
+20
+00:01:26,080 --> 00:01:31,360
+ alloy steel. Chromoly comes in a variety of grains that vary in their percentage addition of these
+
+21
+00:01:31,360 --> 00:01:36,080
+ alloy elements but also in the percentage addition of any carbon that's added. In fact you can get
+
+22
+00:01:36,080 --> 00:01:41,440
+ some varieties of chromoly that only have as much carbon as a low carbon steel but a significantly
+
+23
+00:01:41,440 --> 00:01:45,760
+ better mechanical properties significantly better strength. A very common grade of chromoly
+
+24
+00:01:45,760 --> 00:01:50,320
+ called 4130 chromoly that you're likely to encounter as an engineer because it can be quite
+
+25
+00:01:50,320 --> 00:01:55,040
+ easily worked and welded and machined and otherwise used to manufacture components.
+
+26
+00:01:55,120 --> 00:01:59,360
+ Is relatively easily accessible and falls into this camp. It has about as much carbon as a
+
+27
+00:01:59,360 --> 00:02:05,040
+ low carbon steel but significantly higher strength compared to the 250 to 350 you might get in a
+
+28
+00:02:05,040 --> 00:02:09,520
+ low carbon steel. Chromoly is typically used in places where you want a high strength or a higher
+
+29
+00:02:09,520 --> 00:02:14,800
+ hardness but still want to maintain a decent amount of ductility. For example in framework structures
+
+30
+00:02:14,800 --> 00:02:20,480
+ like aircrafts and bicycle tubes and notably our Formula SAE chassis. My in-you-racey students
+
+31
+00:02:20,480 --> 00:02:24,640
+ who design and build race car frames every year have been using chromoly for quite a long time.
+
+32
+00:02:24,640 --> 00:02:28,640
+ Partly because the supplier who tube cuts these frames a process we'll talk about next week
+
+33
+00:02:28,640 --> 00:02:32,960
+ are only supplies in chromoly but also because the strength to weight ratio of the chromoly
+
+34
+00:02:32,960 --> 00:02:37,520
+ tubing is generally much higher than the mild steel equivalent meaning that you can build a
+
+35
+00:02:37,520 --> 00:02:42,160
+ chassis frame which is just as strong but is going away significantly less and objective it's
+
+36
+00:02:42,160 --> 00:02:46,400
+ quite important for race car builders. We'll leave that discussion on alloy steels there and I encourage
+
+37
+00:02:46,400 --> 00:02:54,480
+ you to check out a couple of the examples that are linked in the textbook page for this video.

@@ -1,0 +1,311 @@
+1
+00:00:00,000 --> 00:00:01,360
+ Well, hello there.
+
+2
+00:00:01,360 --> 00:00:02,960
+ General Kenobi.
+
+3
+00:00:02,960 --> 00:00:05,200
+ And welcome back for another week of materials.
+
+4
+00:00:05,200 --> 00:00:08,800
+ We've made it through one of the six sections of the course, and the time has come.
+
+5
+00:00:08,800 --> 00:00:10,240
+ This is where the final begins.
+
+6
+00:00:10,240 --> 00:00:11,280
+ We're finally here.
+
+7
+00:00:11,280 --> 00:00:12,560
+ I'm going to make a problem with this.
+
+8
+00:00:12,560 --> 00:00:15,360
+ We're going to meet our first family of materials.
+
+9
+00:00:15,360 --> 00:00:18,240
+ The next two weeks are going to be all about engineering metals,
+
+10
+00:00:18,240 --> 00:00:22,400
+ the most likely family of materials you'll probably go into turn to in the
+
+11
+00:00:22,400 --> 00:00:24,880
+ majority of your engineering design problems.
+
+12
+00:00:24,880 --> 00:00:27,280
+ This week is going to be an introduction to these metals.
+
+13
+00:00:27,280 --> 00:00:31,120
+ We're going to talk about their properties and their physics and their chemistry and
+
+14
+00:00:31,120 --> 00:00:33,200
+ the reasons that they are, the way that they are.
+
+15
+00:00:33,200 --> 00:00:36,880
+ We're also going to meet a bunch of different metals and talk about the different applications
+
+16
+00:00:36,880 --> 00:00:38,240
+ that they're typically used for.
+
+17
+00:00:38,240 --> 00:00:42,080
+ Next week, we're going to be focused on manufacturing with engineering metals.
+
+18
+00:00:42,080 --> 00:00:45,680
+ We're going to talk a little bit about how metals are produced in bulk and how they're
+
+19
+00:00:45,680 --> 00:00:47,120
+ supplied, how you purchase them.
+
+20
+00:00:47,120 --> 00:00:50,880
+ And then we're going to talk about all the different processes and techniques that you can use to
+
+21
+00:00:50,880 --> 00:00:55,840
+ shape and form and otherwise manufacture these metals into usable parts.
+
+22
+00:00:55,920 --> 00:00:59,600
+ In this juncture, it's probably prudent of us to define what it is exactly
+
+23
+00:00:59,600 --> 00:01:02,000
+ we mean when we say engineering metal.
+
+24
+00:01:02,000 --> 00:01:04,880
+ If you speak to somebody over in science, if you speak to a chemist,
+
+25
+00:01:04,880 --> 00:01:08,400
+ they would probably describe most of the periodic table as metals.
+
+26
+00:01:08,400 --> 00:01:10,960
+ But in this context, we're only going to be focused on those
+
+27
+00:01:10,960 --> 00:01:14,400
+ which are useful for solving engineering design problems.
+
+28
+00:01:14,400 --> 00:01:19,840
+ When we talk about engineering metals, we're usually referring to lustrous, opaque materials that
+
+29
+00:01:19,840 --> 00:01:22,080
+ have good thermal and electrical performance.
+
+30
+00:01:22,080 --> 00:01:25,840
+ In other words, we're usually good conductors of both heat and electricity with
+
+31
+00:01:25,840 --> 00:01:28,240
+ usually reasonably high melting points.
+
+32
+00:01:28,240 --> 00:01:34,160
+ Have good mechanical performance, usually with high stiffness to weight and strength to weight ratios.
+
+33
+00:01:34,160 --> 00:01:38,000
+ And good manufactureability, they can be easily cast and formed and worked.
+
+34
+00:01:38,000 --> 00:01:42,320
+ Now, of course, these claims aren't true for all metals and not even for all engineering metals,
+
+35
+00:01:42,320 --> 00:01:46,880
+ but generally speaking, this is what we mean when we say we're looking for an engineering metal.
+
+36
+00:01:46,880 --> 00:01:49,840
+ Of the wide range of all engineering metals that exist,
+
+37
+00:01:49,840 --> 00:01:52,800
+ in this course, we're only going to introduce you to a handful of these,
+
+38
+00:01:52,800 --> 00:01:56,480
+ probably the most common ones you're likely to run into as an engineer.
+
+39
+00:01:56,480 --> 00:02:00,800
+ Those primarily composed of iron, aluminium, titanium or copper.
+
+40
+00:02:00,800 --> 00:02:03,760
+ Of course, there are many other engineering metals in the world,
+
+41
+00:02:03,760 --> 00:02:06,240
+ many others that you'll meet in your engineering careers.
+
+42
+00:02:06,240 --> 00:02:11,120
+ As was the case with material properties, hopefully by exposing you in some detail to a
+
+43
+00:02:11,120 --> 00:02:15,040
+ subset of these, you'll be able to extend that knowledge to other metals when you meet them
+
+44
+00:02:15,040 --> 00:02:19,040
+ in the field. You should note my use of the phrase primarily composed of
+
+45
+00:02:19,040 --> 00:02:22,960
+ a few moments ago is very intentional. It's very rare that as an engineer,
+
+46
+00:02:22,960 --> 00:02:27,520
+ you'll meet a design problem where the appropriate solution is to use a pure metal.
+
+47
+00:02:27,520 --> 00:02:32,960
+ Almost every metal that you run into as an engineer is actually an alloy, a generally homogenous
+
+48
+00:02:32,960 --> 00:02:37,600
+ mixture of different metals. Allowing is quite useful. It allows you to create metals,
+
+49
+00:02:37,600 --> 00:02:41,920
+ materials that have the best properties of their constituent components and
+
+50
+00:02:41,920 --> 00:02:45,840
+ eliminate troublesome properties that their constituent components might have as well.
+
+51
+00:02:45,920 --> 00:02:50,080
+ Allowing is quite technical and very complicated and very material specific.
+
+52
+00:02:50,080 --> 00:02:53,920
+ You can think about it a little bit like cross-breeding crop seranimals, but there's a significant
+
+53
+00:02:53,920 --> 00:02:58,560
+ difference in that the properties that you get out of an alloy are highly dependent on
+
+54
+00:02:58,560 --> 00:03:03,120
+ the proportions of alloying elements, the particular combinations of these and the conditions
+
+55
+00:03:03,120 --> 00:03:07,520
+ under which the alloying takes place. There are almost always trade-offs to be had and
+
+56
+00:03:07,520 --> 00:03:12,000
+ we'll talk about this in a little bit more detail when we meet some alloys later in the section.
+
+57
+00:03:12,000 --> 00:03:15,520
+ Because their properties are usually so favorable for solving engineering
+
+58
+00:03:15,520 --> 00:03:20,320
+ design problems, metals make up a large part of our modern world. Whether we're using metals
+
+59
+00:03:20,320 --> 00:03:25,040
+ because of their excellent mechanical properties as the building blocks for strong and stiff
+
+60
+00:03:25,040 --> 00:03:29,120
+ and light structures, or using them because of their excellent non-mechanical properties
+
+61
+00:03:29,120 --> 00:03:34,240
+ as thermal or electrical conductors, these days our society relies on the production and
+
+62
+00:03:34,240 --> 00:03:39,120
+ availability of engineering metals at scale. In fact, production of some metals, for example,
+
+63
+00:03:39,120 --> 00:03:44,720
+ steel is so important that this production is actually a key indicator as to the economic
+
+64
+00:03:44,720 --> 00:03:49,280
+ health of a country. The more steel your country is refining and producing or purchasing,
+
+65
+00:03:49,280 --> 00:03:52,560
+ the more buildings that you're constructing, the more cars that you're making.
+
+66
+00:03:52,560 --> 00:03:57,360
+ A bit of a warning from the outset. This week is going to be a big one in terms of content.
+
+67
+00:03:57,360 --> 00:04:01,360
+ We're going to kick off by talking about the physics and chemistry and crystallography of
+
+68
+00:04:01,360 --> 00:04:06,080
+ engineering materials, the mechanisms that lie at the heart of why they have such good
+
+69
+00:04:06,080 --> 00:04:10,960
+ mechanical and non-mechanical properties, why they're used for so many engineering design problems.
+
+70
+00:04:10,960 --> 00:04:15,040
+ And then we're going to meet a range of materials with a focus on iron and its alloys,
+
+71
+00:04:15,040 --> 00:04:19,520
+ with a focus on steel. This is probably going to be a bit of a slog, it's going to be challenging,
+
+72
+00:04:19,520 --> 00:04:24,000
+ but it's extremely important that you push through here. What we learn together over the next
+
+73
+00:04:24,000 --> 00:04:28,720
+ five or six videos is going to set us up for smooth sailing for the rest of the course.
+
+74
+00:04:28,720 --> 00:04:33,200
+ Take it slow, take lots of breaks, construct a drinking game around every time that I say
+
+75
+00:04:33,200 --> 00:04:38,160
+ I'm or are. Whatever you have to do to make it through the next six or seven videos unscathed.
+
+76
+00:04:38,160 --> 00:04:42,880
+ If you have questions as you're going along, write them down and ask us, post it in the discord.
+
+77
+00:04:42,880 --> 00:04:48,000
+ We are more than happy to help you. So go get yourself a coffee or a tea or a beer if you'd like and
+
+78
+00:04:48,000 --> 00:05:03,040
+ let's crack on.

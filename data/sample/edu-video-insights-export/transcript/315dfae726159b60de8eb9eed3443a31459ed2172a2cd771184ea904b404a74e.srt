@@ -1,0 +1,195 @@
+1
+00:00:00,000 --> 00:00:04,800
+ Alright, now that we kind of understand microstructures in the chemistry and physics of metals and
+
+2
+00:00:04,800 --> 00:00:09,440
+ how this relates to the material properties, we can finally start to meet some specific metals.
+
+3
+00:00:09,440 --> 00:00:14,080
+ Our study this week is going to be divided into two areas, ferrous metals, those primarily
+
+4
+00:00:14,080 --> 00:00:19,040
+ composed of iron and non-ferrous metals, those which aren't. We're going to start with the former
+
+5
+00:00:19,040 --> 00:00:22,960
+ because iron's and steels are probably what you're going to turn to in the majority of your
+
+6
+00:00:22,960 --> 00:00:27,680
+ design circumstances. We're going to spend two or three videos talking about how steelers
+
+7
+00:00:27,680 --> 00:00:32,640
+ refined and made and the microstructures that it forms and how this influences properties.
+
+8
+00:00:32,640 --> 00:00:36,560
+ Because these things are quite important prerequisites to get a hold of, to be able to understand
+
+9
+00:00:36,560 --> 00:00:40,800
+ why, for example, a low carbon steel is different to a high carbon steel, is different to an
+
+10
+00:00:40,800 --> 00:00:45,280
+ alloy steel is different to a stainless steel. But after these next few videos, which admittedly
+
+11
+00:00:45,280 --> 00:00:49,360
+ will still be a little full on, it's all going to be smooth sailing. I told you at the start of
+
+12
+00:00:49,360 --> 00:00:53,520
+ this week that the first half of the week's content was going to be challenging and where
+
+13
+00:00:53,520 --> 00:00:57,920
+ rapidly approaching the peak of that hill. Stick with me for the next couple of videos and
+
+14
+00:00:57,920 --> 00:01:02,240
+ after that it's all going to be okay. To give you some motivation as to why we're studying
+
+15
+00:01:02,240 --> 00:01:07,120
+ iron and steel and why it isn't iron and steel are so prevalent in our society. A lot of
+
+16
+00:01:07,120 --> 00:01:11,280
+ it has to do with inertia. Humans have been working on perfecting the alloying of iron with carbon
+
+17
+00:01:11,280 --> 00:01:17,200
+ to make steel for hundreds, even thousands of years. And because of that centuries-long inertia,
+
+18
+00:01:17,200 --> 00:01:23,200
+ we can now make steels that are strong and stiff and relatively light and cheapest chips and
+
+19
+00:01:23,200 --> 00:01:28,400
+ this is what makes them such great materials. Some of the earliest processes to refine iron from
+
+20
+00:01:28,400 --> 00:01:33,040
+ iron ore that we dig out of the ground was happening in bloomaries around the top of the iron age.
+
+21
+00:01:33,040 --> 00:01:38,000
+ These techniques by virtue of the way that they worked had a tendency to introduce a lot of carbon.
+
+22
+00:01:38,000 --> 00:01:42,480
+ As a result, some of the first iron carbon alloys were made this way. More recently, we've
+
+23
+00:01:42,480 --> 00:01:47,920
+ gotten very good at tightly controlling the carbon content of an iron carbon alloy over steel
+
+24
+00:01:47,920 --> 00:01:54,400
+ to get some pretty incredible properties. These days, we smelt iron ore into iron and steel
+
+25
+00:01:54,400 --> 00:02:00,160
+ at scale using a device called a blast furnace. Here, iron ore is pumped into an incredibly hot
+
+26
+00:02:00,160 --> 00:02:05,680
+ furnace alongside a fuel, a normally coking coal, the kind that we dig out here in the Hunter Valley,
+
+27
+00:02:05,680 --> 00:02:10,320
+ and a flux, and through intense heat and a chemical reaction, we managed to refine
+
+28
+00:02:10,320 --> 00:02:14,880
+ molten iron from the iron ore and capture all of the other crap that we don't want into
+
+29
+00:02:14,880 --> 00:02:19,760
+ slag that gets skimmed off the top. The slag, which is a molten product that consists of the flux
+
+30
+00:02:19,760 --> 00:02:24,560
+ that we put in bound to all of the other contaminants that are in there, gets disposed of or recycled
+
+31
+00:02:24,560 --> 00:02:28,720
+ into concrete, for example, and the molten iron, which is very carbon rich because of the
+
+32
+00:02:28,720 --> 00:02:32,880
+ chemical reaction and the nature of the environment that we're doing this in, we draw away from
+
+33
+00:02:32,880 --> 00:02:37,600
+ the blast furnace and we call pig iron. Pig iron, which gets its name from the classical
+
+34
+00:02:37,600 --> 00:02:42,000
+ pouring technique that we use to make ingots from this molten metal that looked a little bit like
+
+35
+00:02:42,000 --> 00:02:46,800
+ piglets feeding off of the mother, used to be cast this way, the ingots later being remelted to
+
+36
+00:02:46,800 --> 00:02:51,280
+ make iron and steel products. These days, for reasons of efficiency and a column where we don't
+
+37
+00:02:51,280 --> 00:02:56,240
+ tend to cast pig iron ingots, which are sometimes called pigs, instead we directly work with the
+
+38
+00:02:56,240 --> 00:03:01,360
+ molten pig iron, refining it and altering its carbon content to make various kinds of steel.
+
+39
+00:03:01,360 --> 00:03:04,960
+ For reasons that we're about to discover, carbon content, the amount of carbon that's present
+
+40
+00:03:04,960 --> 00:03:09,520
+ in your iron carbon alloy is extremely important in determining the kinds of properties that
+
+41
+00:03:09,520 --> 00:03:14,560
+ your steel or your iron product is going to have. Pig iron, for example, straight out of the
+
+42
+00:03:14,560 --> 00:03:20,240
+ blast furnace typically has a carbon content in excess of 5%. Usually, this is so high that it
+
+43
+00:03:20,240 --> 00:03:25,600
+ results in material properties that are unfavorable for almost all engineering applications.
+
+44
+00:03:25,600 --> 00:03:32,000
+ We typically further process and refine and purify and decarbonize pig iron to make a range of
+
+45
+00:03:32,000 --> 00:03:37,120
+ different steel products and the resulting carbon content is a key contributor to the types of
+
+46
+00:03:37,120 --> 00:03:41,840
+ microstructures that form in these products and the resulting material properties that they have.
+
+47
+00:03:41,840 --> 00:03:45,200
+ Over the next few videos, we're going to talk about those microstructures and the
+
+48
+00:03:45,200 --> 00:03:49,520
+ effect that carbon content has. Then we're going to meet a bunch of different iron and steel
+
+49
+00:03:49,520 --> 00:03:59,520
+ products and discuss where they typically used.

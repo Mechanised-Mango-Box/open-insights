@@ -1,0 +1,155 @@
+1
+00:00:00,000 --> 00:00:04,760
+ Alright, we are through with the admin stuff and we can finally start to talk about some
+
+2
+00:00:04,760 --> 00:00:06,560
+ of the course content.
+
+3
+00:00:06,560 --> 00:00:11,960
+ As the name suggests, this course is in two parts, modeling and control.
+
+4
+00:00:11,960 --> 00:00:15,240
+ And when I say modeling, I'm not talking about the sculpting kind of modeling.
+
+5
+00:00:15,240 --> 00:00:19,520
+ And I'm not even talking about the computer aided design, CAD kind of modeling.
+
+6
+00:00:19,520 --> 00:00:23,360
+ I'm talking about mathematical modeling and you may think this is boring but mathematical
+
+7
+00:00:23,360 --> 00:00:28,120
+ models of the tools that engineers used to make decisions every day and a really fundamental
+
+8
+00:00:28,120 --> 00:00:31,960
+ level mathematical models tell us how variables in a system are related.
+
+9
+00:00:31,960 --> 00:00:34,680
+ And you've almost certainly met these before.
+
+10
+00:00:34,680 --> 00:00:38,200
+ It's pretty hard to get to second or third year of engineering in or having seen a mathematical
+
+11
+00:00:38,200 --> 00:00:41,040
+ model unless you're a civil engineer.
+
+12
+00:00:41,040 --> 00:00:45,480
+ Typically, we use mathematical models to work at how some variables, which we call
+
+13
+00:00:45,480 --> 00:00:48,880
+ inputs, affect other variables, which we call outputs.
+
+14
+00:00:48,880 --> 00:00:52,840
+ Generally speaking, inputs of variables which drive changes to a system.
+
+15
+00:00:52,840 --> 00:00:55,240
+ There are some types of inputs we can control.
+
+16
+00:00:55,240 --> 00:00:59,360
+ For example, in a model of a car, a controllable input would be something like the amount
+
+17
+00:00:59,360 --> 00:01:01,800
+ you've pressed down on the throttle pedal.
+
+18
+00:01:01,800 --> 00:01:06,520
+ And some inputs we can't control, things like again in the model of a car, maybe the
+
+19
+00:01:06,520 --> 00:01:09,600
+ aerodynamic forces or bumps in the road.
+
+20
+00:01:09,600 --> 00:01:13,080
+ These uncontrollable inputs are sometimes called disturbances.
+
+21
+00:01:13,080 --> 00:01:18,320
+ There are a subset of inputs that kind of characterize the system but don't necessarily
+
+22
+00:01:18,320 --> 00:01:20,480
+ drive changes to it.
+
+23
+00:01:20,480 --> 00:01:25,720
+ These things don't usually change with time and we call them the parameters of the system.
+
+24
+00:01:25,720 --> 00:01:31,120
+ Things, for example, like the mass of a car, or the stiffness of the springs on the car, or
+
+25
+00:01:31,120 --> 00:01:33,320
+ the stickiness of the tires or the air pressure.
+
+26
+00:01:33,320 --> 00:01:37,920
+ We typically regard parameters as intrinsic inputs and we don't list them as such when we
+
+27
+00:01:37,920 --> 00:01:41,880
+ body mathematical models, but it's important to note that every bit of information that
+
+28
+00:01:41,880 --> 00:01:45,200
+ you give your model is in some way an input to that model.
+
+29
+00:01:45,200 --> 00:01:49,160
+ Outputs simply said are variables that you're interested in and what you decide to call
+
+30
+00:01:49,160 --> 00:01:52,640
+ an output will probably depend on the reason that you're building a model.
+
+31
+00:01:52,640 --> 00:01:55,280
+ Outputs are usually things we don't have control over.
+
+32
+00:01:55,280 --> 00:01:59,720
+ In other words, we don't usually take inputs as outputs to our models.
+
+33
+00:01:59,720 --> 00:02:01,760
+ Otherwise they'd be pretty boring.
+
+34
+00:02:01,760 --> 00:02:05,000
+ Most of the time you'll know what an output is because it's the reason you've decided
+
+35
+00:02:05,000 --> 00:02:07,120
+ to build the model in the first place.
+
+36
+00:02:07,120 --> 00:02:09,360
+ It's the answer to the question that you're trying to solve.
+
+37
+00:02:09,360 --> 00:02:12,920
+ Let's take a look at problem 1.1 and see if we can identify which of the inputs and which
+
+38
+00:02:12,920 --> 00:02:14,840
+ of the outputs based on our intuition.
+
+39
+00:02:14,840 --> 00:02:17,840
+ And these are the problems you've probably seen before in your prior courses.

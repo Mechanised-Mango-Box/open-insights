@@ -1,0 +1,355 @@
+1
+00:00:00,000 --> 00:00:04,400
+ In this video we're going to talk about molding and casting of engineering polymers.
+
+2
+00:00:04,400 --> 00:00:08,000
+ These techniques for polymers, molding and casting share a name with the
+
+3
+00:00:08,000 --> 00:00:12,320
+ techniques for engineering metals that we met only a few weeks ago and for good reason,
+
+4
+00:00:12,320 --> 00:00:15,600
+ they're largely the same technique just applied to a different material.
+
+5
+00:00:15,600 --> 00:00:21,120
+ Like with metals, molding and casting of engineering polymers involve injecting or pouring or
+
+6
+00:00:21,120 --> 00:00:27,360
+ otherwise introducing a liquid polymer into a negative of the geometry that you'd like to produce.
+
+7
+00:00:27,360 --> 00:00:32,480
+ The polymer is then cooled or cured or otherwise set into the shape of the mold of the
+
+8
+00:00:32,480 --> 00:00:37,600
+ negative and eventually the mold is removed to leave a positive of the geometry that you were trying
+
+9
+00:00:37,600 --> 00:00:41,920
+ to make. While there are lots of different types of molding and casting processes for
+
+10
+00:00:41,920 --> 00:00:46,320
+ engineering polymers and we are going to meet a few of them in detail later in this video,
+
+11
+00:00:46,320 --> 00:00:51,520
+ there are two general principles in which molding and casting of plastics differ significantly
+
+12
+00:00:51,520 --> 00:00:56,240
+ than that for metals. First of all, owing to the lowest strengths and lower melting and
+
+13
+00:00:56,240 --> 00:01:01,280
+ softening temperatures of engineering polymers compared to engineering metals, the process is
+
+14
+00:01:01,280 --> 00:01:05,920
+ the machinery that's involved in performing casting and molding of these products generally
+
+15
+00:01:05,920 --> 00:01:10,880
+ needs to be far less robust. This means that these processes are generally far more accessible,
+
+16
+00:01:10,880 --> 00:01:15,120
+ both in terms of the infrastructure that's required and the difficulty in having a part made,
+
+17
+00:01:15,120 --> 00:01:20,080
+ but also, of course, second of all in the cost. The difference in startup costs for
+
+18
+00:01:20,080 --> 00:01:26,000
+ comparably sized products to be, say, injection molded out of plastic versus die cast out of metal
+
+19
+00:01:26,000 --> 00:01:31,040
+ can be an order of magnitude in the order of tens of thousands of dollars for the former and
+
+20
+00:01:31,040 --> 00:01:36,320
+ hundreds of thousands of dollars or more for the latter. Both molding and casting processes can be
+
+21
+00:01:36,320 --> 00:01:42,320
+ used on thermoplastics and thermosets, but usually we talk about molding in the context of working
+
+22
+00:01:42,320 --> 00:01:46,720
+ with thermoplastics and casting in the context of working with thermosets with thermosetting
+
+23
+00:01:46,720 --> 00:01:51,760
+ resins. We'll kick off with molding processes for thermoplastics, and the first of these we're going
+
+24
+00:01:51,760 --> 00:01:57,040
+ to talk about is blow molding. This is a process for molding thermoplastics into hollow shapes.
+
+25
+00:01:57,040 --> 00:02:01,920
+ A hollow tube of the thermoplastic is heated and inserted into a mold where the bottom of it is
+
+26
+00:02:01,920 --> 00:02:07,920
+ clamped and air hot air is blowing into the thermoplastic to expand it out against the walls of the
+
+27
+00:02:07,920 --> 00:02:13,040
+ mold. Internal pressure is maintained until the thermoplastic cools and sets to the shape of the
+
+28
+00:02:13,040 --> 00:02:17,840
+ inside of the mold. This is the primary process used to make say plastic bottles, especially out
+
+29
+00:02:17,840 --> 00:02:23,440
+ of PET, and is one of the major manufacturing processes that we undertake with thermoplastics.
+
+30
+00:02:23,440 --> 00:02:27,360
+ Like the other molding processes we're going to talk about in this video, blow molding is
+
+31
+00:02:27,360 --> 00:02:32,480
+ usually extremely dimensionally accurate. Through the applied pressure you essentially force the
+
+32
+00:02:32,480 --> 00:02:37,760
+ softened thermoplastic against the walls of the mold, forcing it to take that size and shape.
+
+33
+00:02:37,760 --> 00:02:42,160
+ While there can be some shrinkage and distortion as the thermoplastic cools, this is usually
+
+34
+00:02:42,160 --> 00:02:47,200
+ avoided by maintaining pressure until that cooling is done. And this process can produce
+
+35
+00:02:47,200 --> 00:02:52,480
+ extremely precise, dimensionally accurate, very repeatable parts over and over and over again.
+
+36
+00:02:52,480 --> 00:02:57,280
+ Because only a reasonably low pressure is required to force the softened thermoplastic against
+
+37
+00:02:57,280 --> 00:03:03,200
+ the walls of a mold, you can pull many, many, many parts from a single mold. This process has
+
+38
+00:03:03,200 --> 00:03:07,600
+ a reasonably high upfront cost to build the mold in the first place, but the unit cost of the
+
+39
+00:03:07,600 --> 00:03:12,960
+ parts after that are usually extremely cheap. Injection molding, the next process we're going
+
+40
+00:03:12,960 --> 00:03:18,800
+ to talk about is also extremely economical at scale and can produce some incredibly accurate parts.
+
+41
+00:03:18,800 --> 00:03:24,960
+ Here, as the name suggests, molten thermoplastic is injected under pressure into a mold, into a
+
+42
+00:03:24,960 --> 00:03:29,120
+ negative of the part you'd like to make. This process works an awful lot like die casting,
+
+43
+00:03:29,120 --> 00:03:33,760
+ which we saw for metals, but obviously significantly lower pressures and temperatures required to
+
+44
+00:03:33,760 --> 00:03:38,960
+ work with plastics than were required, say, to work with aluminium or with steel. Oftentimes,
+
+45
+00:03:38,960 --> 00:03:43,760
+ plastic noodles are melted down and pressure is generated by forcing these through a screw into the
+
+46
+00:03:43,760 --> 00:03:48,960
+ mold. And like blow molding, this process can be highly automated and thus extremely efficient.
+
+47
+00:03:48,960 --> 00:03:53,440
+ A world-designed injection molding process sees injection of the molten thermoplastic
+
+48
+00:03:53,440 --> 00:03:58,800
+ cooling inside the mold and subsequent ejection of the part afterwards all happen in the span
+
+49
+00:03:58,800 --> 00:04:03,440
+ of a couple of seconds. Because of the custom design work that's required for injection molding
+
+50
+00:04:04,160 --> 00:04:09,040
+ and the complexities around ejecting the part afterwards, this process can have quite a high
+
+51
+00:04:09,040 --> 00:04:13,840
+ upfront investment required. While very complicated geometries can be made using this technique
+
+52
+00:04:13,840 --> 00:04:18,960
+ with incredible dimensional accuracy, the upfront cost that's required, the upfront investment
+
+53
+00:04:18,960 --> 00:04:23,840
+ that's required to design and manufacture the mold and the tooling means that this process really
+
+54
+00:04:23,840 --> 00:04:28,640
+ only makes sense if you're manufacturing things at scale. Unlike blow molding, which is typically
+
+55
+00:04:28,640 --> 00:04:33,440
+ only achieved with thermoplastics, injection molding can be achieved with either thermoplastics
+
+56
+00:04:33,440 --> 00:04:38,560
+ or thermosets. In the case of the latter, a process often called reaction injection molding,
+
+57
+00:04:38,560 --> 00:04:44,320
+ the thermoset resin is mixed with a catalyst or a hardener just before it's injected into the mold.
+
+58
+00:04:44,320 --> 00:04:48,080
+ The next process on our list is compression molding. This process is a little bit like the
+
+59
+00:04:48,080 --> 00:04:53,680
+ polymer equipment of forging or powder metallurgy for metals. Here, a pre-measured charge of a
+
+60
+00:04:53,680 --> 00:04:58,480
+ granulated polymer is poured into a heated mold and a hammer the other side of the mold comes
+
+61
+00:04:58,480 --> 00:05:02,960
+ down to meet it. The incredible pressures and temperatures that are generated under this immense
+
+62
+00:05:02,960 --> 00:05:07,760
+ force melt the polymer and force it into shape. Because it doesn't involve working with a liquid or a
+
+63
+00:05:07,760 --> 00:05:12,960
+ molten polymer, this process is often used for very, very large plastic parts. Parts that by
+
+64
+00:05:12,960 --> 00:05:16,480
+ virtue of their size would pose problems for injection molding in maintaining sufficient
+
+65
+00:05:16,480 --> 00:05:20,720
+ temperature to keep the polymer liquid. Compression molder parts normally emerge from the mold
+
+66
+00:05:20,720 --> 00:05:25,520
+ with what are called mold lines or flashing along the edges where the two halves of the mold
+
+67
+00:05:25,520 --> 00:05:30,640
+ meet and squeeze out essentially occurs. But this flashing is quite easily removed with a sharp
+
+68
+00:05:30,640 --> 00:05:36,160
+ blade by hand or by some automated process. That being said, this extra step of post-processing
+
+69
+00:05:36,160 --> 00:05:41,120
+ means that compression molding is usually not quite as economical and say injection molding where
+
+70
+00:05:41,120 --> 00:05:45,440
+ parts come out and essentially no cleanup is required. The final process we're going to talk
+
+71
+00:05:45,440 --> 00:05:50,960
+ about is casting of polymers. Here, as the name suggests and totally analogous to the process we
+
+72
+00:05:50,960 --> 00:05:55,840
+ already met for metals a couple of weeks ago, a liquid polymer is poured into a mold, a negative
+
+73
+00:05:55,840 --> 00:06:01,680
+ of the shape you'd like to meet and is allowed to cool or cure or otherwise set into shape.
+
+74
+00:06:01,680 --> 00:06:06,240
+ The key difference between casting of polymers and say injection molding of polymers is that
+
+75
+00:06:06,240 --> 00:06:11,840
+ usually casting occurs only under the pressure of gravity. You can cast either thermoplastics
+
+76
+00:06:11,840 --> 00:06:16,080
+ or thermosets. In the case of the former, it's melted down and poured into the mold and then allowed
+
+77
+00:06:16,080 --> 00:06:20,560
+ to freeze. And in the case of the latter, a thermosetting resin is mixed with a catalyst or a
+
+78
+00:06:20,560 --> 00:06:25,760
+ hardener immediately before being poured into the mold. Passing of polymers is perhaps a more
+
+79
+00:06:25,760 --> 00:06:30,560
+ low volume process, something that's typically done on smaller scales, perhaps for prototyping.
+
+80
+00:06:30,560 --> 00:06:35,840
+ And a major challenge to be overcome in this process is the formation of air bubbles in the casting.
+
+81
+00:06:35,840 --> 00:06:40,720
+ You can get around this with application of heat and vibration, but this process isn't generally
+
+82
+00:06:40,720 --> 00:06:45,920
+ thought of as being one that's applied at scale. Other processes like injection molding are
+
+83
+00:06:45,920 --> 00:06:49,440
+ only marginally more expensive or can actually be cheaper when you're making lots of
+
+84
+00:06:49,440 --> 00:06:54,960
+ lots of parts and are generally far more dimensionally accurate owing to the applied pressure.
+
+85
+00:06:54,960 --> 00:06:59,360
+ And that'll probably do us for casting in molding. I am going to try and organize a special
+
+86
+00:06:59,360 --> 00:07:03,920
+ guest speaker to come and talk to us about a part that they initially rapid prototyped and
+
+87
+00:07:03,920 --> 00:07:08,400
+ later looked at having injection molded because they were going to manufacture at scale, a local
+
+88
+00:07:08,400 --> 00:07:13,440
+ Newcastle business and hopefully that materializes. But if not, I've left plenty of resources for
+
+89
+00:07:13,440 --> 00:07:16,320
+ you on this topic on the textbook page for this video.

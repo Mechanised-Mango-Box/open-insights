@@ -1,0 +1,295 @@
+1
+00:00:00,000 --> 00:00:02,900
+ All right, welcome to week three.
+
+2
+00:00:02,900 --> 00:00:05,440
+ You might notice I'm wearing my Ferrari jumper again.
+
+3
+00:00:05,440 --> 00:00:08,840
+ This has been filmed the day after the Hungarian GP
+
+4
+00:00:08,840 --> 00:00:10,360
+ and we had a marginally better week.
+
+5
+00:00:10,360 --> 00:00:13,240
+ So I don't feel too bad about wearing red this week.
+
+6
+00:00:13,240 --> 00:00:17,520
+ This week we are going to focus on rotating mechanical systems.
+
+7
+00:00:17,520 --> 00:00:20,960
+ These are like the big brother of what we did last week.
+
+8
+00:00:20,960 --> 00:00:23,200
+ Last week we looked at things as point masses, right?
+
+9
+00:00:23,200 --> 00:00:25,400
+ We said they can only translate.
+
+10
+00:00:25,400 --> 00:00:27,480
+ Well, this week we're going to be looking at things
+
+11
+00:00:27,480 --> 00:00:29,960
+ as rigid bodies, kind of the next step up
+
+12
+00:00:29,960 --> 00:00:33,000
+ in terms of modeling them as close to reality.
+
+13
+00:00:33,000 --> 00:00:34,560
+ When we're dealing with rigid bodies,
+
+14
+00:00:34,560 --> 00:00:37,400
+ size and shape actually begin to matter.
+
+15
+00:00:37,400 --> 00:00:39,960
+ In contrast to last week where we could kind of treat
+
+16
+00:00:39,960 --> 00:00:41,800
+ everything as a point and it didn't matter
+
+17
+00:00:41,800 --> 00:00:45,360
+ if it was shaped to like a point or shaped like a potato,
+
+18
+00:00:45,360 --> 00:00:47,000
+ this week if something shaped like a potato,
+
+19
+00:00:47,000 --> 00:00:49,000
+ it does matter because the size and the shape
+
+20
+00:00:49,000 --> 00:00:51,920
+ have a profound impact on the way that things rotate.
+
+21
+00:00:51,920 --> 00:00:53,400
+ This week we're going to look at things
+
+22
+00:00:53,400 --> 00:00:56,800
+ which only rotate and we'll specifically only rotate
+
+23
+00:00:56,800 --> 00:01:00,600
+ about one axis in the axial rotation.
+
+24
+00:01:00,600 --> 00:01:02,280
+ Maybe later in the course we'll look at trying
+
+25
+00:01:02,280 --> 00:01:04,720
+ to mix up things which both translate and rotate
+
+26
+00:01:04,720 --> 00:01:07,400
+ but for this week for what we're getting started
+
+27
+00:01:07,400 --> 00:01:09,840
+ we'll stick to just rotating about one axis.
+
+28
+00:01:09,840 --> 00:01:12,000
+ So what about states?
+
+29
+00:01:12,000 --> 00:01:14,760
+ At the end of last week I promised you that our state selection
+
+30
+00:01:14,760 --> 00:01:17,160
+ procedure was going to get a whole lot easier
+
+31
+00:01:17,160 --> 00:01:19,280
+ because we understood kind of what was going on
+
+32
+00:01:19,280 --> 00:01:20,120
+ underneath the hood.
+
+33
+00:01:20,120 --> 00:01:22,680
+ We took a step back and we looked at the big picture
+
+34
+00:01:22,680 --> 00:01:25,480
+ and I remember saying to you, okay, in general
+
+35
+00:01:25,520 --> 00:01:28,720
+ we're going to choose energy variables as states.
+
+36
+00:01:28,720 --> 00:01:30,880
+ So rather than introduce you to the two variables
+
+37
+00:01:30,880 --> 00:01:32,760
+ we'll choose as states instead
+
+38
+00:01:32,760 --> 00:01:35,000
+ I'm going to introduce you to the two energy variables
+
+39
+00:01:35,000 --> 00:01:37,800
+ for the rotating mechanical system domain.
+
+40
+00:01:37,800 --> 00:01:40,800
+ And those energy variables are angular momentum
+
+41
+00:01:40,800 --> 00:01:42,720
+ and angular displacement.
+
+42
+00:01:42,720 --> 00:01:44,640
+ And if you're thinking to yourselves, hold on,
+
+43
+00:01:44,640 --> 00:01:47,040
+ the energy variables for translating mechanical systems
+
+44
+00:01:47,040 --> 00:01:49,640
+ were linear momentum and linear displacement.
+
+45
+00:01:49,640 --> 00:01:52,720
+ This is basically the same thing, you would be right.
+
+46
+00:01:52,720 --> 00:01:55,040
+ I promised you that it'd be all sorts of beautiful analogs
+
+47
+00:01:55,080 --> 00:01:58,360
+ between the different domains and this is the very first one.
+
+48
+00:01:58,360 --> 00:02:00,440
+ The energy variables for translating systems
+
+49
+00:02:00,440 --> 00:02:02,920
+ and rotating systems are almost identical.
+
+50
+00:02:02,920 --> 00:02:06,360
+ This is the angular analog of what we met last week.
+
+51
+00:02:06,360 --> 00:02:08,760
+ So whenever we see angular momentum
+
+52
+00:02:08,760 --> 00:02:10,880
+ or we see angular displacement,
+
+53
+00:02:10,880 --> 00:02:13,000
+ those are the things we're going to choose as states.
+
+54
+00:02:13,000 --> 00:02:14,080
+ What's even nicer?
+
+55
+00:02:14,080 --> 00:02:17,320
+ The same rule of thumb that we had for translating mechanical
+
+56
+00:02:17,320 --> 00:02:19,960
+ systems actually applies in terms of how many states
+
+57
+00:02:19,960 --> 00:02:21,920
+ we need for rotating systems.
+
+58
+00:02:21,920 --> 00:02:24,240
+ We are once again going to want two states
+
+59
+00:02:24,240 --> 00:02:27,000
+ for every degree of freedom in the system.
+
+60
+00:02:27,000 --> 00:02:28,320
+ Now when things are rotating,
+
+61
+00:02:28,320 --> 00:02:29,720
+ the concept of degrees of freedom
+
+62
+00:02:29,720 --> 00:02:31,960
+ is pretty much the same as it was before.
+
+63
+00:02:31,960 --> 00:02:34,560
+ Every mass that can rotate about its own axis
+
+64
+00:02:34,560 --> 00:02:36,720
+ that's disconnected from other masses.
+
+65
+00:02:36,720 --> 00:02:38,440
+ It's going to be treated as independent
+
+66
+00:02:38,440 --> 00:02:41,160
+ or I think I used the word disconnected last week.
+
+67
+00:02:41,160 --> 00:02:44,200
+ And that mass will be said to have its own degree of freedom.
+
+68
+00:02:44,200 --> 00:02:47,320
+ So basically, as long as two masses aren't sharing a shaft
+
+69
+00:02:47,320 --> 00:02:49,120
+ aren't traveling at the same speed,
+
+70
+00:02:49,120 --> 00:02:52,000
+ we'll consider them to be independent or disconnected.
+
+71
+00:02:52,000 --> 00:02:53,880
+ And they'll have a degree of freedom of their own.
+
+72
+00:02:53,880 --> 00:02:55,920
+ All right, in the same way as last week,
+
+73
+00:02:55,920 --> 00:02:57,960
+ let's go and meet some fundamental components
+
+74
+00:02:57,960 --> 00:03:00,000
+ and then we'll do some more of my problems.

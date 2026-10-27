@@ -1,0 +1,207 @@
+1
+00:00:00,000 --> 00:00:04,200
+ All right. I promised you at the end of last week that I wouldn't be introducing you
+
+2
+00:00:04,200 --> 00:00:08,440
+ to random components anymore. And so instead of saying, let's meet our first electrical
+
+3
+00:00:08,440 --> 00:00:12,320
+ component, the inductor. What I'd like to say to you in this video is, let's meet
+
+4
+00:00:12,320 --> 00:00:16,720
+ the electrical equivalent of the generalized inertia. So you remember in the big picture
+
+5
+00:00:16,720 --> 00:00:21,180
+ video last week I talked about the seven fundamental components. We had generalized
+
+6
+00:00:21,180 --> 00:00:27,240
+ inertia's, capacitors, resistors. We also had generalized effort and flow sources,
+
+7
+00:00:27,320 --> 00:00:33,200
+ transformers and gyrators. Well, the generalized inertia for electrical systems is the inductor.
+
+8
+00:00:33,200 --> 00:00:37,200
+ In this course, you'll see inductors drawn like this. And sometimes they represent actual
+
+9
+00:00:37,200 --> 00:00:41,480
+ inductors that you can go and buy kind of off the shelf or online. And other times they
+
+10
+00:00:41,480 --> 00:00:46,480
+ represent the inductance of actual bits of wire. But irrespective, when I say inductor in
+
+11
+00:00:46,480 --> 00:00:50,720
+ this course, what I really mean is a piece of wire either coiled up and put into a little
+
+12
+00:00:50,720 --> 00:00:55,480
+ package that you call an inductor or an actual piece of wire may be coiled up inside of
+
+13
+00:00:55,560 --> 00:01:01,440
+ a motor, for example, that stores energy by inducing and maintaining a magnetic field.
+
+14
+00:01:01,440 --> 00:01:05,520
+ The kind of driving principle for this is Faraday's law of induction. It says that as you
+
+15
+00:01:05,520 --> 00:01:10,280
+ pass a current through a bit of wire, you generate a magnetic field around it. And that
+
+16
+00:01:10,280 --> 00:01:13,760
+ that current and magnetic field of co dependent, you can't have one without the other.
+
+17
+00:01:13,760 --> 00:01:17,360
+ And if you would have suddenly stopped the current, well, that magnetic field is going
+
+18
+00:01:17,360 --> 00:01:22,600
+ to continue to drive electrons through the wire until all of that energy is spent. That's
+
+19
+00:01:22,600 --> 00:01:27,240
+ the mechanism that's going on here. And in that way, that magnetic field acts as an energy
+
+20
+00:01:27,240 --> 00:01:32,840
+ storage device. Your reducter stores energy with increasing flow. It works pretty much
+
+21
+00:01:32,840 --> 00:01:37,720
+ the same way that a mass does, right? Storing energy with kind of increasing velocity.
+
+22
+00:01:37,720 --> 00:01:43,480
+ The CCRs for an ideal inductor look like this. We have lambda equals Li, where lambda
+
+23
+00:01:43,480 --> 00:01:47,760
+ is the magnetic flux of the inductor, the linked flux. This is kind of an indication of
+
+24
+00:01:47,760 --> 00:01:52,880
+ the strength of the magnetic field you've generated. L is the creatively called inductance
+
+25
+00:01:52,880 --> 00:01:57,480
+ of the inductor. It's a fundamental property that depends on its construction. So the number
+
+26
+00:01:57,480 --> 00:02:02,480
+ of turns of wire that are in there. They cross sexual area, magnetic permeability. Kind
+
+27
+00:02:02,480 --> 00:02:07,440
+ of all the physical properties that make up that inductor. And I is the current passing
+
+28
+00:02:07,440 --> 00:02:13,120
+ through it. So that magnetic flux lambda and the current I are kind of linearly related.
+
+29
+00:02:13,160 --> 00:02:17,880
+ The second CCR, the derivative of flux is the voltage across the inductor. It's basically
+
+30
+00:02:17,880 --> 00:02:23,280
+ the same as our kind of momentum derivative is net force expression. And I'm trying to draw
+
+31
+00:02:23,280 --> 00:02:27,600
+ these parallels because it should be clear to you that inductors and masses are functioning
+
+32
+00:02:27,600 --> 00:02:32,240
+ in basically the same way, right? They both store energy with increasing flow. In this case,
+
+33
+00:02:32,240 --> 00:02:36,840
+ current and previously velocity. They both have a derivative that looks a little bit like
+
+34
+00:02:36,840 --> 00:02:42,920
+ a net force equation, right? Previously, we had the net force, the effort on a mass was
+
+35
+00:02:42,920 --> 00:02:46,840
+ related to the derivative of its momentum. And here we have that the voltage across
+
+36
+00:02:46,840 --> 00:02:51,760
+ the inductor and effort is related to the kind of derivative of its flux. And I think that's
+
+37
+00:02:51,760 --> 00:02:55,600
+ all I want to say about inductors. But before we move on to the next component, I want
+
+38
+00:02:55,600 --> 00:03:00,560
+ to give you a quick word of warning. I want to give you a word of warning, sir. I don't
+
+39
+00:03:00,560 --> 00:03:03,080
+ know what to do.
+
+40
+00:03:03,080 --> 00:03:06,160
+ Particularly as we start to look at multi-domain systems where you might have rotating
+
+41
+00:03:06,160 --> 00:03:11,360
+ analytical things present, it can be very easy to get confused between an outlet represents
+
+42
+00:03:11,360 --> 00:03:16,640
+ say an angular momentum and an L that represents an inductance. It gets really, really
+
+43
+00:03:16,640 --> 00:03:20,520
+ important to make sure you have your subscripts and your bookkeeping down pat. I know this
+
+44
+00:03:20,520 --> 00:03:24,640
+ is something that I often struggle with. So I'll make it clear to you now. I find it
+
+45
+00:03:24,640 --> 00:03:29,360
+ really helpful for all of my inertia to have L sub J. So I remember that that L corresponds
+
+46
+00:03:29,360 --> 00:03:34,920
+ to an inertia J. And for all of my inductors to have L sub whatever that thing is representing.
+
+47
+00:03:34,920 --> 00:03:39,600
+ So if it's representing say the coils of wire in a motor in its armature, I'll do L sub
+
+48
+00:03:39,600 --> 00:03:44,760
+ A for armature. If it's in the field warnings of an externally excited DC motor, a kind
+
+49
+00:03:44,760 --> 00:03:49,640
+ that we'll meet later this week, I might say L sub F. But in general, having subscripts in
+
+50
+00:03:49,640 --> 00:03:54,320
+ there makes it really clear when an L corresponds to an inductor, a constant, or when
+
+51
+00:03:54,320 --> 00:03:58,920
+ an L corresponds to a momentum, a time varying property of a mass. All right, let's go and
+
+52
+00:03:58,920 --> 00:04:00,640
+ meet some more fundamental components.

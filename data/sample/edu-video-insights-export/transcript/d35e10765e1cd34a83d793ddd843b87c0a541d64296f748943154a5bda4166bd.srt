@@ -1,0 +1,95 @@
+1
+00:00:00,000 --> 00:00:00,960
+ All right, everybody.
+
+2
+00:00:03,840 --> 00:00:07,600
+ You've made it the final week of course content, where we're going to be talking about
+
+3
+00:00:07,600 --> 00:00:11,760
+ manufacturing with engineering composites. The good news is that this week is going to be pretty
+
+4
+00:00:11,760 --> 00:00:17,040
+ cruzy. Most of the manufacturing techniques for engineering composites are slight variations on
+
+5
+00:00:17,040 --> 00:00:21,520
+ manufacturing techniques that we've already met one way or another this semester. But we are
+
+6
+00:00:21,520 --> 00:00:25,440
+ going to meet some specialist manufacturing techniques for specific types of composites,
+
+7
+00:00:25,440 --> 00:00:30,080
+ namely fiber reinforced polymers. From the outset, I'll note that manufacturing and
+
+8
+00:00:30,080 --> 00:00:35,280
+ manufacturing ability is actually often the impetus for choice of a composite engineering material
+
+9
+00:00:35,280 --> 00:00:39,200
+ in the first place. In addition to the superior properties that you can sometimes get out of a
+
+10
+00:00:39,200 --> 00:00:44,240
+ composite, they're also sometimes easier to manufacture than any of the constituent parts into a
+
+11
+00:00:44,240 --> 00:00:48,640
+ particular geometry. And just as a word of warning before we start, I should probably note that when
+
+12
+00:00:48,640 --> 00:00:53,040
+ you're manufacturing composites, perhaps more so than when you're manufacturing any other type of
+
+13
+00:00:53,600 --> 00:00:57,440
+ material, you need to be very careful. Remember when we're dealing with composites, we're stacking
+
+14
+00:00:57,440 --> 00:01:02,240
+ intrinsic assumptions and models and simplifications that we make about the constituent materials
+
+15
+00:01:02,240 --> 00:01:06,240
+ on top of assumptions and models and simplifications that we make about the way that these things
+
+16
+00:01:06,240 --> 00:01:10,560
+ are going to interact. And then when we talk about manufacturing of composites, we stack both
+
+17
+00:01:10,560 --> 00:01:14,560
+ of these assumptions on top of some assumptions and simplifications about the way that these
+
+18
+00:01:14,560 --> 00:01:19,200
+ properties are changed by the way we manufacture them, by the way they respond to a heat input
+
+19
+00:01:19,280 --> 00:01:23,120
+ or a plastic deformation, for example. When you kind of convoluted the stack up of the
+
+20
+00:01:23,120 --> 00:01:27,360
+ assumptions made for the constituent materials and the assumptions made about the way they interact
+
+21
+00:01:27,360 --> 00:01:32,080
+ and the assumptions made about the way that manufacturing changes these again, the properties of the
+
+22
+00:01:32,080 --> 00:01:37,200
+ part in service can vary significantly from what you expect. As always, if you want to be more sure
+
+23
+00:01:37,200 --> 00:01:42,240
+ about the properties of an in-service part, your best bet is to manufacture a prototype and test
+
+24
+00:01:42,240 --> 00:01:44,240
+ it for yourself.

@@ -1,0 +1,119 @@
+1
+00:00:00,000 --> 00:00:04,960
+ In this video we're going to talk about linearity and this might be a concept you're familiar with
+
+2
+00:00:04,960 --> 00:00:10,400
+ already and you might be thinking that this isn't worthy of a video of its own but linearity is
+
+3
+00:00:10,400 --> 00:00:15,920
+ one of the more useful properties or assumptions we can make and so it's really really important
+
+4
+00:00:15,920 --> 00:00:22,000
+ that we understand exactly what it means and how to test for it. linearity makes our life easier
+
+5
+00:00:22,000 --> 00:00:26,960
+ in lots of ways. numerically simulating linear systems is generally much easier than their nonlinear
+
+6
+00:00:26,960 --> 00:00:32,640
+ counterparts and so is designing controllers for these kinds of systems. In fact linearity is
+
+7
+00:00:32,640 --> 00:00:38,240
+ generally so useful that most of the time when faced with a nonlinear system or a nonlinear model
+
+8
+00:00:38,240 --> 00:00:43,840
+ of a nonlinear system we're going to approximate it with a linear one and when our approximation gets
+
+9
+00:00:43,840 --> 00:00:48,400
+ too bad too far from the truth we're going to re-approximate with a different linear one.
+
+10
+00:00:48,400 --> 00:00:52,480
+ So that naturally begs the question what does it mean for something to be linear?
+
+11
+00:00:53,280 --> 00:00:59,440
+ If I asked second year Alex this five six seven years ago he probably would have said something
+
+12
+00:00:59,440 --> 00:01:04,320
+ like it means that the response looks something like a straight line maybe this one here
+
+13
+00:01:05,200 --> 00:01:08,320
+ and he's not entirely wrong but he's also not entirely right.
+
+14
+00:01:09,840 --> 00:01:14,480
+ linearity means that a system satisfies two essential properties,
+
+15
+00:01:14,480 --> 00:01:21,200
+ additivity and homogeneity and these are very very well defined. Additivity means that we can build
+
+16
+00:01:21,200 --> 00:01:26,640
+ up responses to complex inputs as the sum of responses to simple inputs. You might have heard
+
+17
+00:01:26,640 --> 00:01:31,440
+ this said in mathematics as the integral of a sum is the same as the sum of the integrals because
+
+18
+00:01:31,440 --> 00:01:37,600
+ the integral is a linear operator. This means that if an input is a sum of two things we can
+
+19
+00:01:37,600 --> 00:01:42,080
+ simulate the response to each of those things separately and sum the responses as if we've
+
+20
+00:01:42,080 --> 00:01:46,880
+ simulated for the sum of those inputs to begin with. This means that we can take inputs which are
+
+21
+00:01:46,960 --> 00:01:51,440
+ nominally complex and might be hard to simulate simulate their parts individually and bring it all
+
+22
+00:01:51,440 --> 00:01:56,560
+ together at the end. Homogeneity means that we can scale responses and have the same effect as
+
+23
+00:01:56,560 --> 00:02:01,440
+ if we'd scaled an input. You might know this from mathematics as being able to take something
+
+24
+00:02:01,440 --> 00:02:05,760
+ out the front of an integral or a derivative again because the linear operators. The
+
+25
+00:02:05,760 --> 00:02:10,320
+ in practice for us this means that we can simulate for small inputs and by simply scaling the
+
+26
+00:02:10,320 --> 00:02:14,960
+ response we can know what the result would have been if we were simulating for a large input.
+
+27
+00:02:15,760 --> 00:02:22,560
+ So with these facts can you now tell me whether or not this straight line this function is linear?
+
+28
+00:02:22,560 --> 00:02:27,280
+ The answer is no but I won't tell you why. Try and work it out for yourself by applying the
+
+29
+00:02:27,280 --> 00:02:33,680
+ properties of additivity and homogeneity to that equation. Linearity is going to be crucially important
+
+30
+00:02:33,680 --> 00:02:43,680
+ for us in this course so you need to know what it is and how to test for it.

@@ -1,0 +1,283 @@
+1
+00:00:00,000 --> 00:00:06,600
+ All right, we're going to kick off our discussions on particular engineering ceramics by starting with the technical ones.
+
+2
+00:00:06,600 --> 00:00:14,200
+ The ones that typically aren't used in civil or building applications, but are more commonly used in, let's say, mechanical or design applications.
+
+3
+00:00:14,200 --> 00:00:24,000
+ Applications that require incredible strength or stiffness or applications that require incredible temperature resistance materials that can operate at extremely high temperatures.
+
+4
+00:00:24,000 --> 00:00:44,000
+ You should note that unlike metals or engineering polymers which are typically grouped into families based on having similar properties or similar behaviors, engineering ceramics, particularly technical ceramics are instead grouped into families based on the primary non-metallic constituent that makes them up, essentially based on their chemistry, based on their name.
+
+5
+00:00:44,000 --> 00:00:56,000
+ Of course, ceramics that share a primary non-metallic constituent that are grouped into a family based on their chemistry will sometimes have similar properties. This isn't as much the case in ceramics as it is in these other families of materials.
+
+6
+00:00:56,000 --> 00:01:07,000
+ And you should, in general, assume that unless told otherwise a family of ceramics, the way that it's defined, doesn't actually say anything about how similar to ceramics might be or how similar their properties might be.
+
+7
+00:01:07,000 --> 00:01:20,000
+ In this video, we're going to meet a few different characteristic engineering ceramics, those which have similar properties to a bunch of others that generally explain why it is you might use a technical ceramic for a particular problem.
+
+8
+00:01:20,000 --> 00:01:33,000
+ But of course, as was the case with polymers, you should note that there are many, many more ceramics out there and that if the ceramics were talking about in this video don't particularly suit the problem you're trying to solve, there are probably ceramics that will, you just need to go and find them.
+
+9
+00:01:33,000 --> 00:01:41,000
+ Check off, we'll begin by talking about oxides, which, as the name suggests, are engineering ceramics whose primary non-metallic constituent is oxygen.
+
+10
+00:01:41,000 --> 00:01:49,000
+ Well, many oxides form naturally as a result of corrosion, aluminium oxide and iron oxide, for example, as some that we've already met.
+
+11
+00:01:49,000 --> 00:01:57,000
+ There are many other oxides, many other technical ceramics that we intentionally manufacture because they have some pretty incredible mechanical properties.
+
+12
+00:01:57,000 --> 00:02:16,000
+ Illumina, aluminium oxide, for example, the one that grows as a passivating film and the outside of aluminium when it corrodes, is also manufactured as an engineering technical ceramic for using applications that require incredible strength or stiffness or applications that require incredible temperature resistance.
+
+13
+00:02:16,000 --> 00:02:21,000
+ Illumina is to oxides and perhaps technical ceramics more broadly what mild steel is to metals.
+
+14
+00:02:21,000 --> 00:02:25,000
+ It's a very, very common and kind of representative example.
+
+15
+00:02:25,000 --> 00:02:31,000
+ You'll often see Illumina used in cutting discs and grinding discs and sandpaper as an abrasive because of how hard it is.
+
+16
+00:02:31,000 --> 00:02:40,000
+ And given its incredible at temperature properties, it's also commonly used to make refractories, components that are designed for use up to 2000 degrees C.
+
+17
+00:02:40,000 --> 00:02:48,000
+ These can include crucibles that are used for melting and casting metals, but also components and lining for furnaces and other high temperature components.
+
+18
+00:02:48,000 --> 00:02:57,000
+ And of course, as we discussed at the end of the non mechanical properties video, Illumina is also commonly used to make watch faces incredibly hard and very optically clear watch faces.
+
+19
+00:02:57,000 --> 00:03:07,000
+ Illumina has properties that are indicative or representative of quite a few oxides of quite a few technical engineering ceramics, being hard and strong and stiff and maintaining these properties at high temperatures.
+
+20
+00:03:07,000 --> 00:03:13,000
+ And oxides of many other metals like titanium and zinc and magnesium all kind of behave the same way.
+
+21
+00:03:13,000 --> 00:03:19,000
+ That being said, there are many oxides that don't have properties similar to Illumina and you need to be a little bit careful of.
+
+22
+00:03:19,000 --> 00:03:35,000
+ Oxides of group wine elements like sodium and lithium and potassium and hydrogen are all not nearly as chemically stable as Illumina and will readily react with water, either water that they're introduced to or even by sucking moisture out of the atmosphere to form some pretty nasty compounds.
+
+23
+00:03:35,000 --> 00:03:41,000
+ In addition to making these oxides fairly useless for most structural applications, they can also be quite dangerous.
+
+24
+00:03:41,000 --> 00:03:47,000
+ To really drive home this point, magnesium forms an oxide as ceramic which has reasonably similar properties to Illumina.
+
+25
+00:03:47,000 --> 00:03:54,000
+ It's quite chemically stable. It's very hard. It's somewhat brittle. It's very, very stiff has excellent high temperature properties.
+
+26
+00:03:54,000 --> 00:04:04,000
+ While calcium, despite being only one row away in the periodic table and being in the same column, having the same number of valence electrons as magnesium, will form a very, very different oxide.
+
+27
+00:04:04,000 --> 00:04:12,000
+ Calcium oxide, unlike magnesium oxide, is very, very unstable and will very happily react with water to form among other things.
+
+28
+00:04:12,000 --> 00:04:17,000
+ Calcium hydroxide are pretty nasty base that will eat away at anything it touches.
+
+29
+00:04:17,000 --> 00:04:21,000
+ Or by pulling CO2 out of the air and reacting with it can form calcium carbonate.
+
+30
+00:04:21,000 --> 00:04:25,000
+ All of this to say that you need to be reasonably careful about what materials you put into service.
+
+31
+00:04:25,000 --> 00:04:33,000
+ While many oxides will have similar properties to Illumina and for that reason are used in many different engineering applications, some oxides do not.
+
+32
+00:04:33,000 --> 00:04:35,000
+ And can be quite dangerous.
+
+33
+00:04:35,000 --> 00:04:38,000
+ Another important family of technical ceramics are carbides.
+
+34
+00:04:38,000 --> 00:04:46,000
+ Unlike many things in chemistry and metallurgy, thankfully engineering ceramics, particularly technical ceramics are reasonably sensibly named.
+
+35
+00:04:46,000 --> 00:04:53,000
+ Carbides, as the names suggest, are those technical engineering ceramics which have carbon as their primary non-metallic constituent.
+
+36
+00:04:53,000 --> 00:04:57,000
+ We've actually met a few carbides already in this course without even knowing it.
+
+37
+00:04:57,000 --> 00:05:04,000
+ We see cementite, the compound that formed in iron when you had too much carbon to fit inside your alpha phase or fit inside your gamma phase.
+
+38
+00:05:04,000 --> 00:05:05,000
+ It's a ceramic.
+
+39
+00:05:05,000 --> 00:05:15,000
+ And while every 3C isn't particularly useful on its own and isn't often used this way, it's extremely important as we've seen in determining the mechanical properties of an iron or steel product.
+
+40
+00:05:15,000 --> 00:05:25,000
+ Remember by tuning the amount of every 3C that's formed and the way that it's formed in a material, the microstructures that are formed around it, we can control the strength and the ductility of a metal.
+
+41
+00:05:25,000 --> 00:05:37,000
+ If we want to talk though about a carbide which is commonly used as a product on its own, perhaps the most representative example is tungsten carbide, which is to carbides probably what alumina is to oxides.
+
+42
+00:05:37,000 --> 00:05:48,000
+ Tungsten carbide, a ceramic made by combining tungsten with carbon, is so ubiquitous in its use, it's so commonly used that very often people refer to it just as carbide.
+
+43
+00:05:48,000 --> 00:06:00,000
+ You've certainly run into a bit of tungsten carbide before, a lot of knives are made out of tungsten carbide, a lot of jewelry, particularly that which is targeted at men who are too tough I guess to be wearing gold or silver, is made out of tungsten carbide.
+
+44
+00:06:00,000 --> 00:06:08,000
+ But in terms of applications that are important to us as engineers, tungsten carbide is what most non-high speed steel cutting tools are made out of.
+
+45
+00:06:08,000 --> 00:06:18,000
+ Tungsten carbide is one of those materials that really blows your mind in terms of its properties, it is stupidly stiff and strong and has incredible high temperature resistance.
+
+46
+00:06:18,000 --> 00:06:28,000
+ You think about it, this makes tungsten carbide a natural choice for cutting tools for drills and meals and for carbide inserts that you put inside of your cutting tool on a layer of a milling machine.
+
+47
+00:06:28,000 --> 00:06:37,000
+ Because it's so stiff, it doesn't deflect very much under load, meaning you can take quite deep cuts without having to worry about shadow or having to worry about bad surface finishes.
+
+48
+00:06:37,000 --> 00:06:42,000
+ And because it's very, very hard, it maintains an edge for much, much longer than a piece of high speed steelwood.
+
+49
+00:06:42,000 --> 00:06:51,000
+ Tungsten carbide is also often used in medical applications for medical tools or even sometimes for implants because it doesn't tend to provoke an allergenic or an immune response.
+
+50
+00:06:51,000 --> 00:06:55,000
+ It's quite chemically stable and for that reason it doesn't really want to react with anything.
+
+51
+00:06:55,000 --> 00:07:04,000
+ And this point I think is particularly interesting, with the exception of diamond, tungsten carbide and its alloys represent the stiffest materials known to man.
+
+52
+00:07:04,000 --> 00:07:13,000
+ This fact, coupled with the fact that it's relatively accessible and relatively economical to make is one of the reasons why you see tungsten carbides so widely used.
+
+53
+00:07:13,000 --> 00:07:19,000
+ It's got such amazing properties and you can get those properties for such a reasonably low cost.
+
+54
+00:07:19,000 --> 00:07:26,000
+ As was the case with oxides, there are some carbides that have similar properties to tungsten carbide that make it a representative example.
+
+55
+00:07:26,000 --> 00:07:40,000
+ Or on carbide, for example, and silicon carbide and titanium carbide all have reasonably similar properties to tungsten carbide, though tungsten carbide being much, much, much, much more available is much, much more commonly used.
+
+56
+00:07:40,000 --> 00:07:45,000
+ You might turn to one of these other carbides if you have some sort of specialty application.
+
+57
+00:07:45,000 --> 00:07:50,000
+ Titanium and boron carbide, for example, are normally used when you're making larger components.
+
+58
+00:07:50,000 --> 00:07:55,000
+ Silicon carbides are very commonly used in abrasives because they tend to break up and shatter into small shards.
+
+59
+00:07:55,000 --> 00:08:01,000
+ It's probably also worth mentioning that carbides, just like Fe3C, can often form in other materials.
+
+60
+00:08:01,000 --> 00:08:04,000
+ Sometimes there's a good thing and sometimes there's a bad thing.
+
+61
+00:08:04,000 --> 00:08:12,000
+ Carburization, for example, is a process where you try to grow a thin layer of carbide on the outside of something to make it a little bit harder, make it a little bit more wear resistant.
+
+62
+00:08:12,000 --> 00:08:20,000
+ And we already talked about a few weeks ago how in stainless steel precipitation of chromium carbide at grain boundaries can result in embrittlement and cracking.
+
+63
+00:08:20,000 --> 00:08:33,000
+ In case of stainless steels, a lot of time and effort went into trying to prevent the formation of this carbide, either by reducing their carbon content or chucking in other materials that preferentially form carbides into make sure that they didn't precipitate out at grain boundaries.
+
+64
+00:08:33,000 --> 00:08:42,000
+ As a final point, I'll also note that technical ceramics, because of their brittleness, aren't particularly good in applications where they're loaded up extremely quickly, they're not particularly tough.
+
+65
+00:08:42,000 --> 00:08:52,000
+ And for this reason, their low toughness, their brittle behavior is usually designed around by making a ceramic component consumable or making it only a part of a larger structure.
+
+66
+00:08:52,000 --> 00:09:00,000
+ Cutting tools that utilize tungsten carbide, for example, very intentionally have carbide inserts that are placed inside of a metal insert holder.
+
+67
+00:09:00,000 --> 00:09:14,000
+ The metal insert holder providing some amount of ductility and is largely reusable and the carbide cutting tip is largely designed to be consumable so that if it ever does crack as a result of some kind of sudden loading, some kind of shock loading, it can just be replaced.
+
+68
+00:09:14,000 --> 00:09:17,000
+ That'll probably do us for our introduction to technical ceramics.
+
+69
+00:09:17,000 --> 00:09:24,000
+ And as I mentioned, there are many, many more of these outside of just oxides and carbides and outside of just alumina and tungsten carbide.
+
+70
+00:09:24,000 --> 00:09:29,000
+ I encourage you to a little bit of independent research and take a look at Edu Pak in preparation for your debate next week.
+
+71
+00:09:29,000 --> 00:09:38,000
+ And as I mentioned, we're very fortunate in that Dr. Dylan Cascale, who's had lots of experience in this area, he's going to pick a part a few more of these in the case study later this week.

@@ -1,0 +1,151 @@
+1
+00:00:00,000 --> 00:00:02,640
+ All right everyone, another week, another happy landing.
+
+2
+00:00:02,640 --> 00:00:07,840
+ Another family of materials. And actually, interestingly, this is the last pure family of
+
+3
+00:00:07,840 --> 00:00:11,920
+ materials we're going to meet. This week and next week, we're going to be talking about
+
+4
+00:00:11,920 --> 00:00:16,000
+ engineering ceramics, a new family that we haven't seen before. And following that,
+
+5
+00:00:16,000 --> 00:00:19,280
+ we're going to move on to talking about engineering composites,
+
+6
+00:00:19,280 --> 00:00:22,480
+ mixtures of the different families of materials that we've already met.
+
+7
+00:00:22,480 --> 00:00:26,160
+ Ceramics are a little bit more difficult to qualify than metals or polymers,
+
+8
+00:00:26,160 --> 00:00:30,400
+ I would say, but if I had to give a descriptor that was indicative of most ceramics,
+
+9
+00:00:30,400 --> 00:00:33,920
+ I would say that they're known for their exceptional mechanical properties,
+
+10
+00:00:33,920 --> 00:00:37,360
+ their exceptional strength and stiffness, especially at temperature,
+
+11
+00:00:37,360 --> 00:00:41,120
+ their exceptional non-mechanical properties, they're really, really high operating and
+
+12
+00:00:41,120 --> 00:00:46,240
+ melting temperatures and their excellent ability to insulate electricity. And for having a pretty
+
+13
+00:00:46,240 --> 00:00:50,400
+ substantial Achilles heel, they're not overly ductile when loaded in tension.
+
+14
+00:00:50,400 --> 00:00:54,960
+ Ceramics, in fact, usually referred to as quite brittle materials when loaded in tension.
+
+15
+00:00:54,960 --> 00:01:00,320
+ This is in stark contrast to the mostly ductile polymers and mostly ductile metals that we've
+
+16
+00:01:00,320 --> 00:01:04,080
+ already met this semester. You'll probably find yourself turning to a ceramic when some
+
+17
+00:01:04,080 --> 00:01:09,520
+ aspect of your problem dictates the use of a material that has these really, really exceptional
+
+18
+00:01:09,520 --> 00:01:13,360
+ mechanical or non-mechanical properties. When you need something that's an extremely good
+
+19
+00:01:13,360 --> 00:01:18,000
+ electrical insulated, but at really, really high temperatures, for example, or you need something
+
+20
+00:01:18,000 --> 00:01:22,400
+ that has incredible stiffness or strength and you only need to load it in compression.
+
+21
+00:01:22,480 --> 00:01:25,840
+ As was the case with all the other families of materials that we've met this semester,
+
+22
+00:01:25,840 --> 00:01:30,240
+ we go to start this week by talking about the physics and the chemistry and the crystallography
+
+23
+00:01:30,240 --> 00:01:34,240
+ of engineering ceramics before we move on to talk about their mechanical and non-mechanical
+
+24
+00:01:34,240 --> 00:01:38,640
+ properties and we'll close the week out by talking about a few characteristics ceramics.
+
+25
+00:01:38,640 --> 00:01:42,080
+ Some technical ceramics, the ones that are typically used in, let's say,
+
+26
+00:01:42,080 --> 00:01:46,800
+ mechanical and other design engineering circumstances, the ones that demand incredible strength or
+
+27
+00:01:46,800 --> 00:01:51,680
+ stiffness or temperature resistance or some of these other really nice properties of ceramics.
+
+28
+00:01:51,680 --> 00:01:56,400
+ And the non-technical ceramics, the ones that are commonly used in, let's say, civil law
+
+29
+00:01:56,400 --> 00:02:00,240
+ construction applications, ones that are primarily used for their economy and their
+
+30
+00:02:00,240 --> 00:02:05,520
+ compressibility. We'll also lightly touch on glasses and new type of material that we haven't
+
+31
+00:02:05,520 --> 00:02:09,920
+ really spent a lot of time talking about before and we'll focus of course there on ceramic glasses
+
+32
+00:02:09,920 --> 00:02:13,840
+ to kind that you're probably familiar with, the kind that's in your window frame or the kind that's
+
+33
+00:02:13,840 --> 00:02:17,520
+ in your Coke bottle or the kind that's on the front of your phone. I'm very excited to say that
+
+34
+00:02:17,520 --> 00:02:23,440
+ given his extensive background in this area, an undergrad FYP and a PhD and starting a company in a
+
+35
+00:02:23,440 --> 00:02:28,560
+ related field that Dr. Dylan Caskilli has kindly agreed to film a case study video for us this week
+
+36
+00:02:28,560 --> 00:02:32,720
+ on the use of ceramics and some of their incredible properties. So you have that to look forward to
+
+37
+00:02:32,720 --> 00:02:36,480
+ as well. All in all, it's going to be an interesting week and I hope you enjoy these lecture videos.
+
+38
+00:02:36,480 --> 00:02:38,000
+ I'll see you in the live stream at the end of it.

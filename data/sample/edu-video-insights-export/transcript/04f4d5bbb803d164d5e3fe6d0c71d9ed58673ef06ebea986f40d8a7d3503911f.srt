@@ -1,0 +1,375 @@
+1
+00:00:00,000 --> 00:00:03,600
+ This video will be all about the electrical performance of engineering materials.
+
+2
+00:00:03,600 --> 00:00:08,000
+ In other words, their performance in response to some sort of applied voltage in the migration
+
+3
+00:00:08,000 --> 00:00:13,040
+ of electrical charge. I'm conscious that many of you are doing e-elect 1310 alongside this course,
+
+4
+00:00:13,040 --> 00:00:17,600
+ and you'll probably, I hope, get a much more robust definition of voltage there than you will
+
+5
+00:00:17,600 --> 00:00:22,160
+ from me. For our purposes, and for those who aren't doing 1310, you can think about voltage
+
+6
+00:00:22,160 --> 00:00:26,960
+ a little bit like the electrical analog of temperature. It's a driving force for the migration
+
+7
+00:00:26,960 --> 00:00:31,600
+ of charge electrons, which is kind of a little bit like heat. We normally classify engineering
+
+8
+00:00:31,600 --> 00:00:36,960
+ materials in terms of their relative willingness to conduct electricity to transfer electrons.
+
+9
+00:00:36,960 --> 00:00:41,200
+ We call them conductors. If they're quite happy to do this, we call them insulators. If they're
+
+10
+00:00:41,200 --> 00:00:45,840
+ not very happy to do this at all. And we call them semiconductors. If they're happy to do this under
+
+11
+00:00:45,840 --> 00:00:50,480
+ certain circumstances. Typically, materials which fall into that first category conductors are
+
+12
+00:00:50,480 --> 00:00:55,600
+ used, as the name suggests, to conduct electricity to transfer electrons from one place to another.
+
+13
+00:00:55,600 --> 00:00:59,520
+ Typically, those in the second category are actively used to prevent the transmission of
+
+14
+00:00:59,520 --> 00:01:05,680
+ electrons and protect people and objects from electrocution, uses insulation over wires, for example.
+
+15
+00:01:05,680 --> 00:01:09,840
+ And semiconductors, that third category? Well, they're a little bit more complicated.
+
+16
+00:01:09,840 --> 00:01:13,920
+ They're used when you want to permit passage of electrons only in certain circumstances,
+
+17
+00:01:13,920 --> 00:01:18,400
+ like I don't know, a computer chip or to generate some electricity on a solar panel.
+
+18
+00:01:18,400 --> 00:01:22,560
+ We're not going to talk a whole lot about semiconductors in this course. The physics is somewhat
+
+19
+00:01:22,560 --> 00:01:26,480
+ complicated and probably well outside the scope of what we're trying to get across.
+
+20
+00:01:26,480 --> 00:01:30,720
+ Our focus is largely going to be on engineering materials that act either as good conductors
+
+21
+00:01:30,720 --> 00:01:35,760
+ or as good insulators. The likelihood of a material to be a good conductor or a good insulator
+
+22
+00:01:35,760 --> 00:01:40,560
+ is captured by a property known as its electrical resistivity. Resistivity is kind of
+
+23
+00:01:40,560 --> 00:01:44,480
+ inversely analogous to thermal conductivity, which we met in the last video.
+
+24
+00:01:44,480 --> 00:01:49,280
+ Resistivity describes the inherent unwillingness of a material to transmit electricity.
+
+25
+00:01:49,360 --> 00:01:53,840
+ Materials with a high resistivity tend to be insulators and materials with a low resistivity
+
+26
+00:01:53,840 --> 00:01:58,480
+ tend to be conductors. Resistivity is a material property and you can be forgiven for not having
+
+27
+00:01:58,480 --> 00:02:03,920
+ heard about it before. You've probably more likely heard about the structural property resistance,
+
+28
+00:02:03,920 --> 00:02:08,320
+ which like Resistivity describes the likelihood of a thing to permit the passage of electrons
+
+29
+00:02:08,320 --> 00:02:13,600
+ building in the resistivity as well as the length of the conductor and its cross-sectional area.
+
+30
+00:02:13,600 --> 00:02:17,280
+ Given that this is an engineering materials course where less concerned with those structural
+
+31
+00:02:17,280 --> 00:02:21,360
+ properties and more concerned with the material ones, and while we won't get into chemistry in
+
+32
+00:02:21,360 --> 00:02:26,240
+ this course, you should be aware that the resistivity of a material is highly dependent on the
+
+33
+00:02:26,240 --> 00:02:31,280
+ freedom of electrons in the upper band of its atoms. Generally speaking, in terms of families,
+
+34
+00:02:31,280 --> 00:02:36,400
+ metals are quite good conductors of electricity. Ceramics and polymers not so much.
+
+35
+00:02:36,400 --> 00:02:40,640
+ This is entirely to do with freedom of electrons. You might have heard the anecdote in high school
+
+36
+00:02:40,640 --> 00:02:45,440
+ about metals having a sea of electrons, a sea of shared electrons. This is why they're such
+
+37
+00:02:45,440 --> 00:02:50,320
+ good conductors. Ceramics and polymers, on the other hand, have very few free electrons,
+
+38
+00:02:50,320 --> 00:02:54,080
+ owing to the types of bonds that they make. We'll talk a little bit more about the suitability
+
+39
+00:02:54,080 --> 00:02:58,080
+ of different materials for electrical transmission in the coming weeks as we meet some of those
+
+40
+00:02:58,080 --> 00:03:01,840
+ materials. But for now, it's not unreasonable for you to commit to memory that
+
+41
+00:03:01,840 --> 00:03:05,760
+ metals generally are good conductors and ceramics and polymers generally are not.
+
+42
+00:03:05,760 --> 00:03:10,080
+ The resistance of a component isn't only a function of the resistivity of the material that
+
+43
+00:03:10,080 --> 00:03:14,880
+ its composed of and its kind of structural properties, its length and its cross-sectional area,
+
+44
+00:03:14,960 --> 00:03:18,960
+ but it's also a function of the environmental conditions that component is subject to.
+
+45
+00:03:18,960 --> 00:03:23,040
+ For example, resistance is quite sensitive to temperature. There are a few mechanisms
+
+46
+00:03:23,040 --> 00:03:27,280
+ that play here, which is why this is often talked about in terms of resistance rather than just
+
+47
+00:03:27,280 --> 00:03:31,920
+ resistivity. There are changes to the conductivity of a material with temperature and there are
+
+48
+00:03:31,920 --> 00:03:36,160
+ also changes to the geometry of a component with temperature and both of those things come
+
+49
+00:03:36,160 --> 00:03:40,080
+ together to change the resistance of that component. But because all of these changes are
+
+50
+00:03:40,080 --> 00:03:44,640
+ directly related to either the material being able to kind of transmit charge or the
+
+51
+00:03:45,120 --> 00:03:49,120
+ component changing size and shape as a result of thermal expansion or contraction, a function of
+
+52
+00:03:49,120 --> 00:03:53,680
+ the material, the effect of a temperature change on the resistance of a component is captured
+
+53
+00:03:53,680 --> 00:03:58,160
+ through a material property known as the temperature coefficient of resistance.
+
+54
+00:03:58,160 --> 00:04:02,080
+ The relationship that governs this change looks an awful lot like the expression for
+
+55
+00:04:02,080 --> 00:04:05,840
+ thermal expansion and this shouldn't be hugely surprising because there's a
+
+56
+00:04:05,840 --> 00:04:09,760
+ similar kind of mechanism going on here. So you do need to be careful because the same
+
+57
+00:04:09,760 --> 00:04:14,240
+ symbol alpha is used in both cases and they mean very different things have different
+
+58
+00:04:14,240 --> 00:04:19,280
+ units and should be treated differently. Resistance isn't only sensitive to temperature either,
+
+59
+00:04:19,280 --> 00:04:23,040
+ it can also change as a function of the strain that your component might be under.
+
+60
+00:04:23,040 --> 00:04:27,280
+ The mechanism here is actually quite structural as you stretch a component as you apply some
+
+61
+00:04:27,280 --> 00:04:31,840
+ strain to it. It's cross section 10 scenario because of the Poisson effect and with a narrow
+
+62
+00:04:31,840 --> 00:04:36,240
+ cross section the resistance of the component tends to increase and the opposite is true as well.
+
+63
+00:04:36,240 --> 00:04:40,240
+ If you squish a component, it's cross section worldwide and it's current carrying capacity
+
+64
+00:04:40,240 --> 00:04:44,800
+ kind of increases as its resistance goes down. Engineers exploit changes in resistance with
+
+65
+00:04:44,800 --> 00:04:49,040
+ temperature and strain all of the time to build sensors for temperatures and strain.
+
+66
+00:04:49,040 --> 00:04:53,280
+ Very simple thermometers called thermistors measure temperature changes by tracking changes in
+
+67
+00:04:53,280 --> 00:04:58,000
+ resistance. And sensors called strain gauges or load cells are used as the name suggests
+
+68
+00:04:58,000 --> 00:05:02,880
+ to measure strain according to changes in resistance. Classification of materials as conductors
+
+69
+00:05:02,880 --> 00:05:07,600
+ or insulators isn't quite the black and white hard line that it's made to seem. In fact,
+
+70
+00:05:07,600 --> 00:05:12,160
+ you can actually pass a current through an insulator if you can generate a sufficiently high
+
+71
+00:05:12,160 --> 00:05:17,120
+ voltage to overcome its inherent resistance. It's called the dielectric strength or the breakdown
+
+72
+00:05:17,120 --> 00:05:21,520
+ voltage. If you can generate a breakdown voltage over an insulator, you can pass a current through
+
+73
+00:05:21,520 --> 00:05:26,240
+ it. Perhaps the most famous example of this is lightning through air. As you build up charge in
+
+74
+00:05:26,240 --> 00:05:30,640
+ the clouds in the sky, you build up a voltage differential between the sky and the ground and when
+
+75
+00:05:30,640 --> 00:05:34,880
+ that gets large enough, when that exceeds the breakdown voltage of air, you get a massive amount
+
+76
+00:05:34,880 --> 00:05:39,120
+ of current transfer to the ground. As a materials design engineer, you're probably going to be more
+
+77
+00:05:39,120 --> 00:05:43,600
+ concerned about breakdown voltage when you're trying to maintain electrical isolation between
+
+78
+00:05:43,600 --> 00:05:47,840
+ components. You need to make sure that if you use a material as an insulator between two
+
+79
+00:05:47,840 --> 00:05:52,400
+ components that it has a sufficiently high breakdown voltage, probably far in excess of any
+
+80
+00:05:52,400 --> 00:05:56,240
+ voltage you'd ever expect to see between those two points to make sure that there's never any
+
+81
+00:05:56,240 --> 00:06:00,320
+ unintended current flow. This could be important, for example, between pins of an electrical
+
+82
+00:06:01,200 --> 00:06:05,440
+ across a component that's designed to maintain electrical isolation like an optocoupler or
+
+83
+00:06:05,440 --> 00:06:09,520
+ across a component whose job it is to stop current flow in a particular direction like a diode.
+
+84
+00:06:09,520 --> 00:06:14,000
+ If you ever find yourself designing a PCB or designing a connector or in a situation where
+
+85
+00:06:14,000 --> 00:06:18,240
+ you need to maintain electrical isolation between components, checking the breakdown voltage
+
+86
+00:06:18,240 --> 00:06:21,920
+ to the material that's going to live between them is probably not a bad idea. It doesn't really
+
+87
+00:06:21,920 --> 00:06:25,680
+ make a whole lot of sense to talk about the breakdown voltage of materials which are conductors
+
+88
+00:06:25,680 --> 00:06:29,600
+ because those materials essentially have a breakdown voltage of zero. You can pass
+
+89
+00:06:29,680 --> 00:06:33,520
+ current through them at very, very low voltages. In terms of families of materials that would
+
+90
+00:06:33,520 --> 00:06:37,760
+ otherwise be thought of as insulators, however, generally speaking, polymers, plastics have a very,
+
+91
+00:06:37,760 --> 00:06:42,800
+ very high breakdown voltage and to a lesser degree, so do ceramics. This relatively high
+
+92
+00:06:42,800 --> 00:06:46,960
+ breakdown strength of polymers and the fact that they have a pretty high raise activity is part
+
+93
+00:06:46,960 --> 00:06:51,120
+ of the reason why they use this insulation on electrical cables. We'll talk a little bit more about
+
+94
+00:06:51,120 --> 00:06:53,680
+ this in context when we meet these materials in the coming weeks.
