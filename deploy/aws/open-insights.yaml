@@ -199,7 +199,7 @@ Resources:
             git clone ${GitRepo} /opt/open-insights/src
           fi
           git -C /opt/open-insights/src checkout --detach "$ref"
-          /opt/open-insights/src/deploy/aws/bootstrap.sh ${AWS::StackName} ${AWS::Region}
+          bash /opt/open-insights/src/deploy/aws/bootstrap.sh ${AWS::StackName} ${AWS::Region}
 
   # The database, uploads, trained models and Caddy's certificates. Apart from the root
   # volume so that they outlive the instance; snapshotted rather than lost if the stack

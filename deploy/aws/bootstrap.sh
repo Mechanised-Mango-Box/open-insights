@@ -37,7 +37,7 @@ if [ "${OI_BOOTSTRAP_REEXEC:-}" != "$ref" ]; then
 	git -C "$SRC" fetch --quiet origin
 	git -C "$SRC" checkout --quiet --detach "$ref"
 	# The lock is held through fd 9, which survives the exec.
-	OI_BOOTSTRAP_REEXEC=$ref exec "$SRC/deploy/aws/bootstrap.sh" "$@"
+	OI_BOOTSTRAP_REEXEC=$ref exec bash "$SRC/deploy/aws/bootstrap.sh" "$@"
 fi
 
 # shellcheck source=deploy/aws/versions.env

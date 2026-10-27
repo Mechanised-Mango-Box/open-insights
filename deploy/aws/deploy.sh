@@ -143,10 +143,12 @@ cmd_up() {
 		--capabilities CAPABILITY_IAM --no-fail-on-empty-changeset
 
 	wait_for_ssm
-	# On a new stack this waits behind the UserData run (bootstrap.sh takes a lock)
-	# and then confirms it; on an existing one it moves the host to $ref.
+	# On a new stack the SSM agent is up before UserData has cloned the repository, so
+	# wait for cloud-init first; bootstrap.sh's lock then queues this behind any run
+	# still going, and confirms it. On an existing stack it moves the host to $ref.
+	# cloud-init's own status is not checked: this run reports the real outcome.
 	[ $existed = 1 ] && echo "updating the host to $ref..." || echo "waiting for first boot..."
-	ssm_run "bash /opt/open-insights/src/deploy/aws/bootstrap.sh $STACK $REGION" 3600
+	ssm_run "cloud-init status --wait >/dev/null || true; bash /opt/open-insights/src/deploy/aws/bootstrap.sh $STACK $REGION" 3600
 	echo "up: $STACK at $(output PublicIp), running $ref"
 }
 
