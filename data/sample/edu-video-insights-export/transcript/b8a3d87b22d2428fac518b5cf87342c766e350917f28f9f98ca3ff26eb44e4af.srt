@@ -1,0 +1,123 @@
+1
+00:00:00,000 --> 00:00:05,500
+ Alright guys, the time has come, welcome to our last kind of week together or half week together.
+
+2
+00:00:06,320 --> 00:00:12,200
+ This week, I want to help kind of bridge the gap a little bit between the modeling half of the course and the control half of the course.
+
+3
+00:00:12,920 --> 00:00:16,960
+ We kind of set this up a little bit last week when we started talking about non-linear systems.
+
+4
+00:00:16,960 --> 00:00:21,880
+ Most of the analysis you're going to do over the next couple of weeks through the week is going to be focused around linear systems.
+
+5
+00:00:21,880 --> 00:00:25,320
+ In fact, linear time invariant systems, LDI systems.
+
+6
+00:00:25,800 --> 00:00:34,720
+ But as we learned last week, even as we start to model reality kind of increasingly well, we start to capture all the non-linear things that make up the world around us.
+
+7
+00:00:35,360 --> 00:00:47,280
+ We can linearize about any point we're interested in, approximation points, equilibrium points and construct kind of linear state space models that represent that thing almost as well, as long as we're kind of near the point that we're approximating.
+
+8
+00:00:47,440 --> 00:01:01,280
+ Over the next couple of videos, I want to talk about how we convert from the kind of state space representation that we've already been dealing with and particularly the linear state space representation that matrix formed that we've been dealing with to kind of the language of control engineers.
+
+9
+00:01:01,280 --> 00:01:08,280
+ One final system representation. It's called the transfer function. Transfer functions are kind of an interesting concept.
+
+10
+00:01:08,280 --> 00:01:17,280
+ A transfer function is simply kind of the operation that you need to do to the input of a system to get the output of that system in Laplace space.
+
+11
+00:01:17,280 --> 00:01:26,280
+ What do I mean by that? If you take the Laplace transform, the input and Laplace transform of the output, then the transfer function is kind of the conglomerate of all the stuff that has to happen in the middle.
+
+12
+00:01:26,280 --> 00:01:36,280
+ Over the next couple of videos, we're going to talk about how you generate a transfer function if you have, say, an ODE representation of a system or a state space model kind of in matrix form representation of a system.
+
+13
+00:01:36,280 --> 00:01:46,280
+ But there are a couple of things I want to talk about now. First of all, transfer functions are only defined for LTI systems. If you're trying to find the transfer function of a nonlinear system, you're doing something wrong.
+
+14
+00:01:46,280 --> 00:01:57,280
+ You should linearize first and then kind of talk about the transfer function of that linearization. Second of all, unlike state space models, which can map kind of multiple inputs to multiple outputs.
+
+15
+00:01:57,280 --> 00:02:06,280
+ Generally, when we say transfer function, we're talking about single input single output systems. We're talking about kind of the mapping from one input to one output.
+
+16
+00:02:06,280 --> 00:02:14,280
+ And if a system has multiple inputs or multiple outputs or both, then there'll be a transfer function mapping each input to each output.
+
+17
+00:02:14,280 --> 00:02:24,280
+ In this kind of sense, sometimes you might say the transfer function is a matrix of all of these transfer functions. Each of them kind of mapping a particular input to a particular output.
+
+18
+00:02:24,280 --> 00:02:32,280
+ But in general, when I refer to transfer function in this course, I'm generally talking about the mapping from one input in Laplace space to one output in Laplace space.
+
+19
+00:02:32,280 --> 00:02:43,280
+ I really like transfer function representations of systems because they boil down a lot of the complexity and the physics of what's going on into really just a polynomial divided by a polynomial.
+
+20
+00:02:43,280 --> 00:02:51,280
+ And they kind of make good on the promise that I made you at the start of the course that kind of under the hood or physical systems act the same.
+
+21
+00:02:51,280 --> 00:02:56,280
+ I've already told you that the kind of electrical analog of a mass spring damper is an RLC circuit.
+
+22
+00:02:56,280 --> 00:03:08,280
+ Well, transfer functions make this really obvious. The transfer function of a mass spring damper and the transfer function of an RLC circuit when you choose your parameters kind of the right way are identical, indistinguishable from one another.
+
+23
+00:03:08,280 --> 00:03:14,280
+ And if you analyze that transfer function, you're kind of going to see the same analysis for an RLC as you are for a mass spring damper.
+
+24
+00:03:14,280 --> 00:03:21,280
+ There's also a pretty enormous library of research and kind of toolboxes to support analysis of transfer functions.
+
+25
+00:03:21,280 --> 00:03:26,280
+ That lab has some of these kind of built in and you'll get to meet those over the kind of control half of the course.
+
+26
+00:03:26,280 --> 00:03:38,280
+ But generally your procedure is going to look something like generate a nonlinear state space model of a system linearize that to get kind of the linear state space form the matrix form kind of convert from that state space model to a transfer function.
+
+27
+00:03:38,280 --> 00:03:43,280
+ And then do some analysis to operate on that transfer function or to build a controller for that transfer function.
+
+28
+00:03:43,280 --> 00:03:50,280
+ In other cases, if people have constructed models by first principles and ended up with kind of an ODE, you know, you can also convert that to a transfer function.
+
+29
+00:03:50,280 --> 00:03:54,280
+ It's one of the topics we're going to talk about this week later this week and going into next week,
+
+30
+00:03:54,280 --> 00:04:06,280
+ UN's going to start to talk about the kind of structure of these transfer functions and how exactly they work in the fact that the kind of roots of the numerator and of the denominator have special meanings in terms of the way the systems are going to react.
+
+31
+00:04:06,280 --> 00:04:24,280
+ But for now, over the next couple of videos, let's talk about how we convert between the representations we've already met and this new one that we're just meeting now so that you guys are well prepared to go into the control half of the course to take any system model it linearize it and get a transfer function ready to control it.

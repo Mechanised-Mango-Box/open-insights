@@ -1,0 +1,615 @@
+1
+00:00:00,000 --> 00:00:04,400
+ Alright, having talked generally about how the arrangement of the constituents in a composite
+
+2
+00:00:04,400 --> 00:00:08,400
+ affect the material properties, we're now going to talk specifically about how mechanical
+
+3
+00:00:08,400 --> 00:00:12,640
+ properties evolve in a composite due to these arrangements. Because this topic gets very,
+
+4
+00:00:12,640 --> 00:00:16,480
+ very complicated, very, very quickly as you start to model the real world,
+
+5
+00:00:16,480 --> 00:00:19,840
+ we're going to be pretty subdued in terms of the approach that we take.
+
+6
+00:00:19,840 --> 00:00:23,120
+ We're only going to talk about two constituent components loaded
+
+7
+00:00:23,120 --> 00:00:28,160
+ actually in their principal directions. In other words, loaded in series or in parallel.
+
+8
+00:00:28,240 --> 00:00:31,840
+ At the end of this video, we'll talk briefly about extensions of this to other geometries,
+
+9
+00:00:31,840 --> 00:00:36,320
+ but we will talk more about that in context as we meet some of those specific composites
+
+10
+00:00:36,320 --> 00:00:41,120
+ later in the week. Before we start a note on syntax on terminology, in this course, we're using
+
+11
+00:00:41,120 --> 00:00:46,560
+ a particular convention in our definition of series and parallel, kind of the intuitive definition
+
+12
+00:00:46,560 --> 00:00:51,440
+ that two things lined up in series are aligned end to end and two things lined up in parallel
+
+13
+00:00:51,440 --> 00:00:57,120
+ or aligned side by side. This convention isn't used universally. For example, in end 2440,
+
+14
+00:00:57,120 --> 00:01:00,960
+ there is a different convention that's used. Neither of these approaches is right or wrong.
+
+15
+00:01:00,960 --> 00:01:04,560
+ Convention is just that. It's like choosing a direction for your coordinate system,
+
+16
+00:01:04,560 --> 00:01:07,840
+ but you should be aware that different people and different courses might have a different
+
+17
+00:01:07,840 --> 00:01:12,560
+ perspective on what exactly you call series and what exactly you call parallel. But really,
+
+18
+00:01:12,560 --> 00:01:16,160
+ this is just a naming convention. We'll kick off our discussion on mechanical properties by
+
+19
+00:01:16,160 --> 00:01:20,400
+ starting with the elasticity of composites. The same way we do with every other material.
+
+20
+00:01:20,400 --> 00:01:25,920
+ Here, like every other material we've met this semester, a composite acts essentially like a spring,
+
+21
+00:01:25,920 --> 00:01:30,080
+ as it's loaded up. It deforms elastically by some amount, stretching the atomic bonds inside the
+
+22
+00:01:30,080 --> 00:01:35,200
+ material, which provide a restoring force. But unlike many of the materials we've met so far in
+
+23
+00:01:35,200 --> 00:01:40,800
+ this course, which were relatively isotropic, composites in general are very anti-sotropy.
+
+24
+00:01:40,800 --> 00:01:45,040
+ They have very different behavior depending on whether the components are aligned in series
+
+25
+00:01:45,040 --> 00:01:49,600
+ or in parallel. If components in a composite are aligned in series, the same way you might have,
+
+26
+00:01:49,600 --> 00:01:55,200
+ if you had discrete layers in a fiber reinforced composite that's being loaded kind of across these
+
+27
+00:01:55,680 --> 00:02:00,000
+ or a sandwich structure that's being loaded across its layers, then the effective elastic
+
+28
+00:02:00,000 --> 00:02:04,880
+ behavior of this composite is going to be very much like two springs connected back to back.
+
+29
+00:02:04,880 --> 00:02:08,880
+ In this arrangement, there are two key constraints on the elastic behavior. First of all,
+
+30
+00:02:08,880 --> 00:02:13,520
+ the total deformation seen by the composite, the effective deformation of the composite,
+
+31
+00:02:13,520 --> 00:02:19,280
+ is a sum of the deformation of the individual parts. And second of all, any applied load needs
+
+32
+00:02:19,280 --> 00:02:24,240
+ to be carried in its entirety by every constituent of the composite. For a load to reach a
+
+33
+00:02:24,240 --> 00:02:28,880
+ or restraint, it has to pass through every single constituent in turn. This gives rise to two
+
+34
+00:02:28,880 --> 00:02:34,160
+ pretty important expressions, one for the effective stiffness of a series comprised composite,
+
+35
+00:02:34,160 --> 00:02:39,040
+ given the stiffnesses of each of the constituents, and one that describes how each of the constituents
+
+36
+00:02:39,040 --> 00:02:43,680
+ to form to make up the total deformation. The derivation for these expressions is linked on the textbook
+
+37
+00:02:43,680 --> 00:02:46,960
+ page for this video. I'm not going to go through it now because I think the vast majority of
+
+38
+00:02:46,960 --> 00:02:50,400
+ people aren't interested in hearing a derivation. But it's up there on the textbook page,
+
+39
+00:02:50,400 --> 00:02:53,760
+ you can check it out if you're interested. There are a couple of interesting observations about
+
+40
+00:02:53,760 --> 00:02:58,400
+ series aligned composites that we can draw from these expressions. First of all, in a series arranged
+
+41
+00:02:58,400 --> 00:03:03,440
+ composite, the effective stiffness depends on the product of the stiffnesses of the constituents.
+
+42
+00:03:03,440 --> 00:03:07,680
+ This means that if you have one constituent which is very, very compliant, the entire composite
+
+43
+00:03:07,680 --> 00:03:12,400
+ is going to suffer. Second of all, there's a hard upper bound on the effective stiffness of the
+
+44
+00:03:12,400 --> 00:03:17,040
+ composite. As the stiffness of one constituent goes to infinity as it essentially becomes rigid,
+
+45
+00:03:17,040 --> 00:03:21,600
+ the effective stiffness of the composite tends towards that of the other constituent. In other
+
+46
+00:03:21,600 --> 00:03:26,080
+ words, if you had a series aligned composite that consisted of a nearly rigid material and a very
+
+47
+00:03:26,080 --> 00:03:31,200
+ compliant material, the effective stiffness would be very close to that of the very compliant material.
+
+48
+00:03:31,200 --> 00:03:35,760
+ Finally, and probably very intuitively, the deformation contributed by each constituent is a
+
+49
+00:03:35,760 --> 00:03:40,400
+ function of its stiffness. In other words, the stiffer constituents deform less and the more
+
+50
+00:03:40,400 --> 00:03:45,280
+ compliant constituents deform more. Now, there are analogies but very different expressions for
+
+51
+00:03:45,280 --> 00:03:49,520
+ a parallel arranged composite. A real world example of a parallel arranged composite would be
+
+52
+00:03:49,520 --> 00:03:54,080
+ something like a fiber reinforced polymer that's loaded in the direction of its layers,
+
+53
+00:03:54,080 --> 00:03:58,640
+ as opposed to through them. The elastic behavior of such a composite is very much like having two
+
+54
+00:03:58,640 --> 00:04:03,040
+ springs in parallel. And as was the case with series aligned composites, there are two key
+
+55
+00:04:03,040 --> 00:04:07,520
+ upshots, two key constraints on the elastic behavior that arise from this arrangement.
+
+56
+00:04:07,520 --> 00:04:11,680
+ First of all, parallel arranged composites are constrained such that the deformation seen by
+
+57
+00:04:11,680 --> 00:04:16,080
+ each constituent is equal. Because the two constituents are arranged in parallel, they have to
+
+58
+00:04:16,160 --> 00:04:21,360
+ deform by the same amount. Second of all, because they're arranged in parallel, not every constituent
+
+59
+00:04:21,360 --> 00:04:26,320
+ needs to bare the entire load. In fact, each constituent will instead contribute some proportion
+
+60
+00:04:26,320 --> 00:04:30,880
+ of the total load will carry some proportion of the total load. These upshots give rise to
+
+61
+00:04:30,880 --> 00:04:35,600
+ expressions for the effective stiffness of a parallel arranged composite and for the proportion
+
+62
+00:04:35,600 --> 00:04:40,240
+ of the load that's carried by each constituent in a parallel arranged composite. And as was the
+
+63
+00:04:40,240 --> 00:04:43,760
+ case with series arranged composites, there are some interesting conclusions that we can draw from
+
+64
+00:04:43,760 --> 00:04:47,920
+ these expressions. First of all, and probably most importantly, the effective stiffness of a
+
+65
+00:04:47,920 --> 00:04:52,240
+ parallel arranged composite doesn't depend on a product of the constituent's differences.
+
+66
+00:04:52,240 --> 00:04:57,120
+ It only depends on a simple sum. This means that a very, very compliant constituent in the stack
+
+67
+00:04:57,120 --> 00:05:02,000
+ up doesn't affect the effective stiffness of the composite as much. And it also means that the
+
+68
+00:05:02,000 --> 00:05:06,160
+ effective stiffness isn't bound by whatever the lowest of the constituent's differences are.
+
+69
+00:05:06,160 --> 00:05:11,840
+ The stiffness can go to infinity as either of the constituents do. Finally, and I hope intuitively,
+
+70
+00:05:11,840 --> 00:05:16,080
+ the proportion of load carried by each constituent is a function of its stiffness with
+
+71
+00:05:16,080 --> 00:05:20,640
+ the stiffer constituents carrying more load. Now, that was a lot of information to take in in
+
+72
+00:05:20,640 --> 00:05:25,440
+ not very much time, so let's recap and bring these things together now. In a series aligned
+
+73
+00:05:25,440 --> 00:05:30,320
+ composite, the load has to be carried equally and completely by every member. And every
+
+74
+00:05:30,320 --> 00:05:34,720
+ member will deform by potentially a different amount to contribute to the total defamation
+
+75
+00:05:34,720 --> 00:05:39,600
+ seen by the part. Consequently, the effective stiffness of a series aligned composite is very
+
+76
+00:05:39,680 --> 00:05:44,640
+ sensitive to both constituent's differences. It's sensitive to a product of these. And series
+
+77
+00:05:44,640 --> 00:05:49,040
+ aligned composites for that reason tend to be a little bit more compliant, a little bit less stiff
+
+78
+00:05:49,040 --> 00:05:55,200
+ than their parallel counterparts. Speaking of parallel aligned composites, here, the load is shared
+
+79
+00:05:55,200 --> 00:06:00,320
+ amongst all of the constituents and doesn't need to be carried in whole by each one. Instead,
+
+80
+00:06:00,320 --> 00:06:05,440
+ each constituent contributes some proportion of the total load bearing capacity of the composite.
+
+81
+00:06:05,520 --> 00:06:10,320
+ That being said, each constituent is subject to the same deformation. They all need to stretch
+
+82
+00:06:10,320 --> 00:06:14,960
+ or compress by the same amount. In a parallel aligned composite, the effective stiffness is a
+
+83
+00:06:14,960 --> 00:06:19,760
+ simple sum of the constituent's differences. And this means that it isn't bound by either of them.
+
+84
+00:06:19,760 --> 00:06:24,000
+ And it also means that if you have a very compliant constituent, it's not going to penalize the
+
+85
+00:06:24,000 --> 00:06:28,400
+ effective stiffness as much as a series aligned one. All right, up until this point, I've been
+
+86
+00:06:28,400 --> 00:06:33,040
+ talking about stiffness, but the time has come for us to tie this near to material properties.
+
+87
+00:06:33,040 --> 00:06:36,800
+ It turns out that irrespective of whether you're talking about an axial loading or a
+
+88
+00:06:36,800 --> 00:06:42,320
+ torsional loading or a bending loading, the stiffness of an engineering material is always
+
+89
+00:06:42,320 --> 00:06:47,120
+ related to young's modulus. And while the specific expressions will differ for these different
+
+90
+00:06:47,120 --> 00:06:52,960
+ use cases, the effective young's modulus of a component is related to the effective stiffness
+
+91
+00:06:52,960 --> 00:06:58,240
+ of that component. And this relationship is essentially analogous to the ones we've just talked
+
+92
+00:06:58,240 --> 00:07:03,280
+ about for stiffness. If, for example, we consider a series arranged composite and again,
+
+93
+00:07:03,280 --> 00:07:08,560
+ only talk about axial loadings and further make an assumption that all of the constituents of this
+
+94
+00:07:08,560 --> 00:07:13,200
+ composite have the same cross-sectional area, we get this expression where the effective young's
+
+95
+00:07:13,200 --> 00:07:18,320
+ modulus, just like the effective stiffness, depends on a product of the constituent moduli.
+
+96
+00:07:18,320 --> 00:07:22,880
+ If we have a parallel arranged composite and assume that each constituent has the same length,
+
+97
+00:07:22,880 --> 00:07:26,720
+ then we get this expression where the effective young's modulus is essentially
+
+98
+00:07:26,720 --> 00:07:31,600
+ weighted some of the constituent moduli. The derivations for both of these expressions are up
+
+99
+00:07:31,600 --> 00:07:35,520
+ on the textbook page for this video. They're a little bit more complicated than the stiffness
+
+100
+00:07:35,520 --> 00:07:39,840
+ ones, but not hugely. But I hope you can see by looking at these expressions that the same
+
+101
+00:07:39,840 --> 00:07:44,720
+ takeaways as applied to stiffness apply to young's modulus. In a series arranged
+
+102
+00:07:44,720 --> 00:07:48,560
+ composite, the introduction of a compliant material, one with a low young's modulus,
+
+103
+00:07:48,560 --> 00:07:53,760
+ is going to severely drag down the effective modulus of the composite. In a parallel arranged
+
+104
+00:07:53,760 --> 00:07:57,600
+ composite, not nearly as much. To put some numbers on this, to give you an example,
+
+105
+00:07:57,600 --> 00:08:02,160
+ let's look at both cases, let's say I have a 50-50 mixture of a really stiff material like
+
+106
+00:08:02,160 --> 00:08:07,360
+ alumina and a really, really compliant material like polyethylene. Illumina has a young's modulus
+
+107
+00:08:07,360 --> 00:08:12,720
+ in the order of 330 gigapascals. Polyethylene has a young's modulus in the order of three quarters
+
+108
+00:08:12,720 --> 00:08:17,760
+ of a gigapascal. In a series arranged, composite, the effective modulus depends on a product of these
+
+109
+00:08:17,760 --> 00:08:23,280
+ things and consequently ends up being only one and a half gigapascals, basically the same as that
+
+110
+00:08:23,280 --> 00:08:28,640
+ of polyethylene. In a parallel arranged composite, the effective modulus depends on a weighted
+
+111
+00:08:28,640 --> 00:08:33,600
+ sum of these and consequently looks more like an average, about halfway between polyethylene
+
+112
+00:08:33,600 --> 00:08:38,560
+ and alumina. And I hope this agrees with your intuitive understanding. If you need to pass a load
+
+113
+00:08:38,560 --> 00:08:42,400
+ through all of the components, then you would imagine that you're essentially limited by
+
+114
+00:08:42,400 --> 00:08:46,960
+ whichever of those is the most compliant. And if you can share a load across a bunch of different
+
+115
+00:08:46,960 --> 00:08:52,160
+ components, then essentially the only penalty you suffer by introduction of a more compliant one
+
+116
+00:08:52,160 --> 00:08:56,960
+ is that you have less cross-sectional area to fill with the stiffer one. Now for situations that
+
+117
+00:08:56,960 --> 00:09:01,600
+ aren't perfectly series or perfectly parallel say that maybe you do have a laminated composite,
+
+118
+00:09:01,600 --> 00:09:05,920
+ but you have some load which is oblique to the layers, or if you have a composite that consists of
+
+119
+00:09:05,920 --> 00:09:10,880
+ one material within another, well then these equations aren't going to strictly apply. That being
+
+120
+00:09:10,880 --> 00:09:16,880
+ said, series and parallel represent the two extremes in terms of orientation of your constituents.
+
+121
+00:09:16,880 --> 00:09:21,520
+ And any effective stiffness or effective young's modulus is going to be bound by these extremes
+
+122
+00:09:21,520 --> 00:09:25,600
+ is going to live somewhere between these extremes. We'll talk a little bit more about these
+
+123
+00:09:25,600 --> 00:09:30,560
+ in context over the next few videos, but I will note that particularly as you start to move towards
+
+124
+00:09:30,560 --> 00:09:36,400
+ more complicated geometries and more complicated loading scenarios, this problem very quickly becomes
+
+125
+00:09:36,400 --> 00:09:41,280
+ intractable to do by hand. In fact, both properties of engineering composites, whether those be
+
+126
+00:09:41,280 --> 00:09:46,160
+ mechanical or even non-mechanical, are very often simulated. There are a bunch of different
+
+127
+00:09:46,160 --> 00:09:49,920
+ techniques for doing this, but they're all well and truly outside the scope of this course. So
+
+128
+00:09:49,920 --> 00:09:54,160
+ I might leave that one there. To finish up this video, I'm going to very briefly talk about
+
+129
+00:09:54,160 --> 00:09:58,320
+ strength of composites, and it can be a very brief discussion because we've already done
+
+130
+00:09:58,320 --> 00:10:03,520
+ all the hard yards in our discussion of stiffness. In a series aligned composite because every
+
+131
+00:10:03,520 --> 00:10:08,240
+ constituent needs to bear the entire load, then the effective strength of your composite is
+
+132
+00:10:08,240 --> 00:10:13,200
+ essentially the minimum of the strengths of your constituents. Because every constituent has to
+
+133
+00:10:13,200 --> 00:10:18,000
+ carry the entire load, you can't really benefit from the incredible strength of one constituent
+
+134
+00:10:18,000 --> 00:10:23,280
+ if the other one is going to let you down. For example, in our hypothetical aluminum polyethylene
+
+135
+00:10:23,280 --> 00:10:27,440
+ composite, you'd never be able to exploit the incredible strength of the aluminum because your
+
+136
+00:10:27,440 --> 00:10:33,280
+ polyethylene is going to fail at some ridiculously low stress. For this exact reason, many series
+
+137
+00:10:33,280 --> 00:10:38,080
+ aligned composites often suffer from what we call delamination, where essentially the constituents
+
+138
+00:10:38,080 --> 00:10:43,680
+ are pulled apart from each other due to a failure of the interconstituent bonding. In a parallel
+
+139
+00:10:43,680 --> 00:10:48,160
+ arrangement, though your effective strength is a little bit more complicated. Because each constituent
+
+140
+00:10:48,160 --> 00:10:53,120
+ carries a proportion of the load relative to its stiffness, relative to its young's modulus,
+
+141
+00:10:53,120 --> 00:10:57,680
+ it can be a little tricky to work out how much load is being carried by each constituent and
+
+142
+00:10:57,680 --> 00:11:03,120
+ correspondingly which constituent is going to fail first. Essentially, it all comes down to a
+
+143
+00:11:03,120 --> 00:11:07,920
+ stiffness to strength ratio. A stiffer material will carry more of the load, but if it has a
+
+144
+00:11:07,920 --> 00:11:12,960
+ sufficiently high strength, it may not fail before the other one does. Essentially, when analyzing
+
+145
+00:11:13,280 --> 00:11:17,440
+ a composite to fail, you need to very carefully consider the stiffness to strength ratios of the
+
+146
+00:11:17,440 --> 00:11:22,000
+ constituents. And that'll probably do is for mechanical properties. To make one final point,
+
+147
+00:11:22,000 --> 00:11:26,240
+ I should note that, well, I've made it sound like you can choose between series or parallel
+
+148
+00:11:26,240 --> 00:11:30,960
+ arrangements in your composite. It's very often the case that these things arise as a function
+
+149
+00:11:30,960 --> 00:11:35,120
+ of the way they're manufactured. And that you may have no choice in whether a composite is loaded
+
+150
+00:11:35,120 --> 00:11:39,760
+ in series or parallel at all. Obviously, if you can choose and you can set your composite up
+
+151
+00:11:39,760 --> 00:11:44,240
+ to behave a particular way, then that's great. But very often, when using a composite, you may
+
+152
+00:11:44,240 --> 00:11:48,880
+ be making the best of a bad situation and subject to the limitations of whatever manufacturing
+
+153
+00:11:48,880 --> 00:11:53,040
+ technique you'd like to use. We'll talk a little bit more about this and the trade-offs involved
+
+154
+00:11:53,040 --> 00:11:56,560
+ in doing so next week when we get to manufacturing with composites.

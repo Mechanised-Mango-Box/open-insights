@@ -1,0 +1,147 @@
+1
+00:00:00,000 --> 00:00:03,680
+ The final thermoplastic we're going to look at this week is polystyrene,
+
+2
+00:00:03,680 --> 00:00:06,960
+ which accounts for around 4% of global plastic production.
+
+3
+00:00:06,960 --> 00:00:11,360
+ As its name suggests, polystyrene is polymerized from the styrene monomer.
+
+4
+00:00:11,360 --> 00:00:14,240
+ This monomer is probably the most complicated of all the ones that we've seen before,
+
+5
+00:00:14,240 --> 00:00:17,680
+ but thankfully we don't need to know anything about it because we're not chemists.
+
+6
+00:00:17,680 --> 00:00:20,000
+ What I will say is that like the other monomers we've met,
+
+7
+00:00:20,000 --> 00:00:22,880
+ we've replaced one in 400 atoms with something different.
+
+8
+00:00:22,880 --> 00:00:25,040
+ In this case, we're the benzene ring.
+
+9
+00:00:25,040 --> 00:00:28,080
+ We produce polystyrene in a bunch of different form factors,
+
+10
+00:00:28,480 --> 00:00:33,680
+ but probably the most common one is as an expanded polystyrene foam styrofoam.
+
+11
+00:00:33,680 --> 00:00:38,080
+ Styrofoam is an incredibly useful and versatile material owing to its incredibly low
+
+12
+00:00:38,080 --> 00:00:42,080
+ effective density. This makes it perfect for applications where you want to fill a space
+
+13
+00:00:42,080 --> 00:00:46,400
+ without necessarily adding a lot of weight. For this exact reason, we commonly use styrofoam
+
+14
+00:00:46,400 --> 00:00:49,360
+ to fill out boxes packaging when we're sending things places.
+
+15
+00:00:49,360 --> 00:00:53,760
+ And it's also commonly used as a lightweight and cheap thermal insulator in houses.
+
+16
+00:00:53,760 --> 00:00:56,400
+ Actually, and I can't pass this up while we're talking about it,
+
+17
+00:00:56,400 --> 00:01:00,000
+ the fact that it's such a good thermal insulator coupled with the fact that it's food safe
+
+18
+00:01:00,000 --> 00:01:03,600
+ means that polystyrene foam can be used as a takeaway food container.
+
+19
+00:01:03,600 --> 00:01:05,680
+ It's what you get your wholeile snack pack in.
+
+20
+00:01:05,680 --> 00:01:08,400
+ What you may not have known is that you can also produce polystyrene
+
+21
+00:01:08,400 --> 00:01:11,440
+ as a hard, brittle, solid, clear plastic.
+
+22
+00:01:11,440 --> 00:01:13,840
+ It's what CD jewel cases are made out of.
+
+23
+00:01:13,840 --> 00:01:18,240
+ While it is very versatile, polystyrene, particularly when it's an expanded foam,
+
+24
+00:01:18,240 --> 00:01:22,480
+ is not very recyclable at all. Because of its chemistry, you need enormous amounts of
+
+25
+00:01:22,480 --> 00:01:26,000
+ of energy to effectively melt down and recycle polystyrene,
+
+26
+00:01:26,000 --> 00:01:28,720
+ and you're releasing pretty nasty fumes in the process.
+
+27
+00:01:28,720 --> 00:01:32,080
+ Polystyrene foam also causes huge headaches for recycling plants,
+
+28
+00:01:32,080 --> 00:01:36,160
+ because it has a tendency to get broken up and distributed amongst all of your other trash,
+
+29
+00:01:36,160 --> 00:01:40,880
+ contaminating all of the other plastics that would otherwise be reasonably easy to recycle.
+
+30
+00:01:40,880 --> 00:01:45,040
+ Long story short, probably don't put polystyrene foam in your recycling bin.
+
+31
+00:01:45,040 --> 00:01:48,560
+ And with that, we've lightly touched on the foremost common thermoplastics.
+
+32
+00:01:48,560 --> 00:01:51,680
+ There's some more information about these on the textbook page that accompanies
+
+33
+00:01:51,680 --> 00:01:55,360
+ the last couple of videos, and you're of course encouraged to a bit of your own research.
+
+34
+00:01:55,360 --> 00:01:57,840
+ Have a look at what edge back has to say about these plastics.
+
+35
+00:01:57,840 --> 00:02:00,800
+ Compare them to the properties of other plastics that you might know.
+
+36
+00:02:00,800 --> 00:02:04,640
+ And I'll finish up by saying that we'll talk about a couple of other types of thermoplastic,
+
+37
+00:02:04,640 --> 00:02:09,360
+ the ones that you tend to get as 3D printing filaments next week when we talk about 3D printing.

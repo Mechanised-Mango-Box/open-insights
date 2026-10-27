@@ -1,0 +1,279 @@
+1
+00:00:00,000 --> 00:00:04,960
+ The majority of engineering ceramics, technical and non-technical are made in the same way.
+
+2
+00:00:04,960 --> 00:00:09,040
+ Ceramic powder is consolidated under pressure by one means or another,
+
+3
+00:00:09,040 --> 00:00:14,000
+ and then is scented or vitrified at high temperatures to allow the particles to kind of
+
+4
+00:00:14,000 --> 00:00:17,840
+ bond together. In many ways, the production of these ceramics closely resembles the
+
+5
+00:00:17,840 --> 00:00:21,600
+ powder metallurgy technique we met for metals all the way back in week four,
+
+6
+00:00:21,600 --> 00:00:25,760
+ and many of the considerations for the design of powder metallurgy components also apply
+
+7
+00:00:25,760 --> 00:00:29,600
+ to the design of ceramic components. In this video we're going to talk about the different kinds
+
+8
+00:00:29,600 --> 00:00:33,920
+ of consolidation processes for ceramic powders in the different ways that ceramics are
+
+9
+00:00:33,920 --> 00:00:38,560
+ fired and scented. There are quite a few different ways that ceramic powders are consolidated
+
+10
+00:00:38,560 --> 00:00:43,440
+ into a green body or a green compact before they're fired or scented. Perhaps the closest
+
+11
+00:00:43,440 --> 00:00:48,560
+ in spirit to the kind that we met when we talked about powder metallurgy is uniaxial compression.
+
+12
+00:00:48,560 --> 00:00:52,640
+ Here, a ceramic powder is loaded into a diet, negative in the geometry that you want to form,
+
+13
+00:00:52,640 --> 00:00:57,920
+ and a ram is brought down with the other side of that geometry to consolidate the powder under pressure.
+
+14
+00:00:57,920 --> 00:01:02,480
+ This is by and large one of the more common processes because you can achieve reasonably complicated
+
+15
+00:01:02,480 --> 00:01:07,280
+ geometries and get reasonably high densification of the product. And it's also quite efficient
+
+16
+00:01:07,280 --> 00:01:12,240
+ because the same motion that loads the diet can eject the previously pressed part. Of course,
+
+17
+00:01:12,240 --> 00:01:15,360
+ this isn't the only method of consolidation. There are a bunch of different ones,
+
+18
+00:01:15,360 --> 00:01:20,240
+ but another very common one is called isostatic compression. Here, the ceramic powder is loaded
+
+19
+00:01:20,240 --> 00:01:24,560
+ into a flexible mold, and that mold is subjected to hydrostatic pressure from a fluid.
+
+20
+00:01:24,560 --> 00:01:28,160
+ This is very commonly used when you want to achieve a very, very high density product. You
+
+21
+00:01:28,160 --> 00:01:32,080
+ really want to get all the pores you can out of there because you can apply pressure from
+
+22
+00:01:32,080 --> 00:01:36,080
+ all of the different directions. It also helps alleviate some of the considerations you have to
+
+23
+00:01:36,080 --> 00:01:40,000
+ make if you were uniaxially pressing your component. Remember when we talked about powder metallurgy,
+
+24
+00:01:40,000 --> 00:01:44,640
+ when you're uniaxially compressing your powder, you can't have sudden changes in the geometry of
+
+25
+00:01:44,640 --> 00:01:49,920
+ a component in the direction of pressing because post-press but pre-centred or fired green bodies
+
+26
+00:01:49,920 --> 00:01:54,640
+ or green compats are usually quite brittle and only would otherwise be held together by
+
+27
+00:01:54,640 --> 00:01:58,880
+ electrostatic forces. Surrey powders are normally included with a binder that helps
+
+28
+00:01:58,880 --> 00:02:03,760
+ hold all these things together until they're sintered or until they're fired. These binders are very
+
+29
+00:02:03,760 --> 00:02:08,480
+ often polymers of one form or another in design to burn out or incinerate out as part of the
+
+30
+00:02:08,480 --> 00:02:13,120
+ sintering process. Well, of course, you can consolidate Surrey powders manually. Very often these
+
+31
+00:02:13,120 --> 00:02:18,080
+ processes are highly automated. Just like in powder metallurgy, you normally have a single motion
+
+32
+00:02:18,080 --> 00:02:22,480
+ that deposits some powder in the die while pushing away the previous part. So you've
+
+33
+00:02:22,480 --> 00:02:27,440
+ consolidated your ceramic powder and you formed your green body and now it's time to sinter or fire.
+
+34
+00:02:27,440 --> 00:02:31,200
+ You remember from last week that the primary difference between the manufacturer of technical
+
+35
+00:02:31,200 --> 00:02:36,000
+ ceramics and the manufacturer of fired non-technical ceramics was that in the case of the former,
+
+36
+00:02:36,000 --> 00:02:40,400
+ our goal is to sinter the particles. To get the particles to meld together at their interface
+
+37
+00:02:40,400 --> 00:02:45,200
+ and achieve densification largely by joining all of the particles together. Whereas in the case
+
+38
+00:02:45,200 --> 00:02:49,680
+ of the latter in vitrification, we do fully sinter some particles and we do partially sinter some
+
+39
+00:02:49,680 --> 00:02:55,360
+ others, but there are also many, many particles that end up unsintered. We instead densify the product.
+
+40
+00:02:55,360 --> 00:03:00,640
+ We instead join all the particles together by melting a glassy phase in between them, primarily
+
+41
+00:03:00,640 --> 00:03:05,120
+ made of silica and other contaminants. This makes densification of technical ceramics by sintering
+
+42
+00:03:05,120 --> 00:03:09,760
+ generally quite a bit harder than densification of non-technical ceramics by vitrification because
+
+43
+00:03:09,760 --> 00:03:14,560
+ the temperatures involved in the former are so much higher than those involved in the latter.
+
+44
+00:03:14,560 --> 00:03:18,160
+ There are of course exceptions to this rule and other things you need to consider, but to give
+
+45
+00:03:18,160 --> 00:03:23,520
+ you a general idea, tungsten carbide ceramics are generally sintered at temperatures in excess of
+
+46
+00:03:23,520 --> 00:03:30,000
+ 2,000 degrees C, whereas clay bricks are generally vitrified at temperatures around 800 to a thousand
+
+47
+00:03:30,000 --> 00:03:34,400
+ degrees C. And as you can know it output together, these temperatures differ quite substantially,
+
+48
+00:03:34,400 --> 00:03:38,960
+ and they differ substantially again from the temperatures that we saw in powder metallurgy.
+
+49
+00:03:38,960 --> 00:03:42,880
+ Now both temperature and the time at which you hold at that temperature are important for
+
+50
+00:03:42,880 --> 00:03:47,680
+ sintering and vitrification, but generally speaking, a rule of thumb for reasonably time
+
+51
+00:03:47,680 --> 00:03:52,480
+ efficient sintering or vitrification of our product is to aim for about 80% of its melting
+
+52
+00:03:52,480 --> 00:03:56,880
+ temperature. And this generally holds true for both metals and ceramics. Iron, for example,
+
+53
+00:03:56,880 --> 00:04:00,880
+ has a melting temperature in the order of 1,500 degrees, and it's generally sintered in the
+
+54
+00:04:00,880 --> 00:04:05,440
+ order of 1,200 degrees, whereas tungsten carbide, which we talked about sintering above 2,000
+
+55
+00:04:05,440 --> 00:04:11,520
+ degrees C, has a melting temperature in the order of 2,900, 3,000 degrees C. Now getting to 2,000
+
+56
+00:04:11,520 --> 00:04:16,560
+ degrees C to sinter some tungsten carbide is absolutely nothing to sneeze at, but for very,
+
+57
+00:04:16,560 --> 00:04:22,000
+ very high melting temperature ceramics, say in the order of 3,500, 4,000 degrees C,
+
+58
+00:04:22,000 --> 00:04:27,120
+ melting temperature ceramics, achieving 70 to 80% of this to sinter them is just not practical
+
+59
+00:04:27,120 --> 00:04:31,280
+ or possible. For these materials, a variety of strategies are used to allow us to center lower
+
+60
+00:04:31,280 --> 00:04:35,760
+ temperatures. For example, some ceramics are hot pressed, in other words, pressure is applied
+
+61
+00:04:35,760 --> 00:04:39,680
+ while they're at temperature, and this can help work out some of the porosity without needing
+
+62
+00:04:40,160 --> 00:04:44,640
+ extremely high 70 to 80% temperatures, and sometimes other additives are alloyant,
+
+63
+00:04:44,640 --> 00:04:48,800
+ so put into the ceramics powder to help it sinter. As a last resort, and I say this because
+
+64
+00:04:48,800 --> 00:04:54,240
+ energy is quite expensive, some ceramics are sintered for extremely long times to help
+
+65
+00:04:54,240 --> 00:04:58,560
+ work out all of that porosity. The anodes that are used to melt aluminium, for example,
+
+66
+00:04:58,560 --> 00:05:03,520
+ are made of graphite, which has a melting temperature in excess of 3,500 degrees C. These anodes
+
+67
+00:05:03,520 --> 00:05:07,760
+ use a combination of the strategies we talked about before and still need to be sintered for up to
+
+68
+00:05:07,760 --> 00:05:12,240
+ 28 days to work out the porosity. And that's probably where I'll leave these discussions.
+
+69
+00:05:12,240 --> 00:05:15,840
+ There's an excellent video on the manufacturer of tungsten carbide cutting incense that I've
+
+70
+00:05:15,840 --> 00:05:25,840
+ left on the textbook page for this one. I strongly encourage you to go and check it out.

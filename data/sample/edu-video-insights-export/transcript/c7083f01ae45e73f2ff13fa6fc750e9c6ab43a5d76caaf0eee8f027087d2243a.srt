@@ -1,0 +1,451 @@
+1
+00:00:00,000 --> 00:00:04,560
+ Alright everybody, we're here. We're at the peak of the hill, the hardest video of the week,
+
+2
+00:00:04,560 --> 00:00:08,400
+ tying together everything we've learned over the last couple of videos.
+
+3
+00:00:08,400 --> 00:00:12,400
+ This is as bad as it's going to get. Stick with me for the next couple of minutes. Focus for
+
+4
+00:00:12,400 --> 00:00:16,480
+ the next couple of minutes and the rest of this week is going to be crazy. We're going to meet a
+
+5
+00:00:16,480 --> 00:00:20,560
+ bunch of different engineering materials and because we've already talked about all of the physics
+
+6
+00:00:20,560 --> 00:00:25,360
+ and chemistry and crystallography and all of these different phases of iron and steel,
+
+7
+00:00:25,360 --> 00:00:28,560
+ all of those discussions are going to be really, really quick and easy.
+
+8
+00:00:28,560 --> 00:00:32,400
+ As we've just talked about, the microstructures of iron and steel that form largely
+
+9
+00:00:32,400 --> 00:00:37,520
+ as a function of the cooling rate and carbon content have a huge effect on their properties,
+
+10
+00:00:37,520 --> 00:00:40,960
+ not least because these different microstructures put up different resistance to the
+
+11
+00:00:40,960 --> 00:00:46,080
+ motion of dislocations, thus substantially impacting both strength and ductility.
+
+12
+00:00:46,080 --> 00:00:50,880
+ We can and very often do intentionally use cooling rate and carbon content as
+
+13
+00:00:50,880 --> 00:00:55,760
+ dials that we can turn to tune in material properties that we want in engineering metals.
+
+14
+00:00:55,840 --> 00:00:59,280
+ This process, changing microstructures and thus material properties,
+
+15
+00:00:59,280 --> 00:01:05,040
+ using cooling rate, is part of a field generally referred to as heat treatment. Sometimes heat
+
+16
+00:01:05,040 --> 00:01:08,880
+ treatment is intentional and very much thought out. You'll intentionally set out to
+
+17
+00:01:08,880 --> 00:01:13,680
+ ultra microstructured to achieve some properties and other times heat treatment is a consequence
+
+18
+00:01:13,680 --> 00:01:18,880
+ of some manufacturing or production technique. bulk metals, for example, are generally worked and
+
+19
+00:01:18,880 --> 00:01:23,680
+ formed at very high temperatures and the cooling rates that are achieved as they come down from
+
+20
+00:01:23,680 --> 00:01:28,160
+ these temperatures have a substantial effect on their properties. For the remainder of this video,
+
+21
+00:01:28,160 --> 00:01:31,760
+ we're going to touch on only a handful of these heat treatments, but you should be aware that
+
+22
+00:01:31,760 --> 00:01:36,240
+ you're going to talk about this in a lot more detail in materials too. Perhaps the first
+
+23
+00:01:36,240 --> 00:01:41,440
+ heat treatment to talk about is recrystallization. Irrespective of what the microstructor looks like
+
+24
+00:01:41,440 --> 00:01:46,080
+ because of all the different things that could have happened to it, if you raise it up above
+
+25
+00:01:46,080 --> 00:01:51,200
+ the eutectoid temperature and you take it back up to the gamma austenite range, then you will grow
+
+26
+00:01:51,200 --> 00:01:55,840
+ new grains which precipitate out from the boundaries of your existing ones. This is essentially
+
+27
+00:01:55,840 --> 00:02:00,800
+ like a recent switch. Irrespective of what kind of microstructures you've grown or what kind of damage
+
+28
+00:02:00,800 --> 00:02:05,760
+ you might have done to the latest introducing dislocations or what kind of misshapen grains you
+
+29
+00:02:05,760 --> 00:02:09,920
+ might have ended up with because of some sort of texture-inducing process. If you can bring your
+
+30
+00:02:09,920 --> 00:02:14,000
+ material back up to the recrystallization temperature and hold there for a little while,
+
+31
+00:02:14,000 --> 00:02:19,680
+ you can grow new fresh grains. You should note that heat transfer isn't instantaneous and
+
+32
+00:02:19,680 --> 00:02:24,400
+ particularly for very thick sections of metal. It might take a little while for all parts of it
+
+33
+00:02:24,400 --> 00:02:28,400
+ to reach the recrystallization temperature. For this reason, recrystallization is generally
+
+34
+00:02:28,400 --> 00:02:33,360
+ talked about being a function of temperature, time, and geometry. Again, you'll talk about this a
+
+35
+00:02:33,360 --> 00:02:37,760
+ little more in materials too. Exactly how you make the decisions of what temperature to hit your
+
+36
+00:02:37,760 --> 00:02:42,800
+ material too and exactly how long to leave it in there to ensure that it actually has recrystallized
+
+37
+00:02:42,800 --> 00:02:47,360
+ everywhere. The next heat treatments on our list are cooling and quenching. These are natural
+
+38
+00:02:47,760 --> 00:02:52,560
+ consequences of recrystallizing, I guess, once you reach a recrystallization temperature or even
+
+39
+00:02:52,560 --> 00:02:56,160
+ if you're there for the first time because you're doing some kind of production or manufacturing
+
+40
+00:02:56,160 --> 00:03:01,440
+ on bulk material, then you need to cool down to room temperature so that your parts can be useful.
+
+41
+00:03:01,440 --> 00:03:04,960
+ We've already talked about how different cooling rates can impact which marker structures you
+
+42
+00:03:04,960 --> 00:03:09,440
+ can expect to see. If you carefully control these cooling rates, you can, in essence, select
+
+43
+00:03:09,440 --> 00:03:13,920
+ which marker structures you'd like to see. If you intentionally cool very, very slowly, then you
+
+44
+00:03:13,920 --> 00:03:18,960
+ can form spheridite. If you cool a little bit faster than that, well, you can form perlite. If you
+
+45
+00:03:18,960 --> 00:03:24,560
+ cool really, really fast by quenching, by taking your material out of the oven and dumping it into an
+
+46
+00:03:24,560 --> 00:03:29,840
+ oil bath or a water bath, then you can form martensite. Just like our recrystallization is
+
+47
+00:03:29,840 --> 00:03:34,640
+ temperature and time sensitive because heat transfer isn't instantaneous, cooling and quenching
+
+48
+00:03:34,640 --> 00:03:38,880
+ are as well. This is where the thermal conductivity and specific heat, or in other words,
+
+49
+00:03:38,880 --> 00:03:43,520
+ thermal diffusivity of a material becomes quite important. Your ability to extract heat
+
+50
+00:03:44,080 --> 00:03:48,000
+ out of it. If you'd like to quench a really thick section of iron or steel so that you can form
+
+51
+00:03:48,000 --> 00:03:52,480
+ martensite throughout a process called through hardening, you need to be able to suck the heat
+
+52
+00:03:52,480 --> 00:03:57,360
+ out from even the center of that steel very, very quickly. Usually it's the case that you can't
+
+53
+00:03:57,360 --> 00:04:02,000
+ achieve such a cooling rate through the entire thickness of a material. It's quite common that
+
+54
+00:04:02,000 --> 00:04:06,880
+ if you quench a part, the outside of it will form martensite because it can cool quite quickly,
+
+55
+00:04:06,880 --> 00:04:11,840
+ but the inside of it because there's a lot of material surrounding it doesn't have a chance to
+
+56
+00:04:11,840 --> 00:04:16,560
+ cool as quickly and instead form something like pearlite. This might sound like a problem but can
+
+57
+00:04:16,560 --> 00:04:21,680
+ actually be advantageous in a bunch of circumstances to have a hard kind of out of skin on the
+
+58
+00:04:21,680 --> 00:04:27,440
+ material, which maybe is a little bit brittle, but a nice ductile core that can absorb vibrations
+
+59
+00:04:27,440 --> 00:04:32,800
+ and impacts and shock loadings. You see there's a lot of parts that interface like gears which
+
+60
+00:04:32,800 --> 00:04:37,760
+ are actually intentionally hardened only on the outside, a process known as case hardening.
+
+61
+00:04:37,840 --> 00:04:41,760
+ They get heated rapidly on the outside and quenched so that they have a hard,
+
+62
+00:04:41,760 --> 00:04:47,280
+ nice out of the skin that's very wear resistant, but then a nice soft ductile core on the inside
+
+63
+00:04:47,280 --> 00:04:51,840
+ to absorb shock loading. You should note that quenching only really becomes effective at
+
+64
+00:04:51,840 --> 00:04:55,520
+ higher carbon contents. There needs to be sufficiently high carbon in the
+
+65
+00:04:55,520 --> 00:05:00,080
+ interstices of a gamma phase when it's hot so that when you cool it rapidly, you trap them in
+
+66
+00:05:00,080 --> 00:05:05,440
+ to form the martensite. Lower carbon content steels generally don't have the capacity to form
+
+67
+00:05:05,440 --> 00:05:09,840
+ martensite when you cool them rapidly like this and as a result they're sometimes referred to
+
+68
+00:05:09,840 --> 00:05:14,000
+ as not hardenerable and what they mean here is that you can't harden them by quenching.
+
+69
+00:05:14,000 --> 00:05:17,760
+ There are of course many other ways to harden these low carbon steels, the ones that we talked
+
+70
+00:05:17,760 --> 00:05:22,480
+ about before, a strain hardening or precipitation hardening or alloying or whatever.
+
+71
+00:05:22,480 --> 00:05:27,040
+ The next on our list of heat treatments is annealing. By heating above the recrystallization
+
+72
+00:05:27,040 --> 00:05:32,240
+ temperature and holding there you can essentially relieve any dislocations or pent-up stresses
+
+73
+00:05:32,240 --> 00:05:36,560
+ called residual stresses that we'll talk about in a few weeks' time, fix any misshapen
+
+74
+00:05:36,560 --> 00:05:42,960
+ grains and if you cool slowly enough maintain this nice reasonably dislocation-free ladders all the way
+
+75
+00:05:42,960 --> 00:05:47,920
+ down to room temperature as per light or spheratite. Tempering is another heat treatment process.
+
+76
+00:05:47,920 --> 00:05:51,360
+ That's a little bit like recrystallization in that you're heating your material up with the
+
+77
+00:05:51,360 --> 00:05:57,040
+ intention of reforming some of the microstructure but unlike recrystallization these changes happen
+
+78
+00:05:57,040 --> 00:06:01,760
+ within existing grains. You don't grow any new grains. You heat your material up to a temperature
+
+79
+00:06:01,840 --> 00:06:06,560
+ below the recrystallization temperature and essentially allow some of the trapped-in carbon
+
+80
+00:06:06,560 --> 00:06:10,880
+ atoms in your martin site phase to diffuse. There's a little bit of a trade-off here you're essentially
+
+81
+00:06:10,880 --> 00:06:15,680
+ giving up some of your martin site and as a result you lose a little bit of strength but you also
+
+82
+00:06:15,680 --> 00:06:21,280
+ gain a lot of ductility and this isn't a zero-sum game. You actually gain a lot more ductility
+
+83
+00:06:21,280 --> 00:06:26,480
+ than you lose in strength. In other words by forming martin site and tempering it back a little
+
+84
+00:06:26,480 --> 00:06:31,200
+ you can end up with a strong and ductile steel. Fast stronger than if you just had
+
+85
+00:06:31,200 --> 00:06:35,600
+ per light and far more ductile than if you just had martin site but not a direct trade-off
+
+86
+00:06:35,600 --> 00:06:39,840
+ between these two. It's kind of the best of both worlds and consequently you very rarely see a
+
+87
+00:06:39,840 --> 00:06:44,240
+ steel supply which has been quenched but not tempered. To finish up we should just talk a little bit
+
+88
+00:06:44,240 --> 00:06:50,160
+ about manufacturing considerations. Some manufacturing processes actually embed heat treatments
+
+89
+00:06:50,160 --> 00:06:54,160
+ in the way that they work. You need to be reasonably careful to understand the temperatures and the
+
+90
+00:06:54,240 --> 00:06:58,480
+ times that are involved in any of these techniques because they can substantially alter
+
+91
+00:06:58,480 --> 00:07:02,480
+ the microstructures and the properties of the steel that you plan to work with. For example you
+
+92
+00:07:02,480 --> 00:07:07,040
+ could buy a very strong high carbon steel that's got lots of martin site in it and then by virtue
+
+93
+00:07:07,040 --> 00:07:10,800
+ of some manufacturing process that you put it through you could lose all of that martin
+
+94
+00:07:10,800 --> 00:07:16,240
+ site, lose all of that strength by heating it up above the recrystallization temperature or even just
+
+95
+00:07:16,240 --> 00:07:20,560
+ by tempering it by accident. This can go the other way as well and perhaps that's a little bit more
+
+96
+00:07:20,560 --> 00:07:25,200
+ dangerous. You could buy a high carbon steel for example that has not been quenched one which is
+
+97
+00:07:25,200 --> 00:07:30,240
+ mainly still perlite and thereby introducing some intense localized heat and cooling say by
+
+98
+00:07:30,240 --> 00:07:34,880
+ welding and then dumping some cold water on it or a welding and maybe even just walking away
+
+99
+00:07:34,880 --> 00:07:40,080
+ depending on the temperature and time. Accidentally for martin site around the area of the world
+
+100
+00:07:40,080 --> 00:07:45,040
+ but now you'll have a mismatch of properties between maybe a reasonably soft high carbon steel
+
+101
+00:07:45,040 --> 00:07:50,160
+ that was mostly politic and a martin city area around the site of the world that's very very strong.
+
+102
+00:07:50,160 --> 00:07:53,760
+ mismatches in material properties like this are generally pretty bad and a great
+
+103
+00:07:53,760 --> 00:07:56,960
+ site for things to crack for example so you need to be a little bit careful. But
+
+104
+00:07:56,960 --> 00:08:00,960
+ so currently it's extremely important that you select steels with the manufacturing process
+
+105
+00:08:00,960 --> 00:08:04,800
+ that you plan to put them through in mind. I think we'll leave it there and at this point you
+
+106
+00:08:04,800 --> 00:08:08,640
+ should take a break and have a beer or something because we're at the top of the hill well done.
+
+107
+00:08:08,640 --> 00:08:12,080
+ Because we've now done all of the hard yards the remainder of the videos for this week
+
+108
+00:08:12,080 --> 00:08:15,840
+ are going to be quite short and snappy. We're going to meet a bunch of different materials
+
+109
+00:08:15,840 --> 00:08:19,840
+ including a few different kinds of steel but because we've already talked about all of the physics
+
+110
+00:08:19,840 --> 00:08:24,400
+ and the chemistry and the crystallography as well as microstructures and heat treatments
+
+111
+00:08:24,400 --> 00:08:27,280
+ it's really just going to be a matter of talking about the different applications for different
+
+112
+00:08:27,280 --> 00:08:31,760
+ metals and referring back to this stuff that we've already mentioned. So have a quick rest and we'll
+
+113
+00:08:31,760 --> 00:08:35,760
+ come back and talk about our first proper material playing carbon steels.

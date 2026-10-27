@@ -1,0 +1,231 @@
+1
+00:00:00,000 --> 00:00:04,880
+ This is the first in a series of three videos that are going to talk about the basic
+
+2
+00:00:04,880 --> 00:00:10,560
+ components that you'll meet in translating mechanical systems. These obviously aren't
+
+3
+00:00:10,560 --> 00:00:15,400
+ the set of all components that you might meet. There are some which are also talked about
+
+4
+00:00:15,400 --> 00:00:19,160
+ in the textbook that you should take a look at. And as I said to you earlier, there
+
+5
+00:00:19,160 --> 00:00:22,400
+ are components that we don't cover in this course. CCRs that we don't cover in this
+
+6
+00:00:22,400 --> 00:00:26,640
+ course. And the responsibility is going to be on you, the engineer to go out and develop
+
+7
+00:00:26,640 --> 00:00:29,880
+ those. But we're going to introduce you to some of them so that you can build some
+
+8
+00:00:29,880 --> 00:00:34,120
+ models and kind of get that muscle memory going of solving problems. You've actually met
+
+9
+00:00:34,120 --> 00:00:38,640
+ all three of these components before in the kind of actively named mass spring damper
+
+10
+00:00:38,640 --> 00:00:43,200
+ system. But in contrast to the problem that we solved together at the end of last week
+
+11
+00:00:43,200 --> 00:00:49,280
+ where I gave you all the CCRs and the SSRs and I guided you through the entire process.
+
+12
+00:00:49,280 --> 00:00:53,240
+ This week I'm going to show you how those components work in isolation so that you can apply
+
+13
+00:00:53,240 --> 00:00:58,480
+ them to some more complicated things, maybe something like this. For the most part, I'm
+
+14
+00:00:58,480 --> 00:01:02,920
+ going to talk about components in terms of the way that they store and release energy.
+
+15
+00:01:02,920 --> 00:01:07,680
+ And this might seem a little bit arbitrary and a little bit unrelated at first. But particularly
+
+16
+00:01:07,680 --> 00:01:11,920
+ later this week when we start to talk about how the different domains, mechanical, electrical,
+
+17
+00:01:11,920 --> 00:01:15,840
+ fluid power are connected. It should make a little bit more sense why I'm talking about
+
+18
+00:01:15,840 --> 00:01:20,520
+ in that way. So the very first component that we need to meet is the point mass, which will
+
+19
+00:01:20,520 --> 00:01:25,760
+ typically draw as a square or a circle with an M inside of it, but not always. In the
+
+20
+00:01:25,760 --> 00:01:30,120
+ last video I kind of gave you some of the fundamental assumptions for this domain which
+
+21
+00:01:30,120 --> 00:01:33,760
+ also are fundamental assumptions that apply to point masses when they're collecting
+
+22
+00:01:33,760 --> 00:01:39,360
+ any size or shape and we're assuming in general that these things don't rotate. But there
+
+23
+00:01:39,360 --> 00:01:43,880
+ are kind of three other fundamental things you need to know about masses for us to be
+
+24
+00:01:43,880 --> 00:01:48,400
+ able to model them effectively. Number one, point masses are bodies that store kinetic
+
+25
+00:01:48,400 --> 00:01:53,360
+ energy with increasing velocity. And Newton's law of inertia, Newton's first law tells
+
+26
+00:01:53,360 --> 00:01:57,760
+ us that if we want to get something to move, if we want to change its velocity, then what
+
+27
+00:01:57,760 --> 00:02:01,680
+ we need to do is apply a force to it. We need to do some work on it. We need to store
+
+28
+00:02:01,680 --> 00:02:07,160
+ some energy in that body and that energy for a point mass gets turned into kinetic energy.
+
+29
+00:02:07,160 --> 00:02:11,880
+ The second fundamental point comes from Newton's second law. And that is that force is
+
+30
+00:02:11,880 --> 00:02:16,000
+ equal to mass times acceleration. In other words, if we know the net force acting on
+
+31
+00:02:16,040 --> 00:02:20,840
+ the body, say by, I don't know drawing a free body diagram, then we should be able
+
+32
+00:02:20,840 --> 00:02:24,880
+ to work out what the acceleration is on that body. Finally, and this is particularly
+
+33
+00:02:24,880 --> 00:02:29,040
+ important because we use this quantity as a state generally, we need to talk about linear
+
+34
+00:02:29,040 --> 00:02:33,760
+ momentum, which we usually give the simple p. This is the product of the mass of a body
+
+35
+00:02:33,760 --> 00:02:39,560
+ and its velocity. It kind of describes how much ink that thing has in the forward direction.
+
+36
+00:02:39,560 --> 00:02:43,880
+ Two things can have the same linear momentum even if they don't have the same mass, a small
+
+37
+00:02:44,040 --> 00:02:48,920
+ body going very fast or a larger body going very slow, for example. By taking these three
+
+38
+00:02:48,920 --> 00:02:53,920
+ characteristics together, we build up the two CCRs that are relevant for masses in our
+
+39
+00:02:53,920 --> 00:02:58,960
+ systems. Number one, that momentum is the product of mass of velocity. And number two,
+
+40
+00:02:58,960 --> 00:03:03,280
+ that if you take the derivative of that, the derivative of momentum, you get mass times
+
+41
+00:03:03,280 --> 00:03:08,960
+ acceleration or in other words, net force. There's an SSR, a system structure relationship,
+
+42
+00:03:08,960 --> 00:03:13,400
+ which is also associated with masses. Every time you see a mass in one of your systems,
+
+43
+00:03:13,400 --> 00:03:17,520
+ you're going to need to work out what that net force is. And we do that by writing
+
+44
+00:03:17,520 --> 00:03:22,040
+ Newton's second law and drawing a free body diagram. You've almost certainly seen this
+
+45
+00:03:22,040 --> 00:03:26,440
+ in courses or in high school before. And in some of those cases, maybe drawing a free body
+
+46
+00:03:26,440 --> 00:03:32,440
+ diagram was optional. In inch 2440, drawing a free body diagram is compulsory. Every time
+
+47
+00:03:32,440 --> 00:03:37,640
+ you see a mass, I should see in your SSR section, a free body diagram of that mass. And
+
+48
+00:03:37,640 --> 00:03:42,280
+ also compulsory is putting the coordinate system that corresponds to that mass on the free
+
+49
+00:03:42,360 --> 00:03:46,120
+ body diagram. Because that coordinate system is going to tell us which forces we should
+
+50
+00:03:46,120 --> 00:03:50,640
+ treat as positive and which forces we should treat as negative. There are a couple of reasons
+
+51
+00:03:50,640 --> 00:03:54,640
+ why we make this compulsory. Number one, it's good practice and it will help you avoid
+
+52
+00:03:54,640 --> 00:03:59,360
+ mistakes. Number two, it satisfies your ethical responsibility to tell people who are reading
+
+53
+00:03:59,360 --> 00:04:04,240
+ your model, how it's been constructed and what assumptions you've made. Finally, number
+
+54
+00:04:04,240 --> 00:04:08,800
+ three, it helps us give you marks. If you make a mistake in the quiz, but you have a free
+
+55
+00:04:08,880 --> 00:04:12,960
+ body diagram there that looks correct with the exception of one thing, I can award you partial
+
+56
+00:04:12,960 --> 00:04:17,520
+ marks on having done the work. This isn't always trivial and some free body diagrams can
+
+57
+00:04:17,520 --> 00:04:22,240
+ get pretty complex. So let's take a look at problem 2.2 together and see if we can draw
+
+58
+00:04:22,240 --> 00:04:24,240
+ the correct free body diagram for this mass.

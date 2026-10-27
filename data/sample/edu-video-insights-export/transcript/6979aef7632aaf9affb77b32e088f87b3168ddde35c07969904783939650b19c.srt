@@ -1,0 +1,387 @@
+1
+00:00:00,000 --> 00:00:04,240
+ All right, it's time to meet our first set of non-mechanical properties, thermal ones.
+
+2
+00:00:04,240 --> 00:00:08,400
+ The ones that talk about the performance of a material and response to some change in temperature.
+
+3
+00:00:08,400 --> 00:00:12,320
+ Temperature is a concept you're probably already familiar with, though, as an engineer you need
+
+4
+00:00:12,320 --> 00:00:17,040
+ a slightly more robust definition than hot or cold. This isn't a chemistry course though,
+
+5
+00:00:17,040 --> 00:00:20,720
+ and so I'm not going to get into the weeds. For our purposes, temperature is really just a
+
+6
+00:00:20,720 --> 00:00:25,280
+ measure of how much the atoms inside of a body of vibrating in their associated energy.
+
+7
+00:00:25,280 --> 00:00:28,960
+ What is at high temperature have atoms that vibrate a lot, and bodies that load
+
+8
+00:00:28,960 --> 00:00:32,720
+ temperature of atoms that don't vibrate very much at all. Difference in temperature between
+
+9
+00:00:32,720 --> 00:00:37,600
+ points is the driving force for migration of heat energy. Heat flows from areas of high
+
+10
+00:00:37,600 --> 00:00:42,560
+ temperature to areas of low temperature. This note brings us nicely to our first thermal property,
+
+11
+00:00:42,560 --> 00:00:47,280
+ thermal conductivity. Conduction is one of the ways that he can be transferred between points of
+
+12
+00:00:47,280 --> 00:00:51,680
+ different temperature. While this isn't exactly the case, you can think about this mechanism as the
+
+13
+00:00:51,680 --> 00:00:56,480
+ atoms within a material vibrating against each other. Atoms in part of a material that are at a
+
+14
+00:00:56,560 --> 00:01:00,720
+ high temperature vibrate a lot, and these bump into their neighbours, and these bump into their neighbours,
+
+15
+00:01:00,720 --> 00:01:05,280
+ and this kind of continues all the way down the material until the atoms in the area of low
+
+16
+00:01:05,280 --> 00:01:09,360
+ temperature start to vibrate as well. Raising the temperature of the material until everything is
+
+17
+00:01:09,360 --> 00:01:14,240
+ vibrating by the same amount, until the material has reached a constant uniform temperature.
+
+18
+00:01:14,240 --> 00:01:18,720
+ The actual mechanisms for conduction of heat can be a little bit material specific, and so we'll
+
+19
+00:01:18,720 --> 00:01:22,800
+ talk about that as we start to meet some materials. For now, what you should note is that the
+
+20
+00:01:22,800 --> 00:01:28,000
+ ease by which a material conduct seat is captured by a property court its thermal conductivity.
+
+21
+00:01:28,000 --> 00:01:33,520
+ We give conductivity the symbol K, and it relates the heat flow rate between two points to the
+
+22
+00:01:33,520 --> 00:01:37,200
+ distance between these points and the temperature difference between these points,
+
+23
+00:01:37,200 --> 00:01:41,120
+ according to Fourier's law of conduction. As far as families of materials go,
+
+24
+00:01:41,120 --> 00:01:44,640
+ metals are generally known for their relatively good thermal conductivity.
+
+25
+00:01:44,640 --> 00:01:50,080
+ Polymers are generally not, and ceramics and composites can vary, depending very much on the type
+
+26
+00:01:50,080 --> 00:01:54,080
+ of ceramic you're talking about and the type of composite you're talking about. We'll talk a
+
+27
+00:01:54,080 --> 00:01:58,080
+ little bit more about this when we meet those materials in the coming weeks. Materials also have a
+
+28
+00:01:58,080 --> 00:02:03,040
+ property known as their specific heat, which we give a symbol C, that describes how much heat
+
+29
+00:02:03,040 --> 00:02:07,520
+ energy you need to put into them to raise their temperature. This quantity becomes quite important
+
+30
+00:02:07,520 --> 00:02:12,160
+ if you're trying to design a heatsink, for example, or control the cooling rates of a casting.
+
+31
+00:02:12,160 --> 00:02:16,800
+ In fact, because this property and thermal conductivity are both important in those circumstances,
+
+32
+00:02:16,800 --> 00:02:21,040
+ and a bunch of others like, I don't know, sequencing your world prep to make sure your components
+
+33
+00:02:21,040 --> 00:02:25,120
+ don't distort very much, you'll usually see them roll together along with density into a property
+
+34
+00:02:25,120 --> 00:02:29,280
+ called thermal diffusivity. Don't worry about this too much. We'll talk about it a little bit more
+
+35
+00:02:29,280 --> 00:02:33,200
+ when we meet some of these processes in the next couple of weeks. The next property on our list
+
+36
+00:02:33,200 --> 00:02:37,440
+ is the thermal expansion coefficient. We've already talked about how when materials heat up
+
+37
+00:02:37,440 --> 00:02:42,640
+ their atoms vibrate more, the consequence of this vibration is that the mean distance between these
+
+38
+00:02:42,640 --> 00:02:48,160
+ atoms, as they vibrate more, tends to increase. As a result, this vibration causes an appreciable
+
+39
+00:02:48,160 --> 00:02:53,680
+ change in the bulk size of a component. The thermal expansion coefficient of a material, which we give
+
+40
+00:02:53,680 --> 00:02:59,280
+ the symbol alpha, describes this change in size in relation to the original size of a material and
+
+41
+00:02:59,280 --> 00:03:02,880
+ a temperature change that's applied. Thermal expansion is something you'll need to be a little bit
+
+42
+00:03:02,880 --> 00:03:07,920
+ careful of in your designs, especially if you have rigid components that interconnect or a nearby
+
+43
+00:03:07,920 --> 00:03:12,160
+ in the presence of some sort of temperature change. A good example of this is that most bridges,
+
+44
+00:03:12,160 --> 00:03:16,720
+ especially long ones, have thermal expansion joints on either end. This is to account for the fact
+
+45
+00:03:16,720 --> 00:03:21,680
+ that the entire bridge will expand and contract in length as temperature changes in the environment.
+
+46
+00:03:21,680 --> 00:03:26,880
+ Thermal expansion, as a property, can also be exploited as a manufacturing or assembly technique.
+
+47
+00:03:26,880 --> 00:03:31,920
+ Trink fitting, for example, is a manufacturing process where you make a component slightly oversized
+
+48
+00:03:31,920 --> 00:03:36,160
+ and then cool it down so that it thermally contracts. Then you can put it inside of a hole or
+
+49
+00:03:36,160 --> 00:03:41,120
+ something, let it warm back up, and that thing will be locked in place. Heating can be used in much
+
+50
+00:03:41,120 --> 00:03:45,920
+ the same way to make undersized components large enough to slip onto a shaft, for example, before
+
+51
+00:03:45,920 --> 00:03:49,760
+ they're cool and are locked into place. The coefficient of thermal expansion is
+
+52
+00:03:49,760 --> 00:03:54,320
+ inversely related to the strength of the bonds that hold a material together. The stronger the bonds,
+
+53
+00:03:54,320 --> 00:03:58,880
+ the less they firmly expand. While we'll talk about this in more detail as we start to meet some
+
+54
+00:03:58,880 --> 00:04:03,520
+ families of materials, generally speaking, the bonds in ceramics are quite strong and as a result,
+
+55
+00:04:03,520 --> 00:04:08,240
+ they have a very low thermal expansion coefficient. While the bonds in metals are slightly weaker
+
+56
+00:04:08,240 --> 00:04:13,600
+ and the bonds in plastics, polymers are weaker again. All right, lucky last. You're probably
+
+57
+00:04:13,600 --> 00:04:18,160
+ already aware that as an engineer, we generally deal with materials in one of three states of matter,
+
+58
+00:04:18,160 --> 00:04:22,800
+ liquids, solids, and gases. As you subject materials to different temperatures, they may change
+
+59
+00:04:22,800 --> 00:04:27,040
+ from one of these states to another. Generally speaking, as with a lot of things, the motivations
+
+60
+00:04:27,040 --> 00:04:31,680
+ behind these changes of state are related to energy. For a given temperature, the material will take
+
+61
+00:04:31,680 --> 00:04:35,360
+ whichever state requires the least amount of energy to form. And because generally, we're
+
+62
+00:04:35,360 --> 00:04:38,880
+ concerned with making sure our materials remain at the state that we've installed them at,
+
+63
+00:04:38,880 --> 00:04:42,960
+ it's important we have an understanding of where these changes occur. The temperature
+
+64
+00:04:42,960 --> 00:04:47,200
+ at which a material transitions from being a solid to a liquid is known as its melting point,
+
+65
+00:04:47,200 --> 00:04:51,360
+ and the opposite, the transition from a liquid to solid is known as its freezing point.
+
+66
+00:04:51,360 --> 00:04:56,400
+ The temperature at which a liquid becomes a gas is known as its boiling point. Generally speaking,
+
+67
+00:04:56,400 --> 00:05:00,640
+ most metals and ceramics have reasonably high melting and boiling points,
+
+68
+00:05:00,640 --> 00:05:04,640
+ meaning that if you install them at room temperature and they generally operate around room
+
+69
+00:05:04,960 --> 00:05:08,720
+ temperature, plus or minus, maybe a couple of hundred degrees, they will be okay, they won't
+
+70
+00:05:08,720 --> 00:05:13,440
+ change state. And as a result, you usually find these kinds of materials operating in high-temperature
+
+71
+00:05:13,440 --> 00:05:18,880
+ environments. Polymers, on the other hand, plastics generally have much lower melting temperatures,
+
+72
+00:05:18,880 --> 00:05:23,680
+ only maybe a hundred degrees or less away from room temperature. And thus, if you're going to use
+
+73
+00:05:23,680 --> 00:05:27,840
+ a plastic or a polymer in your designs, you need to be really careful to make sure you
+
+74
+00:05:27,840 --> 00:05:32,080
+ characterize the kind of temperatures you expected to operate at. Because of some interesting
+
+75
+00:05:32,080 --> 00:05:36,320
+ material specific phenomena that we'll get into in the next couple of weeks, some materials
+
+76
+00:05:36,320 --> 00:05:40,880
+ actually have different freezing and melting points, meaning that the point at which you transition
+
+77
+00:05:40,880 --> 00:05:45,280
+ from one state of matter to another depends on your direction of approach. You might melt at a
+
+78
+00:05:45,280 --> 00:05:49,200
+ higher temperature than you freeze, for example. It's important to note that a lot of the
+
+79
+00:05:49,200 --> 00:05:54,160
+ properties we've talked about in this video can be very, very sensitive to environmental conditions.
+
+80
+00:05:54,160 --> 00:05:59,520
+ We've shown you linear relationships for thermal expansion and for specific heat and for conductivity,
+
+81
+00:05:59,520 --> 00:06:04,320
+ and we've talked about fixed points like melting temperature and boiling temperature and
+
+82
+00:06:04,320 --> 00:06:08,640
+ freezing temperature. But the truth is that a lot of these things can be sensitive to the pressure
+
+83
+00:06:08,640 --> 00:06:12,960
+ and the temperature that your material is operating at. In many cases, these linear relationships,
+
+84
+00:06:12,960 --> 00:06:17,280
+ these linear models that we've shown you will work just fine. But you should be aware that a lot
+
+85
+00:06:17,280 --> 00:06:22,320
+ of these things can vary substantially if you have substantial changes in pressure or temperature.
+
+86
+00:06:22,320 --> 00:06:26,320
+ This is also true of a bunch of other material properties, including some of the mechanical ones
+
+87
+00:06:26,320 --> 00:06:31,360
+ we met last week. For example, Young's modulus stiffness is quite sensitive to temperature.
+
+88
+00:06:31,360 --> 00:06:36,480
+ So much so that, for example, some steels can see a three-fourfold reduction in their Young's modulus
+
+89
+00:06:36,480 --> 00:06:41,040
+ as they approach their melting temperature and this relationship is highly nonlinear.
+
+90
+00:06:41,040 --> 00:06:44,640
+ Throughout the rest of this course, into later studies in materials and thermodynamics,
+
+91
+00:06:44,640 --> 00:06:48,720
+ we're going to talk a little bit about unwinding these models. And some of the ways that you
+
+92
+00:06:48,720 --> 00:06:52,800
+ reach a more accurate result, whether that's tabulated data for some of these parameters as a
+
+93
+00:06:52,800 --> 00:06:56,880
+ a function of changing pressure and temperature, or slightly more sophisticated models than just
+
+94
+00:06:56,880 --> 00:07:00,800
+ a linear relationship. That's all I've got to say about thermal properties for now. I'm aware
+
+95
+00:07:00,800 --> 00:07:04,320
+ there was a lot of content in this video and so it's probably worth watching the game when you've
+
+96
+00:07:04,320 --> 00:07:08,880
+ had a load of time to digest what's going on here. And it's probably also worth checking out the
+
+97
+00:07:08,880 --> 00:07:13,920
+ textbook page for this video, which I'll link in the video description.

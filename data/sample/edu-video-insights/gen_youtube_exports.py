@@ -18,7 +18,7 @@ export is per-channel, and this dataset spans two):
 
     <dataset_tag>/Content <range> <channel>/Table data.csv
 
-Layout and column spelling follow the real exports in ../mock-v3/. Only the six
+Layout and column spelling follow a real Studio export. Only the six
 columns the source data determines are present:
 
     Content                        <- all_metadata.video_id
@@ -38,7 +38,8 @@ There are no audience-retention reports for the same reason. Retention is a
 per-segment measurement; all_*.csv hold one scalar per video
 (average_percentage_viewed) and nothing about the shape of the curve behind it.
 Any curve consistent with that scalar would be a fabrication with twenty invented
-degrees of freedom, so none is written. The real curves are in upstream_raw/*_1.csv.
+degrees of freedom, so none is written here. The real curves are in
+upstream_raw/*_1.csv, and gen_retention_exports.py writes them out as Studio does.
 
 Two notes on the arithmetic, neither of which adds information:
 
@@ -58,9 +59,9 @@ from pathlib import Path
 BASE = Path(__file__).parent
 OUT = BASE.parent / "edu-video-insights-recreated_raw"
 
-# Spelling and order follow ../mock-v3/Content FAKE_DATE_RANGE USERNAME/Table
-# data.csv, minus the columns this dataset cannot fill, plus the Advanced-mode
-# metric its target came from.
+# Spelling and order follow a real Studio Content export's Table data.csv,
+# minus the columns this dataset cannot fill, plus the Advanced-mode metric its
+# target came from.
 CONTENT_HEADER = (
     "Content,Video title,Video publish time,Duration,"
     "Average view duration,Average percentage viewed (%)"

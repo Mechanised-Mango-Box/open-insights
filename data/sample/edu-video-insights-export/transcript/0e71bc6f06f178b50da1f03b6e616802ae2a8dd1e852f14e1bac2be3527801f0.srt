@@ -1,0 +1,159 @@
+1
+00:00:00,000 --> 00:00:05,680
+ Alright guys, congratulations, you've made it to the end of the Modeling Content for
+
+2
+00:00:05,680 --> 00:00:13,600
+ M2440.
+
+3
+00:00:13,600 --> 00:00:18,320
+ This week and the very start of next week is going to be all about trying to kind of bridge
+
+4
+00:00:18,320 --> 00:00:22,560
+ the gap to create a link between the Modeling stuff we've just done and the control
+
+5
+00:00:22,560 --> 00:00:25,840
+ stuff that you're going to do for the next kind of six weeks with associate professor
+
+6
+00:00:26,480 --> 00:00:29,360
+ and we're going to do that by talking about nonlinear systems.
+
+7
+00:00:30,400 --> 00:00:34,960
+ As you probably discovered over the last couple of weeks, the closer you get to modeling
+
+8
+00:00:34,960 --> 00:00:40,000
+ reality, capturing what's actually going on, the more complicated your friction models get,
+
+9
+00:00:40,000 --> 00:00:46,320
+ the more complicated your CCRs for other components get, the more nonlinear that things become.
+
+10
+00:00:47,040 --> 00:00:51,600
+ And for some reasons you already know, linear systems satisfy homogeneity and
+
+11
+00:00:51,600 --> 00:00:56,960
+ additivity, they're easier to simulate, you can pretty easily analyze them using a suite of
+
+12
+00:00:56,960 --> 00:01:00,960
+ tools and software packages that exist to do just that. And for some reasons that will become
+
+13
+00:01:00,960 --> 00:01:05,520
+ more clear over the next couple of weeks as you start to learn about control theory, linear
+
+14
+00:01:05,520 --> 00:01:09,840
+ systems are generally our preference. The things we want to deal with, even if the system that
+
+15
+00:01:09,840 --> 00:01:14,720
+ we're modeling is nonlinear, even if the model that we got at first flash for that system is nonlinear.
+
+16
+00:01:15,280 --> 00:01:19,600
+ The reality is that the CCRs we've given you in this course, the little mini models that
+
+17
+00:01:19,600 --> 00:01:24,640
+ characterize each component, they're probably only accurate in a very small subset of cases.
+
+18
+00:01:24,640 --> 00:01:28,640
+ And unless you kind of build up an arrangement of these to capture something complex, like
+
+19
+00:01:28,640 --> 00:01:32,800
+ I'm using an accumulated to model compressibility, we're using a friction to model the
+
+20
+00:01:32,800 --> 00:01:38,080
+ friction in a gearbox. And even then, most of the time your models are going to end up being
+
+21
+00:01:38,080 --> 00:01:42,880
+ nonlinear. Real life, nonlinearities, you might have already met things like progressive or
+
+22
+00:01:42,880 --> 00:01:48,240
+ digressive rate springs, non-omic resistors like light bulbs that kind of vary resistance with
+
+23
+00:01:48,240 --> 00:01:53,760
+ temperature and diodes, which are kind of an infinite resistance one way and kind of no
+
+24
+00:01:53,760 --> 00:01:59,760
+ resistance the other way, or semiconductors. We already met some kind of nonlinear gyrators right in
+
+25
+00:01:59,760 --> 00:02:05,040
+ the form of externally excited DC motors. And nonlinearities showed up quite a lot of
+
+26
+00:02:05,040 --> 00:02:09,600
+ improved power systems, right when we were modeling friction and valves and kind of compressed
+
+27
+00:02:09,600 --> 00:02:14,640
+ gas accumulators. Nonlinearities in your state space equations are normally pretty easy to spot,
+
+28
+00:02:14,640 --> 00:02:19,360
+ things like the square of a state or the product of two states, trigonometric functions of states
+
+29
+00:02:19,360 --> 00:02:23,520
+ or exponential functions of states. And whenever you see these things happening, you can be
+
+30
+00:02:23,520 --> 00:02:28,880
+ pretty sure that your model is nonlinear. As it turns out, our entire world is built around making
+
+31
+00:02:28,880 --> 00:02:34,400
+ approximations to nonlinear systems such that we can treat them as linear. All of our control
+
+32
+00:02:34,400 --> 00:02:38,240
+ theory that we're going to learn in this course is centered around linear systems. And that brings
+
+33
+00:02:38,240 --> 00:02:44,080
+ us to the goal for this week to learn how to represent nonlinear systems with a linear approximation
+
+34
+00:02:44,080 --> 00:02:48,560
+ how to linearize. We're going to spend the next few lectures talking about what you might already
+
+35
+00:02:48,560 --> 00:02:53,200
+ know about linearization from the kind of one dimensional two-dimensional studies you might have
+
+36
+00:02:53,200 --> 00:02:57,840
+ had in Math 11, 10 or 11, 20. And then we're going to move on to the much more complicated task of
+
+37
+00:02:57,840 --> 00:03:02,400
+ linearizing a state space model. And we're going to finish up this week by talking about some of
+
+38
+00:03:02,400 --> 00:03:06,000
+ the things that our linearization can tell us about our nonlinear system that you might not have
+
+39
+00:03:06,000 --> 00:03:11,680
+ expected whether or not those systems are stable and whether the approximation is any good.
+
+40
+00:03:11,680 --> 00:03:13,920
+ So let's get started.

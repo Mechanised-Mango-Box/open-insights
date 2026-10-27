@@ -1,0 +1,303 @@
+1
+00:00:00,000 --> 00:00:05,760
+ Alright guys welcome to week five the last week of modeling content next week
+
+2
+00:00:05,760 --> 00:00:09,320
+ we're going to be talking about linearization and kind of nonlinear systems in
+
+3
+00:00:09,320 --> 00:00:13,200
+ general and trying to bridge the gap between modeling and control but this is
+
+4
+00:00:13,200 --> 00:00:16,160
+ the last week we're going to be looking at modeling physical systems the last
+
+5
+00:00:16,160 --> 00:00:19,840
+ time we're going to be introducing a domain. Now I should say that we haven't
+
+6
+00:00:19,840 --> 00:00:23,440
+ covered all of the physical domains in this course we haven't talked about
+
+7
+00:00:23,440 --> 00:00:26,760
+ thermal systems we haven't talked about biological systems but I hope we
+
+8
+00:00:26,760 --> 00:00:29,960
+ given you enough exposure that you can kind of go out and start to
+
+9
+00:00:29,960 --> 00:00:33,160
+ research what you think the energy and kind of power variables might be in
+
+10
+00:00:33,160 --> 00:00:37,400
+ those domains kind of use the same generalized state space modeling process
+
+11
+00:00:37,400 --> 00:00:41,800
+ look at your CCRs and your SSRs for the different elements and of course I'd
+
+12
+00:00:41,800 --> 00:00:45,000
+ be happy to speak to you any of those if you kind of aerospace or
+
+13
+00:00:45,000 --> 00:00:48,120
+ mechatronics or even mechanical you'll meet some of these other domains in
+
+14
+00:00:48,120 --> 00:00:52,040
+ future courses and if you're electrical of course you'll spend a lot more time on
+
+15
+00:00:52,040 --> 00:00:55,800
+ electrical systems and meet components that we never saw before. The modeling
+
+16
+00:00:55,880 --> 00:00:59,880
+ part of this course was never supposed to be kind of the bill and end-all meeting
+
+17
+00:00:59,880 --> 00:01:03,400
+ every single possible physical system but just to give you a taste of what's
+
+18
+00:01:03,400 --> 00:01:07,880
+ out there so that you can go and kind of do this as a lifelong learner.
+
+19
+00:01:07,880 --> 00:01:11,560
+ So with that being said let's talk about the last domain we're going to meet in
+
+20
+00:01:11,560 --> 00:01:16,040
+ this course the fluid power domain. Now if that's not a series of words you're
+
+21
+00:01:16,040 --> 00:01:20,440
+ used to hearing in the same sentence I totally get it it was new to me as well
+
+22
+00:01:20,440 --> 00:01:23,160
+ and you might be thinking fluid power well you're talking about fluid dynamics
+
+23
+00:01:23,880 --> 00:01:28,760
+ and in a sense we are but a kind of highly simplified version of that
+
+24
+00:01:28,760 --> 00:01:33,320
+ fluid dynamics is an extremely complicated and super interesting field.
+
+25
+00:01:33,320 --> 00:01:36,680
+ I obviously have kind of a personal interest in it from Formula One but
+
+26
+00:01:36,680 --> 00:01:40,280
+ we're going to make a set of reasonably limiting assumptions here though
+
+27
+00:01:40,280 --> 00:01:43,480
+ you know the kind of equations that govern half fluids work in the real
+
+28
+00:01:43,480 --> 00:01:46,760
+ order exceedingly complex and don't have a closed form solution until you
+
+29
+00:01:46,760 --> 00:01:50,760
+ start to simplify them by making assumptions and taking constraints.
+
+30
+00:01:50,760 --> 00:01:53,560
+ We're going to be placing some pretty huge constraints on our analysis
+
+31
+00:01:53,560 --> 00:01:57,960
+ making some pretty significant assumptions. When we say fluid power systems
+
+32
+00:01:57,960 --> 00:02:01,800
+ I mean the kinds of fluid systems that are designed primarily to do mechanical
+
+33
+00:02:01,800 --> 00:02:06,680
+ work. Systems that are characterized by really really large pressures
+
+34
+00:02:06,680 --> 00:02:11,960
+ really really small flow rates and kind of highly incompressible fluids.
+
+35
+00:02:11,960 --> 00:02:16,120
+ So I'm not talking about kind of air passing over a supersonic jet
+
+36
+00:02:16,120 --> 00:02:20,600
+ I'm talking about hydraulic pressure inside of a line used to move an actuator
+
+37
+00:02:20,600 --> 00:02:25,240
+ maybe on a plane for example. In the fluid power domain we have
+
+38
+00:02:25,240 --> 00:02:28,680
+ two energy variable same as every other domain we've met so far.
+
+39
+00:02:28,680 --> 00:02:32,440
+ A generalized displacement the volume of any tanks that store fluid or
+
+40
+00:02:32,440 --> 00:02:35,960
+ accumulators that will meet in a couple of videos that store fluid
+
+41
+00:02:35,960 --> 00:02:40,600
+ and pressure momentum kind of the momentum of fluid in pipes which are very very
+
+42
+00:02:40,680 --> 00:02:45,560
+ long or very very thin. The rule of thumb for choosing states in fluid power
+
+43
+00:02:45,560 --> 00:02:48,360
+ systems is the same as the rule of thumb for choosing states in electrical
+
+44
+00:02:48,360 --> 00:02:51,240
+ systems. We need to choose as many states as we have
+
+45
+00:02:51,240 --> 00:02:54,680
+ energy storing elements in the system and things that store energy in fluid
+
+46
+00:02:54,680 --> 00:02:58,920
+ power systems are really really long pipes which we won't often see given
+
+47
+00:02:58,920 --> 00:03:02,360
+ that we're usually modeling kind of small hydraulic circuits but
+
+48
+00:03:02,360 --> 00:03:05,880
+ if we kind of extend our analysis to a situation where we have
+
+49
+00:03:05,880 --> 00:03:08,840
+ long thin pipes that have some pressure momentum
+
+50
+00:03:08,840 --> 00:03:13,080
+ those things store energy and kind of gravity tanks and compressed gas
+
+51
+00:03:13,080 --> 00:03:16,840
+ accumulators. Elements that again we're going to meet in a little bit but
+
+52
+00:03:16,840 --> 00:03:21,000
+ these are also things that store energy kind of by increasing their volume.
+
+53
+00:03:21,000 --> 00:03:25,400
+ The power variables for fluid power systems, power variables for fluid power
+
+54
+00:03:25,400 --> 00:03:29,400
+ systems are as follows. The effort variable is pressure
+
+55
+00:03:29,400 --> 00:03:32,920
+ so kind of the analog to voltage and torque and force
+
+56
+00:03:32,920 --> 00:03:37,160
+ and the fluid variable is volumetric flow rate which we give the symbol q
+
+57
+00:03:37,160 --> 00:03:41,480
+ and is kind of analogous to current and velocity and angular velocity.
+
+58
+00:03:41,480 --> 00:03:44,120
+ So we're going to follow the same kind of structure this
+
+59
+00:03:44,120 --> 00:03:46,120
+ week as every other week. We're going to do some
+
+60
+00:03:46,120 --> 00:03:48,680
+ kind of counting states problems and then we're going to go and meet some of
+
+61
+00:03:48,680 --> 00:03:51,480
+ the fundamental elements. I will save you at kind of the
+
+62
+00:03:51,480 --> 00:03:54,280
+ outset of all of this. The fluid power domain is the one I think
+
+63
+00:03:54,280 --> 00:03:56,920
+ students struggle with the most and it's because it's the one that
+
+64
+00:03:56,920 --> 00:04:00,280
+ in general we're all least familiar with. You know you meet some mechanical
+
+65
+00:04:00,280 --> 00:04:02,440
+ systems in your physics courses or if you're a mechanical or
+
+66
+00:04:02,440 --> 00:04:04,440
+ mechatronics or aerospace engineer in your
+
+67
+00:04:04,440 --> 00:04:07,960
+ static and dynamics courses you've all met some kind of electrical systems
+
+68
+00:04:07,960 --> 00:04:10,760
+ in electric 13, 10 and maybe physics before that but
+
+69
+00:04:10,760 --> 00:04:14,120
+ hydraulics and kind of fluid flow. This is something which is new to the
+
+70
+00:04:14,120 --> 00:04:17,240
+ majority of you. So it's okay to be confused and probably
+
+71
+00:04:17,240 --> 00:04:20,120
+ understand if it's going to take more than just this week to
+
+72
+00:04:20,120 --> 00:04:23,560
+ come to understand these systems. That's okay though.
+
+73
+00:04:23,560 --> 00:04:27,400
+ I've got you back. Take your time. Come to understand it. Work through the
+
+74
+00:04:27,400 --> 00:04:30,520
+ two problems. Send me an email. Come to the live stream.
+
+75
+00:04:30,520 --> 00:04:33,720
+ Do what you're going to do. We'll do our very best to support you.
+
+76
+00:04:33,720 --> 00:04:37,640
+ All right let's go have a go at problem 5.1.

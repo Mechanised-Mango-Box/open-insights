@@ -1,0 +1,351 @@
+1
+00:00:00,000 --> 00:00:04,000
+ Let's turn our attention now to something a little bit different, stainless steels.
+
+2
+00:00:04,000 --> 00:00:08,640
+ Back in the 1800s, a couple of famous English scientists, including Michael Faraday and Robert
+
+3
+00:00:08,640 --> 00:00:13,440
+ Bunsen, discovered that if you add chromium to an iron alloy, you actually significantly
+
+4
+00:00:13,440 --> 00:00:17,840
+ improve its corrosion resistance. It turns out that the addition of chromium to an iron alloy
+
+5
+00:00:17,840 --> 00:00:22,720
+ actually imbues that alloy with passivity, because the chromium oxidizes to form a thin,
+
+6
+00:00:22,720 --> 00:00:27,280
+ passivating protective layer on the skin of the alloy. For the next hundred years, there were many
+
+7
+00:00:27,280 --> 00:00:32,320
+ attempts to try and produce a usable iron chromium alloy, though almost all of them proved too
+
+8
+00:00:32,320 --> 00:00:36,560
+ brittle for mainstream use. Though the scientists and metallurgists didn't know this at the time,
+
+9
+00:00:36,560 --> 00:00:41,520
+ it turns out that if you cool an iron chromium alloy from down below its re-crystallization
+
+10
+00:00:41,520 --> 00:00:46,160
+ temperature, all of that chromium has a tendency to precipitate along the grain boundaries and
+
+11
+00:00:46,160 --> 00:00:51,120
+ make it quite brittle. Almost a century later when trying to develop a metal alloy that would be
+
+12
+00:00:51,120 --> 00:00:55,040
+ particularly corrosion resistant in the presence of high temperatures for gun barrels,
+
+13
+00:00:55,040 --> 00:01:00,000
+ an English metallurgist named Harry really developed the first robust stainless steel.
+
+14
+00:01:00,000 --> 00:01:03,760
+ Some legend goes who was working on a bunch of different alloys, and a one-day lift
+
+15
+00:01:03,760 --> 00:01:07,680
+ subscribe at the back of his shop came back after some inclement weather and discovered that
+
+16
+00:01:07,680 --> 00:01:12,080
+ one of the gun barrels hadn't actually rusted. It wasn't long before he tracked down the exact
+
+17
+00:01:12,080 --> 00:01:17,440
+ composition of the rustless gun barrel, and soon afterwards rustless steel as he called it was
+
+18
+00:01:17,440 --> 00:01:22,320
+ being used in a cutlery all over the place. These days, rustless steel was referred to as
+
+19
+00:01:22,320 --> 00:01:27,120
+ stainless steel and we use it in a range of engineering circumstances. The line of demarcation
+
+20
+00:01:27,120 --> 00:01:32,880
+ of where an alloy steel becomes a stainless steel is usually around 10.5% chromium, a pretty
+
+21
+00:01:32,880 --> 00:01:36,960
+ decent amount of included chromium. And this is usually the amount that's required to provide
+
+22
+00:01:36,960 --> 00:01:41,520
+ a substantial amount of passivity. There are, unsurprisingly, a bunch of different kinds of
+
+23
+00:01:41,520 --> 00:01:45,520
+ stainless steel depending on the amount of chromium and other alloying elements you want to
+
+24
+00:01:45,520 --> 00:01:49,680
+ include, and we'll talk about a few of them in this video. The first family, probably the most
+
+25
+00:01:49,680 --> 00:01:53,920
+ common stainless steel you're likely to encounter, are austenitic stainless steels. These
+
+26
+00:01:53,920 --> 00:01:57,760
+ stainless steels have quite a lot of chromium included, a way more than the 10% that's
+
+27
+00:01:57,760 --> 00:02:04,400
+ needed to encourage passivity anywhere from 16 to 25%. And notably, they also have a small amount
+
+28
+00:02:04,400 --> 00:02:09,360
+ anywhere from 6 to 12% of nickel. The purpose of nickel in an austenitic stainless steel is to help
+
+29
+00:02:09,360 --> 00:02:14,400
+ stabilize the gamma phase. In other words, instead of forcing a phase transition from gamma
+
+30
+00:02:14,400 --> 00:02:19,120
+ austenite down to alpha ferrite as you cool as you'd expect in the iron carbon phase diagram,
+
+31
+00:02:19,200 --> 00:02:23,040
+ addition of nickel essentially means that gamma austenite can exist at room temperature.
+
+32
+00:02:23,040 --> 00:02:27,440
+ And because no phase transition has to occur, there's no opportunity for the included chromium
+
+33
+00:02:27,440 --> 00:02:32,080
+ to precipitate outwards to new grain boundaries. And the problem of chromium embrittlement, which had
+
+34
+00:02:32,080 --> 00:02:36,880
+ plagued Bunsen and Faraday, is largely avoided. You should note that there are a few consequences
+
+35
+00:02:36,880 --> 00:02:41,600
+ that come with the microstructure of an austenitic stainless steel being gamma austenite and not
+
+36
+00:02:41,600 --> 00:02:45,920
+ alpha ferrite. The first and probably most notable being that austenitic stainless steels,
+
+37
+00:02:45,920 --> 00:02:50,320
+ the ones you're likely to encounter most often as an engineer, are not magnetic. This can be
+
+38
+00:02:50,320 --> 00:02:54,880
+ quite a useful identification technique for stainless steels. There's almost always a magnet kick
+
+39
+00:02:54,880 --> 00:02:58,800
+ around somewhere in a workshop. And so you can walk up to a piece of what you suspect is an
+
+40
+00:02:58,800 --> 00:03:03,040
+ austenitic stainless steel. And if the magnet went stick to it, then it probably is. You should
+
+41
+00:03:03,040 --> 00:03:07,760
+ also note that by design, by avoiding the phase transition from the gamma austenite phase to the
+
+42
+00:03:07,760 --> 00:03:12,400
+ alpha ferrite phase, you can't heat treat to strengthen these austenitic stainless steels. You
+
+43
+00:03:12,400 --> 00:03:16,720
+ can't form martensite. There are two very common grades of austenitic stainless steel you're
+
+44
+00:03:16,720 --> 00:03:22,160
+ likely to run into as an engineer. The first core 304 stainless is extremely common. It's quite
+
+45
+00:03:22,160 --> 00:03:27,360
+ workable and weldable. It's used in a range of kitchen and other engineering applications.
+
+46
+00:03:27,360 --> 00:03:31,520
+ A lot of stainless steel fasteners are 304. And generally speaking, this is probably the first
+
+47
+00:03:31,520 --> 00:03:35,920
+ stainless steel you'll turn to if you're after a corrosion resistant steel. If you're after a
+
+48
+00:03:35,920 --> 00:03:40,240
+ stainless steel that has slightly better mechanical properties, strengthen hardness and is also slightly
+
+49
+00:03:40,240 --> 00:03:44,960
+ more corrosion resistant, then you might turn to a 316 grade stainless steel. The trade-off for the
+
+50
+00:03:44,960 --> 00:03:49,280
+ better mechanical properties and corrosion resistance that you have in 306 stainless is that it's
+
+51
+00:03:49,280 --> 00:03:53,280
+ slightly less workable and slightly less weldable than it's 304 counterpart. And it's also
+
+52
+00:03:53,280 --> 00:03:57,600
+ a tad more expensive. But generally speaking, if you're working in a highly corrosive environment,
+
+53
+00:03:57,600 --> 00:04:01,680
+ say like a marine environment or in a medical application or as part of a refinery,
+
+54
+00:04:01,680 --> 00:04:05,280
+ then you would opt for a 316 stainless probably over a 304.
+
+55
+00:04:05,360 --> 00:04:09,440
+ Ostonetic stainless steels aren't the only kind and you should be aware of this. It's not true
+
+56
+00:04:09,440 --> 00:04:14,240
+ that all stainless steels, for example, are not magnetic. Other kinds of stainless steel include
+
+57
+00:04:14,240 --> 00:04:18,640
+ ferritic stainless steel, which are essentially nickel-free. Because there's no nickel added in
+
+58
+00:04:18,640 --> 00:04:23,040
+ their stainless steels to stabilize the gamma phase, they do in fact have a phase transition. The
+
+59
+00:04:23,040 --> 00:04:28,240
+ same as any other steel. And as a result, a mainly austenite and room temperature. For this reason,
+
+60
+00:04:28,240 --> 00:04:33,120
+ ferritic stainless steels actually are magnetic. And you can identify them from austenitic stainless
+
+61
+00:04:33,120 --> 00:04:37,280
+ steels based on this fact. And generally speaking, to avoid chromium embrittlement and grain
+
+62
+00:04:37,280 --> 00:04:42,240
+ boundaries, the same problem that Faraday and Bunsen had, ferritic stainless steels usually have a
+
+63
+00:04:42,240 --> 00:04:46,960
+ very low amount of carbon. It turns out that limiting the interaction of carbon and chromium can
+
+64
+00:04:46,960 --> 00:04:50,960
+ also help avoid embrittlement. There are some positives and negatives to using a ferritic stainless
+
+65
+00:04:50,960 --> 00:04:55,040
+ steel compared to an austenitic one. Because they have quite a low amount of carbon, they can be
+
+66
+00:04:55,040 --> 00:05:00,080
+ quite easily welded and worked and they're usually quite ductile, though again, because they have
+
+67
+00:05:00,080 --> 00:05:04,160
+ a small amount of carbon, they usually have a lower strength. If you'd like an extremely high
+
+68
+00:05:04,160 --> 00:05:08,800
+ strength stainless steel, then you're probably going to opt for the third kind, a martensitic stainless
+
+69
+00:05:08,800 --> 00:05:13,120
+ steel. As the name suggests, these stainless steels have a reasonably high carbon content. And they
+
+70
+00:05:13,120 --> 00:05:17,920
+ do in fact have a phase transition from austenite down to ferrite. And so just like your playing
+
+71
+00:05:17,920 --> 00:05:22,640
+ carbon steels, you can quench these to form extremely hard and strong in somewhat brittle
+
+72
+00:05:22,640 --> 00:05:27,520
+ martensite. In the case of martensitic stainless steel, other alloying elements need to be added to
+
+73
+00:05:27,520 --> 00:05:32,480
+ help avoid the chromium embrittlement problem. Martensitic stainless steels avoid this problem by
+
+74
+00:05:32,480 --> 00:05:37,200
+ including alloying elements that preferentially interact with the carbon before the chromium has a
+
+75
+00:05:37,200 --> 00:05:41,440
+ chance to, again, avoiding embrittlement. The high strength thing you can get in a martensitic stainless
+
+76
+00:05:41,440 --> 00:05:45,200
+ steel comes at a cost, comes with a trade off. Generally speaking, because of the high carbon
+
+77
+00:05:45,200 --> 00:05:49,680
+ content and all of the other alloying elements you need to put in, they have worse corrosion resistance
+
+78
+00:05:49,680 --> 00:05:54,000
+ than their ferritic and their austenitic counterparts. And they're also generally quite difficult
+
+79
+00:05:54,000 --> 00:05:59,360
+ to form and work in weld and otherwise manufacture. All of this is to kind of make one key point.
+
+80
+00:05:59,360 --> 00:06:03,200
+ And that is that there are many kinds of stainless steel. You should be aware of this when you
+
+81
+00:06:03,200 --> 00:06:06,960
+ select one and you should be very careful of the manufacturing processes you put these stainless
+
+82
+00:06:06,960 --> 00:06:11,600
+ steels through. Accidental introduction of other alloying elements say it's contaminants in some
+
+83
+00:06:11,600 --> 00:06:16,080
+ sort of molten pool of stainless steel, or if you're welding and you're using a filler rod
+
+84
+00:06:16,080 --> 00:06:20,320
+ that's not the right composition, can have a substantial effect on their properties and can lead
+
+85
+00:06:20,320 --> 00:06:24,560
+ to chromium embrittlement. For this reason it's extremely important you think about these manufacturing
+
+86
+00:06:24,560 --> 00:06:28,960
+ processes when you're selecting a stainless steel. And if you anticipate that you need to form
+
+87
+00:06:28,960 --> 00:06:34,160
+ or work or weld or melt or otherwise carry on with a stainless steel that you know exactly how
+
+88
+00:06:34,160 --> 00:06:35,200
+ you plan to do that.

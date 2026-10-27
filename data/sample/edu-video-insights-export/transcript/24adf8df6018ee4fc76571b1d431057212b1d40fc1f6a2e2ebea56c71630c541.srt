@@ -1,0 +1,195 @@
+1
+00:00:00,000 --> 00:00:04,720
+ Alright, let's talk about a slightly more interesting element.
+
+2
+00:00:04,720 --> 00:00:09,120
+ In this video, I want to talk about the generalized capacitor for fluid power systems.
+
+3
+00:00:09,120 --> 00:00:12,620
+ I should say one of the generalized capacitors for fluid power systems, because there
+
+4
+00:00:12,620 --> 00:00:14,840
+ are actually two in this domain.
+
+5
+00:00:14,840 --> 00:00:18,440
+ The second one can press gas accumulators, we're going to meet in a few videos time.
+
+6
+00:00:18,440 --> 00:00:22,040
+ But in this video, I want to talk about gravity tanks.
+
+7
+00:00:22,040 --> 00:00:25,600
+ As the name suggests, gravity tanks store gravitational potential energy.
+
+8
+00:00:25,600 --> 00:00:30,360
+ You kind of pump fluid into the tank, you raise the level of the fluid in the tank
+
+9
+00:00:30,360 --> 00:00:31,360
+ and you're doing so.
+
+10
+00:00:31,360 --> 00:00:35,480
+ You're kind of raising the mass of that fluid up and storing gravitational potential
+
+11
+00:00:35,480 --> 00:00:36,480
+ energy.
+
+12
+00:00:36,480 --> 00:00:39,120
+ Gravity tanks have this CCR.
+
+13
+00:00:39,120 --> 00:00:43,200
+ You get a pressure change across a gravity tank, kind of from the top to the bottom, or
+
+14
+00:00:43,200 --> 00:00:47,240
+ from the bottom to the top and we'll talk about why that's important in a moment.
+
+15
+00:00:47,240 --> 00:00:51,040
+ You get a pressure change across a tank as a function of a value we call the capacitance
+
+16
+00:00:51,040 --> 00:00:52,040
+ of the tank.
+
+17
+00:00:52,040 --> 00:00:56,480
+ Something that depends on its kind of cross-sectional area, the acceleration due to gravity
+
+18
+00:00:56,480 --> 00:01:01,480
+ at the place where the tank's being used, and the density of the fluid you're dealing with,
+
+19
+00:01:01,480 --> 00:01:05,280
+ and the volume of the tank, how much fluid you've stored, the greater the volume, the
+
+20
+00:01:05,280 --> 00:01:08,560
+ higher the pressure, the greater the capacitance, the lower the pressure.
+
+21
+00:01:08,560 --> 00:01:13,840
+ The SSR for gravity tank is something that I think tripped students up a lot, but I find
+
+22
+00:01:13,840 --> 00:01:17,120
+ it helpful to kind of refer back to what we've already done in terms of springs.
+
+23
+00:01:17,120 --> 00:01:20,880
+ When we were dealing with springs and mechanical systems, you'll remember we had to
+
+24
+00:01:20,880 --> 00:01:25,760
+ kind of jointly define kind of an assumption about tension or compression, the way that
+
+25
+00:01:25,760 --> 00:01:30,920
+ we define delta, and then the way that we drew the spring force on any attached masses
+
+26
+00:01:30,920 --> 00:01:31,920
+ in the system.
+
+27
+00:01:31,920 --> 00:01:36,160
+ Well, there's a similar kind of link between the definitions we need for SSRs of gravity
+
+28
+00:01:36,160 --> 00:01:37,320
+ tanks.
+
+29
+00:01:37,320 --> 00:01:40,840
+ We have to decide whether we're going to define the pressure change across the tank as
+
+30
+00:01:40,840 --> 00:01:45,400
+ positive when we have kind of the top to the bottom, whether we assume the kind of pressure
+
+31
+00:01:45,400 --> 00:01:49,120
+ at the top of the tank is higher than the pressure at the bottom, and we'll vice versa.
+
+32
+00:01:49,120 --> 00:01:51,920
+ Of course, in reality, the pressure at the base is always going to be higher than the
+
+33
+00:01:51,920 --> 00:01:56,560
+ pressure at the top, but essentially, we can assume whatever we want here.
+
+34
+00:01:56,560 --> 00:01:59,760
+ What we need to do, though, is make sure that our assumption lines up with the way that
+
+35
+00:01:59,760 --> 00:02:02,680
+ we assume the volume change of the tank works.
+
+36
+00:02:02,680 --> 00:02:07,680
+ So if we take the pressure to be kind of P0 minus P1, the pressure at the kind of top
+
+37
+00:02:07,680 --> 00:02:11,400
+ being higher than the pressure at the bottom, then we should assume that the volume change
+
+38
+00:02:11,400 --> 00:02:16,360
+ of the tank is such that fluid is leaving the tank, and we should always take kind of V dot
+
+39
+00:02:16,360 --> 00:02:22,040
+ is negative Q, and we should draw that Q kind of going into a node and out of the tank,
+
+40
+00:02:22,040 --> 00:02:24,240
+ if the tank is attached to a node.
+
+41
+00:02:24,240 --> 00:02:25,720
+ The opposite is also true.
+
+42
+00:02:25,720 --> 00:02:31,320
+ If we take kind of P1 minus P0 as our kind of delta P, then what we need to do is assume
+
+43
+00:02:31,320 --> 00:02:35,880
+ that the Q is flowing into the tank, right, that it's making V dot a positive quantity
+
+44
+00:02:35,880 --> 00:02:37,880
+ and increasing its volume.
+
+45
+00:02:37,880 --> 00:02:41,800
+ Of course, then we need to draw it as kind of flow, leaving a node and going into the
+
+46
+00:02:41,800 --> 00:02:42,800
+ tank.
+
+47
+00:02:43,200 --> 00:02:46,440
+ This is a concept that I think is in general a little bit tricky and something that's
+
+48
+00:02:46,440 --> 00:02:51,360
+ maybe best explained by a problem, and we'll see that in the kind of tank problem that
+
+49
+00:02:51,360 --> 00:02:53,160
+ we have coming up in two videos time.

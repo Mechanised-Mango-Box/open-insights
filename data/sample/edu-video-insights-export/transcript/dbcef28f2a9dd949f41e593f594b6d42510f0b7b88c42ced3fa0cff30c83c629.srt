@@ -1,0 +1,111 @@
+1
+00:00:00,000 --> 00:00:05,520
+ Alright, let's talk about the next step on the latter on our path to be able to linearize
+
+2
+00:00:05,520 --> 00:00:07,240
+ state-space models.
+
+3
+00:00:07,240 --> 00:00:09,960
+ We've just dealt with kind of linearizing 1D functions.
+
+4
+00:00:09,960 --> 00:00:12,960
+ Let's talk about linearizing multi-variable functions.
+
+5
+00:00:12,960 --> 00:00:17,060
+ But to be clear, I'm talking about multi-variable scalar functions, things with kind of
+
+6
+00:00:17,060 --> 00:00:19,760
+ multiple inputs but one output.
+
+7
+00:00:19,760 --> 00:00:23,720
+ Well, you'll probably be pleased to know that the equation for linearizing multi-variable
+
+8
+00:00:23,720 --> 00:00:27,440
+ functions is pretty similar to that for linearizing scalar functions.
+
+9
+00:00:27,440 --> 00:00:30,280
+ I promised you there'd be analogues and here they are.
+
+10
+00:00:30,280 --> 00:00:34,760
+ If you have a multi-variable function with two inputs, say f of x and y, then you need
+
+11
+00:00:34,760 --> 00:00:38,320
+ an offset term which kind of depends on where you were approximated about.
+
+12
+00:00:38,320 --> 00:00:43,320
+ That point, this time being a kind of two-dimensional point, not a one-dimensional point.
+
+13
+00:00:43,320 --> 00:00:47,360
+ And you need a gradient in the x direction multiplied by distance in the x direction plus
+
+14
+00:00:47,360 --> 00:00:51,680
+ a gradient in the y direction multiplied by a distance in the y direction.
+
+15
+00:00:51,680 --> 00:00:56,120
+ The kind of graphical outlook of this, the kind of step up from the 1D case where we had a
+
+16
+00:00:56,120 --> 00:01:00,680
+ a kind of line that was tangent to a curve, at least for two dimensions is easy to visualize.
+
+17
+00:01:00,680 --> 00:01:03,480
+ We have a plane which is tangent to a surface.
+
+18
+00:01:03,480 --> 00:01:08,720
+ You probably met this exact case in Math 1110 or Math 1120, finding the tangent plane
+
+19
+00:01:08,720 --> 00:01:11,320
+ to a surface by looking at directional derivatives.
+
+20
+00:01:11,320 --> 00:01:14,920
+ Well, here it is again but this time in the context of linearization.
+
+21
+00:01:14,920 --> 00:01:17,960
+ When you have more than two inputs, say that you've got a function which is dependent
+
+22
+00:01:17,960 --> 00:01:22,760
+ on x, y, and z, instead of just x and y, it gets a little bit harder to visualize.
+
+23
+00:01:22,760 --> 00:01:26,880
+ Not really good at thinking about 40 spaces, at least I'm certainly not, but the concept
+
+24
+00:01:26,880 --> 00:01:27,880
+ is the same.
+
+25
+00:01:27,880 --> 00:01:32,480
+ Our linearization, in general, is an offset term plus a gradient times the distance for
+
+26
+00:01:32,480 --> 00:01:34,800
+ each of the directions that are involved.
+
+27
+00:01:34,800 --> 00:01:37,120
+ Let's have a go at doing this for problem 6.2.
+
+28
+00:01:37,120 --> 00:01:40,160
+ Kind of get the skill under our belts and then move on to the really high case.

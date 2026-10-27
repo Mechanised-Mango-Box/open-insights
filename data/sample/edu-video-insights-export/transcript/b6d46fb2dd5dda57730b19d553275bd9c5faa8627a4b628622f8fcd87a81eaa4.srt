@@ -1,0 +1,307 @@
+1
+00:00:00,000 --> 00:00:03,920
+ All right, in the last of our series on non-mechanical properties, we're going to talk about
+
+2
+00:00:03,920 --> 00:00:09,120
+ biocompatibility, the suitability of materials for use in contact with living tissue.
+
+3
+00:00:09,120 --> 00:00:13,200
+ While biocompatibility is particularly important for those of you who are medical engineers,
+
+4
+00:00:13,200 --> 00:00:17,840
+ it's not only important to medical engineers, because almost all of us will at some point
+
+5
+00:00:17,840 --> 00:00:22,560
+ design a component that's going to come into contact with a human. And even if you're lucky enough
+
+6
+00:00:22,560 --> 00:00:26,320
+ never to have to design a component to come into contact with a human, I say that because
+
+7
+00:00:26,320 --> 00:00:30,080
+ humans are generally not very good things to have floating around in the engineering problem,
+
+8
+00:00:30,080 --> 00:00:34,560
+ they're quite soft and squishy and not well defined. Even if you don't have to design something
+
+9
+00:00:34,560 --> 00:00:37,760
+ that's going to come into contact with a human, it may be the case that you have to package
+
+10
+00:00:37,760 --> 00:00:42,800
+ your transport or send or install something that may then come into contact with a human.
+
+11
+00:00:42,800 --> 00:00:47,680
+ So it's relevant really to all of us. There are many, many elements to biocompatibility,
+
+12
+00:00:47,680 --> 00:00:52,080
+ and I am by no means an expert in this. My studies were in mechanical engineering,
+
+13
+00:00:52,080 --> 00:00:56,480
+ and if I'm being honest, I find the human body a little bit gross and this whole topic makes
+
+14
+00:00:56,480 --> 00:01:01,280
+ me feel a little bit uncomfortable. And so this video is really going to be a very, very brief
+
+15
+00:01:01,280 --> 00:01:05,600
+ introduction. I'm going to try and make sure that I link you to plenty of relevant resources on the
+
+16
+00:01:05,600 --> 00:01:09,360
+ textbook page for this video. And I'm also going to try and make sure that we hit on this topic
+
+17
+00:01:09,360 --> 00:01:14,480
+ in a case study this semester. The biocompatibility properties of a material are largely concerned
+
+18
+00:01:14,480 --> 00:01:20,320
+ with their toxicity. In other words, whether these materials pose a risk or harm to human beings
+
+19
+00:01:20,320 --> 00:01:24,960
+ or other living organisms. And one that you're probably familiar with is carcinogenicity.
+
+20
+00:01:24,960 --> 00:01:29,680
+ If a material is a carcinogen, it means that material has a tendency or a likelihood to
+
+21
+00:01:29,680 --> 00:01:34,640
+ promote the formation of cancers. My understanding is that carcinogens are normally classified
+
+22
+00:01:34,640 --> 00:01:40,720
+ as genotoxic or non-genotoxic, the first kind of affecting DNA and the latter not so much.
+
+23
+00:01:40,720 --> 00:01:45,360
+ But you should be aware that many engineering materials and manufacturing processes involve
+
+24
+00:01:45,360 --> 00:01:49,280
+ carcinogens in one way or another. Now don't be too terrified by that,
+
+25
+00:01:49,280 --> 00:01:53,840
+ quit engineering and enroll in an art degree. In many cases, the underlying risk is only present
+
+26
+00:01:53,840 --> 00:01:59,040
+ if a material is in a particular form or while that material is being transported or installed.
+
+27
+00:01:59,040 --> 00:02:03,920
+ There are many materials that fall into this category and are carcinogenic in particular circumstances
+
+28
+00:02:03,920 --> 00:02:08,960
+ but are quite inert otherwise. Perhaps the most famous of these or certainly one that's been part
+
+29
+00:02:08,960 --> 00:02:14,000
+ of our vernacular lately is asbestos. Asbestos is a fibrous material that was used in the building
+
+30
+00:02:14,000 --> 00:02:19,200
+ industry for many years. And actually as an engineering material, asbestos has some pretty nice
+
+31
+00:02:19,200 --> 00:02:24,400
+ properties. It's a great thermal and electrical insulator and it was reasonably cheap and abundant.
+
+32
+00:02:24,400 --> 00:02:28,800
+ Not too long ago though, it was discovered that asbestos is a carcinogen and it was outlawed for
+
+33
+00:02:28,800 --> 00:02:33,680
+ use in new buildings in much of the developed world. That being said, many buildings that contain
+
+34
+00:02:33,680 --> 00:02:38,880
+ asbestos are still deemed as perfectly safe to work in because as long as it's not disturbed,
+
+35
+00:02:38,880 --> 00:02:43,760
+ it doesn't pose a huge risk to humans. Now asbestos certainly does pose a risk when it's not
+
+36
+00:02:43,760 --> 00:02:49,520
+ left undisturbed and as a result, removal of asbestos is quite an expensive and labor-intensive
+
+37
+00:02:49,520 --> 00:02:54,400
+ and time-intensive process to make sure that humans are adequately shielded from it as it's
+
+38
+00:02:54,400 --> 00:02:59,600
+ carefully extracted from buildings and disposed of safely. There are some engineering materials
+
+39
+00:02:59,600 --> 00:03:03,760
+ that are carcinogenic all of the time and you need to be a little bit careful about these.
+
+40
+00:03:03,760 --> 00:03:09,040
+ As always, good practices to check the material safety data sheet MSDS for any material
+
+41
+00:03:09,040 --> 00:03:13,040
+ you're interested in using and to use these materials in the ways that are intended.
+
+42
+00:03:13,040 --> 00:03:18,320
+ Our next bio-compatibility property is immunogenicity. This is the tendency of a foreign body or
+
+43
+00:03:18,320 --> 00:03:22,720
+ substance to provoke and immune reaction. Immunogenicity is quite important to consider if you're
+
+44
+00:03:22,720 --> 00:03:26,880
+ selecting materials for an implant. If, for example, you're designing a synthetic joint and you
+
+45
+00:03:26,880 --> 00:03:31,200
+ get this wrong and you put a material in somebody's body that triggers an immune response,
+
+46
+00:03:31,200 --> 00:03:35,200
+ then a process known as rejection can occur where the human body will attack the implant as
+
+47
+00:03:35,200 --> 00:03:40,160
+ if it were an infection. Many bad things can happen if this occurs, the least of which are
+
+48
+00:03:40,160 --> 00:03:45,200
+ inflammation and loosening or damage to the implants. In addition to its excellent mechanical
+
+49
+00:03:45,200 --> 00:03:49,920
+ properties, this is one of the reasons why titanium is quite a common choice in dental and other
+
+50
+00:03:49,920 --> 00:03:54,480
+ medical implants, for example, it doesn't tend to provoke an immune response. The final
+
+51
+00:03:54,480 --> 00:04:00,080
+ analysis of bio-compatibility material properties is teratogenicity. This is the tendency of a material
+
+52
+00:04:00,080 --> 00:04:05,760
+ or a substance to cause birth defects on an embryo or a fetus. Ionizing radiation, as well as
+
+53
+00:04:05,760 --> 00:04:10,800
+ some materials, can be teratogenic. And you should be aware that byproducts of some engineering
+
+54
+00:04:10,800 --> 00:04:16,000
+ processes, manufacture and installation can also be. This leads us to a bigger point around risk
+
+55
+00:04:16,000 --> 00:04:21,680
+ management. Our modern engineering world is ripe with biological hazards that are out to get us.
+
+56
+00:04:21,680 --> 00:04:27,360
+ Castanogenic toxic and teratogenic substances are byproducts of many of the engineering manufacturing
+
+57
+00:04:27,360 --> 00:04:32,080
+ processes that we rely on. In general, the engineering risk management framework and hierarchy
+
+58
+00:04:32,080 --> 00:04:36,880
+ of controls are important in helping you minimize exposure to humans. If possible, you first
+
+59
+00:04:36,880 --> 00:04:42,160
+ remove the hazard. If not, then you substitute it. If not, then you implement some sort of engineering
+
+60
+00:04:42,160 --> 00:04:47,120
+ or administrative control. And finally, if exposure to these materials is absolutely necessary,
+
+61
+00:04:47,120 --> 00:04:51,040
+ you equip the person with the appropriate protective equipment to make sure that they're going to be
+
+62
+00:04:51,040 --> 00:04:55,440
+ okay. In general, when dealing with a material that has the potential to cause harm to another human
+
+63
+00:04:55,920 --> 00:05:01,120
+ your obligation, your responsibility is to try and provide a dose which is as low as reasonably
+
+64
+00:05:01,120 --> 00:05:06,240
+ achievable. And if you're using a non-standard material or manufacturing process, you have an
+
+65
+00:05:06,240 --> 00:05:11,120
+ obligation as an engineer to raise awareness and make sure that all of the risks are covered.
+
+66
+00:05:11,120 --> 00:05:15,360
+ Some of the mechanical and non-mechanical properties that we've already met are also important
+
+67
+00:05:15,360 --> 00:05:20,160
+ in this context. For example, material selection of synthetic joints depends not only on those
+
+68
+00:05:20,160 --> 00:05:24,800
+ things being biocompatible, but also on those things being mechanically sufficient.
+
+69
+00:05:24,800 --> 00:05:28,880
+ And interestingly, considerations must be made not just to the outright performance of these
+
+70
+00:05:28,880 --> 00:05:33,440
+ materials in terms of their properties, but also to matching these properties to the surrounding
+
+71
+00:05:33,440 --> 00:05:38,240
+ human tissue. A mismatch of stiffness, for example, between the implant and the tissue you can lead
+
+72
+00:05:38,240 --> 00:05:43,600
+ to premature cracking of one of these things. Obviously, corrosion resistance is also important
+
+73
+00:05:43,600 --> 00:05:49,040
+ if you're putting something inside of the human body, which is often warm and wet and corrosive.
+
+74
+00:05:49,920 --> 00:05:52,720
+ This is one of the reasons why materials that have a tendency for
+
+75
+00:05:52,720 --> 00:05:57,440
+ passivity, stainless steels, aluminium, titanium, are quite often used as well.
+
+76
+00:05:57,440 --> 00:06:01,440
+ We'll talk a little bit more about this in a medical-specific case study a little bit later in the
+
+77
+00:06:01,440 --> 00:06:03,440
+ semester.

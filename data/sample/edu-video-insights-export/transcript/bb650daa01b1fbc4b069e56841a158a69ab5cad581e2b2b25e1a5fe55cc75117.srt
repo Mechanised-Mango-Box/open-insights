@@ -1,0 +1,423 @@
+1
+00:00:00,000 --> 00:00:03,120
+ All right, end of the week. Time to again talk about the big picture.
+
+2
+00:00:03,120 --> 00:00:06,320
+ This should probably be unsurprising to you given what we've been talking about this week,
+
+3
+00:00:06,320 --> 00:00:10,160
+ but this week's material selection video is all about the integration of manufacturing
+
+4
+00:00:10,160 --> 00:00:14,560
+ process compatibility in your materials design and material selection processes.
+
+5
+00:00:14,560 --> 00:00:18,560
+ The intersection of material selection and compatibility with a particular manufacturing process
+
+6
+00:00:18,560 --> 00:00:22,480
+ is an important one. Nobody cares how well suited your material properties are for a problem
+
+7
+00:00:22,480 --> 00:00:27,440
+ if that material can't be shaped and formed and otherwise manufactured into a component to be
+
+8
+00:00:27,440 --> 00:00:32,080
+ used in that circumstance. And by the same token, nobody cares how economical or suitable
+
+9
+00:00:32,080 --> 00:00:36,640
+ a manufacturing process is if you can't use it on the kinds of components that you need to
+
+10
+00:00:36,640 --> 00:00:40,720
+ solve the design problem you've set out to do. These two things, suitability of material
+
+11
+00:00:40,720 --> 00:00:45,520
+ properties for a problem and suitability of that material for manufacturing need to work in
+
+12
+00:00:45,520 --> 00:00:49,440
+ concert together for you to be able to do anything useful. If you ask me there are kind of two
+
+13
+00:00:49,440 --> 00:00:53,920
+ aspects to this problem, the direct compatibility of certain materials with certain manufacturing
+
+14
+00:00:53,920 --> 00:00:59,040
+ processes and the suitability of these processes given the scale of production that you anticipate
+
+15
+00:00:59,040 --> 00:01:02,880
+ you need. That second point, economies of scale, we're going to touch on in a couple of weeks
+
+16
+00:01:02,880 --> 00:01:07,280
+ time when we talk about manufacturing with plastics because I think it's particularly relevant in
+
+17
+00:01:07,280 --> 00:01:11,280
+ that case. But the first point, compatibility of metals and manufacturing processes,
+
+18
+00:01:11,280 --> 00:01:14,640
+ well that's going to be the topic of this video. As I've said a couple of times this week,
+
+19
+00:01:14,640 --> 00:01:17,920
+ you don't need to only rely on the information that I've given you or the stuff that you can
+
+20
+00:01:17,920 --> 00:01:21,920
+ find on the internet to learn about manufacturing processes. A lot of them are documented in
+
+21
+00:01:21,920 --> 00:01:26,480
+ in edgypack just like materials. In edgypack, you can browse all the manufacturing processes that
+
+22
+00:01:26,480 --> 00:01:30,240
+ are in the database the same way that you can all of the materials that are in the database.
+
+23
+00:01:30,240 --> 00:01:34,000
+ You should head over into the top left where you select what database you like to use and instead
+
+24
+00:01:34,000 --> 00:01:38,960
+ of looking at the material universe, you look at the process universe. If I click process
+
+25
+00:01:38,960 --> 00:01:44,480
+ universe here, I can look at joining processes and shaping processes and surface treatment processes.
+
+26
+00:01:44,480 --> 00:01:49,760
+ So for example, if I take a look at the shaping processes, I might go down to machining and down
+
+27
+00:01:49,760 --> 00:01:53,680
+ here, I can see some of the machining processes that we talked about this week working on a
+
+28
+00:01:53,680 --> 00:01:57,760
+ way than working on a milling machine. Just like in the materials universe, curated amounts of
+
+29
+00:01:57,760 --> 00:02:02,160
+ information are provided at the different levels of the database. So in the level one database,
+
+30
+00:02:02,160 --> 00:02:06,400
+ you get a bit of an overview of the process and down here, you get some categoricals and some
+
+31
+00:02:06,400 --> 00:02:11,920
+ bullions, some high, low, yes, no information about compatibility with families of materials.
+
+32
+00:02:11,920 --> 00:02:15,920
+ If you head to the more advanced databases, say level two or level three. If I go up to the top
+
+33
+00:02:15,920 --> 00:02:20,960
+ left here and I go, let's say level three database, then you get significantly more information.
+
+34
+00:02:20,960 --> 00:02:27,600
+ So if I go up to the process universe and I go shaping machining and now you can see I have a
+
+35
+00:02:27,600 --> 00:02:32,160
+ whole lot more process to choose from. Let's go machining, which is now a drop down instead of just
+
+36
+00:02:32,160 --> 00:02:36,720
+ a single page and let's go to something like milling. Here I get a lot more information about a
+
+37
+00:02:36,720 --> 00:02:41,360
+ specific machining process. And if I go down, I've got a lot more information again about the
+
+38
+00:02:41,360 --> 00:02:45,760
+ characteristics of this process in the high level database and particularly for process that tend to
+
+39
+00:02:45,760 --> 00:02:50,400
+ operate at scale, there is some economy of scale information provided as well. If I go over to
+
+40
+00:02:50,400 --> 00:02:57,440
+ casting and let's say die casting, let's go gravity die casting, then I can see relative cost
+
+41
+00:02:57,440 --> 00:03:01,520
+ depending on batch size. And as you would imagine economies of scale come into this, the relative
+
+42
+00:03:01,520 --> 00:03:06,080
+ cost of most processes tends to decrease as you increase the batch size. We'll talk about using this
+
+43
+00:03:06,080 --> 00:03:10,160
+ particular functionality in a couple of weeks when we get to working with engineering polymers.
+
+44
+00:03:10,160 --> 00:03:14,560
+ As you can with materials, you can limit and rank manufacturing processes by their properties.
+
+45
+00:03:14,560 --> 00:03:18,080
+ If you go over to the chart select feature, instead of looking at the material universe,
+
+46
+00:03:18,080 --> 00:03:23,120
+ you look at the process universe. Notably, in the process universe section of the limiting and
+
+47
+00:03:23,120 --> 00:03:27,600
+ ranking stage and edgy pack, you can't select all of the processes. You have to select one of the
+
+48
+00:03:27,600 --> 00:03:31,280
+ sub families. I guess because I expect that if you're looking for a manufacturing process,
+
+49
+00:03:31,280 --> 00:03:35,440
+ you're going to know whether the one you're after is going to be a joining or a shaping or a
+
+50
+00:03:35,440 --> 00:03:40,160
+ surface treatment kind of process. Let's say we'll look at shaping processes to start with.
+
+51
+00:03:40,240 --> 00:03:45,360
+ And in here, I can limit and I can rank exactly the same way I would with materials. So let's go
+
+52
+00:03:45,360 --> 00:03:50,560
+ limit. And now based on the properties of these processes, I can limit it down to only a subset of
+
+53
+00:03:50,560 --> 00:03:54,800
+ these. Let's say I want to limit by shape. I want to limit by processes that can make particular
+
+54
+00:03:54,800 --> 00:03:59,920
+ geometries. Let me see. I only want processes that can make circular prismatic geometries, let's say.
+
+55
+00:04:00,560 --> 00:04:06,720
+ And now my 29 processes have been cold down to 21. I can also limit by other processes as well.
+
+56
+00:04:06,720 --> 00:04:11,040
+ I can limit by compatibility with certain families of materials. And if I click any of these
+
+57
+00:04:11,040 --> 00:04:15,680
+ families, I kind of get some information about what that particular family is. And at any point,
+
+58
+00:04:15,680 --> 00:04:19,360
+ I can just check one of these boxes. Let's say I want to make circular prismatic parts that
+
+59
+00:04:19,360 --> 00:04:23,840
+ are getting me made out of, let's say, metals that are ferrous and metals that are non-ferrous.
+
+60
+00:04:23,840 --> 00:04:28,400
+ You can also click here and look for processes that aren't compatible with certain materials.
+
+61
+00:04:28,400 --> 00:04:32,320
+ I can't off the top of my head to think about why you would want to do that, but that's okay.
+
+62
+00:04:32,320 --> 00:04:37,040
+ Let's not use that constraint. And let's click apply. Now of the 29 processes that are in the
+
+63
+00:04:37,040 --> 00:04:42,000
+ level one database, there are only 10 which are kind of compatible with circular prismatic shapes
+
+64
+00:04:42,000 --> 00:04:46,800
+ and with ferrous and non-ferrous metals like materials. You can also rank processes based on their
+
+65
+00:04:46,800 --> 00:04:51,600
+ properties. So if I go to the chart index stage here, I can create a performance index just like
+
+66
+00:04:51,600 --> 00:04:58,160
+ a material index that I'll rank all of my processes by. So let's see. I'll go physical and quality
+
+67
+00:04:59,040 --> 00:05:03,040
+ I can rank things by the mass range that they're compatible with or the surface roughness that
+
+68
+00:05:03,040 --> 00:05:07,040
+ they can achieve or the tolerance that they can achieve. Let's go with tolerance because I know
+
+69
+00:05:07,040 --> 00:05:12,080
+ that's going to be a quantitative value and we'll click okay. Now I can see all of the
+
+70
+00:05:12,080 --> 00:05:16,000
+ processes in the database. The ones that don't meet my constraints are grayed out and the ones that
+
+71
+00:05:16,000 --> 00:05:20,880
+ remain, I can rank in terms of the tolerance that they're able to achieve. So if I go stage two
+
+72
+00:05:20,880 --> 00:05:26,000
+ tolerance, I can rank these in terms of height alone or actually in terms of tolerance. What you
+
+73
+00:05:26,000 --> 00:05:29,840
+ usually one is the things that can produce the tighter tolerance, I can rank them in terms of
+
+74
+00:05:29,840 --> 00:05:34,400
+ low to high. And kind of jelling with everything we talked about this week, processes that can make
+
+75
+00:05:34,400 --> 00:05:39,040
+ circular prismatic shapes that are compatible with ferrous and non-ferrous materials and can get us
+
+76
+00:05:39,040 --> 00:05:44,160
+ reasonably good tolerances are things like pressing and centering, powder metallurgy and machining
+
+77
+00:05:44,160 --> 00:05:48,240
+ and drilling and investment casting. All of these things should be pretty unsurprising to you at
+
+78
+00:05:48,240 --> 00:05:52,800
+ this stage. So you can limit and rank processes by their compatibility with materials and
+
+79
+00:05:52,800 --> 00:05:56,880
+ this is quite useful if you know what material you're using but not what process you're using.
+
+80
+00:05:56,880 --> 00:06:00,960
+ What if you know what process you'd like to use and not what material you'd like? Well you can do
+
+81
+00:06:00,960 --> 00:06:06,400
+ this the other way around as well. If I delete these stages and I go back to the materials universe,
+
+82
+00:06:07,680 --> 00:06:12,400
+ then I can rank and limit materials by their compatibility with certain manufacturing processes.
+
+83
+00:06:12,400 --> 00:06:15,760
+ You should note that you can only do this in the higher level databases, the level two and
+
+84
+00:06:15,760 --> 00:06:19,920
+ level three database. The process compatibility with materials isn't listed in the level one
+
+85
+00:06:19,920 --> 00:06:24,320
+ database so I'll change from level one here to let's go to level three, let's see the whole
+
+86
+00:06:24,320 --> 00:06:30,000
+ hog. And in here I can limit materials by their compatibility with certain manufacturing processes.
+
+87
+00:06:30,000 --> 00:06:35,920
+ If I go down here to processing properties, I can then limit materials by compatibility with these
+
+88
+00:06:35,920 --> 00:06:41,280
+ processes. So maybe I only want materials that I can mig weld, materials that are really really good
+
+89
+00:06:41,280 --> 00:06:45,920
+ to mig weld. So I'll say good and excellent on mig welding and maybe I only want materials that I
+
+90
+00:06:45,920 --> 00:06:51,120
+ can tig weld as well. So materials that are good and excellent for tig welding. If I click apply the
+
+91
+00:06:51,120 --> 00:06:56,720
+ 4000 entries in the database, I'll limit it down to 157 entries and I suspect that most of these
+
+92
+00:06:56,720 --> 00:07:01,280
+ yep are metals. It's not just bullions either. You can rank materials by their compatibility
+
+93
+00:07:01,280 --> 00:07:08,400
+ with manufacturing processes as well. If I go up to a chart index stage, I can put a processability,
+
+94
+00:07:08,400 --> 00:07:14,480
+ processing properties category and let's go with tig weldability. Well now what I can do
+
+95
+00:07:16,320 --> 00:07:21,440
+ is rank my materials by their tig weldability. Now this ranking obviously tends to make a little
+
+96
+00:07:21,440 --> 00:07:24,960
+ more sense when you're dealing with quantitative properties and we'll get into quantitative
+
+97
+00:07:24,960 --> 00:07:29,520
+ properties, particularly around economics of scale in a couple of weeks time. So there we go,
+
+98
+00:07:29,520 --> 00:07:33,440
+ that's the basics of implementing material and process constraints in edgy pack. What I
+
+99
+00:07:33,440 --> 00:07:36,800
+ encourage you to do now that you're here at the end of the week is have a bit of a dig through
+
+100
+00:07:36,800 --> 00:07:41,040
+ edgy pack, have a bit of a play and look for compatibility between certain materials and certain
+
+101
+00:07:41,040 --> 00:07:45,040
+ processes. See if you can find processes that you previously thought might have been compatible
+
+102
+00:07:45,040 --> 00:07:49,600
+ with the Tyrells, but actually it turns out aren't. And vice versa. See if you can find
+
+103
+00:07:49,600 --> 00:07:53,520
+ processes that aren't compatible with your favorite materials. The ability to limit and rank
+
+104
+00:07:53,520 --> 00:07:57,040
+ materials by the compatibility with the processes is going to be very important in your engineering
+
+105
+00:07:57,040 --> 00:08:00,960
+ career. And so it's reasonably important you get this down now. That'll probably do us for the
+
+106
+00:08:00,960 --> 00:08:03,920
+ week. Have a go at the homework problems and good luck in the quiz.

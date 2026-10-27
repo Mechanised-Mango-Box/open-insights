@@ -1,0 +1,143 @@
+1
+00:00:00,000 --> 00:00:01,040
+ All right, hello there.
+
+2
+00:00:01,040 --> 00:00:03,680
+ Welcome back and great job making it through week one.
+
+3
+00:00:03,680 --> 00:00:07,040
+ I know that learning about properties can sometimes feel like a bit of a bore.
+
+4
+00:00:07,040 --> 00:00:10,560
+ I hope the big picture video from the end of last week kind of brought things together a little
+
+5
+00:00:10,560 --> 00:00:15,120
+ bit and made it clear why we need to study material properties before we can meet any materials.
+
+6
+00:00:15,120 --> 00:00:18,880
+ And certainly I hope over the next couple of weeks as we start to meet some materials,
+
+7
+00:00:18,880 --> 00:00:21,680
+ it becomes clear why we had to learn about the properties first.
+
+8
+00:00:21,680 --> 00:00:25,920
+ While last week we were focused on the subset of all material properties that were
+
+9
+00:00:25,920 --> 00:00:29,760
+ relevant to design when you're concerned about the reaction of material and response to some
+
+10
+00:00:29,760 --> 00:00:32,880
+ kind of load for the remainder of this section of the course for the next week,
+
+11
+00:00:32,880 --> 00:00:36,000
+ we're going to be talking about non-mechanical material properties.
+
+12
+00:00:36,000 --> 00:00:39,920
+ This week we're interested in reactions and materials to other kinds of stimuli like
+
+13
+00:00:39,920 --> 00:00:46,000
+ temperature and electricity and fire and corrosion and how these materials might be compatible
+
+14
+00:00:46,000 --> 00:00:50,240
+ with the human body and how these materials might be compatible with us being able to live in this
+
+15
+00:00:50,240 --> 00:00:53,920
+ earth a little longer than the next couple of years. It's important for us as engineers,
+
+16
+00:00:53,920 --> 00:00:57,920
+ even the mechanical ones, to study non-mechanical material properties because
+
+17
+00:00:58,000 --> 00:01:02,000
+ oftentimes it's these properties that are actually the distinguishing factor in your choice
+
+18
+00:01:02,000 --> 00:01:06,320
+ of a material. It's often the case that for a given learning scenario there are several materials
+
+19
+00:01:06,320 --> 00:01:11,200
+ that could perform satisfactorily in a mechanical sense. Usually it's the non-mechanical properties,
+
+20
+00:01:11,200 --> 00:01:16,240
+ the ones we're meeting this week that are ruling or rule out materials as being suitable based on,
+
+21
+00:01:16,240 --> 00:01:20,080
+ I don't know whether they're conductors of electricity or whether they could insulate as a
+
+22
+00:01:20,080 --> 00:01:24,960
+ heat or whether they're easily recycled or some other constraint that you can put on the problem.
+
+23
+00:01:24,960 --> 00:01:28,560
+ On that particular note, in the big picture video for this week we're going to sum up
+
+24
+00:01:28,560 --> 00:01:33,200
+ everything that we learn in the context of applying constraints to our materials design problems
+
+25
+00:01:33,200 --> 00:01:38,400
+ and implementing these constraints in our materials databases. Before we kick off a few warnings,
+
+26
+00:01:38,400 --> 00:01:42,320
+ first of all, just like with mechanical properties, there are literally hundreds of
+
+27
+00:01:42,320 --> 00:01:46,400
+ non-mechanical properties that govern how materials behave, thermally, electrically,
+
+28
+00:01:46,400 --> 00:01:51,120
+ optically, whatever. We're only going to have time to talk about a subset of those in this course.
+
+29
+00:01:51,120 --> 00:01:54,640
+ Our attention is not to expose you to all of them but to give you just enough knowledge that when
+
+30
+00:01:54,640 --> 00:01:59,280
+ you leave this course you can continue that study on your own, both as a student and later when
+
+31
+00:01:59,280 --> 00:02:04,480
+ you go out into industry. Secondly, just like how we saw mechanical properties could vary with
+
+32
+00:02:04,480 --> 00:02:08,800
+ temperature, pressure, direction that they're measured, non-mechanical properties can have this
+
+33
+00:02:08,800 --> 00:02:12,960
+ kind of variation as well. When we introduce a property or talk about a property this week,
+
+34
+00:02:12,960 --> 00:02:17,280
+ it's probably going to be at standard conditions just like last week, but we will hit on a few
+
+35
+00:02:17,280 --> 00:02:22,800
+ specific properties and their variation with temperature and pressure and other environmental conditions.
+
+36
+00:02:22,800 --> 00:02:32,800
+ All right, with all of that said, let's crack on.

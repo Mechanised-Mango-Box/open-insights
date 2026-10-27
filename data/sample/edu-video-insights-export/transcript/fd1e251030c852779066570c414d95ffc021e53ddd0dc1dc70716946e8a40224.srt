@@ -1,0 +1,219 @@
+1
+00:00:00,000 --> 00:00:06,400
+ While playing carbon steel is generally having carbon content anywhere from 0.25 up to about 1.75%.
+
+2
+00:00:06,400 --> 00:00:11,120
+ There are a bunch of other interesting iron products that we use all the time as engineers that
+
+3
+00:00:11,120 --> 00:00:15,760
+ happen to fall outside of this range. In this video we're going to talk about the two extremes,
+
+4
+00:00:15,760 --> 00:00:20,720
+ extremely low carbon products known as wrought iron with a carbon content generally less than mild
+
+5
+00:00:20,720 --> 00:00:25,840
+ steel, and extremely high carbon products known as cast irons, generally with a carbon content
+
+6
+00:00:25,840 --> 00:00:30,640
+ above high carbon steels, but below pig iron, the one that we met at the very start of the
+
+7
+00:00:30,640 --> 00:00:34,960
+ iron and steel section that has carbon content's way in excess of what would be useful for any
+
+8
+00:00:34,960 --> 00:00:40,720
+ engineering application. So-called wrought irons have an extremely low carbon content in the order of
+
+9
+00:00:40,720 --> 00:00:47,040
+ 0.02 to 0.05%, nearly five times less than the low carbon steels we met in the last video.
+
+10
+00:00:47,040 --> 00:00:52,000
+ wrought irons are known for being extremely ductile and workable owing to the fact that the
+
+11
+00:00:52,000 --> 00:00:57,120
+ very small amount of carbon present means that their microstructure is mainly just pure alpha ferrite.
+
+12
+00:00:57,120 --> 00:01:01,040
+ Because there's essentially very little carbon present in the full most ferrite or pearlite
+
+13
+00:01:01,040 --> 00:01:06,480
+ in this microstructure, dislocations can essentially roam free. This freedom of dislocations is what
+
+14
+00:01:06,480 --> 00:01:11,200
+ gives wrought irons their incredible ductility, but is also responsible for them having reasonably
+
+15
+00:01:11,200 --> 00:01:16,160
+ low strengths. wrought iron is typically worked into shape wall hot, and in your mind this is
+
+16
+00:01:16,160 --> 00:01:20,560
+ probably conjuring up images of a blacksmith which is totally appropriate given that a most wrought
+
+17
+00:01:20,560 --> 00:01:26,160
+ iron was worked by blacksmiths in times long ago. This working process helped improve the strength
+
+18
+00:01:26,160 --> 00:01:30,160
+ of wrought iron as essentially with every blow of the hammer the blacksmith was beating
+
+19
+00:01:30,160 --> 00:01:35,040
+ dislocations into it that strain hardening it and making it stronger. wrought iron was quite
+
+20
+00:01:35,040 --> 00:01:40,160
+ popular in construction in the 19th century but was soon overtaken by steels for reasons of
+
+21
+00:01:40,160 --> 00:01:45,360
+ convenience and cost. These days wrought iron is mainly used for aesthetic or decorative purposes
+
+22
+00:01:45,360 --> 00:01:50,720
+ or to maintain historical accuracy. It's not really a widely used engineering material.
+
+23
+00:01:50,720 --> 00:01:55,760
+ On the other extreme so-called cast irons have an extremely high carbon content
+
+24
+00:01:55,760 --> 00:02:01,840
+ in the order of 2 to 4% right on the boundary of high carbon steels up to the boundary of pig iron.
+
+25
+00:02:01,840 --> 00:02:06,400
+ Unlike wrought irons cast irons are very commonly used in modern engineering design.
+
+26
+00:02:06,400 --> 00:02:10,320
+ Their properties are highly dependent on the carbon content as well as the proportions of
+
+27
+00:02:10,320 --> 00:02:15,120
+ other alloy elements. A silicon is a big player. Generally speaking cast irons are known for
+
+28
+00:02:15,120 --> 00:02:19,760
+ being reasonably cheap and strong in compression though quite brittle in tension and
+
+29
+00:02:19,760 --> 00:02:23,760
+ consequently having a low tensile strength. They're also generally known for the way that they're
+
+30
+00:02:23,760 --> 00:02:28,880
+ typically manufactured. Cast irons owing to their low melting temperature and as the name suggests
+
+31
+00:02:28,880 --> 00:02:33,840
+ are usually cast. Because they're rather brittle they're usually not worked though in some cases
+
+32
+00:02:33,840 --> 00:02:38,000
+ can be machined. Like steels there are a couple of different flavours of cast iron that you should
+
+33
+00:02:38,000 --> 00:02:43,760
+ be aware of. So-called grey cast irons have a carbon content anywhere between 2 and a half to
+
+34
+00:02:43,760 --> 00:02:50,400
+ 4% and a silicon content anywhere between 1 and 3%. Silicon in a cast iron has the effect of
+
+35
+00:02:50,400 --> 00:02:56,080
+ breaking down or preventing the formation of FE3C. In other words instead of a high carbon content
+
+36
+00:02:56,080 --> 00:03:01,920
+ cast iron forming martin site or pearlite or spherinite, instead it forms a two-phase mixture of
+
+37
+00:03:01,920 --> 00:03:08,160
+ alpha ferrite and carbon pure carbon in the form of graphite. In grey cast iron this two-phase mixture
+
+38
+00:03:08,160 --> 00:03:13,280
+ looks like an alpha matrix with graphite flakes throughout. These flakes act as reasonably good
+
+39
+00:03:13,280 --> 00:03:18,320
+ obstructions to the motion of dislocations and while this reduces the ductility of grey cast irons
+
+40
+00:03:18,320 --> 00:03:23,040
+ and leads them to be rather brittle the graphite flakes make machining of grey cast iron
+
+41
+00:03:23,040 --> 00:03:28,160
+ actually rather nice. These flakes tend to help lubricate your cutting tools and in general drilling
+
+42
+00:03:28,160 --> 00:03:33,760
+ and machining grey cast iron is a breeze. So-called white cast iron is another flavour with
+
+43
+00:03:33,760 --> 00:03:39,360
+ roughly the same amount of carbon as grey cast iron but only around 1% silicon. In white cast
+
+44
+00:03:39,360 --> 00:03:44,320
+ irons the added silicon is not enough to break down FE3C. In other words their microstructure is
+
+45
+00:03:44,320 --> 00:03:49,040
+ actually mainly pearlite. The consequence of this is that the microstructure of white cast iron is
+
+46
+00:03:49,040 --> 00:03:53,600
+ generally an even better disrupted to the motion of dislocations than that of grey cast iron.
+
+47
+00:03:53,920 --> 00:03:58,560
+ Consequently white cast irons have a tendency to be even stronger and even less ductile than their
+
+48
+00:03:58,560 --> 00:04:03,840
+ grey counterparts. Because it has strong and brittle white cast iron can be it generally can't be
+
+49
+00:04:03,840 --> 00:04:08,960
+ machined with any sort of ease and consequently is usually cast into its final geometry.
+
+50
+00:04:08,960 --> 00:04:14,240
+ Now not all cast irons are brittle in fact one variety called ductile cast iron or
+
+51
+00:04:14,240 --> 00:04:20,400
+ nodular cast iron is designed with ductility in mind. Here very small amounts of other alloy elements
+
+52
+00:04:20,400 --> 00:04:25,760
+ like serium or magnesium are added that have a tendency to help break down the FE3C in such a way
+
+53
+00:04:25,760 --> 00:04:31,440
+ that it forms spheres of graphite rather than flanks. Formation of spheres of graphite has a similar
+
+54
+00:04:31,440 --> 00:04:37,760
+ effect to spheres of FE3C in spheridite in steel providing less obstruction to dislocations and
+
+55
+00:04:37,760 --> 00:04:41,680
+ while resulting in a weaker iron product is much more ductile.

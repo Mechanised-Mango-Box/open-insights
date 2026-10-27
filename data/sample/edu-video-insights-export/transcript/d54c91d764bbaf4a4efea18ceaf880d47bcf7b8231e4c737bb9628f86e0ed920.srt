@@ -1,0 +1,323 @@
+1
+00:00:00,000 --> 00:00:04,160
+ This video is all about corrosion, the natural breakdown of engineering materials.
+
+2
+00:00:04,160 --> 00:00:08,960
+ This video will be particularly focused on metals, which corrode in an electrochemical reaction.
+
+3
+00:00:08,960 --> 00:00:12,080
+ Other materials don't really corrode the same way, if at all.
+
+4
+00:00:12,080 --> 00:00:16,160
+ Ceramics aren't particularly susceptible to corrosion, nor plastics and polymers,
+
+5
+00:00:16,160 --> 00:00:19,680
+ so you can break these down by other means for you to be light and fire.
+
+6
+00:00:19,680 --> 00:00:24,320
+ We'll talk a little bit more about corrosion of those specific materials when we meet them in the coming weeks.
+
+7
+00:00:24,320 --> 00:00:29,120
+ Corrosion is generally viewed in a pretty negative life by engineers and designers of components.
+
+8
+00:00:29,120 --> 00:00:34,160
+ It has a tendency to break down and pit and rust and destroy our beautiful designs.
+
+9
+00:00:34,160 --> 00:00:38,560
+ But on top of being aesthetically displeasing, corrosion also generally has the
+
+10
+00:00:38,560 --> 00:00:42,640
+ dangerous tendency to worsen the material properties of our components,
+
+11
+00:00:42,640 --> 00:00:46,640
+ weaken our structures. And as a result, understanding why corrosion forms,
+
+12
+00:00:46,640 --> 00:00:50,160
+ how to prevent it and how to limit is important for you as engineers,
+
+13
+00:00:50,160 --> 00:00:53,360
+ especially if you're going to be designing safety critical components.
+
+14
+00:00:53,360 --> 00:00:56,400
+ Corrosion is generally the result of an electrochemical reaction
+
+15
+00:00:56,400 --> 00:00:59,760
+ known as an oxidation reduction or redox reaction.
+
+16
+00:00:59,760 --> 00:01:02,560
+ Now, I'm getting pretty good at saying this, but I'll say it again.
+
+17
+00:01:02,560 --> 00:01:05,120
+ This isn't a chemistry course, and I'm not going to get into the weeds
+
+18
+00:01:05,120 --> 00:01:06,880
+ of how a redox reaction works.
+
+19
+00:01:06,880 --> 00:01:08,960
+ But if you're interested, what's wrong with you?
+
+20
+00:01:08,960 --> 00:01:11,840
+ I've put some resources down in the video description that you can check out.
+
+21
+00:01:11,840 --> 00:01:14,240
+ The abridged version of those resources is as follows.
+
+22
+00:01:14,240 --> 00:01:18,320
+ A redox reaction occurs between two participants, an anode and a cathode.
+
+23
+00:01:18,320 --> 00:01:20,800
+ In the kind of redox reaction that causes corrosion,
+
+24
+00:01:20,800 --> 00:01:24,560
+ the anodic participant gives up an electron to the cathodic participant.
+
+25
+00:01:24,560 --> 00:01:28,240
+ The anode then becomes positively charged, it's said to be oxidized,
+
+26
+00:01:28,240 --> 00:01:31,840
+ and the cathode becomes negatively charged. It's said to be reduced.
+
+27
+00:01:31,840 --> 00:01:36,480
+ This process, this ionization of the anode forms an oxide on the anode.
+
+28
+00:01:36,480 --> 00:01:40,080
+ In the case of some materials, this oxidation is actually rather harmless.
+
+29
+00:01:40,080 --> 00:01:44,240
+ It forms the thin film over the anode, sealing it from the cathode and preventing any further
+
+30
+00:01:44,240 --> 00:01:47,520
+ corrosion from taking place. In lots of other materials, however,
+
+31
+00:01:47,520 --> 00:01:51,680
+ including perhaps the most famous one, iron oxide rust, the oxide layer forms
+
+32
+00:01:51,680 --> 00:01:56,320
+ as a weak flaky poo on top of the material that's easily removed,
+
+33
+00:01:56,320 --> 00:01:59,920
+ exposing fresh anodic material to be corroded.
+
+34
+00:01:59,920 --> 00:02:05,200
+ Materials which tend to form a nice thin, strong oxide layer that seals them off from further
+
+35
+00:02:05,200 --> 00:02:08,160
+ corrosion are said to have the property of passivity.
+
+36
+00:02:08,160 --> 00:02:11,520
+ And this oxide layer passivates them from further corrosion.
+
+37
+00:02:11,520 --> 00:02:15,840
+ Aluminium is a well-known example of this. If it suffers a scratch or an indentation or something,
+
+38
+00:02:15,840 --> 00:02:20,480
+ it grows back a new thin film of oxide layer that protects it from further corrosion.
+
+39
+00:02:20,560 --> 00:02:24,880
+ Generally speaking, prevention of corrosion is achieved by sealing the anode from potential
+
+40
+00:02:24,880 --> 00:02:29,920
+ cathodes by means of some sort of insulation. Passivity is only one type of insulation,
+
+41
+00:02:29,920 --> 00:02:34,240
+ and for materials which don't have this property, there are ways that you can prevent them from
+
+42
+00:02:34,240 --> 00:02:38,640
+ corroding. One very common approach is to use a surface coating like a paint or some sort of
+
+43
+00:02:38,640 --> 00:02:42,960
+ plating process. You need to be a little bit careful in the application and maintenance of these
+
+44
+00:02:42,960 --> 00:02:47,360
+ coatings, however, because if there is an imperfection, if there's a scratch, for example,
+
+45
+00:02:47,360 --> 00:02:52,720
+ corrosion can begin to grow inside under the coating. In some cases, corrosion can be presented
+
+46
+00:02:52,720 --> 00:02:58,240
+ by offering up a sacrifice. Here, you coat or plate the material that you want to protect in
+
+47
+00:02:58,240 --> 00:03:03,040
+ another material which is more susceptible to corrosion. This is the concept behind galvanization,
+
+48
+00:03:03,040 --> 00:03:07,840
+ a process you often see on mass manufactured components that need to live out in the elements.
+
+49
+00:03:07,840 --> 00:03:11,440
+ In this case, a zinc layer is placed on the outside of your steel components,
+
+50
+00:03:11,440 --> 00:03:14,800
+ and that zinc layer is more susceptible to corrosion than the steel is,
+
+51
+00:03:14,800 --> 00:03:19,040
+ meaning that the zinc needs to be consumed before the steel can. This usually takes quite a
+
+52
+00:03:19,040 --> 00:03:24,720
+ long time, and a combination of galvanization and surface coating and painting can be quite an
+
+53
+00:03:24,720 --> 00:03:29,040
+ effective way of protecting steel and iron components from rust. Materials which exhibit
+
+54
+00:03:29,040 --> 00:03:33,200
+ passivity aren't immune from corrosion, and in particularly corrosive environments can still
+
+55
+00:03:33,200 --> 00:03:38,240
+ corrode. That being said, subjecting these materials to a process known as anodizing can actually
+
+56
+00:03:38,240 --> 00:03:43,840
+ encourage the growth of a thicker, stronger oxide layer, essentially by preloading the corrosion
+
+57
+00:03:43,840 --> 00:03:48,480
+ in a particular way, you can build a nice defense to future corrosion in the field.
+
+58
+00:03:48,480 --> 00:03:52,800
+ The susceptibility of a material to corrosion is largely dependent on its chemical makeup,
+
+59
+00:03:52,800 --> 00:03:57,520
+ the number of electrons that it has floating around in its upper shells. For corrosion between
+
+60
+00:03:57,520 --> 00:04:02,240
+ two materials, however, a type called galvanic corrosion. A galvanic series chart like this one over
+
+61
+00:04:02,240 --> 00:04:06,720
+ here can give you an indication of the likely direction of attack, which material will act as the
+
+62
+00:04:06,720 --> 00:04:11,920
+ anode and be oxidized, and which material will act as the cathode, being reduced and suffering very
+
+63
+00:04:12,080 --> 00:04:16,880
+ little to no damage. Corrosion of all types is accelerated in the presence of substances or conditions
+
+64
+00:04:16,880 --> 00:04:22,320
+ that are able to aid the underlying redox reaction. Very high temperatures can aid corrosion,
+
+65
+00:04:22,320 --> 00:04:27,760
+ as can acids, and probably a very common example, salts. Not so much in Australia, but in many
+
+66
+00:04:27,760 --> 00:04:32,560
+ other countries where the conditions are generally a little bit cooler, road salt is used to melt
+
+67
+00:04:32,560 --> 00:04:37,280
+ snow on roads. As cars drive around on this salty snow, they tend to kick it up onto their
+
+68
+00:04:37,280 --> 00:04:42,560
+ underside, and as the snow melts, you've now got this perfect slurry of corrosion forming liquid
+
+69
+00:04:42,560 --> 00:04:47,200
+ on the underside of your car. This is why in countries like Japan or Europe, rust seems to be much
+
+70
+00:04:47,200 --> 00:04:51,520
+ more common on cars than it is here in Australia where, to be honest, conditions are usually pretty
+
+71
+00:04:51,520 --> 00:04:56,240
+ mild. That'll probably do us for corrosion. If you want to take away some key points from this video,
+
+72
+00:04:56,240 --> 00:05:00,960
+ corrosion is the result of an electrochemical process known as a redox reaction. In this kind of
+
+73
+00:05:00,960 --> 00:05:06,080
+ reaction, one material is oxidized, giving up electrons, and one material is reduced, taking in
+
+74
+00:05:06,080 --> 00:05:11,040
+ electrons. The oxidized material corrodes, and the result of this corrosion is usually a
+
+75
+00:05:11,040 --> 00:05:15,120
+ worsening of material properties. This isn't true of all materials, with some forming a
+
+76
+00:05:15,120 --> 00:05:19,520
+ passivating layer that protects them from further corrosion and can actually have better material
+
+77
+00:05:19,520 --> 00:05:24,080
+ properties. Corrosion can be prevented by sealing materials off from potential cathodes using a
+
+78
+00:05:24,080 --> 00:05:29,120
+ paint or a surface coating, and corrosion can be worsened in the presence of salts and acids and
+
+79
+00:05:29,120 --> 00:05:33,600
+ temperature and other things that have the ability to worsen the underlying redox reaction.
+
+80
+00:05:33,600 --> 00:05:36,960
+ There's a little bit more info about corrosion on the textbook page for this video,
+
+81
+00:05:36,960 --> 00:05:46,240
+ I encourage you to check it out.

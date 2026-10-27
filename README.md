@@ -81,7 +81,10 @@ Getting the files from YouTube Studio:
   more → Export current view → CSV.
 - **Captions:** the video's Subtitles → ⋮ beside the language → Download → `.srt`.
 
-Sample reports are in `data/sample/`.
+Sample reports, and a ready-made export to import, are in `data/sample/`; its
+[README](data/sample/README.md) walks through a full test with them.
+`server/scripts/build_export.py` builds the same export from a server's database and
+Studio reports, without the browser.
 
 ## For Developers/Hosts
 

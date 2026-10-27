@@ -1,0 +1,703 @@
+1
+00:00:00,000 --> 00:00:04,560
+ Okay, in this video we're going to talk about some advanced ceramics, talk about some of
+
+2
+00:00:04,560 --> 00:00:09,200
+ the absolutely maxed out properties you can get out of them and some of the really weird
+
+3
+00:00:09,200 --> 00:00:12,560
+ properties that you can get that you wouldn't expect to be able to get from a ceramic.
+
+4
+00:00:12,560 --> 00:00:15,660
+ I'm giving this video instead of Alex because some of the things we're going to meet
+
+5
+00:00:15,660 --> 00:00:20,640
+ today are really closely aligned to some of the work that I did in my PhD or some of the
+
+6
+00:00:20,640 --> 00:00:24,080
+ research that I'm actively doing right now in the university.
+
+7
+00:00:24,080 --> 00:00:28,680
+ So if we want to talk about advanced ceramics with maxed out properties, the first one
+
+8
+00:00:28,680 --> 00:00:32,200
+ most people gravitate to is diamond and that's for good reason.
+
+9
+00:00:32,200 --> 00:00:36,720
+ We use diamond all the time as engineers in high abrasive applications where we want to
+
+10
+00:00:36,720 --> 00:00:42,120
+ do things like cut other ceramics or sometimes for its really interesting optical properties.
+
+11
+00:00:42,120 --> 00:00:47,440
+ But what's diamond is amazing and it is amazing, it's really hard to synthesize and
+
+12
+00:00:47,440 --> 00:00:52,640
+ so we can't often use it in larger applications for that we have to turn to some of
+
+13
+00:00:52,640 --> 00:00:56,720
+ the other ceramics that we're going to talk about here and a really close runner-up behind
+
+14
+00:00:56,720 --> 00:01:01,800
+ the diamond in a whole bunch of properties and sometimes exceeding it are actually ceramic
+
+15
+00:01:01,800 --> 00:01:04,240
+ compounds involving the element boron.
+
+16
+00:01:04,240 --> 00:01:09,600
+ So borides or boron containing ceramics, borons and elements that you may not have heard
+
+17
+00:01:09,600 --> 00:01:14,280
+ of before but it's just over here next to carbon on the periodic table and it has a tendency
+
+18
+00:01:14,280 --> 00:01:20,280
+ to form some unbelievably strong bonds with other elements when it joins to them.
+
+19
+00:01:20,280 --> 00:01:26,600
+ But as a result of these strong bonds we get really impressive, mechanical and non-mechanical
+
+20
+00:01:26,600 --> 00:01:27,600
+ properties.
+
+21
+00:01:27,600 --> 00:01:32,120
+ It's basically ceramics that turned up to 11.
+
+22
+00:01:32,120 --> 00:01:36,680
+ So where do you need properties even higher than you getting out of things like your
+
+23
+00:01:36,680 --> 00:01:40,480
+ alumina and other ceramics that you've met like comes in carbide?
+
+24
+00:01:40,480 --> 00:01:44,880
+ Well one case is in abrasive cutting areas.
+
+25
+00:01:44,880 --> 00:01:49,320
+ So what are you cutting or sandblasting for example where you need to take a deliberate
+
+26
+00:01:49,320 --> 00:01:54,840
+ abrasive and force it at high velocity through a nozzle, how do you not just obliterate
+
+27
+00:01:54,840 --> 00:01:57,080
+ that nozzle with abrasion?
+
+28
+00:01:57,080 --> 00:02:01,440
+ Well you make it out of something even harder, you make it out of something like boron carbide
+
+29
+00:02:01,440 --> 00:02:03,680
+ is really common for that.
+
+30
+00:02:03,680 --> 00:02:08,680
+ Another situation where you need both incredible hardness at really high temperature
+
+31
+00:02:08,680 --> 00:02:13,200
+ is some cutting applications, particularly times when you're cutting materials that have
+
+32
+00:02:13,200 --> 00:02:17,080
+ already been heat treated to be super duper hard.
+
+33
+00:02:17,120 --> 00:02:22,480
+ And sometimes these scenarios you machine them and you get incredible temperatures created
+
+34
+00:02:22,480 --> 00:02:25,160
+ well above a thousand degrees.
+
+35
+00:02:25,160 --> 00:02:30,560
+ In these cases you'll often need cutting tools made out of something other than tungsten
+
+36
+00:02:30,560 --> 00:02:33,800
+ carbide at these extremely elevated temperatures.
+
+37
+00:02:33,800 --> 00:02:39,960
+ So tungsten boride sometimes boron carbide, titanium diboride, or make exceptional cutting
+
+38
+00:02:39,960 --> 00:02:45,640
+ tools at these incredibly, incredibly aggressive environments.
+
+39
+00:02:45,640 --> 00:02:52,120
+ There's some other cases where this really high temperature but inert passivating behavior
+
+40
+00:02:52,120 --> 00:02:53,840
+ is also useful.
+
+41
+00:02:53,840 --> 00:02:57,080
+ So casting of ceramics is another one.
+
+42
+00:02:57,080 --> 00:03:01,640
+ So if you've got something like a reaction vessel or a casting dye and you're going to put
+
+43
+00:03:01,640 --> 00:03:06,520
+ something really hot into it, say you're boiling aluminium out of it or you've got a liquid
+
+44
+00:03:06,520 --> 00:03:09,960
+ metal ceramic that you need to pour into something, what do you make that dye out of
+
+45
+00:03:09,960 --> 00:03:12,680
+ so that it actually survives this process?
+
+46
+00:03:12,760 --> 00:03:17,320
+ Well again, things like titanium diboride, borides are really common in this case.
+
+47
+00:03:17,320 --> 00:03:21,560
+ And either you can make the entire dye out of this but this is very expensive.
+
+48
+00:03:21,560 --> 00:03:27,400
+ Alternatively, you can actually get simpler, cheaper dyes and spray them with a coating of something
+
+49
+00:03:27,400 --> 00:03:31,480
+ like boron nitride to give them a thin, passivating protective layer.
+
+50
+00:03:31,480 --> 00:03:35,320
+ And this is really common for home hobbyists when they're doing glass making and stuff like that,
+
+51
+00:03:35,960 --> 00:03:42,200
+ that I use it for some of my really expensive dyes in my lab and other abrasive components as well.
+
+52
+00:03:43,320 --> 00:03:48,920
+ There is one other situation where boron is incredibly or boron compounds are incredibly
+
+53
+00:03:48,920 --> 00:03:49,800
+ commonly used.
+
+54
+00:03:49,800 --> 00:03:53,640
+ And I'm going to choose some of my words quite carefully here for this being a YouTube video.
+
+55
+00:03:54,440 --> 00:03:56,680
+ High strain rate applications.
+
+56
+00:03:56,680 --> 00:04:02,680
+ So you may remember from polymers when we talked about sometimes when you stretch them very quickly,
+
+57
+00:04:02,680 --> 00:04:04,920
+ their value mechanisms actually change.
+
+58
+00:04:04,920 --> 00:04:10,280
+ Well there's this entire field of research where very, very high strain rates, very,
+
+59
+00:04:10,280 --> 00:04:13,800
+ very fast applications of load are studied.
+
+60
+00:04:13,800 --> 00:04:18,760
+ And in these scenarios, probably the thing that will be most apparently useful to you
+
+61
+00:04:18,760 --> 00:04:21,800
+ might be something like a ballistic interaction.
+
+62
+00:04:21,800 --> 00:04:27,480
+ So in this environment you have an incredibly fast object moving into a material.
+
+63
+00:04:28,360 --> 00:04:33,640
+ And often in times you would wish to dissipate that energy as quickly as possible.
+
+64
+00:04:33,640 --> 00:04:38,760
+ Now some conventional logic would say a high toughness material with a lot of ductility could
+
+65
+00:04:38,760 --> 00:04:41,320
+ be good in this scenario and you may be correct.
+
+66
+00:04:41,320 --> 00:04:47,320
+ But in a lot of these scenarios penetration depth is important, yeah?
+
+67
+00:04:48,200 --> 00:04:51,880
+ And so what you actually turn to a lot of these times are composites.
+
+68
+00:04:51,880 --> 00:04:53,640
+ They're generally a mixture of many things.
+
+69
+00:04:53,640 --> 00:04:59,000
+ But one of the most important parts of them is an incredibly hard ceramic material.
+
+70
+00:04:59,000 --> 00:05:03,560
+ When it is interactive in a high velocity or a high strain rate impact,
+
+71
+00:05:03,560 --> 00:05:05,640
+ it actually changes its value mechanism.
+
+72
+00:05:05,720 --> 00:05:08,600
+ It's still cracks, but it cracks in a different way,
+
+73
+00:05:08,600 --> 00:05:13,080
+ which causes a whole bunch of the energy of the incoming object to actually be reflected
+
+74
+00:05:13,080 --> 00:05:20,920
+ and injected back into the projectile itself, disintegrating the projectile as it attempts to move
+
+75
+00:05:20,920 --> 00:05:26,440
+ through the ceramic plate and expelling a large amount of that energy back out the other way,
+
+76
+00:05:26,440 --> 00:05:30,840
+ which can be very useful in some of these specific applications, yeah?
+
+77
+00:05:31,800 --> 00:05:32,120
+ Cool.
+
+78
+00:05:33,000 --> 00:05:39,080
+ So moving away from that and into some of the other properties that can make some of these
+
+79
+00:05:39,080 --> 00:05:44,440
+ ceramics really interesting is things like their thermal and electrical properties.
+
+80
+00:05:44,440 --> 00:05:50,760
+ So many of these incredibly stiff materials actually have really high thermal conductivity.
+
+81
+00:05:50,760 --> 00:05:55,160
+ It's because their excellent photonic transfer mechanism,
+
+82
+00:05:55,160 --> 00:05:58,600
+ they can move energy through their lattice very easily.
+
+83
+00:05:58,600 --> 00:06:02,840
+ To get this, you generally want light atoms that are really rigidly bonded together.
+
+84
+00:06:02,840 --> 00:06:06,600
+ Diamond, again, takes the cake, almost perfect electrical insulator,
+
+85
+00:06:06,600 --> 00:06:09,560
+ but the best thermal conductor that we currently know.
+
+86
+00:06:10,200 --> 00:06:13,480
+ If you're not going to get enough diamond to do the thing that you want to do,
+
+87
+00:06:13,480 --> 00:06:15,880
+ borides are great substitutes in this environment.
+
+88
+00:06:15,880 --> 00:06:20,120
+ As is aluminium nitride is another really, really great contender,
+
+89
+00:06:20,120 --> 00:06:21,960
+ and so are some silicon carbides.
+
+90
+00:06:21,960 --> 00:06:26,360
+ There's a whole bunch of materials that exist that are almost perfect electrical insulators,
+
+91
+00:06:26,360 --> 00:06:28,360
+ but brilliant thermal conductors.
+
+92
+00:06:29,640 --> 00:06:34,760
+ On the other end of the spectrum, not all ceramics are actually electrical insulators.
+
+93
+00:06:34,760 --> 00:06:37,560
+ Many of them are actually semiconductors,
+
+94
+00:06:37,560 --> 00:06:41,240
+ or full-blown conductors of electricity under the right circumstances.
+
+95
+00:06:41,960 --> 00:06:46,920
+ So if you take a ceramic that's got electrical conductivity,
+
+96
+00:06:46,920 --> 00:06:50,440
+ but all of the other properties of ceramics, big good at high temperature,
+
+97
+00:06:50,440 --> 00:06:53,160
+ their corrosion resistant, they're not going to melt,
+
+98
+00:06:53,160 --> 00:06:55,400
+ they're not going to creep when you heat them up.
+
+99
+00:06:55,400 --> 00:07:00,200
+ You can actually make incredibly high temperature heating elements out of them.
+
+100
+00:07:00,200 --> 00:07:04,600
+ And most heating elements that go above about 1200 degrees are made out of ceramics.
+
+101
+00:07:05,480 --> 00:07:10,600
+ Milibdenum dicillicide or moly dicillicide is one of the most common materials used for it.
+
+102
+00:07:10,600 --> 00:07:13,160
+ These are remarkable materials,
+
+103
+00:07:13,160 --> 00:07:16,920
+ and they actually have a really interesting way of preventing oxidation,
+
+104
+00:07:16,920 --> 00:07:20,760
+ in that when you heat them up by passing huge currents through them
+
+105
+00:07:20,760 --> 00:07:22,920
+ so they glow bright orange and above,
+
+106
+00:07:24,280 --> 00:07:27,400
+ the ceramic actually oxidizes a little bit.
+
+107
+00:07:27,400 --> 00:07:31,640
+ Milibdenum oxide kind of can intuitively has a very low boiling temperature.
+
+108
+00:07:31,640 --> 00:07:34,360
+ It boils at like 1100 degrees vaporizes.
+
+109
+00:07:34,920 --> 00:07:37,000
+ And you get left with a silicon oxide,
+
+110
+00:07:37,000 --> 00:07:40,040
+ passivating layer on the outside of the heating element,
+
+111
+00:07:40,040 --> 00:07:43,240
+ which actually even sells heels if it gets slightly damaged.
+
+112
+00:07:43,240 --> 00:07:45,480
+ This means that you can get these materials in air,
+
+113
+00:07:46,040 --> 00:07:48,120
+ pass enormous currents through them,
+
+114
+00:07:48,120 --> 00:07:54,840
+ and they'll get unbelievably hot and last for hundreds and hundreds of hours at these temperatures.
+
+115
+00:07:54,840 --> 00:07:58,440
+ They're essentially the only materials that you can use in this type of environment.
+
+116
+00:08:00,120 --> 00:08:03,080
+ If we go even further on the electrical properties,
+
+117
+00:08:03,080 --> 00:08:06,360
+ we can jump into the realm of superconductors.
+
+118
+00:08:06,360 --> 00:08:08,440
+ Almost all high temperature superconductors,
+
+119
+00:08:08,440 --> 00:08:12,520
+ by the way high temperature, it means like 50 degrees above zero kelvin.
+
+120
+00:08:14,200 --> 00:08:17,480
+ Almost every one of them is actually made out of a ceramic.
+
+121
+00:08:17,480 --> 00:08:19,800
+ Quite a complicated ceramic most of the time.
+
+122
+00:08:19,800 --> 00:08:22,840
+ With at least four, maybe more elements in it,
+
+123
+00:08:22,840 --> 00:08:26,440
+ a range in a very peculiar, very specific order,
+
+124
+00:08:26,440 --> 00:08:30,520
+ such that they create these channels that electrons can go down.
+
+125
+00:08:30,520 --> 00:08:34,200
+ So ceramics, which most people will tell you are electrical insulators,
+
+126
+00:08:34,200 --> 00:08:40,200
+ are actually perfectly brilliant electrical conductors under the very specific set of circumstances.
+
+127
+00:08:40,840 --> 00:08:44,440
+ Now what you can see here is a superconductor, right?
+
+128
+00:08:44,440 --> 00:08:46,920
+ And we're not going to ask you to ever memorize in this course
+
+129
+00:08:46,920 --> 00:08:49,400
+ any type of crystal structure that looks this messed up.
+
+130
+00:08:49,400 --> 00:08:50,360
+ It's totally fine.
+
+131
+00:08:51,000 --> 00:08:55,560
+ But what I want you to acknowledge from this is there are some times with ceramics.
+
+132
+00:08:55,560 --> 00:08:58,520
+ We can actually bring a whole bunch of elements together
+
+133
+00:08:58,520 --> 00:09:02,920
+ and get them to form very, very specific structures.
+
+134
+00:09:02,920 --> 00:09:06,440
+ This isn't an alley. It's different to an alley.
+
+135
+00:09:06,440 --> 00:09:11,240
+ It's actually a ternary or quaternary, depending on how many elements you have in it,
+
+136
+00:09:11,240 --> 00:09:14,360
+ compound that arranges itself very, very specifically.
+
+137
+00:09:15,240 --> 00:09:18,920
+ You'd met one of these before. If you had me teach you pretty much anything,
+
+138
+00:09:18,920 --> 00:09:21,800
+ you would have heard me at some stage mentioned max phases.
+
+139
+00:09:21,800 --> 00:09:27,480
+ They were what I did my PhD in and they are a ternary ceramic of titanium, silicon,
+
+140
+00:09:27,480 --> 00:09:29,240
+ and carbon, for example.
+
+141
+00:09:29,240 --> 00:09:32,440
+ For example, and the titanium and carbon bond together,
+
+142
+00:09:32,440 --> 00:09:37,480
+ just like they do in titanium carbide are normal typical ceramic,
+
+143
+00:09:37,480 --> 00:09:40,360
+ and that gives us our normal typical ceramic behavior.
+
+144
+00:09:40,360 --> 00:09:43,080
+ But we also get this other layer of silicon in there,
+
+145
+00:09:43,080 --> 00:09:46,680
+ which is bonded totally differently almost like a metal,
+
+146
+00:09:46,680 --> 00:09:48,520
+ and it gives us metallic behavior.
+
+147
+00:09:48,520 --> 00:09:51,400
+ So if we get a piece of one of these macroscopically,
+
+148
+00:09:51,400 --> 00:09:53,640
+ if we take a piece of this and we have a look at it,
+
+149
+00:09:53,640 --> 00:09:57,160
+ you'd be totally within your rights to say that that's a metal, right?
+
+150
+00:09:57,160 --> 00:10:01,000
+ It's hard, it's shiny, it's electrically conductive,
+
+151
+00:10:01,000 --> 00:10:05,080
+ it's thermally conductive, it looks like a metal.
+
+152
+00:10:05,080 --> 00:10:08,040
+ It's not even that brittle. You can hit this thing with a hammer
+
+153
+00:10:08,040 --> 00:10:11,800
+ and it won't immediately shatter until a million pieces like a piece of glass would.
+
+154
+00:10:12,600 --> 00:10:16,360
+ However, it does have a whole bunch of ceramic properties.
+
+155
+00:10:16,360 --> 00:10:19,880
+ It has a very high stiffness, it has a fairly low density,
+
+156
+00:10:19,880 --> 00:10:22,840
+ has good strength, and it maintains all of these things,
+
+157
+00:10:22,840 --> 00:10:25,240
+ even when you heat it up to high temperatures,
+
+158
+00:10:25,240 --> 00:10:27,160
+ it doesn't soften like a metal does.
+
+159
+00:10:28,760 --> 00:10:33,800
+ But it also has reasonably good fracture toughness.
+
+160
+00:10:34,600 --> 00:10:39,560
+ I see all of these atoms line themselves up in a very specific way in the crystal,
+
+161
+00:10:39,560 --> 00:10:41,480
+ and it creates these layers.
+
+162
+00:10:41,480 --> 00:10:45,960
+ And these layers grow in such a way that if a crack tries to propagate through them,
+
+163
+00:10:45,960 --> 00:10:48,200
+ some of them can actually slide past each other,
+
+164
+00:10:48,200 --> 00:10:50,360
+ some of them are aligned in different orientations,
+
+165
+00:10:50,360 --> 00:10:53,160
+ and it suppresses the ability for a crack to go through.
+
+166
+00:10:53,160 --> 00:10:57,080
+ They still do fail brittle, they still do have brittle fracture,
+
+167
+00:10:57,080 --> 00:10:59,400
+ but nowhere near as much as you might first think.
+
+168
+00:11:01,000 --> 00:11:05,000
+ So, with all of this combined, what do I want you to take away from this?
+
+169
+00:11:05,720 --> 00:11:08,040
+ Do you need to memorize the structure of a max face?
+
+170
+00:11:08,040 --> 00:11:09,320
+ No, not at all.
+
+171
+00:11:09,320 --> 00:11:11,960
+ But what we want you to acknowledge from this is
+
+172
+00:11:11,960 --> 00:11:16,280
+ the world of ceramics is actually quite a lot broader than most people think it is.
+
+173
+00:11:16,280 --> 00:11:19,480
+ And as an engineer, you can actually exist in this space,
+
+174
+00:11:19,480 --> 00:11:23,800
+ manipulate some of these either maxed out properties or unexpected properties
+
+175
+00:11:23,800 --> 00:11:29,400
+ to be able to create materials that can be successful in extremely hostile environments.
+
+176
+00:11:29,400 --> 00:11:32,360
+ That will do us for this one. I hope you enjoyed it.

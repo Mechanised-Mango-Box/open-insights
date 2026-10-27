@@ -1,0 +1,111 @@
+1
+00:00:00,000 --> 00:00:05,000
+ We'll kick off our discussion about engineering composites by talking about some of the intrinsic ones,
+
+2
+00:00:05,000 --> 00:00:13,000
+ the ones that form naturally as a result of some manufacturing process or naturally as a result of some natural process, like oxidation.
+
+3
+00:00:13,000 --> 00:00:24,000
+ It quite serendipitously turns out that many of these intrinsic composites that form without us necessarily even trying to make them have properties that are really well suited for engineering applications.
+
+4
+00:00:24,000 --> 00:00:29,000
+ To start with, we might talk about some intrinsically formed dispersion strengthened composites.
+
+5
+00:00:29,000 --> 00:00:37,000
+ Remember, these composites are where very, very small particles of one material, usually a ceramic, are dispersed in a matrix of another material, usually a metal.
+
+6
+00:00:37,000 --> 00:00:47,000
+ And the particles are so small that they can change the properties of this metal, strengthen this metal by disrupting the crystal lattice and providing more and more blockage for the motion of these locations.
+
+7
+00:00:47,000 --> 00:00:55,000
+ Well, it turns out that many dispersion strengthened composites actually occur incidentally as a result of some other manufacturing process or some other refinement process.
+
+8
+00:00:55,000 --> 00:01:02,000
+ An example that we like pointing to, an example we've talked about a lot over the course of this semester is Fe3C cementite in steel.
+
+9
+00:01:02,000 --> 00:01:10,000
+ Sealers the composite where this ceramic is distributed in the lattice of the iron and this process occurs naturally in the refinement of iron ore.
+
+10
+00:01:10,000 --> 00:01:22,000
+ In this specific example and inability to accommodate that excess carbon that's floating around during the smelting process, in the interstices of the alpha phase or the gamma phase of the iron, leads to the formation of Fe3C.
+
+11
+00:01:22,000 --> 00:01:33,000
+ This compound, this ceramic forms preferentially because it has a far lower enthalpy of formation, it represents a far lower energy state for those constituents to be in rather than just floating around separately.
+
+12
+00:01:33,000 --> 00:01:40,000
+ Couple with the fact that there's more than enough activation energy floating around in the blast furnace in the form of heat during the smelting process.
+
+13
+00:01:40,000 --> 00:01:49,000
+ And you'll remember from our discussions way back in week three that the distribution of this Fe3C of this cementite in the steel product can have a massive effect on its properties.
+
+14
+00:01:49,000 --> 00:01:58,000
+ By altering both the carbon content that's floating around and the cooling rate of the bulk product, we can control exactly how that Fe3C gets distributed.
+
+15
+00:01:58,000 --> 00:02:03,000
+ The former the carbon content is normally controlled during the refinement process, during the smelting process.
+
+16
+00:02:03,000 --> 00:02:13,000
+ But practical limitations on the cooling rate that you can achieve when you're at scale manufacturing, at scale refining iron ore means that the microstructure you end up with may not necessarily be ideal.
+
+17
+00:02:13,000 --> 00:02:21,000
+ That being said, as long as you've got the carbon content right, you can post heat treat any of this steel to redistribute that Fe3C in different ways.
+
+18
+00:02:21,000 --> 00:02:29,000
+ And by doing so, by essentially changing how the dispersed phase is dispersed within the matrix, you can change the effective properties of this composite material.
+
+19
+00:02:29,000 --> 00:02:38,000
+ Intrinsically formed composites don't only arise as a result of, say, man-made manufacturing processes, but also come about because of natural processes as well.
+
+20
+00:02:38,000 --> 00:02:48,000
+ We've already talked extensively the semester about how passivating oxide layers form has some materials react with oxygen to form an oxide layer that seals them off from further corrosion.
+
+21
+00:02:48,000 --> 00:02:59,000
+ And we talked a few weeks ago about how these oxide layers are actually serate materials, and we talked last week about how the combination of this oxide layer and the base metal collectively makes up a composite.
+
+22
+00:02:59,000 --> 00:03:13,000
+ Well, while these oxide layers do grow naturally on quite a few different metals, say aluminium and titanium, for example, we actually do promote and support and encourage the growth of these oxide layers as a specific manufacturing process called anodization.
+
+23
+00:03:13,000 --> 00:03:26,000
+ Here, for parts that we know are going to be subject to some sort of high wear environment or highly corrosive environment, we can actually grow thicker, harder, stronger oxide layers by encouraging the reaction between the base metal and oxygen.
+
+24
+00:03:27,000 --> 00:03:32,000
+ This is normally achieved by submerging the passivating metal in an electrolyte and applying a charge to it.
+
+25
+00:03:32,000 --> 00:03:37,000
+ And then encouraging a chemical reaction within the electrolyte that gives off oxygen atoms that are ionized.
+
+26
+00:03:37,000 --> 00:03:42,000
+ These come into contact with the charge passivating metal and react to form a thicker, harder oxide layer.
+
+27
+00:03:42,000 --> 00:03:54,000
+ Anodization is a process that's widely practiced not only to provide scratch and corrosion resistance, but also to apply colored coatings to passivating metals that don't tend to wear and chip as easily as say paint would.
+
+28
+00:03:54,000 --> 00:04:03,000
+ So, that makes us a resource that explain a bit more about how the anodizing process works and a little bit more about intrinsically formed composites in general on the textbook page for this video.

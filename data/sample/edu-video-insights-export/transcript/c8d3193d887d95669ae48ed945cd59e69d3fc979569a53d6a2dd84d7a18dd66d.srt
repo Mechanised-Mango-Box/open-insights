@@ -1,0 +1,187 @@
+1
+00:00:00,000 --> 00:00:01,520
+ All right, everybody, you've made it.
+
+2
+00:00:01,520 --> 00:00:05,360
+ With the exception of the advanced stuff that's coming right at the end of the course,
+
+3
+00:00:05,360 --> 00:00:09,600
+ we've reached the last section of kind of core material that we're going to cover,
+
+4
+00:00:09,600 --> 00:00:11,200
+ the last two weeks of content.
+
+5
+00:00:11,200 --> 00:00:12,720
+ Now, there are two of them.
+
+6
+00:00:12,720 --> 00:00:15,040
+ This week, we're going to meet engineering composites,
+
+7
+00:00:15,040 --> 00:00:20,480
+ amalgams of two or three or more engineering materials that come together to give you some
+
+8
+00:00:20,480 --> 00:00:24,240
+ effective properties that might be better than the sum of the parts.
+
+9
+00:00:24,240 --> 00:00:28,320
+ Engineering composites are normally constructed to leverage the best aspects of the constituents
+
+10
+00:00:28,320 --> 00:00:33,280
+ that make them up and to minimize the effects of the weaknesses of these constituents.
+
+11
+00:00:33,280 --> 00:00:37,920
+ And as you can imagine, the properties and behaviors of these constituents are fundamental
+
+12
+00:00:37,920 --> 00:00:42,320
+ to the effective properties and behaviors of the composites that are made from them.
+
+13
+00:00:42,320 --> 00:00:46,400
+ It's one of the reasons why this had to come right at the end after all of our studies
+
+14
+00:00:46,400 --> 00:00:50,000
+ and why you needed to have such a good understanding of all of these different
+
+15
+00:00:50,000 --> 00:00:53,680
+ constituent families of materials to be able to talk about composites.
+
+16
+00:00:53,680 --> 00:00:57,760
+ From the outset and first of all, I might recognize that the word composite is quite broad
+
+17
+00:00:57,760 --> 00:01:00,240
+ and has different meanings depending on who you speak to.
+
+18
+00:01:00,240 --> 00:01:04,320
+ And while the word composite might conjure up images in your mind of complicated,
+
+19
+00:01:04,320 --> 00:01:08,480
+ organic geometries made from carbon fiber, it does have a broader definition.
+
+20
+00:01:08,480 --> 00:01:11,520
+ Most of the engineering materials that we've already met this semester,
+
+21
+00:01:11,520 --> 00:01:16,160
+ whether or not they appear to be pure, actually composites of one kind or another.
+
+22
+00:01:16,160 --> 00:01:22,560
+ For example, even pure mild steel, my favorite material is a composite of pure iron and cementite,
+
+23
+00:01:22,560 --> 00:01:24,000
+ a metal and a ceramic.
+
+24
+00:01:24,000 --> 00:01:28,720
+ And aluminium alloys are the same, a composite of a pure aluminium core with an
+
+25
+00:01:28,720 --> 00:01:32,800
+ alumina oxide layer, a ceramic oxide layer on the outside.
+
+26
+00:01:32,800 --> 00:01:36,720
+ In general, whether you classify a material as a composite depends a little bit on context
+
+27
+00:01:36,720 --> 00:01:38,560
+ and can be a little bit subjective.
+
+28
+00:01:38,560 --> 00:01:43,200
+ Some people, for example, might classify any mixture of pure elements as a composite or
+
+29
+00:01:43,200 --> 00:01:47,280
+ any mixture of unlike geometries of a single element as a composite.
+
+30
+00:01:47,280 --> 00:01:50,880
+ In this course, we're going to take a slightly more restrictive definition,
+
+31
+00:01:50,880 --> 00:01:56,800
+ classifying a composite as a mixture of at least two distinct phases of materials.
+
+32
+00:01:56,800 --> 00:01:59,520
+ This definition captures the obvious examples of composites,
+
+33
+00:01:59,520 --> 00:02:03,280
+ the ones you're probably familiar with, fiber reinforced polymers, for example.
+
+34
+00:02:03,280 --> 00:02:07,200
+ But also captures some of the more nebulous ones, the mild steels, for example,
+
+35
+00:02:07,200 --> 00:02:10,240
+ that have one material entombed within another.
+
+36
+00:02:10,240 --> 00:02:14,560
+ Importantly, our definition of a composite is going to exclude materials which are a
+
+37
+00:02:14,560 --> 00:02:18,560
+ mixture of two or more elements, but this happens in an interesting way.
+
+38
+00:02:18,640 --> 00:02:22,480
+ Like in an alloy where one material might be substitutionally or interstitually
+
+39
+00:02:22,480 --> 00:02:28,080
+ alloyed into another, but becomes part of the same matrix and isn't distinct from the other.
+
+40
+00:02:28,080 --> 00:02:31,520
+ This week, as has been the trend in this course, we're going to focus more on the
+
+41
+00:02:31,520 --> 00:02:35,840
+ material properties of composites and how these arise as a function of their constituents
+
+42
+00:02:35,840 --> 00:02:36,720
+ and their geometry.
+
+43
+00:02:36,720 --> 00:02:40,640
+ And we'll meet a few characteristic subfamilies of composites as well.
+
+44
+00:02:40,640 --> 00:02:44,080
+ Next week, we're going to focus more on manufacturing of engineering composites
+
+45
+00:02:44,080 --> 00:02:47,520
+ and the different techniques that are used to form and shape these.
+
+46
+00:02:47,520 --> 00:02:50,480
+ So sit back, relax and enjoy the videos for this week.
+
+47
+00:02:50,480 --> 00:02:54,480
+ The last of the concept introduction videos we're going to have in this course.

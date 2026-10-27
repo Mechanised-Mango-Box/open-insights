@@ -1,0 +1,151 @@
+1
+00:00:00,000 --> 00:00:04,000
+ You may have noticed that these videos have a similar structure to last week.
+
+2
+00:00:04,000 --> 00:00:08,000
+ We're now on the third of three basic components in rotating systems.
+
+3
+00:00:08,000 --> 00:00:14,000
+ And just like last week we met masses, we met springs, and now we're going to meet frictions.
+
+4
+00:00:14,000 --> 00:00:19,000
+ This is intentional. I'm trying to draw as many kind of threads back to what we've already done as possible.
+
+5
+00:00:19,000 --> 00:00:23,000
+ So you can start to see under the hood, start to see the analogs.
+
+6
+00:00:23,000 --> 00:00:27,000
+ Friction, I think in rotating systems is pretty easy to visualize.
+
+7
+00:00:27,000 --> 00:00:32,000
+ You can imagine taking a shaft even on high quality bearings and spinning it up.
+
+8
+00:00:32,000 --> 00:00:35,000
+ And eventually that thing is going to come to a stop, right?
+
+9
+00:00:35,000 --> 00:00:40,000
+ As all of that kinetic energy is dissipated into heat from the rollers in the bearings.
+
+10
+00:00:40,000 --> 00:00:45,000
+ In this course, we're going to use friction elements, which we give this symbol to model these kinds of losses.
+
+11
+00:00:45,000 --> 00:00:50,000
+ Now a prominent kind of real world example of this would be something like a gearbox.
+
+12
+00:00:50,000 --> 00:00:53,000
+ In this course, we're going to model gearboxes as ideal.
+
+13
+00:00:53,000 --> 00:00:56,000
+ We're going to assume that all the power we put in we then get out again.
+
+14
+00:00:56,000 --> 00:01:06,000
+ But if we ever want to model the non-ideality, the reality that in gearboxes, when you put a certain amount of power in you only get a fraction of that power out due to friction,
+
+15
+00:01:06,000 --> 00:01:11,000
+ we'll dump a friction element on one side of the gearbox to model that kind of loss.
+
+16
+00:01:11,000 --> 00:01:14,000
+ Another real world example would be something like your car.
+
+17
+00:01:14,000 --> 00:01:18,000
+ In Australia, we're pretty fond of quoting how many kilowatts our car makes.
+
+18
+00:01:18,000 --> 00:01:24,000
+ But if you look on the car sales website, I'm pretty sure what they're quoting is the amount of power that your car makes at the crank,
+
+19
+00:01:24,000 --> 00:01:26,000
+ at the kind of output of the engine.
+
+20
+00:01:26,000 --> 00:01:30,000
+ But between the engine and the wheels, it has to go through a transmission at gearbox.
+
+21
+00:01:30,000 --> 00:01:38,000
+ If it's a rear-wheel-drive car, it goes through a prop shaft and then through a differential and then through some drive shafts and all throughout that process,
+
+22
+00:01:38,000 --> 00:01:45,000
+ there's friction involved that's sapping that power away to the tune of, I don't know, 10, 15% of the power that you're making at the crank.
+
+23
+00:01:45,000 --> 00:01:50,000
+ In this course, we're going to use a linear viscous friction model, similar to what we did for translating mechanical systems.
+
+24
+00:01:50,000 --> 00:01:54,000
+ And actually, it has a pretty similar CCR. Here it is.
+
+25
+00:01:54,000 --> 00:01:58,000
+ TB, in this case, is the torque that's produced by the friction element,
+
+26
+00:01:58,000 --> 00:02:01,000
+ usually in the direction opposing motion.
+
+27
+00:02:01,000 --> 00:02:03,000
+ B is the linear viscous damping coefficient.
+
+28
+00:02:03,000 --> 00:02:12,000
+ And on my URL is the kind of relative velocity, the relative angular velocity between our shaft and whatever kind of the reference surface is.
+
+29
+00:02:12,000 --> 00:02:15,000
+ Now, in the same way as the car example last week,
+
+30
+00:02:15,000 --> 00:02:24,000
+ where we had a car sliding on a plane and we defined the V-rail for the friction to be the velocity of that car minus the velocity of the ground, which was zero.
+
+31
+00:02:24,000 --> 00:02:31,000
+ For rotating systems, we'll define omega-rail as the velocity of the shaft that the friction element lives on minus zero.
+
+32
+00:02:31,000 --> 00:02:36,000
+ Because in this case, the reference surface is probably the outer race of our bearing.
+
+33
+00:02:36,000 --> 00:02:40,000
+ The thing which is fixed to, I don't know, sometimes bearing housing, which isn't moving.
+
+34
+00:02:40,000 --> 00:02:50,000
+ If we do it this way, then dealing with the SSR for friction, the definition of omega-rail and the associated drawing of a friction torque on a free body diagram is actually really easy.
+
+35
+00:02:50,000 --> 00:02:55,000
+ Same as before, you only need to remember that friction always opposes motion.
+
+36
+00:02:55,000 --> 00:03:01,000
+ And then you should draw it opposite to the coordinate system of any inertia that you happen during a free body diagram for.
+
+37
+00:03:01,000 --> 00:03:05,000
+ So, with all of that said, I think we now have enough information,
+
+38
+00:03:05,000 --> 00:03:12,000
+ we've now met enough components that we can go and model problem 2.4, our first rotating mechanical system.

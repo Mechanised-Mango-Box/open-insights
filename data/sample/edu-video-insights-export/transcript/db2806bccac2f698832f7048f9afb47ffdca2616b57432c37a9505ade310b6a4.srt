@@ -1,0 +1,163 @@
+1
+00:00:00,000 --> 00:00:03,680
+ All right, the time has come to begin talking about some specific engineering
+
+2
+00:00:03,680 --> 00:00:07,680
+ polymers. It shouldn't come as a huge shock to you, but just like metals, we tend to group
+
+3
+00:00:07,680 --> 00:00:13,040
+ engineering polymers into families. Unlike metals, however, these families are generally not described
+
+4
+00:00:13,040 --> 00:00:17,840
+ in terms of the primary composition of a polymer, the same way that families of metals are described
+
+5
+00:00:17,840 --> 00:00:21,920
+ by their primary composition. Instead, we construct families of polymers normally in terms of
+
+6
+00:00:21,920 --> 00:00:27,120
+ their reaction to an applied heat. In this context and broadly speaking, there are generally
+
+7
+00:00:27,120 --> 00:00:31,440
+ two types of engineering polymer that we're going to be concerned about in this course.
+
+8
+00:00:31,440 --> 00:00:36,240
+ Thermoplastic polymers and thermo-setting polymers. In this video, we're going to talk about the
+
+9
+00:00:36,240 --> 00:00:40,080
+ former and over the next few videos, we're going to meet a couple of different kinds of
+
+10
+00:00:40,080 --> 00:00:44,800
+ thermoplastic polymer and a bit later we'll talk a little bit about thermo-setting polymers as
+
+11
+00:00:44,800 --> 00:00:49,040
+ well. Thermo-plastic polymers, which are sometimes called thermo-sophoning polymers or just
+
+12
+00:00:49,040 --> 00:00:55,200
+ thermoplastics, are a family of polymers that all soften when heated and eventually melt. As you
+
+13
+00:00:55,200 --> 00:01:00,480
+ can imagine, this is a pretty useful property. Thermo-plastics can be heated up and molded into shape
+
+14
+00:01:00,480 --> 00:01:05,040
+ and then allowed to cool and they'll take that shape, they'll set to that shape. Thermo-plastics
+
+15
+00:01:05,040 --> 00:01:09,280
+ behave this particular way because they have very little to know cross-linking between their
+
+16
+00:01:09,280 --> 00:01:13,920
+ polymer chains. Consequently, all that's holding these chains together are relatively weak
+
+17
+00:01:13,920 --> 00:01:18,640
+ vander-walls bonds. When you heat them up, you overcome these vander-walls bonds and they become
+
+18
+00:01:18,640 --> 00:01:23,760
+ very easy to shape and form. Because they behave this way because they can be later remelted down
+
+19
+00:01:23,760 --> 00:01:29,120
+ into other shapes, thermoplastic polymers are normally produced in bulk, polymerized in bulk.
+
+20
+00:01:29,120 --> 00:01:33,520
+ At scale, most engineering thermoplastics are produced into small little pellets called
+
+21
+00:01:33,520 --> 00:01:37,680
+ Nerdles and then shipped around the world to be melted down and formed into all of the
+
+22
+00:01:37,680 --> 00:01:42,080
+ shapes and plastics that we know and love. Because of how easy they are to work and shape at
+
+23
+00:01:42,080 --> 00:01:46,480
+ temperature, you've probably already done a little bit of thermoplastic forming of your own.
+
+24
+00:01:46,480 --> 00:01:50,720
+ If you've ever used an FDM 3D printer, then you know exactly what I'm talking about.
+
+25
+00:01:50,800 --> 00:01:54,640
+ Here, the bulk plastic was polymerized and probably turned into Nerdles,
+
+26
+00:01:54,640 --> 00:01:59,120
+ shipped off to a plant somewhere where they remelted it down and extruded it into long bits of
+
+27
+00:01:59,120 --> 00:02:04,160
+ filament. And finally, you load this filament into your 3D printer, which melts the thermoplastic again
+
+28
+00:02:04,160 --> 00:02:08,560
+ and deposits it onto your job, forming in whatever shape it was you were trying to 3D print.
+
+29
+00:02:08,560 --> 00:02:12,480
+ Because melting of thermoplastics is a mechanical process and not a chemical one because there's
+
+30
+00:02:12,480 --> 00:02:17,360
+ essentially no damage to the chains, you can theoretically remel to thermoplastic down and
+
+31
+00:02:17,360 --> 00:02:22,640
+ form it as many times as you like. Now, most thermoplastics aren't actually indefinitely recycled.
+
+32
+00:02:22,640 --> 00:02:27,200
+ I'm usually in service damage or contamination means that they can only be recycled three or
+
+33
+00:02:27,200 --> 00:02:31,760
+ four times before they're effectively useless. But generally speaking, the recyclability and
+
+34
+00:02:31,760 --> 00:02:37,040
+ the versatility that the remelteability of thermoplastics offers is one of the reasons why they're
+
+35
+00:02:37,040 --> 00:02:41,520
+ so widely used. Over the next few videos, we're going to talk about some of the most commonly
+
+36
+00:02:41,520 --> 00:02:46,000
+ used and produced thermoplastics. Obviously, this won't be an account of all of the possible
+
+37
+00:02:46,000 --> 00:02:50,080
+ thermoplastics in the world. But like everything else in this course, what I'm aiming to do
+
+38
+00:02:50,080 --> 00:02:53,600
+ is give you a little bit of exposure to these things so that you can then go and do some
+
+39
+00:02:53,600 --> 00:02:57,440
+ independent study of your own and set you up nicely for materials too.
+
+40
+00:02:57,440 --> 00:03:00,560
+ As we meet some of these thermoplastics, we're going to talk about their properties and their
+
+41
+00:03:00,560 --> 00:03:08,400
+ typical uses and their recyclability as well. So stay tuned.

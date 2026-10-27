@@ -1,0 +1,243 @@
+1
+00:00:00,000 --> 00:00:04,000
+ All right. The time has come for us to start talking about some of the course content.
+
+2
+00:00:04,000 --> 00:00:07,840
+ As I mentioned in the preliminary videos, this course is broken up into six sections.
+
+3
+00:00:07,840 --> 00:00:12,080
+ We're going to talk about material properties and then metals, plastics, ceramics,
+
+4
+00:00:12,080 --> 00:00:17,200
+ composites, and finally some advanced materials. In this first section, which will take us
+
+5
+00:00:17,200 --> 00:00:22,560
+ two weeks to get through, material properties will be our focus. These are the measurable qualities
+
+6
+00:00:22,560 --> 00:00:27,200
+ and characteristics and classifications of engineering materials. Over the next two weeks,
+
+7
+00:00:27,200 --> 00:00:30,960
+ we're going to focus on the material properties that are important to us as engineers,
+
+8
+00:00:30,960 --> 00:00:35,120
+ but you should be aware that this isn't an exhaustive account. There are hundreds of material
+
+9
+00:00:35,120 --> 00:00:39,760
+ properties that govern how engineering materials behave mechanically, optically, thermally.
+
+10
+00:00:39,760 --> 00:00:44,240
+ However, we just don't have time to go through all of them in this course. So we're going to be
+
+11
+00:00:44,240 --> 00:00:48,480
+ focused on the key ones, the fundamental ones that you need to get an understanding of what's going
+
+12
+00:00:48,480 --> 00:00:53,200
+ on. With that knowledge, you should be able to then go out and look at other properties with the same
+
+13
+00:00:53,200 --> 00:00:57,200
+ kind of lens. If after the content this week, you're interested in learning about some of these
+
+14
+00:00:57,200 --> 00:01:01,200
+ other properties. This Wikipedia page is a good place to start. And of course, as you pack our
+
+15
+00:01:01,200 --> 00:01:05,680
+ materials database goes into way more depth than we're going to be able to in these videos.
+
+16
+00:01:05,680 --> 00:01:09,600
+ There are a few high-level concepts we need to hit before we can even talk about material
+
+17
+00:01:09,600 --> 00:01:13,920
+ properties and the first is the difference between a material property and a structural property.
+
+18
+00:01:13,920 --> 00:01:17,440
+ The truth is that the performance of an engineering component, whether that's a mechanical
+
+19
+00:01:17,440 --> 00:01:22,320
+ component or an electrical component or a medical component or whatever, is usually a function of both
+
+20
+00:01:22,320 --> 00:01:27,200
+ the materials that it's made out of and the geometry of that component. A really obvious example
+
+21
+00:01:27,200 --> 00:01:32,160
+ of this is weight. The weight of a component depends on both the density of the material that makes
+
+22
+00:01:32,160 --> 00:01:37,280
+ it up, but also how much of that thing you have, how much space it takes up. The former, the density,
+
+23
+00:01:37,280 --> 00:01:41,840
+ the thing that belongs just to the material, we call a material property. And the thing which
+
+24
+00:01:41,840 --> 00:01:45,680
+ relates to both material and geometry, we usually call a structural property. In this case,
+
+25
+00:01:45,680 --> 00:01:50,800
+ it would be mass. You might also hear these referred to as intensive or extensive properties or
+
+26
+00:01:50,800 --> 00:01:55,200
+ intrinsic and extrinsic properties. In this course, we're largely going to be focused only on
+
+27
+00:01:55,200 --> 00:01:59,520
+ material properties rather than structural properties, but of course, you should be aware that in
+
+28
+00:01:59,520 --> 00:02:03,920
+ an engineering design where trade-offs exist, in other words, every engineering design ever,
+
+29
+00:02:03,920 --> 00:02:08,080
+ there are probably ways that you can make up for the fact that a particular material has an
+
+30
+00:02:08,080 --> 00:02:13,440
+ inferior property by some compromise to the geometry or vice versa. I should note that while we're
+
+31
+00:02:13,440 --> 00:02:17,840
+ about to meet a bunch of material properties, it may seem like these things, these properties and
+
+32
+00:02:17,840 --> 00:02:23,200
+ materials are fundamental laws of the universe. This isn't the case. A material properties could
+
+33
+00:02:23,200 --> 00:02:27,440
+ often change as a function of environmental conditions, temperature and pressure, or even in the
+
+34
+00:02:27,440 --> 00:02:31,920
+ direction that they're measured. Some materials, for example, are much stronger in one direction than
+
+35
+00:02:31,920 --> 00:02:36,720
+ others. And in fact, this kind of variation of properties with the direction is so common that it has
+
+36
+00:02:36,720 --> 00:02:41,840
+ a special name in material science. We call anisotropy. A material which has kind of the same
+
+37
+00:02:41,840 --> 00:02:45,920
+ properties in every direction is said to be isotropic. A material which doesn't is said to be
+
+38
+00:02:45,920 --> 00:02:51,200
+ anisotropic. You see this quite a lot in fibrous materials like woods where they're stronger
+
+39
+00:02:51,200 --> 00:02:55,360
+ kind of along the grain than they are across it. And perhaps an example that's much more familiar
+
+40
+00:02:55,360 --> 00:03:01,040
+ to you guys is in 3D prints where, again, they're much stronger in the direction of the grain of the
+
+41
+00:03:01,040 --> 00:03:05,440
+ print than they are kind of between layers of the print. We're going to talk all about temperature
+
+42
+00:03:05,440 --> 00:03:10,000
+ variation and pressure variation of properties and anisotropy when we start to meet some materials
+
+43
+00:03:10,000 --> 00:03:14,320
+ where this is particularly relevant. For now, all you need to be aware of is that over the next
+
+44
+00:03:14,320 --> 00:03:18,400
+ couple of weeks when we make reference to a material property, that reference is usually made at
+
+45
+00:03:18,400 --> 00:03:23,360
+ what are called standard conditions. About 25 degrees C and about one atmosphere. But these things
+
+46
+00:03:23,360 --> 00:03:27,920
+ can change significantly depending on the conditions that your material is at. One final note,
+
+47
+00:03:27,920 --> 00:03:32,480
+ up until this point in your engineering career, you might have been quite content using words like
+
+48
+00:03:32,480 --> 00:03:37,360
+ stiff and strong and hard to all mean the same thing. When we're talking about material properties,
+
+49
+00:03:37,360 --> 00:03:42,480
+ it's extremely important that we be specific. These words all have different meanings in this
+
+50
+00:03:42,480 --> 00:03:47,360
+ context and if you go looking for a strong material, that material may not necessarily be hard or
+
+51
+00:03:47,360 --> 00:03:51,920
+ stiff and vice versa. You don't necessarily need to remember the meanings of all of these properties,
+
+52
+00:03:51,920 --> 00:03:56,320
+ but you do need to remember that they're different and where to find that information. Don't forget
+
+53
+00:03:56,320 --> 00:04:00,400
+ you can search out online textbook at any point if you need help with that. So with those bug bears
+
+54
+00:04:00,400 --> 00:04:04,560
+ out of the way, we can begin talking about this week's content. As a subset of all possible
+
+55
+00:04:04,560 --> 00:04:08,880
+ material properties, this week we're going to be focusing on the mechanical ones. The ones related
+
+56
+00:04:08,880 --> 00:04:14,080
+ to the performance of a material under load. As a design engineer, be you mechanical or electrical
+
+57
+00:04:14,080 --> 00:04:18,080
+ or medical or aerospace, you're normally going to be concerned about the mechanical properties of
+
+58
+00:04:18,080 --> 00:04:21,760
+ material when you're thinking about the way that it might fail. There are lots of different
+
+59
+00:04:21,760 --> 00:04:26,080
+ value mechanisms and they are usually different properties associated with these and we'll try and
+
+60
+00:04:26,080 --> 00:04:31,280
+ hit all of those in the coming videos. So sit back, relax. We're going to kick off by talking about
+
+61
+00:04:31,280 --> 00:04:33,280
+ stress and strain.

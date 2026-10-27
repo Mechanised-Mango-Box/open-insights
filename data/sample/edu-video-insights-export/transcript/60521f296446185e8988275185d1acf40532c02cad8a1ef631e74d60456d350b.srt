@@ -1,0 +1,119 @@
+1
+00:00:00,000 --> 00:00:04,000
+ We already talked about extrusion of metals a few weeks ago which is going to make this video
+
+2
+00:00:04,000 --> 00:00:09,440
+ pretty quick. Extrusion of polymers works in largely the same way. It's ordinarily thermoplastic
+
+3
+00:00:09,440 --> 00:00:13,920
+ polymers which are extruded and not thermosetting ones and the process works something like this.
+
+4
+00:00:13,920 --> 00:00:19,760
+ Granules, pellets of the thermoplastic, nerdles of the thermoplastic are loaded into a hopper where
+
+5
+00:00:19,760 --> 00:00:24,800
+ they're fed down into a heated chamber that softens them and finally they're fed through an
+
+6
+00:00:24,800 --> 00:00:29,920
+ orophys under pressure normally provided by a screw. In many ways extrusion of thermoplastic
+
+7
+00:00:29,920 --> 00:00:34,240
+ is kind of like the first step in an injection molding process. It all kind of happens the same way
+
+8
+00:00:34,240 --> 00:00:39,200
+ and the same general limitations that apply to extrusion of metals also apply to extrusion of plastics.
+
+9
+00:00:39,200 --> 00:00:43,760
+ You can usually only use this technique to make prismatic shapes shaped with a constant cross
+
+10
+00:00:43,760 --> 00:00:47,840
+ section. Obviously the temperatures and pressures involved in extruding plastics are
+
+11
+00:00:47,840 --> 00:00:52,400
+ significantly lower than those involved in extruding metals and as a result the infrastructure
+
+12
+00:00:52,400 --> 00:00:57,040
+ requirements are lower and so are the costs. We use extrusion to make a range of plastic
+
+13
+00:00:57,040 --> 00:01:02,560
+ products a standard plastic stock for example in the form of rods and bars is made by extrusion
+
+14
+00:01:02,560 --> 00:01:07,520
+ as are many other constant cross sectional shapes owing to the dimensional accuracy in the
+
+15
+00:01:07,520 --> 00:01:11,840
+ ease by which different lengths of a shape can be made using this process. There are two
+
+16
+00:01:11,840 --> 00:01:15,440
+ specific use cases I'm going to call out for plastic extrusion because I think they're
+
+17
+00:01:15,440 --> 00:01:19,840
+ super duper interesting. The first is coding of electrical cables with insulation this is normally
+
+18
+00:01:19,840 --> 00:01:24,480
+ achieved through extrusion by pulling the electrical wires through the extruder and coding them
+
+19
+00:01:24,480 --> 00:01:29,280
+ in plastic during the process. And the second is production of 3D printer filament.
+
+20
+00:01:29,280 --> 00:01:33,680
+ Here, noodles of plastic are melted down and turned into the filament that you later load into
+
+21
+00:01:33,680 --> 00:01:38,480
+ your printer to melt down and turn into useful parts. And a lot of time and effort goes into
+
+22
+00:01:38,480 --> 00:01:43,360
+ making sure that the product you receive, the extrusion you receive, the filament you receive is
+
+23
+00:01:43,360 --> 00:01:49,120
+ something of a constant cross section of a very, very repeatable and precise constant cross section.
+
+24
+00:01:49,200 --> 00:01:52,640
+ There's a brilliant video of the Prusa filament factory that I'll link in the description
+
+25
+00:01:52,640 --> 00:01:56,880
+ of this one that I encourage you to check out that kind of details this entire process.
+
+26
+00:01:56,880 --> 00:02:01,520
+ And in that video they talk about the lengths that they go to to ensure consistency of the
+
+27
+00:02:01,520 --> 00:02:06,240
+ diameter of the filament wire and the importance of this in later 3D printing processes.
+
+28
+00:02:06,240 --> 00:02:09,520
+ I encourage you to check that one out as well as the other resources that I've linked on the
+
+29
+00:02:09,520 --> 00:02:13,840
+ textbook page for this video. I think you'll find that wholly those resources give you a better
+
+30
+00:02:13,840 --> 00:02:26,560
+ appreciation for the types of processes and the products that we make using plastic extrusion.

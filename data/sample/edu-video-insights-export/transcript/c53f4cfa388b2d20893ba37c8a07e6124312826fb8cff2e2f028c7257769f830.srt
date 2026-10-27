@@ -1,0 +1,107 @@
+1
+00:00:00,000 --> 00:00:05,440
+ The next property on our list is ductility, which is the capacity of a material to deform before
+
+2
+00:00:05,440 --> 00:00:10,960
+ fracturing. Very ductile materials will deform quite a long way before they finally snap.
+
+3
+00:00:10,960 --> 00:00:15,200
+ Very brittle materials won't deform very much at all before they snap.
+
+4
+00:00:15,200 --> 00:00:19,040
+ Ductility is generally considered a favorable property in engineering design,
+
+5
+00:00:19,040 --> 00:00:23,120
+ usually if something's going to fail, you want it to happen slowly enough that you can see it
+
+6
+00:00:23,120 --> 00:00:28,880
+ coming and make repairs if necessary. A brittle components can be quite scary and dangerous.
+
+7
+00:00:28,880 --> 00:00:33,600
+ Ductility is also quite important for many shaping processes and so if you'd like some way to
+
+8
+00:00:33,600 --> 00:00:38,880
+ work or shape or form your material after it's been made, then you probably want a ductile one.
+
+9
+00:00:38,880 --> 00:00:42,640
+ Often there's a trade-off between strength and ductility in materials design.
+
+10
+00:00:42,640 --> 00:00:47,200
+ There are some materials that have incredibly high strengths but aren't very ductile.
+
+11
+00:00:47,200 --> 00:00:51,040
+ Meaning that you can load them up with tons of stress and they'll be totally okay.
+
+12
+00:00:51,040 --> 00:00:56,000
+ But if you ever exceed their yield strength, they will snap, fail catastrophically.
+
+13
+00:00:56,000 --> 00:00:59,520
+ On the other side of the coin, you might elect to use a material that has a lower yield
+
+14
+00:00:59,520 --> 00:01:04,000
+ strength but has some amount of ductility. Meaning that when it does start to fail,
+
+15
+00:01:04,000 --> 00:01:08,400
+ you can catch that, see it, make some sort of repair, replace the component, whatever.
+
+16
+00:01:08,400 --> 00:01:12,080
+ There's a brilliant video from Richard Hammond's engineering connections where they look at a
+
+17
+00:01:12,080 --> 00:01:16,000
+ steel versus a carbon fiber drive shaft that illustrates this perfectly.
+
+18
+00:01:16,000 --> 00:01:20,160
+ The steel drive shaft doesn't have the strength that the carbon fiber one does but it is
+
+19
+00:01:20,160 --> 00:01:25,040
+ much more ductile. When it fails, it kind of deforms and twists around in a way that wouldn't hurt
+
+20
+00:01:25,040 --> 00:01:30,400
+ anybody. The carbon fiber one, when it fails, it brittle fails, it fractures and it does
+
+21
+00:01:30,400 --> 00:01:34,560
+ so in a way that could be quite dangerous if this component was actually in service.
+
+22
+00:01:34,560 --> 00:01:39,360
+ Ductility we measure using a quantity called percentage elongation which is really just a long
+
+23
+00:01:39,360 --> 00:01:44,880
+ way of saying strain at fracture. In other words, materials that are quite ductile strain
+
+24
+00:01:44,880 --> 00:01:49,760
+ quite a long way before they finally fracture. Materials which are brittle don't strain very far
+
+25
+00:01:49,760 --> 00:01:54,400
+ before they fracture. Generally speaking, and this is a broad generalization,
+
+26
+00:01:54,400 --> 00:01:58,960
+ metals and polymers are known for their ductility, much more so polymers than metals. On the other
+
+27
+00:01:58,960 --> 00:02:01,520
+ hand, ceramics and composites not so much.

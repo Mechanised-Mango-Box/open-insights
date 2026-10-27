@@ -1,0 +1,463 @@
+1
+00:00:00,000 --> 00:00:03,920
+ After laser cutting, my next favorite manufacturing process is folding of sheet metal,
+
+2
+00:00:03,920 --> 00:00:08,240
+ and we're going to talk about that in this video, alongside bending and forming of metals in general.
+
+3
+00:00:08,240 --> 00:00:10,480
+ Like many of the other processes that we're meeting this week,
+
+4
+00:00:10,480 --> 00:00:14,160
+ bending, folding, and forming can be applied to other materials as well.
+
+5
+00:00:14,160 --> 00:00:17,120
+ Though in this case, we're going to be focused on the application of these techniques to
+
+6
+00:00:17,120 --> 00:00:19,360
+ metals, particularly ductile metals.
+
+7
+00:00:19,360 --> 00:00:23,200
+ Bending, folding, and forming techniques can be used to very economically build up
+
+8
+00:00:23,200 --> 00:00:28,080
+ complicated geometries that are lightweight and simple and reasonably easy to manufacture.
+
+9
+00:00:28,080 --> 00:00:31,360
+ All of these techniques kind of work the same way, and a little bit like forging.
+
+10
+00:00:31,360 --> 00:00:35,280
+ You clamp a metal in one place and you impart some plastic deformation in another.
+
+11
+00:00:35,280 --> 00:00:38,320
+ The words folding and bending are typically used to describe techniques that
+
+12
+00:00:38,320 --> 00:00:41,120
+ plastically deform metals along straight lines.
+
+13
+00:00:41,120 --> 00:00:44,800
+ Folding is generally used to refer to working with thinner metals, with sheet metal,
+
+14
+00:00:44,800 --> 00:00:48,080
+ and bending is typically used to describe working with thicker metals.
+
+15
+00:00:48,080 --> 00:00:52,000
+ Whether or not you can fold or bend a metal is very much a function of its yield strength and its
+
+16
+00:00:52,000 --> 00:00:56,240
+ ductility. Generally speaking, it's easier to bend metals that have a lower yield strength,
+
+17
+00:00:56,240 --> 00:00:59,760
+ and your bends are much more likely to be successful if the material is ductile,
+
+18
+00:00:59,760 --> 00:01:01,600
+ otherwise they might snap or tear.
+
+19
+00:01:01,600 --> 00:01:06,240
+ You can't really bend very brittle materials, and extremely strong metals, irrespective of whether
+
+20
+00:01:06,240 --> 00:01:09,840
+ the ductile will require more and more power to be able to bend them.
+
+21
+00:01:09,840 --> 00:01:14,240
+ This power that you require to bend very strong metals normally manifests the machine doing
+
+22
+00:01:14,240 --> 00:01:17,920
+ the bending needing to be stronger and stiffer and thus more expensive.
+
+23
+00:01:17,920 --> 00:01:21,520
+ But generally speaking, if you're building a component out of mild steel or aluminium,
+
+24
+00:01:21,520 --> 00:01:24,080
+ as you more than likely will be in a lot of cases,
+
+25
+00:01:24,080 --> 00:01:27,600
+ bending and folding are very economical ways to build up complicated geometries
+
+26
+00:01:27,600 --> 00:01:31,120
+ and actually add effective strength and stiffness to your parts.
+
+27
+00:01:31,120 --> 00:01:33,600
+ You'll talk a little bit more about this in your later year design courses,
+
+28
+00:01:33,600 --> 00:01:36,160
+ but there are lots of different ways to achieve the same result.
+
+29
+00:01:36,160 --> 00:01:40,160
+ A strong stiff part can be made out of 6mm thick steel welded together,
+
+30
+00:01:40,160 --> 00:01:44,480
+ but can also be made out of 1mm thick steel with some folded or bent returns on it.
+
+31
+00:01:44,480 --> 00:01:47,600
+ In fact, you might be surprised to know that much of your car is made out of very,
+
+32
+00:01:47,600 --> 00:01:50,720
+ very thin sections of steel, 0.6 to 1mm steel.
+
+33
+00:01:50,720 --> 00:01:53,600
+ This is possible because the panels that make up your car have lots of bends
+
+34
+00:01:53,600 --> 00:01:56,800
+ and folds and formations in them that add stiffness to the part.
+
+35
+00:01:56,800 --> 00:01:59,360
+ Designing components to be bent or folded can be a little bit tricky
+
+36
+00:01:59,360 --> 00:02:02,880
+ and it's one of the things you're going to talk about in your later year design courses.
+
+37
+00:02:02,880 --> 00:02:06,640
+ You need to account for things like how much material is lost in the bend.
+
+38
+00:02:06,640 --> 00:02:08,960
+ You can probably imagine that as you bend a bit of material,
+
+39
+00:02:08,960 --> 00:02:11,760
+ the outside of it needs to grow and the inside of it needs to shrink
+
+40
+00:02:11,760 --> 00:02:13,280
+ just like if you're bending a beam.
+
+41
+00:02:13,280 --> 00:02:15,440
+ And consequently, when laying out a component to be bent,
+
+42
+00:02:15,440 --> 00:02:18,960
+ you need to leave enough material for a bend radius to exist.
+
+43
+00:02:19,040 --> 00:02:22,320
+ The amount of space that you need to leave for a bend radius is very much a function
+
+44
+00:02:22,320 --> 00:02:23,680
+ of the material you're dealing with.
+
+45
+00:02:23,680 --> 00:02:26,400
+ Some materials are more likely to plastically to form when being bent
+
+46
+00:02:26,400 --> 00:02:28,160
+ and so you need to leave less than others.
+
+47
+00:02:28,160 --> 00:02:31,120
+ Thankfully, modding CAD package to make designs for foldable bent components
+
+48
+00:02:31,120 --> 00:02:32,400
+ relatively straightforward.
+
+49
+00:02:32,400 --> 00:02:35,120
+ You can design the component you want in the geometry that you'd like
+
+50
+00:02:35,120 --> 00:02:38,080
+ and then unfold the components by telling the CAD package
+
+51
+00:02:38,080 --> 00:02:39,760
+ what material you're working with.
+
+52
+00:02:39,760 --> 00:02:42,320
+ Again, you'll touch on this more in your later year design courses,
+
+53
+00:02:42,320 --> 00:02:45,040
+ but there's an incredible video here I encourage you to watch by this
+
+54
+00:02:45,040 --> 00:02:48,560
+ alternative that walks you through all of the things you need to consider.
+
+55
+00:02:48,560 --> 00:02:51,120
+ There are lots of different ways that you can bend and fold metals.
+
+56
+00:02:51,120 --> 00:02:53,360
+ Probably two of the most common you're likely to come across
+
+57
+00:02:53,360 --> 00:02:55,440
+ are pan breaks and press breaks.
+
+58
+00:02:55,440 --> 00:02:58,560
+ Pan breaks, sometimes called box breaks, are given this name because they
+
+59
+00:02:58,560 --> 00:03:01,040
+ were classically used to make pans and boxes.
+
+60
+00:03:01,040 --> 00:03:03,600
+ These breaks are reasonably straightforward. They have an upper section
+
+61
+00:03:03,600 --> 00:03:06,240
+ at clamp that you can pull down which holds your material in place
+
+62
+00:03:06,240 --> 00:03:09,040
+ and gives you a nice hard edge to bend against.
+
+63
+00:03:09,040 --> 00:03:13,360
+ And a table which you lift up and as you do brings your material folds your material
+
+64
+00:03:13,360 --> 00:03:17,120
+ upwards. As you can imagine, order of operations is quite important here.
+
+65
+00:03:17,120 --> 00:03:20,320
+ If you fold one side up, you might find that as you go to fold the next,
+
+66
+00:03:20,320 --> 00:03:23,600
+ that side's going to be in the way. It's going to hit the machine as it comes upwards.
+
+67
+00:03:23,600 --> 00:03:27,120
+ For this reason, a lot of box and pan breaks have removable fingers in the clamp
+
+68
+00:03:27,120 --> 00:03:31,360
+ that you can take away to essentially give some room for your previous fold to fit into.
+
+69
+00:03:31,360 --> 00:03:33,920
+ Box and pan breaks are normally used to fold thinner materials,
+
+70
+00:03:33,920 --> 00:03:38,400
+ anywhere from like one to three mill aluminium and kind of up to one and a half mill steel.
+
+71
+00:03:38,400 --> 00:03:41,600
+ Though the capacity of a particular break is going to be a function of its strength
+
+72
+00:03:41,600 --> 00:03:45,360
+ and size and stiffness. And usually you'll see stamped on the side of a break,
+
+73
+00:03:45,360 --> 00:03:49,760
+ it's capacity for both aluminium and steel. For thicker sections or for different materials,
+
+74
+00:03:49,760 --> 00:03:54,400
+ you may turn to a press break rather than a pan break. Here, rather than clamping the material
+
+75
+00:03:54,400 --> 00:03:58,560
+ and bringing a table up to fold it, you put your material over the top of a negative of the
+
+76
+00:03:58,560 --> 00:04:03,360
+ geometry you'd like to form and drive a positive of the geometry you'd like to form down over it.
+
+77
+00:04:03,360 --> 00:04:06,640
+ You can build up reasonably complex shapes using this technique because you can build
+
+78
+00:04:06,640 --> 00:04:10,560
+ forms that are all sorts of odd shapes to get into little nooks and crannies to be able to do a
+
+79
+00:04:10,560 --> 00:04:14,000
+ fold. And generally speaking, press breaks are driven by hydraulic pumps.
+
+80
+00:04:14,080 --> 00:04:17,120
+ This means that much thicker materials can be folded or bent in a press break
+
+81
+00:04:17,120 --> 00:04:20,800
+ than they can in a pan break. As an interesting aside, it used to be the case that building up a
+
+82
+00:04:20,800 --> 00:04:24,400
+ library of press break tools was reasonably expensive. These days, a lot of people have been
+
+83
+00:04:24,400 --> 00:04:28,640
+ experimenting with 3D printed press break tools to be able to get into odd places and to
+
+84
+00:04:28,640 --> 00:04:33,040
+ impart odd geometries on a shape. You might think that plastics being much softer and much
+
+85
+00:04:33,040 --> 00:04:36,720
+ weaker than steels can't possibly be used to form them, but it turns out that if you make
+
+86
+00:04:36,720 --> 00:04:40,640
+ your geometry just right, if you set your load parts up the correct way, you can fold and
+
+87
+00:04:40,640 --> 00:04:44,800
+ bend steel with plastic quite easily. And because they're so cheap, 3D printed press break
+
+88
+00:04:44,800 --> 00:04:48,800
+ forms and dies don't need to last very long. So if a low volume runs or where you need to make
+
+89
+00:04:48,800 --> 00:04:53,280
+ some sort of interesting complicated shape that would otherwise require manufacturing and machining
+
+90
+00:04:53,280 --> 00:04:57,120
+ a whole new die out of metal, these days you can just print to die in all sorts of complicated
+
+91
+00:04:57,120 --> 00:05:01,440
+ geometries. Bending and folding aren't only limited to working on flat sheet or plate,
+
+92
+00:05:01,440 --> 00:05:05,440
+ you can also bend tube and pipe. There are a range of different machines to achieve this task
+
+93
+00:05:05,440 --> 00:05:08,960
+ depending on the size of the tube or pipe you'd like to bend and its wall thickness and the
+
+94
+00:05:09,440 --> 00:05:13,520
+ material that it's made out of. For reasonably easy jobs like copper pipe, you can probably bend them
+
+95
+00:05:13,520 --> 00:05:18,080
+ by hand, but you can also buy small cute little hand held benders to do the job as well.
+
+96
+00:05:18,080 --> 00:05:22,000
+ For slightly bigger and thicker jobs like say roll bar tubing on a race car, you can invest in
+
+97
+00:05:22,000 --> 00:05:26,560
+ these floor mount or ratcheting benders that can get a pretty good result as well. When you move up
+
+98
+00:05:26,560 --> 00:05:30,640
+ to thick boy pipes, you might need to invest in some sort of hydraulic pipe bending machine.
+
+99
+00:05:30,640 --> 00:05:34,320
+ In all cases you need to be a little bit careful when bending pipe and tube products to make sure
+
+100
+00:05:34,320 --> 00:05:38,720
+ that you don't kink the inside wall as you bend them. Sometimes the wall thickness of the pipe is
+
+101
+00:05:38,720 --> 00:05:42,240
+ sufficient to make sure this doesn't happen, but occasionally need to be a little bit careful in
+
+102
+00:05:42,240 --> 00:05:46,320
+ working with thinner sections. Do this you might pack the inside of the pipe full of sand before
+
+103
+00:05:46,320 --> 00:05:50,640
+ you bend it or lightly apply some heat before you bend it or you might insert what are called
+
+104
+00:05:50,640 --> 00:05:54,960
+ bending balls inside the pipe before you bend it. Bending is a process that doesn't only need to
+
+105
+00:05:54,960 --> 00:05:59,520
+ be done by hand, CNC bending machines do exist and the extent to which the process of bending is
+
+106
+00:05:59,520 --> 00:06:03,520
+ computer controlled is very much dependent on the job. Some bending jobs are semi-automated with a
+
+107
+00:06:03,520 --> 00:06:07,520
+ moving back wall for you to put the sheet up against and then the die will go down a fixed
+
+108
+00:06:07,520 --> 00:06:12,720
+ amount so that you can kind of repetitively churn out lots of consistent parts. While other jobs,
+
+109
+00:06:12,720 --> 00:06:17,360
+ for example, the formation of body panels on cars are completely automated. Even at low volume CNC
+
+110
+00:06:17,360 --> 00:06:20,720
+ bending is quite affordable and like laser cutting there are a bunch of businesses you can send
+
+111
+00:06:20,720 --> 00:06:24,960
+ your jobs to who will quite happily bend your components for a modest fee. And some of these machines
+
+112
+00:06:24,960 --> 00:06:29,920
+ have surprising capability. They can cut and form and bend and punch things into your sheet metal
+
+113
+00:06:29,920 --> 00:06:34,000
+ only in one operation. All of this is to say that complex geometries don't only need to be
+
+114
+00:06:34,000 --> 00:06:38,800
+ machined or welded or made out of standard parts. You can get reasonably complicated and
+
+115
+00:06:38,800 --> 00:06:44,240
+ custom designs made out of bent components that are reasonably cheap, very strong and stiff and
+
+116
+00:06:44,240 --> 00:06:49,920
+ and quite easy to design and manufacture in reasonably short timeframes.

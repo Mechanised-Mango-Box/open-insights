@@ -2,10 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { parseYoutubeContentCsv } from './youtube-csv-import';
 
 /**
- * The CSV text below is copied from the fixtures under `data/sample/mock-v3/`
- * and `data/local/`, trimmed to the rows each case is about. Inlined rather
- * than read off disk: those files live outside `client/`, so a spec that read
- * them would depend on the wider checkout being present.
+ * The CSV text below follows real YouTube Studio "Content" exports, trimmed to
+ * the rows each case is about. Inlined rather than read off disk, so the spec
+ * does not depend on any data being present outside `client/`.
  */
 const CONTENT_HEADER =
   'Content,Video title,Video publish time,Duration,Views,Watch time (hours),Subscribers,Average view duration,Impressions,Impressions click-through rate (%)';

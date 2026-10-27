@@ -1,0 +1,231 @@
+1
+00:00:00,000 --> 00:00:05,560
+ Alright, the time has come to talk about our very first domain.
+
+2
+00:00:05,560 --> 00:00:09,280
+ This week we're going to be looking at translating mechanical systems.
+
+3
+00:00:09,280 --> 00:00:13,960
+ As the name suggests, this week we're going to be studying bodies which move by only translating,
+
+4
+00:00:13,960 --> 00:00:16,640
+ that is to say, not rotating.
+
+5
+00:00:16,640 --> 00:00:20,760
+ And when you reduce the body down to something which only translates, it's size and its
+
+6
+00:00:20,760 --> 00:00:23,360
+ shape become unimportant.
+
+7
+00:00:23,360 --> 00:00:26,680
+ You might be familiar with this concept, you might have seen it in physics before, we're
+
+8
+00:00:26,680 --> 00:00:29,200
+ treating these bodies as point masses.
+
+9
+00:00:29,200 --> 00:00:34,040
+ So all of the characteristics of that body, whether it's sharp edged or rounded, whether
+
+10
+00:00:34,040 --> 00:00:37,680
+ it takes up a lot of space or not very much space, these things are unimportant for
+
+11
+00:00:37,680 --> 00:00:38,680
+ our analysis.
+
+12
+00:00:38,680 --> 00:00:43,000
+ Unless, of course, there's a CCR which depends on that that might impose some sort of
+
+13
+00:00:43,000 --> 00:00:46,440
+ force on the body, maybe something like air resistance.
+
+14
+00:00:46,440 --> 00:00:50,920
+ This week we're going to restrict our analysis to rectilinear motion, one demotion.
+
+15
+00:00:50,920 --> 00:00:55,120
+ But to extend this technique to systems which move in more than one dimension, all you have
+
+16
+00:00:55,120 --> 00:00:59,040
+ to do is model each dimension the same way that we do for the one dimension we're going
+
+17
+00:00:59,040 --> 00:01:00,480
+ to look at this week.
+
+18
+00:01:00,480 --> 00:01:06,560
+ As a side note, things which move in two dimensions, but do so along a kind of fixed path,
+
+19
+00:01:06,560 --> 00:01:07,800
+ work in the same way.
+
+20
+00:01:07,800 --> 00:01:11,880
+ And many of these techniques can be extended to work on things in path coordinates, for
+
+21
+00:01:11,880 --> 00:01:13,200
+ example.
+
+22
+00:01:13,200 --> 00:01:18,160
+ So I guess the very first thing we need to talk about is how you choose states, the fundamental
+
+23
+00:01:18,160 --> 00:01:23,440
+ variables that are going to characterize our systems for translating mechanical systems.
+
+24
+00:01:23,440 --> 00:01:27,240
+ I told you at the end of the mass spring damper video that in general, this was going
+
+25
+00:01:27,240 --> 00:01:31,480
+ to be a complicated process and that I would introduce you to rules of thumb for each domain.
+
+26
+00:01:31,480 --> 00:01:35,320
+ Well, the time has come for one of these rules of thumb and here it is.
+
+27
+00:01:35,320 --> 00:01:40,920
+ For translating mechanical systems, we require twice as many states as we have degrees of freedom
+
+28
+00:01:40,920 --> 00:01:42,960
+ present in the system.
+
+29
+00:01:42,960 --> 00:01:46,360
+ And generally speaking, we're going to choose the momenta of the masses that we're dealing
+
+30
+00:01:46,360 --> 00:01:48,920
+ with and their positions.
+
+31
+00:01:48,920 --> 00:01:52,800
+ All the deformations of any attached springs as our states.
+
+32
+00:01:52,800 --> 00:01:57,320
+ Now this is in always the case and I'll show you a counter example to this later this
+
+33
+00:01:57,320 --> 00:01:58,320
+ week.
+
+34
+00:01:58,320 --> 00:02:01,920
+ But as a starting point, at first blush, this is a pretty good approach.
+
+35
+00:02:01,920 --> 00:02:06,800
+ Now depending on whether or not you've done courses in mechanics or whether you've done
+
+36
+00:02:06,800 --> 00:02:11,280
+ a computer aided design course, you may or may not be familiar with the concept of a degree
+
+37
+00:02:11,280 --> 00:02:12,520
+ of freedom.
+
+38
+00:02:12,520 --> 00:02:14,280
+ And I'll put this as simply as I can.
+
+39
+00:02:14,280 --> 00:02:19,000
+ A degree of freedom is simply an independent way that a mass can move.
+
+40
+00:02:19,000 --> 00:02:22,760
+ Unconstrained bodies in the real world have six degrees of freedom.
+
+41
+00:02:22,760 --> 00:02:29,280
+ They can translate about x, y, and z, and they can rotate about each of these axes,
+
+42
+00:02:29,280 --> 00:02:33,080
+ x, y, and z.
+
+43
+00:02:33,080 --> 00:02:37,000
+ Sometimes things are constrained in a way that limits their degree of freedom.
+
+44
+00:02:37,000 --> 00:02:41,880
+ So for example, this week we're looking at things which translate in only one direction,
+
+45
+00:02:41,880 --> 00:02:47,120
+ which means that in general, every disconnected mass has one degree of freedom.
+
+46
+00:02:47,120 --> 00:02:51,920
+ But of course, if a mass can move in two different directions, x and y independently,
+
+47
+00:02:51,920 --> 00:02:53,840
+ it would have two degrees of freedom.
+
+48
+00:02:53,840 --> 00:02:58,440
+ And if I had something like two masses that were rigidly linked so that as long as I knew
+
+49
+00:02:58,440 --> 00:03:03,040
+ the position of one, I could write the position of the other and some sort of static function
+
+50
+00:03:03,040 --> 00:03:06,480
+ of that first one, that would only be one degree of freedom.
+
+51
+00:03:06,480 --> 00:03:08,800
+ They act like one mass.
+
+52
+00:03:08,800 --> 00:03:13,480
+ So just to sum up, you need twice as many states as you have degrees of freedom.
+
+53
+00:03:13,480 --> 00:03:18,280
+ And in general, at least for rectilinear motion, you have one degree of freedom for each disconnected
+
+54
+00:03:18,280 --> 00:03:22,840
+ mass, meaning for every disconnected mass you need two states.
+
+55
+00:03:22,840 --> 00:03:28,400
+ Generally, these two states will look something like the momentum of that mass and its position,
+
+56
+00:03:28,400 --> 00:03:33,400
+ either directly or described by the deformation of the spring, which is just how to do it.
+
+57
+00:03:33,400 --> 00:03:37,520
+ Let's have a go at problem 2.1 and see if we can work out how many degrees of freedom
+
+58
+00:03:37,520 --> 00:03:41,480
+ and how many different states we're going to need to model a bunch of mechanical systems.

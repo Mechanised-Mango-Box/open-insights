@@ -1,0 +1,327 @@
+1
+00:00:00,000 --> 00:00:04,640
+ This video is going to be all about the physics and the chemistry of metals that give them the
+
+2
+00:00:04,640 --> 00:00:09,280
+ properties that make them the way that they are. That being said, I'll repeat what I've said a few
+
+3
+00:00:09,280 --> 00:00:14,800
+ times. This isn't a chemistry course or a physics course or a crystallography course and so we're
+
+4
+00:00:14,800 --> 00:00:19,840
+ going to be scraping the surface doing just a little bit of this stuff just enough to motivate
+
+5
+00:00:19,840 --> 00:00:23,760
+ everything else that we need to know. If you find this stuff boring, take solace in the fact
+
+6
+00:00:23,760 --> 00:00:27,280
+ there's only going to be a little bit. If you find this stuff really interesting, you should be
+
+7
+00:00:27,280 --> 00:00:30,880
+ pleased because there's going to be a little bit more of it in engineering materials too and
+
+8
+00:00:30,880 --> 00:00:35,840
+ you have that to look forward to. To kick off, we're going to talk a little bit about metallic bonding.
+
+9
+00:00:35,840 --> 00:00:40,720
+ You should remember from a high school chemistry and not even year 11 and 12, but year 8, 9 and 10
+
+10
+00:00:40,720 --> 00:00:45,680
+ chemistry, there are different types of bonds that hold things in the world together. Different bonds
+
+11
+00:00:45,680 --> 00:00:50,880
+ allow like and unlike atoms to share electrons in different ways. Vanda Wall's bonds, which will
+
+12
+00:00:50,880 --> 00:00:55,600
+ meet when we talk about polymers are quite weak. COVID-19 bonds, which will meet when we talk about
+
+13
+00:00:55,600 --> 00:01:00,560
+ ceramics are quite strong. Metals are interesting in that they form their own kind of bond
+
+14
+00:01:00,560 --> 00:01:05,440
+ called metallic bonds and the strength of these is somewhere in the middle of vanda walls and
+
+15
+00:01:05,440 --> 00:01:11,120
+ covalent bonds. Metallic bonding is a little bit like communism. Here, the metallic atoms give up
+
+16
+00:01:11,120 --> 00:01:16,880
+ their free outer shell valence electrons for the good of the whole and these are shared amongst
+
+17
+00:01:16,880 --> 00:01:22,960
+ all of the now metal ions that are scattered around the place. If this shared sea cloud of
+
+18
+00:01:22,960 --> 00:01:28,320
+ electrons that you get around and through your distribution of metal ions is what gives metals
+
+19
+00:01:28,320 --> 00:01:33,920
+ a lot of their properties. Partly owing to this kind of bonding, metals are one type of material that
+
+20
+00:01:33,920 --> 00:01:39,840
+ form what we call crystal structures. These structures are reasonably ordered patterns or arrangements
+
+21
+00:01:39,840 --> 00:01:45,920
+ of the metal atoms in a huge 3D lattice. There are many, many different kinds of patents,
+
+22
+00:01:45,920 --> 00:01:51,040
+ so many that there are databases established to house all of this information and you'll talk a
+
+23
+00:01:51,200 --> 00:01:55,520
+ little bit more about this in materials too. For now, what you need to know is that these patterns
+
+24
+00:01:55,520 --> 00:02:01,360
+ are usually described, documented in terms of the smallest repeating unit needed to characterize them,
+
+25
+00:02:01,360 --> 00:02:06,160
+ called a unit cell. The type of pattern that a metal likes to form in its crystal lattice,
+
+26
+00:02:06,160 --> 00:02:11,520
+ the type of unit cell that it has, actually has a profound effect on its properties.
+
+27
+00:02:11,520 --> 00:02:16,080
+ This happens for a whole bunch of reasons, including but not limited to the ability of a metal
+
+28
+00:02:16,080 --> 00:02:21,840
+ to be alloyed, either interstitially or substitutionally by shoving it at them in the gap inside
+
+29
+00:02:21,840 --> 00:02:26,480
+ of the unit cell or by replacing a member of a unit cell with a different kind of atom.
+
+30
+00:02:26,480 --> 00:02:30,480
+ And the relative mechanical performance of a particular type of unit cell.
+
+31
+00:02:30,480 --> 00:02:34,800
+ We're not going to delve too far into crystallography in this course, but we will talk about it a
+
+32
+00:02:34,800 --> 00:02:39,200
+ little bit more when we meet ions and steels because these can vary wildly in terms of properties
+
+33
+00:02:39,200 --> 00:02:44,400
+ and manufactureability and hardenability depending on the types of microstructures that form.
+
+34
+00:02:44,480 --> 00:02:49,280
+ For now, just be aware that atoms in metals tend to arrange themselves in crystal structures.
+
+35
+00:02:49,280 --> 00:02:53,760
+ These crystal structures are documented or described in terms of the smallest repeating unit
+
+36
+00:02:53,760 --> 00:02:58,960
+ core to unit cell. And also typically when we draw these crystal structures in 2D,
+
+37
+00:02:58,960 --> 00:03:02,960
+ we don't necessarily draw a realistic representation of the crystal structure.
+
+38
+00:03:02,960 --> 00:03:08,720
+ For example, graphene has a hexagonal crystal structure forming a honeycomb of sorts. Typically,
+
+39
+00:03:08,720 --> 00:03:14,000
+ this and everything else is drawn as what's called a primitive cubic crystal structure.
+
+40
+00:03:14,080 --> 00:03:18,160
+ Straight lines up and down left and right to represent the atomic lattice.
+
+41
+00:03:18,160 --> 00:03:24,000
+ Zooming out one step from crystal lattices and unit cells, we should talk a little bit about grains.
+
+42
+00:03:24,000 --> 00:03:28,560
+ Due to the way that they're refined and manufactured, most engineering metals don't form
+
+43
+00:03:28,560 --> 00:03:33,680
+ perfect beautiful crystal lattices stretching on until the very edges of the material.
+
+44
+00:03:33,680 --> 00:03:37,360
+ Instead, because most metals are cast and cool from a liquid state,
+
+45
+00:03:37,360 --> 00:03:42,080
+ they tend to solidify around seed points, usually precipitations or
+
+46
+00:03:42,080 --> 00:03:45,440
+ inclusions in the liquid metal and cool from there.
+
+47
+00:03:45,440 --> 00:03:50,400
+ The emerging solids that grow in all of these different places in the liquid metal are called dendrites.
+
+48
+00:03:50,400 --> 00:03:54,240
+ And what happens is that these dendrites eventually intersect with each other.
+
+49
+00:03:54,240 --> 00:03:58,160
+ Consequently, you get this nice crystalline behavior from the seed point,
+
+50
+00:03:58,160 --> 00:04:02,320
+ but because you're growing these in a bunch of different locations, they end up intersecting and
+
+51
+00:04:02,320 --> 00:04:08,720
+ forming what's called a polycrystalline material. Here, each individual nice crystalline chunk
+
+52
+00:04:08,720 --> 00:04:12,720
+ is called a grain, and the intersections of these are called grain boundaries.
+
+53
+00:04:13,360 --> 00:04:17,920
+ In most homogeneous metals, grains are typically oriented randomly because they tend to
+
+54
+00:04:17,920 --> 00:04:21,440
+ seed and cool from random points all throughout the liquid bulk.
+
+55
+00:04:21,440 --> 00:04:25,360
+ And this is actually why most metals have reasonably isotropic, in other words,
+
+56
+00:04:25,360 --> 00:04:29,680
+ not very directionally dependent properties. They grow in all of these random directions,
+
+57
+00:04:29,680 --> 00:04:33,120
+ and all of the atomic lattice plans get oriented in random directions.
+
+58
+00:04:33,120 --> 00:04:36,880
+ And because most mechanical and non-mechanical properties can be influenced by the directions
+
+59
+00:04:36,880 --> 00:04:41,200
+ in which the atom planes are lined up inside of your material, if they're all randomly
+
+60
+00:04:41,200 --> 00:04:46,000
+ kind of dispersed and there isn't a particular bias toward any one direction, and the material,
+
+61
+00:04:46,000 --> 00:04:51,120
+ as a whole, as a bulk, gets isotropic properties. This isn't always the case by the way,
+
+62
+00:04:51,120 --> 00:04:56,640
+ and lots of manufacturing processes can introduce what's called texture, a preferred orientation
+
+63
+00:04:56,640 --> 00:05:01,200
+ of grains within a metal. Rolling, for example, has the tendency to elongate metals in the
+
+64
+00:05:01,200 --> 00:05:04,720
+ direction that they're being rolled and squished them perpendicular to this.
+
+65
+00:05:04,720 --> 00:05:09,200
+ This can lead to a substantial amount of anisotropy in the properties of that metal.
+
+66
+00:05:09,200 --> 00:05:13,920
+ The final thing we should talk about in this context are defects. Now, grain boundaries are the
+
+67
+00:05:13,920 --> 00:05:19,760
+ only deviation that we see from perfectly crystalline behavior in most engineering metals.
+
+68
+00:05:19,760 --> 00:05:25,040
+ Even within a single grain, the beautiful crystalline lattice can be interrupted and disrupted by
+
+69
+00:05:25,040 --> 00:05:30,880
+ things that we call defects. These defects can include vacancies, missing atoms in the lattice,
+
+70
+00:05:30,880 --> 00:05:36,400
+ they can include interstitial alloying elements, atoms that squeeze in in between others,
+
+71
+00:05:36,400 --> 00:05:41,680
+ substitutional alloying elements, atoms that sneak in and replace one of the parent metals,
+
+72
+00:05:41,680 --> 00:05:47,520
+ pours and inclusions, contaminants, air bubbles, poo that can get in and disrupt your lattice,
+
+73
+00:05:47,520 --> 00:05:52,080
+ grain boundaries like we've already seen, and precipitated phases where enough of an alloying
+
+74
+00:05:52,080 --> 00:05:58,080
+ element can get into one place and essentially form a lattice inside of a lattice. These defects
+
+75
+00:05:58,080 --> 00:06:03,360
+ normally have the effect of straining the lattice, introducing an uneven spacing between
+
+76
+00:06:03,360 --> 00:06:08,080
+ atoms. Now, you might think this is inherently bad, and you'd be forgiven for doing so. They're
+
+77
+00:06:08,080 --> 00:06:12,720
+ called defects, after all. But in many cases, this is actually intentional. When we're alloying,
+
+78
+00:06:12,720 --> 00:06:17,360
+ we're trying to introduce substitutional or interstitial alloyance. We're trying to have these
+
+79
+00:06:17,360 --> 00:06:22,160
+ things replace members of the lattice or slip in the DMs of the atoms that it's surrounding,
+
+80
+00:06:22,160 --> 00:06:26,080
+ with the effect of straining the lattice. Many of these defects are responsible for giving
+
+81
+00:06:26,080 --> 00:06:30,320
+ metals the mechanical properties that make them so sought after. And that's what we'll talk
+
+82
+00:06:30,320 --> 00:06:31,520
+ about in the next video.

@@ -1,0 +1,151 @@
+1
+00:00:00,000 --> 00:00:03,980
+ Alright, let's talk about torsion springs.
+
+2
+00:00:03,980 --> 00:00:07,680
+ Torsion springs are kind of like the rotating analogs of the springs that we met last
+
+3
+00:00:07,680 --> 00:00:10,000
+ week, the translating ones.
+
+4
+00:00:10,000 --> 00:00:13,120
+ And just like translating springs, just like linear springs.
+
+5
+00:00:13,120 --> 00:00:17,320
+ When you see a torsion spring, which we normally draw this way, it's probably not modeling
+
+6
+00:00:17,320 --> 00:00:20,640
+ an actual torsion spring, like you'd find in a mouse trap.
+
+7
+00:00:20,640 --> 00:00:24,080
+ It's probably modeling the elasticity of a shaft.
+
+8
+00:00:24,080 --> 00:00:27,640
+ We talked last week about how all things are flexible, and this is true whether you're
+
+9
+00:00:27,640 --> 00:00:31,200
+ flexing them kind of this way, or you're flexing them this way.
+
+10
+00:00:31,200 --> 00:00:34,440
+ So torsion springs are normally modeling the fact that real shafts when you apply a
+
+11
+00:00:34,440 --> 00:00:39,640
+ torque to them start to wind up, right, start to kind of deflect.
+
+12
+00:00:39,640 --> 00:00:44,920
+ In general, torsion springs act as separate as for the inertia that might be in our models.
+
+13
+00:00:44,920 --> 00:00:48,400
+ When you look at a system, you can usually work out which segments of the system will
+
+14
+00:00:48,400 --> 00:00:52,640
+ be traveling at the same speed based on the torsion springs, because these kind of act
+
+15
+00:00:52,640 --> 00:00:55,240
+ is natural bookends for each speed.
+
+16
+00:00:55,240 --> 00:00:58,880
+ If you have two addersions on either side of a torsion spring, you should generally expect
+
+17
+00:00:58,880 --> 00:01:01,640
+ that those two things will be traveling at different speeds.
+
+18
+00:01:01,640 --> 00:01:06,120
+ The CCR for torsion springs is pretty similar to the CCR for linear springs that we met
+
+19
+00:01:06,120 --> 00:01:07,120
+ last week.
+
+20
+00:01:07,120 --> 00:01:11,560
+ In that case, it was F equals one in C Delta, and torsion springs kind of work the
+
+21
+00:01:11,560 --> 00:01:12,560
+ same way.
+
+22
+00:01:12,560 --> 00:01:16,840
+ The torque we get out T is one in C Delta theta, where just like before, let's see
+
+23
+00:01:16,840 --> 00:01:20,440
+ as a compliance coefficient, though in this case, the unit is different because it's
+
+24
+00:01:20,440 --> 00:01:26,120
+ relating torque to angular deformation, Delta theta, as opposed to the C for linear springs
+
+25
+00:01:26,120 --> 00:01:29,040
+ that were related force to linear deformation.
+
+26
+00:01:29,040 --> 00:01:33,280
+ The SSR associated with torsion springs is also pretty similar.
+
+27
+00:01:33,280 --> 00:01:37,200
+ In this case, what we need to do is work out what Delta theta looks like, kind of defined
+
+28
+00:01:37,200 --> 00:01:42,120
+ when it's positive, and then draw the torques on any associated free body diagrams, kind
+
+29
+00:01:42,120 --> 00:01:45,080
+ of in agreement with that definition.
+
+30
+00:01:45,080 --> 00:01:49,400
+ Unlike linear springs, though, we don't generally assume torsion springs to be in kind
+
+31
+00:01:49,400 --> 00:01:50,400
+ of tension or compression.
+
+32
+00:01:50,400 --> 00:01:54,320
+ I mean, that's because it doesn't make a whole lot of sense to talk about, but instead,
+
+33
+00:01:54,320 --> 00:01:59,360
+ what we do is we work out what a positive Delta means, say if it's theta one minus theta
+
+34
+00:01:59,360 --> 00:02:03,680
+ two, what does that mean for the way that two nurtures a kind of moving in a system, and
+
+35
+00:02:03,680 --> 00:02:06,040
+ how should we draw the torques accordingly?
+
+36
+00:02:06,040 --> 00:02:10,040
+ This is a really difficult concept and kind of gets the best of students every year.
+
+37
+00:02:10,040 --> 00:02:13,960
+ So let's have a go at problem 3.3 together and see if we can kind of grasp what's going
+
+38
+00:02:13,960 --> 00:02:14,960
+ on here.

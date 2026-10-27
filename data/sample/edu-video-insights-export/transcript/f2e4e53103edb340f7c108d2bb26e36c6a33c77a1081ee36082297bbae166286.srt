@@ -1,0 +1,119 @@
+1
+00:00:00,000 --> 00:00:06,200
+ Alright, having talked about a few different types of composites, we're now going to deep dive into a very specific area.
+
+2
+00:00:06,200 --> 00:00:10,400
+ We're going to talk over the next few videos about fiber reinforced polymers.
+
+3
+00:00:10,400 --> 00:00:16,200
+ Last week we talked about what it is that makes up a fiber reinforced polymer and how these things tend to get their properties,
+
+4
+00:00:16,200 --> 00:00:20,000
+ but we didn't talk a whole lot about why it is you might choose to use one.
+
+5
+00:00:20,000 --> 00:00:24,000
+ And there are many different reasons why you might choose to use a fiber reinforced polymer for a job,
+
+6
+00:00:24,000 --> 00:00:28,200
+ but one of the main ones is the versatility in manufacturing that they provide.
+
+7
+00:00:28,200 --> 00:00:33,600
+ In some cases, fiber reinforced polymers are the only sensible approach to achieving a particular geometry.
+
+8
+00:00:33,600 --> 00:00:39,800
+ Say you have some really interesting complex organic geometry that needs to be stiff and strong and lightweight.
+
+9
+00:00:39,800 --> 00:00:42,600
+ The aerodynamic surface is on a Formula One car, for example.
+
+10
+00:00:42,600 --> 00:00:45,400
+ And in other cases, kind of on the other end of the spectrum,
+
+11
+00:00:45,400 --> 00:00:51,400
+ sometimes fiber reinforced polymers are the only way that's economical or practical to achieve a particular geometry.
+
+12
+00:00:51,400 --> 00:00:56,400
+ Say if you have some really, really large but thin body like a boat hull or a pool.
+
+13
+00:00:56,400 --> 00:01:07,600
+ Another benefit in manufacturing a part out of a fiber reinforced polymer is that you can often optimize the properties of that part to work in concert with the geometry for a very specific load case.
+
+14
+00:01:07,600 --> 00:01:11,800
+ You can do this both by aligning the fibers in the expected direction of load,
+
+15
+00:01:11,800 --> 00:01:19,400
+ but also by placing extra reinforcement, extra fibers in areas that you expect are going to carry a huge amount of load.
+
+16
+00:01:19,400 --> 00:01:29,200
+ And this versatility that you get from manufacturing, this ability that you have to finely tune the properties mean that fiber reinforced polymers can really be min-max materials.
+
+17
+00:01:29,200 --> 00:01:33,200
+ In circumstances where you know where you can predict the loading scenario really, really well,
+
+18
+00:01:33,200 --> 00:01:39,800
+ you can get really, really lightweight, really, really volume efficient solutions to manufacturing a particular part.
+
+19
+00:01:39,800 --> 00:01:44,300
+ Over the next few videos, we're going to look in detail at how fiber reinforced polymers are made.
+
+20
+00:01:44,300 --> 00:01:50,900
+ We're going to start by talking about how the constituent components are produced, the fibers themselves and the reasons that are used to lay them up.
+
+21
+00:01:50,900 --> 00:01:56,600
+ We're going to talk a little bit about the molds and forms the geometry upon which you build your fiber reinforced polymers.
+
+22
+00:01:56,600 --> 00:01:59,400
+ And then we're going to talk specifically about the layout process.
+
+23
+00:01:59,400 --> 00:02:04,600
+ In any case, we're probably going to go a little bit more in detail here than any manufacturing process we've met so far.
+
+24
+00:02:04,600 --> 00:02:09,200
+ Partly because this is a super interesting process, but also because the details matter a lot here.
+
+25
+00:02:09,200 --> 00:02:17,700
+ In order for you to design a part that's going to be made from a fiber reinforced polymer, you need to have a really, really good understanding of the entire process, the way that this is made.
+
+26
+00:02:17,700 --> 00:02:25,600
+ Because without this understanding, without paying considerations toward this manufacturing you might design in features that are impossible to make using an FRP.
+
+27
+00:02:25,600 --> 00:02:35,800
+ I focus over the next couple of videos is going to be primarily on layout composites on laminated FRP's, but we will at the end of this talk about embedded FRP's as well, plastics that have some more amounts of fiber within them.
+
+28
+00:02:35,800 --> 00:02:40,700
+ On note from the outset that this is a highly technical process and I am by no means an expert on it.
+
+29
+00:02:40,700 --> 00:02:47,600
+ I've done my fair share of fiberglass and carbon fiber layout before both for my own projects and as part of the Formula SAE team here on campus.
+
+30
+00:02:47,600 --> 00:02:57,300
+ But thankfully, a composites manufacturing expert, Professor Bill McBride has agreed to come onto the live show with us this week and talk a little bit about his 30 plus years of experience working with composites.

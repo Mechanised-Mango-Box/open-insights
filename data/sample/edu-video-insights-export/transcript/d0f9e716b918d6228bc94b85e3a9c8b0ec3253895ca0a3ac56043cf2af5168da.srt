@@ -1,0 +1,223 @@
+1
+00:00:00,000 --> 00:00:03,600
+ The next property on our list is actually a couple of properties all at once.
+
+2
+00:00:03,600 --> 00:00:05,680
+ This video is all about strength.
+
+3
+00:00:05,680 --> 00:00:08,960
+ An umbrella term used to describe a couple of properties that are
+
+4
+00:00:08,960 --> 00:00:13,040
+ all related to the ability of a material to bare load without failing.
+
+5
+00:00:13,040 --> 00:00:16,080
+ Now, there are a bunch of different mechanisms for failure and
+
+6
+00:00:16,080 --> 00:00:20,080
+ unsurprisingly, there is a strength property related to each of these.
+
+7
+00:00:20,080 --> 00:00:23,200
+ The first one we'll touch on is a property called yield strength.
+
+8
+00:00:23,200 --> 00:00:27,200
+ Most engineering materials exhibit what we call a lastoplastic behavior.
+
+9
+00:00:27,200 --> 00:00:31,600
+ For these elastoplastic materials, when the applied stress exceeds what's called their
+
+10
+00:00:31,600 --> 00:00:36,560
+ yield strength, they begin not only deforming elastically, in other words, in a way that
+
+11
+00:00:36,560 --> 00:00:40,240
+ recovers all of that deformation when the load is removed, but they begin deforming
+
+12
+00:00:40,240 --> 00:00:45,120
+ plastically. Plastic deformation, unlike elastic deformation, is not recoverable,
+
+13
+00:00:45,120 --> 00:00:49,200
+ as the load is removed, the material remains permanently deformed.
+
+14
+00:00:49,200 --> 00:00:53,760
+ Yield strength is a stress, really, it's a line in the sand at which a material stops behaving
+
+15
+00:00:54,480 --> 00:00:58,400
+ elastically. We give it the symbol sigma subwire to note that this thing is a stress, and
+
+16
+00:00:58,400 --> 00:01:01,760
+ we keep in mind that because it's a stress, it must also have units of
+
+17
+00:01:01,760 --> 00:01:05,360
+ pascals. Typically, this line in the sand is drawn reasonably high for
+
+18
+00:01:05,360 --> 00:01:09,680
+ engineering materials, particularly metals, and as a result, you'll see a yield strength
+
+19
+00:01:09,680 --> 00:01:13,680
+ written in mega-pascals. And because generally speaking, it's the goal of a design
+
+20
+00:01:13,680 --> 00:01:17,840
+ engineer to make sure their components don't permanently deform when a load is applied,
+
+21
+00:01:17,840 --> 00:01:22,320
+ yield strength is typically taken as the point of failure for most engineering applications.
+
+22
+00:01:22,880 --> 00:01:27,760
+ Irrespective of whether a material only elastically deformed, or whether it's elastoplastic,
+
+23
+00:01:27,760 --> 00:01:31,280
+ and elastically deforms up to the yield strength, and then both elastically
+
+24
+00:01:31,280 --> 00:01:35,920
+ elastically deforms after that, at some point every material will fracture.
+
+25
+00:01:35,920 --> 00:01:39,600
+ The highest stress that a material can sustain before it catastrophically fails,
+
+26
+00:01:39,600 --> 00:01:43,520
+ and fractures like this, is a property that we call its ultimate strength.
+
+27
+00:01:43,520 --> 00:01:48,080
+ Ultimate strength, again, is a line in the sand in terms of a stress that a material can bear,
+
+28
+00:01:48,080 --> 00:01:52,640
+ and as a result, we give it the symbol, sigma sub U, and it has units of pascals.
+
+29
+00:01:52,640 --> 00:01:56,080
+ Just like yield strength, typically this is quite high for engineering materials,
+
+30
+00:01:56,080 --> 00:02:00,880
+ particularly metals, and typically you'll see ultimate strength written as mega-pascals.
+
+31
+00:02:00,880 --> 00:02:04,160
+ Even though as a design engineer, you're probably going to be concerned with making sure your
+
+32
+00:02:04,160 --> 00:02:08,960
+ components don't ever yield, and typically because an ultimate strength is higher than a yield
+
+33
+00:02:08,960 --> 00:02:12,800
+ strength, most things yield before they fracture, it's still generally important for you to
+
+34
+00:02:12,800 --> 00:02:16,720
+ consider ultimate strength when you're an engineer to make sure that you know when your
+
+35
+00:02:16,720 --> 00:02:21,280
+ thing is going to fail catastrophically, and your design fails safes around that to make sure
+
+36
+00:02:21,280 --> 00:02:25,760
+ that people don't get hurt. For many engineering materials, yield strength and ultimate strength
+
+37
+00:02:25,760 --> 00:02:31,440
+ are very closely related for one of two reasons. First, they can often be the same strength
+
+38
+00:02:31,440 --> 00:02:35,520
+ for materials which don't plastically deform or which plastically deform very little,
+
+39
+00:02:35,520 --> 00:02:41,040
+ they yield and they fail very close to each other. Or two, the same underlying physical phenomena
+
+40
+00:02:41,040 --> 00:02:45,120
+ is governing both properties, and we'll talk a little bit more about this when we start to meet
+
+41
+00:02:45,520 --> 00:02:49,360
+ some families of materials in the coming weeks and the chemistry and the physics of what's going on
+
+42
+00:02:49,360 --> 00:02:53,520
+ when they elastically and plastically deform. Strength is one of those properties where it's very,
+
+43
+00:02:53,520 --> 00:02:58,880
+ very common to see anisotropy in materials. For some materials, this is a function of how they're made.
+
+44
+00:02:58,880 --> 00:03:02,880
+ For example, ceramics are quite strongly in compression, but reasonably weak in tension.
+
+45
+00:03:02,880 --> 00:03:07,600
+ This is because they're somewhat porous and in tension all the pores inside of the ceramic
+
+46
+00:03:07,600 --> 00:03:12,080
+ act is nice places for cracks to grow. In other cases, it's because a material physically
+
+47
+00:03:12,080 --> 00:03:17,920
+ is different in one direction than another. For example, a 3D print or a carbon fiber composite
+
+48
+00:03:17,920 --> 00:03:21,920
+ will be quite strong in the direction of its fibers or in the direction of the print,
+
+49
+00:03:21,920 --> 00:03:26,960
+ but reasonably weak in the directions perpendicular to this. For these reasons and for materials
+
+50
+00:03:26,960 --> 00:03:32,560
+ that tend to be anisotropic, you might see both tensile and compressive yield and ultimate
+
+51
+00:03:32,560 --> 00:03:37,280
+ strength documented in a materials database. And there can be quite a substantial difference
+
+52
+00:03:37,280 --> 00:03:41,280
+ between the tensile and compressive yield strength and the tensile and compressive ultimate strength
+
+53
+00:03:41,280 --> 00:03:46,000
+ of some of these materials. In general, designing to a tensile yield strength or a tensile
+
+54
+00:03:46,000 --> 00:03:50,000
+ compressive strength is probably a little bit safer, a little bit more concerted than designing
+
+55
+00:03:50,000 --> 00:03:55,120
+ to a compressive one because most materials will fail sooner in tension than compression.
+
+56
+00:03:55,120 --> 00:03:59,760
+ But to be safe, you should be designing to whichever of the two is lower for a given material.

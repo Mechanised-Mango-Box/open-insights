@@ -1,0 +1,135 @@
+1
+00:00:00,000 --> 00:00:02,880
+ We've made some good progress together over the last week and a half.
+
+2
+00:00:02,880 --> 00:00:07,840
+ We now know what a state space model is, and we know how to construct one for general
+
+3
+00:00:07,840 --> 00:00:12,160
+ translating mechanical systems. And we've actually even built a few of these together
+
+4
+00:00:12,160 --> 00:00:16,480
+ when all we've been given is a sketch or a pictorial representation of the system.
+
+5
+00:00:16,480 --> 00:00:20,400
+ On our journey to being well-rounded modeling engineers, we've now met three different
+
+6
+00:00:20,400 --> 00:00:25,920
+ representations of physical systems. These sketches of schematics, the pictorial representations,
+
+7
+00:00:25,920 --> 00:00:30,400
+ are the ODEs that we got from first principles modeling and our favorite kind,
+
+8
+00:00:30,400 --> 00:00:35,520
+ the state space models. Our next milestone, our next representation that we need to meet,
+
+9
+00:00:35,520 --> 00:00:40,960
+ is the block diagram. And over the course of this video, we're going to learn what a block diagram is,
+
+10
+00:00:40,960 --> 00:00:44,880
+ and then over the next few videos, we're going to learn how to convert our existing models,
+
+11
+00:00:44,880 --> 00:00:52,640
+ our state space and ODEs, into block diagrams. Block diagrams are visual maps, visual representations
+
+12
+00:00:53,120 --> 00:00:58,800
+ show us the flow of information in our model. And they're super, super useful. Number one,
+
+13
+00:00:58,800 --> 00:01:03,920
+ they give us a way of converting between other representations that might ordinarily be difficult.
+
+14
+00:01:03,920 --> 00:01:09,120
+ Number two, they reveal potential issues about our model or our controls, for example,
+
+15
+00:01:09,120 --> 00:01:14,320
+ causality. And number three, most importantly, I think, they make it really easy to see the
+
+16
+00:01:14,320 --> 00:01:19,440
+ flow of information and understand how our model is constructed. Block diagrams consist of two
+
+17
+00:01:19,440 --> 00:01:25,280
+ fundamental components, lines or arrows that we call signals, and blocks which operate on these
+
+18
+00:01:25,280 --> 00:01:32,560
+ signals. This block diagram shows the signal X of T entering a block called F, which operates on
+
+19
+00:01:32,560 --> 00:01:39,040
+ that signal to provide another signal called Y, which is F of X of T. In general, we're going
+
+20
+00:01:39,040 --> 00:01:44,560
+ to draw blocks as squares with the particular operator that they are written inside of the square.
+
+21
+00:01:44,880 --> 00:01:50,560
+ But for ease of reading and to line up with Simulink, the MATLAB based program for simulating
+
+22
+00:01:50,560 --> 00:01:57,120
+ block diagrams, some blocks we give special shapes. The sum, the gain, and the integrator blocks
+
+23
+00:01:57,120 --> 00:02:02,720
+ are examples of these. You should note that every fundamental operation generally has its own block,
+
+24
+00:02:02,720 --> 00:02:08,320
+ additions, traction, modification, division, calculus as well, integrators, derivatives.
+
+25
+00:02:09,360 --> 00:02:13,200
+ But that's what to say that you can't build your own blocks. And you can make a block,
+
+26
+00:02:13,200 --> 00:02:19,200
+ as complicated as you like, a block which takes in multiple inputs, does some operation on all
+
+27
+00:02:19,200 --> 00:02:24,640
+ those inputs, and then provides multiple outputs. At the end of the day, the block diagram representation
+
+28
+00:02:24,640 --> 00:02:29,680
+ is not unique. And there are lots of different ways that you could build a particular block diagram
+
+29
+00:02:29,680 --> 00:02:36,560
+ using say all fundamental components or using fewer components, fewer blocks that have more
+
+30
+00:02:36,560 --> 00:02:40,960
+ complicated functions. It really just depends on what you're trying to communicate and who you're
+
+31
+00:02:40,960 --> 00:02:46,400
+ trying to communicate it to. So with the basics in hand, over the next few videos, we're going
+
+32
+00:02:46,400 --> 00:02:52,480
+ to learn how to convert the models we already have seen, state space and ODEs, into block diagram
+
+33
+00:02:52,480 --> 00:02:57,040
+ representation. And we might even go back and look at some of the problems we've generated models
+
+34
+00:02:57,040 --> 00:03:07,040
+ and draw the block diagrams for those.

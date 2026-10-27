@@ -1,0 +1,123 @@
+1
+00:00:00,000 --> 00:00:03,560
+ At this point, we've talked about lots of different ways that materials can fail.
+
+2
+00:00:03,560 --> 00:00:09,080
+ And we've drawn some lines in the sand as to where we think different materials will fail different ways.
+
+3
+00:00:09,080 --> 00:00:14,880
+ For example, we said that the yield strength is the maximum stress you can withstand before you start to plastically deform.
+
+4
+00:00:14,880 --> 00:00:20,320
+ And we said the ultimate strength is kind of the maximum stress you can withstand before you fracture your component.
+
+5
+00:00:20,320 --> 00:00:26,560
+ Well, it turns out you can actually fail components well below the yield strength and well below the ultimate strength
+
+6
+00:00:26,560 --> 00:00:29,760
+ by loading them and unloading them many, many times.
+
+7
+00:00:29,800 --> 00:00:34,760
+ This kind of failure is called fatigue failure and it occurs in most engineering materials.
+
+8
+00:00:34,760 --> 00:00:43,560
+ While the number of cycles required to fail material by fatigue is a function of the amplitude of that load that you put on and you take away and you put on and you take away,
+
+9
+00:00:43,560 --> 00:00:48,200
+ generally speaking, it's a very, very high number like in the order of 10 to the 10.
+
+10
+00:00:48,200 --> 00:00:54,240
+ Now it might seem totally impossible to you that any component you ever design could have so many load unload cycles.
+
+11
+00:00:54,240 --> 00:00:59,720
+ In your head, you might be picturing a load unload cycle is like, I don't know, you've designed a shelf and someone puts some stuff on the shelf
+
+12
+00:00:59,720 --> 00:01:07,720
+ and then takes it away and certainly that is the case, but generally fatigue loadings are a little bit more subtle and not necessarily the thing you were designing for.
+
+13
+00:01:07,720 --> 00:01:19,720
+ A common example is vibration in a car or an airplane or a trailer, all of those kind of disturbances from the road and the wind and whatever else add up even if they are very, very small loads.
+
+14
+00:01:19,720 --> 00:01:26,720
+ This is actually one of the reasons why it's considered bad practice to solder in automotive and aerospace wiring looms, for example.
+
+15
+00:01:26,720 --> 00:01:43,720
+ Solder joints really are just metals and even though they never going to be subjected to any significant loads, the small vibrations that result from, say, an engine ticking over or bumps in the road or whatever else add up and eventually you build up 10 to the 10 or more cycles and fail these things by fatigue.
+
+16
+00:01:43,720 --> 00:01:49,720
+ You can probably imagine the fatigue life of an engineering material is a function of the load that's being applied.
+
+17
+00:01:49,720 --> 00:01:57,720
+ If you're applying a really, really small amplitude load, then you would expect your material to last longer than if you're applying a load, say just below the yield stress.
+
+18
+00:01:57,720 --> 00:02:06,720
+ For most materials, the fatigue life as a function of the applied load amplitude is captured on what's called an SN curve, S for stress and N for number of cycles.
+
+19
+00:02:06,720 --> 00:02:11,720
+ Even though these curves typically have a log scale on the x-axis, they're generally pretty easy to read.
+
+20
+00:02:11,720 --> 00:02:21,720
+ You can read off along the x-axis your desired lifetime of the component and where it intersects the curve for the material you're looking at is the maximum stress amplitude you can apply to reach that lifetime.
+
+21
+00:02:21,720 --> 00:02:29,720
+ If you're comparing two materials on the basis of their fatigue performance, you can do this on a constant cycle or on a constant stress basis.
+
+22
+00:02:29,720 --> 00:02:38,720
+ You can say for a given stress which material is going to give me the largest lifetime or you could say for a given lifetime which material is going to permit the largest stress.
+
+23
+00:02:38,720 --> 00:02:42,720
+ Most material databases are documented on a constant cycle basis.
+
+24
+00:02:42,720 --> 00:02:48,720
+ In other words, for some number of cycles usually around 10 to the 7, they'll tell you what the fatigue strength is.
+
+25
+00:02:48,720 --> 00:02:54,720
+ The maximum amplitude of stress that you can put through that component and still achieve 10 to the 7 cycles.
+
+26
+00:02:54,720 --> 00:03:01,720
+ Interestingly, if you look at some materials, there's a plateau at some point for stress amplitude as a function of number of cycles.
+
+27
+00:03:01,720 --> 00:03:06,720
+ In other words, below a particular stress amplitude, you can have as many cycles as you like.
+
+28
+00:03:06,720 --> 00:03:11,720
+ Put simply, if the stress amplitude is low enough, these materials do not fail by fatigue.
+
+29
+00:03:11,720 --> 00:03:20,720
+ For these materials, the height of this plateau or the highest stress that you can apply before you'll begin to fail by fatigue is called the endurance limit or sometimes the fatigue limit.
+
+30
+00:03:20,720 --> 00:03:34,720
+ If you engineering materials have a fatigue limit, have an endurance limit meaning that provided your stress is low enough, they won't fail by fatigue and this obviously is something that can be quite useful if you're designing a component that you expect to be operating in an environment with lots of vibration.
+
+31
+00:03:34,720 --> 00:03:42,720
+ In any case, it's your responsibility as the design engineer to consult the materials databases select the most appropriate one-fuel loading scenario.

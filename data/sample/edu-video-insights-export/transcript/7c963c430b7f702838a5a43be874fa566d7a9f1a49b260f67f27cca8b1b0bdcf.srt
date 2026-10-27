@@ -1,0 +1,491 @@
+1
+00:00:00,000 --> 00:00:04,480
+ At the end of the last video, we talked about how the carbon content of an iron-carbon alloy
+
+2
+00:00:04,480 --> 00:00:09,520
+ of a steel is extremely important in determining the types of microstructures that form
+
+3
+00:00:09,520 --> 00:00:13,040
+ and the corresponding material properties of that product.
+
+4
+00:00:13,040 --> 00:00:16,880
+ Over this video, in the next one, we're going to talk about how exactly that happens.
+
+5
+00:00:16,880 --> 00:00:20,880
+ For your information, we have reached the peak of the hill in terms of difficulty for this
+
+6
+00:00:20,880 --> 00:00:25,760
+ week and to be honest, probably for the course. This is a topic that confuses
+
+7
+00:00:25,760 --> 00:00:30,880
+ many undergraduate and even graduate and even experienced in industry engineers.
+
+8
+00:00:30,880 --> 00:00:35,840
+ The alloy of carbon and iron is an extremely complicated topic that's taken us centuries,
+
+9
+00:00:35,840 --> 00:00:41,360
+ us being humans, not us being me, to master. It's very important that you take this video
+
+10
+00:00:41,360 --> 00:00:45,920
+ and the next one slowly. Have breaks if you need to, ask questions if you need to,
+
+11
+00:00:45,920 --> 00:00:50,400
+ write lots of notes, take your time. Like I've said to you before, once we get over this hill,
+
+12
+00:00:50,400 --> 00:00:55,280
+ it's all going to be smooth sailing. To kick off, let's start by talking about equilibrium
+
+13
+00:00:55,280 --> 00:00:59,600
+ phases of iron. Now, if there are two new words here that I should introduce,
+
+14
+00:00:59,600 --> 00:01:06,480
+ a phase of a material is really just a distinct or homogenous region of similar like microstructures
+
+15
+00:01:06,480 --> 00:01:11,360
+ and properties. By heavily controlling both the carbon content and the cooling rate of an
+
+16
+00:01:11,360 --> 00:01:17,440
+ iron-carbon alloy of a steel, we can change how many phases are present in the final product.
+
+17
+00:01:17,440 --> 00:01:22,080
+ We could end up with a single phase of a homogenous microstructure or we could end up with
+
+18
+00:01:22,080 --> 00:01:27,360
+ several phases of different kinds of microstructure. An equilibrium phase is a phase that we can
+
+19
+00:01:27,360 --> 00:01:32,240
+ expect to fall if we approach this cooling from the liquid state extremely slowly,
+
+20
+00:01:32,240 --> 00:01:37,040
+ essentially in quasi-static conditions. It's important that I make this distinction here because
+
+21
+00:01:37,040 --> 00:01:41,760
+ the microstructures and the phases that you get if you cool quickly are very different to those
+
+22
+00:01:41,760 --> 00:01:46,960
+ if you cool quasi-static conditions at equilibrium conditions. We'll talk about those a little bit more
+
+23
+00:01:46,960 --> 00:01:52,160
+ in the next video. For now, in terms of equilibrium phases of iron, those you can expect to see
+
+24
+00:01:52,160 --> 00:01:57,120
+ if you approach this in a quasi-static kind of way, there are three types that we'll be concerned
+
+25
+00:01:57,120 --> 00:02:02,960
+ about. The first is called alpha ferrite. The second is called gamma austenite and the third is
+
+26
+00:02:02,960 --> 00:02:08,960
+ called cementite or Fe3c. These three equilibrium phases of iron will be at the core of everything
+
+27
+00:02:08,960 --> 00:02:13,200
+ we talk about for the rest of this video and the next video. At reasonably low temperatures,
+
+28
+00:02:13,200 --> 00:02:19,280
+ in other words, less than about 900 degrees C, iron can form as an alpha ferrite phase.
+
+29
+00:02:19,280 --> 00:02:25,200
+ Alpha ferrite has a BCC microstructure of body-centred cubic microstructure. One of the unit cells that
+
+30
+00:02:25,200 --> 00:02:30,000
+ we talked about in the previous video here, the smallest repeating unit of the crystal lattice
+
+31
+00:02:30,000 --> 00:02:35,920
+ is a cube with equal length sides and an atom of iron at each one of its vertices, as well as one
+
+32
+00:02:35,920 --> 00:02:41,840
+ extra atom at its center. Alpha ferrite as a phase of iron isn't very accommodating of alloying
+
+33
+00:02:41,840 --> 00:02:46,400
+ with carbon. This is because iron atoms and carbon atoms are a very different size, meaning that
+
+34
+00:02:46,400 --> 00:02:51,040
+ it's quite hard to substitute one iron atom for a carbon atom, the way that we've talked about in
+
+35
+00:02:51,040 --> 00:02:56,400
+ the past. And in this configuration, the gaps in the unit cell aren't large enough to fit a carbon
+
+36
+00:02:56,400 --> 00:03:01,120
+ atom in. Now with sufficient motivation, in other words, if you heat the thing up in the unit cell
+
+37
+00:03:01,120 --> 00:03:07,040
+ expands, for example, you can fit carbon atoms interstitially into alpha iron. But at low
+
+38
+00:03:07,040 --> 00:03:11,600
+ temperatures, it's pretty much impossible to do this. And at high temperatures, it requires still
+
+39
+00:03:11,600 --> 00:03:16,560
+ a lot of energy to do this, meaning that if there's another phase that your iron can take to better
+
+40
+00:03:16,560 --> 00:03:21,440
+ accommodate that carbon, it probably will. Speaking of other phases that can better accommodate
+
+41
+00:03:21,440 --> 00:03:27,200
+ carbon, let's now talk about gamma austenite. Gamma austenite is another phase that iron can take in
+
+42
+00:03:27,200 --> 00:03:34,000
+ usually only forms above 700-ish degrees. And unlike alpha ferrite, gamma austenite has what's
+
+43
+00:03:34,000 --> 00:03:39,680
+ called an FCC face-centred cubic structure. The unit cell here looks slightly different.
+
+44
+00:03:39,680 --> 00:03:45,120
+ Like alpha ferrite, gamma austenite also has an atom at each vertex of the unit cell.
+
+45
+00:03:45,120 --> 00:03:49,760
+ Unlike alpha ferrite, however, instead of a single atom at the center of the cell,
+
+46
+00:03:49,760 --> 00:03:54,080
+ we have an atom at the center of each face of the cell as well. The net result of this
+
+47
+00:03:54,080 --> 00:03:58,800
+ configuration is that gamma austenite is actually much better at accommodating carbon.
+
+48
+00:03:58,800 --> 00:04:02,880
+ The size of the interstices, the gaps left between atoms in the unit cell, are now actually
+
+49
+00:04:02,880 --> 00:04:07,280
+ beautifully carbon sized, and we're quite happily accommodate carbon intercessually.
+
+50
+00:04:07,280 --> 00:04:10,960
+ If you've been paying attention, you'll note that there's a temperature band where both alpha and
+
+51
+00:04:10,960 --> 00:04:18,800
+ gamma conform, gamma above 720 in alpha below 912. And in this temperature band where both alpha and
+
+52
+00:04:18,800 --> 00:04:24,000
+ gamma are happy to exist, generally you'll get some two phase mixture, some ratio of these that's
+
+53
+00:04:24,000 --> 00:04:28,160
+ dependent on the amount of carbon that's around. The more carbon that you need to accommodate,
+
+54
+00:04:28,160 --> 00:04:32,320
+ the more gamma is likely to form because it's easy to put carbon inside of gamma that it is
+
+55
+00:04:32,320 --> 00:04:37,360
+ to put it inside of alpha. And the less carbon that's required, the more alpha is likely to form,
+
+56
+00:04:37,360 --> 00:04:41,680
+ for exactly the same reason. There's no need to accommodate that carbon anymore.
+
+57
+00:04:41,680 --> 00:04:46,480
+ This discussion around carbon brings us nicely to our third equilibrium phase of iron,
+
+58
+00:04:46,480 --> 00:04:52,800
+ called cementite, or Fe3C. Fe3C is quite happy to form at both low and high temperatures,
+
+59
+00:04:52,800 --> 00:04:57,360
+ and generally speaking, we'll fall when you've reached the solubility limit of carbon in alpha
+
+60
+00:04:57,360 --> 00:05:01,840
+ and carbon in gamma. In other words, when you've shoehorned as much carbon as you can into the
+
+61
+00:05:01,840 --> 00:05:07,040
+ interstices of your gamma austenite and your alpha ferrite, whatever's left over will form into
+
+62
+00:05:07,040 --> 00:05:13,040
+ this stable compound with any other remaining iron. The reasons behind this all have to do with energy
+
+63
+00:05:13,040 --> 00:05:18,000
+ and nature being lazy, if it takes less energy to shoehorn a carbon atom inside of a gamma than
+
+64
+00:05:18,000 --> 00:05:22,560
+ an alpha, then it's going to do that. If it takes more energy to shoehorn yet another carbon
+
+65
+00:05:22,560 --> 00:05:27,200
+ atom into the already reasonably full gammas and alphas than it would to make cementite,
+
+66
+00:05:27,200 --> 00:05:31,200
+ then it's going to go and make some cementite. Cementite actually has a different structure to both
+
+67
+00:05:31,200 --> 00:05:36,000
+ alpha ferrite and gamma austenite. It's not faceted to cubic and it's not body-cented cubic,
+
+68
+00:05:36,000 --> 00:05:40,560
+ it's actually this ugly looking thing. Interestingly enough, though it forms inside of your iron
+
+69
+00:05:40,560 --> 00:05:45,200
+ carbon alloy, cementite is not technically a metal, it's actually a ceramic, and for that reason,
+
+70
+00:05:45,200 --> 00:05:50,400
+ we'll talk about it a little bit more in week 8. Given that both temperature and carbon content
+
+71
+00:05:50,400 --> 00:05:56,240
+ can contribute to which phases tend to form inside of an iron carbon alloy, it's very common
+
+72
+00:05:56,240 --> 00:06:01,600
+ to put these things on what's called a phase diagram. Phase diagrams are really just a map that
+
+73
+00:06:01,600 --> 00:06:06,240
+ tell you for a given temperature and composition what phases you can expect to see. Typically,
+
+74
+00:06:06,240 --> 00:06:11,840
+ you plot temperature on the y-axis and changing composition on the x-axis, and the iron carbon
+
+75
+00:06:11,840 --> 00:06:17,760
+ phase diagram looks something like this. Now, this is an extremely complicated and convoluted
+
+76
+00:06:17,760 --> 00:06:23,120
+ phase diagram. My intention is not to teach you about phase diagrams here. If it was my intention,
+
+77
+00:06:23,120 --> 00:06:27,520
+ we would not be starting with this one, I promise you. That being said, understanding this
+
+78
+00:06:27,520 --> 00:06:32,720
+ particular phase diagram is important for us to be able to motivate some of the non-equilibrium
+
+79
+00:06:32,720 --> 00:06:37,680
+ phases we're going to meet in the next video. So we're going to step through this one relatively
+
+80
+00:06:37,680 --> 00:06:42,640
+ slowly with reference to the phases that we've already met. There is a general guiding principle
+
+81
+00:06:42,640 --> 00:06:47,200
+ that will help you understand why this phase diagram is the way that it is, why it looks so
+
+82
+00:06:47,200 --> 00:06:53,120
+ misshapen. And the answer to that is that nature is generally quite lazy. At equilibrium conditions,
+
+83
+00:06:53,120 --> 00:06:58,880
+ given enough time, iron will form in whatever phase or phases will require the least amount of
+
+84
+00:06:58,880 --> 00:07:04,560
+ energy. All this phase diagram tells us is for a particular temperature carbon combination
+
+85
+00:07:04,560 --> 00:07:10,560
+ which phase or phases require the least amount of energy to form. So let's step through and
+
+86
+00:07:10,560 --> 00:07:14,800
+ build up this diagram trying to relate it back to the knowledge we have of these three
+
+87
+00:07:14,800 --> 00:07:19,840
+ fundamental phases that we just met. To begin with, let's completely ignore the influence of
+
+88
+00:07:19,840 --> 00:07:23,920
+ carbon on the phase diagram. Let's look at the zero percent carbon case. Let's look at just
+
+89
+00:07:23,920 --> 00:07:30,080
+ what happens on the Y axis. At zero percent carbon content and at reasonably low temperatures,
+
+90
+00:07:30,080 --> 00:07:35,440
+ less than 900 degrees, alpha ferrite is the stable form of carbon. It's the one that requires
+
+91
+00:07:35,440 --> 00:07:40,080
+ the least amount of energy to form. If you're at zero percent carbon content and you're less
+
+92
+00:07:40,080 --> 00:07:44,960
+ than this temperature, your iron will form as alpha ferrite. At higher temperatures and zero
+
+93
+00:07:44,960 --> 00:07:50,400
+ percent carbon content, gamma austenite is the stable form of carbon. In other words, gamma austenite
+
+94
+00:07:50,400 --> 00:07:55,120
+ will require the least amount of energy to form. Typically, alpha doesn't tend to form at high
+
+95
+00:07:55,120 --> 00:07:59,600
+ temperatures and gamma doesn't tend to form at lower temperatures because in each case, the other
+
+96
+00:07:59,600 --> 00:08:05,360
+ one requires less energy to do so. And nature being lazy, given enough time, will always take
+
+97
+00:08:05,360 --> 00:08:10,080
+ the lower energy approach. Now, introduction of carbon complicates matters a little bit because it
+
+98
+00:08:10,080 --> 00:08:15,680
+ changes the ranges at which these phases are stable. It changes the ranges at which it costs
+
+99
+00:08:15,680 --> 00:08:20,160
+ more energy to do one than the other. If you take you to account the effects of both temperature
+
+100
+00:08:20,160 --> 00:08:25,600
+ and carbon content, you trace out these unshaped regions of where alpha requires the least amount
+
+101
+00:08:25,600 --> 00:08:30,720
+ of energy to form and gamma requires the least amount of energy to form. That on temperature band,
+
+102
+00:08:30,800 --> 00:08:34,160
+ we talked about earlier where it's possible to form both alpha and gamma,
+
+103
+00:08:34,160 --> 00:08:38,880
+ well, that can show up on the face diagram as well. In this temperature band and for a particular
+
+104
+00:08:38,880 --> 00:08:44,640
+ range of carbon contents, you can form a two-phase mixture of both alpha and gamma. And in this
+
+105
+00:08:44,640 --> 00:08:49,200
+ two-phase region, the relative amount of alpha and gamma that you have in this mixture
+
+106
+00:08:49,200 --> 00:08:53,040
+ is dependent on the amount of carbon that's present. The more carbon that's present, the more
+
+107
+00:08:53,040 --> 00:08:57,280
+ gamma needs to be made to accommodate that carbon. The less carbon that's present, the less
+
+108
+00:08:57,280 --> 00:09:01,600
+ gamma is needed to accommodate that carbon. On the left-hand extreme where there's no carbon
+
+109
+00:09:01,600 --> 00:09:05,280
+ present, well, you can get away with just having alpha. On the right-hand extreme where there's
+
+110
+00:09:05,280 --> 00:09:09,440
+ too much carbon present, you can't afford to have any alpha at all. You must have converted
+
+111
+00:09:09,440 --> 00:09:13,600
+ it all to gamma to be able to accommodate all of the carbon that's around. In either case,
+
+112
+00:09:13,600 --> 00:09:17,760
+ if you have more carbon kicking around than you can accommodate in alpha at low temperatures or
+
+113
+00:09:17,760 --> 00:09:21,920
+ gamma in high temperatures, in other words, if you've already shoved as much carbon as you can
+
+114
+00:09:21,920 --> 00:09:26,800
+ into the interstices of these phases, such that it requires less energy to now form some
+
+115
+00:09:26,800 --> 00:09:31,760
+ mentite than it does to shoehorn any more carbon in there, well, then that's what will happen.
+
+116
+00:09:31,760 --> 00:09:35,760
+ In addition to your kind of fully packed-out alpha or fully packed-out gamma,
+
+117
+00:09:35,760 --> 00:09:42,640
+ completely stuffed full of carbon, you will also now form some mentite FE3C as a separate phase.
+
+118
+00:09:42,640 --> 00:09:47,600
+ The line of demarcation where it costs less energy to just make some FE3C than it does to
+
+119
+00:09:47,600 --> 00:09:52,240
+ shoehorn any more carbon into the alpha or the gamma that already exists is called the
+
+120
+00:09:52,240 --> 00:09:56,720
+ solubility limit of carbon in the alpha or the solubility limit of carbon in the gamma.
+
+121
+00:09:56,960 --> 00:10:01,840
+ And with that, we have now covered everything we need to know about equilibrium phases of iron.
+
+122
+00:10:01,840 --> 00:10:06,160
+ Stick with me for one more video where we'll talk about the non-equilibrium phases of iron,
+
+123
+00:10:06,160 --> 00:10:12,720
+ at which point it's all going to be smooth sailing.

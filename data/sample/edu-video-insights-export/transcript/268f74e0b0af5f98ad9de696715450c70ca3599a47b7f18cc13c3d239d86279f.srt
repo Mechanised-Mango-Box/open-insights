@@ -1,0 +1,459 @@
+1
+00:00:00,000 --> 00:00:03,840
+ In this video, we're going to talk about the constituents of a fiber reinforced polymer,
+
+2
+00:00:03,840 --> 00:00:07,600
+ namely the fibers themselves and the resonance used to lay them up.
+
+3
+00:00:07,600 --> 00:00:10,560
+ We're going to talk about the different kinds of fiber that you might use and how these
+
+4
+00:00:10,560 --> 00:00:14,640
+ are manufactured and how you select between them. And we'll do the same for resonance as well.
+
+5
+00:00:14,640 --> 00:00:19,760
+ Picking a particular fiber for use in an FRP lab is often a bit of a balancing act between
+
+6
+00:00:19,760 --> 00:00:23,840
+ the stiffness and the strength of the part that you want to make, but also the density,
+
+7
+00:00:23,840 --> 00:00:28,480
+ the weight of that part. And unsurprisingly, different fibers come with different costs as well.
+
+8
+00:00:28,480 --> 00:00:31,840
+ There are endless choices in this space, natural and synthetic fibers,
+
+9
+00:00:31,840 --> 00:00:35,920
+ fibers that are themselves ceramics or metals and fibers that are polymers.
+
+10
+00:00:35,920 --> 00:00:40,080
+ But probably the three most common fibers for an FRP layup, at least for the kind of engineering
+
+11
+00:00:40,080 --> 00:00:44,480
+ problems you might be looking to solve are fiberglass, Kevlar, and carbon fiber.
+
+12
+00:00:44,480 --> 00:00:47,760
+ You can of course get all of these materials in a bunch of different grades,
+
+13
+00:00:47,760 --> 00:00:52,000
+ but the most common fiberglass is typically referred to as e-glass,
+
+14
+00:00:52,000 --> 00:00:56,240
+ the most common Kevlar Kevlar 49, and the most common carbon fiber
+
+15
+00:00:56,240 --> 00:01:01,120
+ so-called high modulus carbon fiber. Each of these potential fiber constituents have their
+
+16
+00:01:01,120 --> 00:01:05,760
+ own strengths and weaknesses. Fiberglass, for example, being so much cheaper than the other
+
+17
+00:01:05,760 --> 00:01:10,480
+ alternatives is often used in large structures. And for this reason, you see it very commonly in
+
+18
+00:01:10,480 --> 00:01:14,960
+ boat hulls and in pools, but it doesn't provide the same overall stiffness or strength as
+
+19
+00:01:14,960 --> 00:01:18,880
+ Kevlar and carbon fiber do. It's worth noting though that there are complexities you can't
+
+20
+00:01:18,880 --> 00:01:23,600
+ strictly pull apart here. Fiberglass, for example, being so much cheaper than Kevlar or carbon
+
+21
+00:01:24,000 --> 00:01:29,120
+ you can use way, way more of it to make up the strength or stiffness and usually still spend less
+
+22
+00:01:29,120 --> 00:01:33,120
+ money. But in circumstances where you're volume limited or you're weight limited and you just can't
+
+23
+00:01:33,120 --> 00:01:37,920
+ throw more and more fiber at the problem like in aerospace components or motorsport components or
+
+24
+00:01:37,920 --> 00:01:43,280
+ in prosthetics, then carbon fiber and Kevlar which are far stiffer and stronger or other things
+
+25
+00:01:43,280 --> 00:01:47,760
+ being equal begin to make a bit more sense. Of these two Kevlar is a little bit stronger and
+
+26
+00:01:47,760 --> 00:01:52,400
+ tougher and is generally known for having better impact resistance. And carbon fiber is a little
+
+27
+00:01:52,400 --> 00:01:56,320
+ bit stiffer. We typically see the former of surfaces that are expected to see a bit of wear and
+
+28
+00:01:56,320 --> 00:02:01,440
+ we usually see the latter in places where maintaining geometry under load is critically important like
+
+29
+00:02:01,440 --> 00:02:06,960
+ aerodynamic surfaces. And interestingly, many parts are made up as composites of these composites
+
+30
+00:02:06,960 --> 00:02:12,240
+ with carbon fiber in some locations and fiberglass in other locations and Kevlar in other locations
+
+31
+00:02:12,240 --> 00:02:16,560
+ again. Fiberglass is very commonly used to make up the bulk geometry of a part because you can get
+
+32
+00:02:16,560 --> 00:02:20,880
+ a lot of it in there for not very much money. And carbon is often used to reinforce critical
+
+33
+00:02:20,960 --> 00:02:25,440
+ locations like bolt holes. You might also on the same part see Kevlar in locations that you expect
+
+34
+00:02:25,440 --> 00:02:29,680
+ to see a lot of wear like on the underside of a part near the front of a car that's expected to
+
+35
+00:02:29,680 --> 00:02:34,080
+ maybe scrape the ground every now and again. And alongside making composites of these composites
+
+36
+00:02:34,080 --> 00:02:39,440
+ by mixing and matching distinct regions of carbon fiber and Kevlar and fiberglass, you can actually
+
+37
+00:02:39,440 --> 00:02:44,880
+ get composite fiber mats that are made up of part carbon fiber and part Kevlar for example.
+
+38
+00:02:44,880 --> 00:02:48,240
+ In any case, you need to take a little bit of care if you're going to be mixing and matching
+
+39
+00:02:48,240 --> 00:02:52,480
+ these things. Remember for components that are aligned in parallel for example, each carries a
+
+40
+00:02:52,480 --> 00:02:56,560
+ proportion of the load relative to its stiffness. This means that if you're going to use a stiffer
+
+41
+00:02:56,560 --> 00:03:01,760
+ material to skin a more compliant one like carbon fiber on the outside of fiberglass, you need to
+
+42
+00:03:01,760 --> 00:03:06,080
+ make sure that the thickness of the carbon fiber layer is sufficient that it has the effective
+
+43
+00:03:06,080 --> 00:03:11,280
+ strength required to carry the component of the load that it's going to bear. Because even if
+
+44
+00:03:11,280 --> 00:03:15,440
+ it's going to be far thinner than a fiberglass layer, being so much stiffer it might actually
+
+45
+00:03:15,680 --> 00:03:20,000
+ carry a higher proportion of the load. These fibers of themselves made in a variety of different
+
+46
+00:03:20,000 --> 00:03:25,040
+ ways. Fiberglass, for example, is made by an extrusion process where molten silica is forced
+
+47
+00:03:25,040 --> 00:03:30,400
+ through a die before eventually being spooled onto a bobbin. And many polymer fibers like nylon
+
+48
+00:03:30,400 --> 00:03:36,160
+ and Kevlar and polyacrylonitrile are precursor to making carbon fiber and made through a process
+
+49
+00:03:36,160 --> 00:03:41,840
+ known as wet spinning. Here, a viscous polymer is condensed and coagulated in a liquid bath and
+
+50
+00:03:41,840 --> 00:03:46,240
+ kind of extracted before being spooled. Carbon fiber is kind of a special case of this where you
+
+51
+00:03:46,240 --> 00:03:51,200
+ then take that polymer fiber and subject it to another process called pyrolysis that essentially
+
+52
+00:03:51,200 --> 00:03:56,880
+ strips off all of the non-carbon elements of the polymer chains and rearranges them in a particular way
+
+53
+00:03:56,880 --> 00:04:01,360
+ to make them stronger and stiffer. That process is quite involved and to describe it in any more
+
+54
+00:04:01,360 --> 00:04:05,840
+ detail would be verging on the boundaries of talking about chemistry. It's probably going to leave it
+
+55
+00:04:05,840 --> 00:04:08,960
+ there. But I have left some more information about it on the textbook page for this video if you'd
+
+56
+00:04:08,960 --> 00:04:13,920
+ like to check it out. Now, all of these fibers after initial formation and spooling onto a bobbin
+
+57
+00:04:13,920 --> 00:04:19,360
+ are weaved into a fabric into a mat that can be laid up or laminated. As you can imagine, this
+
+58
+00:04:19,360 --> 00:04:23,440
+ process is generally done with industrial sized looms and is highly automated and there are a
+
+59
+00:04:23,440 --> 00:04:28,080
+ bunch of different weave geometries that you can purchase your fibers in. I won't go into too much
+
+60
+00:04:28,080 --> 00:04:31,840
+ detail on the different types of weave. I've left some interesting resources on the textbook page
+
+61
+00:04:31,840 --> 00:04:36,720
+ if you'd like to check that out that compares between them, but generally selecting between one weave
+
+62
+00:04:36,720 --> 00:04:41,520
+ and another is a function of a few different things. Promoting or mitigating anisotropy in your
+
+63
+00:04:41,520 --> 00:04:45,920
+ part because load will tend to be carried along the direction of the fibers in your weave.
+
+64
+00:04:45,920 --> 00:04:51,440
+ How drapeable the particular weave is how easy it is to form over tight radii when you're laying it up.
+
+65
+00:04:51,440 --> 00:04:56,240
+ The density of fibers in this weave and the subsequent permeation of the polymer when you form
+
+66
+00:04:56,240 --> 00:05:01,440
+ the bulk FRP and the appearance of the final part as well. It's actually quite common. Many
+
+67
+00:05:01,440 --> 00:05:06,960
+ FRPs are made by using variations of different weave geometries or even just variations on the
+
+68
+00:05:06,960 --> 00:05:11,200
+ orientation of a single weave geometry. This is usually done in an effort to try and limit the amount
+
+69
+00:05:11,200 --> 00:05:15,520
+ of anisotropy in a part by kind of distributing the directions that the layers are oriented.
+
+70
+00:05:15,520 --> 00:05:19,680
+ You can get back to reasonably isotropic behavior, but you should note that even if you could
+
+71
+00:05:19,680 --> 00:05:24,000
+ somehow get totally random alignment of these fibers in the part because you're kind of
+
+72
+00:05:24,000 --> 00:05:27,760
+ laminating them. You're putting them down one after the other after the other. You're always
+
+73
+00:05:27,760 --> 00:05:32,400
+ going to have different properties out of plain than you are in plain. Now irrespective of your
+
+74
+00:05:32,400 --> 00:05:36,640
+ particular choice of fiber and particular choice of weave geometry for that fiber, you're going
+
+75
+00:05:36,640 --> 00:05:42,720
+ to need a polymer to intune these fibers to make up the bulk FRP. Layup of FRPs almost always
+
+76
+00:05:42,720 --> 00:05:47,520
+ involves using a thermosetting resin as the polymer. And the reason that we use thermosetting
+
+77
+00:05:47,520 --> 00:05:52,400
+ resins as opposed to thermoplastics is largely a question of manufacturing convenience. Before
+
+78
+00:05:52,400 --> 00:05:56,160
+ and in the early stages of the curing process, thermosetting resins are a viscous liquid which
+
+79
+00:05:56,160 --> 00:06:01,040
+ makes them very easy to distribute amongst and over the fibers. And this convenience is quite
+
+80
+00:06:01,040 --> 00:06:05,440
+ serendipitous because thermosets generally have the kind of properties that we'd want to use in a
+
+81
+00:06:05,440 --> 00:06:09,360
+ an FRP. They're a little bit stronger and a little bit stiffer and a little bit more temperature
+
+82
+00:06:09,360 --> 00:06:14,080
+ resistant than their thermoplastic cousins. For this purpose, amongst all thermosetting resins,
+
+83
+00:06:14,080 --> 00:06:18,400
+ polyester and vinyl ester resins are probably the most common. Polyester, for example, has been
+
+84
+00:06:18,400 --> 00:06:23,840
+ used to manufacture composite components, namely boats for dozens of years. And vinylester has very,
+
+85
+00:06:24,000 --> 00:06:27,920
+ very similar properties with a little bit better corrosion resistance and heat tolerance.
+
+86
+00:06:27,920 --> 00:06:31,920
+ But the reason that these two resins are probably so widespread in their uses that they're
+
+87
+00:06:31,920 --> 00:06:37,040
+ generally the most economical option when it comes to layup of an FRP. They do have their
+
+88
+00:06:37,040 --> 00:06:41,840
+ limitations though because both polyester and vinyl ester are dissolved in a styrene
+
+89
+00:06:41,840 --> 00:06:46,960
+ monomer. That's the monomer that you catalyze with the MEKP that eventually crosslinks between
+
+90
+00:06:46,960 --> 00:06:50,800
+ all of the chains to make up the thermoset. Because they're dissolved in the styrene monomer, they
+
+91
+00:06:50,800 --> 00:06:56,320
+ have a tendency to break down to dissolve polystyrene, which is a common material that we use for
+
+92
+00:06:56,320 --> 00:07:01,520
+ making the forms that we lay out FRPs onto. Consequently, if you want to use polystyrene forms,
+
+93
+00:07:01,520 --> 00:07:05,840
+ you need an additional sealing process on these first to try and make sure there's no contact
+
+94
+00:07:05,840 --> 00:07:10,080
+ between the resin you're putting on for your part and the polystyrene you'd like to use in your
+
+95
+00:07:10,080 --> 00:07:14,160
+ form. On a somewhat related note, polyester and vinyl ester resins can also be a little bit
+
+96
+00:07:14,160 --> 00:07:19,120
+ dangerous to work with. The MEKP catalysts that you use to kickstart the curing process is pretty
+
+97
+00:07:19,120 --> 00:07:23,920
+ toxic to humans. A slightly safer option for both the humans working with the resin and the
+
+98
+00:07:23,920 --> 00:07:28,480
+ forms that you might be using is epoxy resin. Epoxy resins are generally a little bit more bio
+
+99
+00:07:28,480 --> 00:07:32,480
+ compatible than the polyester and vinyl ester ones and they're actually a little bit stronger and
+
+100
+00:07:32,480 --> 00:07:36,880
+ stiffer as well. This of course comes at a cost and in this case it's a real physical cost.
+
+101
+00:07:36,880 --> 00:07:41,040
+ Epoxy resins are generally a fair bit more expensive than their vinyl ester or polyester
+
+102
+00:07:41,040 --> 00:07:45,600
+ counterparts. And consequently, it may be used a little bit more selectively. It's probably worth
+
+103
+00:07:45,600 --> 00:07:49,840
+ mentioning that not all resins can be used with all fibers. There is quite a lot of compatibility
+
+104
+00:07:49,840 --> 00:07:53,360
+ between the different families of fiber and the different families of resin we've talked about
+
+105
+00:07:53,360 --> 00:07:58,560
+ in this video. But to name one example, chop strand fiberglass mat, which is a matting the
+
+106
+00:07:58,560 --> 00:08:03,680
+ consists of shredded up shorter strands of fiberglass that's often used to make up bulk geometry
+
+107
+00:08:03,680 --> 00:08:08,640
+ because it's quite cheap and it's very, very drapeable. It consists of short strands of fiberglass
+
+108
+00:08:08,640 --> 00:08:13,440
+ that are held together by a binary that's designed to be dissolved by a polyester or a vinyl ester
+
+109
+00:08:13,920 --> 00:08:17,040
+ resin. This is one of the many complexities that's involved in the selection of these components.
+
+110
+00:08:17,040 --> 00:08:20,720
+ I don't expect you to memorize all the different compatibilities but there should give you some
+
+111
+00:08:20,720 --> 00:08:24,640
+ consideration for the fact that it's not quite straightforward and that a little bit of care is
+
+112
+00:08:24,640 --> 00:08:28,480
+ required in selection of ingredients. And that's probably where I'll leave it for manufacturer
+
+113
+00:08:28,480 --> 00:08:32,720
+ and selection of FRP constituents. Now there's a lot more information on the textbook page for
+
+114
+00:08:32,720 --> 00:08:36,720
+ this video that I encourage you to check out before we move on to talking about design of
+
+115
+00:08:36,720 --> 00:08:46,720
+ forms and molds for FRP layout.

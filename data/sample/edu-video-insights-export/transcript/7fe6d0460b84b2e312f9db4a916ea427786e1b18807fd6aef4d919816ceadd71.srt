@@ -1,0 +1,583 @@
+1
+00:00:00,000 --> 00:00:03,600
+ Before we can talk about the range of different manufacturing processes that are available to
+
+2
+00:00:03,600 --> 00:00:08,480
+ help you shape engineering materials into the geometries that you need to solve your design problems,
+
+3
+00:00:08,480 --> 00:00:12,720
+ we should talk a little bit about the standard sections and form factors and grades that you
+
+4
+00:00:12,720 --> 00:00:17,280
+ can buy these materials in. In this video we're going to talk about those standard sizes and
+
+5
+00:00:17,280 --> 00:00:21,600
+ sections and grades and these discussions are going to be focused around mild steel,
+
+6
+00:00:21,600 --> 00:00:26,000
+ aluminium and stainless steel, probably the three most common engineering metals you'll turn
+
+7
+00:00:26,000 --> 00:00:30,080
+ into in the majority of your design circumstances. We're a little bit spoiled for choice here in
+
+8
+00:00:30,080 --> 00:00:35,280
+ Newcastle with a range of supplies for mild steel, stainless and aluminium available to us with
+
+9
+00:00:35,280 --> 00:00:39,440
+ an arms reach. And while the discussions we're about to have will be focused on these materials,
+
+10
+00:00:39,440 --> 00:00:43,600
+ you should be aware that generally speaking these whole true for other materials as well,
+
+11
+00:00:43,600 --> 00:00:47,920
+ though the more specialized ones, coppers and titanium is for example by virtue of being a little
+
+12
+00:00:47,920 --> 00:00:52,240
+ bit more expensive tend to have slightly different rules. Because the following is going to be a bit
+
+13
+00:00:52,240 --> 00:00:57,680
+ of a broad overview, I've put some detailed information including catalogs and list of local suppliers
+
+14
+00:00:57,680 --> 00:01:02,080
+ and some places that you can find more specialized materials on the textbook page that accompanies this
+
+15
+00:01:02,080 --> 00:01:07,040
+ video. With all of that said, let's kick off by talking about tube and pipe. In lay language,
+
+16
+00:01:07,040 --> 00:01:11,840
+ the words, tube and pipe may well be synonyms, but in the engineering context they mean two
+
+17
+00:01:11,840 --> 00:01:16,640
+ completely different things. In the context of supply of engineering metals, the word tube
+
+18
+00:01:16,640 --> 00:01:22,000
+ generally refers to a hollow standard section that's characterized by its added dimensions and used
+
+19
+00:01:22,000 --> 00:01:26,720
+ to build some sort of framework. The word pipe generally refers to some sort of standard section
+
+20
+00:01:26,720 --> 00:01:31,440
+ that's usually referred to in terms of its inner dimensions and is ordinarily used to carry
+
+21
+00:01:31,440 --> 00:01:36,480
+ some sort of fluid, a liquid or a gas. You can purchase tubes and pipes in a variety of cross
+
+22
+00:01:36,480 --> 00:01:41,600
+ sectional shapes, effective diameters and war thicknesses. In Australia, the three most common
+
+23
+00:01:41,600 --> 00:01:48,080
+ tube types you're likely to see are RHS, CHS and SHS, rectangular, circular and square
+
+24
+00:01:48,080 --> 00:01:53,200
+ hollow section respectively. These standard sections come in a variety of sizes and generally speaking,
+
+25
+00:01:53,200 --> 00:01:57,040
+ most manufacturers will have a catalog that you can download that lists all of the different
+
+26
+00:01:57,040 --> 00:02:02,240
+ sizes available for all of the different types of tube product they offer. Here in Australia,
+
+27
+00:02:02,240 --> 00:02:06,720
+ square and rectangular tube products typically have added dimensions that are nice round
+
+28
+00:02:06,720 --> 00:02:11,360
+ 5 or 10 millimeter increments. But generally speaking, wall thicknesses and the diameters of
+
+29
+00:02:11,360 --> 00:02:16,080
+ circular hollow section products tend to be imperial. This is largely a consequence of the way
+
+30
+00:02:16,160 --> 00:02:20,000
+ the tube products are manufactured. They normally made by passing a sheet of steel through a
+
+31
+00:02:20,000 --> 00:02:24,240
+ series of rollers that incrementally fold them up into the correct size and shape. And then they're
+
+32
+00:02:24,240 --> 00:02:28,800
+ seen well at an end or ground to for one continuous product. Of course there are standards including
+
+33
+00:02:28,800 --> 00:02:33,040
+ this Australian standard which dictate the way that these manufacturing process have to be carried
+
+34
+00:02:33,040 --> 00:02:37,200
+ out in the tolerances that you can expect on any kind of tube product that you buy.
+
+35
+00:02:37,200 --> 00:02:41,440
+ And the same goes for pipe as well. In all cases, because the infrastructure required for the bulk
+
+36
+00:02:41,440 --> 00:02:46,800
+ production of steel and aluminium products is so expensive and generally so old and has so much
+
+37
+00:02:46,800 --> 00:02:51,280
+ inertia behind it, imperial measurements are very common to see throughout. Generally speaking,
+
+38
+00:02:51,280 --> 00:02:55,120
+ because they're designed to be used to build up frameworks and other components,
+
+39
+00:02:55,120 --> 00:02:59,520
+ the tolerance on tube products are a little bit tighter than those on pipe products.
+
+40
+00:02:59,520 --> 00:03:03,760
+ And for the same reason, tube products are normally described in terms of their external dimensions
+
+41
+00:03:03,760 --> 00:03:07,840
+ and a wall thickness while pipe products are normally described in terms of their internal
+
+42
+00:03:07,840 --> 00:03:13,360
+ diameter buyer and obscure kind of metric known as a nominal bore. The nominal bore of a pipe
+
+43
+00:03:13,360 --> 00:03:18,160
+ product as the name suggests is kind of a rough measurement for the inner diameter, but it's also
+
+44
+00:03:18,160 --> 00:03:22,720
+ a function of the thickness called the schedule of the pipe. All of this is to say that the system
+
+45
+00:03:22,720 --> 00:03:27,520
+ for characterising pipe is quite antiquated and confusing. Generally speaking, you go to reach for
+
+46
+00:03:27,520 --> 00:03:32,800
+ a nominal bore to diameter conversion chart to make sense of a phrase like 15 nominal bore extra
+
+47
+00:03:32,800 --> 00:03:37,520
+ heavy. Because they primarily designed to carry fluids, pipe products typically have a much higher
+
+48
+00:03:37,600 --> 00:03:41,680
+ wall thickness than tube products and they're not really intended to be used in structural
+
+49
+00:03:41,680 --> 00:03:46,000
+ applications. In fact, if you speak to someone who designs frameworks, use of a pipe might be
+
+50
+00:03:46,000 --> 00:03:50,720
+ considered a bit more of an agricultural approach. So that's hollow sections, but you can also
+
+51
+00:03:50,720 --> 00:03:55,280
+ buy still an aluminium in a range of solid sections as well. We're only speaking in the family
+
+52
+00:03:55,280 --> 00:04:00,240
+ of these solid sections is typically referred to as bar stock or merchant bar. And you can buy
+
+53
+00:04:00,240 --> 00:04:06,080
+ merchant bar in a range of form factors, flat, angle, equal and unequal sides, as well as round,
+
+54
+00:04:06,080 --> 00:04:10,560
+ hex, i-beam and c-channel. Each of these standard sections are particularly useful in specific
+
+55
+00:04:10,560 --> 00:04:15,520
+ cases and quite complicated shapes can be built up as weldments, combinations of these standard
+
+56
+00:04:15,520 --> 00:04:20,400
+ sections, meaning that rather than having to say machine to shape out of a solid block of steel,
+
+57
+00:04:20,400 --> 00:04:24,560
+ you can build it up out of a bunch of much cheaper components and weld them together.
+
+58
+00:04:24,560 --> 00:04:29,120
+ While one could argue that these are also an example of bar stock, aluminium extrusion I generally
+
+59
+00:04:29,120 --> 00:04:33,440
+ like to put in a different category. While steel bar stock is typically made by some sort of rolling
+
+60
+00:04:33,440 --> 00:04:38,240
+ process, probably a hot rolling process, aluminium extrusions are, as the name suggests,
+
+61
+00:04:38,240 --> 00:04:42,960
+ extruded, pulled through a die. This process, which is possible because aluminium is quite
+
+62
+00:04:42,960 --> 00:04:48,320
+ ductile and has a much lower strength than steel, results in an extremely dimensionally precise
+
+63
+00:04:48,320 --> 00:04:52,960
+ and beautifully surface finished product. Also owing to its higher ductility, aluminium
+
+64
+00:04:52,960 --> 00:04:56,880
+ extrusions can be made in a variety of extremely complicated shapes.
+
+65
+00:04:56,880 --> 00:05:01,520
+ Aluminium extrusions are infinitely useful and you can buy them in a very, very wide range of
+
+66
+00:05:01,520 --> 00:05:06,240
+ standard sections. I'll leave a catalog for all rich aluminium or local supplier on the textbook
+
+67
+00:05:06,240 --> 00:05:11,440
+ page for this video. One type of aluminium extrusion, for example, a section called 80-20 aluminium
+
+68
+00:05:11,440 --> 00:05:16,720
+ is extremely useful for building up framework structures very, very quickly with high dimensional
+
+69
+00:05:16,720 --> 00:05:21,200
+ accuracy. These sections have T slots or V slots inside of them, meaning that you can bolt a lot of
+
+70
+00:05:21,200 --> 00:05:26,240
+ these together to build up complicated sections that are very, very square, very, very dimensionally
+
+71
+00:05:27,120 --> 00:05:31,360
+ for this reason they're commonly used to make hobby CNC machines, for example.
+
+72
+00:05:31,360 --> 00:05:36,320
+ The last standard section I'm going to talk about are plates and sheets. These are large flat
+
+73
+00:05:36,320 --> 00:05:40,560
+ sections of your engineering materials and generally speaking, the difference between a plate
+
+74
+00:05:40,560 --> 00:05:45,120
+ and a sheet is largely just a matter of thickness. Plates and sheets of metal are quite useful if
+
+75
+00:05:45,120 --> 00:05:49,440
+ you plan to make very large components that are going to be folded or formed or bent.
+
+76
+00:05:49,440 --> 00:05:53,840
+ Or if you'd like to laser cut or plasma cut or press or punch a bunch of smaller components
+
+77
+00:05:54,320 --> 00:05:58,720
+ out of a single sheet rather economically. Depending on who you speak to, the line of demarcation
+
+78
+00:05:58,720 --> 00:06:04,480
+ between what is a sheet and what is a plate is somewhere around 5 to 6 to 10 millimeters.
+
+79
+00:06:04,480 --> 00:06:08,560
+ Then a flat sections are generally referred to as sheets and thicker flat sections are generally
+
+80
+00:06:08,560 --> 00:06:12,240
+ referred to as plates. These are usually manufactured slightly differently.
+
+81
+00:06:12,240 --> 00:06:16,320
+ Sheets are normally made in long coils that get rolled up and then unrolled and cut to
+
+82
+00:06:16,320 --> 00:06:22,000
+ standard sizes, usually about 1200 millimeters by 2400 millimeters. Though you can specifically
+
+83
+00:06:22,000 --> 00:06:26,240
+ purchase longer sheets and you can purchase coils of sheets as well. Plates owing to their
+
+84
+00:06:26,240 --> 00:06:31,840
+ thickness generally aren't coiled or sold in coils. You usually buy them in very standard sizes.
+
+85
+00:06:31,840 --> 00:06:35,440
+ The particular supplier you're talking about and your relationship with them and how much you're
+
+86
+00:06:35,440 --> 00:06:39,680
+ planning to buy and how thick the material is and how common the material is will all have an
+
+87
+00:06:39,680 --> 00:06:45,440
+ effect on the standard sizes that you can get. 1200 by 2400 is a reasonably safe bet all of the time,
+
+88
+00:06:45,440 --> 00:06:49,840
+ but some suppliers will let you buy smaller volumes of sheet or plate, especially if you're buying
+
+89
+00:06:49,840 --> 00:06:53,360
+ a material which is a little bit more expensive and a little bit more uncommon like copper for
+
+90
+00:06:53,360 --> 00:06:58,000
+ example. And if you're buying a very very common material especially from a reseller who does some
+
+91
+00:06:58,000 --> 00:07:02,560
+ manufacturing of their own, you may be able to buy half or quarter sheets. And important thing
+
+92
+00:07:02,560 --> 00:07:07,120
+ to note and this is true of most types of stock but particularly for plates and sheets of material
+
+93
+00:07:07,120 --> 00:07:11,280
+ is that if you're outsourcing a job to a local manufacturer say a laser cutter or a plasma
+
+94
+00:07:11,280 --> 00:07:16,560
+ cutter or a machine shop, they will typically offer to procure stock for you. In many cases this
+
+95
+00:07:16,560 --> 00:07:20,000
+ makes a lot of sense, they can usually get a better deal than you can because they're buying
+
+96
+00:07:20,000 --> 00:07:24,240
+ at volume and it means that you only pay for the material that you need. Anything that's left
+
+97
+00:07:24,240 --> 00:07:27,440
+ over from the job they'll keep in stock. Some suppliers can also get a little bit
+
+98
+00:07:27,440 --> 00:07:31,360
+ antsy about you providing your own material because it adds another step in the manufacturing
+
+99
+00:07:31,360 --> 00:07:35,360
+ process that they have to deal with. To finish up I'll just very briefly touch on finishes,
+
+100
+00:07:35,360 --> 00:07:39,360
+ tempers, and coatings. When you buy metal products you can get them in a variety of different
+
+101
+00:07:39,360 --> 00:07:44,320
+ finishes. When buying tube and pipe and bar products you might hear terms like unfinished
+
+102
+00:07:44,320 --> 00:07:48,960
+ and black and painted being thrown around. Unfinished products as the name suggests are pretty
+
+103
+00:07:48,960 --> 00:07:53,360
+ much straight off the mill. Sometimes these can present with mill scale which is an oxide, a
+
+104
+00:07:53,360 --> 00:07:57,680
+ consequence of the production process that actually helps to provide a little bit of protection
+
+105
+00:07:57,680 --> 00:08:02,000
+ similar to a passive-80 layer but not exactly the same. And other times particularly if they've
+
+106
+00:08:02,000 --> 00:08:06,560
+ been cold rolled instead of hot rolled they can present quite nicely almost ready to use. You need
+
+107
+00:08:06,560 --> 00:08:09,600
+ to be a little bit careful with unfinished steel products you probably don't want to leave them
+
+108
+00:08:09,600 --> 00:08:13,360
+ sitting out in the rain because they'll have a tendency to rust. And for this reason a lot of
+
+109
+00:08:13,360 --> 00:08:18,160
+ steel products are provided in what's called a painted state. Painted steel painted RHS for example
+
+110
+00:08:18,160 --> 00:08:23,120
+ has a characteristic blue primer applied in the manufacturing stage. The purpose of this primer is
+
+111
+00:08:23,120 --> 00:08:26,720
+ mainly to provide some rudimentary protection from the elements as this steel is
+
+112
+00:08:26,720 --> 00:08:30,480
+ transported and makes its way to youth and manufacture. And it usually doesn't put up much of
+
+113
+00:08:30,480 --> 00:08:34,960
+ an impediment to further manufacturing. It's a well through primer meaning that as the name suggests
+
+114
+00:08:34,960 --> 00:08:39,120
+ it can be welded without too many serious issues. And it's only pretty easy to remove with an
+
+115
+00:08:39,120 --> 00:08:43,200
+ angle grinder and a wire wheel or a damp cloth with some method on it. It's designed to be this
+
+116
+00:08:43,200 --> 00:08:48,000
+ way so that you can further manufacture your part before finally deciding how you'd like to coat it.
+
+117
+00:08:48,000 --> 00:08:53,680
+ You can also buy many steel products, tube and pipe and sheet in a galvanized finish. Here
+
+118
+00:08:53,680 --> 00:08:58,160
+ after manufacture the steel product has been zinc plated to provide some additional corrosion
+
+119
+00:08:58,160 --> 00:09:01,920
+ resistance. This is extremely important if you plan for your components to live out in the
+
+120
+00:09:01,920 --> 00:09:06,320
+ weather as galvanization provides quite a good resistance to corrosion. Though working with
+
+121
+00:09:06,320 --> 00:09:10,720
+ galvanized products and be a bit of a pain in the arse you need to grind away all of the zinc
+
+122
+00:09:10,720 --> 00:09:16,160
+ all of the gout from the top layer of any area you'd like to weld from a galvanized bit of steel
+
+123
+00:09:16,160 --> 00:09:20,400
+ because the zinc when welded gives off some fumes that are not particularly nice for humans to
+
+124
+00:09:20,400 --> 00:09:24,000
+ breathe. It also has a tendency to completely mess up your molten pool of metal and
+
+125
+00:09:24,000 --> 00:09:29,280
+ results in pretty nasty looking welds. For higher carbon steels and alloy steels and aluminium
+
+126
+00:09:29,280 --> 00:09:33,760
+ you can generally purchase these in a variety of tempers. We talked about quenching and tempering
+
+127
+00:09:33,760 --> 00:09:37,840
+ and heat trading a little bit last week and so it shouldn't be a huge shock to you that selecting
+
+128
+00:09:37,840 --> 00:09:42,160
+ the appropriate temper to get the right balance of strength and ductility is important for your
+
+129
+00:09:42,160 --> 00:09:46,320
+ designs. And as we discussed last week you need to be very careful to make sure that you purchase
+
+130
+00:09:46,320 --> 00:09:50,960
+ a material with an appropriate state of temper for any manufacturing processes you plan to put it
+
+131
+00:09:50,960 --> 00:09:55,680
+ through. Purchasing a high carbon steel and then welding it might result in some extremely strong
+
+132
+00:09:55,680 --> 00:10:00,320
+ and brittle localized areas around the welds. On the other side of the coin buying a hardened
+
+133
+00:10:00,320 --> 00:10:04,080
+ and tempered steel and then putting it through some sort of manufacturing process that involves
+
+134
+00:10:04,080 --> 00:10:08,560
+ a lot of heat like I don't know forging. It may result in losing all of those nice mechanical
+
+135
+00:10:08,560 --> 00:10:12,240
+ properties that have been imbued by the tempering process. Of course there are businesses that
+
+136
+00:10:12,240 --> 00:10:16,880
+ make a living by providing heat treatment services and so you can purchase a steel or an
+
+137
+00:10:16,880 --> 00:10:21,280
+ aluminium in a particular state of temper that's convenient to work with and this is very common.
+
+138
+00:10:21,280 --> 00:10:24,560
+ Do all of the work that you want to do and then send it off to one of these places to be
+
+139
+00:10:24,560 --> 00:10:29,200
+ heat treated afterwards. That'll probably do us for this video. As I said there's an entire
+
+140
+00:10:29,200 --> 00:10:33,200
+ wide world out there in terms of materials that you can buy in the different finishes and
+
+141
+00:10:33,200 --> 00:10:36,320
+ tempers that you can get them in. There's a little bit more information on the textbook page
+
+142
+00:10:36,320 --> 00:10:40,320
+ that accompanies this video but the real learning is going to happen in your future courses where
+
+143
+00:10:40,320 --> 00:10:43,920
+ you have a chance to design components. Any extra curricular activities that you do where you
+
+144
+00:10:43,920 --> 00:10:47,600
+ have a chance to design components like say new teams. You're finding your project where you
+
+145
+00:10:47,600 --> 00:10:51,760
+ may get a chance to do this and of course your time out in industry designing and manufacturing
+
+146
+00:10:51,760 --> 00:10:53,760
+ components as an engineer.
